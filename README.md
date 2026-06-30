@@ -91,6 +91,21 @@ one, while the real `phone` column stayed flagged.
 to the v1.5 Claude layer. It's documented in the code and here, not hidden — that's the point of
 the trust model.
 
+### Stress-tested at scale — `npm run simulate`
+
+Beyond the hand-labeled set, a seeded simulation harness ([`sim.mjs`](sim.mjs)) runs the scorer
+against **20,000 procedurally-generated datasets** with known planted defects, plus an edge-case
+battery and a PII trap battery. Latest run ([`SIMULATION.md`](SIMULATION.md)):
+
+| | result |
+|---|---|
+| Monte Carlo (20,000 datasets, 83,835 defects) | **recall 100% · precision 100% · 0 crashes** |
+| Edge cases (0 rows, all-empty, unicode, emoji, 60 cols…) | **16/16 survive, sane output** |
+| PII traps (ids, zips, years, coords, prices…) | **0 false positives, 1 documented residual (`bbl`)** |
+| Throughput | **~260,000 rows/sec** (100k rows in ~390 ms) |
+
+Deterministic (seeded), so the numbers reproduce exactly: `node sim.mjs <seed> <N> --report`.
+
 ---
 
 ## Anchor dataset

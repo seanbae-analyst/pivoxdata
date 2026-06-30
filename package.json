@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node serve.mjs",
     "score": "node cli.mjs",
-    "validate": "node --max-old-space-size=4096 validate.mjs"
+    "validate": "node --max-old-space-size=4096 validate.mjs",
+    "simulate": "node sim.mjs 7 20000 --report"
   },
   "dependencies": {
     "papaparse": "^5.4.1",
