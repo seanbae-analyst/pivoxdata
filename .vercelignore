@@ -1,0 +1,7 @@
+# Vercel CLI uploads the working dir (not .gitignore) — keep the deploy lean.
+nyc_restaurant_full.csv
+node_modules
+venv
+__pycache__
+*.pyc
+.DS_Store
