@@ -1,0 +1,19 @@
+{
+  "dataset": "DOHMH NYC Restaurant Inspection Results (43nn-pn8j)",
+  "source": "https://data.cityofnewyork.us/api/views/43nn-pn8j/rows.csv?accessType=DOWNLOAD",
+  "file": "nyc_restaurant_full.csv",
+  "row_count": 295810,
+  "engines": [
+    "pandas",
+    "python-stdlib-csv",
+    "grep"
+  ],
+  "facts": {
+    "total_rows": 295810,
+    "grade_missing": 149869,
+    "score_missing": 17095,
+    "fake_1900_date": 3506,
+    "boro_eq_0": 370,
+    "camis_unique": 31159
+  }
+}

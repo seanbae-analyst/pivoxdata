@@ -1,0 +1,15 @@
+{
+  "name": "dataready",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node serve.mjs",
+    "score": "node cli.mjs",
+    "validate": "node --max-old-space-size=4096 validate.mjs"
+  },
+  "dependencies": {
+    "papaparse": "^5.4.1",
+    "xlsx": "^0.18.5"
+  }
+}

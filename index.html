@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DataReady — is your data AI-ready?</title>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+  :root{ --bg:#0d1117; --panel:#161b22; --line:#27303b; --ink:#e6edf3; --mut:#8b949e;
+    --hi:#f85149; --med:#d29922; --low:#3fb950; --acc:#58a6ff; }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif}
+  .wrap{max-width:840px;margin:0 auto;padding:40px 20px 80px}
+  h1{font-size:26px;margin:0 0 4px} .sub{color:var(--mut);margin:0 0 28px}
+  .drop{border:1.5px dashed var(--line);border-radius:14px;padding:40px;text-align:center;
+    background:var(--panel);cursor:pointer;transition:.15s} .drop:hover{border-color:var(--acc)}
+  .drop input{display:none} .drop b{color:var(--acc)}
+  .muted{color:var(--mut);font-size:13px}
+  .grid{display:grid;grid-template-columns:160px 1fr;gap:22px;align-items:center;margin:28px 0}
+  .gauge{width:160px;height:160px;border-radius:50%;display:grid;place-items:center;
+    background:conic-gradient(var(--g) calc(var(--p)*1%), #21262d 0);}
+  .gauge div{width:128px;height:128px;border-radius:50%;background:var(--bg);display:grid;
+    place-items:center;flex-direction:column;text-align:center}
+  .gauge .n{font-size:38px;font-weight:700} .gauge .l{font-size:12px;color:var(--mut)}
+  .dim{margin:7px 0} .dim .t{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
+  .track{height:8px;background:#21262d;border-radius:6px;overflow:hidden;margin-top:3px}
+  .fill{height:100%;border-radius:6px;background:var(--acc)}
+  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
+  .high{background:rgba(248,81,73,.15);color:var(--hi)} .medium{background:rgba(210,153,34,.15);color:var(--med)}
+  .low{background:rgba(63,185,80,.15);color:var(--low)}
+  .ev{color:var(--mut);font-family:ui-monospace,monospace;font-size:12px}
+  .note{margin-top:22px;padding:12px 14px;border-left:3px solid var(--acc);background:var(--panel);
+    border-radius:0 8px 8px 0;font-size:13px;color:var(--mut)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>DataReady</h1>
+  <p class="sub">Drop a CSV or Excel file — get a 0–100 AI-readiness score and exactly what to fix. Runs entirely in your browser; nothing is uploaded.</p>
+
+  <label class="drop" id="drop">
+    <input type="file" id="file" accept=".csv,.xlsx,.xls" />
+    <div>Drag a file here or <b>browse</b></div>
+    <div class="muted" style="margin-top:6px">.csv · .xlsx · .xls — first sheet</div>
+  </label>
+
+  <section id="out" class="hidden">
+    <div class="grid">
+      <div class="gauge" id="gauge"><div><div class="n" id="score">–</div><div class="l">AI-ready</div></div></div>
+      <div id="dims"></div>
+    </div>
+    <table>
+      <thead><tr><th>Severity</th><th>Issue (verified fact)</th><th>Evidence</th></tr></thead>
+      <tbody id="issues"></tbody>
+    </table>
+    <div class="note" id="note"></div>
+  </section>
+</div>
+
+<script type="module">
+import { scoreDataset } from "./scorer.mjs";
+
+const $ = (id) => document.getElementById(id);
+const gColor = (s) => s >= 80 ? "#3fb950" : s >= 55 ? "#d29922" : "#f85149";
+
+function render(r){
+  $("out").classList.remove("hidden");
+  $("score").textContent = r.score;
+  const g = $("gauge"); g.style.setProperty("--p", r.score); g.style.setProperty("--g", gColor(r.score));
+  $("dims").innerHTML = Object.entries(r.dimensions).map(([k,d])=>`
+    <div class="dim"><div class="t"><span>${k}</span><span>${d.score}/100 · w${d.weight}</span></div>
+    <div class="track"><div class="fill" style="width:${d.score}%;background:${gColor(d.score)}"></div></div></div>`).join("");
+  $("issues").innerHTML = r.issues.map(i=>`
+    <tr><td><span class="tag ${i.severity}">${i.severity}</span></td>
+    <td>${i.message}</td><td class="ev">${i.evidence}</td></tr>`).join("")
+    || `<tr><td colspan="3" class="muted">No issues found — looks AI-ready.</td></tr>`;
+  $("note").textContent = `${r.rowCount.toLocaleString()} rows × ${r.columnCount} cols. Every issue above is a verifiable FACT; the score is a judgment built on those facts. ${r.weightsNote}`;
+}
+
+function handle(file){
+  const name = file.name.toLowerCase();
+  if(name.endsWith(".xlsx") || name.endsWith(".xls")){
+    const reader = new FileReader();
+    reader.onload = (e)=>{
+      const wb = XLSX.read(e.target.result, {type:"array"});
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, {defval:"", raw:false});
+      render(scoreDataset(rows, Object.keys(rows[0]||{})));
+    };
+    reader.readAsArrayBuffer(file);
+  } else {
+    Papa.parse(file, {header:true, dynamicTyping:false, skipEmptyLines:true,
+      complete:(res)=> render(scoreDataset(res.data, res.meta.fields)) });
+  }
+}
+
+$("file").addEventListener("change", (e)=> e.target.files[0] && handle(e.target.files[0]));
+const d = $("drop");
+["dragover","dragenter"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="#58a6ff";}));
+["dragleave","drop"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="";}));
+d.addEventListener("drop",(e)=> e.dataTransfer.files[0] && handle(e.dataTransfer.files[0]));
+</script>
+</body>
+</html>

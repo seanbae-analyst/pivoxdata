@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# python (verify.py harness)
+venv/
+__pycache__/
+*.pyc
+
+# the 138 MB full anchor dataset — too big for git; re-download via ANCHOR_DATASET.md.
+# the 2.5 MB sample IS committed so the demo + CLI work out of the box.
+nyc_restaurant_full.csv
+
+# os / editor
+.DS_Store
