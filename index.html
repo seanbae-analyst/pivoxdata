@@ -4,58 +4,139 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DataReady — is your data AI-ready?</title>
+<meta name="description" content="Drop a CSV, get a 0–100 AI-readiness score with prioritized, plain-language fixes. Runs entirely in your browser." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-  :root{ --bg:#0d1117; --panel:#161b22; --line:#27303b; --ink:#e6edf3; --mut:#8b949e;
-    --hi:#f85149; --med:#d29922; --low:#3fb950; --acc:#58a6ff; }
-  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.55 ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif}
-  .wrap{max-width:840px;margin:0 auto;padding:40px 20px 80px}
-  h1{font-size:26px;margin:0 0 4px} .sub{color:var(--mut);margin:0 0 28px}
-  .drop{border:1.5px dashed var(--line);border-radius:14px;padding:40px;text-align:center;
-    background:var(--panel);cursor:pointer;transition:.15s} .drop:hover{border-color:var(--acc)}
-  .drop input{display:none} .drop b{color:var(--acc)}
-  .muted{color:var(--mut);font-size:13px}
-  .grid{display:grid;grid-template-columns:160px 1fr;gap:22px;align-items:center;margin:28px 0}
-  .gauge{width:160px;height:160px;border-radius:50%;display:grid;place-items:center;
-    background:conic-gradient(var(--g) calc(var(--p)*1%), #21262d 0);}
-  .gauge div{width:128px;height:128px;border-radius:50%;background:var(--bg);display:grid;
-    place-items:center;flex-direction:column;text-align:center}
-  .gauge .n{font-size:38px;font-weight:700} .gauge .l{font-size:12px;color:var(--mut)}
-  .dim{margin:7px 0} .dim .t{display:flex;justify-content:space-between;font-size:13px;color:var(--mut)}
-  .track{height:8px;background:#21262d;border-radius:6px;overflow:hidden;margin-top:3px}
-  .fill{height:100%;border-radius:6px;background:var(--acc)}
-  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:14px}
-  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-  th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-  .tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase}
-  .high{background:rgba(248,81,73,.15);color:var(--hi)} .medium{background:rgba(210,153,34,.15);color:var(--med)}
-  .low{background:rgba(63,185,80,.15);color:var(--low)}
-  .ev{color:var(--mut);font-family:ui-monospace,monospace;font-size:12px}
-  .note{margin-top:22px;padding:12px 14px;border-left:3px solid var(--acc);background:var(--panel);
-    border-radius:0 8px 8px 0;font-size:13px;color:var(--mut)}
-  .hidden{display:none}
-  .samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
-  .chip{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;
-    padding:6px 12px;font-size:13px;cursor:pointer;transition:.15s;font-family:inherit}
-  .chip:hover{border-color:var(--acc);color:var(--acc)}
-  .chip:disabled{opacity:.55;cursor:default}
+  :root{
+    --bg:#0a0d13; --panel:#111621; --panel2:#161c28; --line:#222a38; --line2:#2d3644;
+    --ink:#e9eef6; --mut:#8b95a6; --dim:#5a6473;
+    --hi:#f76d68; --med:#e3ab3c; --low:#4ecb7d; --acc:#5b9dff; --brand:#cda86a;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;color:var(--ink);font-family:Inter,ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-size:15px;line-height:1.55;letter-spacing:-.01em;
+    background:
+      radial-gradient(1100px 520px at 50% -8%, #17202e 0%, rgba(23,32,46,0) 60%),
+      var(--bg);
+    background-attachment:fixed;min-height:100vh;}
+  .wrap{max-width:780px;margin:0 auto;padding:56px 22px 96px}
+  a{color:var(--acc);text-decoration:none} a:hover{text-decoration:underline}
+
+  /* ---------- hero ---------- */
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;letter-spacing:-.02em;color:var(--ink)}
+  .brand svg{display:block}
+  .brand .beta{margin-left:2px;font-size:10px;font-weight:600;color:var(--brand);border:1px solid rgba(205,168,106,.35);
+    border-radius:20px;padding:1px 7px;letter-spacing:.04em;text-transform:uppercase}
+  h1{font-size:clamp(28px,5vw,40px);line-height:1.08;font-weight:800;letter-spacing:-.03em;margin:26px 0 12px}
+  h1 .g{background:linear-gradient(92deg,#8fbcff,#5b9dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--mut);margin:0 0 30px;font-size:16px;max-width:60ch}
+
+  /* ---------- drop zone ---------- */
+  .drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;
+    border:1.5px dashed var(--line2);border-radius:16px;padding:38px 24px;text-align:center;cursor:pointer;
+    background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,0));transition:.16s ease}
+  .drop:hover{border-color:var(--acc);background:linear-gradient(180deg,rgba(91,157,255,.06),rgba(91,157,255,0))}
+  .drop.drag{border-color:var(--acc);border-style:solid;background:rgba(91,157,255,.08)}
+  .drop input{display:none}
+  .drop .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
+    background:var(--panel2);border:1px solid var(--line);color:var(--acc)}
+  .drop .big{font-size:15.5px;font-weight:600} .drop b{color:var(--acc)}
+  .drop .fmt{color:var(--dim);font-size:12.5px;font-family:var(--mono)}
+
+  /* ---------- sample chips ---------- */
+  .samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px}
+  .samples .lbl{color:var(--mut);font-size:13px;margin-right:2px}
+  .chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel);color:var(--ink);
+    border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:500;
+    cursor:pointer;transition:.14s;font-family:inherit}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand);opacity:.8}
+  .chip:hover{border-color:var(--acc);color:#fff;background:var(--panel2)}
+  .chip:disabled{opacity:.5;cursor:default}
+
+  /* ---------- result cards ---------- */
+  #out{margin-top:30px;display:flex;flex-direction:column;gap:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}
+  .scorecard{display:flex;gap:26px;align-items:center}
+  @media(max-width:560px){.scorecard{flex-direction:column;align-items:stretch;gap:18px;text-align:center}}
+
+  .gauge{flex:0 0 auto;width:148px;height:148px;border-radius:50%;display:grid;place-items:center;margin:0 auto;
+    background:conic-gradient(var(--g,var(--acc)) calc(var(--p,0)*1%), #1b2330 0)}
+  .gauge .inner{width:116px;height:116px;border-radius:50%;background:var(--panel);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+  .gauge .n{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .gauge .l{font-size:11.5px;font-weight:600;letter-spacing:.02em;margin-top:5px;text-transform:uppercase}
+  .scoremeta{flex:1;min-width:0}
+  .scoremeta .cap{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.06em;font-weight:600;margin-bottom:12px}
+
+  .dim{margin:11px 0}
+  .dim:first-child{margin-top:0}
+  .dim-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13.5px;margin-bottom:5px}
+  .dim-name{font-weight:600;text-transform:capitalize}
+  .dim-val{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  .dim-val .max{color:var(--dim)} .dim-w{color:var(--dim);font-weight:400;font-size:11.5px;margin-left:7px}
+  .track{height:7px;background:#1b2330;border-radius:6px;overflow:hidden}
+  .fill{height:100%;border-radius:6px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+
+  /* ---------- issues ---------- */
+  .card-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .card-h .t{font-size:14px;font-weight:700}
+  .count{font-family:var(--mono);font-size:12px;color:var(--mut);background:var(--panel2);
+    border:1px solid var(--line);border-radius:20px;padding:2px 9px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr{transition:background .12s} tbody tr:hover{background:rgba(255,255,255,.02)}
+  th{color:var(--dim);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+  .tag{display:inline-block;font-size:10.5px;font-weight:700;padding:2.5px 9px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:.03em}
+  .high{background:rgba(247,109,104,.14);color:var(--hi);box-shadow:inset 0 0 0 1px rgba(247,109,104,.25)}
+  .medium{background:rgba(227,171,60,.14);color:var(--med);box-shadow:inset 0 0 0 1px rgba(227,171,60,.25)}
+  .low{background:rgba(78,203,125,.14);color:var(--low);box-shadow:inset 0 0 0 1px rgba(78,203,125,.25)}
+  td .msg{font-weight:500}
+  .ev{color:var(--mut);font-family:var(--mono);font-size:12px;white-space:nowrap}
+  @media(max-width:560px){.ev{white-space:normal}}
+
+  .note{font-size:13px;color:var(--mut);line-height:1.6;padding:14px 16px;border:1px solid var(--line);
+    border-left:3px solid var(--brand);border-radius:0 10px 10px 0;background:var(--panel)}
+  .note b{color:var(--ink);font-weight:600}
+
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);color:var(--dim);font-size:12.5px;
+    display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+  footer .dot{color:var(--line2)}
+  .hidden,#out.hidden{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>DataReady</h1>
-  <p class="sub">Drop a CSV or Excel file — get a 0–100 AI-readiness score and exactly what to fix. Runs entirely in your browser; nothing is uploaded.</p>
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="#cda86a" stroke-width="1.6"/>
+      <path d="M6.5 14.5l3.2 3.2 8-9.4" stroke="#5b9dff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6.5 8.5h5M6.5 11h3" stroke="#8b95a6" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    DataReady <span class="beta">v1</span>
+  </div>
+
+  <h1>Is your data <span class="g">AI-ready?</span></h1>
+  <p class="sub">Drop a CSV or Excel file — get a 0–100 readiness score and exactly what to fix, in plain language. Runs entirely in your browser; nothing is uploaded.</p>
 
   <label class="drop" id="drop">
     <input type="file" id="file" accept=".csv,.xlsx,.xls" />
-    <div>Drag a file here or <b>browse</b></div>
-    <div class="muted" style="margin-top:6px">.csv · .xlsx · .xls — first sheet</div>
+    <div class="ic">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div class="big">Drop a file here or <b>browse</b></div>
+    <div class="fmt">.csv · .xlsx · .xls — first sheet</div>
   </label>
 
   <div class="samples">
-    <span class="muted">No file handy? Try a sample:</span>
+    <span class="lbl">No file handy? Try a sample:</span>
     <button type="button" class="chip" data-src="nyc_restaurant_sample.csv">NYC restaurants · 5k rows</button>
     <button type="button" class="chip" data-src="samples/sales_pipeline.csv">Sales pipeline · CRM</button>
     <button type="button" class="chip" data-src="samples/employees.csv">Employees · HR</button>
@@ -63,36 +144,65 @@
   </div>
 
   <section id="out" class="hidden">
-    <div class="grid">
-      <div class="gauge" id="gauge"><div><div class="n" id="score">–</div><div class="l">AI-ready</div></div></div>
-      <div id="dims"></div>
+    <div class="card scorecard">
+      <div class="gauge" id="gauge">
+        <div class="inner"><div class="n" id="score">–</div><div class="l" id="verdict">—</div></div>
+      </div>
+      <div class="scoremeta">
+        <div class="cap">Readiness by dimension</div>
+        <div id="dims"></div>
+      </div>
     </div>
-    <table>
-      <thead><tr><th>Severity</th><th>Issue (verified fact)</th><th>Evidence</th></tr></thead>
-      <tbody id="issues"></tbody>
-    </table>
+
+    <div class="card">
+      <div class="card-h"><span class="t">Issues found</span><span class="count" id="issue-count"></span></div>
+      <table>
+        <thead><tr><th style="width:88px">Severity</th><th>Issue (verified fact)</th><th style="width:1%">Evidence</th></tr></thead>
+        <tbody id="issues"></tbody>
+      </table>
+    </div>
+
     <div class="note" id="note"></div>
   </section>
+
+  <footer>
+    <span>Deterministic scorer — every number is a verifiable fact, checked by 3 independent engines.</span>
+    <span><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source & case study →</a></span>
+  </footer>
 </div>
 
 <script type="module">
 import { scoreDataset } from "./scorer.mjs";
 
 const $ = (id) => document.getElementById(id);
-const gColor = (s) => s >= 80 ? "#3fb950" : s >= 55 ? "#d29922" : "#f85149";
+const gColor = (s) => s >= 80 ? "#4ecb7d" : s >= 55 ? "#e3ab3c" : "#f76d68";
+const verdict = (s) => s >= 80 ? "AI-ready" : s >= 55 ? "Needs cleanup" : "Not ready";
 
 function render(r){
   $("out").classList.remove("hidden");
+  const c = gColor(r.score);
   $("score").textContent = r.score;
-  const g = $("gauge"); g.style.setProperty("--p", r.score); g.style.setProperty("--g", gColor(r.score));
+  $("score").style.color = c;
+  const v = $("verdict"); v.textContent = verdict(r.score); v.style.color = c;
+  const g = $("gauge"); g.style.setProperty("--p", r.score); g.style.setProperty("--g", c);
+
   $("dims").innerHTML = Object.entries(r.dimensions).map(([k,d])=>`
-    <div class="dim"><div class="t"><span>${k}</span><span>${d.score}/100 · w${d.weight}</span></div>
-    <div class="track"><div class="fill" style="width:${d.score}%;background:${gColor(d.score)}"></div></div></div>`).join("");
+    <div class="dim">
+      <div class="dim-top">
+        <span class="dim-name">${k === "pii" ? "PII" : k}</span>
+        <span class="dim-val">${d.score}<span class="max">/100</span><span class="dim-w">${Math.round(d.weight*100)}% weight</span></span>
+      </div>
+      <div class="track"><div class="fill" style="width:${d.score}%;background:${gColor(d.score)}"></div></div>
+    </div>`).join("");
+
+  $("issue-count").textContent = r.issues.length ? `${r.issues.length} total` : "none";
   $("issues").innerHTML = r.issues.map(i=>`
     <tr><td><span class="tag ${i.severity}">${i.severity}</span></td>
-    <td>${i.message}</td><td class="ev">${i.evidence}</td></tr>`).join("")
+    <td class="msg">${i.message}</td><td class="ev">${i.evidence}</td></tr>`).join("")
     || `<tr><td colspan="3" class="muted">No issues found — looks AI-ready.</td></tr>`;
-  $("note").textContent = `${r.rowCount.toLocaleString()} rows × ${r.columnCount} cols. Every issue above is a verifiable FACT; the score is a judgment built on those facts. ${r.weightsNote}`;
+
+  $("note").innerHTML = `<b>${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns.</b> Every issue above is a verifiable <b>fact</b>; the score is a <b>judgment</b> built on those facts. ${r.weightsNote}`;
+  $("out").scrollIntoView({behavior:"smooth", block:"nearest"});
 }
 
 function handle(file){
@@ -133,9 +243,10 @@ document.querySelectorAll(".chip").forEach((btn)=>{
     }
   });
 });
+
 const d = $("drop");
-["dragover","dragenter"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="#58a6ff";}));
-["dragleave","drop"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="";}));
+["dragover","dragenter"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.classList.add("drag");}));
+["dragleave","drop"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.classList.remove("drag");}));
 d.addEventListener("drop",(e)=> e.dataTransfer.files[0] && handle(e.dataTransfer.files[0]));
 </script>
 </body>
