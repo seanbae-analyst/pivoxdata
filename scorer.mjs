@@ -152,9 +152,9 @@ export function scoreDataset(rows, columns) {
   return {
     rowCount: n, columnCount: cols.length, score,
     dimensions: {
-      completeness: { score: completenessScore, weight: weights.completeness },
-      consistency: { score: consistencyScore, weight: weights.consistency },
-      pii: { score: piiScore, weight: weights.pii },
+      completeness: { score: Math.round(completenessScore), weight: weights.completeness },
+      consistency: { score: Math.round(consistencyScore), weight: weights.consistency },
+      pii: { score: Math.round(piiScore), weight: weights.pii },
     },
     weightsNote: "Dimension weights are a judgment, not a fact — tunable. See TRUST.md.",
     issues: issues.sort((a, b) => sev(b.severity) - sev(a.severity)),

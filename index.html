@@ -36,6 +36,11 @@
   .note{margin-top:22px;padding:12px 14px;border-left:3px solid var(--acc);background:var(--panel);
     border-radius:0 8px 8px 0;font-size:13px;color:var(--mut)}
   .hidden{display:none}
+  .samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:14px}
+  .chip{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+    padding:6px 12px;font-size:13px;cursor:pointer;transition:.15s;font-family:inherit}
+  .chip:hover{border-color:var(--acc);color:var(--acc)}
+  .chip:disabled{opacity:.55;cursor:default}
 </style>
 </head>
 <body>
@@ -48,6 +53,14 @@
     <div>Drag a file here or <b>browse</b></div>
     <div class="muted" style="margin-top:6px">.csv · .xlsx · .xls — first sheet</div>
   </label>
+
+  <div class="samples">
+    <span class="muted">No file handy? Try a sample:</span>
+    <button type="button" class="chip" data-src="nyc_restaurant_sample.csv">NYC restaurants · 5k rows</button>
+    <button type="button" class="chip" data-src="samples/sales_pipeline.csv">Sales pipeline · CRM</button>
+    <button type="button" class="chip" data-src="samples/employees.csv">Employees · HR</button>
+    <button type="button" class="chip" data-src="samples/customers.csv">Customers</button>
+  </div>
 
   <section id="out" class="hidden">
     <div class="grid">
@@ -100,6 +113,26 @@ function handle(file){
 }
 
 $("file").addEventListener("change", (e)=> e.target.files[0] && handle(e.target.files[0]));
+
+// one-click sample datasets — fetch a bundled CSV and run the exact same scoring path
+document.querySelectorAll(".chip").forEach((btn)=>{
+  btn.addEventListener("click", async ()=>{
+    const src = btn.dataset.src, label = btn.textContent;
+    const chips = [...document.querySelectorAll(".chip")];
+    chips.forEach(c=>c.disabled=true); btn.textContent = "scoring…";
+    try{
+      const res = await fetch(src);
+      if(!res.ok) throw new Error(res.status);
+      const text = await res.text();
+      handle(new File([text], src.split("/").pop(), {type:"text/csv"}));
+    }catch(err){
+      btn.textContent = "failed — retry";
+    }finally{
+      chips.forEach(c=>c.disabled=false);
+      if(btn.textContent==="scoring…") btn.textContent = label;
+    }
+  });
+});
 const d = $("drop");
 ["dragover","dragenter"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="#58a6ff";}));
 ["dragleave","drop"].forEach(ev=>d.addEventListener(ev,(e)=>{e.preventDefault();d.style.borderColor="";}));
