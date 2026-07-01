@@ -7,15 +7,17 @@
 <meta name="description" content="Drop a CSV, get a 0–100 AI-readiness score with prioritized, plain-language fixes. Runs entirely in your browser." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   :root{
-    --bg:#0a0d13; --panel:#111621; --panel2:#161c28; --line:#222a38; --line2:#2d3644;
-    --ink:#e9eef6; --mut:#8b95a6; --dim:#5a6473;
-    --hi:#f76d68; --med:#e3ab3c; --low:#4ecb7d; --acc:#5b9dff; --brand:#cda86a;
+    /* PivoxQuant v3 — Vantablack + Bronze (matched to frontend/src/app/globals.css .dark) */
+    --bg:#0a0e17; --panel:#111827; --panel2:#1e293b; --line:#334155; --line2:#3d4b5f;
+    --ink:#e2e8f0; --mut:#94a3b8; --dim:#64748b;
+    --hi:#f87171; --med:#e0a83a; --low:#4ec97d; --acc:#d4a558; --acc-h:#b8956a; --brand:#d4a558;
     --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --serif:"Playfair Display","EB Garamond",Georgia,serif;
   }
   *{box-sizing:border-box}
   html{-webkit-text-size-adjust:100%}
@@ -33,16 +35,17 @@
   .brand svg{display:block}
   .brand .beta{margin-left:2px;font-size:10px;font-weight:600;color:var(--brand);border:1px solid rgba(205,168,106,.35);
     border-radius:20px;padding:1px 7px;letter-spacing:.04em;text-transform:uppercase}
-  h1{font-size:clamp(28px,5vw,40px);line-height:1.08;font-weight:800;letter-spacing:-.03em;margin:26px 0 12px}
-  h1 .g{background:linear-gradient(92deg,#8fbcff,#5b9dff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1{font-family:var(--serif);font-size:clamp(30px,5.2vw,44px);line-height:1.14;font-weight:700;
+    letter-spacing:-.005em;margin:24px 0 14px;color:var(--ink)}
+  h1 .g{color:var(--acc)}
   .sub{color:var(--mut);margin:0 0 30px;font-size:16px;max-width:60ch}
 
   /* ---------- drop zone ---------- */
   .drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;
     border:1.5px dashed var(--line2);border-radius:16px;padding:38px 24px;text-align:center;cursor:pointer;
     background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,0));transition:.16s ease}
-  .drop:hover{border-color:var(--acc);background:linear-gradient(180deg,rgba(91,157,255,.06),rgba(91,157,255,0))}
-  .drop.drag{border-color:var(--acc);border-style:solid;background:rgba(91,157,255,.08)}
+  .drop:hover{border-color:var(--acc);background:linear-gradient(180deg,rgba(212,165,88,.07),rgba(212,165,88,0))}
+  .drop.drag{border-color:var(--acc);border-style:solid;background:rgba(212,165,88,.10)}
   .drop input{display:none}
   .drop .ic{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;
     background:var(--panel2);border:1px solid var(--line);color:var(--acc)}
@@ -116,9 +119,9 @@
 <div class="wrap">
   <div class="brand">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="#cda86a" stroke-width="1.6"/>
-      <path d="M6.5 14.5l3.2 3.2 8-9.4" stroke="#5b9dff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M6.5 8.5h5M6.5 11h3" stroke="#8b95a6" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="#d4a558" stroke-width="1.6"/>
+      <path d="M6.5 14.5l3.2 3.2 8-9.4" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6.5 8.5h5M6.5 11h3" stroke="#94a3b8" stroke-width="1.6" stroke-linecap="round"/>
     </svg>
     DataReady <span class="beta">v1</span>
   </div>
@@ -175,7 +178,7 @@
 import { scoreDataset } from "./scorer.mjs";
 
 const $ = (id) => document.getElementById(id);
-const gColor = (s) => s >= 80 ? "#4ecb7d" : s >= 55 ? "#e3ab3c" : "#f76d68";
+const gColor = (s) => s >= 80 ? "#4ec97d" : s >= 55 ? "#e0a83a" : "#f87171";
 const verdict = (s) => s >= 80 ? "AI-ready" : s >= 55 ? "Needs cleanup" : "Not ready";
 
 function render(r){
