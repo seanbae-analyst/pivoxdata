@@ -1,6 +1,7 @@
 # DataReady — is your data AI-ready?
 
 **▶ Live demo: [pivoxdata.vercel.app](https://pivoxdata.vercel.app)** — drag a CSV onto the page.
+**📖 Case study: [CASE_STUDY.md](CASE_STUDY.md)** — the product thinking, decision by decision.
 
 Drop a CSV or Excel file, get a **0–100 AI-readiness score** with prioritized, plain-language
 fixes — so a non-coder can tell whether a dataset is good enough for AI/analytics *before*
