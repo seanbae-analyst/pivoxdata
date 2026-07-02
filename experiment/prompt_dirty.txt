@@ -1,0 +1,55 @@
+You are a data analyst. Answer using ONLY the CSV below — no outside knowledge.
+Give exact numbers. Answer as a numbered list; one short caveat sentence per answer is allowed.
+
+1. How many deals are in this dataset?
+2. What is the total pipeline value (sum of amount_usd), in USD?
+3. What is the earliest close_date in the data?
+4. How many deals are in the APAC region?
+5. How many deals belong to the account "Globex"?
+
+CSV:
+deal_id,account,owner_email,stage,amount_usd,close_date,region,notes
+D-1001,Wayne LLC,dan.oh@salesco.com,Negotiation,65000,"Jan 15, 2025",EMEA,
+D-1002,Wonka Co,sofia.p@salesco.com,Closed Won,20000,03/08/2025,EMEA,
+D-1003,GLOBEX,dan.oh@salesco.com,Negotiation,101500,"May 22, 2025",NA,
+D-1004,Acme Corp,amy.n@salesco.com,Closed Lost,18500,09/10/2025,NA,
+D-1005,GLOBEX,raj.s@salesco.com,Closed Won,4000,1900-01-01,,
+D-1006,Stark Ind,dan.oh@salesco.com,Qualified,88500,1900-01-01,,
+D-1007,Acme Corp,sofia.p@salesco.com,Negotiation,52000,"Mar 10, 2025",,
+D-1008,Stark Ind,amy.n@salesco.com,Qualified,42500,"Jun 5, 2025",,
+D-1009,Soylent,jane.kim@salesco.com,Proposal,113000,"Jun 18, 2025",LATAM,
+D-1010,Stark Ind,mark.lee@salesco.com,Negotiation,unknown,"Feb 12, 2025",,
+D-1011,Vehement,dan.oh@salesco.com,Negotiation,unknown,2025-08-25,NA,
+D-1012,Wayne LLC,sofia.p@salesco.com,Prospect,78500,"Jun 20, 2025",,
+D-1013,Soylent,raj.s@salesco.com,Proposal,45500,2025-10-19,,
+D-1014,Soylent,sofia.p@salesco.com,Negotiation,86500,04/03/2025,EMEA,
+D-1015,Massive Dynamic,raj.s@salesco.com,Closed Won,TBD,2025-11-16,NA,
+D-1016,Stark Ind,sofia.p@salesco.com,Prospect,8500,2025-02-28,NA,
+D-1017,Cyberdyne,raj.s@salesco.com,Prospect,72000,1900-01-01,EMEA,
+D-1018,Acme Corp,jane.kim@salesco.com,Proposal,50500,"May 12, 2025",NA,
+D-1019,Cyberdyne,mark.lee@salesco.com,Proposal,82500,04/16/2025,apac,
+D-1020,Globex,amy.n@salesco.com,Prospect,24000,2025-08-24,LATAM,
+D-1021,Globex,amy.n@salesco.com,Qualified,TBD,2025-02-25,NA,
+D-1022,Massive Dynamic,amy.n@salesco.com,Proposal,28000,"Feb 4, 2025",apac,
+D-1023,Cyberdyne,raj.s@salesco.com,Negotiation,7500,"Apr 22, 2025",LATAM,
+D-1024,Wonka Co,sofia.p@salesco.com,Closed Lost,47000,2025-06-13,,
+D-1025,Globex,jane.kim@salesco.com,Closed Lost,69000,2025-03-27,,
+D-1026,Umbrella,jane.kim@salesco.com,Proposal,17500,1900-01-01,Apac,
+D-1027,Wayne LLC,sofia.p@salesco.com,Closed Lost,69000,1900-01-01,EMEA,
+D-1028,Cyberdyne,mark.lee@salesco.com,Proposal,16000,"Feb 18, 2025",,
+D-1029,Vehement,jane.kim@salesco.com,Qualified,94500,2025-08-17,EMEA,
+D-1030,Cyberdyne,mark.lee@salesco.com,Closed Won,TBD,1900-01-01,NA,
+D-1031,Cyberdyne,raj.s@salesco.com,Prospect,46500,2025-09-16,LATAM,
+D-1032,Initech,mark.lee@salesco.com,Closed Won,6500,09/04/2025,LATAM,
+D-1033,Cyberdyne,amy.n@salesco.com,Prospect,TBD,01/27/2025,NA,
+D-1034,Umbrella,amy.n@salesco.com,Closed Won,117000,07/23/2025,EMEA,
+D-1035,Wonka Co,jane.kim@salesco.com,Negotiation,81000,07/06/2025,EMEA,
+D-1036,Globex,raj.s@salesco.com,Proposal,unknown,06/06/2025,,
+D-1037,Hooli,raj.s@salesco.com,Proposal,42000,2025-05-18,,
+D-1038,Wayne LLC,amy.n@salesco.com,Closed Won,115000,08/05/2025,,
+D-1039,Initech,raj.s@salesco.com,Prospect,TBD,2025-11-21,,
+D-1040,Acme Corp,mark.lee@salesco.com,Closed Won,1500,01/01/2025,NA,
+D-1041,Wonka Co,raj.s@salesco.com,Qualified,14000,2025-02-01,LATAM,
+D-1042,Hooli,raj.s@salesco.com,Proposal,75000,1900-01-01,NA,
+D-1004,Acme Corp,amy.n@salesco.com,Closed Lost,18500,09/10/2025,NA,
+D-1011,Vehement,dan.oh@salesco.com,Negotiation,unknown,2025-08-25,NA,

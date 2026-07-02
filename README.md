@@ -126,6 +126,15 @@ battery and a PII trap battery. Latest run ([`SIMULATION.md`](SIMULATION.md)):
 
 Deterministic (seeded), so the numbers reproduce exactly: `node sim.mjs <seed> <N> --report`.
 
+### Does the score matter? — the "so what" experiment
+
+We asked a real LLM the same five analyst questions on the dirty demo file and on the
+DataReady-cleaned version ([`experiment/SO_WHAT.md`](experiment/SO_WHAT.md) — protocol,
+ground truth, and raw transcripts, committed unedited). Cheap tier on dirty: total inflated
+by $18,500, "earliest deal: 1900-01-01." Frontier tier on dirty: right numbers via silently
+improvised judgment calls that flipped between two identical runs. On clean: correct,
+direct, reproducible — and 0 raw emails in the prompt instead of 44.
+
 ---
 
 ## Anchor dataset

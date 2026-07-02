@@ -57,6 +57,16 @@
   .drop .big{font-size:15.5px;font-weight:600} .drop b{color:var(--acc)}
   .drop .fmt{color:var(--dim);font-size:12.5px;font-family:var(--mono)}
 
+  .sowhat{margin-top:30px;border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:18px 20px}
+  .sowhat .sw-h{font-size:13.5px;font-weight:600;margin-bottom:12px}
+  .sowhat .sw-h a{color:var(--acc);text-decoration:none} .sowhat .sw-h a:hover{text-decoration:underline}
+  .sowhat table{width:100%;border-collapse:collapse;font-size:13px}
+  .sowhat th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:4px 10px 8px 0}
+  .sowhat td{padding:7px 10px 7px 0;border-top:1px solid var(--line);vertical-align:top}
+  .sowhat td.q{color:var(--mut)}
+  .sowhat td.bad{font-family:var(--mono);color:var(--hi)} .sowhat td.bad small,.sowhat td.good small{display:block;font-family:var(--sans,inherit);color:var(--dim);font-size:11.5px;margin-top:2px}
+  .sowhat td.good{font-family:var(--mono);color:var(--low)}
+  .sowhat .sw-note{margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.55}
   .samples{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:18px}
   .samples .lbl{color:var(--mut);font-size:13px;margin-right:2px}
   .chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel);color:var(--ink);
@@ -224,6 +234,25 @@
       <button type="button" class="chip" data-src="samples/sales_pipeline.csv">Sales pipeline · CRM</button>
       <button type="button" class="chip" data-src="samples/employees.csv">Employees · HR</button>
       <button type="button" class="chip" data-src="samples/customers.csv">Customers</button>
+    </div>
+
+    <div class="sowhat">
+      <div class="sw-h">Why bother? We asked an AI to analyze the sales-pipeline sample — before and after cleaning. <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">Full experiment, raw transcripts →</a></div>
+      <table>
+        <thead><tr><th>Question</th><th>AI on the dirty file</th><th>AI on the cleaned file</th></tr></thead>
+        <tbody>
+          <tr><td class="q">Total pipeline value</td>
+            <td class="bad">$1,818,500<small>a duplicate row's $18,500 counted twice</small></td>
+            <td class="good">$1,800,000 ✓</td></tr>
+          <tr><td class="q">Earliest close date</td>
+            <td class="bad">1900-01-01<small>the placeholder, reported as the answer</small></td>
+            <td class="good">2025-01-01 ✓</td></tr>
+          <tr><td class="q">Real emails handed to the AI</td>
+            <td class="bad">44<small>exposed before any model can “handle” them</small></td>
+            <td class="good">0 (masked) ✓</td></tr>
+        </tbody>
+      </table>
+      <div class="sw-note">Cheap-tier model, identical prompts, single-shot runs — transcripts committed unedited. A frontier model self-cleaned the 44-row file, but flipped its “earliest date” answer between two identical runs, and the emails were already sent. Judgments made once, explicitly, beat judgments improvised per-prompt.</div>
     </div>
 
     <footer>

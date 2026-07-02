@@ -112,6 +112,7 @@ dataset.
 | Fix loop with ask-don't-guess UX | live demo, `fixer.mjs`, `validate.mjs` §3–4 |
 | ~150,000 rows/sec scoring throughput | 100k rows ≈ 660 ms |
 | Shipped | [pivoxdata.vercel.app](https://pivoxdata.vercel.app), zero-dependency static deploy |
+| "So what" proven with a real LLM, transcripts committed | [`experiment/SO_WHAT.md`](experiment/SO_WHAT.md) |
 
 ### Scope expansion, on the same principle — duplicate IDs (Keys/uniqueness slice)
 
@@ -124,6 +125,19 @@ reference columns with legitimate repeats (`customer_id` on an orders table) fal
 gate and stay silent. Fixing stays a judgment — exact-copy dups clear via dedupe, differing
 rows are reported to the human. Shipped as the 11th issue type with its own validation
 section and Monte-Carlo defect class: still 100% recall / 100% precision at 20k datasets.
+
+### The "so what" experiment — proving the score matters
+
+A readiness score is only as good as its consequence, so we measured the consequence: the
+same five analyst questions, asked of a real LLM, on the dirty sales-pipeline sample vs the
+DataReady-cleaned version ([`experiment/SO_WHAT.md`](experiment/SO_WHAT.md), raw transcripts
+committed). The cheap tier returned a pipeline total inflated by $18,500 and named the
+1900-01-01 placeholder "the earliest close date." The frontier tier self-cleaned the 44-row
+file — by silently improvising the exact judgment calls this tool makes explicit — and still
+flipped its headline answer between two identical runs. On the cleaned file every model
+answered correctly, directly, and identically; and 44 real emails stayed out of the prompt.
+The experiment also surfaced the honest scale point: in-context self-cleaning is a small-file
+luxury — the 295k-row anchor dataset doesn't fit in a context window at all.
 
 ## 8 · What I'd do next (and deliberately didn't)
 

@@ -1,0 +1,54 @@
+{
+  "protocol": {
+    "model": "claude-sonnet-5 (Claude CLI, single run each)",
+    "cleanedWith": "fixDataset recommended set + most-common unify + PII mask"
+  },
+  "fixes_applied": [
+    "Dropped \"notes\" — 100% empty, carries no information.",
+    "Normalized 23 dates in \"close_date\" to ISO 8601 (YYYY-MM-DD).",
+    "Cleared 7 placeholder dates (1900-01-01 / 0000-00-00) in \"close_date\" — they are missing data, not dates.",
+    "Masked 44 email values in \"owner_email\".",
+    "Unified 2 values in \"account\" to your chosen spelling (\"Globex\").",
+    "Unified 1 value in \"region\" to your chosen spelling (\"apac\").",
+    "Converted 9 sentinel tokens (N/A, NULL, …) in \"amount_usd\" to real empty cells.",
+    "Removed 2 exact duplicate rows."
+  ],
+  "skipped": [
+    "Duplicate IDs in \"deal_id\": exact duplicate copies are removed by dedupe — if duplicates remain, the rows differ and deciding which record is the truth is your call.",
+    "Missing values in \"region\" left blank — imputation is a judgment, not a fact.",
+    "\"amount_usd\" mixes numbers and words — coercing \"thirty\" → 30 needs interpretation, left as-is."
+  ],
+  "score_before": 74,
+  "score_after": 95,
+  "q1_deal_count": {
+    "dirty_rows": 44,
+    "clean_rows": 42
+  },
+  "q2_total_pipeline_usd": {
+    "dirty_sum": 1818500,
+    "clean_sum": 1800000,
+    "inflation": 18500
+  },
+  "q3_earliest_close_date": {
+    "clean": "2025-01-01",
+    "dirty_contains_placeholder": true
+  },
+  "q4_apac_deals": {
+    "clean": 3,
+    "dirty_spellings": [
+      "apac",
+      "Apac"
+    ]
+  },
+  "q5_globex_deals": {
+    "clean": 6,
+    "dirty_spellings": [
+      "GLOBEX",
+      "Globex"
+    ]
+  },
+  "pii_exposure": {
+    "raw_emails_in_dirty_prompt": 44,
+    "raw_emails_in_clean_prompt": 0
+  }
+}

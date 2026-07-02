@@ -1,0 +1,53 @@
+You are a data analyst. Answer using ONLY the CSV below — no outside knowledge.
+Give exact numbers. Answer as a numbered list; one short caveat sentence per answer is allowed.
+
+1. How many deals are in this dataset?
+2. What is the total pipeline value (sum of amount_usd), in USD?
+3. What is the earliest close_date in the data?
+4. How many deals are in the APAC region?
+5. How many deals belong to the account "Globex"?
+
+CSV:
+deal_id,account,owner_email,stage,amount_usd,close_date,region
+D-1001,Wayne LLC,d***@salesco.com,Negotiation,65000,2025-01-15,EMEA
+D-1002,Wonka Co,s***@salesco.com,Closed Won,20000,2025-03-08,EMEA
+D-1003,Globex,d***@salesco.com,Negotiation,101500,2025-05-22,NA
+D-1004,Acme Corp,a***@salesco.com,Closed Lost,18500,2025-09-10,NA
+D-1005,Globex,r***@salesco.com,Closed Won,4000,,
+D-1006,Stark Ind,d***@salesco.com,Qualified,88500,,
+D-1007,Acme Corp,s***@salesco.com,Negotiation,52000,2025-03-10,
+D-1008,Stark Ind,a***@salesco.com,Qualified,42500,2025-06-05,
+D-1009,Soylent,j***@salesco.com,Proposal,113000,2025-06-18,LATAM
+D-1010,Stark Ind,m***@salesco.com,Negotiation,,2025-02-12,
+D-1011,Vehement,d***@salesco.com,Negotiation,,2025-08-25,NA
+D-1012,Wayne LLC,s***@salesco.com,Prospect,78500,2025-06-20,
+D-1013,Soylent,r***@salesco.com,Proposal,45500,2025-10-19,
+D-1014,Soylent,s***@salesco.com,Negotiation,86500,2025-04-03,EMEA
+D-1015,Massive Dynamic,r***@salesco.com,Closed Won,,2025-11-16,NA
+D-1016,Stark Ind,s***@salesco.com,Prospect,8500,2025-02-28,NA
+D-1017,Cyberdyne,r***@salesco.com,Prospect,72000,,EMEA
+D-1018,Acme Corp,j***@salesco.com,Proposal,50500,2025-05-12,NA
+D-1019,Cyberdyne,m***@salesco.com,Proposal,82500,2025-04-16,apac
+D-1020,Globex,a***@salesco.com,Prospect,24000,2025-08-24,LATAM
+D-1021,Globex,a***@salesco.com,Qualified,,2025-02-25,NA
+D-1022,Massive Dynamic,a***@salesco.com,Proposal,28000,2025-02-04,apac
+D-1023,Cyberdyne,r***@salesco.com,Negotiation,7500,2025-04-22,LATAM
+D-1024,Wonka Co,s***@salesco.com,Closed Lost,47000,2025-06-13,
+D-1025,Globex,j***@salesco.com,Closed Lost,69000,2025-03-27,
+D-1026,Umbrella,j***@salesco.com,Proposal,17500,,apac
+D-1027,Wayne LLC,s***@salesco.com,Closed Lost,69000,,EMEA
+D-1028,Cyberdyne,m***@salesco.com,Proposal,16000,2025-02-18,
+D-1029,Vehement,j***@salesco.com,Qualified,94500,2025-08-17,EMEA
+D-1030,Cyberdyne,m***@salesco.com,Closed Won,,,NA
+D-1031,Cyberdyne,r***@salesco.com,Prospect,46500,2025-09-16,LATAM
+D-1032,Initech,m***@salesco.com,Closed Won,6500,2025-09-04,LATAM
+D-1033,Cyberdyne,a***@salesco.com,Prospect,,2025-01-27,NA
+D-1034,Umbrella,a***@salesco.com,Closed Won,117000,2025-07-23,EMEA
+D-1035,Wonka Co,j***@salesco.com,Negotiation,81000,2025-07-06,EMEA
+D-1036,Globex,r***@salesco.com,Proposal,,2025-06-06,
+D-1037,Hooli,r***@salesco.com,Proposal,42000,2025-05-18,
+D-1038,Wayne LLC,a***@salesco.com,Closed Won,115000,2025-08-05,
+D-1039,Initech,r***@salesco.com,Prospect,,2025-11-21,
+D-1040,Acme Corp,m***@salesco.com,Closed Won,1500,2025-01-01,NA
+D-1041,Wonka Co,r***@salesco.com,Qualified,14000,2025-02-01,LATAM
+D-1042,Hooli,r***@salesco.com,Proposal,75000,,NA
