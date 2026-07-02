@@ -35,9 +35,14 @@ const isNumeric = (v) => v !== "" && !isNaN(Number(v));
 // normalization key for value-variant clustering: "USA" / " usa" / "U.S.A." → "usa".
 // Deterministic surface normalization only — semantic merging ("sb" vs "Sanghyun")
 // needs world knowledge and is deferred to the v1.5 Claude layer.
+// Punctuation BETWEEN DIGITS is meaningful and survives: Korean 지번 addresses spell
+// lot numbers as "642" vs "64-2" — different parcels that must never cluster (found
+// dogfooding Seoul commercial data). "테크노-마트"/"테크노마트" still cluster: the
+// hyphen there sits between letters, not digits.
 export const variantKey = (raw) =>
   raw.toLowerCase().normalize("NFKC")
-    .replace(/[^\p{L}\p{N}\s]+/gu, "")   // strip punctuation entirely: "u.s.a." → "usa"
+    .replace(/(?<=\d)[^\p{L}\p{N}\s]+(?=\d)/gu, "-") // digit-punct-digit → canonical "-"
+    .replace(/(?<!\d)[^\p{L}\p{N}\s-]+|[^\p{L}\p{N}\s]+(?!\d)|(?<!\d)-/gu, "") // strip the rest
     .replace(/\s+/g, " ").trim();        // collapse whitespace: "ROOSEVELT  AVE" ≡ "Roosevelt Ave"
 export function dateShape(v) {
   if (/^\d{4}-\d{2}-\d{2}/.test(v)) return "ISO";
@@ -84,7 +89,13 @@ export function scoreDataset(rows, columns) {
       if (s) dateShapes[s] = (dateShapes[s] || 0) + 1;
     }
     let piiType = null, piiCount = 0;
-    const detectors = { ...PII_PATTERNS, phone: looksLikePhone };
+    // a column that NAMES itself a code (법정동코드, zipcode, violation_code) is an
+    // administrative code, not PII — Korean 10-digit 법정동코드 collides with the bare
+    // phone shape exactly like NYC's bbl, but here the header says so; trust it.
+    // (found dogfooding Seoul commercial data — same name-gate philosophy as
+    // looksLikeIdColumn; '번호' is NOT excluded: 전화번호 really is a phone.)
+    const codeNamed = /(코드|code)\s*$/i.test(String(col).trim());
+    const detectors = codeNamed ? {} : { ...PII_PATTERNS, phone: looksLikePhone };
     for (const [type, test] of Object.entries(detectors)) {
       const match = test instanceof RegExp ? (t) => test.test(t) : test;
       // a date like 2021-03-05 also matches loose phone shapes — exclude date-shaped

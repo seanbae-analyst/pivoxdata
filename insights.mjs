@@ -59,8 +59,13 @@ export function extractInsights(rows, columns, stats) {
   // metrics: numeric, not an id by name, not code-like, not near-constant, not PII/date,
   // and not a discrete integer LABEL (≤100 distinct values each reused ≥50× — district
   // numbers, board codes: averaging those is meaningless)
+  // Korean address parts (…번지 lot numbers, …번호 registry numbers) are positional
+  // labels, not quantities — summing 건물본번지 is as meaningless as summing ZIP codes
+  // (found dogfooding Seoul commercial data; english analog: *_number)
+  const labelNamed = (c) => /(번지|번호)\s*$|_?number\s*$/i.test(String(c).trim());
   const metricCols = columns.filter((c) => prof[c] && !prof[c].codeLike && prof[c].cv >= 0.05 &&
     !(prof[c].intOnly && cs[c].uniqueCount <= 100 && cs[c].present / cs[c].uniqueCount >= 50) &&
+    !labelNamed(c) &&
     !looksLikeIdColumn(c) && !cs[c].piiType && Object.keys(cs[c].dateShapes || {}).length === 0).slice(0, 6);
   // categories: low-cardinality text
   const categoryCols = columns.filter((c) => cs[c] && !cs[c].piiType &&

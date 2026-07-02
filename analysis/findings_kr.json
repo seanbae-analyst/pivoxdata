@@ -1,0 +1,194 @@
+{
+  "dataready": {
+    "score": 76,
+    "issues": [
+      "[high] high_missing@지점명",
+      "[high] high_missing@건물부번지",
+      "[high] high_missing@건물명",
+      "[high] empty_column@동정보",
+      "[high] empty_column@호정보",
+      "[medium] missing@층정보",
+      "[medium] value_variants@상호명",
+      "[medium] value_variants@건물명"
+    ]
+  },
+  "insights": [
+    {
+      "shape": "granularity",
+      "fact": "Your 537,489 rows describe only 156,526 distinct \"지번코드\" entities — 3.4 rows per entity."
+    },
+    {
+      "shape": "outliers",
+      "fact": "The largest \"층정보\" is 8,279 — 8,279× the median 1; 98952 values ≥3× median carry 69.9% of the column's total."
+    },
+    {
+      "shape": "structural_missing",
+      "fact": "\"건물명\" is 53.4% blank overall — but 65.7% blank when 상권업종대분류코드=\"I2\" vs 33.7% when 상권업종대분류코드=\"M1\"."
+    },
+    {
+      "shape": "segment_gap",
+      "fact": "Average \"층정보\" for 상권업종대분류코드=\"M1\" is 5.7 — +97.9% vs the overall 2.9 (55440 rows)."
+    },
+    {
+      "shape": "segment_gap",
+      "fact": "Average \"층정보\" for 상권업종대분류명=\"과학·기술\" is 5.7 — +97.9% vs the overall 2.9 (55440 rows)."
+    }
+  ],
+  "entity": {
+    "rows": 537489,
+    "unique_상가업소번호": 537489
+  },
+  "industry": {
+    "top": [
+      {
+        "k": "음식",
+        "n": 138558,
+        "pct": 25.8
+      },
+      {
+        "k": "소매",
+        "n": 112810,
+        "pct": 21
+      },
+      {
+        "k": "과학·기술",
+        "n": 92306,
+        "pct": 17.2
+      },
+      {
+        "k": "수리·개인",
+        "n": 52039,
+        "pct": 9.7
+      },
+      {
+        "k": "교육",
+        "n": 45080,
+        "pct": 8.4
+      }
+    ]
+  },
+  "district": {
+    "top3": [
+      {
+        "k": "강남구",
+        "n": 64239
+      },
+      {
+        "k": "서초구",
+        "n": 38947
+      },
+      {
+        "k": "송파구",
+        "n": 33600
+      }
+    ],
+    "bottom3": [
+      {
+        "k": "서대문구",
+        "n": 13631
+      },
+      {
+        "k": "강북구",
+        "n": 12246
+      },
+      {
+        "k": "도봉구",
+        "n": 10377
+      }
+    ],
+    "gangnam_vs_dobong": 6.2
+  },
+  "floors": [
+    {
+      "k": "과학·기술",
+      "avg": 5.75,
+      "n": 55440
+    },
+    {
+      "k": "시설관리·임대",
+      "avg": 5.45,
+      "n": 13424
+    },
+    {
+      "k": "교육",
+      "avg": 3.83,
+      "n": 28960
+    },
+    {
+      "k": "보건의료",
+      "avg": 3.68,
+      "n": 12756
+    },
+    {
+      "k": "예술·스포츠",
+      "avg": 2.37,
+      "n": 11963
+    },
+    {
+      "k": "소매",
+      "avg": 2.27,
+      "n": 62808
+    },
+    {
+      "k": "부동산",
+      "avg": 2.11,
+      "n": 15715
+    },
+    {
+      "k": "수리·개인",
+      "avg": 1.95,
+      "n": 32439
+    },
+    {
+      "k": "음식",
+      "avg": 1.36,
+      "n": 90059
+    }
+  ],
+  "building_name_missing": [
+    {
+      "k": "숙박",
+      "pct": 81.4
+    },
+    {
+      "k": "음식",
+      "pct": 65.7
+    },
+    {
+      "k": "예술·스포츠",
+      "pct": 64.6
+    },
+    {
+      "k": "수리·개인",
+      "pct": 61.3
+    },
+    {
+      "k": "소매",
+      "pct": 55.5
+    },
+    {
+      "k": "교육",
+      "pct": 46.5
+    },
+    {
+      "k": "부동산",
+      "pct": 46.1
+    },
+    {
+      "k": "보건의료",
+      "pct": 42.3
+    },
+    {
+      "k": "시설관리·임대",
+      "pct": 39.6
+    },
+    {
+      "k": "과학·기술",
+      "pct": 33.7
+    }
+  ],
+  "coords": {
+    "missing": 0,
+    "out_of_bbox": 0
+  }
+}

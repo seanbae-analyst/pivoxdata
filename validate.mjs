@@ -307,6 +307,47 @@ console.log("=".repeat(64));
     [...insGB, ...insCC].every((i) => i.fact && i.baseline && i.sowhat && i.materiality > 0));
 }
 
+// ---------- (9) KOREAN DATA — gaps found dogfooding Seoul commercial data (537k rows) ----------
+console.log("\n" + "=".repeat(64));
+console.log("(9) KOREAN DATA — code-named columns are not PII; 지번 lots never merge");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  const { variantKey } = await import("./scorer.mjs");
+
+  // a) 법정동코드: 10-digit administrative codes must NOT flag as phone PII
+  const rows = Array.from({ length: 20 }, (_, i) => ({
+    "법정동코드": `11680101${String(i).padStart(2, "0")}`,   // 10-digit, phone-shaped
+    "전화번호": `010-2${String(1000 + i)}-${String(1000 + i)}`, // a REAL phone column
+    "상호명": `가게${i}`,
+  }));
+  const r = scoreDataset(rows, ["법정동코드", "전화번호", "상호명"]);
+  assert("법정동코드 (code-named) not flagged as PII",
+    !r.issues.some((i) => i.code === "pii" && i.column === "법정동코드"));
+  assert("전화번호 still flagged as PII (번호 is not excluded)",
+    r.issues.some((i) => i.code === "pii" && i.column === "전화번호"));
+
+  // b) 지번 lot numbers: "642" and "64-2" are different parcels — never cluster
+  assert("지번 642 ≠ 64-2 (digit-punctuation preserved)",
+    variantKey("서울특별시 송파구 문정동 642") !== variantKey("서울특별시 송파구 문정동 64-2"));
+  assert("64.2 ≡ 64-2 (punct between digits canonicalized)",
+    variantKey("문정동 64.2") === variantKey("문정동 64-2"));
+  assert("테크노-마트 ≡ 테크노마트 (letter-side punct still strips)",
+    variantKey("테크노-마트") === variantKey("테크노마트"));
+  assert("U.S.A. ≡ usa (existing behavior intact)",
+    variantKey("U.S.A.") === variantKey("usa"));
+
+  // c) …번지/…번호 columns are address labels, not metrics — insights must not sum them
+  const { extractInsights } = await import("./insights.mjs");
+  const lot = Array.from({ length: 30 }, (_, i) => ({
+    "상호명": `가게${i % 6}`, "구명": i < 15 ? "강남구" : "도봉구",
+    "건물본번지": String(i < 3 ? 3000 + i : 10 + i),   // outlier-shaped, but a LABEL
+  }));
+  const insKR = extractInsights(lot, ["상호명", "구명", "건물본번지"], scoreDataset(lot, ["상호명", "구명", "건물본번지"]));
+  assert("번지 column never becomes a metric (no outlier/sum trivia)",
+    !insKR.some((i) => i.fact.includes("건물본번지")));
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));

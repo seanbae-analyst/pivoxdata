@@ -17,3 +17,4 @@ nyc_restaurant_full.csv
 # claude/bkit session artifacts
 .bkit/
 **/.bkit/
+kr_data/
