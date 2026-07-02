@@ -31,6 +31,35 @@ Deploy: static site, zero build step — `vercel deploy` (config in [`vercel.jso
 
 ---
 
+## When to use it — and when not to
+
+The common denominator: **the moment tabular data is about to enter an AI.**
+
+Use it when:
+1. **You're about to paste a CSV into ChatGPT/Claude.** The experiment below shows what
+   happens otherwise — and a PII check is only meaningful *before* upload, by definition.
+2. **The file is too big for the model to self-audit.** A frontier model hand-cleaned our
+   44-row sample in-context; the 295,810-row anchor dataset doesn't even fit in a context
+   window. RAG ingestion, fine-tuning sets, batch pipelines.
+3. **The same analysis runs repeatedly.** In-context cleaning is improvised per prompt and
+   wobbles between runs (measured — see the experiment). Dashboards, daily reports, agents
+   need judgments made once, explicitly.
+4. **The number ships.** An error stops a report; a confidently-wrong total goes into the
+   board deck.
+5. **Someone hands you a CSV you've never seen.** A 30-second readiness verdict before you
+   invest analysis time.
+
+Skip it when:
+- Your org already runs real data-quality infra (dbt tests, Great Expectations) — this is
+  the lightweight gate *in front of* an AI prompt, not a replacement for pipeline DQ.
+- Your problem needs judgment-level repair (imputation, `"thirty"` → 30, semantic merging) —
+  the tool deliberately refuses to guess.
+- Your data is wrong-but-well-formed (a valid-looking phone number that's not the right
+  number). Form is checkable; truth needs a source of record (see TRUST.md).
+- Multi-sheet / merged-cell Excel or multi-file joins — out of scope in v1.
+- A tiny throwaway file with no PII and a frontier model on the other side — honest answer:
+  in-context self-cleaning may be enough for a one-off.
+
 ## What it does
 
 CSV/XLSX in → score across dimensions → a ranked, plain-language issue list, each tagged as a
