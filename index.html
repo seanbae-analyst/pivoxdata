@@ -206,6 +206,17 @@
   .ba-t td small{display:block;font-family:inherit;color:var(--dim);font-size:11px;white-space:normal;margin-top:2px}
   .ba-note{margin-top:10px;font-size:11.5px;color:var(--dim);line-height:1.55}
   .ba-note a{color:var(--acc);text-decoration:none} .ba-note a:hover{text-decoration:underline}
+  .ins{margin-top:14px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--panel)}
+  .ins-h{font-size:13px;font-weight:700;margin-bottom:10px}
+  .ins-item{padding:10px 0;border-top:1px solid var(--line)}
+  .ins-item .tagline{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+  .ins-item .shape{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);
+    background:rgba(212,165,88,.14);border-radius:5px;padding:2px 7px;white-space:nowrap}
+  .ins-item .fact{font-size:13px;font-weight:600;line-height:1.5}
+  .ins-item .base{font-size:11.5px;color:var(--dim);margin-top:3px}
+  .ins-item .sw{font-size:12px;color:var(--mut);margin-top:4px;line-height:1.5}
+  .ins-item .sw b{color:var(--acc);font-weight:700}
+  .ins-empty{font-size:12.5px;color:var(--mut);padding:4px 0}
   #fixed .btn{margin-top:14px;margin-right:10px}
 
   .hidden{display:none!important}
@@ -327,6 +338,13 @@
           these are the answers an AI (or any analyst) would compute. Highlighted rows changed.
           <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">We ran this against a real LLM →</a></div>
         </div>
+        <div class="ins" id="ins-wrap">
+          <div class="ins-h" id="ins-h">What your data says</div>
+          <div id="ins-body"></div>
+          <div class="ba-note">Deterministic pattern detection on the cleaned data — each insight is a recomputable fact,
+          its baseline, and what to do about it. Below-threshold observations stay silent on purpose.
+          The shapes were discovered by <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/analysis/ANALYSIS.md" target="_blank" rel="noopener">a real 295k-row analysis →</a></div>
+        </div>
         <div class="opt" style="border-bottom:none;padding-bottom:0">
           <input type="checkbox" id="opt-bom" checked>
           <label for="opt-bom">Excel-friendly CSV (UTF-8 BOM)<span class="why">prevents broken Korean / Unicode when opened in Excel</span></label>
@@ -347,6 +365,7 @@
 import { scoreDataset } from "./scorer.mjs";
 import { fixDataset } from "./fixer.mjs";
 import { analyzeBeforeAfter } from "./analyzer.mjs";
+import { extractInsights } from "./insights.mjs";
 
 const $ = (id) => document.getElementById(id);
 const gColor = (s) => s >= 80 ? "#4ec97d" : s >= 55 ? "#e0a83a" : "#f87171";
@@ -694,6 +713,24 @@ $("applyfix").addEventListener("click", ()=>{
   q(".ba-h").textContent = changed
     ? `So what? ${changed} analytical answer${changed>1?"s":""} changed — this is what the cleanup was for:`
     : "So what? Your analytical answers were already stable — cleanup made them safe to trust:";
+
+  // insight engine — patterns in the CLEANED data (fact + baseline + so-what)
+  const SHAPE_LABEL = { granularity:"granularity", weighting_bias:"weighting bias",
+    structural_missing:"structural missing", concentration:"concentration",
+    segment_gap:"segment gap", outliers:"outliers" };
+  const insights = extractInsights(res.rows, res.columns, after);
+  $("ins-h").textContent = insights.length
+    ? `What your data says — ${insights.length} pattern${insights.length>1?"s":""} above threshold:`
+    : "What your data says";
+  $("ins-body").innerHTML = insights.length
+    ? insights.map(i=>`<div class="ins-item">
+        <div class="tagline"><span class="shape">${esc(SHAPE_LABEL[i.shape]||i.shape)}</span>
+        <span class="fact">${esc(i.fact)}</span></div>
+        <div class="base">baseline: ${esc(i.baseline)}</div>
+        <div class="sw"><b>→</b> ${esc(i.sowhat)}</div></div>`).join("")
+    : `<div class="ins-empty">No headline patterns above threshold — the data is evenly behaved.
+       Honest silence beats trivia; every threshold is documented in <span style="font-family:var(--mono)">insights.mjs</span>.</div>`;
+
   $("fixed").classList.remove("hidden");
   $("fixed").scrollIntoView({behavior:"smooth", block:"nearest"});
 });

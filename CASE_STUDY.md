@@ -139,6 +139,21 @@ answered correctly, directly, and identically; and 44 real emails stayed out of 
 The experiment also surfaced the honest scale point: in-context self-cleaning is a small-file
 luxury — the 295k-row anchor dataset doesn't fit in a context window at all.
 
+### The analysis loop, closed — and productized
+
+The tool's reason to exist is the analyst loop (clean → analyze → findings →
+recommendation), so we ran that loop for real once: [`analysis/ANALYSIS.md`](analysis/ANALYSIS.md)
+on the full 295k-row NYC dataset, with DataReady dogfooded as step 1. It produced
+decision-grade findings (a 3.4× granularity trap; a +42.9% weighted-average bias; missing
+grades that are process, not corruption; risk concentrated in Queens while volume sits in
+Manhattan; 3,506 never-inspected restaurants hidden behind placeholder dates) and a
+recommendation memo. Then each finding was generalized into a deterministic insight shape
+([`insights.mjs`](insights.mjs)) that now runs on every uploaded file — manual analysis as
+discovery, product as the generalization. The engine's first draft produced exactly the
+auto-EDA trivia the category is infamous for (summed ZIP codes, "93% of X in the segment
+with 93% of rows"); the shipped version encodes those failures as guards, and its
+validation includes an honest-silence test.
+
 ## 8 · What I'd do next (and deliberately didn't)
 
 - **v1.5 Claude layer** — phrase facts in plain language, suggest column descriptions,

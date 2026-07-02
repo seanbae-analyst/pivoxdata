@@ -1,0 +1,175 @@
+{
+  "step1_dataready": {
+    "rows_raw": 295810,
+    "rows_clean": 295685,
+    "score_before": 73,
+    "score_after": 78,
+    "fixes": [
+      "Cleared 3506 placeholder dates (1900-01-01 / 0000-00-00) in \"INSPECTION DATE\" — they are missing data, not dates.",
+      "Converted 1 sentinel token (N/A, NULL, …) in \"DBA\" to real empty cells.",
+      "Converted 31 sentinel tokens (N/A, NULL, …) in \"BUILDING\" to real empty cells.",
+      "Converted 28 sentinel tokens (N/A, NULL, …) in \"STREET\" to real empty cells.",
+      "Removed 125 exact duplicate rows."
+    ],
+    "skipped": [
+      "Missing values in \"GRADE\" left blank — imputation is a judgment, not a fact.",
+      "Missing values in \"GRADE DATE\" left blank — imputation is a judgment, not a fact.",
+      "PII in \"PHONE\" left as-is — masking or dropping is a governance decision, not a mechanical fix.",
+      "PII in \"BBL\" left as-is — masking or dropping is a governance decision, not a mechanical fix.",
+      "Multiple spellings in \"DBA\" left as-is — pick a canonical form to unify them.",
+      "\"BUILDING\" mixes numbers and words — coercing \"thirty\" → 30 needs interpretation, left as-is.",
+      "Multiple spellings in \"BUILDING\" left as-is — pick a canonical form to unify them.",
+      "Multiple spellings in \"STREET\" left as-is — pick a canonical form to unify them.",
+      "Multiple spellings in \"VIOLATION DESCRIPTION\" left as-is — pick a canonical form to unify them."
+    ]
+  },
+  "granularity": {
+    "rows": 295685,
+    "unique_restaurants": 31159,
+    "unique_inspections": 87892,
+    "rows_per_inspection": 3.36
+  },
+  "grade_missing_by_type": [
+    {
+      "type": "Cycle Inspection / Initial Inspection",
+      "rows": 155732,
+      "missing_pct": 61.9
+    },
+    {
+      "type": "Cycle Inspection / Re-inspection",
+      "rows": 58041,
+      "missing_pct": 4
+    },
+    {
+      "type": "Pre-permit (Operational) / Initial Inspection",
+      "rows": 41735,
+      "missing_pct": 57.8
+    },
+    {
+      "type": "Pre-permit (Operational) / Re-inspection",
+      "rows": 10857,
+      "missing_pct": 4.5
+    },
+    {
+      "type": "Administrative Miscellaneous / Initial Inspection",
+      "rows": 9577,
+      "missing_pct": 99.9
+    },
+    {
+      "type": "Pre-permit (Non-operational) / Initial Inspection",
+      "rows": 3614,
+      "missing_pct": 71.4
+    },
+    {
+      "type": "(blank)",
+      "rows": 3506,
+      "missing_pct": 100
+    }
+  ],
+  "grade_missing_overall_pct": 50.7,
+  "weighting_bias": {
+    "row_weighted_avg_score": 25.48,
+    "inspection_weighted_avg_score": 17.83,
+    "bias_pct": 42.9,
+    "note": "NYC scores: higher = worse. Row-averaging inflates the city's apparent risk."
+  },
+  "cuisine_risk": {
+    "worst": [
+      {
+        "segment": "Indian",
+        "inspections": 1007,
+        "avg_score": 23.9,
+        "critical_pct": 90.4
+      },
+      {
+        "segment": "Caribbean",
+        "inspections": 2755,
+        "avg_score": 21.5,
+        "critical_pct": 89.2
+      },
+      {
+        "segment": "Chinese",
+        "inspections": 7322,
+        "avg_score": 21.1,
+        "critical_pct": 90.7
+      },
+      {
+        "segment": "Latin American",
+        "inspections": 3641,
+        "avg_score": 21.1,
+        "critical_pct": 92
+      },
+      {
+        "segment": "Thai",
+        "inspections": 1111,
+        "avg_score": 20.8,
+        "critical_pct": 90
+      }
+    ],
+    "best": [
+      {
+        "segment": "Donuts",
+        "inspections": 1998,
+        "avg_score": 11,
+        "critical_pct": 77
+      },
+      {
+        "segment": "Hamburgers",
+        "inspections": 1622,
+        "avg_score": 12.2,
+        "critical_pct": 75.6
+      },
+      {
+        "segment": "Tex-Mex",
+        "inspections": 986,
+        "avg_score": 13.9,
+        "critical_pct": 77.9
+      }
+    ],
+    "min_inspections": 500
+  },
+  "boro_risk": [
+    {
+      "segment": "Queens",
+      "inspections": 19461,
+      "avg_score": 19.1,
+      "critical_pct": 88.8
+    },
+    {
+      "segment": "Brooklyn",
+      "inspections": 21594,
+      "avg_score": 17.9,
+      "critical_pct": 85.4
+    },
+    {
+      "segment": "Bronx",
+      "inspections": 7702,
+      "avg_score": 17.5,
+      "critical_pct": 88.1
+    },
+    {
+      "segment": "Manhattan",
+      "inspections": 31481,
+      "avg_score": 17.1,
+      "critical_pct": 85.6
+    },
+    {
+      "segment": "Staten Island",
+      "inspections": 2926,
+      "avg_score": 16.9,
+      "critical_pct": 88.5
+    }
+  ],
+  "backlog": {
+    "never_inspected_restaurants": 3506,
+    "share_of_all_restaurants_pct": 11.3,
+    "by_boro": {
+      "0": 48,
+      "Manhattan": 1580,
+      "Brooklyn": 853,
+      "Queens": 698,
+      "Bronx": 208,
+      "Staten Island": 119
+    }
+  }
+}

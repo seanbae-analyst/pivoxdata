@@ -155,6 +155,20 @@ battery and a PII trap battery. Latest run ([`SIMULATION.md`](SIMULATION.md)):
 
 Deterministic (seeded), so the numbers reproduce exactly: `node sim.mjs <seed> <N> --report`.
 
+### From readiness to insight — the analysis layer
+
+After cleanup the app also tells you what the file *says*: [`insights.mjs`](insights.mjs)
+detects six deterministic patterns (granularity traps, weighted-average bias, structural
+missingness, concentration, segment gaps, outliers), each emitted only as **fact + baseline
++ so-what** and ranked by materiality — below-threshold observations stay silent. The shapes
+were not invented: they are the generalized findings of [a real manual analysis of the
+295k-row NYC dataset](analysis/ANALYSIS.md) (clean → analyze → findings → recommendation,
+with DataReady dogfooded as step 1), and the engine re-discovers that analysis' headline
+findings on its own (9.5 rows per restaurant; grade blanks 62% vs 4% by inspection type).
+Gate: `validate.mjs` §8 — including an honest-silence test on clean data.
+Known residual (documented, like the `bbl` case): entity-key *semantics* — the finest
+repeating key is reported even when a human would name a different column the entity.
+
 ### Does the score matter? — the "so what" experiment
 
 We asked a real LLM the same five analyst questions on the dirty demo file and on the

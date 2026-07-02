@@ -260,6 +260,53 @@ console.log("=".repeat(64));
     by("Rows the analysis")?.dirty === "5" && by("Rows the analysis")?.clean === "4");
 }
 
+// ---------- (8) INSIGHTS — real patterns fire, trivia stays silent ----------
+console.log("\n" + "=".repeat(64));
+console.log("(8) INSIGHTS — fact+baseline+so-what shapes; honest silence on clean data");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  const { extractInsights } = await import("./insights.mjs");
+  const run = (rows, cols) => extractInsights(rows, cols, scoreDataset(rows, cols));
+
+  // a) granularity + weighting bias: entity O0 heavy (10 rows, total 1000),
+  //    O1..O9 light (2 rows each, total 100) — 28 rows, 10 entities
+  const gb2 = [];
+  for (let j = 0; j < 10; j++) gb2.push({ order_id: "O0", order_total: "1000", item: `a${j}` });
+  for (let e = 1; e < 10; e++) for (let j = 0; j < 2; j++) gb2.push({ order_id: `O${e}`, order_total: "100", item: `b${e}${j}` });
+  const insGB = run(gb2, ["order_id", "order_total", "item"]);
+  assert("granularity fires (28 rows, 10 entities, 2.8×)",
+    insGB.some((i) => i.shape === "granularity" && /2\.8/.test(i.fact)));
+  assert("weighting bias fires (row-avg ≫ entity-avg)",
+    insGB.some((i) => i.shape === "weighting_bias" && /\+/.test(i.fact)));
+
+  // b) structural missingness: grade blank 90% in phase A vs 0% in phase B
+  const sm = [];
+  for (let i = 0; i < 20; i++) sm.push({ phase: "A", grade: i < 18 ? "" : "ok", who: `p${i}` });
+  for (let i = 0; i < 20; i++) sm.push({ phase: "B", grade: "ok", who: `q${i}` });
+  assert("structural missingness fires (90% vs 0% by phase)",
+    run(sm, ["phase", "grade", "who"]).some((i) => i.shape === "structural_missing" && i.fact.includes('phase="A"')));
+
+  // c) concentration + outliers: 90% of revenue from 10% of rows
+  const cc = [];
+  for (let e = 0; e < 9; e++) for (let j = 0; j < 2; j++) cc.push({ region: `R${e}`, revenue: "10" });
+  cc.push({ region: "KING", revenue: "800" }); cc.push({ region: "KING", revenue: "800" });
+  const insCC = run(cc, ["region", "revenue"]);
+  assert("concentration fires only with value-share ≫ row-share",
+    insCC.some((i) => i.shape === "concentration" && i.fact.includes("KING")));
+  assert("outliers fire (800 ≫ median 10)", insCC.some((i) => i.shape === "outliers"));
+
+  // d) trivia guards: clean/uniform data (+ a concentrated ZIP code column) → SILENCE
+  const clean = [];
+  for (let i = 0; i < 20; i++) clean.push({ user_id: `U${i}`, name: `n${i}`, zip: i < 15 ? "10001" : "94103", flag: "yes" });
+  assert("honest silence on clean data (zip codes are not metrics)",
+    run(clean, ["user_id", "name", "zip", "flag"]).length === 0);
+
+  // e) format contract: every insight carries fact + baseline + so-what + materiality
+  assert("every insight has fact/baseline/sowhat/materiality",
+    [...insGB, ...insCC].every((i) => i.fact && i.baseline && i.sowhat && i.materiality > 0));
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));
