@@ -13,3 +13,7 @@ nyc_restaurant_full.csv
 # os / editor
 .DS_Store
 .vercel
+
+# claude/bkit session artifacts
+.bkit/
+**/.bkit/
