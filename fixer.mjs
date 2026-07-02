@@ -6,6 +6,7 @@
 // is itself a verifiable claim.
 import {
   scoreDataset, SENTINELS, PLACEHOLDER_DATE, PII_PATTERNS, dateShape, looksLikePhone,
+  variantKey,
 } from "./scorer.mjs";
 
 const MONTHS = {
@@ -45,6 +46,9 @@ const maskDigits = (t) => "***-" + (t.match(/\d/g) || []).slice(-4).join("");
 //   clearSentinels    N/A, NULL, -, … → empty                (default true)
 //   dropEmptyCols     drop 100%-empty columns                (default true)
 //   maskPII           mask email/phone/ssn values            (default false — governance)
+//   unify             { [column]: { [variantKey]: "canonical spelling" } } — the user's
+//                     chosen winner per spelling cluster; clusters without a choice are
+//                     left untouched (default {} — never unify without being told)
 export function fixDataset(rows, columns, opts = {}) {
   const {
     maskPII = false,
@@ -53,6 +57,7 @@ export function fixDataset(rows, columns, opts = {}) {
     clearPlaceholders = true,
     clearSentinels = true,
     dropEmptyCols = true,
+    unify = {},
   } = opts;
   let cols = (columns && columns.length ? columns : Object.keys(rows[0] || {})).slice();
   let out = rows.map((r) => ({ ...r }));
@@ -126,6 +131,23 @@ export function fixDataset(rows, columns, opts = {}) {
         skipped.push({ code: "pii", column: col,
           reason: `PII in "${col}" left as-is — masking or dropping is a governance decision, not a mechanical fix.` });
       }
+    } else if (iss.code === "value_variants") {
+      const choices = unify[col];
+      if (!choices || Object.keys(choices).length === 0) {
+        skipped.push({ code: "value_variants", column: col,
+          reason: `Multiple spellings in "${col}" left as-is — pick a canonical form to unify them.` });
+        continue;
+      }
+      let n = 0;
+      for (const r of out) {
+        const raw = String(r[col] ?? "").trim();
+        if (!raw) continue;
+        const canon = choices[variantKey(raw)];
+        if (canon != null && canon !== "" && raw !== canon) { r[col] = canon; n++; }
+      }
+      const picked = [...new Set(Object.values(choices).filter(Boolean))];
+      fixes.push({ code: "unify", column: col, count: n,
+        message: `Unified ${n} value${n === 1 ? "" : "s"} in "${col}" to your chosen spelling${picked.length > 1 ? "s" : ""} (${picked.slice(0, 3).map((p) => `"${p}"`).join(", ")}${picked.length > 3 ? ", …" : ""}).` });
     } else if (iss.code === "missing" || iss.code === "high_missing") {
       skipped.push({ code: iss.code, column: col,
         reason: `Missing values in "${col}" left blank — imputation is a judgment, not a fact.` });

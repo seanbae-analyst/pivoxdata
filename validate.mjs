@@ -106,6 +106,40 @@ console.log("=".repeat(64));
   assert("empty column dropped (8 → 7)", res.columns.length === 7);
 }
 
+// ---------- (4) Value-variant unification (user-chosen canonical) ----------
+console.log("\n" + "=".repeat(64));
+console.log("(4) UNIFY — spelling clusters, canonical chosen by the USER");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  // fixture: one column spelling the same country 3 ways + a consistent column
+  const rows = [
+    { id: "1", country: "USA" }, { id: "2", country: "usa" }, { id: "3", country: "U.S.A." },
+    { id: "4", country: "USA" }, { id: "5", country: "Korea" }, { id: "6", country: "Korea" },
+  ];
+  const cols = ["id", "country"];
+  const before = scoreDataset(rows, cols);
+  const flagged = before.issues.find((i) => i.code === "value_variants" && i.column === "country");
+  assert("cluster detected (USA/usa/U.S.A.)", !!flagged);
+
+  // without a user choice → untouched (never unify without being told)
+  const noChoice = fixDataset(rows, cols);
+  assert("no choice → left as-is (skipped, values unchanged)",
+    noChoice.skipped.some((s) => s.code === "value_variants") &&
+    noChoice.rows.some((r) => r.country === "usa"));
+
+  // user chooses "USA" as canonical
+  const res = fixDataset(rows, cols, { unify: { country: { usa: "USA" } } });
+  const after = scoreDataset(res.rows, res.columns);
+  assert("chosen canonical applied (usa/U.S.A. → USA)",
+    res.rows.filter((r) => r.country === "USA").length === 4 &&
+    !res.rows.some((r) => r.country === "usa" || r.country === "U.S.A."));
+  assert("Korea untouched (no cross-cluster damage)",
+    res.rows.filter((r) => r.country === "Korea").length === 2);
+  assert("issue gone + score improved after unify",
+    !after.issues.some((i) => i.code === "value_variants") && after.score > before.score);
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));

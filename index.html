@@ -149,6 +149,10 @@
   .radio:has(input:checked){border-color:var(--acc);color:var(--ink);box-shadow:inset 0 0 0 1px var(--acc)}
   .radio input{accent-color:var(--acc);cursor:pointer}
   .radio .ex{font-family:var(--mono);font-size:12px;color:var(--mut)}
+  .customtxt{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 9px;
+    color:var(--ink);font-family:inherit;font-size:13px;width:150px;outline:none}
+  .customtxt:focus{border-color:var(--acc)}
+  .customtxt::placeholder{color:var(--dim)}
   .always{margin-top:12px;color:var(--dim);font-size:12.5px;line-height:1.6}
   .always b{color:var(--mut);font-weight:600}
 
@@ -277,6 +281,7 @@ const fmtSize = (b) => b == null ? "" : b < 1024*1024 ? (b/1024).toFixed(1)+" KB
 
 let last = null;     // {rows, columns, name, size}
 let cleaned = null;  // {rows, columns, name}
+let clusterIndex = []; // spelling clusters shown in the options panel (rebuilt per render)
 
 /* ---------- view routing (real page transition, back-button friendly) ---------- */
 function showView(v, push = true){
@@ -345,6 +350,28 @@ function buildFixOptions(r){
       </div>
     </div>`);
 
+  // spelling clusters — "USA / usa / U.S.A." — the user picks the winner per cluster
+  clusterIndex = [];
+  for (const iss of r.issues.filter((i)=>i.code === "value_variants")){
+    const all = r.columnStats[iss.column]?.variantClusters || [];
+    for (const cl of all.slice(0, 3)){
+      const ci = clusterIndex.length;
+      clusterIndex.push({ col: iss.column, key: cl.key, forms: cl.forms });
+      parts.push(`
+      <div class="optgroup">
+        <div class="q">“${esc(iss.column)}” spells the same value ${cl.forms.length} ways — which one should win?</div>
+        <div class="choices">
+          ${cl.forms.slice(0, 4).map((f, fi)=>`
+            <label class="radio"><input type="radio" name="unify-${ci}" value="${fi}" ${fi===0?"checked":""}> ${esc(f.raw)} <span class="ex">×${f.count}</span></label>`).join("")}
+          <label class="radio"><input type="radio" name="unify-${ci}" value="custom"> <input type="text" class="customtxt" id="unify-txt-${ci}" placeholder="or type your own…" spellcheck="false"></label>
+          <label class="radio"><input type="radio" name="unify-${ci}" value="keep"> Leave as-is</label>
+        </div>
+      </div>`);
+    }
+    if (all.length > 3) parts.push(
+      `<div class="always">…and ${all.length - 3} more spelling cluster${all.length - 3 > 1 ? "s" : ""} in “${esc(iss.column)}” — clean, download, re-upload to continue.</div>`);
+  }
+
   const check = (id, label, why, checked=true) => `
     <div class="opt"><input type="checkbox" id="${id}" ${checked?"checked":""}>
     <label for="${id}">${label}<span class="why">${why}</span></label></div>`;
@@ -359,6 +386,13 @@ function buildFixOptions(r){
     "Drop 100%-empty columns", "they carry zero information"));
 
   $("fixopts").innerHTML = parts.join("");
+
+  // typing a custom spelling auto-selects its radio (no extra click needed)
+  document.querySelectorAll(".customtxt").forEach((t)=>{
+    const pick = ()=>{ t.closest(".radio").querySelector("input[type=radio]").checked = true; };
+    t.addEventListener("focus", pick);
+    t.addEventListener("input", pick);
+  });
 
   const kept = [];
   if (codes.has("missing") || codes.has("high_missing")) kept.push("<b>missing values</b> (imputation is a judgment)");
@@ -454,6 +488,16 @@ d.addEventListener("drop",(e)=> e.dataTransfer.files[0] && handle(e.dataTransfer
 $("applyfix").addEventListener("click", ()=>{
   if(!last) return;
   const q = (sel)=>document.querySelector(sel);
+  // spelling clusters: the user's canonical per cluster — an existing form,
+  // their own typed spelling, or "keep" (→ untouched)
+  const unify = {};
+  clusterIndex.forEach((cl, ci)=>{
+    const v = q(`input[name=unify-${ci}]:checked`)?.value;
+    if (v == null || v === "keep") return;
+    let canon = v === "custom" ? ($(`unify-txt-${ci}`)?.value ?? "").trim() : cl.forms[Number(v)]?.raw;
+    if (canon) (unify[cl.col] ||= {})[cl.key] = canon;
+  });
+
   const opts = {
     dedupe:            q("#opt-dedupe") ? q("#opt-dedupe").checked : true,
     clearPlaceholders: q("#opt-ph")     ? q("#opt-ph").checked     : true,
@@ -461,6 +505,7 @@ $("applyfix").addEventListener("click", ()=>{
     dropEmptyCols:     q("#opt-empty")  ? q("#opt-empty").checked  : true,
     dateTarget:        q("input[name=datefmt]:checked")?.value ?? "ISO",
     maskPII:           q("input[name=piiopt]:checked")?.value === "mask",
+    unify,
   };
   const res = fixDataset(last.rows, last.columns, opts);
   const after = scoreDataset(res.rows, res.columns);

@@ -31,6 +31,14 @@ export const PLACEHOLDER_DATE = /^(1900-01-01|01\/01\/1900|0000-00-00)/;
 export const SENTINELS = new Set(["n/a", "na", "null", "none", "-", "--", "unknown", "tbd", "#n/a"]);
 
 const isNumeric = (v) => v !== "" && !isNaN(Number(v));
+
+// normalization key for value-variant clustering: "USA" / " usa" / "U.S.A." → "usa".
+// Deterministic surface normalization only — semantic merging ("sb" vs "Sanghyun")
+// needs world knowledge and is deferred to the v1.5 Claude layer.
+export const variantKey = (raw) =>
+  raw.toLowerCase().normalize("NFKC")
+    .replace(/[^\p{L}\p{N}\s]+/gu, "")   // strip punctuation entirely: "u.s.a." → "usa"
+    .replace(/\s+/g, " ").trim();        // collapse whitespace: "ROOSEVELT  AVE" ≡ "Roosevelt Ave"
 export function dateShape(v) {
   if (/^\d{4}-\d{2}-\d{2}/.test(v)) return "ISO";
   if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(v)) return "US-slash";
@@ -70,8 +78,39 @@ export function scoreDataset(rows, columns) {
       }).length;
       if (c > piiCount && c >= Math.max(3, present * 0.3)) { piiCount = c; piiType = type; }
     }
+    // value-variant clusters — same normalized key, ≥2 raw spellings ("USA"/"usa"/"U.S.A.").
+    // Only for text-ish columns: PII, date, and mostly-numeric columns are excluded, and
+    // sentinel tokens are excluded (they are already their own issue).
+    let variantClusters = [];
+    const textish = !piiType && Object.keys(dateShapes).length === 0 &&
+      (present === 0 || numericCount / present <= 0.9);
+    if (textish) {
+      const groups = new Map();
+      for (const v of nonEmpty) {
+        const raw = String(v).trim();
+        if (SENTINELS.has(raw.toLowerCase())) continue;   // sentinels are their own issue
+        if (isNumeric(raw)) continue;                      // "12.5" vs "125" must never merge
+        const key = variantKey(raw);
+        if (!key) continue;
+        let g = groups.get(key);
+        if (!g) groups.set(key, (g = new Map()));
+        g.set(raw, (g.get(raw) || 0) + 1);
+      }
+      for (const [key, forms] of groups) {
+        if (forms.size >= 2) variantClusters.push({
+          key,
+          forms: [...forms.entries()].map(([raw, count]) => ({ raw, count }))
+            .sort((a, b) => b.count - a.count),
+          total: [...forms.values()].reduce((s, x) => s + x, 0),
+        });
+      }
+      variantClusters.sort((a, b) => b.total - a.total);
+      variantClusters = variantClusters.slice(0, 5); // cap for sanity on free-text columns
+    }
+
     columnStats[col] = { present, missing, missingRate: n ? missing / n : 0, uniqueCount,
-      placeholderDateCount, sentinelCount, numericCount, dateShapes, piiType, piiCount };
+      placeholderDateCount, sentinelCount, numericCount, dateShapes, piiType, piiCount,
+      variantClusters };
   }
 
   const add = (dimension, severity, column, code, message, evidence) =>
@@ -125,6 +164,13 @@ export function scoreDataset(rows, columns) {
     if (s.placeholderDateCount > 0) {
       add("consistency", "high", col, "placeholder_date", `"${col}" has ${s.placeholderDateCount} placeholder dates (1900-01-01 / 0000-00-00).`, `placeholder=${s.placeholderDateCount}`);
       consistencyPenalty += 6;
+    }
+    if (s.variantClusters.length > 0) {
+      const ex = s.variantClusters[0].forms.slice(0, 3).map((f) => `"${f.raw}"`).join(" / ");
+      add("consistency", "medium", col, "value_variants",
+        `"${col}" spells the same value multiple ways (${ex}${s.variantClusters.length > 1 ? ` — and ${s.variantClusters.length - 1} more cluster${s.variantClusters.length > 2 ? "s" : ""}` : ""}).`,
+        s.variantClusters.map((c) => c.forms.map((f) => `${f.raw}×${f.count}`).join("/")).join(" · "));
+      consistencyPenalty += 4;
     }
   }
   const consistencyScore = Math.max(0, 100 - consistencyPenalty);
