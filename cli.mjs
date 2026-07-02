@@ -1,10 +1,15 @@
-// cli.mjs — score any CSV/Excel file from the terminal (same scorer the app uses).
-//   node cli.mjs <file.csv|file.xlsx>
+// cli.mjs — score (and optionally fix) any CSV/Excel file from the terminal.
+//   node cli.mjs <file.csv|file.xlsx>            score only
+//   node cli.mjs <file.csv> --fix [out.csv]      score, apply mechanical fixes,
+//                                                write cleaned CSV, re-score
+import fs from "fs";
+import Papa from "papaparse";
 import { parseFile } from "./parse.mjs";
 import { scoreDataset } from "./scorer.mjs";
+import { fixDataset } from "./fixer.mjs";
 
 const path = process.argv[2];
-if (!path) { console.error("usage: node cli.mjs <file.csv|file.xlsx>"); process.exit(2); }
+if (!path) { console.error("usage: node cli.mjs <file.csv|file.xlsx> [--fix [out.csv]]"); process.exit(2); }
 
 const { rows, columns } = parseFile(path);
 const r = scoreDataset(rows, columns);
@@ -19,3 +24,25 @@ for (const i of r.issues) {
   console.log(`  [${i.severity.toUpperCase().padEnd(6)}] ${i.dimension}/${i.code}  ${i.message}`);
 }
 console.log();
+
+// ---- optional mechanical fix pass ----
+const fixIdx = process.argv.indexOf("--fix");
+if (fixIdx > -1) {
+  const argOut = process.argv[fixIdx + 1];
+  const outPath = argOut && !argOut.startsWith("--")
+    ? argOut
+    : path.replace(/\.(csv|xlsx|xls)$/i, "") + ".cleaned.csv";
+
+  const res = fixDataset(rows, columns);
+  const after = scoreDataset(res.rows, res.columns);
+
+  console.log(`FIX — mechanical only (nothing guessed):\n`);
+  for (const f of res.fixes) console.log(`  ✓ ${f.message}`);
+  for (const s of res.skipped) console.log(`  ○ ${s.reason}`);
+
+  const csv = Papa.unparse({ fields: res.columns, data: res.rows.map((row) => res.columns.map((c) => row[c] ?? "")) });
+  fs.writeFileSync(outPath, csv + "\n");
+
+  console.log(`\n  score ${res.before.score} → ${after.score}   rows ${rows.length} → ${res.rows.length}   cols ${columns.length} → ${res.columns.length}`);
+  console.log(`  wrote ${outPath}\n`);
+}

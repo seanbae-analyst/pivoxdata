@@ -45,6 +45,19 @@ CSV/XLSX in → score across dimensions → a ranked, plain-language issue list,
 Scores are **judgments built on facts** — the facts underneath are always inspectable, and the
 dimension weights are explicit and tunable. (See `TRUST.md` for why that separation matters.)
 
+### …and it closes the loop: score → clean → download (v1.1)
+
+Detection without remediation is half a product. The **"Clean it"** button (and
+`npm run score file.csv -- --fix`, or `node cli.mjs file.csv --fix`) applies every fix that is
+*mechanically unambiguous* — dedupe exact rows, normalize mixed dates to ISO 8601, convert
+sentinel tokens to real empties, clear placeholder dates, drop 100%-empty columns — then
+re-scores the cleaned data and hands you the CSV. On the bundled CRM sample that's **79 → 95**.
+
+What it deliberately does **not** do is guess: imputing missing values, coercing `"thirty"` → 30,
+and PII masking policy are *judgments*, so [`fixer.mjs`](fixer.mjs) reports them as
+"left alone — needs human judgment" instead of silently altering data. Same fact-vs-judgment
+line as the scorer, enforced by the validation gate (`npm run validate`, section 3).
+
 ---
 
 ## Trust: don't trust, verify

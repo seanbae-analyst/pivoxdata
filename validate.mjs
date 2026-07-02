@@ -3,9 +3,13 @@
 //       ground truth, and measure precision / recall.
 //   (2) ORACLE AGREEMENT: run on the full NYC dataset and check the scorer's own
 //       computed facts match verify.py's independent oracle (verified_facts.json).
+//   (3) FIXER: mechanical remediation must raise the score, kill exactly the
+//       mechanical issue codes, and NEVER silently touch judgment-level issues
+//       (missing / numeric_text_mix / PII stays flagged).
 import fs from "fs";
 import { parseFile, norm } from "./parse.mjs";
 import { scoreDataset } from "./scorer.mjs";
+import { fixDataset } from "./fixer.mjs";
 
 let failures = 0;
 
@@ -69,6 +73,37 @@ try {
   }
 } catch (e) {
   console.log("\nskipped: " + e.message + "\n(run verify.py first to produce verified_facts.json)");
+}
+
+// ---------- (3) Fixer: mechanical remediation ----------
+console.log("\n" + "=".repeat(64));
+console.log("(3) FIXER — mechanical remediation on customers_messy.csv");
+console.log("=".repeat(64));
+{
+  const { rows, columns } = parseFile("test-data/customers_messy.csv");
+  const res = fixDataset(rows, columns);
+  const after = scoreDataset(res.rows, res.columns);
+  const afterCodes = new Set(after.issues.map((i) => i.code));
+
+  const assert = (name, ok) => {
+    console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`);
+    if (!ok) failures++;
+  };
+
+  console.log(`\n  score ${res.before.score} → ${after.score}   rows ${rows.length} → ${res.rows.length}   cols ${columns.length} → ${res.columns.length}`);
+  for (const f of res.fixes) console.log(`    · ${f.message}`);
+  for (const s of res.skipped) console.log(`    ○ skipped: ${s.reason}`);
+  console.log();
+
+  assert("score improved", after.score > res.before.score);
+  assert("mechanical codes gone (dup/mixed_date/placeholder/sentinel/empty_col)",
+    ["dup_rows", "mixed_date_format", "placeholder_date", "sentinel", "empty_column"]
+      .every((c) => !afterCodes.has(c)));
+  assert("PII still flagged (fixer must not silently mask)", afterCodes.has("pii"));
+  assert("judgment issues untouched (missing / numeric_text_mix survive)",
+    afterCodes.has("missing") && afterCodes.has("numeric_text_mix"));
+  assert("dup row removed (16 → 15)", res.rows.length === 15);
+  assert("empty column dropped (8 → 7)", res.columns.length === 7);
 }
 
 console.log("\n" + (failures === 0

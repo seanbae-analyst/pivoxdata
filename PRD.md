@@ -69,8 +69,14 @@ language) → **suggested fixes + a downloadable report / data-dictionary draft.
 - **v1.5 (Claude layer):** plain-language explanations, standardized column-name +
   description suggestions, data-dictionary draft, remaining 3 dimensions. Claude only *phrases*
   facts the code already computed — it never produces the score.
+- **v1.1 (shipped):** deterministic **fix layer** — the subset of remediation that is
+  mechanically unambiguous (dedupe, ISO-date normalize, sentinel→empty, placeholder-date clear,
+  drop empty columns) + cleaned-CSV download + before→after re-score. Judgment-level fixes
+  (imputation, `"thirty"`→30 coercion, PII masking policy) are explicitly *reported as skipped*,
+  never guessed — same fact/judgment line as the scorer.
 - **Out of scope (v1):** messy Excel structures (multiple sheets, merged cells, multi-row
-  headers), multi-file joins, live DB connectors, auto-fixing the data, accounts/auth.
+  headers), multi-file joins, live DB connectors, accounts/auth. ~~auto-fixing the data~~ →
+  shipped as the deterministic subset above in v1.1; judgment-level fixing stays out until v1.5.
 
 ## Anchor / demo dataset
 A real, notoriously messy public dataset used to prove the tool and ground the case-study.

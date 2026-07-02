@@ -3,9 +3,9 @@
 // Every issue carries a `type:'fact'` and its raw evidence — scores are judgments
 // built on facts (see TRUST.md). Dimension weights are explicit and tunable.
 
-const EMPTY = (v) => v === null || v === undefined || String(v).trim() === "";
+export const EMPTY = (v) => v === null || v === undefined || String(v).trim() === "";
 
-const PII_PATTERNS = {
+export const PII_PATTERNS = {
   email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
   ssn: /^\d{3}-\d{2}-\d{4}$/,
 };
@@ -21,17 +21,17 @@ const PII_PATTERNS = {
 // Residual: a bare 10-digit municipal id (e.g. NYC `bbl`) is indistinguishable
 // from a bare 10-digit phone by shape alone — resolvable only with column-name
 // semantics (deferred to the v1.5 Claude layer). Documented, not hidden.
-function looksLikePhone(t) {
+export function looksLikePhone(t) {
   if (t.includes(".")) return false;
   const digits = (t.match(/\d/g) || []).length;
   const hasSep = /[\s()+-]/.test(t);
   return hasSep ? digits >= 10 && digits <= 15 : digits === 10 || digits === 11;
 }
-const PLACEHOLDER_DATE = /^(1900-01-01|01\/01\/1900|0000-00-00)/;
-const SENTINELS = new Set(["n/a", "na", "null", "none", "-", "--", "unknown", "tbd", "#n/a"]);
+export const PLACEHOLDER_DATE = /^(1900-01-01|01\/01\/1900|0000-00-00)/;
+export const SENTINELS = new Set(["n/a", "na", "null", "none", "-", "--", "unknown", "tbd", "#n/a"]);
 
 const isNumeric = (v) => v !== "" && !isNaN(Number(v));
-function dateShape(v) {
+export function dateShape(v) {
   if (/^\d{4}-\d{2}-\d{2}/.test(v)) return "ISO";
   if (/^\d{1,2}\/\d{1,2}\/\d{4}/.test(v)) return "US-slash";
   if (/^[A-Za-z]+ \d{1,2},? \d{4}/.test(v)) return "long";
