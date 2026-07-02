@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>서울 상가 537,489행 분석 메모 · DataReady</title>
+<meta name="description" content="소상공인시장진흥공단 상가(상권)정보 서울 537,489행 — clean → analyze → findings → recommendation. 모든 숫자 재현 가능." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0e17; --panel:#111827; --panel2:#1e293b; --line:#334155;
+    --ink:#e2e8f0; --mut:#94a3b8; --dim:#64748b;
+    --hi:#f87171; --med:#e0a83a; --low:#4ec97d; --acc:#d4a558;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --serif:"Playfair Display","EB Garamond",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:Inter,"Noto Sans KR",ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif;
+    font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:780px;margin:0 auto;padding:44px 22px 80px}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--ink);text-decoration:none}
+  .brand .lg{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--acc);display:grid;place-items:center;color:var(--acc);font-size:13px}
+  .top a.back{color:var(--acc);text-decoration:none;font-size:13.5px}
+  .top a.back:hover{text-decoration:underline}
+  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
+  h1{font-family:"Noto Sans KR",var(--serif);font-size:clamp(26px,4.4vw,38px);line-height:1.24;font-weight:700;margin:0 0 14px}
+  .lede{color:var(--mut);font-size:15.5px;margin:0 0 8px}
+  .meta{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:34px}
+  .meta a{color:var(--dim)}
+  h2{font-family:"Noto Sans KR",var(--serif);font-size:21px;font-weight:700;margin:42px 0 12px}
+  p{margin:0 0 14px;color:var(--ink)}
+  p.mut{color:var(--mut)}
+  b{color:#fff}
+  .num{font-family:var(--mono)}
+  .find{border-left:3px solid var(--acc);padding:2px 0 2px 16px;margin:22px 0}
+  .find .fh{font-weight:700;font-size:16px;margin-bottom:6px}
+  .find .fh .n{font-family:var(--mono);color:var(--acc);margin-right:8px}
+  .stat{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+  .stat .s{flex:1 1 150px;border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:12px 14px}
+  .stat .v{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--acc)}
+  .stat .v.bad{color:var(--hi)}
+  .stat .l{font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.45}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
+  th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:4px 10px 8px 0}
+  td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
+  td.num{white-space:nowrap}
+  code{font-family:var(--mono);font-size:12.5px;background:var(--panel2);border-radius:5px;padding:2px 6px}
+  ul{margin:0 0 14px;padding-left:20px} li{margin-bottom:8px}
+  .note{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;font-size:13px;color:var(--mut);line-height:1.65}
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
+  footer a{color:var(--acc);text-decoration:none} footer a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="/"><span class="lg">✓</span>DataReady</a>
+    <a class="back" href="/">← 파일 채점하러 가기</a>
+  </div>
+
+  <div class="kicker">분석 메모 · 한국 공공데이터 편</div>
+  <h1>서울 상가 537,489행이 말하는 것 — 그리고 분석 전에 알아야 할 함정</h1>
+  <p class="lede">소상공인시장진흥공단 상가(상권)정보, 서울, 2026-03-31 분기 스냅샷.
+  <b>clean → analyze → findings → recommendation</b> 루프를 <a href="/analysis" style="color:var(--acc)">NYC 295k</a>에
+  이어 한국 데이터에 반복했습니다. 모든 숫자는 커밋된 스크립트가 계산합니다.</p>
+  <div class="meta">reproduce: <code>node analysis/run_kr.mjs</code> ·
+    <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/analysis/ANALYSIS_KR.md" target="_blank" rel="noopener">원문 메모 + findings_kr.json →</a></div>
+
+  <div class="stat">
+    <div class="s"><div class="v num">537,489</div><div class="l">서울 상가 (행 = 상가, 완전 유니크 확인)</div></div>
+    <div class="s"><div class="v num">3.4개</div><div class="l">필지(지번코드)당 상가 — 필지 질문은 dedupe 필수</div></div>
+    <div class="s"><div class="v num">46.8%</div><div class="l">음식 + 소매 — 서울 상가의 절반</div></div>
+    <div class="s"><div class="v num bad">8,279층</div><div class="l">층정보 최댓값 — 실존하는 오입력</div></div>
+    <div class="s"><div class="v num bad">14.3%</div><div class="l">1년 새 등재에서 사라진 상가 (신규 +13.7%)</div></div>
+  </div>
+
+  <h2>Step 1 — 채점부터 (DataReady dogfood)</h2>
+  <p>Readiness <b class="num">76</b>. 실제 이슈: <code>동정보</code>·<code>호정보</code> 100% 빈 컬럼,
+  <code>지점명</code> 91.3% 결측, 상호명·건물명 표기 변형(테크노-마트/테크노마트).
+  좌표는 흠잡을 데 없음 — 결측 0, 서울 경계 밖 0. 좋은 것도 그대로 기록합니다.</p>
+
+  <h2>Findings</h2>
+
+  <div class="find">
+    <div class="fh"><span class="n">1</span>행 ≠ 필지: 한 필지에 상가 3.4개</div>
+    <p><code>상가업소번호</code>는 537,489/537,489 완전 유니크(행 = 상가 ✓). 그러나 지번코드 기준
+    <b class="num">156,526개 필지에 3.4개꼴</b> — 임대료·개발·재건축처럼 "필지/건물 단위" 질문은
+    dedupe 없이는 3.4× 왜곡됩니다. NYC의 3.36 rows/inspection과 정확히 같은 granularity trap.</p>
+  </div>
+
+  <div class="find">
+    <div class="fh"><span class="n">2</span>서울 상가의 절반 가까이는 먹고 파는 곳</div>
+    <p>음식 <b class="num">25.8%</b>(138,558) + 소매 <b class="num">21.0%</b>(112,810) = <b>46.8%</b>.
+    3위 과학·기술(17.2%)과의 간격이 상권 정책이 체감되는 대상을 말해줍니다.
+    자치구로는 강남구(64,239)가 도봉구(10,377)의 <b class="num">6.2배</b>.</p>
+  </div>
+
+  <div class="find">
+    <div class="fh"><span class="n">3</span>도시의 수직 구조가 데이터에 있다</div>
+    <table>
+      <thead><tr><th>업종 (n≥5,000)</th><th>평균 입점 층</th></tr></thead>
+      <tbody>
+        <tr><td>과학·기술 (오피스형)</td><td class="num">5.75</td></tr>
+        <tr><td>시설관리·임대</td><td class="num">5.45</td></tr>
+        <tr><td>교육</td><td class="num">3.83</td></tr>
+        <tr><td>수리·개인</td><td class="num">1.95</td></tr>
+        <tr><td><b>음식 (로드샵형)</b></td><td class="num"><b>1.36</b></td></tr>
+      </tbody>
+    </table>
+    <p>음식 1.36층 vs 과학·기술 5.75층 — <b class="num">4.2배</b>. "몇 층에 있느냐"가 업종을 예측하는
+    피처라는 뜻이고, 이 +97.9% 갭은 <a href="/" style="color:var(--acc)">인사이트 엔진</a>이 스스로 찾아냈습니다.
+    층 필터 없는 "상권 분석"은 오피스와 로드샵을 뒤섞습니다.</p>
+  </div>
+
+  <div class="find">
+    <div class="fh"><span class="n">4</span>건물명 결측 53.4%는 랜덤이 아니다</div>
+    <p>숙박 <b class="num">81.4%</b> · 음식 65.7% vs 과학·기술 <b class="num">33.7%</b>.
+    저층 노변·간이 업소일수록 건물명이 비어 있습니다 — 결측이 업종 구조를 따르는,
+    NYC grade 결측의 한국판. 건물명으로 조인/그룹핑하는 분석은 업종 편향을 그대로 상속합니다.</p>
+  </div>
+
+  <div class="find">
+    <div class="fh"><span class="n">5</span>층정보 최댓값 8,279층 — 불가능 값 실존</div>
+    <p>아웃라이어 감지가 중앙값 1층의 <b class="num">8,279배</b>짜리 값을 노출했습니다.
+    서울에 8천 층 건물은 없습니다 — 명백한 오입력이고, 층 기반 집계를 조용히 오염시킵니다.</p>
+  </div>
+
+  <div class="find">
+    <div class="fh"><span class="n">6</span>순변화 -0.6%가 숨기는 것: 연간 회전율 28%</div>
+    <p>1년 전 스냅샷(2025-03-31, 540,516개)과 대조하면 등재 기준
+    <b class="num">소멸 77,169개(14.3%) + 신규 74,142개(13.7%)</b> — 총량은 거의 그대로지만
+    <b>서울 상가 7곳 중 1곳이 1년 안에 사라졌습니다</b>. 업종별 소멸률은 교육 29.2% ·
+    음식 16.9% vs 과학·기술 7.0% — 로드샵 업종은 고회전, 오피스 업종은 안정.
+    정직 주석: 생존 상가의 업종 재분류는 0.1%뿐(정비 아티팩트 아님)이나, 교육은 소멸·신규가
+    나란히 29~30%라 ID 재부여가 섞였을 수 있어 하방 신뢰를 낮게 둡니다.</p>
+  </div>
+
+  <h2>권고</h2>
+  <ul>
+    <li><b>필지 단위 질문은 지번코드로 dedupe 후</b> — 상가 수 ≠ 필지 수 (3.4×).</li>
+    <li><b>건물명 기반 분석 금지</b> (결측 53%, 업종 편향) — 건물관리번호·좌표로 대체.</li>
+    <li><b>층정보는 range-check 후 사용</b> (8,279층 같은 오입력 존재).</li>
+    <li>상권 분석의 기본 프레임에 <b>수직(층) 축</b>을 넣을 것 — 업종은 수평으로만 갈리지 않는다.</li>
+  </ul>
+
+  <h2>이 분석이 제품에 남긴 것</h2>
+  <p class="mut">한국 데이터를 실전 투입하자 스코어러의 갭 3개가 터졌고, 전부 가드로 인코딩되어
+  검증 게이트(validate §9)에 박혔습니다: <code>…코드</code> 컬럼의 phone PII 오탐(법정동코드 10자리 =
+  NYC bbl 잔여의 대량 발생판) → 코드-이름 게이트 / 지번 "642" vs "64-2" 오병합(다른 필지!) →
+  숫자 사이 구두점 보존 / <code>…번지</code> 합산 트리비아 → 라벨-이름 지표 제외.
+  실패를 겪고, 가드로 만들고, 게이트로 고정하는 — 이 도구가 만들어져 온 방식 그대로.</p>
+
+  <div class="note"><b>한계</b> — churn은 등재 기준 diff(실개폐업+DB 정비 혼재);
+  업종 분류는 공단 기준; 상가 수 ≠ 매출·규모; 지방행정 인허가 데이터(LOCALDATA)는
+  네트워크 차단으로 이번 회차에서 상가정보로 대체. 통계적 검정 미적용 — 인용한 갭들은
+  의사결정에 충분한 크기이나 신뢰구간은 없음.</div>
+
+  <footer>
+    <span>결정론 분석 — 모든 숫자는 커밋된 스크립트로 재계산 가능.</span>
+    <span><a href="/analysis">NYC 295k 분석 →</a> · <a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source →</a></span>
+  </footer>
+</div>
+</body>
+</html>

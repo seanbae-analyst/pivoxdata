@@ -1,0 +1,107 @@
+{
+  "caveat": "등재 기준 diff — 실제 개폐업 + 공단 DB 정비 혼재. 상가업소번호 재부여 가능성 미확인.",
+  "prev_20250331": 540516,
+  "cur_20260331": 537489,
+  "survived": 463347,
+  "gone": 77169,
+  "born": 74142,
+  "gone_rate_pct": 14.3,
+  "born_rate_pct": 13.7,
+  "net_pct": -0.6,
+  "churn_by_category": [
+    {
+      "cat": "교육",
+      "prev": 44626,
+      "gone_pct": 29.2
+    },
+    {
+      "cat": "보건의료",
+      "prev": 18494,
+      "gone_pct": 17
+    },
+    {
+      "cat": "음식",
+      "prev": 139929,
+      "gone_pct": 16.9
+    },
+    {
+      "cat": "소매",
+      "prev": 113485,
+      "gone_pct": 15
+    },
+    {
+      "cat": "예술·스포츠",
+      "prev": 20416,
+      "gone_pct": 14.8
+    },
+    {
+      "cat": "숙박",
+      "prev": 8697,
+      "gone_pct": 14.3
+    },
+    {
+      "cat": "부동산",
+      "prev": 25000,
+      "gone_pct": 10.1
+    },
+    {
+      "cat": "시설관리·임대",
+      "prev": 24734,
+      "gone_pct": 10
+    },
+    {
+      "cat": "수리·개인",
+      "prev": 50986,
+      "gone_pct": 8.9
+    },
+    {
+      "cat": "과학·기술",
+      "prev": 94149,
+      "gone_pct": 7
+    }
+  ],
+  "churn_by_gu_top5": [
+    {
+      "gu": "노원구",
+      "prev": 15395,
+      "gone_pct": 16.9
+    },
+    {
+      "gu": "양천구",
+      "prev": 15459,
+      "gone_pct": 16.8
+    },
+    {
+      "gu": "강동구",
+      "prev": 19126,
+      "gone_pct": 16.5
+    },
+    {
+      "gu": "강서구",
+      "prev": 26080,
+      "gone_pct": 16
+    },
+    {
+      "gu": "구로구",
+      "prev": 18539,
+      "gone_pct": 16
+    }
+  ],
+  "churn_by_gu_bottom3": [
+    {
+      "gu": "서초구",
+      "prev": 39246,
+      "gone_pct": 11.8
+    },
+    {
+      "gu": "금천구",
+      "prev": 17919,
+      "gone_pct": 11.7
+    },
+    {
+      "gu": "종로구",
+      "prev": 20901,
+      "gone_pct": 11.1
+    }
+  ]
+}
