@@ -1,0 +1,93 @@
+{
+  "source": "data.go.kr 15076265 성남시 음식점 현황 (기준일 2026-05-12), 41,142행 — LOCALDATA 스키마의 시 단위 직접 첨부",
+  "caveat": "성남시 1개 시 — 전국 일반화 불가. '폐업'+'폐업중' 모두 폐업 처리. 검열 처리: N년 생존율은 관측창 ≥N년 코호트만.",
+  "dataready_score": 92,
+  "n": 41142,
+  "closed": 28784,
+  "closed_pct": 70,
+  "median_lifespan_closed_years": 4,
+  "closed_within_3y_pct": 41,
+  "survival": [
+    {
+      "years": 1,
+      "n": 39809,
+      "pct": 89.1
+    },
+    {
+      "years": 3,
+      "n": 36651,
+      "pct": 72.2
+    },
+    {
+      "years": 5,
+      "n": 33411,
+      "pct": 59.8
+    },
+    {
+      "years": 10,
+      "n": 26323,
+      "pct": 40.6
+    },
+    {
+      "years": 20,
+      "n": 14456,
+      "pct": 24.2
+    }
+  ],
+  "cohorts_5y": {
+    "1980s": {
+      "opened": 693,
+      "five_year_survival_pct": 100,
+      "eligible": 693
+    },
+    "1990s": {
+      "opened": 5486,
+      "five_year_survival_pct": 91.5,
+      "eligible": 5486
+    },
+    "2000s": {
+      "opened": 11810,
+      "five_year_survival_pct": 53.5,
+      "eligible": 11810
+    },
+    "2010s": {
+      "opened": 13123,
+      "five_year_survival_pct": 52.1,
+      "eligible": 13123
+    },
+    "2020s": {
+      "opened": 9933,
+      "five_year_survival_pct": 46.6,
+      "eligible": 2202
+    }
+  },
+  "by_gu": {
+    "분당구": {
+      "n": 20827,
+      "median_lifespan_closed": 3.3,
+      "five_year_survival_pct": 55.9
+    },
+    "수정구": {
+      "n": 10440,
+      "median_lifespan_closed": 4.5,
+      "five_year_survival_pct": 62
+    },
+    "중원구": {
+      "n": 9875,
+      "median_lifespan_closed": 5.3,
+      "five_year_survival_pct": 65.2
+    }
+  },
+  "by_kind": {
+    "일반음식점": {
+      "n": 30463,
+      "median_lifespan_closed": 4.8,
+      "five_year_survival_pct": 64.1
+    },
+    "휴게음식점": {
+      "n": 10679,
+      "median_lifespan_closed": 2.3,
+      "five_year_survival_pct": 45.8
+    }
+  }
+}
