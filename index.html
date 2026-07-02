@@ -738,13 +738,18 @@ $("applyfix").addEventListener("click", ()=>{
        Honest silence beats trivia; every threshold is documented in <span style="font-family:var(--mono)">insights.mjs</span>.</div>`;
 
   $("fixed").classList.remove("hidden");
-  $("fixed").scrollIntoView({behavior:"smooth", block:"nearest"});
+  const dest = analyzeJump ? $("ins-wrap") : $("fixed");
+  analyzeJump = false;
+  dest.scrollIntoView({behavior:"smooth", block:"start"});
 });
 
-// one-click path from the score card: recommended cleanup (the panel's defaults) + jump to insights
+// one-click path from the score card: recommended cleanup (the panel's defaults) + jump to insights.
+// A flag (not a timeout) decides the landing spot — two competing smooth scrolls raced before,
+// and losing the race dropped users at the bottom of the tall results card (the download buttons).
+let analyzeJump = false;
 $("analyze-now").addEventListener("click", ()=>{
+  analyzeJump = true;
   $("applyfix").click();
-  setTimeout(()=> $("ins-wrap")?.scrollIntoView({behavior:"smooth", block:"start"}), 200);
 });
 
 $("rescore").addEventListener("click", ()=>{
