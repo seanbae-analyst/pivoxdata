@@ -21,11 +21,12 @@ console.log("=".repeat(64));
   const { rows, columns } = parseFile("test-data/customers_messy.csv");
   const r = scoreDataset(rows, columns);
 
-  // ground truth = the 9 planted defects (code, column)
+  // ground truth = the 10 planted defects (code, column) — dup_id joined when the
+  // Keys/uniqueness slice shipped: the duplicate row also duplicates customer_id 1005.
   const expected = [
     ["empty_column", "notes"], ["missing", "country"], ["missing", "age"],
     ["mixed_date_format", "signup_date"], ["placeholder_date", "signup_date"],
-    ["numeric_text_mix", "age"], ["dup_rows", "(rows)"],
+    ["numeric_text_mix", "age"], ["dup_rows", "(rows)"], ["dup_id", "customer_id"],
     ["pii", "email"], ["pii", "phone"],
   ];
   const flagged = r.issues.map((i) => [i.code, i.column]);
@@ -172,6 +173,54 @@ console.log("=".repeat(64));
     (() => { const d = fixDataset(rows, cols);
       return d.columns.includes("Full Name") && d.columns.some((c) => /Email/i.test(c)) &&
         d.rows.some((r) => r["Full Name"] === "SARAH LEE"); })());
+}
+
+// ---------- (6) DUP-ID — Keys/uniqueness slice: near-unique identifier columns ----------
+console.log("\n" + "=".repeat(64));
+console.log("(6) DUP-ID — duplicate values in near-unique identifier columns");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  const mk = (n, idGen, extra = {}) =>
+    Array.from({ length: n }, (_, i) => ({ order_id: idGen(i), item: `item-${i % 4}`, ...extra }));
+
+  // a) near-unique PK with 2 leaked duplicate values → flagged, high severity
+  const pk = mk(20, (i) => `O${String(i).padStart(3, "0")}`);
+  pk[18].order_id = "O000"; pk[19].order_id = "O001";           // 18/20 unique = 90%
+  const rA = scoreDataset(pk, ["order_id", "item"]);
+  const hitA = rA.issues.find((i) => i.code === "dup_id" && i.column === "order_id");
+  assert("near-unique PK with leaked dups flagged (18/20 unique)", !!hitA && hitA.severity === "high");
+  assert("evidence names the duplicated values", !!hitA && /O000/.test(hitA.message));
+
+  // b) reference-style column (heavy legitimate repeats) → NOT flagged
+  const fk = Array.from({ length: 40 }, (_, i) => ({ row_no: `R${i}`, customer_id: `C${i % 5}` }));
+  const rB = scoreDataset(fk, ["row_no", "customer_id"]);
+  assert("FK-style column with heavy repeats stays silent (12.5% unique)",
+    !rB.issues.some((i) => i.code === "dup_id"));
+
+  // c) name guard: "paid"/"valid" end in -id but are NOT identifier tokens
+  const named = Array.from({ length: 12 }, (_, i) => ({ paid: i < 6 ? "yes" : "no", valid: "true", uid: `U${i}` }));
+  const rC = scoreDataset(named, ["paid", "valid", "uid"]);
+  assert("\"paid\"/\"valid\" columns never flagged (token guard)",
+    !rC.issues.some((i) => i.code === "dup_id"));
+
+  // d) fully unique id → NOT flagged
+  const uniq = mk(20, (i) => `O${String(i).padStart(3, "0")}`);
+  assert("fully unique id column stays silent",
+    !scoreDataset(uniq, ["order_id", "item"]).issues.some((i) => i.code === "dup_id"));
+
+  // e) fixer behavior: exact-copy dups vanish via dedupe; differing rows survive + reported skipped
+  const exact = mk(20, (i) => `O${String(i).padStart(3, "0")}`);
+  exact.push({ ...exact[0] });                                   // exact duplicate row
+  const resE1 = fixDataset(exact, ["order_id", "item"]);
+  assert("dup_id from an exact duplicate row disappears after dedupe",
+    !scoreDataset(resE1.rows, resE1.columns).issues.some((i) => i.code === "dup_id"));
+  const differ = mk(20, (i) => `O${String(i).padStart(3, "0")}`);
+  differ.push({ order_id: "O000", item: "item-DIFFERENT" });     // same id, different row
+  const resE2 = fixDataset(differ, ["order_id", "item"]);
+  assert("dup_id on differing rows survives the fixer (judgment) + reported as skipped",
+    scoreDataset(resE2.rows, resE2.columns).issues.some((i) => i.code === "dup_id") &&
+    resE2.skipped.some((s) => s.code === "dup_id"));
 }
 
 console.log("\n" + (failures === 0

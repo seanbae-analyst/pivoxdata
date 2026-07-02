@@ -172,6 +172,9 @@ export function fixDataset(rows, columns, opts = {}) {
     } else if (iss.code === "numeric_text_mix") {
       skipped.push({ code: iss.code, column: col,
         reason: `"${col}" mixes numbers and words — coercing "thirty" → 30 needs interpretation, left as-is.` });
+    } else if (iss.code === "dup_id") {
+      skipped.push({ code: "dup_id", column: col,
+        reason: `Duplicate IDs in "${col}": exact duplicate copies are removed by dedupe — if duplicates remain, the rows differ and deciding which record is the truth is your call.` });
     }
     // dup_rows handled below, AFTER normalization (normalizing can reveal more exact dups)
   }

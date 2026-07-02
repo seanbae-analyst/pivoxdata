@@ -46,6 +46,23 @@ export function dateShape(v) {
   return null;
 }
 
+// Keys/uniqueness (PRD dimension 6) — first deterministic slice, folded into Consistency
+// until the full 6-dimension expansion. A column is treated as *intending* uniqueness only
+// when BOTH hold, which is what keeps precision honest (same shape-over-guess philosophy
+// as the phone detector above):
+//   • its header's LAST token names an identifier ("deal_id", "dealId", "Deal ID", "uuid")
+//     — token-based so "paid"/"valid"/"grid" never match, and
+//   • its values are ≥90% unique — so a reference column like customer_id on an orders
+//     table (many legitimate repeats) stays silent; only a near-unique key with a few
+//     leaked duplicates is flagged.
+export function looksLikeIdColumn(name) {
+  const tokens = String(name).replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  const last = tokens[tokens.length - 1];
+  return last === "id" || last === "uid" || last === "uuid" || last === "guid";
+}
+export const ID_UNIQUENESS_GATE = 0.9;
+
 export function scoreDataset(rows, columns) {
   const n = rows.length;
   const cols = columns && columns.length ? columns : Object.keys(rows[0] || {});
@@ -108,6 +125,17 @@ export function scoreDataset(rows, columns) {
       variantClusters = variantClusters.slice(0, 5); // cap for sanity on free-text columns
     }
 
+    // duplicate values in a near-unique identifier column (see looksLikeIdColumn above)
+    let idDupes = null;
+    if (looksLikeIdColumn(col) && present > 0) {
+      const counts = new Map();
+      for (const v of nonEmpty) { const t = String(v).trim(); counts.set(t, (counts.get(t) || 0) + 1); }
+      const dups = [...counts.entries()].filter(([, c]) => c > 1).sort((a, b) => b[1] - a[1]);
+      if (dups.length && counts.size / present >= ID_UNIQUENESS_GATE) {
+        idDupes = { dups, uniqueRatio: counts.size / present };
+      }
+    }
+
     // casing profile (stats only, no issue) — powers the "normalize casing?" option in the UI
     let caseCounts = null;
     if (textish) {
@@ -123,7 +151,7 @@ export function scoreDataset(rows, columns) {
 
     columnStats[col] = { present, missing, missingRate: n ? missing / n : 0, uniqueCount,
       placeholderDateCount, sentinelCount, numericCount, dateShapes, piiType, piiCount,
-      variantClusters, caseCounts };
+      variantClusters, caseCounts, idDupes };
   }
 
   const add = (dimension, severity, column, code, message, evidence) =>
@@ -177,6 +205,14 @@ export function scoreDataset(rows, columns) {
     if (s.placeholderDateCount > 0) {
       add("consistency", "high", col, "placeholder_date", `"${col}" has ${s.placeholderDateCount} placeholder dates (1900-01-01 / 0000-00-00).`, `placeholder=${s.placeholderDateCount}`);
       consistencyPenalty += 6;
+    }
+    if (s.idDupes) {
+      const extra = s.idDupes.dups.reduce((sum, [, c]) => sum + (c - 1), 0);
+      const ex = s.idDupes.dups.slice(0, 3).map(([v, c]) => `"${v}"×${c}`).join(" · ");
+      add("consistency", "high", col, "dup_id",
+        `"${col}" looks like a unique identifier (${(s.idDupes.uniqueRatio * 100).toFixed(1)}% unique) but ${s.idDupes.dups.length} value${s.idDupes.dups.length > 1 ? "s appear" : " appears"} more than once (${ex}).`,
+        `dup_values=${s.idDupes.dups.length} extra_rows=${extra}`);
+      consistencyPenalty += 8;
     }
     if (s.variantClusters.length > 0) {
       const ex = s.variantClusters[0].forms.slice(0, 3).map((f) => `"${f.raw}"`).join(" / ");

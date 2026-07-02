@@ -505,6 +505,7 @@ function render(r){
     missing:           { auto: false, text: "Your call: backfill from the source system, or drop those rows if they're few. Imputation is a judgment." },
     sentinel:          { auto: true,  text: "Convert to real empties below — otherwise tools count “N/A” as data." },
     dup_rows:          { auto: true,  text: "Remove below — duplicates inflate every count and bias any model." },
+    dup_id:            { auto: false, text: "Same ID on more than one row: if the rows are exact copies, dedupe below clears them — if they differ, decide which record is the truth before any join or training run." },
     numeric_text_mix:  { auto: false, text: "Fix by hand: decide what “thirty” means, convert in Sheets/Excel, or drop the text rows." },
     mixed_date_format: { auto: true,  text: "Unify below — pick ISO or US and every date becomes parseable." },
     placeholder_date:  { auto: true,  text: "Clear below — 1900-01-01 silently poisons any time-series." },

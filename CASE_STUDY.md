@@ -107,11 +107,23 @@ dataset.
 |---|---|
 | Deterministic scorer, browser + Node, same module | `scorer.mjs`, no build step |
 | Facts triangulated by 3 engines + JS as 4th | `verify.py`, `verified_facts.json`, `validate.mjs` §2 |
-| Recall 100% / precision 100% at scale | `SIMULATION.md` — 20k datasets, 83,835 defects, 0 crashes |
-| Ground-truth measured north-star | `test-data/GROUND_TRUTH.md` — 9/9 recall, 100% precision |
+| Recall 100% / precision 100% at scale | `SIMULATION.md` — 20k datasets, 99,045 defects, 0 crashes |
+| Ground-truth measured north-star | `test-data/GROUND_TRUTH.md` — 10/10 recall, 100% precision |
 | Fix loop with ask-don't-guess UX | live demo, `fixer.mjs`, `validate.mjs` §3–4 |
-| ~260,000 rows/sec scoring throughput | 100k rows ≈ 390 ms |
+| ~150,000 rows/sec scoring throughput | 100k rows ≈ 660 ms |
 | Shipped | [pivoxdata.vercel.app](https://pivoxdata.vercel.app), zero-dependency static deploy |
+
+### Scope expansion, on the same principle — duplicate IDs (Keys/uniqueness slice)
+
+"Why only these issue types?" has a principled answer — *only what the machine can prove* —
+and the PRD's Keys/uniqueness dimension had a provable slice waiting: a column that **names
+itself an identifier** (`deal_id`, `dealId`, "Deal ID" — token-gated so `paid`/`valid` never
+match) and is **≥90% unique** is treated as intending uniqueness; duplicated values in it are
+a fact. The two-gate design keeps precision honest the same way the phone detector does:
+reference columns with legitimate repeats (`customer_id` on an orders table) fall under the
+gate and stay silent. Fixing stays a judgment — exact-copy dups clear via dedupe, differing
+rows are reported to the human. Shipped as the 11th issue type with its own validation
+section and Monte-Carlo defect class: still 100% recall / 100% precision at 20k datasets.
 
 ## 8 · What I'd do next (and deliberately didn't)
 

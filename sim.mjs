@@ -55,6 +55,10 @@ const CLEAN_COLS = {
   name: { gen: genName, numeric: false },
   country: { gen: () => pick(COUNTRIES), numeric: false },
   cuisine: { gen: () => pick(CUISINES), numeric: false },
+  // reference-style id (FK): pool of 3 values, so with n≥6 rows uniqueness is pigeonholed
+  // to ≤50% — always far below the 90% gate; the dup_id detector must NEVER fire on it
+  // (built-in negative test on every dataset that draws this column)
+  account_id: { gen: () => `A${randint(1, 3)}`, numeric: false },
   // fully numeric (numFrac ~1.0 → no numeric_text_mix; widths chosen to avoid phone collision)
   amount: { gen: () => String(randint(1, 9999)), numeric: true },
   zip: { gen: () => String(randint(10000, 99999)), numeric: true },      // 5 digits, not phone
@@ -92,11 +96,14 @@ function genDataset() {
   if (chance(0.4)) defects.push("placeholder_date");
   if (chance(0.55)) defects.push("pii_email");
   if (chance(0.5)) defects.push("pii_phone");
+  // dup_id needs n≥20 so a planted duplicate can't drag uniqueness under the 90% gate
+  const plantDupId = n >= 20 && chance(0.4);
+  if (plantDupId) defects.push("dup_id");
   let plantDups = chance(0.4);
 
   const colDefs = {};
   for (const d of defects) {
-    const cn = d + "_col";
+    const cn = d === "dup_id" ? "order_id" : d + "_col";   // detector is name-gated: last token must be an id token
     cols.push({ name: cn });
     colDefs[cn] = d;
   }
@@ -148,14 +155,34 @@ function genDataset() {
       const fmt = chance(0.5) ? genPhoneFormatted : genPhone10;
       for (let i = 0; i < n; i++) rows[i][cn] = fmt();
       expected.add(`pii:${cn}`);
+    } else if (d === "dup_id") {
+      // near-unique key with k leaked duplicate values (k ≈ 3% of n, so ≥97% unique
+      // before row-dup planting — comfortably above the documented 90% gate)
+      const k = Math.max(1, Math.floor(n * 0.03));
+      for (let i = 0; i < n; i++) rows[i][cn] = `O${String(i).padStart(6, "0")}`;
+      for (let j = 0; j < k; j++) rows[n - 1 - j][cn] = rows[j][cn];
+      // expected is finalized below — whole-row dup planting can move the ratio
     }
   }
 
+  let rowDups = 0;
   if (plantDups) {
-    const dups = randint(1, Math.max(1, Math.floor(n * 0.1)));
-    for (let k = 0; k < dups; k++) rows.push({ ...rows[randint(0, n - 1)] });
+    // when a dup_id column is present, cap row dups at 4% so the planted key column
+    // stays above the 90% uniqueness gate: (n−0.03n)/(n+0.04n) ≈ 0.93
+    rowDups = randint(1, Math.max(1, Math.floor(n * (plantDupId ? 0.04 : 0.1))));
+    for (let k = 0; k < rowDups; k++) rows.push({ ...rows[randint(0, n - 1)] });
     expected.add(`dup_rows:(rows)`);
   }
+
+  // dup_id ground truth mirrors the detector's DOCUMENTED contract (≥90% unique),
+  // computed from the known plant counts — duplicated rows also duplicate id values.
+  if (plantDupId) {
+    const kDup = Math.max(1, Math.floor(n * 0.03));
+    if ((n - kDup) / (n + rowDups) >= 0.9) expected.add(`dup_id:order_id`);
+  }
+  // row-dup planting duplicates row_id too — a genuinely correct dup_id flag there
+  // whenever row_id stays ≥90% unique (small datasets fall under the gate and stay silent)
+  if (plantDups && n / (n + rowDups) >= 0.9) expected.add(`dup_id:row_id`);
 
   return { rows, columns: cols.map((c) => c.name), expected };
 }
@@ -169,6 +196,7 @@ function familyKey(issue) {
   if (c === "mixed_date_format") return `mixed_date:${col}`;
   if (c === "placeholder_date") return `placeholder_date:${col}`;
   if (c === "dup_rows") return `dup_rows:(rows)`;
+  if (c === "dup_id") return `dup_id:${col}`;
   if (c === "pii") return `pii:${col}`;
   return `other:${col}`;
 }

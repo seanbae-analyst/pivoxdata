@@ -89,8 +89,9 @@ case-study is believed because one tool said so.
 > **Issue precision** = % of flagged issues a user would confirm as real.
 
 Measured against a **hand-labeled ground truth** ([`test-data/GROUND_TRUTH.md`](test-data/GROUND_TRUTH.md)):
-a customers dataset with a schema the scorer has never seen and 9 deliberately planted defects.
-Current result: **recall 9/9 (100%), precision 100%** — every planted defect caught, nothing
+a customers dataset with a schema the scorer has never seen and 10 deliberately planted defects
+(duplicate-ID detection joined the set when the Keys/uniqueness slice shipped).
+Current result: **recall 10/10 (100%), precision 100%** — every planted defect caught, nothing
 invented.
 
 ### A precision bug, found and fixed
@@ -118,10 +119,10 @@ battery and a PII trap battery. Latest run ([`SIMULATION.md`](SIMULATION.md)):
 
 | | result |
 |---|---|
-| Monte Carlo (20,000 datasets, 83,835 defects) | **recall 100% · precision 100% · 0 crashes** |
+| Monte Carlo (20,000 datasets, 99,045 defects) | **recall 100% · precision 100% · 0 crashes** |
 | Edge cases (0 rows, all-empty, unicode, emoji, 60 cols…) | **16/16 survive, sane output** |
 | PII traps (ids, zips, years, coords, prices…) | **0 false positives, 1 documented residual (`bbl`)** |
-| Throughput | **~260,000 rows/sec** (100k rows in ~390 ms) |
+| Throughput | **~150,000 rows/sec** (100k rows in ~660 ms) |
 
 Deterministic (seeded), so the numbers reproduce exactly: `node sim.mjs <seed> <N> --report`.
 
