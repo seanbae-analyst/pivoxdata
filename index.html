@@ -135,6 +135,18 @@
     border-left:3px solid var(--brand);border-radius:0 10px 10px 0;background:var(--panel)}
   .note b{color:var(--ink);font-weight:600}
 
+  /* what-to-do guidance per issue */
+  .sumline{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--mut);
+    margin:0 0 10px;font-family:var(--mono)}
+  .sumline b{color:var(--acc)}
+  td .act{margin-top:6px;font-size:12.5px;line-height:1.5;color:var(--mut)}
+  td .act .b{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;border-radius:4px;padding:1.5px 7px;margin-right:7px;vertical-align:1px}
+  td .act.auto .b{background:rgba(212,165,88,.16);color:var(--acc)}
+  td .act.manual .b{background:var(--panel2);color:var(--mut);box-shadow:inset 0 0 0 1px var(--line)}
+  td .act.auto{cursor:pointer} td .act.auto:hover{color:var(--acc)}
+  .dlnote{margin-top:10px;font-size:12px;color:var(--dim);line-height:1.55}
+
   /* fix options — the "how do YOU want it unified?" panel */
   .opt{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
   .opt:last-of-type{border-bottom:none}
@@ -244,6 +256,7 @@
 
     <div class="card">
       <div class="card-h"><span class="t">Issues found</span><span class="count" id="issue-count"></span></div>
+      <div class="sumline" id="sumline"></div>
       <table class="issues">
         <thead><tr><th style="width:88px">Severity</th><th>Issue (verified fact)</th><th style="width:1%">Evidence</th></tr></thead>
         <tbody id="issues"></tbody>
@@ -269,7 +282,11 @@
           <label for="opt-bom">Excel-friendly CSV (UTF-8 BOM)<span class="why">prevents broken Korean / Unicode when opened in Excel</span></label>
         </div>
         <button type="button" class="btn" id="dl">Download cleaned CSV</button>
+        <button type="button" class="btn ghost" id="dlx">Download .xlsx</button>
         <button type="button" class="btn ghost" id="rescore">Re-score the cleaned data</button>
+        <div class="dlnote">macOS opens downloads in <b>Numbers</b> by default — that's an OS setting, not the file.
+        Right-click the file → <b>Open With → Excel</b> (or import into Google Sheets), or use the .xlsx button.
+        The UTF-8 BOM option keeps Korean text intact either way.</div>
       </div>
     </div>
 
@@ -301,6 +318,11 @@ function showView(v, push = true){
 window.addEventListener("popstate", (e)=> showView(e.state?.v === "report" && last ? "report" : "home", false));
 $("backlink").addEventListener("click", ()=> showView("home"));
 $("homebtn").addEventListener("click", ()=> showView("home"));
+// "one-click fix" line in the issues table jumps to the cleanup panel
+document.addEventListener("click",(e)=>{
+  const t = e.target.closest("[data-goto]");
+  if (t) document.getElementById(t.dataset.goto)?.scrollIntoView({behavior:"smooth", block:"start"});
+});
 
 /* ---------- dataset identity ---------- */
 function colKind(stat){
@@ -476,10 +498,34 @@ function render(r){
       <div class="track"><div class="fill" style="width:${d.score}%;background:${gColor(d.score)}"></div></div>
     </div>`).join("");
 
+  // per-issue guidance: WHAT to do about it, and whether this tool can do it for you
+  const ACTIONS = {
+    empty_column:      { auto: true,  text: "Drop it in the panel below — it carries zero information." },
+    high_missing:      { auto: false, text: "Your call: backfill from the source system, or accept the gaps. Don't let a tool invent values." },
+    missing:           { auto: false, text: "Your call: backfill from the source system, or drop those rows if they're few. Imputation is a judgment." },
+    sentinel:          { auto: true,  text: "Convert to real empties below — otherwise tools count “N/A” as data." },
+    dup_rows:          { auto: true,  text: "Remove below — duplicates inflate every count and bias any model." },
+    numeric_text_mix:  { auto: false, text: "Fix by hand: decide what “thirty” means, convert in Sheets/Excel, or drop the text rows." },
+    mixed_date_format: { auto: true,  text: "Unify below — pick ISO or US and every date becomes parseable." },
+    placeholder_date:  { auto: true,  text: "Clear below — 1900-01-01 silently poisons any time-series." },
+    pii:               { auto: true,  text: "Decide below: keep (flagged), mask, or drop the column. Never feed raw PII to an LLM." },
+    value_variants:    { auto: true,  text: "Pick the winning spelling below (or type your own) — variants split your group-bys." },
+  };
+
   $("issue-count").textContent = r.issues.length ? `${r.issues.length} total` : "none";
-  $("issues").innerHTML = r.issues.map(i=>`
-    <tr><td><span class="tag ${i.severity}">${i.severity}</span></td>
-    <td class="msg">${esc(i.message)}</td><td class="ev">${esc(i.evidence)}</td></tr>`).join("")
+  const nAuto = r.issues.filter(i=>ACTIONS[i.code]?.auto).length;
+  const nManual = r.issues.length - nAuto;
+  $("sumline").innerHTML = r.issues.length
+    ? `<span><b>${nAuto}</b> fixable one-click below ⚡</span><span><b>${nManual}</b> need your judgment ✍️</span>`
+    : "";
+
+  $("issues").innerHTML = r.issues.map(i=>{
+    const a = ACTIONS[i.code];
+    const act = a ? `<div class="act ${a.auto?"auto":"manual"}" ${a.auto?'data-goto="fixcard"':''}>
+      <span class="b">${a.auto?"⚡ one-click fix":"✍️ needs you"}</span>${esc(a.text)}</div>` : "";
+    return `<tr><td><span class="tag ${i.severity}">${i.severity}</span></td>
+    <td class="msg">${esc(i.message)}${act}</td><td class="ev">${esc(i.evidence)}</td></tr>`;
+  }).join("")
     || `<tr><td colspan="3" style="color:var(--mut)">No issues found — looks AI-ready.</td></tr>`;
 
   $("note").innerHTML = `<b>${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns.</b> Every issue above is a verifiable <b>fact</b>; the score is a <b>judgment</b> built on those facts. ${r.weightsNote}`;
@@ -605,6 +651,16 @@ $("dl").addEventListener("click", ()=>{
   a.download = "cleaned_" + cleaned.name.replace(/^cleaned_/, "").replace(/\.(xlsx|xls)$/i, ".csv");
   a.click();
   URL.revokeObjectURL(a.href);
+});
+
+$("dlx").addEventListener("click", ()=>{
+  if(!cleaned) return;
+  const ws = XLSX.utils.json_to_sheet(
+    cleaned.rows.map(r=>Object.fromEntries(cleaned.columns.map(c=>[c, r[c] ?? ""]))),
+    { header: cleaned.columns });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "cleaned");
+  XLSX.writeFile(wb, "cleaned_" + cleaned.name.replace(/^cleaned_/, "").replace(/\.(csv|xlsx|xls)$/i, "") + ".xlsx");
 });
 </script>
 </body>
