@@ -30,11 +30,30 @@ function toISO(t) {
   return null;
 }
 
+// ISO → MM/DD/YYYY (for users whose downstream tooling expects US format —
+// the target format is the USER's judgment, passed in as opts.dateTarget)
+const isoToUS = (iso) => { const [y, m, d] = iso.split("-"); return `${m}/${d}/${y}`; };
+
 const maskEmail = (t) => t[0] + "***@" + t.split("@")[1];
 const maskDigits = (t) => "***-" + (t.match(/\d/g) || []).slice(-4).join("");
 
+// opts — every knob is a JUDGMENT the caller (the user, via the UI) supplies;
+// defaults are the recommended conservative set. The tool never guesses policy.
+//   dedupe            remove exact duplicate rows            (default true)
+//   dateTarget        "ISO" | "US" — which format to unify mixed dates to (default "ISO")
+//   clearPlaceholders 1900-01-01 / 0000-00-00 → empty        (default true)
+//   clearSentinels    N/A, NULL, -, … → empty                (default true)
+//   dropEmptyCols     drop 100%-empty columns                (default true)
+//   maskPII           mask email/phone/ssn values            (default false — governance)
 export function fixDataset(rows, columns, opts = {}) {
-  const { maskPII = false } = opts;
+  const {
+    maskPII = false,
+    dedupe = true,
+    dateTarget = "ISO",
+    clearPlaceholders = true,
+    clearSentinels = true,
+    dropEmptyCols = true,
+  } = opts;
   let cols = (columns && columns.length ? columns : Object.keys(rows[0] || {})).slice();
   let out = rows.map((r) => ({ ...r }));
   const fixes = [];
@@ -54,6 +73,7 @@ export function fixDataset(rows, columns, opts = {}) {
   for (const iss of before.issues) {
     const col = iss.column;
     if (iss.code === "sentinel") {
+      if (!clearSentinels) { skipped.push({ code: "sentinel", column: col, reason: `Sentinel tokens in "${col}" kept — per your choice.` }); continue; }
       let n = 0;
       for (const r of out) {
         const t = String(r[col] ?? "").trim().toLowerCase();
@@ -62,6 +82,7 @@ export function fixDataset(rows, columns, opts = {}) {
       fixes.push({ code: "sentinel", column: col, count: n,
         message: `Converted ${n} sentinel token${n > 1 ? "s" : ""} (N/A, NULL, …) in "${col}" to real empty cells.` });
     } else if (iss.code === "placeholder_date") {
+      if (!clearPlaceholders) { skipped.push({ code: "placeholder_date", column: col, reason: `Placeholder dates in "${col}" kept — per your choice.` }); continue; }
       let n = 0;
       for (const r of out) {
         const t = String(r[col] ?? "").trim();
@@ -75,11 +96,16 @@ export function fixDataset(rows, columns, opts = {}) {
         const t = String(r[col] ?? "").trim();
         if (!t) continue;
         const iso = toISO(t);
-        if (iso && iso !== t) { r[col] = iso; n++; }
+        if (!iso) continue;
+        const target = dateTarget === "US" ? isoToUS(iso) : iso;
+        if (target !== t) { r[col] = target; n++; }
       }
       fixes.push({ code: "date_normalize", column: col, count: n,
-        message: `Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to ISO 8601 (YYYY-MM-DD).` });
+        message: dateTarget === "US"
+          ? `Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to US format (MM/DD/YYYY) — your choice.`
+          : `Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to ISO 8601 (YYYY-MM-DD).` });
     } else if (iss.code === "empty_column") {
+      if (!dropEmptyCols) { skipped.push({ code: "empty_column", column: col, reason: `Empty column "${col}" kept — per your choice.` }); continue; }
       cols = cols.filter((c) => c !== col);
       fixes.push({ code: "drop_empty_column", column: col, count: 1,
         message: `Dropped "${col}" — 100% empty, carries no information.` });
@@ -111,16 +137,20 @@ export function fixDataset(rows, columns, opts = {}) {
   }
 
   // 2. dedupe exact duplicate rows on the surviving columns
-  const seen = new Set();
-  const deduped = [];
-  for (const r of out) {
-    const k = cols.map((c) => r[c]).join("");
-    if (!seen.has(k)) { seen.add(k); deduped.push(r); }
+  if (dedupe) {
+    const seen = new Set();
+    const deduped = [];
+    for (const r of out) {
+      const k = cols.map((c) => r[c]).join("\u0001"); // unit-separator: no collision like join("")
+      if (!seen.has(k)) { seen.add(k); deduped.push(r); }
+    }
+    const removed = out.length - deduped.length;
+    if (removed > 0) fixes.push({ code: "dedupe", column: "(rows)", count: removed,
+      message: `Removed ${removed} exact duplicate row${removed > 1 ? "s" : ""}.` });
+    out = deduped;
+  } else if (before.issues.some((i) => i.code === "dup_rows")) {
+    skipped.push({ code: "dup_rows", column: "(rows)", reason: "Duplicate rows kept — per your choice." });
   }
-  const removed = out.length - deduped.length;
-  if (removed > 0) fixes.push({ code: "dedupe", column: "(rows)", count: removed,
-    message: `Removed ${removed} exact duplicate row${removed > 1 ? "s" : ""}.` });
-  out = deduped;
 
   return { rows: out, columns: cols, fixes, skipped, before };
 }
