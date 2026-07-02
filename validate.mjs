@@ -223,6 +223,43 @@ console.log("=".repeat(64));
     resE2.skipped.some((s) => s.code === "dup_id"));
 }
 
+// ---------- (7) ANALYZER — the "so what" layer: same questions, both versions ----------
+console.log("\n" + "=".repeat(64));
+console.log("(7) ANALYZER — before/after answers diff on the defects, and only on them");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  // fixture: dup row inflates a sum; placeholder poisons a min-date; variants split a
+  // group-by; PII email exposure; one stable column that must NOT diff.
+  const rows = [
+    { amount: "100", when: "1900-01-01", country: "USA",  email: "a@x.com", stage: "Won" },
+    { amount: "200", when: "2024-03-05", country: "usa",  email: "b@x.com", stage: "Won" },
+    { amount: "300", when: "2024-06-10", country: "Korea", email: "c@x.com", stage: "Lost" },
+    { amount: "400", when: "2024-09-20", country: "USA",  email: "d@x.com", stage: "Won" },
+  ];
+  rows.push({ ...rows[3] });                                     // exact dup: +400 to the dirty sum
+  const cols = ["amount", "when", "country", "email", "stage"];
+  const stats = scoreDataset(rows, cols);
+  const res = fixDataset(rows, cols, { piiMode: "mask", unify: { country: { usa: "USA" } } });
+  const { analyzeBeforeAfter } = await import("./analyzer.mjs");
+  const m = analyzeBeforeAfter({ rows, columns: cols, stats }, { rows: res.rows, columns: res.columns });
+  const by = (label) => m.find((x) => x.label.includes(label));
+
+  assert("dup row inflates the dirty sum (1,400 → 1,000)",
+    by("Total of \"amount\"")?.dirty === "1,400" && by("Total of \"amount\"")?.clean === "1,000" && by("Total of \"amount\"")?.differs);
+  assert("placeholder poisons the dirty earliest date (1900-01-01 → 2024-03-05)",
+    by("Earliest \"when\"")?.dirty === "1900-01-01" && by("Earliest \"when\"")?.clean === "2024-03-05");
+  assert("variant split visible to a group-by (3 groups → 2)",
+    by("Distinct groups a group-by sees in \"country\"")?.dirty === "3" &&
+    by("Distinct groups a group-by sees in \"country\"")?.clean === "2");
+  assert("raw email exposure drops to 0 after masking",
+    by("Raw email")?.dirty === "5" && by("Raw email")?.clean === "0");
+  assert("stable column does NOT diff (stage groups unchanged)",
+    by("Distinct groups a group-by sees in \"stage\"")?.differs === false);
+  assert("row count reflects dedupe (5 → 4)",
+    by("Rows the analysis")?.dirty === "5" && by("Rows the analysis")?.clean === "4");
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));

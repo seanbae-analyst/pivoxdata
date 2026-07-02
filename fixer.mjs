@@ -16,7 +16,8 @@ const MONTHS = {
 };
 
 // normalize a recognized date shape to ISO 8601; null = shape not recognized (leave alone)
-function toISO(t) {
+// (exported: analyzer.mjs uses the same parse so both sides of the diff agree on dates)
+export function toISO(t) {
   const s = dateShape(t);
   if (s === "ISO") return t.slice(0, 10);
   if (s === "US-slash") {

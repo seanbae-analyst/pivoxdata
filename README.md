@@ -135,6 +135,11 @@ by $18,500, "earliest deal: 1900-01-01." Frontier tier on dirty: right numbers v
 improvised judgment calls that flipped between two identical runs. On clean: correct,
 direct, reproducible — and 0 raw emails in the prompt instead of 44.
 
+The app generalizes this to **every uploaded file**: after cleanup it re-runs the same
+schema-derived analysis (totals, date ranges, group-by counts, PII exposure) on both
+versions and shows exactly which answers changed — deterministic code on both sides
+([`analyzer.mjs`](analyzer.mjs), gated by `validate.mjs` §7).
+
 ---
 
 ## Anchor dataset
