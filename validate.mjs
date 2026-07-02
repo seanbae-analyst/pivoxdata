@@ -140,6 +140,40 @@ console.log("=".repeat(64));
     !after.issues.some((i) => i.code === "value_variants") && after.score > before.score);
 }
 
+// ---------- (5) Extended user-choice fixes: headers / casing / PII-drop / empty rows ----------
+console.log("\n" + "=".repeat(64));
+console.log("(5) EXTENDED OPTIONS — headers, casing, PII drop, empty rows");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  const rows = [
+    { "Full Name": "kim minjun", "AGE": "29", "Email Addr": "a@x.com" },
+    { "Full Name": "SARAH LEE",  "AGE": "34", "Email Addr": "b@x.com" },
+    { "Full Name": "Tom Brown",  "AGE": "41", "Email Addr": "c@x.com" },
+    { "Full Name": "wang wei",   "AGE": "38", "Email Addr": "d@x.com" },
+    { "Full Name": "", "AGE": "", "Email Addr": "" },                    // fully empty row
+  ];
+  const cols = ["Full Name", "AGE", "Email Addr"];
+  const res = fixDataset(rows, cols, {
+    headerStyle: "snake",
+    caseNormalize: { "Full Name": "title" },
+    piiMode: "drop",
+    dropEmptyRows: true,
+  });
+  assert("headers → snake_case (Full Name → full_name, AGE → age)",
+    res.columns.includes("full_name") && res.columns.includes("age"));
+  assert("PII column dropped (Email Addr gone)",
+    !res.columns.some((c) => /email/i.test(c)));
+  assert("casing → Title Case (kim minjun → Kim Minjun, SARAH LEE → Sarah Lee)",
+    res.rows.some((r) => r.full_name === "Kim Minjun") &&
+    res.rows.some((r) => r.full_name === "Sarah Lee"));
+  assert("fully-empty row removed (5 → 4)", res.rows.length === 4);
+  assert("defaults untouched: headerStyle keep / piiMode keep leaves data alone",
+    (() => { const d = fixDataset(rows, cols);
+      return d.columns.includes("Full Name") && d.columns.some((c) => /Email/i.test(c)) &&
+        d.rows.some((r) => r["Full Name"] === "SARAH LEE"); })());
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));

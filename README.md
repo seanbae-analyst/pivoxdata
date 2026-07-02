@@ -54,10 +54,15 @@ Detection without remediation is half a product. The **"Clean it"** button (and
 sentinel tokens to real empties, clear placeholder dates, drop 100%-empty columns — then
 re-scores the cleaned data and hands you the CSV. On the bundled CRM sample that's **79 → 95**.
 
+Every policy knob is the **user's** judgment, asked in the UI: date convention (ISO vs US),
+PII handling (keep / mask / drop column), spelling-cluster canonicals (pick one or type your
+own), casing normalization per column, header style (snake_case / lowercase), duplicates,
+placeholder dates, sentinels, empty rows/columns, whitespace, Excel-friendly BOM on download.
+
 What it deliberately does **not** do is guess: imputing missing values, coercing `"thirty"` → 30,
-and PII masking policy are *judgments*, so [`fixer.mjs`](fixer.mjs) reports them as
+and semantic unification are *judgments*, so [`fixer.mjs`](fixer.mjs) reports them as
 "left alone — needs human judgment" instead of silently altering data. Same fact-vs-judgment
-line as the scorer, enforced by the validation gate (`npm run validate`, section 3).
+line as the scorer, enforced by the validation gate (`npm run validate`, sections 3–5).
 
 ---
 

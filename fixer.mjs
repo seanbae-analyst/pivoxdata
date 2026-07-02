@@ -49,6 +49,11 @@ const maskDigits = (t) => "***-" + (t.match(/\d/g) || []).slice(-4).join("");
 //   unify             { [column]: { [variantKey]: "canonical spelling" } } — the user's
 //                     chosen winner per spelling cluster; clusters without a choice are
 //                     left untouched (default {} — never unify without being told)
+//   trim              trim stray whitespace around values    (default true)
+//   dropEmptyRows     remove rows where every field is empty (default true)
+//   headerStyle       "keep" | "snake" | "lower" — rename column headers
+//   caseNormalize     { [column]: "upper"|"lower"|"title" } — user-chosen casing per column
+//   piiMode           "keep" | "mask" | "drop" — supersedes legacy maskPII boolean
 export function fixDataset(rows, columns, opts = {}) {
   const {
     maskPII = false,
@@ -58,21 +63,30 @@ export function fixDataset(rows, columns, opts = {}) {
     clearSentinels = true,
     dropEmptyCols = true,
     unify = {},
+    trim = true,
+    dropEmptyRows = true,
+    headerStyle = "keep",
+    caseNormalize = {},
   } = opts;
+  const piiMode = opts.piiMode ?? (maskPII ? "mask" : "keep");
+  const numish = (t) => t !== "" && !isNaN(Number(t));
+  const toTitle = (s) => s.split(/\s+/).map((w) => w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w).join(" ");
   let cols = (columns && columns.length ? columns : Object.keys(rows[0] || {})).slice();
   let out = rows.map((r) => ({ ...r }));
   const fixes = [];
   const skipped = [];
   const before = scoreDataset(rows, cols);
 
-  // 0. trim stray whitespace (pure normalization, not tied to an issue)
-  let trimmed = 0;
-  for (const r of out) for (const c of cols) {
-    const v = r[c];
-    if (typeof v === "string") { const t = v.trim(); if (t !== v) { r[c] = t; trimmed++; } }
+  // 0. trim stray whitespace (pure normalization, user-toggleable)
+  if (trim) {
+    let trimmed = 0;
+    for (const r of out) for (const c of cols) {
+      const v = r[c];
+      if (typeof v === "string") { const t = v.trim(); if (t !== v) { r[c] = t; trimmed++; } }
+    }
+    if (trimmed) fixes.push({ code: "trim", column: "(all)", count: trimmed,
+      message: `Trimmed stray whitespace on ${trimmed} value${trimmed > 1 ? "s" : ""}.` });
   }
-  if (trimmed) fixes.push({ code: "trim", column: "(all)", count: trimmed,
-    message: `Trimmed stray whitespace on ${trimmed} value${trimmed > 1 ? "s" : ""}.` });
 
   // 1. issue-driven fixes — keyed off the exact same detection the score came from
   for (const iss of before.issues) {
@@ -115,7 +129,11 @@ export function fixDataset(rows, columns, opts = {}) {
       fixes.push({ code: "drop_empty_column", column: col, count: 1,
         message: `Dropped "${col}" — 100% empty, carries no information.` });
     } else if (iss.code === "pii") {
-      if (maskPII) {
+      if (piiMode === "drop") {
+        cols = cols.filter((c) => c !== col);
+        fixes.push({ code: "pii_drop", column: col, count: 1,
+          message: `Dropped PII column "${col}" entirely — your choice.` });
+      } else if (piiMode === "mask") {
         const type = (iss.evidence || "").split("=")[0];
         let n = 0;
         for (const r of out) {
@@ -172,6 +190,50 @@ export function fixDataset(rows, columns, opts = {}) {
     out = deduped;
   } else if (before.issues.some((i) => i.code === "dup_rows")) {
     skipped.push({ code: "dup_rows", column: "(rows)", reason: "Duplicate rows kept — per your choice." });
+  }
+
+  // 3. user-chosen casing normalization per column (never applied unasked)
+  for (const [col, style] of Object.entries(caseNormalize)) {
+    if (!cols.includes(col) || !style || style === "keep") continue;
+    let n = 0;
+    for (const r of out) {
+      const raw = String(r[col] ?? "").trim();
+      if (!raw || numish(raw) || SENTINELS.has(raw.toLowerCase())) continue;
+      const t = style === "upper" ? raw.toUpperCase() : style === "lower" ? raw.toLowerCase() : toTitle(raw);
+      if (t !== raw) { r[col] = t; n++; }
+    }
+    if (n) fixes.push({ code: "casing", column: col, count: n,
+      message: `Normalized casing of ${n} value${n > 1 ? "s" : ""} in "${col}" to ${style === "upper" ? "UPPERCASE" : style === "lower" ? "lowercase" : "Title Case"} — your choice.` });
+  }
+
+  // 4. drop rows where every remaining field is empty
+  if (dropEmptyRows) {
+    const beforeN = out.length;
+    out = out.filter((r) => cols.some((c) => String(r[c] ?? "").trim() !== ""));
+    const removedE = beforeN - out.length;
+    if (removedE > 0) fixes.push({ code: "empty_rows", column: "(rows)", count: removedE,
+      message: `Removed ${removedE} completely empty row${removedE > 1 ? "s" : ""}.` });
+  }
+
+  // 5. header rename — the naming convention is the user's judgment
+  if (headerStyle !== "keep") {
+    const used = new Set(); const map = {};
+    for (const c of cols) {
+      let name = headerStyle === "snake"
+        ? String(c).normalize("NFKC").trim().toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "")
+        : String(c).trim().toLowerCase();
+      if (!name) name = "column";
+      let base = name, i = 2;
+      while (used.has(name)) name = `${base}_${i++}`;
+      used.add(name); map[c] = name;
+    }
+    const renamed = cols.filter((c) => map[c] !== c);
+    if (renamed.length) {
+      out = out.map((r) => { const nr = {}; for (const c of cols) nr[map[c]] = r[c]; return nr; });
+      cols = cols.map((c) => map[c]);
+      fixes.push({ code: "headers", column: "(headers)", count: renamed.length,
+        message: `Renamed ${renamed.length} header${renamed.length > 1 ? "s" : ""} to ${headerStyle === "snake" ? "snake_case" : "lowercase"} (e.g. "${renamed[0]}" → "${map[renamed[0]]}") — your choice.` });
+    }
   }
 
   return { rows: out, columns: cols, fixes, skipped, before };

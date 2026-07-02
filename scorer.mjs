@@ -108,9 +108,22 @@ export function scoreDataset(rows, columns) {
       variantClusters = variantClusters.slice(0, 5); // cap for sanity on free-text columns
     }
 
+    // casing profile (stats only, no issue) — powers the "normalize casing?" option in the UI
+    let caseCounts = null;
+    if (textish) {
+      caseCounts = { upper: 0, lower: 0, mixed: 0 };
+      for (const v of nonEmpty) {
+        const raw = String(v).trim();
+        if (!/\p{L}/u.test(raw) || SENTINELS.has(raw.toLowerCase()) || isNumeric(raw)) continue;
+        if (raw === raw.toUpperCase()) caseCounts.upper++;
+        else if (raw === raw.toLowerCase()) caseCounts.lower++;
+        else caseCounts.mixed++;
+      }
+    }
+
     columnStats[col] = { present, missing, missingRate: n ? missing / n : 0, uniqueCount,
       placeholderDateCount, sentinelCount, numericCount, dateShapes, piiType, piiCount,
-      variantClusters };
+      variantClusters, caseCounts };
   }
 
   const add = (dimension, severity, column, code, message, evidence) =>

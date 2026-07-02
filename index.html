@@ -155,6 +155,9 @@
   .customtxt::placeholder{color:var(--dim)}
   .always{margin-top:12px;color:var(--dim);font-size:12.5px;line-height:1.6}
   .always b{color:var(--mut);font-weight:600}
+  .optsec{margin:16px 0 4px;font-size:11px;color:var(--brand);text-transform:uppercase;
+    letter-spacing:.08em;font-weight:700}
+  .optsec:first-child{margin-top:6px}
 
   .btn{background:var(--acc);color:#0f172a;border:none;border-radius:10px;padding:10px 18px;
     font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:.14s}
@@ -261,6 +264,10 @@
         <ul class="fixlist" id="fixlist"></ul>
         <div class="skipcap" id="skipcap">Left alone:</div>
         <ul class="skiplist" id="skiplist"></ul>
+        <div class="opt" style="border-bottom:none;padding-bottom:0">
+          <input type="checkbox" id="opt-bom" checked>
+          <label for="opt-bom">Excel-friendly CSV (UTF-8 BOM)<span class="why">prevents broken Korean / Unicode when opened in Excel</span></label>
+        </div>
         <button type="button" class="btn" id="dl">Download cleaned CSV</button>
         <button type="button" class="btn ghost" id="rescore">Re-score the cleaned data</button>
       </div>
@@ -328,27 +335,73 @@ function renderMeta(r){
 }
 
 /* ---------- fix options — ask, don't guess ---------- */
+let caseIndex = []; // columns offered a casing choice (rebuilt per render)
+
 function buildFixOptions(r){
   const codes = new Set(r.issues.map((i)=>i.code));
-  const parts = [];
+  const check = (id, label, why, checked=true) => `
+    <div class="opt"><input type="checkbox" id="${id}" ${checked?"checked":""}>
+    <label for="${id}">${label}<span class="why">${why}</span></label></div>`;
 
-  if (codes.has("mixed_date_format")) parts.push(`
+  /* ── Structure ── */
+  const struct = [];
+  if (codes.has("dup_rows")) struct.push(check("opt-dedupe",
+    "Remove exact duplicate rows", "identical rows add no information and inflate counts"));
+  const emptyRowCount = last.rows.filter((row)=> last.columns.every((c)=> String(row[c] ?? "").trim() === "")).length;
+  if (emptyRowCount > 0) struct.push(check("opt-erows",
+    `Remove ${emptyRowCount} completely empty row${emptyRowCount>1?"s":""}`, "rows with every field blank"));
+  if (codes.has("empty_column")) struct.push(check("opt-empty",
+    "Drop 100%-empty columns", "they carry zero information"));
+  // header naming convention — always offered (the convention is YOUR judgment)
+  const snakePreview = last.columns.map((c)=>String(c).normalize("NFKC").trim().toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu,"_").replace(/^_+|_+$/g,""));
+  const hdrChanged = last.columns.findIndex((c,i)=> snakePreview[i] !== c);
+  struct.push(`
     <div class="optgroup">
-      <div class="q">Your dates are written 3 different ways — which convention do you want?</div>
+      <div class="q">Column header style${hdrChanged>-1 ? ` <span class="ex" style="font-weight:400">e.g. “${esc(last.columns[hdrChanged])}” → “${esc(snakePreview[hdrChanged])}”</span>` : ""}</div>
+      <div class="choices">
+        <label class="radio"><input type="radio" name="hdrfmt" value="keep" checked> Keep as-is</label>
+        <label class="radio"><input type="radio" name="hdrfmt" value="snake"> snake_case <span class="ex">inspection_date</span></label>
+        <label class="radio"><input type="radio" name="hdrfmt" value="lower"> lowercase <span class="ex">inspection date</span></label>
+      </div>
+    </div>`);
+
+  /* ── Values ── */
+  const vals = [];
+  vals.push(check("opt-trim", "Trim stray spaces around values", "\" USA \" → \"USA\" — invisible whitespace breaks joins and groupbys"));
+  if (codes.has("sentinel")) vals.push(check("opt-sent",
+    "Convert N/A, NULL, “-” to real empty cells", "so tools count them as missing instead of as values"));
+  if (codes.has("placeholder_date")) vals.push(check("opt-ph",
+    "Clear placeholder dates (1900-01-01 / 0000-00-00)", "they are missing data wearing a date costume"));
+  if (codes.has("mixed_date_format")) vals.push(`
+    <div class="optgroup">
+      <div class="q">Your dates are written multiple ways — which convention do you want?</div>
       <div class="choices">
         <label class="radio"><input type="radio" name="datefmt" value="ISO" checked> ISO 8601 <span class="ex">2021-03-05</span></label>
         <label class="radio"><input type="radio" name="datefmt" value="US"> US style <span class="ex">03/05/2021</span></label>
       </div>
     </div>`);
 
-  if (codes.has("pii")) parts.push(`
+  // casing choice — offered per column whose values mix UPPER / lower / Title styles
+  caseIndex = [];
+  for (const c of last.columns){
+    const cc = r.columnStats[c]?.caseCounts;
+    if (!cc) continue;
+    const styles = ["upper","lower","mixed"].filter((k)=>cc[k]>0);
+    if (styles.length < 2 || caseIndex.length >= 3) continue;
+    const ki = caseIndex.length;
+    caseIndex.push({ col: c });
+    vals.push(`
     <div class="optgroup">
-      <div class="q">Personal data (email / phone) was found — what should happen to it?</div>
+      <div class="q">“${esc(c)}” mixes letter cases <span class="ex" style="font-weight:400">(UPPER ×${cc.upper} · lower ×${cc.lower} · Mixed ×${cc.mixed})</span> — normalize?</div>
       <div class="choices">
-        <label class="radio"><input type="radio" name="piiopt" value="keep" checked> Keep as-is <span class="ex">just flag it</span></label>
-        <label class="radio"><input type="radio" name="piiopt" value="mask"> Mask values <span class="ex">a***@gmail.com · ***-0182</span></label>
+        <label class="radio"><input type="radio" name="case-${ki}" value="keep" checked> Leave as-is</label>
+        <label class="radio"><input type="radio" name="case-${ki}" value="upper"> UPPERCASE</label>
+        <label class="radio"><input type="radio" name="case-${ki}" value="title"> Title Case</label>
+        <label class="radio"><input type="radio" name="case-${ki}" value="lower"> lowercase</label>
       </div>
     </div>`);
+  }
 
   // spelling clusters — "USA / usa / U.S.A." — the user picks the winner per cluster
   clusterIndex = [];
@@ -357,7 +410,7 @@ function buildFixOptions(r){
     for (const cl of all.slice(0, 3)){
       const ci = clusterIndex.length;
       clusterIndex.push({ col: iss.column, key: cl.key, forms: cl.forms });
-      parts.push(`
+      vals.push(`
       <div class="optgroup">
         <div class="q">“${esc(iss.column)}” spells the same value ${cl.forms.length} ways — which one should win?</div>
         <div class="choices">
@@ -368,24 +421,25 @@ function buildFixOptions(r){
         </div>
       </div>`);
     }
-    if (all.length > 3) parts.push(
+    if (all.length > 3) vals.push(
       `<div class="always">…and ${all.length - 3} more spelling cluster${all.length - 3 > 1 ? "s" : ""} in “${esc(iss.column)}” — clean, download, re-upload to continue.</div>`);
   }
 
-  const check = (id, label, why, checked=true) => `
-    <div class="opt"><input type="checkbox" id="${id}" ${checked?"checked":""}>
-    <label for="${id}">${label}<span class="why">${why}</span></label></div>`;
+  /* ── Privacy ── */
+  const priv = [];
+  if (codes.has("pii")) priv.push(`
+    <div class="optgroup">
+      <div class="q">Personal data (email / phone) was found — what should happen to it?</div>
+      <div class="choices">
+        <label class="radio"><input type="radio" name="piiopt" value="keep" checked> Keep as-is <span class="ex">just flag it</span></label>
+        <label class="radio"><input type="radio" name="piiopt" value="mask"> Mask values <span class="ex">a***@gmail.com · ***-0182</span></label>
+        <label class="radio"><input type="radio" name="piiopt" value="drop"> Drop the column${r.issues.filter(i=>i.code==="pii").length>1?"s":""} <span class="ex">remove entirely</span></label>
+      </div>
+    </div>`);
 
-  if (codes.has("dup_rows")) parts.push(check("opt-dedupe",
-    "Remove exact duplicate rows", "identical rows add no information and inflate counts"));
-  if (codes.has("placeholder_date")) parts.push(check("opt-ph",
-    "Clear placeholder dates (1900-01-01 / 0000-00-00)", "they are missing data wearing a date costume"));
-  if (codes.has("sentinel")) parts.push(check("opt-sent",
-    "Convert N/A, NULL, “-” to real empty cells", "so tools count them as missing instead of as values"));
-  if (codes.has("empty_column")) parts.push(check("opt-empty",
-    "Drop 100%-empty columns", "they carry zero information"));
-
-  $("fixopts").innerHTML = parts.join("");
+  const sec = (title, arr) => arr.length ? `<div class="optsec">${title}</div>` + arr.join("") : "";
+  $("fixopts").innerHTML =
+    sec("Structure", struct) + sec("Values", vals) + sec("Privacy", priv);
 
   // typing a custom spelling auto-selects its radio (no extra click needed)
   document.querySelectorAll(".customtxt").forEach((t)=>{
@@ -400,7 +454,7 @@ function buildFixOptions(r){
   $("alwayskept").innerHTML = kept.length
     ? `Always left alone, no matter what: ${kept.join(" · ")} — the tool refuses to guess.` : "";
 
-  $("fixcard").classList.toggle("hidden", r.issues.length === 0);
+  $("fixcard").classList.remove("hidden"); // header/trim options exist for every file
 }
 
 /* ---------- render report ---------- */
@@ -498,13 +552,24 @@ $("applyfix").addEventListener("click", ()=>{
     if (canon) (unify[cl.col] ||= {})[cl.key] = canon;
   });
 
+  // casing: the user's chosen style per offered column
+  const caseNormalize = {};
+  caseIndex.forEach((cx, ki)=>{
+    const v = q(`input[name=case-${ki}]:checked`)?.value;
+    if (v && v !== "keep") caseNormalize[cx.col] = v;
+  });
+
   const opts = {
     dedupe:            q("#opt-dedupe") ? q("#opt-dedupe").checked : true,
     clearPlaceholders: q("#opt-ph")     ? q("#opt-ph").checked     : true,
     clearSentinels:    q("#opt-sent")   ? q("#opt-sent").checked   : true,
     dropEmptyCols:     q("#opt-empty")  ? q("#opt-empty").checked  : true,
+    trim:              q("#opt-trim")   ? q("#opt-trim").checked   : true,
+    dropEmptyRows:     q("#opt-erows")  ? q("#opt-erows").checked  : true,
     dateTarget:        q("input[name=datefmt]:checked")?.value ?? "ISO",
-    maskPII:           q("input[name=piiopt]:checked")?.value === "mask",
+    piiMode:           q("input[name=piiopt]:checked")?.value ?? "keep",
+    headerStyle:       q("input[name=hdrfmt]:checked")?.value ?? "keep",
+    caseNormalize,
     unify,
   };
   const res = fixDataset(last.rows, last.columns, opts);
@@ -533,7 +598,8 @@ $("dl").addEventListener("click", ()=>{
   if(!cleaned) return;
   const csv = Papa.unparse({ fields: cleaned.columns,
     data: cleaned.rows.map(r=>cleaned.columns.map(c=>r[c] ?? "")) });
-  const blob = new Blob([csv + "\n"], {type:"text/csv;charset=utf-8"});
+  const bom = $("opt-bom")?.checked ? "\uFEFF" : "";
+  const blob = new Blob([bom + csv + "\n"], {type:"text/csv;charset=utf-8"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = "cleaned_" + cleaned.name.replace(/^cleaned_/, "").replace(/\.(xlsx|xls)$/i, ".csv");
