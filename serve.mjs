@@ -23,9 +23,11 @@ http
   .createServer((req, res) => {
     const urlPath = decodeURIComponent(req.url.split("?")[0]);
     let rel = urlPath === "/" ? "index.html" : urlPath.replace(/^\/+/, "");
-    let file = path.join(ROOT, rel);
-    // contain to ROOT (no path traversal)
-    if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end("forbidden"); }
+    let file = path.resolve(ROOT, rel);
+    // contain to ROOT (no path traversal). Compare with a trailing separator so
+    // a sibling dir sharing ROOT's name as a prefix (…/dataready-evil) can't
+    // pass a bare startsWith(ROOT) check.
+    if (file !== ROOT && !file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end("forbidden"); }
     // Vercel serves /maps as maps.html (cleanUrls); do the same here
     if (!path.extname(file) && fs.existsSync(file + ".html")) file += ".html";
     fs.readFile(file, (err, data) => {
