@@ -2,7 +2,9 @@
 // The browser does the same job with the CDN builds of these libraries.
 import fs from "fs";
 import Papa from "papaparse";
-import * as XLSX from "xlsx";
+// SheetJS ESM build only exposes readFile on the default export, not as a named
+// export — importing the namespace leaves XLSX.readFile undefined.
+import XLSX from "xlsx";
 
 export const norm = (c) => String(c).trim().toLowerCase().replace(/\s+/g, "_");
 

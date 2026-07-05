@@ -11,7 +11,17 @@ import { fixDataset } from "./fixer.mjs";
 const path = process.argv[2];
 if (!path) { console.error("usage: node cli.mjs <file.csv|file.xlsx> [--fix [out.csv]]"); process.exit(2); }
 
-const { rows, columns } = parseFile(path);
+let rows, columns;
+try {
+  ({ rows, columns } = parseFile(path));
+} catch (err) {
+  const code = err && err.code;
+  if (code === "ENOENT") console.error(`error: file not found — ${path}`);
+  else if (code === "EACCES") console.error(`error: permission denied — ${path}`);
+  else if (/zip|central directory|unsupported/i.test(err.message || "")) console.error(`error: could not read "${path}" — the file looks corrupt or is not a valid CSV/Excel file.`);
+  else console.error(`error: could not read "${path}" — ${err.message}`);
+  process.exit(1);
+}
 const r = scoreDataset(rows, columns);
 
 const bar = (s) => "█".repeat(Math.round(s / 5)).padEnd(20, "·");
