@@ -23,9 +23,11 @@ http
   .createServer((req, res) => {
     const urlPath = decodeURIComponent(req.url.split("?")[0]);
     let rel = urlPath === "/" ? "index.html" : urlPath.replace(/^\/+/, "");
-    const file = path.join(ROOT, rel);
-    // contain to ROOT (no path traversal)
-    if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end("forbidden"); }
+    const file = path.resolve(ROOT, rel);
+    // contain to ROOT (no path traversal). Compare with a trailing separator so
+    // a sibling dir sharing ROOT's name as a prefix (…/dataready-evil) can't
+    // pass a bare startsWith(ROOT) check.
+    if (file !== ROOT && !file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end("forbidden"); }
     fs.readFile(file, (err, data) => {
       if (err) { res.writeHead(404, { "content-type": "text/plain" }); return res.end("not found"); }
       res.writeHead(200, { "content-type": TYPES[path.extname(file)] || "application/octet-stream" });
