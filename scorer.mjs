@@ -181,7 +181,13 @@ export function scoreDataset(rows, columns) {
     } else if (s.missingRate >= 0.2) {
       add("completeness", "medium", col, "missing", `"${col}" is ${(s.missingRate * 100).toFixed(1)}% missing.`, `missing=${s.missing}/${n}`);
       completenessPenalty += 4;
-    } else if (s.sentinelCount > 0) {
+    }
+    // Sentinel tokens are orthogonal to the missing-rate buckets above: a
+    // column can be both partly missing AND have "N/A"/"NULL"/"-" hiding as
+    // data. Previously this sat in the same else-if chain, so any column past
+    // the 20% missing threshold never reported sentinels — and the fixer,
+    // which keys off the "sentinel" issue, then left them in the cleaned file.
+    if (s.missing !== n && s.sentinelCount > 0) {
       add("completeness", "low", col, "sentinel", `"${col}" has ${s.sentinelCount} placeholder tokens (N/A, NULL, -, ...) hiding as data.`, `sentinel=${s.sentinelCount}`);
       completenessPenalty += 2;
     }
