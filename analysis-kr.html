@@ -5,62 +5,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>서울 상가 537,489행 분석 메모 · DataReady</title>
 <meta name="description" content="소상공인시장진흥공단 상가(상권)정보 서울 537,489행 — clean → analyze → findings → recommendation. 모든 숫자 재현 가능." />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+KR:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css" />
 <style>
-  :root{
-    --bg:#0a0e17; --panel:#111827; --panel2:#1e293b; --line:#334155;
-    --ink:#e2e8f0; --mut:#94a3b8; --dim:#64748b;
-    --hi:#f87171; --med:#e0a83a; --low:#4ec97d; --acc:#d4a558;
-    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
-    --serif:"Playfair Display","EB Garamond",Georgia,serif;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font-family:Inter,"Noto Sans KR",ui-sans-serif,-apple-system,Segoe UI,Roboto,sans-serif;
-    font-size:15px;line-height:1.7;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:780px;margin:0 auto;padding:44px 22px 80px}
-  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:34px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;color:var(--ink);text-decoration:none}
-  .brand .lg{width:26px;height:26px;border-radius:7px;border:1.5px solid var(--acc);display:grid;place-items:center;color:var(--acc);font-size:13px}
-  .top a.back{color:var(--acc);text-decoration:none;font-size:13.5px}
-  .top a.back:hover{text-decoration:underline}
-  .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px}
-  h1{font-family:"Noto Sans KR",var(--serif);font-size:clamp(26px,4.4vw,38px);line-height:1.24;font-weight:700;margin:0 0 14px}
-  .lede{color:var(--mut);font-size:15.5px;margin:0 0 8px}
-  .meta{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:34px}
-  .meta a{color:var(--dim)}
-  h2{font-family:"Noto Sans KR",var(--serif);font-size:21px;font-weight:700;margin:42px 0 12px}
-  p{margin:0 0 14px;color:var(--ink)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 72px}
+  @media(max-width:560px){.wrap{padding:0 16px 56px}}
+  body{font-size:16px;line-height:1.72}
+  html[lang=ko] body{word-break:keep-all;overflow-wrap:break-word}
+  article{padding-top:40px}
+  .kicker{font-size:13.5px;font-weight:600;color:var(--bronze-hi);margin-bottom:12px}
+  h1{font-size:clamp(30px,5vw,44px);line-height:1.15;font-weight:700;letter-spacing:-.035em;margin:0 0 16px;word-break:keep-all}
+  .lede{color:var(--mut);font-size:17px;line-height:1.65;margin:0 0 12px}
+  .lede b{color:var(--ink-2)}
+  .meta{font-size:13px;color:var(--dim);margin-bottom:32px}
+  .meta a{color:var(--mut)}
+  h2{font-size:22px;font-weight:700;letter-spacing:-.025em;margin:52px 0 14px;word-break:keep-all}
+  h3{font-size:16px;font-weight:650;margin:28px 0 8px}
+  p{margin:0 0 16px;color:var(--ink-2)}
   p.mut{color:var(--mut)}
-  b{color:#fff}
-  .num{font-family:var(--mono)}
-  .find{border-left:3px solid var(--acc);padding:2px 0 2px 16px;margin:22px 0}
-  .find .fh{font-weight:700;font-size:16px;margin-bottom:6px}
-  .find .fh .n{font-family:var(--mono);color:var(--acc);margin-right:8px}
-  .stat{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
-  .stat .s{flex:1 1 150px;border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:12px 14px}
-  .stat .v{font-family:var(--mono);font-size:20px;font-weight:600;color:var(--acc)}
-  .stat .v.bad{color:var(--hi)}
-  .stat .l{font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.45}
-  table{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}
-  th{text-align:left;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);font-weight:600;padding:4px 10px 8px 0}
-  td{padding:7px 10px 7px 0;border-top:1px solid var(--line)}
+  .card{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:18px 20px;margin:18px 0}
+  .num{font-variant-numeric:tabular-nums}
+  .find{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:18px 20px;margin:14px 0}
+  .find p:last-child,.find table:last-child{margin-bottom:0}
+  .find .fh{display:flex;gap:10px;align-items:baseline;font-weight:650;font-size:17px;letter-spacing:-.015em;margin-bottom:8px;color:var(--ink)}
+  .find .fh .n{flex:0 0 auto;width:24px;height:24px;border-radius:50%;display:inline-grid;place-items:center;font-size:12.5px;font-weight:650;
+    background:var(--bronze-soft);color:var(--bronze-hi);transform:translateY(-1px)}
+  .stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 8px}
+  .stat .s{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px}
+  .stat .v{font-size:24px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+  .stat .v.bad{color:var(--bad)} .stat .v.good{color:var(--good)}
+  .stat .l{font-size:13px;color:var(--dim);margin-top:4px;line-height:1.45}
+  .tw{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:12px 0 14px}
+  th{text-align:left;font-size:12.5px;color:var(--dim);font-weight:500;padding:4px 12px 8px 0}
+  td{padding:9px 12px 9px 0;border-top:1px solid var(--line);color:var(--ink-2)}
   td.num{white-space:nowrap}
-  code{font-family:var(--mono);font-size:12.5px;background:var(--panel2);border-radius:5px;padding:2px 6px}
-  ul{margin:0 0 14px;padding-left:20px} li{margin-bottom:8px}
-  .note{border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:14px 16px;font-size:13px;color:var(--mut);line-height:1.65}
-  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--dim)}
-  footer a{color:var(--acc);text-decoration:none} footer a:hover{text-decoration:underline}
+  ul{margin:0 0 16px;padding-left:20px;color:var(--ink-2)} li{margin-bottom:10px}
+  li::marker{color:var(--bronze)}
+  .note{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:14px 16px;font-size:13.5px;color:var(--mut);line-height:1.65}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="top">
-    <a class="brand" href="/"><span class="lg">✓</span>DataReady</a>
-    <a class="back" href="/">← 파일 채점하러 가기</a>
-  </div>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>DataReady</a>
+    <nav class="nav"><a href="/">← 파일 채점하러 가기</a></nav>
+  </header>
+  <article>
 
   <div class="kicker">분석 메모 · 한국 공공데이터 편</div>
   <h1>서울 상가 537,489행이 말하는 것 — 그리고 분석 전에 알아야 할 함정</h1>
@@ -101,7 +94,7 @@
 
   <div class="find">
     <div class="fh"><span class="n">3</span>도시의 수직 구조가 데이터에 있다</div>
-    <table>
+    <div class="tw"><table>
       <thead><tr><th>업종 (n≥5,000)</th><th>평균 입점 층</th></tr></thead>
       <tbody>
         <tr><td>과학·기술 (오피스형)</td><td class="num">5.75</td></tr>
@@ -110,7 +103,7 @@
         <tr><td>수리·개인</td><td class="num">1.95</td></tr>
         <tr><td><b>음식 (로드샵형)</b></td><td class="num"><b>1.36</b></td></tr>
       </tbody>
-    </table>
+    </table></div>
     <p>음식 1.36층 vs 과학·기술 5.75층 — <b class="num">4.2배</b>. "몇 층에 있느냐"가 업종을 예측하는
     피처라는 뜻이고, 이 +97.9% 갭은 <a href="/" style="color:var(--acc)">인사이트 엔진</a>이 스스로 찾아냈습니다.
     층 필터 없는 "상권 분석"은 오피스와 로드샵을 뒤섞습니다.</p>
@@ -170,7 +163,9 @@
   네트워크 차단으로 이번 회차에서 상가정보로 대체. 통계적 검정 미적용 — 인용한 갭들은
   의사결정에 충분한 크기이나 신뢰구간은 없음.</div>
 
-  <footer>
+  </article>
+
+  <footer class="site">
     <span>결정론 분석 — 모든 숫자는 커밋된 스크립트로 재계산 가능.</span>
     <span><a href="/analysis">NYC 295k 분석 →</a> · <a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source →</a></span>
   </footer>

@@ -198,6 +198,7 @@ reproduce `verify.py`); the 2.5 MB sample is committed so the demo and CLI work 
 
 ```
 index.html        the browser demo (drag-drop → score)
+ui.css            shared tokens + base styles for every page (black + bronze, Pretendard)
 scorer.mjs        the deterministic scorer — pure function, runs identically in browser + Node
 parse.mjs         CSV/XLSX → rows (Node CLI)
 cli.mjs           score any file from the terminal
