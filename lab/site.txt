@@ -1,1 +1,1 @@
-https://pivoxdata.vercel.app
+https://data.pivoxquant.com

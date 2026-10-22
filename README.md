@@ -1,6 +1,6 @@
 # 개인투자자 데이터 연구소 · Korean Retail Investor Data Lab
 
-**▶ [pivoxdata.vercel.app](https://pivoxdata.vercel.app)** — free, non-commercial. No ads, no payment, no investment advice.
+**▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — free, non-commercial. No ads, no payment, no investment advice.
 
 **한국 개인투자자가 실제로 어떻게 움직였는지 공개 데이터로 확인합니다.** 질문은 넷입니다 — 언제 몰려 사나, 빚을
 얼마나 내나, 어디로 나가나, 매매를 기록하긴 하나. 답이 있는 것은 연구 페이지로, 없는 것은 없다고 적었습니다.
@@ -9,10 +9,10 @@
 
 | 질문 | 페이지 | 데이터 |
 |---|---|---|
-| 개인은 언제 몰려 샀나 | [`/research/net-buy`](https://pivoxdata.vercel.app/research/net-buy) | ECOS 901Y055 (원작성 한국거래소), 2004–2026 월별 |
-| 빚을 내 산 주식은 얼마나 되나 | [`/research/credit`](https://pivoxdata.vercel.app/research/credit) | ECOS 901Y056 (원작성 금융투자협회) + 901Y014 (한국거래소), 1999–2026 월말 |
-| 개인은 어디로 나가나 | [`/maps/korea-investor`](https://pivoxdata.vercel.app/maps/korea-investor) | 예탁결제원 자료 — 경로·조건만 정리 (API 키 필요) |
-| 개인은 매매를 기록하나 | [`/research/record-habit`](https://pivoxdata.vercel.app/research/record-habit) | 열린 질문 — 물은 공개 조사 0건, 가까운 공식 숫자 3개 |
+| 개인은 언제 몰려 샀나 | [`/research/net-buy`](https://data.pivoxquant.com/research/net-buy) | ECOS 901Y055 (원작성 한국거래소), 2004–2026 월별 |
+| 빚을 내 산 주식은 얼마나 되나 | [`/research/credit`](https://data.pivoxquant.com/research/credit) | ECOS 901Y056 (원작성 금융투자협회) + 901Y014 (한국거래소), 1999–2026 월말 |
+| 개인은 어디로 나가나 | [`/maps/korea-investor`](https://data.pivoxquant.com/maps/korea-investor) | 예탁결제원 자료 — 경로·조건만 정리 (API 키 필요) |
+| 개인은 매매를 기록하나 | [`/research/record-habit`](https://data.pivoxquant.com/research/record-habit) | 열린 질문 — 물은 공개 조사 0건, 가까운 공식 숫자 3개 |
 
 In English: a research site on Korean retail investors built from public data — when they pile in, how much they
 borrow to buy, where they go abroad, and whether they keep a record of their trades. Every number carries its
@@ -41,7 +41,7 @@ npm run lab:build    # rebuild pages from the committed lab/data/*.json only (no
 - License: ECOS lets statistics compiled by other agencies be used **non-commercially with the source named**;
   commercial use needs the compiling agency's approval. That is why the site stays free and ad-free.
 
-## DataReady — the file checker at [`/check`](https://pivoxdata.vercel.app/check)
+## DataReady — the file checker at [`/check`](https://data.pivoxquant.com/check)
 
 The lab grew out of DataReady: drop a CSV or Excel file, get a **0–100 AI-readiness score** with prioritized,
 plain-language fixes. Runs entirely in the browser; nothing is uploaded. **📖 Case study:** [CASE_STUDY.md](CASE_STUDY.md).
