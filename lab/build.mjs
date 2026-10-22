@@ -298,10 +298,9 @@ for (const p of PAGES) {
   if (h !== before) { fs.writeFileSync(file, h); changed++; console.log(`wrote ${p.file}`); } else console.log(`same  ${p.file}`);
 }
 
-// sitemap: every indexable page, research pages dated by their data
-const today = new Date().toISOString().slice(0, 10);
+// sitemap: every indexable page, dated by the data it was built from (so a rebuild on another day changes nothing)
 const sm = PAGES.filter((p) => !p.noindex && fs.existsSync(path.join(ROOT, p.file)))
-  .map((p) => `  <url><loc>${SITE}${p.path === "/" ? "/" : p.path}</loc><lastmod>${p.file.startsWith("research/") || p.path === "/" ? fetched : today}</lastmod></url>`).join("\n");
+  .map((p) => `  <url><loc>${SITE}${p.path}</loc><lastmod>${fetched}</lastmod></url>`).join("\n");
 fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sm}\n</urlset>\n`);
 
 if (failures.length) { console.error(`\nBUILD STOPPED — a sentence on a page no longer matches the data:\n- ${failures.join("\n- ")}`); process.exit(1); }

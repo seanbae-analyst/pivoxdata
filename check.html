@@ -44,8 +44,8 @@ if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?
   h1{font-size:clamp(36px,6.4vw,58px);line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:20px 0 16px}
   h1 .g{color:var(--bronze)}
   .sub{color:var(--mut);margin:0;font-size:17px;line-height:1.6;max-width:56ch}
-  /* phone: the two analysis memos are also in the footer, so the top bar keeps only maps + GitHub */
-  @media(max-width:560px){.nav a[href="/analysis"],.nav a[href="/analysis-kr"]{display:none}}
+  /* phone: maps, GitHub and the analysis memos are all in the footer, so the top bar keeps the lab link + language */
+  @media(max-width:560px){.nav a[href="/analysis"],.nav a[href="/analysis-kr"],.nav a[href="/maps"],.nav a[href^="https://github.com"]{display:none}}
 
   .drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;
     border:1.5px dashed var(--line-2);border-radius:18px;padding:44px 24px;background:var(--surface);
