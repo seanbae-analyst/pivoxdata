@@ -2,7 +2,7 @@
 
 > How I scoped, built, verified, and shipped a data-readiness product in one build cycle —
 > and what each decision was for.
-> **Live:** [pivoxdata.vercel.app](https://pivoxdata.vercel.app) · **PRD:** [PRD.md](PRD.md) · **Trust model:** [TRUST.md](TRUST.md)
+> **Live:** [data.pivoxquant.com](https://data.pivoxquant.com) · **PRD:** [PRD.md](PRD.md) · **Trust model:** [TRUST.md](TRUST.md)
 
 ---
 
@@ -111,7 +111,7 @@ dataset.
 | Ground-truth measured north-star | `test-data/GROUND_TRUTH.md` — 10/10 recall, 100% precision |
 | Fix loop with ask-don't-guess UX | live demo, `fixer.mjs`, `validate.mjs` §3–4 |
 | ~150,000 rows/sec scoring throughput | 100k rows ≈ 660 ms |
-| Shipped | [pivoxdata.vercel.app](https://pivoxdata.vercel.app), zero-dependency static deploy |
+| Shipped | [data.pivoxquant.com](https://data.pivoxquant.com), zero-dependency static deploy |
 | "So what" proven with a real LLM, transcripts committed | [`experiment/SO_WHAT.md`](experiment/SO_WHAT.md) |
 
 ### Scope expansion, on the same principle — duplicate IDs (Keys/uniqueness slice)
