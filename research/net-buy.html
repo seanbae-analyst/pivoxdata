@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Dataset","name":"개인은 언제 몰려 샀나 — 코스피 개인 순매수 2004–2026","description":"코스피 개인·기관·외국인의 월별 순매수와 2004년부터의 누적. 한국은행 ECOS 투자자별 주식거래(원작성 한국거래소)로 그렸습니다.","url":"https://pivoxdata.vercel.app/research/net-buy","inLanguage":"ko","isAccessibleForFree":true,"temporalCoverage":"2004-01/2026-09","dateModified":"2026-10-22","creator":{"@type":"Organization","name":"개인투자자 데이터 연구소","url":"https://pivoxdata.vercel.app"},"isBasedOn":[{"@type":"Dataset","name":"1.5.1.3 투자자별 주식거래 (901Y055)","publisher":{"@type":"Organization","name":"한국은행 ECOS"},"creator":{"@type":"Organization","name":"한국거래소"}}],"usageInfo":"ECOS 통계정보이용지침: 타 기관 작성 통계는 출처를 명시하여 비상업적으로 이용, 상업적 이용은 통계작성기관의 승인 필요","variableMeasured":["개인 순매수 거래대금 (백만원)","기관투자자 순매수 거래대금 (백만원)","외국인 순매수 거래대금 (백만원)"]}</script>
 <!--/@head-->
 <link rel="stylesheet" href="/research.css" />
 </head>
@@ -70,7 +71,7 @@
     <p><b>시장 범위</b> 표 이름에 시장이 적혀 있지 않습니다. 2021년 1월 개인 값(22.3조원)이 그달 보도된 코스피 개인 순매수와 같아서 코스피(유가증권시장)로 봤습니다. 코스닥은 들어 있지 않은 것으로 봅니다.</p>
     <p><b>검산</b> 다섯 투자자 구분(개인·기관·외국인·기타외국인·기타법인)을 더한 값과 연간 표를 월별 값과 맞춰 봤습니다. 처음 이 페이지는 “273개월 모두 0”이라고 적었는데, 다시 재 보니 백만원 단위 반올림 때문에 ±1~2가 남는 달이 있어 고쳤습니다. 기타법인은 2009년 3월부터 따로 집계됩니다. 2026년 값은 최근 공표분이라 나중에 바뀔 수 있습니다.</p>
     <!--@checks--><ul class="checks"><li class="">개인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기관투자자 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타법인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0 (앞 62개월은 따로 집계되지 않아 비어 있음, 200903부터 값)</li><li class="">273개월 중 168개월은 정확히 0, 나머지도 ±2백만원 안 (반올림)</li><li class="">22개 연도, 연간표와 월별 합의 차이 최대 3백만원 (월별 반올림 12번)</li></ul><!--/@checks-->
-    <p><b>이용 조건</b> 원작성이 한국거래소라 ECOS에서는 다른 기관 작성 통계로 분류됩니다. 출처를 밝혀 비상업적으로 이용할 수 있고, 상업적 이용은 작성기관(한국거래소)의 승인이 필요합니다. 이 페이지는 무료·비상업 사이트에 출처를 밝혀 싣습니다. 조건 해석은 약관 문구를 옮긴 것이며 법률 자문이 아닙니다.</p>
+    <p><b>이용 조건</b> 원작성이 한국거래소라 ECOS에서는 다른 기관 작성 통계입니다. ECOS 통계정보이용지침: “타 기관에서 작성한 통계정보는 출처를 명시하여 비상업적으로 이용할 수 있지만, 상업적으로 이용하고자 하는 경우에는 해당 통계작성기관(저작자)의 승인을 받은 후에 이용하여야 합니다.” 이 페이지는 무료·비상업 사이트에 출처를 밝혀 싣고, 값은 바꾸지 않았습니다. 인용할 때는 “출처: ECOS(한국은행, 한국거래소 원자료), 조회일”처럼 적어 주세요. 조건 해석은 지침 문구를 옮긴 것이며 법률 자문이 아닙니다.</p>
     <p><b>다시 받는 법</b> <code>node lab/fetch.mjs &amp;&amp; node lab/verify.mjs &amp;&amp; node lab/build.mjs</code> — 저장소의 <a href="https://github.com/seanbae-analyst/pivoxdata/tree/main/lab" target="_blank" rel="noopener">lab/</a> 폴더. ECOS 주소 형식: <code>https://ecos.bok.or.kr/api/StatisticSearch/{키}/json/kr/1/10/901Y055/M/{시작월}/{끝월}/S22CB/VA</code> — 항목 코드 S22CB 개인, S22CA 기관투자자, S22CC 외국인, S22CD 기타외국인, S22CF 기타법인. 표본 키(<code>sample</code>)는 한 번에 10행까지라 10개월씩 나눠 받았습니다.</p>
     <div class="tools"><button type="button" class="btn ghost sm" id="csv">이 페이지 데이터 CSV로 받기</button></div>
   </section>

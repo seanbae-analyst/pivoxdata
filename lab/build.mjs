@@ -76,7 +76,19 @@ function head(page, html) {
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
-`;
+${page.dataset ? `<script type="application/ld+json">${JSON.stringify(dataset(page, title, desc, url))}</script>\n` : ""}`;
+}
+// schema.org Dataset for pages that publish a series (read by dataset search engines)
+function dataset(page, title, desc, url) {
+  const d = page.dataset();
+  return {
+    "@context": "https://schema.org", "@type": "Dataset", name: title.replace(/ · 개인투자자 데이터 연구소$/, ""), description: desc, url,
+    inLanguage: "ko", isAccessibleForFree: true, temporalCoverage: d.coverage, dateModified: fetched,
+    creator: { "@type": "Organization", name: "개인투자자 데이터 연구소", url: SITE },
+    isBasedOn: d.sources.map((x) => ({ "@type": "Dataset", name: x.name, publisher: { "@type": "Organization", name: "한국은행 ECOS" }, creator: { "@type": "Organization", name: x.by } })),
+    usageInfo: "ECOS 통계정보이용지침: 타 기관 작성 통계는 출처를 명시하여 비상업적으로 이용, 상업적 이용은 통계작성기관의 승인 필요",
+    variableMeasured: d.variables,
+  };
 }
 
 // ---------- data ----------
@@ -214,8 +226,14 @@ function netbuy() {
 // ============ pages ============
 const PAGES = [
   { file: "home.html", path: "/", og: "home" },
-  { file: "research/credit.html", path: "/research/credit", og: "credit" },
-  { file: "research/net-buy.html", path: "/research/net-buy", og: "net-buy" },
+  { file: "research/credit.html", path: "/research/credit", og: "credit", dataset: () => ({
+    coverage: `${S.credit.rows.find((r) => r[0] >= "199901")[0].replace(/(\d{4})(\d{2})/, "$1-$2")}/${S.credit.last.replace(/(\d{4})(\d{2})/, "$1-$2")}`,
+    sources: [{ name: `${S.credit.source.table_name} (${S.credit.source.table})`, by: S.credit.source.compiled_by }, { name: `${S.mcap_kospi.source.table_name} (${S.mcap_kospi.source.table})`, by: S.mcap_kospi.source.compiled_by }],
+    variables: ["신용융자 잔고 (월말, 원)", "투자자 예탁금 (원)", "위탁매매 미수금 (원)", "코스피·코스닥 시가총액 (천원)"] }) },
+  { file: "research/net-buy.html", path: "/research/net-buy", og: "net-buy", dataset: () => ({
+    coverage: `${S.netbuy_individual.first.replace(/(\d{4})(\d{2})/, "$1-$2")}/${S.netbuy_individual.last.replace(/(\d{4})(\d{2})/, "$1-$2")}`,
+    sources: [{ name: `${S.netbuy_individual.source.table_name} (${S.netbuy_individual.source.table})`, by: S.netbuy_individual.source.compiled_by }],
+    variables: ["개인 순매수 거래대금 (백만원)", "기관투자자 순매수 거래대금 (백만원)", "외국인 순매수 거래대금 (백만원)"] }) },
   { file: "research/record-habit.html", path: "/research/record-habit", og: "record-habit" },
   { file: "maps.html", path: "/maps" },
   { file: "maps/korea-investor.html", path: "/maps/korea-investor" },
