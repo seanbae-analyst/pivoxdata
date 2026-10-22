@@ -11,9 +11,9 @@ import { fixDataset } from "./fixer.mjs";
 const path = process.argv[2];
 if (!path) { console.error("usage: node cli.mjs <file.csv|file.xlsx> [--fix [out.csv]]"); process.exit(2); }
 
-let rows, columns;
+let rows, columns, encoding;
 try {
-  ({ rows, columns } = parseFile(path));
+  ({ rows, columns, encoding } = parseFile(path));
 } catch (err) {
   const code = err && err.code;
   if (code === "ENOENT") console.error(`error: file not found — ${path}`);
@@ -25,7 +25,15 @@ try {
 const r = scoreDataset(rows, columns);
 
 const bar = (s) => "█".repeat(Math.round(s / 5)).padEnd(20, "·");
-console.log(`\nDataReady score: ${r.score}/100   (${r.rowCount.toLocaleString()} rows × ${r.columnCount} cols)\n`);
+const ENCODING_NOTICE = {
+  cp949: "note: not UTF-8 — read as CP949 (EUC-KR). Check the Korean text below looks right.",
+  "utf-16le": "note: read as UTF-16 (byte-order mark).",
+  "utf-16be": "note: read as UTF-16 (byte-order mark).",
+  unknown: "note: neither UTF-8 nor CP949 — unreadable bytes became \uFFFD (see the issues below).",
+};
+if (ENCODING_NOTICE[encoding]) console.log(`\n${ENCODING_NOTICE[encoding]}`);
+console.log(`\nDataReady score: ${r.score}/100   (${r.rowCount.toLocaleString()} rows × ${r.columnCount} cols)`);
+console.log(`Verdict: ${r.verdict.label}${r.verdict.capped ? `  (score alone would say AI-ready — capped: personal data in ${r.verdict.piiColumns.map((c) => `"${c}"`).join(", ")})` : ""}\n`);
 for (const [k, d] of Object.entries(r.dimensions)) {
   console.log(`  ${k.padEnd(13)} ${bar(d.score)} ${d.score}/100  (weight ${d.weight})`);
 }

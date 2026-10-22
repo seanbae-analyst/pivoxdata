@@ -67,7 +67,7 @@ export function extractInsights(rows, columns, stats) {
   const metricCols = columns.filter((c) => prof[c] && !prof[c].codeLike && prof[c].cv >= 0.05 &&
     !(prof[c].intOnly && cs[c].uniqueCount <= 100 && cs[c].present / cs[c].uniqueCount >= 50) &&
     !labelNamed(c) &&
-    !looksLikeIdColumn(c) && !cs[c].piiType && Object.keys(cs[c].dateShapes || {}).length === 0).slice(0, 6);
+    !looksLikeIdColumn(c) && !cs[c].piiType && !cs[c].idKind && Object.keys(cs[c].dateShapes || {}).length === 0).slice(0, 6);
   // categories: low-cardinality text
   const categoryCols = columns.filter((c) => cs[c] && !cs[c].piiType &&
     Object.keys(cs[c].dateShapes || {}).length === 0 && !looksLikeIdColumn(c) &&

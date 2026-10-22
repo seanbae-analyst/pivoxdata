@@ -5,8 +5,8 @@
 // applied. The cleaned data is re-scorable by the same scorer: the before→after delta
 // is itself a verifiable claim.
 import {
-  scoreDataset, SENTINELS, PLACEHOLDER_DATE, PII_PATTERNS, dateShape, looksLikePhone,
-  variantKey,
+  scoreDataset, PLACEHOLDER_DATE, dateShape, matchesPII, isValidYMD, KR_DATE_SHAPES,
+  isSentinelToken, makeSentinelTest, variantKey,
 } from "./scorer.mjs";
 import { L, piiName } from "./lang.mjs";
 
@@ -16,19 +16,30 @@ const MONTHS = {
   jan: 1, feb: 2, mar: 3, apr: 4, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12,
 };
 
-// normalize a recognized date shape to ISO 8601; null = shape not recognized (leave alone)
-// (exported: analyzer.mjs uses the same parse so both sides of the diff agree on dates)
+// normalize a recognized date shape to ISO 8601; null = shape not recognized, or not safely
+// convertible (leave alone). (exported: analyzer.mjs uses the same parse so both sides of the
+// diff agree on dates)
+//   • year-first Korean forms (2026.10.22 · 2026. 10. 22. · 2026년 10월 22일 · 2026/10/22) are
+//     unambiguous → converted, but only when they are a real calendar date
+//   • "26-10-22" (YY-MM-DD) → null: the century, and whether it is y-m-d at all, is a judgment
+//   • a US-slash value that is not a real m/d date (13/05/2021 is d/m) → null, never "2021-13-05"
+const iso = (y, m, d) => `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 export function toISO(t) {
   const s = dateShape(t);
   if (s === "ISO") return t.slice(0, 10);
   if (s === "US-slash") {
     const m = t.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-    return `${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`;
+    return isValidYMD(+m[3], +m[1], +m[2]) ? iso(m[3], m[1], m[2]) : null;
   }
   if (s === "long") {
     const m = t.match(/^([A-Za-z]+) (\d{1,2}),? (\d{4})/);
     const mo = MONTHS[m[1].toLowerCase()];
-    return mo ? `${m[3]}-${String(mo).padStart(2, "0")}-${m[2].padStart(2, "0")}` : null;
+    return mo ? iso(m[3], mo, m[2]) : null;
+  }
+  const kr = KR_DATE_SHAPES.find(([name]) => name === s);
+  if (kr) {
+    const m = kr[1].exec(t);
+    return isValidYMD(+m[1], +m[2], +m[3]) ? iso(m[1], m[2], m[3]) : null;
   }
   return null;
 }
@@ -39,6 +50,9 @@ const isoToUS = (iso) => { const [y, m, d] = iso.split("-"); return `${m}/${d}/$
 
 const maskEmail = (t) => t[0] + "***@" + t.split("@")[1];
 const maskDigits = (t) => "***-" + (t.match(/\d/g) || []).slice(-4).join("");
+// 주민등록번호: nothing kept — the front half is a birth date, the 7th digit sex/nationality
+const maskAll = () => "******-*******";
+const MASKERS = { email: maskEmail, ssn: maskDigits, phone: maskDigits, bank_account: maskDigits, kr_rrn: maskAll };
 
 // opts — every knob is a JUDGMENT the caller (the user, via the UI) supplies;
 // defaults are the recommended conservative set. The tool never guesses policy.
@@ -96,12 +110,14 @@ export function fixDataset(rows, columns, opts = {}) {
     if (iss.code === "sentinel") {
       if (!clearSentinels) { skipped.push({ code: "sentinel", column: col, reason: L(`Sentinel tokens in "${col}" kept — per your choice.`, `"${col}" 열의 빈칸 표시(N/A 등)는 고른 대로 그대로 두었습니다.`) }); continue; }
       let n = 0;
+      // the scorer's own column-aware test (없음 stays when the column also answers 있음)
+      const isSentinel = makeSentinelTest(out.map((r) => r[col]));
       for (const r of out) {
-        const t = String(r[col] ?? "").trim().toLowerCase();
-        if (t && SENTINELS.has(t)) { r[col] = ""; n++; }
+        const t = String(r[col] ?? "").trim();
+        if (t && isSentinel(t)) { r[col] = ""; n++; }
       }
       fixes.push({ code: "sentinel", column: col, count: n,
-        message: L(`Converted ${n} sentinel token${n > 1 ? "s" : ""} (N/A, NULL, …) in "${col}" to real empty cells.`, `"${col}" 열의 빈칸 표시(N/A, NULL 등) ${n}개를 진짜 빈칸으로 바꿨습니다.`) });
+        message: L(`Converted ${n} sentinel token${n > 1 ? "s" : ""} (N/A, NULL, 미상, …) in "${col}" to real empty cells.`, `"${col}" 열의 빈칸 표시(N/A, NULL, 미상 등) ${n}개를 진짜 빈칸으로 바꿨습니다.`) });
     } else if (iss.code === "placeholder_date") {
       if (!clearPlaceholders) { skipped.push({ code: "placeholder_date", column: col, reason: L(`Placeholder dates in "${col}" kept — per your choice.`, `"${col}" 열의 자리만 채운 날짜는 고른 대로 그대로 두었습니다.`) }); continue; }
       let n = 0;
@@ -112,15 +128,18 @@ export function fixDataset(rows, columns, opts = {}) {
       fixes.push({ code: "placeholder_date", column: col, count: n,
         message: L(`Cleared ${n} placeholder date${n > 1 ? "s" : ""} (1900-01-01 / 0000-00-00) in "${col}" — they are missing data, not dates.`, `"${col}" 열의 자리만 채운 날짜(1900-01-01 / 0000-00-00) ${n}개를 비웠습니다 — 날짜가 아니라 빠진 값입니다.`) });
     } else if (iss.code === "mixed_date_format") {
-      let n = 0;
+      let n = 0, left = 0;
       for (const r of out) {
         const t = String(r[col] ?? "").trim();
         if (!t) continue;
-        const iso = toISO(t);
-        if (!iso) continue;
-        const target = dateTarget === "US" ? isoToUS(iso) : iso;
+        const isoDate = toISO(t);
+        if (!isoDate) { if (dateShape(t)) left++; continue; }
+        const target = dateTarget === "US" ? isoToUS(isoDate) : isoDate;
         if (target !== t) { r[col] = target; n++; }
       }
+      if (left) skipped.push({ code: "date_ambiguous", column: col,
+        reason: L(`${left} date${left > 1 ? "s" : ""} in "${col}" left as written — a two-digit year (26-10-22) or a date that is not on the calendar can't be converted without guessing.`,
+          `"${col}" 열의 날짜 ${left}개는 적힌 그대로 두었습니다 — 두 자리 연도(26-10-22)나 달력에 없는 날짜는 추측 없이 바꿀 수 없습니다.`) });
       fixes.push({ code: "date_normalize", column: col, count: n,
         message: dateTarget === "US"
           ? L(`Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to US format (MM/DD/YYYY) — your choice.`, `"${col}" 열의 날짜 ${n}개를 고른 대로 미국식(MM/DD/YYYY)으로 맞췄습니다.`)
@@ -140,10 +159,8 @@ export function fixDataset(rows, columns, opts = {}) {
         let n = 0;
         for (const r of out) {
           const t = String(r[col] ?? "").trim();
-          if (!t) continue;
-          if (type === "email" && PII_PATTERNS.email.test(t)) { r[col] = maskEmail(t); n++; }
-          else if (type === "ssn" && PII_PATTERNS.ssn.test(t)) { r[col] = maskDigits(t); n++; }
-          else if (type === "phone" && looksLikePhone(t) && !dateShape(t)) { r[col] = maskDigits(t); n++; }
+          if (!t || !MASKERS[type] || !matchesPII(type, t)) continue;
+          r[col] = MASKERS[type](t); n++;
         }
         fixes.push({ code: "pii_mask", column: col, count: n,
           message: L(`Masked ${n} ${type} value${n > 1 ? "s" : ""} in "${col}".`, `"${col}" 열의 ${piiName(type)} ${n}개를 가렸습니다.`) });
@@ -173,8 +190,17 @@ export function fixDataset(rows, columns, opts = {}) {
       skipped.push({ code: iss.code, column: col,
         reason: L(`Missing values in "${col}" left blank — imputation is a judgment, not a fact.`, `"${col}" 열의 빈 값은 비워 두었습니다 — 값을 채워 넣는 것은 사실이 아니라 판단입니다.`) });
     } else if (iss.code === "numeric_text_mix") {
+      // quote the column's OWN text values — a canned "thirty" under a column of "N/A" or
+      // "약 30" explains nothing
+      const ex = (before.columnStats[col]?.textSamples || []).slice(0, 2).map((t) => `"${t}"`).join(", ");
       skipped.push({ code: iss.code, column: col,
-        reason: L(`"${col}" mixes numbers and words — coercing "thirty" → 30 needs interpretation, left as-is.`, `"${col}" 열에 숫자와 글자가 섞여 있습니다 — "서른" → 30 같은 변환은 해석이 필요해 그대로 두었습니다.`) });
+        reason: L(`"${col}" mixes numbers and text (${ex}) — turning those into numbers needs interpretation, left as-is.`, `"${col}" 열에 숫자와 글자(${ex})가 섞여 있습니다 — 숫자로 바꾸려면 해석이 필요해 그대로 두었습니다.`) });
+    } else if (iss.code === "number_with_unit") {
+      skipped.push({ code: iss.code, column: col,
+        reason: L(`Numbers with units in "${col}" left as-is — what unit the plain numbers are in (원? 만원?) is your call, not a mechanical fix.`, `"${col}" 열의 단위 붙은 숫자는 그대로 두었습니다 — 단위 없는 숫자가 원인지 만원인지는 기계적으로 정할 수 없습니다.`) });
+    } else if (iss.code === "unreadable_header" || iss.code === "unreadable_value") {
+      skipped.push({ code: iss.code, column: col,
+        reason: L(`Unreadable characters (�) can't be repaired here — the original letters are not in the file. Re-export it from the source as UTF-8.`, `읽을 수 없는 글자(�)는 여기서 고칠 수 없습니다 — 원래 글자가 파일에 없습니다. 원본에서 UTF-8로 다시 내려받으세요.`) });
     } else if (iss.code === "dup_id") {
       skipped.push({ code: "dup_id", column: col,
         reason: L(`Duplicate IDs in "${col}": exact duplicate copies are removed by dedupe — if duplicates remain, the rows differ and deciding which record is the truth is your call.`, `"${col}" 열의 중복 ID: 완전히 같은 행은 중복 제거로 지워집니다 — 그래도 남으면 행 내용이 달라서, 어느 기록이 맞는지는 직접 정해야 합니다.`) });
@@ -204,7 +230,7 @@ export function fixDataset(rows, columns, opts = {}) {
     let n = 0;
     for (const r of out) {
       const raw = String(r[col] ?? "").trim();
-      if (!raw || numish(raw) || SENTINELS.has(raw.toLowerCase())) continue;
+      if (!raw || numish(raw) || isSentinelToken(raw)) continue;
       const t = style === "upper" ? raw.toUpperCase() : style === "lower" ? raw.toLowerCase() : toTitle(raw);
       if (t !== raw) { r[col] = t; n++; }
     }
