@@ -164,7 +164,7 @@ function drawCum(){
   svg.addEventListener("focus",()=>show(cur));svg.addEventListener("blur",hide);
 }
 function draw(){drawBars();drawCum()}
-document.getElementById("csv").addEventListener("click",()=>{const body=[["출처: ECOS(한국은행, 한국거래소 원자료) 901Y055 투자자별 주식거래(코스피), 순매수 거래대금. 비상업적 이용, 값 변경 없음. https://pivoxdata.vercel.app/research/net-buy"],["월","개인(백만원)","기관투자자(백만원)","외국인(백만원)"],...ROWS].map(r=>r.join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+body],{type:"text/csv;charset=utf-8"}));a.download="net-buy_"+ROWS[0][0]+"-"+ROWS[ROWS.length-1][0]+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+document.getElementById("csv").addEventListener("click",()=>{const body=[["출처: ECOS(한국은행, 한국거래소 원자료) 901Y055 투자자별 주식거래(코스피), 순매수 거래대금. 비상업적 이용, 값 변경 없음. "+document.querySelector("link[rel=canonical]").href],["월","개인(백만원)","기관투자자(백만원)","외국인(백만원)"],...ROWS].map(r=>r.join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+body],{type:"text/csv;charset=utf-8"}));a.download="net-buy_"+ROWS[0][0]+"-"+ROWS[ROWS.length-1][0]+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 draw();let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(draw,120)});
 </script>
 </body>

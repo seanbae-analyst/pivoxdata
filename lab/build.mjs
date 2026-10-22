@@ -10,7 +10,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SITE = "https://pivoxdata.vercel.app";
+// The public address, in one place: canonical/OG URLs, JSON-LD, sitemap.xml and robots.txt all come from it.
+// Moving to a custom domain = edit lab/site.txt (or set SITE_URL) and run `npm run lab:build`.
+const SITE = (process.env.SITE_URL || fs.readFileSync(path.join(ROOT, "lab", "site.txt"), "utf8")).trim().replace(/\/$/, "");
 const load = (id) => JSON.parse(fs.readFileSync(path.join(ROOT, "lab", "data", `${id}.json`), "utf8"));
 const CHECKS = JSON.parse(fs.readFileSync(path.join(ROOT, "lab", "data", "checks.json"), "utf8"));
 if (CHECKS.checks.some((c) => !c.ok)) throw new Error("lab/data/checks.json has failed checks — run node lab/verify.mjs and fix first");
@@ -163,7 +165,7 @@ function credit() {
       change: [{ at: dropWon.t, text: `${lbl(dropWon.t)} ${sjo(dropWon.ch)}` }, { at: "202003", text: `2020.03 ${sjo(rows.find((r) => r.t === "202003").ch)}` }],
       shift: [{ at: "200706", series: 1, text: `2007.06 ${jo(won2jo(M.credit["200706"]))}` }, { at: "200511", series: 0, text: `2005.11 ${jo(won2jo(M.unpaid["200511"]))}` }],
     },
-    note: `출처: ECOS(한국은행, ${S.credit.source.compiled_by}·${S.mcap_kospi.source.compiled_by} 원자료) 901Y056·901Y014, ${fetched} 조회. 월말 잔고. 신용융자 1998-06·1998-12는 ECOS에 0으로 적혀 있어 빈칸. 비상업적 이용, 값 변경 없음. https://pivoxdata.vercel.app/research/credit`,
+    note: `출처: ECOS(한국은행, ${S.credit.source.compiled_by}·${S.mcap_kospi.source.compiled_by} 원자료) 901Y056·901Y014, ${fetched} 조회. 월말 잔고. 신용융자 1998-06·1998-12는 ECOS에 0으로 적혀 있어 빈칸. 비상업적 이용, 값 변경 없음. ${SITE}/research/credit`,
     csv: S.credit.rows.filter((r) => r[0] >= "199806").map(([t]) => [t, holes.has(t) ? "" : M.credit[t], M.deposits[t], M.unpaid[t], M.mcap_kospi[t] && M.mcap_kosdaq[t] ? M.mcap_kospi[t] + M.mcap_kosdaq[t] : ""]),
   };
 
@@ -320,5 +322,6 @@ let changed = 0;
 for (const { p, file, before, h } of out) {
   if (h !== before) { fs.writeFileSync(file, h); changed++; console.log(`wrote ${p.file}`); } else console.log(`same  ${p.file}`);
 }
+fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sm}\n</urlset>\n`);
 console.log(`\nbuilt ${changed} page(s) from data fetched ${fetched}`);
