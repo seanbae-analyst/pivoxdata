@@ -201,6 +201,7 @@ index.html        the browser demo (drag-drop → score)
 ui.css            shared tokens + base styles for every page (black + bronze, Pretendard)
 maps.html         data maps index — one question, the public datasets for it, how they join
 maps/*.html       the maps themselves (manual research, metadata only — no data is fetched)
+maps/korea-investor-net-buy.html  monthly KOSPI net buying by investor type, 2004–2026 — ECOS 901Y055 values fetched once and embedded (source: KRX via the Bank of Korea; non-commercial use with attribution)
 scorer.mjs        the deterministic scorer — pure function, runs identically in browser + Node
 parse.mjs         CSV/XLSX → rows (Node CLI)
 cli.mjs           score any file from the terminal
