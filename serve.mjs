@@ -23,9 +23,11 @@ http
   .createServer((req, res) => {
     const urlPath = decodeURIComponent(req.url.split("?")[0]);
     let rel = urlPath === "/" ? "index.html" : urlPath.replace(/^\/+/, "");
-    const file = path.join(ROOT, rel);
+    let file = path.join(ROOT, rel);
     // contain to ROOT (no path traversal)
     if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end("forbidden"); }
+    // Vercel serves /maps as maps.html (cleanUrls); do the same here
+    if (!path.extname(file) && fs.existsSync(file + ".html")) file += ".html";
     fs.readFile(file, (err, data) => {
       if (err) { res.writeHead(404, { "content-type": "text/plain" }); return res.end("not found"); }
       res.writeHead(200, { "content-type": TYPES[path.extname(file)] || "application/octet-stream" });

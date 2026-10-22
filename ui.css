@@ -1,0 +1,65 @@
+/* ui.css — shared base for every DataReady page (index, analysis, analysis-kr).
+   Follows the PivoxQuant black-and-bronze refresh (2026-10-11): one sans family (Pretendard),
+   tabular numbers instead of a mono face, sentence-case labels with no wide letter-spacing,
+   14px cards / 10px buttons, no glows or decorative gradients. Mono is for code only. */
+:root{
+  --bg:#050505;
+  --surface:#0d0d0d; --surface-2:#141414; --surface-3:#1c1c1c;
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.14);
+  --ink:#ededed; --ink-2:#cfcfcf; --mut:#9b9b9b; --dim:#6c6c6c;
+
+  --bronze:#b8956a; --bronze-hi:#cdab80;
+  --bronze-soft:rgba(184,149,106,.12); --bronze-line:rgba(184,149,106,.4);
+
+  /* severity / verdict — muted so the page reads as a document, not an alarm panel */
+  --bad:#d88a8a;  --bad-soft:rgba(216,138,138,.12);
+  --warn:#d7b26e; --warn-soft:rgba(215,178,110,.12);
+  --good:#8fbf9a; --good-soft:rgba(143,191,154,.12);
+
+  --radius-card:14px; --radius-cta:10px; --radius-sm:8px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,system-ui,"Apple SD Gothic Neo","Segoe UI",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+  font-size:15px;line-height:1.6;letter-spacing:-.005em;font-variant-numeric:tabular-nums;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;min-height:100vh}
+a{color:var(--bronze-hi);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+b,strong{font-weight:600;color:var(--ink)}
+code,kbd,pre{font-family:var(--mono);font-size:.86em}
+code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--ink-2)}
+::selection{background:rgba(184,149,106,.35)}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:2px;border-radius:6px}
+
+/* ---------- top bar ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:650;font-size:15.5px;letter-spacing:-.02em;
+  color:var(--ink);cursor:pointer;background:none;border:0;padding:0;font-family:inherit;text-decoration:none}
+.brand:hover{text-decoration:none}
+.brand .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:var(--bronze);color:#120e09}
+.nav{display:flex;align-items:center;gap:4px;font-size:14px}
+.nav a,.nav button{color:var(--mut);padding:7px 11px;border-radius:var(--radius-sm);background:none;border:0;
+  font:inherit;cursor:pointer;transition:color .15s,background .15s}
+.nav a:hover,.nav button:hover{color:var(--ink);background:var(--surface-2);text-decoration:none}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--bronze);color:#120e09;
+  border:1px solid transparent;border-radius:var(--radius-cta);padding:10px 18px;font-family:inherit;font-size:14.5px;
+  font-weight:600;letter-spacing:-.01em;cursor:pointer;transition:background .15s,border-color .15s,color .15s;white-space:nowrap}
+.btn:hover{background:var(--bronze-hi);text-decoration:none}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface-2);border-color:var(--mut)}
+.btn.block{width:100%}
+
+/* ---------- footer ---------- */
+footer.site{margin-top:72px;padding:22px 0 8px;border-top:1px solid var(--line);color:var(--dim);font-size:13px;
+  display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
+footer.site a{color:var(--mut)} footer.site a:hover{color:var(--ink)}
+footer.site .links{display:flex;flex-wrap:wrap;gap:4px 16px}
+
+.hidden{display:none!important}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}

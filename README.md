@@ -198,6 +198,9 @@ reproduce `verify.py`); the 2.5 MB sample is committed so the demo and CLI work 
 
 ```
 index.html        the browser demo (drag-drop → score)
+ui.css            shared tokens + base styles for every page (black + bronze, Pretendard)
+maps.html         data maps index — one question, the public datasets for it, how they join
+maps/*.html       the maps themselves (manual research, metadata only — no data is fetched)
 scorer.mjs        the deterministic scorer — pure function, runs identically in browser + Node
 parse.mjs         CSV/XLSX → rows (Node CLI)
 cli.mjs           score any file from the terminal
