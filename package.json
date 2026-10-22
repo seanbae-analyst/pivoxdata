@@ -7,10 +7,12 @@
     "dev": "node serve.mjs",
     "score": "node cli.mjs",
     "validate": "node --max-old-space-size=4096 validate.mjs",
-    "simulate": "node sim.mjs 7 20000 --report"
+    "simulate": "node sim.mjs 7 20000 --report",
+    "lab": "node lab/fetch.mjs && node lab/verify.mjs && node lab/build.mjs",
+    "lab:build": "node lab/verify.mjs && node lab/build.mjs"
   },
   "dependencies": {
     "papaparse": "^5.4.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

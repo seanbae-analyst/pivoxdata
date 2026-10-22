@@ -272,6 +272,19 @@ function suiteEdgeCases() {
 }
 
 // ============================ C. PII TRAP BATTERY ============================
+const pad2 = (x) => String(x).padStart(2, "0");
+// 주민등록번호: real date + G in 1–8; back digits random (post-2020 numbers have no checksum)
+function genRRN(sep) {
+  const g = randint(1, 4), y = g <= 2 ? randint(40, 99) : randint(0, 20);
+  return `${pad2(y)}${pad2(randint(1, 12))}${pad2(randint(1, 28))}${sep}${g}${String(randint(0, 999999)).padStart(6, "0")}`;
+}
+// 사업자등록번호 with a valid check digit
+function genBRN() {
+  const d = Array.from({ length: 9 }, () => randint(0, 9)), w = [1, 3, 7, 1, 3, 7, 1, 3, 5];
+  let s = d.reduce((a, x, i) => a + x * w[i], 0); s += Math.floor((d[8] * 5) / 10);
+  const t = d.join("") + ((10 - (s % 10)) % 10);
+  return `${t.slice(0, 3)}-${t.slice(3, 5)}-${t.slice(5)}`;
+}
 // confusable numeric columns that must NOT be flagged as PII (except the documented residual).
 function suitePIITraps() {
   const NN = 200;
@@ -288,6 +301,15 @@ function suitePIITraps() {
     "REAL_phone (10-digit)": genPhone10,            // SHOULD be flagged (true positive)
     "REAL_email": (i) => genEmail(i),               // SHOULD be flagged (true positive)
     "bare_10digit_id (bbl-like)": () => String(1000000000 + randint(0, 8999999999)), // KNOWN residual
+    // Korean confusables (scorer-kr): 13-digit order numbers, random 13-digit ids, business
+    // registration numbers and corporate-named columns must stay silent; real RRNs (with and
+    // without hyphen) and dotted mobiles must be caught
+    "order_no (YYYYMMDD+5, 13-digit)": () => `20${randint(10, 26)}${pad2(randint(1, 12))}${pad2(randint(1, 28))}${String(randint(1, 99999)).padStart(5, "0")}`,
+    "random_13digit_id": () => String(1000000000000 + randint(0, 8999999999999)),
+    "biz_reg_no (###-##-#####)": genBRN,
+    "REAL_rrn (hyphen)": () => genRRN("-"),
+    "REAL_rrn (bare 13-digit)": () => genRRN(""),
+    "REAL_mobile_dotted (010.1234.5678)": () => `010.${randint(1000, 9999)}.${randint(1000, 9999)}`,
   };
   const out = [];
   for (const [name, gen] of Object.entries(traps)) {

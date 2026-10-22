@@ -6,7 +6,7 @@
 // deterministic code on BOTH versions of the data. The diff between the two columns
 // IS the consequence of the defects: no AI, no opinion, every number recomputable.
 // (The generalized, every-file version of experiment/SO_WHAT.md.)
-import { EMPTY, PII_PATTERNS, looksLikePhone, looksLikeIdColumn, dateShape } from "./scorer.mjs";
+import { EMPTY, matchesPII, looksLikeIdColumn, dateShape } from "./scorer.mjs";
 import { toISO } from "./fixer.mjs";
 import { L, piiName } from "./lang.mjs";
 
@@ -40,10 +40,8 @@ function groups(rows, col) {
   return m;                                                       // that's how group-bys see them
 }
 function piiExposed(rows, col, type) {
-  const test = type === "phone" ? looksLikePhone : PII_PATTERNS[type];
-  const match = test instanceof RegExp ? (t) => test.test(t) : test;
   // masked values (d***@x.com, ***-1234) are no longer raw PII — don't count them
-  return vals(rows, col).filter((t) => !t.includes("***") && match(t) && !(type === "phone" && dateShape(t))).length;
+  return vals(rows, col).filter((t) => !t.includes("***") && matchesPII(type, t)).length;
 }
 
 // dirty: { rows, columns, stats }  — stats = scoreDataset(rows, columns) of the DIRTY data
@@ -65,11 +63,11 @@ export function analyzeBeforeAfter(dirty, clean) {
     if (s.piiType) {
       const d = piiExposed(dirty.rows, col, s.piiType);
       const c = cc ? piiExposed(clean.rows, cc, s.piiType) : 0;
-      push(L(`Raw ${s.piiType} values in "${col}" an AI would receive`, `AI가 그대로 받게 될 "${col}" 열의 ${piiName(s.piiType)}`), fmt(d), cc ? fmt(c) : L("0 (column removed)", "0 (열 삭제됨)"));
+      push(L(`Raw ${piiName(s.piiType)} values in "${col}" an AI would receive`, `AI가 그대로 받게 될 "${col}" 열의 ${piiName(s.piiType)}`), fmt(d), cc ? fmt(c) : L("0 (column removed)", "0 (열 삭제됨)"));
       continue; // a PII column is not also summed/grouped
     }
     const numFrac = s.numericCount / s.present;
-    if (numFrac >= 0.5 && !looksLikeIdColumn(col)) {
+    if (numFrac >= 0.5 && !looksLikeIdColumn(col) && !s.idKind) { // 사업자등록번호 has no "total"
       const d = sumOf(dirty.rows, col);
       const c = cc ? sumOf(clean.rows, cc) : null;
       push(L(`Total of "${col}"`, `"${col}" 합계`), fmt(d.sum), gone(c ? fmt(c.sum) : ""),

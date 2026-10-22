@@ -5,8 +5,18 @@
     {
       "source": "/(.*).mjs",
       "headers": [
-        { "key": "Content-Type", "value": "text/javascript; charset=utf-8" }
+        {
+          "key": "Content-Type",
+          "value": "text/javascript; charset=utf-8"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/maps/korea-investor-net-buy",
+      "destination": "/research/net-buy",
+      "permanent": true
     }
   ]
 }

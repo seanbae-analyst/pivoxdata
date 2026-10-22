@@ -21,11 +21,11 @@
 - ✓ whitespace-only values — score=97, issues=1
 - ✓ columns param empty (infer) — score=100, issues=0
 - ✓ single PII phone col only — score=96, issues=1
-- ✓ mixed null + sentinel — score=98, issues=1
+- ✓ mixed null + sentinel — score=98, issues=2
 - ✓ wide: 60 columns — score=100, issues=0
 - ✓ 1 col all 1900 dates — score=93, issues=2
 
-## C. PII trap battery — 12 confusable columns
+## C. PII trap battery — 18 confusable columns
 - sequential_id (8-digit): ✓ not flagged
 - zip5: ✓ not flagged
 - year: ✓ not flagged
@@ -38,15 +38,21 @@
 - REAL_phone (10-digit): ✓ flagged (true positive)
 - REAL_email: ✓ flagged (true positive)
 - bare_10digit_id (bbl-like): △ documented residual
+- order_no (YYYYMMDD+5, 13-digit): ✓ not flagged
+- random_13digit_id: ✓ not flagged
+- biz_reg_no (###-##-#####): ✓ not flagged
+- REAL_rrn (hyphen): ✓ flagged (true positive)
+- REAL_rrn (bare 13-digit): ✓ flagged (true positive)
+- REAL_mobile_dotted (010.1234.5678): ✓ flagged (true positive)
 
 Unsolved false positives: **0**. Missed true positives: **0**. Documented residuals (bbl 10-digit shape collision): **1**.
 
 ## D. Performance
 | rows | time | throughput | score |
 |---|---|---|---|
-| 1,000 | 6 ms | 165,572 rows/s | 90 |
-| 10,000 | 70 ms | 142,153 rows/s | 90 |
-| 50,000 | 343 ms | 145,588 rows/s | 90 |
-| 100,000 | 664 ms | 150,687 rows/s | 90 |
+| 1,000 | 18 ms | 57,043 rows/s | 90 |
+| 10,000 | 198 ms | 50,437 rows/s | 90 |
+| 50,000 | 1252 ms | 39,938 rows/s | 90 |
+| 100,000 | 2388 ms | 41,883 rows/s | 90 |
 
 **Verdict: ALL SIMULATIONS PASSED ✓**

@@ -45,6 +45,8 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
   font:inherit;cursor:pointer;transition:color .15s,background .15s}
 .nav a:hover,.nav button:hover{color:var(--ink);background:var(--surface-2);text-decoration:none}
 .nav a,.nav button{white-space:nowrap}
+.brand .short{display:none}
+@media(max-width:560px){.brand .full{display:none}.brand .short{display:inline}.nav a{padding:7px 8px}.topbar{gap:8px}}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--bronze);color:#120e09;

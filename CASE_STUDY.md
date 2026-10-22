@@ -176,3 +176,24 @@ validation includes an honest-silence test.
    products, fixed it measurably (5→1), and documented the residual instead of hiding it.
 5. **Product architecture from one principle** — fact vs. judgment drew every line: what the
    scorer asserts, what the fixer touches, what the UI asks, what the tool refuses to do.
+
+## 10 · From a checker to a lab (2026-10)
+
+The data maps kept landing on the same subject: Korean retail investors. One map asked four questions — when they
+pile in, how much they borrow, where they go abroad, whether they keep a record of their trades — and found that
+the last one has **no public answer at all** (no survey by 금투협 · 금감원 · 한국은행 · 통계청 · 자본시장연구원 ·
+금융소비자보호재단 asks it). So the site was refocused into a research lab on that one population, and the checker
+became one of its tools (`/check`).
+
+What carried over is the method, not the code:
+
+- **Facts and judgments, mechanized.** Every interpretive sentence on a research page is generated from the data and
+  guarded (`lab/build.mjs`). If a re-fetch moves the peak month, the build stops; it never publishes a stale sentence.
+- **A third reading.** Month-end credit balances from ECOS are matched against the daily KOFIA figures reported in the
+  news (four months, exact to the 억원) — which is also how the series was shown to be month-end, not a monthly average.
+- **Licensing as a first-class fact.** The same number can be free to show or not depending on the route it came
+  through. The site is non-commercial because ECOS allows other agencies' statistics to be used non-commercially with
+  attribution; that constraint is stated on every page rather than discovered later.
+- **The finding a reader would share:** the credit balance hit a record in won (38.0조, May 2026), but against market
+  size the 2021 peak was higher (0.93% vs 0.55%). "Record high" is only true in one unit — exactly the kind of
+  claim the site exists to check.

@@ -3,13 +3,27 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>한국 개인투자자 데이터 지도 · DataReady</title>
+<title>한국 개인투자자 데이터 지도 · 개인투자자 데이터 연구소</title>
 <meta name="description" content="한국 개인투자자의 매매·레버리지·해외투자·인구통계·기록 습관을 다룬 공개 데이터 24개와, 이을 키, 앱 화면에 보여줘도 되는지." />
+<!--@head-->
 <meta name="theme-color" content="#050505" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href="https://pivoxdata.vercel.app/maps/korea-investor" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="개인투자자 데이터 연구소" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://pivoxdata.vercel.app/maps/korea-investor" />
+<meta property="og:title" content="한국 개인투자자 데이터 지도" />
+<meta property="og:description" content="한국 개인투자자의 매매·레버리지·해외투자·인구통계·기록 습관을 다룬 공개 데이터 24개와, 이을 키, 앱 화면에 보여줘도 되는지." />
+<meta property="og:image" content="https://pivoxdata.vercel.app/og/home.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://pivoxdata.vercel.app/og/home.png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
+<!--/@head-->
 <style>
 /* Layout: one research question → a key-hub graph (datasets on the sides, join keys in the middle),
    then the order to join them, the time windows they share, and the full catalog. Dark-first, bronze accent. */
@@ -254,10 +268,12 @@ footer p{margin:0 0 6px;max-width:90ch}
 </head>
 <body>
 <div class="wrap">
-  <header class="topbar">
-    <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>DataReady</a>
-    <nav class="nav"><a href="/maps">데이터 지도</a><a href="/">파일 채점</a></nav>
-  </header>
+<!--@nav-->
+<header class="topbar">
+  <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="full">개인투자자 데이터 연구소</span><span class="short">데이터 연구소</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
+</header>
+<!--/@nav-->
 <header class="top">
   <div>
     <div class="eyebrow">데이터 지도 · 수동 조사판</div>
@@ -286,7 +302,7 @@ footer p{margin:0 0 6px;max-width:90ch}
     <div class="big">없음</div>
     <p>개인 순매수가 들어 있는 KRX 자료는 정보데이터시스템 <b>화면에서만</b> 볼 수 있고, 약관이 복제·배포와 자동 수집을 막습니다. 무료 KRX Open API에는 투자자 구분이 아예 없습니다. 공식 경로는 조건이 공개되지 않은 <b>유료 데이터 분배 계약</b>뿐입니다.</p>
     <p>한국은행 ECOS가 KRX의 월별 투자자별 거래를 다시 싣지만, 다른 기관 통계라 <b>비상업적 이용만</b> 됩니다.</p>
-    <p><a href="/maps/korea-investor-net-buy">이 ECOS 자료로 그린 월별 개인 순매수 그래프 (2004–2026) →</a></p>
+    <p><a href="/research/net-buy">이 ECOS 자료로 그린 월별 개인 순매수 그래프 (2004–2026) →</a></p>
     <p class="quote">KRX 정보데이터시스템 이용약관 제12조② "이용자는 당 사이트의 정보를 거래소의 사전 허락 없이 복사·복제·배포·전송·공중송신하여서는 아니 됩니다."</p>
   </div>
 </div>

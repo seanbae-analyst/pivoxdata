@@ -1,0 +1,9 @@
+{
+  "about": "Month-end 신용융자 잔고 figures reported in the news from KOFIA's daily data, collected by hand on 2026-10-22 to check that ECOS 901Y056 S23E is a month-end (settlement-date) balance and not a monthly average. A value matches when it is within tolerance_won (news rounds to 억원).",
+  "credit": [
+    { "month": "200612", "won": 497700000000, "tolerance_won": 100000000, "quote": "지난해 말 4977억원", "outlet": "이투데이", "date": "2007-06-26", "url": "https://www.etoday.co.kr/news/view/131446" },
+    { "month": "202512", "won": 27286500000000, "tolerance_won": 100000000, "quote": "지난해 12월31일 27조2865억원", "outlet": "경향신문", "date": "2026-08-05", "url": "https://www.khan.co.kr/article/202608051749001" },
+    { "month": "202605", "won": 38022600000000, "tolerance_won": 100000000, "quote": "38조 226억원", "outlet": "뉴데일리", "date": "2026-06-01", "url": "https://www.newdaily.co.kr/site/data/html/2026/06/01/2026060100108.html" },
+    { "month": "202607", "won": 28935000000000, "tolerance_won": 100000000, "quote": "지난달 31일 28조9350억원", "outlet": "뉴시스", "date": "2026-08-04", "url": "https://www.newsis.com/view/NISX20260804_0003735544" }
+  ]
+}
