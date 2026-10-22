@@ -1,5 +1,5 @@
 // parse.mjs — file -> {rows, columns, encoding} for the Node CLI (CSV via Papa, Excel via SheetJS).
-// The browser does the same job in index.html with the same decoder (encoding.mjs).
+// The browser does the same job in check.html with the same decoder (encoding.mjs).
 import fs from "fs";
 import Papa from "papaparse";
 // SheetJS ESM build only exposes readFile on the default export, not as a named

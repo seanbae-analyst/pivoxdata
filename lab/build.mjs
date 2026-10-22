@@ -234,7 +234,7 @@ function netbuy() {
 
 // ============ pages ============
 const PAGES = [
-  { file: "home.html", path: "/", og: "home" },
+  { file: "index.html", path: "/", og: "home" },
   { file: "research/credit.html", path: "/research/credit", og: "credit", dataset: () => ({
     coverage: `${S.credit.rows.find((r) => r[0] >= "199901")[0].replace(/(\d{4})(\d{2})/, "$1-$2")}/${S.credit.last.replace(/(\d{4})(\d{2})/, "$1-$2")}`,
     sources: [{ name: `${S.credit.source.table_name} (${S.credit.source.table})`, by: S.credit.source.compiled_by }, { name: `${S.mcap_kospi.source.table_name} (${S.mcap_kospi.source.table})`, by: S.mcap_kospi.source.compiled_by }],
@@ -275,7 +275,7 @@ const fill = {
     h = region(h, "sources", `<p>각 숫자는 ${R.checked_at}에 원문(보고서·보도자료 PDF)에서 다시 읽었습니다. 점수와 비율, 비율의 분모(누구 중 몇 %인지)는 원문 표현을 따랐습니다.</p><ul class="checks">${R.cards.map((c) => `<li><a href="${c.url}" target="_blank" rel="noopener">${esc(c.cite)}</a></li>`).join("")}</ul>`, f);
     return h;
   },
-  "home.html": (h, f) => {
+  "index.html": (h, f) => {
     const [p0, p1, pn, pneg] = N.facts.pre;
     const nb = `<b>${N.facts.lastY}년 1–${N.facts.lastM}월 개인 순매수 ${(N.facts.ytd / 1e6 > 0 ? "+" : "") + (N.facts.ytd / 1e6).toFixed(1)}조</b> — 2004년 이후 어느 한 해보다 많습니다. ${p0}~${p1}년 ${pn}년 중 ${pneg}년은 개인이 순매도한 해였고, 2020년 이후 순매수한 해는 ${N.facts.postPos.map((k) => (k === N.facts.lastY && N.facts.lastM < 12 ? `${k}년(1–${N.facts.lastM}월)` : `${k}년`)).join(" · ")}입니다.`;
     const cr = `<b>신용융자 잔고는 ${lbl(C.facts.peak.t)} 월말 ${jo(C.facts.peak.cr)}로 1999년 이후 금액으로 가장 컸습니다.</b> 그달 시가총액 대비 비율은 ${C.facts.rAtPeak.toFixed(2)}%로, 비율이 가장 높았던 ${lbl(C.facts.rPeak.t)}(${C.facts.rPeak.v.toFixed(2)}%)보다 낮습니다. 투자자 구분이 없는 시장 전체 값입니다.`;

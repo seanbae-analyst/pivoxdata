@@ -1,4 +1,4 @@
-// encoding.mjs — bytes → text, shared by the browser (index.html) and the Node CLI (parse.mjs).
+// encoding.mjs — bytes → text, shared by the browser (check.html) and the Node CLI (parse.mjs).
 //
 // Korean public-data downloads are very often CP949 (a.k.a. EUC-KR / UHC). Reading them as
 // UTF-8 silently turns every Hangul cell into mojibake, and the scorer then grades garbage.

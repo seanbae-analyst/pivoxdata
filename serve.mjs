@@ -1,5 +1,5 @@
 // serve.mjs — zero-dependency static server for the DataReady demo.
-// The app uses native ES modules (`import` in index.html), which browsers refuse
+// The app uses native ES modules (`import` in check.html and the research pages), which browsers refuse
 // to load over file:// — so the page must be served over HTTP. `npm run dev`.
 import http from "http";
 import fs from "fs";
