@@ -44,7 +44,7 @@ loses points per problem (never below 0). **80–100** AI-ready · **55–79** n
 | **Completeness · 완전성 (40%)** | Column entirely empty · 전부 빈 열 | −12 |
 | | Column ≥ 50% empty · 50% 이상 빈 열 | −8 |
 | | Column ≥ 20% empty · 20% 이상 빈 열 | −4 |
-| | Blanks dressed as data (N/A, NULL, none, unknown, TBD, "-"), only in columns under 20% empty · 값처럼 적힌 빈칸 (빈칸 20% 미만인 열만) | −2 |
+| | Blanks dressed as data (N/A, NULL, none, unknown, TBD, "-"), counted on top of the rules above; not in an entirely empty column · 값처럼 적힌 빈칸 (위 감점과 따로 셈, 전부 빈 열은 제외) | −2 |
 | **Consistency · 일관성 (35%)** | Exact duplicate rows · 완전히 같은 행 | −3 + duplicate %, max −15 · 최대 −15 |
 | | Numbers and text mixed in one column (10–90% numeric) · 숫자·글자가 섞인 열 | −6 |
 | | Dates written more than one way (ISO · US slash · "March 5, 2021") · 날짜 형식이 여럿 | −8 |
