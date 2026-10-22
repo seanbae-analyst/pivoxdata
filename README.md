@@ -3,9 +3,19 @@
 **▶ Live demo: [pivoxdata.vercel.app](https://pivoxdata.vercel.app)** — drag a CSV onto the page.
 **📖 Case study: [CASE_STUDY.md](CASE_STUDY.md)** — the product thinking, decision by decision.
 
-Drop a CSV or Excel file, get a **0–100 AI-readiness score** with prioritized, plain-language
-fixes — so a non-coder can tell whether a dataset is good enough for AI/analytics *before*
-wasting a day on it. Runs entirely in the browser; nothing is uploaded.
+**Check data before you use it.** The site has two halves that answer that one question:
+
+- **Your own file → the scorer.** Drop a CSV or Excel file, get a **0–100 AI-readiness score** with
+  prioritized, plain-language fixes — so a non-coder can tell whether a dataset is good enough for
+  AI/analytics *before* wasting a day on it. Runs entirely in the browser; nothing is uploaded.
+- **Public data → [data maps](https://pivoxdata.vercel.app/maps).** For one question, which public
+  datasets can answer it, which keys join them, which periods overlap, and whether each one may be
+  used (terms quoted from each provider). Two maps so far — Seoul store closures and Korean retail
+  investors — plus [one chart drawn by following a map](https://pivoxdata.vercel.app/maps/korea-investor-net-buy).
+
+The site is free and non-commercial: no payment, no ads. That is also why the net-buying chart may
+carry KRX-authored data (ECOS allows non-commercial use with the source named). Adding paid features
+or ads would mean taking that page down first.
 
 > A product-thinking portfolio piece by **Sanghyun Bae**. The full 1-page PRD is in
 > [`PRD.md`](PRD.md); the trust model is in [`TRUST.md`](TRUST.md).

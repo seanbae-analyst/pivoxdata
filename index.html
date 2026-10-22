@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DataReady — is your data AI-ready?</title>
-<meta name="description" content="Drop a CSV, get a 0–100 AI-readiness score with prioritized, plain-language fixes. Runs entirely in your browser." />
+<meta name="description" content="Check data before you use it. Drop a CSV for a 0–100 AI-readiness score with plain-language fixes, or open a data map to see which public datasets answer a question and whether you may use them." />
 <meta name="theme-color" content="#050505" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
@@ -25,6 +25,16 @@
   h1{font-size:clamp(36px,6.4vw,58px);line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:20px 0 16px}
   h1 .g{color:var(--bronze)}
   .sub{color:var(--mut);margin:0;font-size:17px;line-height:1.6;max-width:56ch}
+  .ways{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px;max-width:760px}
+  @media(max-width:640px){.ways{grid-template-columns:1fr}}
+  /* phone: the two analysis memos are also in the footer, so the top bar keeps only maps + GitHub */
+  @media(max-width:560px){.nav a[href="/analysis"],.nav a[href="/analysis-kr"]{display:none}}
+  .way{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:var(--radius-card);padding:14px 16px;
+    background:var(--surface);color:var(--ink);transition:border-color .15s,background .15s}
+  .way:hover{border-color:var(--bronze-line);background:var(--surface-2);text-decoration:none}
+  .way .w-t{font-size:14.5px;font-weight:600}
+  .way .w-d{font-size:13.5px;color:var(--mut);line-height:1.55}
+  .way .w-go{font-size:13.5px;color:var(--bronze-hi);font-weight:600;margin-top:2px}
 
   .drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;
     border:1.5px dashed var(--line-2);border-radius:18px;padding:44px 24px;background:var(--surface);
@@ -246,6 +256,10 @@
       <span class="pill"><i></i>Runs in your browser · nothing is uploaded</span>
       <h1>Is your data <span class="g">AI-ready?</span></h1>
       <p class="sub">Drop a CSV or Excel file. Get a 0–100 readiness score, every problem in plain language, and a cleaned file you can download — before you paste it into an AI.</p>
+      <div class="ways" aria-label="Two ways to check data before you use it">
+        <a class="way" href="#drop"><span class="w-t">You have a file</span><span class="w-d">Score its quality right here: gaps, mixed formats, duplicates and personal data.</span><span class="w-go">Drop it below ↓</span></a>
+        <a class="way" href="/maps"><span class="w-t">You're looking for public data · 데이터 지도</span><span class="w-d">For one question: which public datasets answer it, how they join, which periods overlap, and whether you may use them.</span><span class="w-go">Open the maps →</span></a>
+      </div>
     </div>
 
     <label class="drop" id="drop">
