@@ -37,19 +37,25 @@ function axes(svg, { W, H, m, iw, ticks, Y, yfmt, months, X, narrow, zeroLine })
 }
 
 function interact(svg, { n, W, H, iw, m, X, show, hide, pick }) {
-  let cur = n - 1;
-  svg.addEventListener("pointermove", (e) => { const b = svg.getBoundingClientRect(); const x = (e.clientX - b.left) * W / b.width; cur = pick(x); show(cur, x, (e.clientY - b.top) * H / b.height); });
-  svg.addEventListener("pointerleave", hide);
+  let cur = n - 1, touch = false;
+  const at = (e) => { const b = svg.getBoundingClientRect(); const x = (e.clientX - b.left) * W / b.width; cur = pick(x); show(cur, x, (e.clientY - b.top) * H / b.height); };
+  svg.addEventListener("pointermove", at);
+  // a tap: show the tapped month and keep it (no hover to end it); the focus that follows must not jump to the last month
+  svg.addEventListener("pointerdown", (e) => { touch = e.pointerType !== "mouse"; at(e); });
+  svg.addEventListener("pointerleave", () => { if (!touch) hide(); });
   svg.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight" && e.key !== "Home" && e.key !== "End") return;
     e.preventDefault();
     cur = e.key === "Home" ? 0 : e.key === "End" ? n - 1 : Math.max(0, Math.min(n - 1, cur + (e.key === "ArrowLeft" ? -1 : 1)));
     show(cur);
   });
-  svg.addEventListener("focus", () => show(cur)); svg.addEventListener("blur", hide);
+  svg.addEventListener("focus", () => show(cur)); svg.addEventListener("blur", () => { touch = false; hide(); });
 }
 
-function placeTip(tip, x, y, W) { tip.style.left = Math.min(Math.max(0, x + 12), W - tip.offsetWidth) + "px"; tip.style.top = Math.max(0, y - 10) + "px"; }
+// redraw on width changes only (a phone's toolbar collapsing changes the height and should not reset the chart)
+function onWidth(box, draw) { let w = box.clientWidth, t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { if (box.clientWidth !== w) { w = box.clientWidth; draw(); } }, 120); }); }
+
+function placeTip(tip, x, y, W, H) { tip.style.left = Math.min(Math.max(0, x + 12), W - tip.offsetWidth) + "px"; tip.style.top = Math.max(0, Math.min(y - 10, (H ?? Infinity) - tip.offsetHeight)) + "px"; }
 
 export function lines(box, o) {
   const draw = () => {
@@ -59,7 +65,7 @@ export function lines(box, o) {
     const { W, svg, tip, iw, ih } = frame(box, { label: o.label, narrow, H, m });
     const n = o.months.length, all = o.series.flatMap((s) => s.values).filter((v) => v != null);
     const lo = Math.min(o.min ?? Infinity, ...all), hi = Math.max(...all);
-    const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1]);
+    const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * iw / Math.max(1, n - 1);
     axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X, narrow, zeroLine: y0 < 0 });
     (o.bands || []).forEach((b) => { const i0 = o.months.indexOf(b.from), i1 = o.months.indexOf(b.to); if (i0 < 0 || i1 < 0) return;
@@ -90,13 +96,13 @@ export function lines(box, o) {
       dots.forEach((d, k) => { const v = o.series[k].values[i]; d.setAttribute("visibility", v == null ? "hidden" : "visible"); if (v != null) { d.setAttribute("cx", X(i)); d.setAttribute("cy", Y(v)); } });
       const rows = o.series.map((s) => [s.name, s.values[i], s.color]);
       tip.innerHTML = `<b>${lbl(o.months[i])}</b>` + rows.map(([nm, v, c]) => `<div class="r"><span><span class="sw" style="background:${c}"></span>${nm}</span><span>${v == null ? "—" : o.fmt(v)}</span></div>`).join("") + (o.tipExtra ? o.tipExtra(i) : "");
-      tip.hidden = false; placeTip(tip, px ?? X(i), py ?? m.t, W);
+      tip.hidden = false; placeTip(tip, px ?? X(i), py ?? m.t, W, H);
       if (live) live.textContent = `${lbl(o.months[i])} · ` + rows.map(([nm, v]) => `${nm} ${v == null ? "값 없음" : o.fmt(v)}`).join(" · ");
     };
     const hide = () => { ln.setAttribute("visibility", "hidden"); dots.forEach((d) => d.setAttribute("visibility", "hidden")); tip.hidden = true; };
     interact(svg, { n, W, H, iw, m, X, show, hide, pick: (x) => Math.max(0, Math.min(n - 1, Math.round((x - m.l) / iw * (n - 1)))) });
   };
-  draw(); let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 120); });
+  draw(); onWidth(box, draw);
 }
 
 export function bars(box, o) {
@@ -106,7 +112,7 @@ export function bars(box, o) {
     const { W, svg, tip, iw, ih } = frame(box, { label: o.label, narrow, H, m });
     const n = o.months.length, bw = iw / n, vals = o.values;
     const nums = vals.filter((v) => v != null), lo = Math.min(0, ...nums), hi = Math.max(0, ...nums);
-    const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1]);
+    const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * bw;
     axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X: (i) => X(i) + bw / 2, narrow, zeroLine: true });
     const g = el("g", {}, svg), gap = bw > 3 ? Math.min(1, bw * 0.25) : 0, rects = [];
@@ -119,13 +125,13 @@ export function bars(box, o) {
     const show = (i, px, py) => {
       hl.setAttribute("x", X(i)); hl.setAttribute("visibility", "visible"); rects.forEach((r, j) => r && r.setAttribute("fill-opacity", j === i ? 1 : 0.55));
       tip.innerHTML = `<b>${lbl(o.months[i])}</b><div class="r"><span>${o.name}</span><span>${vals[i] == null ? "—" : o.fmt(vals[i])}</span></div>` + (o.tipExtra ? o.tipExtra(i) : "");
-      tip.hidden = false; placeTip(tip, px ?? X(i), py ?? Y(Math.max(0, vals[i] ?? 0)), W);
+      tip.hidden = false; placeTip(tip, px ?? X(i), py ?? Y(Math.max(0, vals[i] ?? 0)), W, H);
       if (live) live.textContent = `${lbl(o.months[i])} ${o.name} ${vals[i] == null ? "값 없음" : o.fmt(vals[i])}`;
     };
     const hide = () => { hl.setAttribute("visibility", "hidden"); rects.forEach((r) => r && r.setAttribute("fill-opacity", 1)); tip.hidden = true; };
     interact(svg, { n, W, H, iw, m, X, show, hide, pick: (x) => Math.max(0, Math.min(n - 1, Math.floor((x - m.l) / bw))) });
   };
-  draw(); let t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 120); });
+  draw(); onWidth(box, draw);
 }
 
 // CSV of what a chart shows, built in the browser (the data is already on the page).

@@ -58,13 +58,21 @@ function head(page, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || "";
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
   const url = SITE + page.path, img = `${SITE}/og/${page.og || "home"}.png`;
+  const locale = /<html lang="en"/.test(html) ? "en_US" : "ko_KR";
+  if (page.noindex) return `
+<meta name="theme-color" content="#050505" />
+<meta name="robots" content="noindex" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css" />
+`;
   return `
 <meta name="theme-color" content="#050505" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <link rel="canonical" href="${url}" />
 <meta property="og:type" content="${page.path === "/" ? "website" : "article"}" />
 <meta property="og:site_name" content="개인투자자 데이터 연구소" />
-<meta property="og:locale" content="ko_KR" />
+<meta property="og:locale" content="${locale}" />
 <meta property="og:url" content="${url}" />
 <meta property="og:title" content="${title.replace(/ · 개인투자자 데이터 연구소$/, "")}" />
 <meta property="og:description" content="${desc}" />
@@ -126,7 +134,7 @@ function credit() {
   const cd = rows.map((r) => ({ t: r.t, v: (r.cr / r.dep) * 100 }));
   const cdPeak = argmax(cd, (r) => r.v), cdLast = cd.at(-1);
   const depPeak = argmax(rows, (r) => r.dep);
-  const first7 = rows.find((r) => r.t.startsWith("2007") && r.cr >= 1);
+  const first7 = rows.find((r) => r.cr >= 1);
 
   // guards for the sentences below
   expect(peak.t === "202605", `credit peak moved to ${peak.t}`);
@@ -137,10 +145,14 @@ function credit() {
   expect(midHi.cr < p2021.cr, "2022–2024 exceeded the 2021 peak");
   expect(first7?.t === "200703", `credit first ≥ 1조 in ${first7?.t}`);
   expect(cdPeak.t === "200706", `credit/deposit peak moved to ${cdPeak.t}`);
+  expect(depPeak.t === peak.t, `deposit peak (${depPeak.t}) is no longer the credit peak month (${peak.t})`);
   expect([dropWon, dropPct, dropPct2].every((r) => kospiChg(r.t) < 0), "a largest-drop month no longer has a falling KOSPI");
   expect(M.unpaid["200704"] > 5e11 && M.unpaid["200705"] < 1e11, "the May 2007 미수금 drop is no longer in the data");
 
   const shiftMonths = months.filter((t) => t >= "200501" && t <= "200812");
+  const m56 = months.filter((t) => t >= "200501" && t <= "200612");
+  const u56 = m56.map((t) => won2jo(M.unpaid[t])), unp56 = { lo: Math.min(...u56), hi: Math.max(...u56) }, cr56hi = Math.max(...m56.map((t) => won2jo(M.credit[t])));
+  expect(cr56hi < unp56.lo, "2005–06: credit was no longer below every month of 미수금");
   const D = {
     months, credit: cr, deposits: dep, change, changePct, ratioMonths, ratio, mcap,
     shift: { months: shiftMonths, unpaid: shiftMonths.map((t) => r4(won2jo(M.unpaid[t]))), credit: shiftMonths.map((t) => r4(won2jo(M.credit[t]))) },
@@ -167,7 +179,7 @@ function credit() {
     ratio: `금액으로는 ${kmon(peak.t)}이 가장 컸지만, <b>시장 크기에 견준 비율은 ${kmon(rPeak.t)}(${rPeak.v.toFixed(2)}%)이 가장 높았습니다.</b> ${kmon(rLast.t)} 비율은 ${rLast.v.toFixed(2)}%입니다. 그사이 신용융자는 ${jo(crAt(rPeak.t))}에서 ${jo(crAt(rLast.t))}로 ${Math.round((crAt(rLast.t) / crAt(rPeak.t) - 1) * 100)}% 늘었고, 코스피·코스닥 시가총액 합은 ${Math.round(rPeak.m).toLocaleString("ko-KR")}조에서 ${Math.round(rLast.m).toLocaleString("ko-KR")}조로 ${Math.round((rLast.m / rPeak.m - 1) * 100)}% 늘었습니다. “사상 최대”라는 말은 금액 기준일 때만 맞습니다.`,
     change: `원으로는 <b>${kmon(dropWon.t)}(${sjo(dropWon.ch)}, ${spct(dropWon.chp)})</b>에 가장 많이 줄었습니다. 비율로는 ${kmon(dropPct.t)}(${spct(dropPct.chp)})과 ${kmon(dropPct2.t)}(${spct(dropPct2.chp)})이 가장 컸습니다. 세 달 모두 코스피 월말 종가가 전달보다 낮았습니다(${[dropWon, dropPct, dropPct2].map((r) => `${lbl(r.t)} ${spct(kospiChg(r.t))}`).join(", ")}). ${dropWon.t === "202607" ? `2026년 7월에는 28·29일 이틀 연속 서킷브레이커가 발동됐습니다(${`<a href="https://news.mtn.co.kr/news-detail/2026080416155599328" target="_blank" rel="noopener">머니투데이방송 2026-08-04</a>`}). ` : ""}같은 달에 일어났다는 사실까지만 이 표로 말할 수 있습니다.`,
     deposit: `예탁금은 ${kmon(depPeak.t)} ${jo(depPeak.dep)}로 가장 많았습니다. 예탁금에 견준 신용융자는 <b>${kmon(cdPeak.t)} ${cdPeak.v.toFixed(1)}%</b>가 가장 높았고, ${kmon(cdLast.t)}에는 ${cdLast.v.toFixed(1)}%입니다. 빚이 사상 최대일 때 넣어 둔 돈도 함께 많았습니다.`,
-    shift: `2005~2006년에는 미수금이 1~2조 원이었고 신용융자는 1조 원이 안 됐습니다. <b>2007년 5월 한 달 새 미수금은 ${jo(won2jo(M.unpaid["200704"]))}에서 ${jo(won2jo(M.unpaid["200705"]))}로 줄고, 신용융자는 ${jo(won2jo(M.credit["200704"]))}에서 ${jo(won2jo(M.credit["200705"]))}로 늘었습니다.</b> 빚의 총량보다 형태가 바뀐 달입니다. 그해 2월 1일 신용거래 제도가 바뀐 뒤 잔고가 하루 약 290억 원씩 늘었고(${`<a href="https://www.fnnews.com/news/200704191735344830" target="_blank" rel="noopener">파이낸셜뉴스 2007-04-19</a>`}), 5월 1일부터는 결제일까지 돈을 채우지 않은 계좌를 30일 동안 현금으로만 사게 하는 미수동결계좌 제도가 시행됐습니다(${`<a href="https://www.kofia.or.kr/brd/m_95/view.do?seq=495" target="_blank" rel="noopener">금융투자협회 공지 2007-04-12</a>`}). 6월 하순에는 증권사들이 새 신용융자를 멈췄습니다(${`<a href="https://www.etoday.co.kr/news/view/131405" target="_blank" rel="noopener">이투데이 2007-06-26</a>`}).`,
+    shift: `2005~2006년에는 미수금이 월말 ${jo(unp56.lo)}~${jo(unp56.hi)}였고 신용융자는 가장 많을 때도 ${jo(cr56hi)}였습니다. <b>2007년 5월 한 달 새 미수금은 ${jo(won2jo(M.unpaid["200704"]))}에서 ${jo(won2jo(M.unpaid["200705"]))}로 줄고, 신용융자는 ${jo(won2jo(M.credit["200704"]))}에서 ${jo(won2jo(M.credit["200705"]))}로 늘었습니다.</b> 빚의 총량보다 형태가 바뀐 달입니다. 그해 2월 1일 신용거래 제도가 바뀐 뒤 잔고가 하루 약 290억 원씩 늘었고(${`<a href="https://www.fnnews.com/news/200704191735344830" target="_blank" rel="noopener">파이낸셜뉴스 2007-04-19</a>`}), 5월 1일부터는 결제일까지 돈을 채우지 않은 계좌를 30일 동안 현금으로만 사게 하는 미수동결계좌 제도가 시행됐습니다(${`<a href="https://www.kofia.or.kr/brd/m_95/view.do?seq=495" target="_blank" rel="noopener">금융투자협회 공지 2007-04-12</a>`}). 6월 하순에는 증권사들이 새 신용융자를 멈췄습니다(${`<a href="https://www.etoday.co.kr/news/view/131405" target="_blank" rel="noopener">이투데이 2007-06-26</a>`}).`,
   };
 
   const years = [...new Set(rows.map((r) => r.t.slice(0, 4)))];
@@ -264,7 +276,7 @@ const fill = {
   },
   "research/net-buy.html": (h, f) => {
     h = region(h, "data", `const ROWS=${JSON.stringify(N.ROWS)};`, f);
-    h = region(h, "meta", N.meta, f); h = region(h, "stats", N.stats, f); h = region(h, "yearly", N.yearly, f); h = region(h, "checks", N.checks, f); h = region(h, "read-cum", N.readCum, f);
+    h = region(h, "meta", N.meta, f); h = region(h, "stats", N.stats, f); h = region(h, "yearly", N.yearly, f); h = region(h, "checks", N.checks, f); h = region(h, "read-cum", N.readCum, f); h = region(h, "period", `${kmon(N.ROWS[0][0])}부터 ${kmon(N.ROWS.at(-1)[0])}까지`, f);
     return h;
   },
   "research/record-habit.html": (h, f) => {
@@ -285,23 +297,28 @@ const fill = {
   },
 };
 
-let changed = 0;
+// Render everything first; write nothing unless every guard held (a half-written site is worse than a stale one).
+const out = [];
 for (const p of PAGES) {
   const file = path.join(ROOT, p.file);
   if (!fs.existsSync(file)) { console.log(`skip  ${p.file} (missing)`); continue; }
   const before = fs.readFileSync(file, "utf8");
   let h = before;
-  if (has(h, "head")) h = region(h, "head", head(p, h) + (p.noindex ? `<meta name="robots" content="noindex" />\n` : ""), p.file);
+  if (has(h, "head")) h = region(h, "head", head(p, h), p.file);
   if (has(h, "nav")) h = region(h, "nav", NAV, p.file);
   if (has(h, "footer")) h = region(h, "footer", FOOTER, p.file);
   if (fill[p.file]) h = fill[p.file](h, p.file);
-  if (h !== before) { fs.writeFileSync(file, h); changed++; console.log(`wrote ${p.file}`); } else console.log(`same  ${p.file}`);
+  out.push({ p, file, before, h });
 }
 
 // sitemap: every indexable page, dated by the data it was built from (so a rebuild on another day changes nothing)
 const sm = PAGES.filter((p) => !p.noindex && fs.existsSync(path.join(ROOT, p.file)))
   .map((p) => `  <url><loc>${SITE}${p.path}</loc><lastmod>${fetched}</lastmod></url>`).join("\n");
-fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sm}\n</urlset>\n`);
 
-if (failures.length) { console.error(`\nBUILD STOPPED — a sentence on a page no longer matches the data:\n- ${failures.join("\n- ")}`); process.exit(1); }
+if (failures.length) { console.error(`BUILD STOPPED — nothing written. A sentence on a page no longer matches the data:\n- ${failures.join("\n- ")}`); process.exit(1); }
+let changed = 0;
+for (const { p, file, before, h } of out) {
+  if (h !== before) { fs.writeFileSync(file, h); changed++; console.log(`wrote ${p.file}`); } else console.log(`same  ${p.file}`);
+}
+fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sm}\n</urlset>\n`);
 console.log(`\nbuilt ${changed} page(s) from data fetched ${fetched}`);

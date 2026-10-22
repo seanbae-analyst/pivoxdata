@@ -36,9 +36,19 @@
  },
  "checks": [
   {
+   "id": "fresh:netbuy_individual",
+   "ok": true,
+   "fact": "개인 순매수 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:netbuy_individual",
    "ok": true,
    "fact": "개인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:netbuy_institution",
+   "ok": true,
+   "fact": "기관투자자 순매수 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:netbuy_institution",
@@ -46,9 +56,19 @@
    "fact": "기관투자자 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:netbuy_foreign",
+   "ok": true,
+   "fact": "외국인 순매수 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:netbuy_foreign",
    "ok": true,
    "fact": "외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:netbuy_other_foreign",
+   "ok": true,
+   "fact": "기타외국인 순매수 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:netbuy_other_foreign",
@@ -56,9 +76,19 @@
    "fact": "기타외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:netbuy_other_corp",
+   "ok": true,
+   "fact": "기타법인 순매수 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:netbuy_other_corp",
    "ok": true,
    "fact": "기타법인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0 (앞 62개월은 따로 집계되지 않아 비어 있음, 200903부터 값)"
+  },
+  {
+   "id": "fresh:buy_total",
+   "ok": true,
+   "fact": "매수 거래대금 합계: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:buy_total",
@@ -66,9 +96,19 @@
    "fact": "매수 거래대금 합계: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:deposits",
+   "ok": true,
+   "fact": "투자자 예탁금: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:deposits",
    "ok": true,
    "fact": "투자자 예탁금: 340개월 199806–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:unpaid",
+   "ok": true,
+   "fact": "위탁매매 미수금: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:unpaid",
@@ -76,9 +116,19 @@
    "fact": "위탁매매 미수금: 340개월 199806–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:credit",
+   "ok": true,
+   "fact": "신용융자 잔고: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:credit",
    "ok": true,
    "fact": "신용융자 잔고: 340개월 199806–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:short_credit",
+   "ok": true,
+   "fact": "신용대주 잔고: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:short_credit",
@@ -86,9 +136,19 @@
    "fact": "신용대주 잔고: 340개월 199806–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:mcap_kospi",
+   "ok": true,
+   "fact": "KOSPI 시가총액: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:mcap_kospi",
    "ok": true,
    "fact": "KOSPI 시가총액: 261개월 200501–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:kospi_value",
+   "ok": true,
+   "fact": "KOSPI 거래대금: 마지막 값 202609, 받은 날 2026-10-22"
   },
   {
    "id": "months:kospi_value",
@@ -96,14 +156,29 @@
    "fact": "KOSPI 거래대금: 261개월 200501–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:kospi_close",
+   "ok": true,
+   "fact": "KOSPI 종가: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:kospi_close",
    "ok": true,
    "fact": "KOSPI 종가: 320개월 200002–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:mcap_kosdaq",
+   "ok": true,
+   "fact": "KOSDAQ 시가총액: 마지막 값 202609, 받은 날 2026-10-22"
+  },
+  {
    "id": "months:mcap_kosdaq",
    "ok": true,
    "fact": "KOSDAQ 시가총액: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "netbuy:non-empty",
+   "ok": true,
+   "fact": "순매수 273개월"
   },
   {
    "id": "netbuy:sums-to-zero",

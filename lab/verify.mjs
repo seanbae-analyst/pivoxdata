@@ -20,13 +20,17 @@ for (const s of SERIES) {
   const lead = d.rows.findIndex((r) => r[1] !== null);
   d.rows.forEach((r, i) => { if (i && r[0] !== nextMonth(d.rows[i - 1][0])) gaps++; if (i >= lead && (typeof r[1] !== "number" || !Number.isFinite(r[1]))) nulls++; });
   const from = lead > 0 ? ` (앞 ${lead}개월은 따로 집계되지 않아 비어 있음, ${d.rows[lead][0]}부터 값)` : "";
-  check(`months:${s.id}`, gaps === 0 && nulls === 0, `${d.label}: ${d.n}개월 ${d.first}–${d.last}, 빠진 달 ${gaps}, 숫자 아닌 값 ${nulls}${from}`);
+  // a series must be non-empty and reach within 3 months of the day it was fetched (ECOS lags ~5 days)
+  const fetchedM = d.fetched_at.slice(0, 4) * 12 + +d.fetched_at.slice(5, 7), lastM = d.last ? d.last.slice(0, 4) * 12 + +d.last.slice(4) : 0;
+  check(`fresh:${s.id}`, d.n > 0 && fetchedM - lastM <= 3, `${d.label}: 마지막 값 ${d.last ?? "없음"}, 받은 날 ${d.fetched_at}`);
+  check(`months:${s.id}`, d.n > 0 && gaps === 0 && nulls === 0, `${d.label}: ${d.n}개월 ${d.first}–${d.last}, 빠진 달 ${gaps}, 숫자 아닌 값 ${nulls}${from}`);
 }
 
 // 2. net buying: the five investor groups must net to zero each month (ECOS rounds each to 백만원)
 const NB = ["individual", "institution", "foreign", "other_foreign", "other_corp"].map((k) => Object.fromEntries(load(`netbuy_${k}`).rows));
 const months = Object.keys(NB[0]);
 // before 기타법인 is reported separately (null), the other four groups must net to zero on their own
+check("netbuy:non-empty", months.length > 0, `순매수 ${months.length}개월`);
 const resid = months.map((t) => NB.reduce((a, o) => a + (o[t] ?? 0), 0));
 const exact = resid.filter((r) => r === 0).length, maxAbs = Math.max(...resid.map(Math.abs));
 check("netbuy:sums-to-zero", maxAbs <= 2, `${months.length}개월 중 ${exact}개월은 정확히 0, 나머지도 ±${maxAbs}백만원 안 (반올림)`);
@@ -34,6 +38,7 @@ check("netbuy:sums-to-zero", maxAbs <= 2, `${months.length}개월 중 ${exact}�
 // 3. a year of net buying (annual table) = the sum of its months (monthly table), within rounding
 {
   const A = load("netbuy_individual_A").rows, I = NB[0];
+  if (!A.length) check("netbuy:annual=sum", false, "연간표가 비어 있음");
   const worst = Math.max(...A.map(([y, v]) => Math.abs(months.filter((t) => t.startsWith(y)).reduce((s, t) => s + I[t], 0) - v)));
   check("netbuy:annual=sum", worst <= 6, `${A.length}개 연도, 연간표와 월별 합의 차이 최대 ${worst}백만원 (월별 반올림 12번)`);
 }
@@ -42,7 +47,7 @@ check("netbuy:sums-to-zero", maxAbs <= 2, `${months.length}개월 중 ${exact}�
 for (const a of ANNUAL.filter((x) => x.id !== "netbuy_individual_A")) {
   const M = Object.fromEntries(load(a.of).rows), A = load(a.id).rows;
   const hit = A.filter(([y, v]) => M[`${y}12`] === v).length;
-  check(`balance:${a.of}:A=Dec`, hit === A.length, `${A.length}개 연도 중 ${hit}개 연도에서 연간 값 = 12월 값`);
+  check(`balance:${a.of}:A=Dec`, A.length > 0 && hit === A.length, `${A.length}개 연도 중 ${hit}개 연도에서 연간 값 = 12월 값`);
 }
 
 // 5. known holes: a balance of exactly 0 between non-zero months is a missing value, not a real zero
