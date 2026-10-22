@@ -332,7 +332,7 @@ if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?
             <td><span lang="en">A column that is entirely empty</span><span lang="ko">전부 비어 있는 열</span></td><td>−12</td></tr>
           <tr><td><span lang="en">A column 50% or more empty</span><span lang="ko">50% 이상 비어 있는 열</span></td><td>−8</td></tr>
           <tr><td><span lang="en">A column 20% or more empty</span><span lang="ko">20% 이상 비어 있는 열</span></td><td>−4</td></tr>
-          <tr><td><span lang="en">Blanks dressed as data: N/A, NULL, none, unknown, TBD, “-” (only checked when the column is under 20% empty)</span><span lang="ko">값처럼 적힌 빈칸: N/A, NULL, none, unknown, TBD, “-” (빈칸이 20% 미만인 열만 봅니다)</span></td><td>−2</td></tr>
+          <tr><td><span lang="en">Blanks dressed as data: N/A, NULL, none, unknown, TBD, “-” (counted on top of the rules above; not in an entirely empty column)</span><span lang="ko">값처럼 적힌 빈칸: N/A, NULL, none, unknown, TBD, “-” (위 감점과 따로 셉니다. 전부 빈 열은 제외)</span></td><td>−2</td></tr>
           <tr><th rowspan="6"><span lang="en">Consistency</span><span lang="ko">일관성</span><small>35%</small></th>
             <td><span lang="en">Exact duplicate rows</span><span lang="ko">완전히 같은 행</span></td><td><span lang="en">−3, plus the duplicate share in %, up to −15</span><span lang="ko">−3에 중복 비율(%)만큼 더, 최대 −15</span></td></tr>
           <tr><td><span lang="en">Numbers and text mixed in one column (10–90% numeric)</span><span lang="ko">한 열에 숫자와 글자가 섞임 (숫자가 10–90%)</span></td><td>−6</td></tr>
