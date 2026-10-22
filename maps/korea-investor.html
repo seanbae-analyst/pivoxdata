@@ -1,0 +1,685 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>한국 개인투자자 데이터 지도 · DataReady</title>
+<meta name="description" content="한국 개인투자자의 매매·레버리지·해외투자·인구통계·기록 습관을 다룬 공개 데이터 24개와, 이을 키, 앱 화면에 보여줘도 되는지." />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css" />
+<style>
+/* Layout: one research question → a key-hub graph (datasets on the sides, join keys in the middle),
+   then the order to join them, the time windows they share, and the full catalog. Dark-first, bronze accent. */
+:root{
+  --bg:#050505; --surface:#0d0d0d; --surface-2:#141414; --surface-3:#1c1c1c;
+  --line:rgba(237,229,214,.10); --line-2:rgba(237,229,214,.18);
+  --ink:#ededed; --ink-2:#cfcfcf; --mut:#9b9b9b; --dim:#6c6c6c;
+  --bronze:#b8956a; --bronze-soft:rgba(184,149,106,.12); --bronze-line:rgba(184,149,106,.4);
+  --ok:#8fc29c; --ok-soft:rgba(143,194,156,.14);
+  --guess:#d9b26a; --guess-soft:rgba(217,178,106,.14);
+  --conv:#8fb0d6; --conv-soft:rgba(143,176,214,.14);
+  --bad:#dc8f8a;
+  --sans:"Pretendard Variable",Pretendard,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6;
+  font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 72px}
+a{color:var(--bronze);text-underline-offset:3px}
+code,.mono{font-family:var(--mono);font-size:.84em}
+.wrap{max-width:1240px;margin:0 auto}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:2px;border-radius:6px}
+
+/* header */
+header.top{padding:40px 0 8px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end}
+@media(max-width:820px){header.top{grid-template-columns:1fr}}
+.eyebrow{font-size:13px;color:var(--bronze);font-weight:600}
+h1{font-size:clamp(28px,4.4vw,42px);line-height:1.15;letter-spacing:-.03em;margin:8px 0 12px;font-weight:700;text-wrap:balance}
+.q{color:var(--mut);max-width:62ch;margin:0;font-size:16px}
+.q b{color:var(--ink);font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(4,auto);gap:4px 22px}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,auto)}}
+.stat .v{font-size:24px;font-weight:700;letter-spacing:-.02em}
+.stat .l{font-size:12.5px;color:var(--dim);line-height:1.35}
+.meta-line{font-size:13px;color:var(--dim);margin:14px 0 0}
+
+/* sections */
+section{margin-top:40px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sh h2{font-size:20px;letter-spacing:-.02em;margin:0;font-weight:700}
+.sh p{margin:0;color:var(--mut);font-size:14px;max-width:70ch}
+
+/* legend + toggles */
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:13px;color:var(--mut);margin-bottom:10px}
+.lg{display:inline-flex;align-items:center;gap:8px}
+.lg svg{flex:none}
+.toggle{display:inline-flex;align-items:center;gap:7px;cursor:pointer;margin-left:auto}
+.toggle input{accent-color:var(--bronze)}
+
+/* map layout */
+.maprow{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px;align-items:start}
+@media(max-width:1100px){.maprow{grid-template-columns:minmax(0,1fr)}}
+.graphbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto;min-width:0}
+#graph{display:block;min-width:840px;width:100%;height:auto}
+#graph text{font-family:var(--sans)}
+.node rect{fill:var(--surface-2);stroke:var(--line-2);stroke-width:1;transition:stroke .15s,fill .15s}
+.node text{fill:var(--ink-2);font-size:12.5px}
+.node .sub{fill:var(--dim);font-size:10.5px;font-family:var(--mono)}
+.node{cursor:pointer;outline:none}
+.node:hover rect,.node:focus-visible rect{stroke:var(--bronze-line)}
+.node.sel rect{stroke:var(--bronze);stroke-width:2;fill:var(--bronze-soft)}
+.node.sel text{fill:var(--ink)}
+.node.dim{opacity:.32}
+.hub rect{fill:var(--surface-3);stroke:var(--bronze-line);stroke-width:1.2}
+.hub text{fill:var(--ink);font-size:13px;font-weight:600}
+.hub .sub{fill:var(--mut);font-size:10.5px;font-weight:400;font-family:var(--sans)}
+.hub{cursor:pointer;outline:none}
+.hub.sel rect{fill:var(--bronze-soft);stroke:var(--bronze);stroke-width:2}
+.hub.dim{opacity:.32}
+.lane-h{fill:var(--bronze);font-size:12px;font-weight:600}
+.lane-s{fill:var(--dim);font-size:11px}
+.edge{fill:none;stroke-linecap:round;transition:opacity .15s}
+.edge.ok{stroke:var(--ok);stroke-width:1.7}
+.edge.guess{stroke:var(--guess);stroke-width:1.6;stroke-dasharray:6 4}
+.edge.conv{stroke:var(--conv);stroke-width:1.7;stroke-dasharray:1.5 4.5}
+.edge{opacity:.32}
+.edge.on{opacity:1}
+.edge.off{opacity:.06}
+.edge.hidden{display:none}
+
+/* side panel */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0;position:sticky;top:max(12px,env(safe-area-inset-top,0px))}
+@media(max-width:1100px){.panel{position:static}}
+.panel .kind{font-size:12.5px;color:var(--bronze);font-weight:600}
+.panel h3{margin:4px 0 2px;font-size:18px;line-height:1.35;letter-spacing:-.015em}
+.panel .pid{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.panel .role{margin:12px 0 14px;color:var(--ink-2);font-size:14.5px}
+.panel dl{display:grid;grid-template-columns:76px minmax(0,1fr);gap:6px 10px;margin:0 0 14px;font-size:13.5px}
+.panel dt{color:var(--dim)}
+.panel dd{margin:0;color:var(--ink-2);overflow-wrap:anywhere}
+.ph{font-size:13px;font-weight:600;color:var(--mut);margin:14px 0 6px}
+.keys{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.keys li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 8px;align-items:start;font-size:13.5px}
+.keys .cols{grid-column:2;font-family:var(--mono);font-size:11.5px;color:var(--mut);overflow-wrap:anywhere}
+.badge{display:inline-block;font-size:11.5px;font-weight:600;border-radius:6px;padding:1px 7px;white-space:nowrap;align-self:start;margin-top:2px}
+.b-ok{color:var(--ok);background:var(--ok-soft)}
+.b-guess{color:var(--guess);background:var(--guess-soft)}
+.b-conv{color:var(--conv);background:var(--conv-soft)}
+.hublink,.dslink{background:none;border:0;padding:0;color:var(--ink);cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:3px}
+.hublink:hover,.dslink:hover{text-decoration-color:var(--bronze)}
+.chk{list-style:none;margin:0;padding:0;font-size:13px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
+.chk li{padding-left:18px;position:relative}
+.chk li::before{position:absolute;left:0;top:0}
+.chk.v li::before{content:"✓";color:var(--ok)}
+.chk.u li::before{content:"?";color:var(--guess);font-weight:700}
+.srclink{display:inline-block;margin-top:14px;font-size:13px}
+
+/* recipe */
+.recipe{display:grid;gap:10px;counter-reset:st}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:4px 14px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+@media(max-width:640px){.step{grid-template-columns:30px minmax(0,1fr)}.step .badge{grid-column:2;justify-self:start}}
+.step .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;background:var(--bronze-soft);color:var(--bronze)}
+.step h4{margin:2px 0 4px;font-size:15.5px;letter-spacing:-.01em}
+.step p{margin:0;color:var(--mut);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--line-2);background:var(--surface-2);border-radius:8px;padding:3px 9px;font-size:12.5px;cursor:pointer;color:var(--ink-2)}
+.chip:hover{border-color:var(--bronze-line);color:var(--ink)}
+.chip .k{font-family:var(--mono);font-size:11px;color:var(--dim);margin-left:4px}
+
+.warns{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:12px}
+.warn{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--surface)}
+.warn h5{margin:0 0 4px;font-size:14px;color:var(--bad)}
+.warn p{margin:0;color:var(--mut);font-size:13.5px}
+
+/* timeline */
+.tlbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow-x:auto}
+#tl{display:block;min-width:760px;width:100%;height:auto}
+#tl text{font-family:var(--sans)}
+.tl-lab{fill:var(--ink-2);font-size:12.5px}
+.tl-sub{fill:var(--dim);font-size:10.5px}
+.tl-axis{fill:var(--dim);font-size:11px}
+.tl-grid{stroke:var(--line);stroke-width:1}
+.tl-bar-ok{fill:var(--ok)}
+.tl-bar-guess{fill:url(#hatch)}
+.tl-band{fill:var(--bronze-soft)}
+.tl-band-l{fill:var(--bronze);font-size:11.5px;font-weight:600}
+.tl-mark{stroke:var(--bad);stroke-width:1.4;stroke-dasharray:3 3}
+.tl-mark-l{fill:var(--bad);font-size:11px}
+.tl-dot{fill:var(--ok)}
+.tl-dot-g{fill:var(--guess)}
+
+/* catalog */
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.seg{display:inline-flex;flex-wrap:wrap;gap:4px}
+.seg button{border:1px solid var(--line-2);background:var(--surface);border-radius:9px;padding:5px 11px;font-size:13px;cursor:pointer;color:var(--mut)}
+.seg button[aria-pressed="true"]{border-color:var(--bronze-line);background:var(--bronze-soft);color:var(--ink)}
+#q{margin-left:auto;background:var(--surface);border:1px solid var(--line-2);border-radius:9px;padding:6px 11px;color:var(--ink);font:inherit;font-size:13.5px;min-width:0;width:220px}
+@media(max-width:560px){#q{margin-left:0;width:100%}}
+.tbox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.cat{border-collapse:collapse;width:100%;min-width:980px;font-size:13.5px}
+.cat th{text-align:left;font-size:12.5px;color:var(--dim);font-weight:500;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+.cat td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+.cat tr:last-child td{border-bottom:0}
+.cat tbody tr{cursor:pointer}
+.cat tbody tr:hover td{background:var(--surface-2)}
+.cat tr.sel td{background:var(--bronze-soft)}
+.cat .nm{color:var(--ink);font-weight:500}
+.cat .id{font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+.kpills{display:flex;flex-wrap:wrap;gap:4px}
+
+.offmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px}
+.off{border:1px dashed var(--line-2);border-radius:14px;padding:14px 16px}
+.off h5{margin:0 0 2px;font-size:14px}
+.off .id{font-family:var(--mono);font-size:11.5px;color:var(--dim)}
+.off p{margin:6px 0 0;color:var(--mut);font-size:13.5px}
+
+footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
+footer p{margin:0 0 6px;max-width:90ch}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+<style>
+/* additions for the investor map: redistribution status is the second axis */
+:root{ --free:var(--ok); --nc:var(--guess); --no:var(--bad); --rep:var(--dim); }
+.r-free{color:var(--ok);background:var(--ok-soft)}
+.r-nc{color:var(--guess);background:var(--guess-soft)}
+.r-no{color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,transparent)}
+.r-rep{color:var(--mut);background:var(--surface-3)}
+.stripe-free{fill:var(--ok)} .stripe-nc{fill:var(--guess)} .stripe-no{fill:var(--bad)} .stripe-rep{fill:var(--dim)}
+.answer{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;margin-top:22px}
+@media(max-width:860px){.answer{grid-template-columns:1fr}}
+.ans{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.ans.lead{border-color:var(--bronze-line)}
+.ans h3{margin:0 0 6px;font-size:16px;letter-spacing:-.01em}
+.ans .big{font-size:30px;font-weight:700;letter-spacing:-.03em;margin:2px 0 4px}
+.ans p{margin:0 0 8px;color:var(--mut);font-size:14px}
+.ans p:last-child{margin-bottom:0}
+.ans b{color:var(--ink);font-weight:600}
+.bars{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 10px;align-items:center;font-size:13px;margin:10px 0 8px}
+.bars .tr{height:8px;background:var(--surface-3);border-radius:4px;overflow:hidden}
+.bars .fl{height:100%;background:var(--bronze);border-radius:4px}
+.bars .fl.alt{background:var(--dim)}
+.bars .lb{color:var(--mut)} .bars .vl{font-weight:600}
+.use{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media(max-width:900px){.use{grid-template-columns:1fr}}
+.usecol{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0}
+.usecol h4{margin:0 0 2px;font-size:15px;display:flex;align-items:center;gap:8px}
+.usecol .dot{width:9px;height:9px;border-radius:50%;flex:none}
+.usecol > p{margin:0 0 10px;color:var(--mut);font-size:13.5px}
+.usecol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.usecol li{font-size:13.5px}
+.usecol li .why{display:block;color:var(--dim);font-size:12.5px}
+.quote{margin:10px 0 0;padding:10px 12px;border-left:2px solid var(--line-2);color:var(--mut);font-size:13px;background:var(--surface-2);border-radius:0 8px 8px 0}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>DataReady</a>
+    <nav class="nav"><a href="/maps">데이터 지도</a><a href="/">파일 채점</a></nav>
+  </header>
+<header class="top">
+  <div>
+    <div class="eyebrow">데이터 지도 · 수동 조사판</div>
+    <h1>한국 개인투자자 데이터 지도</h1>
+    <p class="q">질문: <b>한국 개인투자자는 언제 몰리고, 빚을 얼마나 내고, 어디로 나가며, 자기 매매를 기록하긴 하는가?</b> 이 질문에 쓸 수 있는 공개 데이터를 찾고, 무엇으로 잇는지와 <b>앱 화면에 보여줘도 되는지</b>를 함께 정리했습니다.</p>
+  </div>
+  <div class="stats" id="stats"></div>
+</header>
+<p class="meta-line">2026-10-22 조사 · KRX · 예탁결제원(SEIBro) · 금융투자협회(FreeSIS) · 공공데이터포털 · 한국은행 ECOS · KOSIS · 금감원 · 자본시장연구원 화면과 이용약관을 직접 읽음 · ECOS는 표본 키로 실제 값까지 받아 봄 · 약관 해석은 법률 자문이 아님</p>
+
+<div class="answer">
+  <div class="ans lead">
+    <h3>"매매를 기록하는가"를 물은 공개 설문</h3>
+    <div class="big">0건</div>
+    <p>금융투자협회·금감원·한국은행·통계청·자본시장연구원·금융소비자보호재단 어디에도 <b>투자 기록이나 매매일지를 쓰는지 묻는 공개 문항을 찾지 못했습니다.</b> 2018~2026년 국내 논문·조사까지 검색한 범위 안에서입니다. 이 질문의 답은 공개 데이터로는 얻기 어렵고, 직접 재야 합니다.</p>
+    <p>가장 가까운 문항은 「2024 전국민 금융이해력 조사」(금감원·한국은행, 2,400명 면접)의 <b>'평소 재무상황 점검'</b>입니다. 투자 기록이 아니라 자기 재무를 꾸준히 살피는지를 묻는 일반 문항입니다.</p>
+    <div class="bars" aria-label="평소 재무상황 점검 동의 비율">
+      <span class="lb">전체 2024</span><div class="tr"><div class="fl" style="width:43.4%"></div></div><span class="vl">43.4%</span>
+      <span class="lb">20대 2024</span><div class="tr"><div class="fl" style="width:33.2%"></div></div><span class="vl">33.2%</span>
+      <span class="lb">20대 2022</span><div class="tr"><div class="fl alt" style="width:55.8%"></div></div><span class="vl">55.8%</span>
+    </div>
+    <p>펀드·ETF 투자자 조사(금융소비자보호재단, 매년 2,500명, 172문항)는 설문지가 비공개라 기록 문항이 있는지 확인하지 못했습니다. 보도자료 9건에 드러난 사후 점검 문항은 점검 주기와 운용보고서뿐이었습니다. 원자료는 연도당 100만 원이고, 논문·학술지 게재 목적이면 무료지만 비영리 이용 서약을 받습니다.</p>
+  </div>
+  <div class="ans">
+    <h3>개인 순매수를 앱에 보여줄 공식 무료 경로</h3>
+    <div class="big">없음</div>
+    <p>개인 순매수가 들어 있는 KRX 자료는 정보데이터시스템 <b>화면에서만</b> 볼 수 있고, 약관이 복제·배포와 자동 수집을 막습니다. 무료 KRX Open API에는 투자자 구분이 아예 없습니다. 공식 경로는 조건이 공개되지 않은 <b>유료 데이터 분배 계약</b>뿐입니다.</p>
+    <p>한국은행 ECOS가 KRX의 월별 투자자별 거래를 다시 싣지만, 다른 기관 통계라 <b>비상업적 이용만</b> 됩니다.</p>
+    <p class="quote">KRX 정보데이터시스템 이용약관 제12조② "이용자는 당 사이트의 정보를 거래소의 사전 허락 없이 복사·복제·배포·전송·공중송신하여서는 아니 됩니다."</p>
+  </div>
+</div>
+
+<section id="map">
+  <div class="sh">
+    <h2>이을 수 있는 키</h2>
+    <p>양옆이 데이터셋, 가운데가 공통 키입니다. 데이터셋 왼쪽 띠의 색은 앱 화면에 보여줘도 되는지입니다.</p>
+  </div>
+  <div class="legend">
+    <span class="lg"><svg width="12" height="12" aria-hidden="true"><rect width="4" height="12" rx="1" fill="var(--ok)"/></svg>앱에 표시 가능 (출처 표시)</span>
+    <span class="lg"><svg width="12" height="12" aria-hidden="true"><rect width="4" height="12" rx="1" fill="var(--guess)"/></svg>비상업적 이용만</span>
+    <span class="lg"><svg width="12" height="12" aria-hidden="true"><rect width="4" height="12" rx="1" fill="var(--bad)"/></svg>표시 불가 · 유료 계약</span>
+    <span class="lg"><svg width="12" height="12" aria-hidden="true"><rect width="4" height="12" rx="1" fill="var(--dim)"/></svg>보고서 수치 인용만</span>
+  </div>
+  <div class="legend">
+    <span class="lg"><svg width="34" height="8" aria-hidden="true"><line x1="1" y1="4" x2="33" y2="4" stroke="var(--ok)" stroke-width="2"/></svg>확인 — 명세·표본에서 필드를 봄</span>
+    <span class="lg"><svg width="34" height="8" aria-hidden="true"><line x1="1" y1="4" x2="33" y2="4" stroke="var(--guess)" stroke-width="2" stroke-dasharray="6 4"/></svg>추정 — 제3자 코드나 설명으로만 봄</span>
+    <span class="lg"><svg width="34" height="8" aria-hidden="true"><line x1="1" y1="4" x2="33" y2="4" stroke="var(--conv)" stroke-width="2" stroke-dasharray="1.5 4.5" stroke-linecap="round"/></svg>변환 필요 — 일→월 집계·코드 변환</span>
+    <label class="toggle"><input type="checkbox" id="freeonly"> 앱에 표시 가능한 것만</label>
+  </div>
+  <div class="maprow">
+    <div class="graphbox"><svg id="graph" role="img" aria-label="데이터셋과 공통 키를 잇는 그래프"></svg></div>
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+</section>
+
+<section id="use">
+  <div class="sh">
+    <h2>무엇을 어디까지 쓸 수 있나</h2>
+    <p>같은 숫자도 받는 경로에 따라 조건이 다릅니다. 가계금융복지조사는 ECOS로 받으면 비상업 조건이 붙고, KOSIS로 받으면 상업적 이용까지 됩니다.</p>
+  </div>
+  <div class="use" id="usecols"></div>
+</section>
+
+<section id="time">
+  <div class="sh">
+    <h2>같이 볼 수 있는 기간</h2>
+    <p>빗금은 시작 시점을 확인하지 못한 것입니다. 점은 한 시점만 있는 조사입니다.</p>
+  </div>
+  <div class="tlbox"><svg id="tl" role="img" aria-label="데이터셋별 제공 기간"></svg></div>
+</section>
+
+<section id="catalog">
+  <div class="sh">
+    <h2>카탈로그</h2>
+    <p>지도에 올린 데이터셋 전체의 메타데이터입니다. 줄을 누르면 위 지도에서 선택됩니다.</p>
+  </div>
+  <div class="ctl">
+    <div class="seg" id="seg" role="group" aria-label="분류"></div>
+    <input id="q" type="search" placeholder="이름·기관·필드 이름 검색" aria-label="카탈로그 검색">
+  </div>
+  <div class="tbox"><table class="cat"><thead><tr><th>데이터</th><th>단위</th><th>개인 구분</th><th>기간</th><th>앱 표시</th><th>받는 법</th><th>이을 키</th></tr></thead><tbody id="rows"></tbody></table></div>
+</section>
+
+<section id="off">
+  <div class="sh">
+    <h2>지도에 못 올린 자료</h2>
+    <p>언론이 자주 인용하지만 공개 경로를 찾지 못했거나, 조건을 확인하지 못한 자료입니다.</p>
+  </div>
+  <div class="offmap" id="offmap"></div>
+</section>
+
+<footer>
+  <p>필드 이름은 각 기관의 API 명세(Swagger·ECOS 항목 목록·KRX Open API 명세), 화면 정의, 표본 응답에서 읽었습니다. KRX 정보데이터시스템 화면은 로그인이 필요해 필드 이름을 제3자 라이브러리(pykrx) 소스로 확인했고 "추정"으로 표시했습니다.</p>
+  <p>재배포 조건은 각 사이트의 이용약관·공공누리 유형·데이터셋 화면 문구를 그대로 옮긴 것이며 법률 자문이 아닙니다. 무료 앱이 '비상업적 이용'에 해당하는지는 작성기관의 해석이 필요합니다.</p>
+</footer>
+</div>
+
+<script>
+const LANES = {
+  trade:{t:"개인 매매·쏠림", s:"개인이 언제·무엇을 사고파나", side:"L"},
+  lev:{t:"레버리지·대기자금", s:"빚과 계좌에 쌓인 돈", side:"L"},
+  who:{t:"누가 투자하나", s:"연령·가구 단위", side:"L"},
+  abroad:{t:"해외투자", s:"서학개미의 흐름", side:"R"},
+  habit:{t:"판단·기록 습관", s:"설문과 계좌 분석 보고서", side:"R"},
+  bridge:{t:"코드 다리", s:"종목 코드를 잇는 기준표", side:"R"},
+};
+const HUBS = {
+  day:{t:"일자", s:"basDt · TRD_DD · YYYYMMDD",
+    d:"일별 자료끼리는 날짜로 바로 잇습니다. 이름은 기관마다 다릅니다(KRX TRD_DD·BAS_DD, 공공데이터포털 basDt, 예탁결제원 frcrScrtDpsgStlDt). 영업일만 있는 자료와 달력일 자료를 섞을 때 빈 날을 맞춰야 합니다."},
+  month:{t:"월", s:"YYYYMM",
+    d:"한국은행 ECOS와 SEIBro 보관현황은 월 단위입니다. 일별 자료는 월로 합쳐서 잇습니다(합계인지 말일 잔액인지 지표마다 다릅니다)."},
+  qy:{t:"분기·연", s:"YYYYQn · YYYY · 조사연도",
+    d:"자금순환(분기), 가계금융복지조사(연), 예탁결제원 주주 통계(연말), 금융이해력 조사(2년마다)가 여기서 만납니다. 기준 시점이 연말·조사 시점·분기말로 달라 같은 연도라도 같은 순간이 아닙니다."},
+  stock:{t:"종목 코드", s:"ISIN 12자리 ↔ 단축 6자리",
+    d:"KRX 화면과 API가 ISIN(KR7005930003)과 단축코드(005930)를 섞어 씁니다. 공공데이터포털 주식시세·상장종목정보가 둘을 함께 줘서 다리가 됩니다. 주식분포 자료는 법인등록번호(crno)라 상장종목정보로 한 번 더 바꿔야 합니다."},
+  country:{t:"국가", s:"국가코드 · 시장명",
+    d:"예탁결제원 결제 API는 국가 코드, SEIBro 화면은 '미국·일본·홍콩·중국·유로시장' 같은 시장 이름을 씁니다. 한국은행 국제수지에는 국가 구분이 없습니다."},
+  age:{t:"연령대", s:"10세 구간 · 정의가 서로 다름",
+    d:"같은 '연령대'라도 대상이 다릅니다. 가계금융복지조사는 가구주 연령, 예탁결제원 주주 통계는 주주 본인 연령, 금융이해력 조사는 응답자 연령입니다. 숫자를 나란히 놓을 수는 있지만 같은 사람 집단이 아닙니다."},
+};
+const HUB_ORDER = ["day","month","qy","stock","country","age"];
+const RED = {free:["앱에 표시 가능","r-free","stripe-free"], nc:["비상업적 이용만","r-nc","stripe-nc"], no:["표시 불가 · 유료 계약","r-no","stripe-no"], rep:["보고서 수치 인용만","r-rep","stripe-rep"]};
+
+const DS = [
+ {id:"KRX 12008", short:"투자자별 거래실적 (시장)", lane:"trade", name:"투자자별 거래실적", prov:"한국거래소", portal:"KRX 정보데이터시스템 (로그인 필요)", url:"https://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020301",
+  unit:"시장(KOSPI·KOSDAQ) × 일 × 투자자 12구분", split:"개인 · 외국인 · 기관 세부 9종 · 기타법인", period:"미확인", access:"화면 (로그인) · CSV 버튼 함수는 있음", r:"no",
+  rq:"제12조② 사전 허락 없는 복사·복제·배포·전송 금지, 제10조② 자동화 수단에 의한 무단 수집 금지",
+  role:"개인의 일별 매수·매도·순매수 대금을 기관·외국인과 나란히 보여 주는 가장 직접적인 원천입니다. 볼 수는 있지만 앱에 실을 수 없습니다.",
+  k:[["day","TRD_DD","guess"]],
+  v:["메뉴 번호 12008 = MDC0201020301","비로그인 시 로그인 요구, JSON은 'LOGOUT' 400","이용약관 2026-08-29 시행본"], u:["필드 이름·투자자 12구분 (pykrx 소스로만 봄)","제공 기간"]},
+ {id:"KRX 12009", short:"투자자별 거래실적 (종목)", lane:"trade", name:"투자자별 거래실적(개별종목)", prov:"한국거래소", portal:"KRX 정보데이터시스템", url:"https://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020302",
+  unit:"종목 × 일 × 투자자", split:"12008과 같음", period:"미확인", access:"화면 (로그인)", r:"no", rq:"12008과 같은 약관",
+  role:"테마주처럼 특정 종목에 개인 순매수가 쏠린 날을 잡아냅니다.",
+  k:[["day","TRD_DD","guess"],["stock","isuCd (ISIN)","guess"]], v:["메뉴 12009 존재, 로그인 요구"], u:["필드 이름 (pykrx 소스)"]},
+ {id:"KRX 12010", short:"투자자별 순매수상위종목", lane:"trade", name:"투자자별 순매수상위종목", prov:"한국거래소", portal:"KRX 정보데이터시스템", url:"https://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020303",
+  unit:"시장 × 기간 × 투자자 × 종목 순위", split:"투자자 코드 8000 = 개인", period:"미확인", access:"화면 (로그인)", r:"no", rq:"12008과 같은 약관",
+  role:"한 기간 동안 개인이 가장 많이 순매수한 종목 목록입니다.",
+  k:[["stock","ISU_SRT_CD (단축 6자리)","guess"],["day","조회 기간 → 일 단위로 다시 조회","conv"]], v:["메뉴 12010 존재"], u:["필드 이름·투자자 코드표 (pykrx 소스)"]},
+ {id:"ECOS 901Y055", short:"투자자별 주식거래 (월)", lane:"trade", name:"한국은행 ECOS 1.5.1.3 투자자별 주식거래 (원작성: 한국거래소)", prov:"한국거래소 · 한국은행 재수록", portal:"한국은행 ECOS (Open API)", url:"https://ecos.bok.or.kr/",
+  unit:"월 × 투자자 × 매도·매수·순매수 × 거래량·대금", split:"개인 · 기관투자자 · 외국인 · 기타외국인 · 기타법인", period:"2004 ~ 2026-08", access:"API (키 필요, 무료) · 화면 · 파일", r:"nc",
+  rq:"ECOS: 타 기관 작성 통계는 출처를 밝혀 비상업적으로 이용, 상업적 이용은 작성기관(KRX) 승인 필요",
+  role:"개인이 언제 순매수로 몰리는지 월 단위로 받을 수 있는 유일한 기계 판독 경로입니다. 분석·내부 참고에는 쓰고, 앱 화면에 싣는 건 KRX 승인 문제입니다.",
+  k:[["month","TIME (YYYYMM)","ok"]],
+  v:["표본 키로 실제 조회: 개인 순매수 거래대금 2026-07 = 5,371,539백만원","항목 S22CB 개인(순매수), VA 거래대금","작성기관 표기 '한국거래소'"], u:["무료 앱이 '비상업적'에 해당하는지에 대한 KRX 해석"]},
+ {id:"KRX OPEN API", short:"일별매매정보 (Open API)", lane:"trade", name:"KRX OPEN API 유가증권·코스닥 일별매매정보", prov:"한국거래소", portal:"openapi.krx.co.kr", url:"https://openapi.krx.co.kr/contents/OPP/INFO/service/OPPINFO004.cmd",
+  unit:"종목 × 일", split:"없음 (투자자 구분 서비스가 아예 없음)", period:"2010-01-04부터", access:"API (키 · 관리자 승인 · 하루 10,000회)", r:"no",
+  rq:"제6조② 비상업적인 목적으로만, 제11조② 제공받은 정보를 제3자에게 제공할 수 없다",
+  role:"시세·거래대금만 있어 개인 행동을 직접 보여 주지 않습니다. 개인 순매수 자료에 붙일 바탕일 뿐이고, 그것도 앱에 실을 수 없습니다.",
+  k:[["day","BAS_DD","ok"],["stock","ISU_CD (단축 6자리)","ok"]], v:["7개 분야 서비스 전체에 '투자자별' 없음","출력 필드 15개 (명세 디코드)","이용약관 2025-12-26 시행본"], u:["코스닥 API ID"]},
+ {id:"data.go.kr 15094808", short:"주식시세정보 (금융위)", lane:"trade", name:"금융위원회_주식시세정보 (원천: 한국거래소)", prov:"금융위원회", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15094808/openapi.do",
+  unit:"종목 × 일", split:"없음", period:"미확인 · 다음 영업일 13시 이후 갱신", access:"API (키, 자동승인)", r:"no",
+  rq:"공공누리 4유형 + '상업적 목적 여부와 상관 없이 제3자 무단 제공 및 재배포가 엄격히 금지'",
+  role:"투자자 구분이 없는 시세 자료입니다. 무료지만 재배포가 금지됩니다.",
+  k:[["day","basDt","ok"],["stock","srtnCd, isinCd","ok"]], v:["Swagger 필드","라이선스 문구 (2026-09-07 수정)"], u:["제공 기간 시작"]},
+
+ {id:"15094809 증시자금", short:"투자자예탁금·미수·반대매매", lane:"lev", name:"금융위원회_금융투자협회종합통계정보 — 증시자금추이", prov:"금융투자협회 (제공 금융위원회)", portal:"공공데이터포털 (원본 FreeSIS)", url:"https://www.data.go.kr/data/15094809/openapi.do",
+  unit:"시장 전체 × 일", split:"없음 (시장 전체)", period:"시작 미확인", access:"API (키, 자동승인, 하루 10,000건)", r:"free",
+  rq:"공공데이터포털 '이용허락범위 제한 없음', 별도 재배포 제한 문구 없음",
+  role:"증권계좌로 현금이 언제 몰리는지(투자자예탁금)와 미수·반대매매로 강제 청산되는 규모를 일 단위로 봅니다. 이 지도에서 앱에 보여줄 수 있는 몇 안 되는 개인 행동 지표입니다.",
+  k:[["day","basDt","ok"]], v:["필드: invrDpsgAmt 투자자예탁금, brkTrdUcolMny 위탁매매 미수금, ucolMnyVsOppsTrdRlImpt 반대매매비중","FreeSIS 요약: 투자자예탁금 90조 2,976억원 (10/20)","엔드포인트 존재 (가짜 키로 30 응답)"], u:["시계열 시작 연도","요청 파라미터 이름 (명세에 비어 있음)"]},
+ {id:"15094809 신용공여", short:"신용거래융자 잔고", lane:"lev", name:"금융위원회_금융투자협회종합통계정보 — 신용공여잔고추이", prov:"금융투자협회", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15094809/openapi.do",
+  unit:"시장(유가·코스닥·전체) × 일", split:"없음 (개인 한정 아님)", period:"시작 미확인", access:"API (키)", r:"free", rq:"'이용허락범위 제한 없음'",
+  role:"빚을 내 산 주식 잔고입니다. 신용융자는 대부분 개인이 쓰지만 자료에 개인 구분은 없습니다.",
+  k:[["day","basDt","ok"]], v:["crdTrFingWhl·Scrs·Kosdaq 신용거래융자","FreeSIS 요약: 신용융자 30조 5,139억원 (10/20)"], u:["시작 연도"]},
+ {id:"15094809 CMA", short:"CMA 계좌 (개인 계좌 수)", lane:"lev", name:"금융위원회_금융투자협회종합통계정보 — 일자별 CMA현황", prov:"금융투자협회", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15094809/openapi.do",
+  unit:"일 × 운용대상 × 투자자구분", split:"개인 · 법인 · 합계", period:"시작 미확인", access:"API (키)", r:"free", rq:"'이용허락범위 제한 없음'",
+  role:"이 묶음에서 유일하게 '개인' 계좌 수가 나옵니다. 증권사 대기자금에 개인이 얼마나 머무는지 봅니다.",
+  k:[["day","basDt","ok"]], v:["필드 invrCtg (개인/법인/합계), actCnt 계좌 수, actBal 잔액"], u:["시작 연도"]},
+ {id:"15094809 해외파생", short:"해외파생 거래 (위탁자 개인)", lane:"lev", name:"금융위원회_금융투자협회종합통계정보 — 국내투자자의 해외파생상품거래동향", prov:"금융투자협회", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15094809/openapi.do",
+  unit:"월 × 국가 × 거래소 × 상품 × 위탁자", split:"위탁자 (개인 · 법인 · 보험 · 외국인 등)", period:"시작 미확인", access:"API (키)", r:"free", rq:"'이용허락범위 제한 없음'",
+  role:"개인이 해외 선물·옵션으로 고위험 거래를 얼마나 하는지 월 단위로 봅니다. 해외주식 현물은 아닙니다.",
+  k:[["month","basDt (월별 거래량)","guess"],["country","byNtnl","ok"]], v:["필드 brkPn 위탁자 설명에 '개인' 포함, trPrcUsd 거래대금"], u:["실제 응답에 개인 구분이 나오는지 (키가 없어 못 받음)"]},
+
+ {id:"KSD 주주 통계", short:"주식 소유자 현황 (연말)", lane:"who", name:"12월 결산 상장법인 주식 소유자 현황", prov:"한국예탁결제원", portal:"연례 보도자료 (매년 3월)", url:"https://www.seoulfn.com/news/articleView.html?idxno=623861",
+  unit:"연말 × 연령대 · 성별 · 시도·시군구", split:"개인 · 법인 · 외국인, 연령 · 성별 · 지역", period:"매년 · 확인한 연도 2021·2022·2025", access:"보도자료만 (파일·API 못 찾음)", r:"rep", rq:"보도자료 원문을 열지 못해 조건 미확인 — 수치 인용만",
+  role:"개인 주주 수와 연령·성별·지역 분포를 해마다 보여 주는 거의 유일한 공식 집계입니다. 2025년 말 개인 약 1,442만 명, 50대 333만 명(23.1%)이 가장 많았습니다.",
+  k:[["qy","기준일 12-31","ok"],["age","연령대","ok"]],
+  v:["2025년 말 소유자 약 1,456만 명, 개인 99.1% (2026-03-18 발표, 언론 보도)","2021년 말 1,384만 명 (+50.6%)","SEIBro 메뉴 329개에 주주 통계 화면 없음"], u:["보도자료 원문 파일 형식과 주소","표 형태 파일이 정말 없는지"]},
+ {id:"KOSIS 가계금융복지", short:"가계금융복지조사 (주식 보유)", lane:"who", name:"가계금융복지조사 — 가구주연령계층별 자산·부채·소득 (금융자산 중 주식·채권·펀드)", prov:"국가데이터처 · 한국은행 · 금융감독원", portal:"KOSIS (ECOS 903Y206에도 재수록) · MDIS", url:"https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1HDAAA06",
+  unit:"연 × 가구 특성", split:"가구주 연령 · 성별 · 지역 · 소득·자산 5분위 등 (가구 단위)", period:"2012 ~ 2025 (표 두 개로 나뉨)", access:"화면 · 파일 · API · 마이크로데이터", r:"free",
+  rq:"KOSIS 경로: '비상업적 또는 상업적 활용이 모두 가능', 출처 명시, 가공 없이 유료 판매 금지 · ECOS 경로로 받으면 비상업 조건이 붙음",
+  role:"연령대별로 주식·채권·펀드를 가진 가구 비율과 금액을 줍니다. '누가 투자하나'의 인구통계 축입니다. 주식만 따로 떼지는 않습니다.",
+  k:[["qy","연도","ok"],["age","가구주 연령계층 (10세)","ok"]],
+  v:["ECOS 표본 조회: 2025년 30~39세 가구의 주식·채권·펀드 보유 비율 39.7%","KOSIS 표 목록 (지역·성별·연령·소득분위 등)","KOSIS 이용지침 원문"], u:["KOSIS 표 안 항목 이름이 ECOS와 같은지","마이크로데이터 반출·재배포 조건"]},
+ {id:"data.go.kr 15043364", short:"주식분포 (종목별 주주 유형)", lane:"who", name:"금융위원회_주식분포및사고주권정보 (원천: 예탁결제원)", prov:"금융위원회 · 한국예탁결제원", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15043364/openapi.do",
+  unit:"회사 × 기준일 × 주식분포구분", split:"분포구분 코드 (개인·연령 구분이 있는지 미확인)", period:"미확인", access:"API (키)", r:"nc",
+  rq:"공공누리 2유형 (출처표시 · 상업적 이용금지), 상업적 이용은 예탁결제원과 정보이용계약",
+  role:"종목마다 주주가 어떤 유형으로 나뉘는지 보여 줍니다. 구분 코드에 개인이 있으면 개인 쏠림이 큰 종목을 찾는 데 씁니다.",
+  k:[["stock","crno (법인등록번호) → 상장종목정보로 변환","conv"],["qy","rgtExertQualBasDt","guess"]], v:["Swagger 필드","활용가이드 예시: 회사 하나가 67행"], u:["주식분포구분코드 전체 목록 (개인이 있는지)"]},
+
+ {id:"data.go.kr 15043445", short:"해외증권 결제 (일 · 국가)", lane:"abroad", name:"금융위원회_국제거래외화증권예탁결제정보 (원천: 예탁결제원)", prov:"금융위원회 · 한국예탁결제원", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15043445/openapi.do",
+  unit:"결제일 × 증권구분 × 국가", split:"없음 (국내 투자자 전체)", period:"API 등록 2020-04 · 데이터 시작 미확인", access:"API (키, 자동승인, 하루 10,000회)", r:"nc",
+  rq:"공공누리 2유형, '상업적으로 활용하고자 하는 이용자는 … 한국예탁결제원과 … 정보이용계약이 필요'",
+  role:"해외 주식·채권 매수·매도 결제를 국가별로 매일 봅니다. 해외주식으로 사람이 몰린 날을 일 단위로 잡을 수 있습니다.",
+  k:[["day","frcrScrtDpsgStlDt","ok"],["country","scrsMrktNtnlDcd, scrsMrktNtnlDcdNm","ok"]], v:["오퍼레이션 2개 (Swagger)","2026-04-20 수정"], u:["몇 년도부터 조회되는지"]},
+ {id:"data.go.kr 15157414", short:"미국주식 결제 건수 (연)", lane:"abroad", name:"한국예탁결제원_국제거래정보서비스_GW", prov:"한국예탁결제원", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15157414/openapi.do",
+  unit:"연 (미국주식 결제 건수)", split:"없음", period:"미확인", access:"API (키, 개발계정 하루 100회)", r:"nc", rq:"공공누리 2유형 (상업적 이용금지)",
+  role:"연도별 미국주식 매수·매도 결제 건수로 서학개미 활동량의 연 추이를 봅니다.",
+  k:[["qy","schStdYy","ok"],["country","미국 한정","conv"]], v:["오퍼레이션 getOvsStkSetlCount","2026-02-09 등록"], u:["옛 SEIBro Open API를 옮긴 것인지"]},
+ {id:"SEIBro 보관현황", short:"외화증권 보관현황 (월)", lane:"abroad", name:"SEIBro 증권예탁통계 > 외화증권 보관현황", prov:"한국예탁결제원", portal:"SEIBro 화면 (국가승인통계 '증권예탁통계')", url:"https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/deposit/BIP_CNST01536V.xml&menuNo=359",
+  unit:"연월 × 증권종류 (주식·채권·수익증권 …)", split:"없음", period:"시작 미확인", access:"화면 · 엑셀 내려받기 틀 있음", r:"no",
+  rq:"SEIBro 저작권보호방침 '무단 복제 및 배포는 원칙적으로 금지', 이용약관 제8조② 영리 이용·제3자 이용은 사전 승낙",
+  role:"외화주식 보관 잔고가 달마다 어떻게 커졌는지 보는 긴 월별 시계열입니다.",
+  k:[["month","연월","ok"]], v:["화면 정의 XML 머리글·단위 (USD, 매입대금 기준)","국가승인통계 348001 연결"], u:["시계열 시작","KOSIS에도 같은 표가 있는지"]},
+ {id:"SEIBro TOP50", short:"해외주식 종목 TOP50", lane:"abroad", name:"SEIBro 외화증권예탁결제 > 종목별내역(주식TOP50)", prov:"한국예탁결제원", portal:"SEIBro 화면", url:"https://seibro.or.kr/websquare/control.jsp?w2xPath=/IPORTAL/user/ovsSec/BIP_CNTS10013V.xml&menuNo=921",
+  unit:"기간 × 국가 × 종목 상위 50", split:"없음", period:"미확인", access:"화면만 (엑셀 내려받기 폐지)", r:"no",
+  rq:"SEIBro 약관 + 화면 소스 주석 '2026-NIP-0009 저작권 침해로 인한 엑셀다운로드 폐지'",
+  role:"국내 투자자가 어떤 해외 종목을 얼마나 사고팔고 들고 있는지 보여 주는 종목 단위 신호입니다. 2026년에 내려받기가 막혔습니다.",
+  k:[["stock","ISIN (해외 종목)","ok"],["country","NATION_NM (US·HK·CN·JP·VN)","ok"]], v:["화면 정의 XML 열 이름","엑셀 내려받기 폐지 주석"], u:["가장 이른 조회 날짜"]},
+ {id:"ECOS 281Y002", short:"가계 해외주식 잔액 (분기)", lane:"abroad", name:"한국은행 ECOS 2.3.1.3 금융자산부채잔액표 — 가계 및 비영리단체", prov:"한국은행", portal:"ECOS (Open API)", url:"https://ecos.bok.or.kr/",
+  unit:"분기 × 제도부문 × 계정 (십억원)", split:"가계 및 비영리단체 (개인 단위 아님)", period:"2008 4분기 ~ 2026 2분기", access:"API (키, 무료) · 화면 · 파일", r:"free",
+  rq:"ECOS: '한국은행이 작성한 통계정보는 출처를 명시하는 한 상업적 용도를 포함하여 무료로 자유롭게 사용, 가공 및 재배포할 수 있습니다'",
+  role:"가계가 국내주식·해외주식·펀드로 들고 있는 돈을 분기 잔액으로 봅니다. 해외주식 비중이 언제 커졌는지 보여 줍니다(가격 변동과 순매수가 섞인 잔액).",
+  k:[["qy","TIME (YYYYQn)","ok"]], v:["표본 조회: 가계 비거주자 발행주식 2025 1분기 140.8조 → 2분기 158.4조원","항목 코드 F072ZZB 등"], u:["정식 키 일일 한도"]},
+ {id:"ECOS 301Y013", short:"국제수지 증권투자 (월)", lane:"abroad", name:"한국은행 ECOS 2.5.1.1 국제수지 — 증권투자(자산)·주식(자산)", prov:"한국은행", portal:"ECOS (Open API)", url:"https://ecos.bok.or.kr/",
+  unit:"월 × 계정 (백만달러)", split:"없음 (개인·기관 섞임)", period:"1980-01 ~ 2026-08", access:"API (키) · 화면 · 파일", r:"free", rq:"한국은행 작성 — 출처 명시 조건으로 상업적 이용 포함 자유",
+  role:"거주자의 해외주식 순취득을 월별로 봅니다. 개인과 기관이 섞여 있어 서학개미 단독 지표는 아닙니다.",
+  k:[["month","TIME (YYYYMM)","ok"]], v:["항목 BOPF21100000 주식(자산)","861개 항목 목록"], u:["국제투자대조표에서 가계를 따로 떼는 항목"]},
+
+ {id:"금융이해력 2024", short:"전국민 금융이해력 조사", lane:"habit", name:"2024 전국민 금융이해력 조사", prov:"금융감독원 · 한국은행", portal:"보도자료 (hwp · PDF)", url:"https://eiec.kdi.re.kr/policy/materialView.do?num=266065&pg=&pp=&topic=L",
+  unit:"조사 회차 × 연령대 · 성별", split:"응답자 연령대 · 성별 · 소득 · 학력", period:"2018 · 2020 · 2022 · 2024", access:"보고서만 (원자료 공개 미확인)", r:"rep", rq:"보도자료 저작권 조건 미확인 — 수치 인용만",
+  role:"기록 습관에 가장 가까운 공식 문항 '평소 재무상황 점검'이 있습니다. 2024년 43.4%, 20대 33.2%(2022년 55.8%). 투자 매매 기록 문항은 아닙니다.",
+  k:[["qy","조사연도","ok"],["age","응답자 연령대","ok"]], v:["PDF 원문: 만 18~79세 2,400가구 면접","배점표 '평소 재무상황 점검 — 매우 동의 또는 동의 1점'","'정보에 입각한 금융상품 선택' 58.9점"], u:["원자료 공개 여부","문항 원문 문장"]},
+ {id:"펀드·ETF 투자자 조사", short:"펀드·ETF 투자자 조사", lane:"habit", name:"펀드·ETF 투자자 조사 (2025 결과)", prov:"한국금융소비자보호재단", portal:"kfcpf.or.kr", url:"https://www.kfcpf.or.kr/front/evalution/research4.do",
+  unit:"연 × 응답자 (2,500명, 온라인)", split:"응답자 특성 (설문지 미열람)", period:"2007 ~ 2025 (ETF는 2026부터)", access:"결과 책자 유료 · 원자료는 학술 목적에 한해", r:"rep", rq:"'학술연구 목적으로 활용하시는 경우에 한해 원자료를 제공'",
+  role:"펀드·ETF 투자자의 가입 계기·정보원·거래 행태를 묻는 유일한 장기 연간 설문입니다. 기록 문항이 있는지는 설문지를 받아 봐야 압니다.",
+  k:[["qy","조사연도","ok"]], v:["조사 개요·대상·방법·원자료 제공 조건"], u:["투자 기록·매매일지 문항 유무"]},
+ {id:"KCMI 26-04", short:"개인 해외투자 성과 분석", lane:"habit", name:"자본시장연구원 연구보고서 26-04 개인투자자의 해외투자 특징 및 성과 분석", prov:"자본시장연구원", portal:"kcmi.re.kr", url:"https://www.kcmi.re.kr/report/report_view?report_no=2254",
+  unit:"보고서 (대형 증권사 개인 102,380명 계좌)", split:"연령 · 성별 · 자산규모 (보고서 안 분석)", period:"2020 ~ 2022 거래", access:"보고서 PDF (원자료 비공개)", r:"rep", rq:"COPYRIGHT KCMI — 인용 조건 미확인",
+  role:"20~30대·고액투자자의 해외자산 비중이 높고 레버리지·인버스 ETP 의존이 크며, 비용 차감 후 손실 투자자가 더 많았다는 실제 계좌 근거입니다.",
+  k:[["age","보고서 안 연령 구간","conv"]], v:["발행 2026-02-09, 표본·결론"], u:["저작권정책 세부"]},
+ {id:"KCMI 22-02", short:"개인 행태적 편의 분석", lane:"habit", name:"자본시장연구원 연구보고서 22-02 국내 개인투자자의 행태적 편의와 거래행태", prov:"자본시장연구원", portal:"kcmi.re.kr", url:"https://www.kcmi.re.kr/report/report_view?report_no=1481",
+  unit:"보고서 (4개 증권사 개인 204,004명 계좌)", split:"신규·기존, 연령, 성별, 투자규모", period:"2020-03 ~ 2020-10 거래", access:"보고서 PDF", r:"rep", rq:"인용 조건 미확인",
+  role:"과잉확신, 처분효과(이익 종목을 손실 종목보다 2배 넘게 판다), 복권형 주식 선호, 단기 군집거래를 실제 거래로 확인했습니다. 설문이나 매매일지 문항은 없습니다.",
+  k:[["age","신규·기존 · 연령 구간","conv"]], v:["보고서 본문: 설문 없음, 매매일지 미수집"], u:[]},
+
+ {id:"data.go.kr 15094775", short:"KRX 상장종목정보", lane:"bridge", name:"금융위원회_KRX상장종목정보", prov:"금융위원회 (원천: 한국거래소)", portal:"공공데이터포털", url:"https://www.data.go.kr/data/15094775/openapi.do",
+  unit:"종목 × 기준일", split:"없음", period:"다음 영업일 13시 이후 갱신", access:"API (키)", r:"no", rq:"공공누리 4유형 + 제3자 무단 제공·재배포 금지 (내부 변환표로만)",
+  role:"단축코드·ISIN·법인등록번호를 한 줄에 담아, 종목 단위 자료를 서로 잇는 열쇠입니다. 화면에 보여주지 않고 내부 변환에만 씁니다.",
+  k:[["stock","srtnCd, isinCd, crno","ok"]], v:["Swagger 필드 (2026-09-23 수정)"], u:[]},
+];
+
+const OFF = [
+ {n:"주식거래활동계좌 수", id:"언론 인용: '금융투자협회에 따르면'", p:"FreeSIS 메뉴와 Open API 어디에도 없었고, 금융투자협회 게시판에도 같은 질문이 답변 없이 남아 있습니다(2021·2024). 공개 경로가 없을 수 있습니다."},
+ {n:"KRX 데이터 분배상품 (종목별투자자별 · 신용거래정보)", id:"krxdata@krx.co.kr · 유료", p:"개인 순매수를 재배포 목적으로 쓸 수 있는 유일한 공식 경로로 보입니다. 가격과 웹 표시 허용 범위는 공개돼 있지 않습니다. 학술 목적은 50% 할인."},
+ {n:"KRX ETF·공매도 투자자별 화면", id:"KRX 13106 · 13107 · 32003", p:"레버리지·인버스 ETF의 개인 비중, 개인의 공매도 참여를 볼 수 있는 화면입니다. 로그인이 필요해 열 이름과 내려받기 여부를 확인하지 못했습니다."},
+ {n:"금융감독원 FISIS Open API", id:"fisis.fss.or.kr", p:"증권사별 재무·영업 통계입니다. 개인 계좌 수·고객예탁금 표를 찾지 못했고, 키 발급 때 동의하는 약관 본문도 읽지 못했습니다."},
+ {n:"민간 투자자 설문 (피앰아이 2026-06 · 서울신문·리멤버 2026-08)", id:"언론 보도로만 봄", p:"정보원(유튜브 37.4% 등)만 묻고 기록 습관은 묻지 않았습니다."},
+];
+
+/* which data can do what — from the redistribution field */
+const USE = [
+ {k:"free", t:"앱에 보여줘도 됨", c:"var(--ok)", p:"출처를 표시하면 무료 앱 화면에 실을 수 있습니다."},
+ {k:"nc", t:"분석·내부 참고만", c:"var(--guess)", p:"비상업적 이용만 됩니다. 상업적으로 쓰려면 작성기관 승인이나 계약이 필요합니다."},
+ {k:"no", t:"보여줄 수 없음", c:"var(--bad)", p:"화면 열람만 되거나 재배포가 금지됩니다. 유료 계약이 유일한 경로입니다."},
+];
+
+/* timeline: [label, sub, start, end|points[], conf] */
+const TL = [
+ ["개인 순매수 (월)","ECOS 901Y055 · 비상업",2004,2026.67,"ok"],
+ ["국제수지 해외주식 (월)","ECOS 301Y013 · 1980년부터, 그림은 2004부터",2004,2026.67,"ok"],
+ ["가계 해외주식 잔액 (분기)","ECOS 281Y002",2008.75,2026.5,"ok"],
+ ["KRX 일별 시세 (Open API)","2010-01-04부터",2010,2026.8,"ok"],
+ ["가계금융복지조사 (연)","2012~2017 · 2017~2025 두 표",2012,2025.99,"ok"],
+ ["펀드 투자자 조사 (연)","2007~2025",2007,2025.99,"ok"],
+ ["예탁금·신용융자·반대매매 (일)","API 등록 2021-11 · 데이터 시작 미확인",2021.85,2026.8,"guess"],
+ ["해외증권 결제 (일 · 국가)","API 등록 2020-04 · 데이터 시작 미확인",2020.3,2026.8,"guess"],
+ ["자본시장연구원 계좌 분석","22-02: 2020.3~10 · 26-04: 2020~2022",2020,2023,"ok"],
+ ["전국민 금융이해력 조사","2018 · 2020 · 2022 · 2024",[2018,2020,2022,2024],null,"pts"],
+ ["예탁원 주주 통계 (연말)","확인한 연도 2021 · 2022 · 2025",[2021.99,2022.99,2025.99],null,"pts"],
+];
+
+/* ---------------- render ---------------- */
+const $ = s => document.querySelector(s);
+const byId = Object.fromEntries(DS.map(d=>[d.id,d]));
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const CONF = {ok:["확인","b-ok"],guess:["추정","b-guess"],conv:["변환 필요","b-conv"]};
+let sel = {type:"ds", id:"15094809 증시자금"};
+
+function stats(){
+  const free = DS.filter(d=>d.r==="free").length;
+  const items = [[DS.length,"데이터셋"],[`${free}개`,"앱에 표시 가능"],["0건","기록 습관 설문"],["없음","개인 순매수 무료 표시 경로"]];
+  $("#stats").innerHTML = items.map(([v,l])=>`<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+}
+
+const NS="http://www.w3.org/2000/svg";
+const G = {W:860, nodeW:244, nodeH:30, gap:6, hubW:176, hubH:44};
+function el(tag, attrs, parent){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function computeLayout(){
+  const L = {nodes:{}, hubs:{}, lanes:[]};
+  const leftX = 14, rightX = G.W - 14 - G.nodeW, hubX = G.W/2;
+  const place = (side, x) => {
+    let y = 18;
+    for (const [lk, lane] of Object.entries(LANES)){
+      if (lane.side !== side) continue;
+      L.lanes.push({x, y, t:lane.t, s:lane.s}); y += 34;
+      for (const d of DS.filter(d=>d.lane===lk)){ L.nodes[d.id] = {x, y, side}; y += G.nodeH + G.gap; }
+      y += 14;
+    }
+    return y;
+  };
+  L.H = Math.max(place("L", leftX), place("R", rightX)) + 6;
+  const avg = HUB_ORDER.map(h=>{
+    const ys = DS.filter(d=>d.k.some(k=>k[0]===h)).map(d=>L.nodes[d.id].y + G.nodeH/2);
+    return {h, y: ys.reduce((a,b)=>a+b,0)/ys.length};
+  }).sort((a,b)=>a.y-b.y);
+  const minGap = G.hubH + 34, top = 40, bottom = L.H - 40 - G.hubH;
+  let prev = -Infinity;
+  for (const a of avg){ a.y = Math.max(a.y - G.hubH/2, prev + minGap, top); prev = a.y; }
+  const over = prev - bottom; if (over > 0) for (const a of avg) a.y -= over;
+  for (const a of avg) L.hubs[a.h] = {x: hubX - G.hubW/2, y: a.y};
+  return L;
+}
+function drawGraph(){
+  const layout = computeLayout(), svg = $("#graph");
+  svg.innerHTML = ""; svg.setAttribute("viewBox", `0 0 ${G.W} ${layout.H}`);
+  const eg = el("g",{},svg), ng = el("g",{},svg);
+  for (const ln of layout.lanes){
+    el("text",{x:ln.x+2,y:ln.y+12,class:"lane-h"},ng).textContent = ln.t;
+    el("text",{x:ln.x+2,y:ln.y+26,class:"lane-s"},ng).textContent = ln.s;
+  }
+  for (const d of DS){
+    const n = layout.nodes[d.id];
+    for (const [h,,conf] of d.k){
+      const hb = layout.hubs[h], y1 = n.y + G.nodeH/2, y2 = hb.y + G.hubH/2;
+      const x1 = n.side==="L" ? n.x + G.nodeW : n.x, x2 = n.side==="L" ? hb.x : hb.x + G.hubW, dx = (x2 - x1) * .5;
+      el("path",{d:`M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`, class:`edge ${conf}`, "data-ds":d.id, "data-hub":h},eg);
+    }
+    const g = el("g",{class:"node", tabindex:"0", role:"button", "data-ds":d.id, "aria-label":`${d.name} 선택, ${RED[d.r][0]}`},ng);
+    el("rect",{x:n.x,y:n.y,width:G.nodeW,height:G.nodeH,rx:8},g);
+    el("rect",{x:n.x+5,y:n.y+7,width:3.5,height:G.nodeH-14,rx:1.5,class:RED[d.r][2]},g);
+    el("text",{x:n.x+16,y:n.y+19.5},g).textContent = d.short;
+    g.addEventListener("click",()=>select("ds",d.id));
+    g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select("ds",d.id);} });
+  }
+  for (const h of HUB_ORDER){
+    const hb = layout.hubs[h], H = HUBS[h];
+    const g = el("g",{class:"hub", tabindex:"0", role:"button", "data-hub":h, "aria-label":`${H.t} 키 선택`},ng);
+    el("rect",{x:hb.x,y:hb.y,width:G.hubW,height:G.hubH,rx:12},g);
+    el("text",{x:hb.x+G.hubW/2,y:hb.y+19,"text-anchor":"middle"},g).textContent = H.t;
+    el("text",{x:hb.x+G.hubW/2,y:hb.y+34,"text-anchor":"middle",class:"sub"},g).textContent = H.s;
+    g.addEventListener("click",()=>select("hub",h));
+    g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();select("hub",h);} });
+  }
+  applyHighlight();
+}
+function applyHighlight(){
+  const freeOnly = $("#freeonly").checked;
+  const activeDs = new Set(), activeHub = new Set();
+  if (sel.type==="ds"){ activeDs.add(sel.id); byId[sel.id].k.forEach(k=>activeHub.add(k[0])); }
+  else { activeHub.add(sel.id); DS.forEach(d=>{ if(d.k.some(k=>k[0]===sel.id)) activeDs.add(d.id); }); }
+  document.querySelectorAll("#graph .edge").forEach(p=>{
+    const r = byId[p.dataset.ds].r;
+    p.classList.toggle("hidden", freeOnly && r!=="free");
+    const on = sel.type==="ds" ? p.dataset.ds===sel.id : p.dataset.hub===sel.id;
+    p.classList.toggle("on", on); p.classList.toggle("off", !on);
+  });
+  document.querySelectorAll("#graph .node").forEach(g=>{
+    const r = byId[g.dataset.ds].r;
+    g.classList.toggle("sel", sel.type==="ds" && g.dataset.ds===sel.id);
+    g.classList.toggle("dim", !activeDs.has(g.dataset.ds) || (freeOnly && r!=="free"));
+  });
+  document.querySelectorAll("#graph .hub").forEach(g=>{
+    g.classList.toggle("sel", sel.type==="hub" && g.dataset.hub===sel.id);
+    g.classList.toggle("dim", !activeHub.has(g.dataset.hub));
+  });
+  document.querySelectorAll("#rows tr").forEach(tr=>tr.classList.toggle("sel", sel.type==="ds" && tr.dataset.ds===sel.id));
+}
+function panel(){
+  const P = $("#panel");
+  if (sel.type==="hub"){
+    const H = HUBS[sel.id], list = DS.filter(d=>d.k.some(k=>k[0]===sel.id));
+    P.innerHTML = `<div class="kind">공통 키</div><h3>${esc(H.t)}</h3><div class="pid">${esc(H.s)}</div><p class="role">${esc(H.d)}</p>
+      <div class="ph">이 키를 가진 데이터셋 ${list.length}개</div>
+      <ul class="keys">${list.map(d=>{const k=d.k.find(k=>k[0]===sel.id);const [lab,cls]=CONF[k[2]];
+        return `<li><span class="badge ${cls}">${lab}</span><button class="dslink" data-ds="${esc(d.id)}">${esc(d.short)}</button><span class="cols">${esc(k[1])} · ${esc(RED[d.r][0])}</span></li>`}).join("")}</ul>`;
+  } else {
+    const d = byId[sel.id], [rl,rc] = RED[d.r];
+    P.innerHTML = `<div class="kind">${esc(LANES[d.lane].t)}</div><h3>${esc(d.name)}</h3><div class="pid">${esc(d.id)}</div>
+      <p class="role">${esc(d.role)}</p>
+      <div><span class="badge ${rc}">${esc(rl)}</span></div>
+      <p class="quote">${esc(d.rq)}</p>
+      <dl style="margin-top:14px"><dt>제공</dt><dd>${esc(d.prov)} · ${esc(d.portal)}</dd><dt>단위</dt><dd>${esc(d.unit)}</dd>
+      <dt>개인 구분</dt><dd>${esc(d.split)}</dd><dt>기간</dt><dd>${esc(d.period)}</dd><dt>받는 법</dt><dd>${esc(d.access)}</dd></dl>
+      <div class="ph">이을 키</div>
+      <ul class="keys">${d.k.map(([h,cols,conf])=>{const [lab,cls]=CONF[conf];
+        return `<li><span class="badge ${cls}">${lab}</span><button class="hublink" data-hub="${h}">${esc(HUBS[h].t)}</button><span class="cols">${esc(cols)}</span></li>`}).join("")}</ul>
+      ${d.v.length?`<div class="ph">확인한 것</div><ul class="chk v">${d.v.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      ${d.u.length?`<div class="ph">확인 못 한 것</div><ul class="chk u">${d.u.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+      <a class="srclink" href="${esc(d.url)}" target="_blank" rel="noopener">원본 화면 열기 ↗</a>`;
+  }
+  P.querySelectorAll(".dslink").forEach(b=>b.addEventListener("click",()=>select("ds",b.dataset.ds)));
+  P.querySelectorAll(".hublink").forEach(b=>b.addEventListener("click",()=>select("hub",b.dataset.hub)));
+}
+function select(type,id,scroll){
+  sel = {type,id}; applyHighlight(); panel();
+  if (scroll) document.getElementById("map").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+}
+function usecols(){
+  $("#usecols").innerHTML = USE.map(u=>{
+    const list = DS.filter(d=>d.r===u.k);
+    return `<div class="usecol"><h4><span class="dot" style="background:${u.c}"></span>${esc(u.t)} <span style="color:var(--dim);font-weight:400">${list.length}</span></h4><p>${esc(u.p)}</p>
+      <ul>${list.map(d=>`<li><button class="dslink" data-ds="${esc(d.id)}">${esc(d.short)}</button><span class="why">${esc(d.split)}</span></li>`).join("")}</ul></div>`;
+  }).join("");
+  $("#usecols").querySelectorAll(".dslink").forEach(b=>b.addEventListener("click",()=>select("ds",b.dataset.ds,true)));
+}
+function timeline(){
+  const svg = $("#tl"); svg.innerHTML = "";
+  const W = 900, labW = 250, x0 = labW + 10, x1 = W - 24, rowH = 34, top = 34;
+  const y0 = 2003, yN = 2027, H = top + TL.length*rowH + 30;
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const X = v => x0 + (v - y0) / (yN - y0) * (x1 - x0);
+  const defs = el("defs",{},svg);
+  const pat = el("pattern",{id:"hatch",width:"6",height:"6",patternUnits:"userSpaceOnUse",patternTransform:"rotate(45)"},defs);
+  el("rect",{width:"6",height:"6",fill:"var(--guess-soft)"},pat);
+  el("line",{x1:"0",y1:"0",x2:"0",y2:"6",stroke:"var(--guess)","stroke-width":"2.5"},pat);
+  el("rect",{x:X(2020),y:top-8,width:X(2022)-X(2020),height:TL.length*rowH+8,class:"tl-band"},svg);
+  el("text",{x:(X(2020)+X(2022))/2,y:top-14,"text-anchor":"middle",class:"tl-band-l"},svg).textContent = "2020~2021 개인 급증 (2021 말 주주 1,384만, +50.6%)";
+  for (let yr=2004; yr<=2026; yr+=2){
+    el("line",{x1:X(yr),x2:X(yr),y1:top-6,y2:top+TL.length*rowH,class:"tl-grid"},svg);
+    el("text",{x:X(yr),y:H-8,"text-anchor":"middle",class:"tl-axis"},svg).textContent = yr;
+  }
+  TL.forEach(([lab,sub,s,e,c],i)=>{
+    const y = top + i*rowH;
+    el("text",{x:8,y:y+14,class:"tl-lab"},svg).textContent = lab;
+    el("text",{x:8,y:y+27,class:"tl-sub"},svg).textContent = sub;
+    if (c==="pts") s.forEach(v=>el("circle",{cx:X(v),cy:y+13,r:5,class:"tl-dot"},svg));
+    else el("rect",{x:X(s),y:y+6,width:Math.max(3,X(e)-X(s)),height:14,rx:4,class: c==="ok"?"tl-bar-ok":"tl-bar-guess"},svg);
+  });
+}
+let laneFilter = "all";
+function catalog(){
+  const segs = [["all","전체"],...Object.entries(LANES).map(([k,v])=>[k,v.t])];
+  $("#seg").innerHTML = segs.map(([k,t])=>`<button data-l="${k}" aria-pressed="${k===laneFilter}">${t}</button>`).join("");
+  $("#seg").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{laneFilter=b.dataset.l;catalog();}));
+  const q = ($("#q").value||"").trim().toLowerCase();
+  const rows = DS.filter(d=>(laneFilter==="all"||d.lane===laneFilter) &&
+    (!q || [d.name,d.short,d.prov,d.id,d.k.map(k=>k[1]).join(" ")].join(" ").toLowerCase().includes(q)));
+  $("#rows").innerHTML = rows.map(d=>`<tr data-ds="${esc(d.id)}" tabindex="0">
+    <td><div class="nm">${esc(d.short)}</div><div class="id">${esc(d.id)}</div></td>
+    <td>${esc(d.unit)}</td><td>${esc(d.split)}</td><td>${esc(d.period)}</td>
+    <td><span class="badge ${RED[d.r][1]}">${esc(RED[d.r][0])}</span></td><td>${esc(d.access)}</td>
+    <td><div class="kpills">${d.k.map(([h,,c])=>`<span class="badge ${CONF[c][1]}">${esc(HUBS[h].t)}</span>`).join("")}</div></td></tr>`).join("")
+    || `<tr><td colspan="7" style="color:var(--mut)">찾는 데이터셋이 없습니다. 검색어를 바꿔 보세요.</td></tr>`;
+  $("#rows").querySelectorAll("tr[data-ds]").forEach(tr=>{
+    tr.addEventListener("click",()=>select("ds",tr.dataset.ds,true));
+    tr.addEventListener("keydown",e=>{ if(e.key==="Enter"){select("ds",tr.dataset.ds,true);} });
+  });
+  applyHighlight();
+}
+function offmap(){ $("#offmap").innerHTML = OFF.map(o=>`<div class="off"><h5>${esc(o.n)}</h5><div class="id">${esc(o.id)}</div><p>${esc(o.p)}</p></div>`).join(""); }
+
+$("#freeonly").addEventListener("change",applyHighlight);
+$("#q").addEventListener("input",catalog);
+stats(); drawGraph(); panel(); usecols(); timeline(); catalog(); offmap();
+</script>
+
+</body>
+</html>
