@@ -182,6 +182,40 @@ table.cat{border-collapse:collapse;width:100%;min-width:980px;font-size:13.5px}
 footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--line);color:var(--dim);font-size:13px}
 footer p{margin:0 0 6px;max-width:90ch}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* ---------- phone layout (≤760px): list instead of graph, stacked timeline, catalog cards ---------- */
+.klist{display:none}
+@media(max-width:760px){
+  .graphbox{display:none}
+  .klist{display:block}
+  .legend .lg:has(line){display:none}
+  .kchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+  .kchip{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink-2);cursor:pointer}
+  .kchip b{font-weight:600;color:var(--dim);margin-left:4px}
+  .kchip[aria-pressed="true"]{border-color:var(--bronze);background:var(--bronze-soft);color:var(--ink)}
+  .klane{margin:0 0 16px}
+  .klane h3{font-size:13px;color:var(--bronze);font-weight:600;margin:0 0 2px}
+  .klane .ls{font-size:12px;color:var(--dim);margin:0 0 8px}
+  .krow{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);
+    border-radius:12px;padding:11px 12px;margin-bottom:6px;cursor:pointer;color:var(--ink-2);transition:opacity .15s,border-color .15s}
+  .krow .st{flex:none;width:3.5px;align-self:stretch;border-radius:2px;background:var(--line-2)}
+  .krow .tx{min-width:0;flex:1}
+  .krow .nm{font-size:14px;color:var(--ink);font-weight:500;line-height:1.35}
+  .krow .ks{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+  .krow .ks .badge{font-size:11px}
+  .krow .col{display:none;font-family:var(--mono);font-size:11px;color:var(--mut);margin-top:5px;overflow-wrap:anywhere}
+  .krow.sel{border-color:var(--bronze);background:var(--bronze-soft)}
+  .krow.dim{opacity:.38}
+  .krow.hit .col{display:block}
+  #tl{min-width:0}
+  table.cat{min-width:0}
+  .cat thead{display:none}
+  .cat tbody tr{display:block;border-bottom:1px solid var(--line);padding:12px 14px}
+  .cat td{display:grid;grid-template-columns:76px minmax(0,1fr);gap:8px;padding:3px 0;border:0}
+  .cat td::before{content:attr(data-label);color:var(--dim);font-size:12px}
+  .cat td:first-child{display:block;padding-bottom:6px}
+  .cat td:first-child::before{content:none}
+}
 </style>
 
 </head>
@@ -572,6 +606,7 @@ function applyHighlight(){
     g.classList.toggle("dim", !activeHub.has(g.dataset.hub));
   });
   document.querySelectorAll("#rows tr").forEach(tr=>tr.classList.toggle("sel", sel.type==="ds" && tr.dataset.ds===sel.id));
+  syncList();
 }
 
 function panel(){
@@ -604,7 +639,7 @@ function panel(){
 
 function select(type,id,scroll){
   sel = {type,id}; applyHighlight(); panel();
-  if (scroll) document.getElementById("map").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
+  if (scroll) document.getElementById(scroll==="panel" || NARROW.matches ? "panel" : "map").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block:"start"});
 }
 
 function steps(){
@@ -618,7 +653,7 @@ function steps(){
 
 function timeline(){
   const svg = $("#tl"); svg.innerHTML = "";
-  const W = 900, labW = 250, x0 = labW + 10, x1 = W - 24, rowH = 34, top = 34;
+  const N = NARROW.matches, W = N ? 360 : 900, labW = 250, x0 = N ? 8 : labW + 10, x1 = W - (N ? 12 : 24), rowH = N ? 50 : 34, top = 34;
   const y0 = 2006, yN = 2027, H = top + TL.length*rowH + 44;
   svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
   const X = v => x0 + (v - y0) / (yN - y0) * (x1 - x0);
@@ -628,19 +663,19 @@ function timeline(){
   el("line",{x1:"0",y1:"0",x2:"0",y2:"6",stroke:"var(--guess)","stroke-width":"2.5"},pat);
   // overlap band: closure × rent 2021Q1–2024Q1
   el("rect",{x:X(2021),y:top-8,width:X(2024.25)-X(2021),height:TL.length*rowH+8,class:"tl-band"},svg);
-  el("text",{x:(X(2021)+X(2024.25))/2,y:top-14,"text-anchor":"middle",class:"tl-band-l"},svg).textContent = "폐업 × 임대료 겹침 2021 1분기 ~ 2024 1분기";
-  for (let yr=2008; yr<=2026; yr+=2){
+  el("text",{x:N ? x0 : (X(2021)+X(2024.25))/2,y:top-14,"text-anchor":N ? "start" : "middle",class:"tl-band-l"},svg).textContent = "폐업 × 임대료 겹침 2021 1분기 ~ 2024 1분기";
+  for (let yr=2008; yr<=2026; yr+= N ? 4 : 2){
     el("line",{x1:X(yr),x2:X(yr),y1:top-6,y2:top+TL.length*rowH,class:"tl-grid"},svg);
     el("text",{x:X(yr),y:H-24,"text-anchor":"middle",class:"tl-axis"},svg).textContent = yr;
   }
   el("line",{x1:X(2024),x2:X(2024),y1:top-6,y2:top+TL.length*rowH,class:"tl-mark"},svg);
-  el("text",{x:X(2024),y:H-6,"text-anchor":"middle",class:"tl-mark-l"},svg).textContent = "2024 표준단위구역 전환";
+  el("text",{x:N ? x1 : X(2024),y:H-6,"text-anchor":N ? "end" : "middle",class:"tl-mark-l"},svg).textContent = "2024 표준단위구역 전환";
   TL.forEach(([lab,sub,s,e,c],i)=>{
     const y = top + i*rowH;
-    el("text",{x:8,y:y+14,class:"tl-lab"},svg).textContent = lab;
-    el("text",{x:8,y:y+27,class:"tl-sub"},svg).textContent = sub;
-    if (c==="point"){ el("circle",{cx:X(s),cy:y+13,r:5,class:"tl-dot"},svg); }
-    else el("rect",{x:X(s),y:y+6,width:Math.max(3,X(e)-X(s)),height:14,rx:4,class: c==="ok"?"tl-bar-ok":"tl-bar-guess"},svg);
+    el("text",{x:8,y:y+(N?12:14),class:"tl-lab"},svg).textContent = lab;
+    el("text",{x:8,y:y+(N?25:27),class:"tl-sub"},svg).textContent = sub;
+    if (c==="point"){ el("circle",{cx:X(s),cy:y+(N?37:13),r:5,class:"tl-dot"},svg); }
+    else el("rect",{x:X(s),y:y+(N?32:6),width:Math.max(3,X(e)-X(s)),height:N?10:14,rx:4,class: c==="ok"?"tl-bar-ok":"tl-bar-guess"},svg);
   });
 }
 
@@ -657,6 +692,8 @@ function catalog(){
     <td>${esc(d.unit)}</td><td>${esc(d.cycle)}</td><td>${esc(d.period)}</td><td>${esc(d.lic)}</td><td>${esc(d.access)}</td>
     <td><div class="kpills">${d.k.map(([h,,c])=>`<span class="badge ${CONF[c][1]}">${esc(HUBS[h].t)}</span>`).join("")}</div></td></tr>`).join("")
     || `<tr><td colspan="7" style="color:var(--mut)">찾는 데이터셋이 없습니다. 검색어를 바꿔 보세요.</td></tr>`;
+  const heads = [...document.querySelectorAll(".cat thead th")].map(th=>th.textContent);
+  $("#rows").querySelectorAll("tr[data-ds]").forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.label=heads[i]||""));
   $("#rows").querySelectorAll("tr[data-ds]").forEach(tr=>{
     tr.addEventListener("click",()=>select("ds",tr.dataset.ds,true));
     tr.addEventListener("keydown",e=>{ if(e.key==="Enter"){select("ds",tr.dataset.ds,true);} });
@@ -670,7 +707,41 @@ function offmap(){
 
 $("#okonly").addEventListener("change",applyHighlight);
 $("#q").addEventListener("input",catalog);
-stats(); drawGraph(); panel(); steps(); timeline(); catalog(); offmap();
+
+/* ---------- phone list view (mirrors the graph's selection state) ---------- */
+const NARROW = window.matchMedia("(max-width: 760px)");
+function drawList(){
+  let box = document.getElementById("klist");
+  if (!box){ box = document.createElement("div"); box.id = "klist"; box.className = "klist";
+    document.querySelector(".graphbox").after(box); }
+  const chips = HUB_ORDER.map(h=>{const n = DS.filter(d=>d.k.some(k=>k[0]===h)).length;
+    return `<button class="kchip" data-hub="${h}" aria-pressed="false">${esc(HUBS[h].t)}<b>${n}</b></button>`}).join("");
+  const lanes = Object.entries(LANES).map(([lk,lane])=>{
+    const rows = DS.filter(d=>d.lane===lk).map(d=>{
+      const stripe = (typeof RED!=="undefined" && d.r) ? `background:var(--${{free:"ok",nc:"guess",no:"bad",rep:"dim"}[d.r]})` : "";
+      const ks = d.k.map(([h,,c])=>`<span class="badge ${CONF[c][1]}">${esc(HUBS[h].t)}</span>`).join("");
+      return `<button class="krow" data-ds="${esc(d.id)}"><span class="st" style="${stripe}"></span><span class="tx"><span class="nm">${esc(d.short)}</span><span class="ks">${ks}</span><span class="col"></span></span></button>`;
+    }).join("");
+    return rows ? `<div class="klane"><h3>${esc(lane.t)}</h3><p class="ls">${esc(lane.s)}</p>${rows}</div>` : "";
+  }).join("");
+  box.innerHTML = `<div class="kchips" role="group" aria-label="공통 키">${chips}</div>${lanes}`;
+  box.querySelectorAll(".kchip").forEach(b=>b.addEventListener("click",()=>select("hub",b.dataset.hub)));
+  box.querySelectorAll(".krow").forEach(b=>b.addEventListener("click",()=>select("ds",b.dataset.ds,"panel")));
+}
+function syncList(){
+  const box = document.getElementById("klist"); if (!box) return;
+  box.querySelectorAll(".kchip").forEach(b=>b.setAttribute("aria-pressed", String(sel.type==="hub" && b.dataset.hub===sel.id)));
+  box.querySelectorAll(".krow").forEach(r=>{
+    const d = byId[r.dataset.ds], k = sel.type==="hub" ? d.k.find(k=>k[0]===sel.id) : null;
+    r.classList.toggle("sel", sel.type==="ds" && d.id===sel.id);
+    r.classList.toggle("dim", sel.type==="hub" && !k);
+    r.classList.toggle("hit", !!k);
+    r.querySelector(".col").textContent = k ? k[1] : "";
+  });
+}
+NARROW.addEventListener("change", ()=>timeline());
+
+drawList(); stats(); drawGraph(); panel(); steps(); timeline(); catalog(); offmap();
 </script>
 
 </body>
