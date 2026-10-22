@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>개인투자자는 매매를 기록하나 — 열린 질문 · 개인투자자 데이터 연구소</title>
+<meta name="description" content="한국 개인투자자가 매매 이유나 결과를 기록하는지 물은 공개 조사를 찾지 못했습니다. 어디까지 찾았는지, 가장 가까운 공식 숫자 세 개와 그 한계, 답하려면 무엇을 재야 하는지 정리했습니다." />
+<!--@head-->
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href="https://pivoxdata.vercel.app/research/record-habit" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="개인투자자 데이터 연구소" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://pivoxdata.vercel.app/research/record-habit" />
+<meta property="og:title" content="개인투자자는 매매를 기록하나 — 열린 질문" />
+<meta property="og:description" content="한국 개인투자자가 매매 이유나 결과를 기록하는지 물은 공개 조사를 찾지 못했습니다. 어디까지 찾았는지, 가장 가까운 공식 숫자 세 개와 그 한계, 답하려면 무엇을 재야 하는지 정리했습니다." />
+<meta property="og:image" content="https://pivoxdata.vercel.app/og/record-habit.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://pivoxdata.vercel.app/og/record-habit.png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css" />
+<!--/@head-->
+<link rel="stylesheet" href="/research.css" />
+<style>
+  .cards{display:grid;gap:12px}
+  .card{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:18px 20px;display:grid;grid-template-columns:180px 1fr;gap:6px 22px}
+  @media(max-width:700px){.card{grid-template-columns:1fr}}
+  .card .big{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+  .card .unit{font-size:13px;color:var(--mut);margin-top:4px}
+  .card h3{font-size:16px;margin:0 0 4px;font-weight:650}
+  .card p{margin:0 0 6px;font-size:14px;color:var(--ink-2)}
+  .card .why{color:var(--mut)}
+  .card .why b{color:var(--ink-2);font-weight:600}
+  .card .cite{font-size:12.5px;color:var(--dim)}
+  .searched{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin:0;padding:0;list-style:none;font-size:14px}
+  @media(max-width:700px){.searched{grid-template-columns:1fr}}
+  .searched li{border-bottom:1px solid var(--grid);padding:8px 0;display:flex;justify-content:space-between;gap:12px}
+  .searched .r{color:var(--mut);white-space:nowrap}
+  .measure{counter-reset:m;display:grid;gap:10px;margin:0;padding:0;list-style:none;max-width:760px}
+  .measure li{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:14px 16px 14px 52px;position:relative;font-size:14.5px;color:var(--ink-2)}
+  .measure li::before{counter-increment:m;content:counter(m);position:absolute;left:16px;top:14px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--bronze-soft);color:var(--bronze-hi);font-size:12.5px;font-weight:650}
+  .measure b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<!--@nav-->
+<header class="topbar">
+  <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="full">개인투자자 데이터 연구소</span><span class="short">데이터 연구소</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
+</header>
+<!--/@nav-->
+<main>
+  <header>
+    <div class="kicker">열린 질문</div>
+    <h1>개인투자자는 매매를 기록하나</h1>
+    <p class="lede">왜 샀는지, 언제 팔지, 결과가 어땠는지를 적어 두는 한국 개인투자자가 얼마나 되는지 — 이 질문에 답한 공개 조사를 찾지 못했습니다. 어디까지 찾았는지, 가장 가까운 공식 숫자는 무엇이고 왜 답이 아닌지, 답하려면 무엇을 재야 하는지를 적습니다.</p>
+    <p class="meta">2026-10-22 조사 · 찾은 범위 밖에 조사가 있을 수 있습니다 · 알고 계시면 <a href="https://github.com/seanbae-analyst/pivoxdata/issues/new?title=%EA%B8%B0%EB%A1%9D%20%EC%8A%B5%EA%B4%80%20%EC%A1%B0%EC%82%AC%20%EC%A0%9C%EB%B3%B4" target="_blank" rel="noopener">알려 주세요</a></p>
+  </header>
+
+  <section class="stats" aria-label="핵심 수치">
+    <div class="stat"><div class="v">0건</div><div class="l">매매 기록 여부를 물은 공개 조사</div><div class="n">한국 개인투자자 대상</div></div>
+    <div class="stat"><div class="v">6곳</div><div class="l">찾아본 공식 기관</div><div class="n">아래 목록</div></div>
+    <div class="stat"><div class="v">2018–2026</div><div class="l">찾아본 기간</div><div class="n">논문·조사 보고서 포함</div></div>
+    <div class="stat"><div class="v">3개</div><div class="l">가장 가까운 공식 숫자</div><div class="n">모두 기록 문항은 아님</div></div>
+  </section>
+
+  <section>
+    <h2>어디까지 찾았나</h2>
+    <p class="sub">투자자 대상 정기 조사를 내는 기관과, 개인투자자 행태 연구를 내는 기관을 찾았습니다. “매매일지”, “투자일지”, “투자 기록”, “매매 이유 기록”을 묻는 문항을 기준으로 봤습니다.</p>
+    <ul class="searched"><!--@searched--><li><span><b>금융투자협회</b> · 개인 금융투자 실태조사(자본시장연구원 공동, 2016년 자료) 등</span><span class="r">기록 문항 없음</span></li><li><span><b>금융감독원·한국은행</b> · 전국민 금융이해력 조사 2018·2020·2022·2024</span><span class="r">재무상황 점검 문항만</span></li><li><span><b>통계청</b> · 가계금융복지조사</span><span class="r">기록 문항 없음</span></li><li><span><b>자본시장연구원</b> · 개인투자자 행태 연구 보고서</span><span class="r">거래내역 분석 · 설문 아님</span></li><li><span><b>한국금융소비자보호재단</b> · 펀드 투자자 조사(매년 2,500명)</span><span class="r">설문지 비공개 · 공개분에 없음</span></li><li><span><b>한국은행</b> · 해외주식 투자자 설문(2026년 9월 계획 보도)</span><span class="r">문항 미공개</span></li><li><span><b>그 밖에</b> · 한국거래소, 증권사·리서치사 설문(투자 정보 원천 등)</span><span class="r">기록 문항 없음</span></li><li><span><b>해외</b> · 미국 FINRA 재단 투자자 조사 등</span><span class="r">견줄 문항 확인 못함</span></li><!--/@searched--></ul>
+  </section>
+
+  <section>
+    <h2>가장 가까운 숫자 세 개</h2>
+    <p class="sub">기록을 직접 묻지는 않지만 가장 가까이 가는 공식 숫자입니다. 각각 왜 이 질문의 답이 아닌지 함께 적었습니다.</p>
+    <div class="cards"><!--@cards--><article class="card"><div><div class="big">43.4점</div><div class="unit">100점 만점 · 전체 2024</div></div><div><h3>평소 재무상황을 점검한다</h3><p>‘평소 재무상황 점검’에 동의 이상으로 답한 비율에 해당하는 점수입니다. 20대는 33.2점으로, 2022년 55.8점보다 낮아졌습니다.</p><p class="why"><b>답이 아닌 이유</b> 투자 기록이 아니라 자기 재무를 꾸준히 살피는지를 묻는 일반 문항입니다. 투자자만 따로 본 값도 아닙니다.</p><p class="cite"><a href="https://eiec.kdi.re.kr/policy/materialView.do?num=266065" target="_blank" rel="noopener">금융감독원·한국은행 「2024 전국민 금융이해력 조사」, 만 18~79세 2,400명 면접, 2025-04-29 발표</a></p></div></article><article class="card"><div><div class="big">65.3%</div><div class="unit">운용보고서를 받은 펀드 투자자 중</div></div><div><h3>받은 운용보고서를 읽지 않는다</h3><p>2023년 57.7%, 2024년 60.0%에서 늘었습니다. 읽지 않는 이유로는 ‘내용이 너무 많아서’(41.9%), ‘용어와 내용이 어려워서’(27.5%)를 꼽았습니다.</p><p class="why"><b>답이 아닌 이유</b> 남이 써 준 보고서를 읽는지이지, 자기 매매를 적는지가 아닙니다. 다만 투자한 뒤 돌아보는 일이 드물다는 쪽을 가리킵니다.</p><p class="cite"><a href="https://www.kfcpf.or.kr/front/viewAritcle.do?bbsId=BBS_0004&nttId=1879" target="_blank" rel="noopener">한국금융소비자보호재단 「2025 펀드 투자자 조사」, 만 25~64세 2,500명 온라인, 2026-03-12 공개</a></p></div></article><article class="card"><div><div class="big">2배 이상</div><div class="unit">개인투자자 약 20만 명 · 2020년 3~10월</div></div><div><h3>오른 주식을 내린 주식보다 더 잘 판다</h3><p>매수가격보다 오른 주식을 팔 확률이 내린 주식을 팔 확률보다 두 배 이상 높았습니다. 일별 거래내역으로 본 결과입니다.</p><p class="why"><b>답이 아닌 이유</b> 설문이 아니라 거래내역에서 본 행동입니다. 기록 여부와는 상관없이, 기록이 있어야 자기 매매에서 스스로 확인할 수 있는 종류의 패턴입니다.</p><p class="cite"><a href="https://www.kcmi.re.kr/report/report_view?report_no=1481" target="_blank" rel="noopener">자본시장연구원 연구보고서 22-02 「국내 개인투자자의 행태적 편의와 거래행태」(김민기·김준석), 2022-02</a></p></div></article><!--/@cards--></div>
+  </section>
+
+  <section>
+    <h2>답하려면 무엇을 재야 하나</h2>
+    <p class="sub">공개 데이터로는 얻을 수 없어 직접 재야 하는 질문입니다. 설문 답과 실제 행동이 다를 수 있으므로, 묻는 것과 보는 것이 둘 다 있어야 합니다.</p>
+    <ol class="measure">
+      <li><b>적어 본 적이 있는지.</b> “매매 이유를 어딘가에 적어 본 적이 있나요?” — 없다 / 가끔 메모 / 노트나 앱에 꾸준히 / 예전엔 했다. 한 번이라도 적어 본 사람과 꾸준히 적는 사람을 나눠야 합니다.</li>
+      <li><b>적은 것을 다시 보는지.</b> 기록의 쓸모는 나중에 다시 읽을 때 생깁니다. 적는 것과 다시 읽는 것은 다른 습관이라 따로 물어야 합니다.</li>
+      <li><b>말한 것과 한 것이 같은지.</b> “꾸준히 적는다”고 답한 사람이 실제 매매에 기록을 남기는지는 설문이 아니라 매매 기록으로만 확인할 수 있습니다.</li>
+      <li><b>누가 답했는지.</b> 기록에 관심 있는 사람이 이런 설문에 더 많이 답할 수 있습니다. 표본이 전체 개인투자자를 대표하는지 함께 적어야 합니다.</li>
+    </ol>
+  </section>
+
+  <section class="limits">
+    <h2>이 페이지가 말하지 않는 것</h2>
+    <ul>
+      <li><b>기록하면 수익이 나아진다고 말하지 않습니다.</b> 그것을 보여 주는 한국 데이터도 찾지 못했습니다.</li>
+      <li><b>“0건”은 찾아본 범위 안에서입니다.</b> 증권사 내부 설문이나 비공개 조사는 볼 수 없었습니다.</li>
+      <li>위 숫자 세 개는 서로 다른 조사·연도·대상에서 나왔습니다. 나란히 놓았지만 같은 사람 집단이 아닙니다.</li>
+    </ul>
+  </section>
+
+  <section class="note">
+    <h2>출처</h2>
+    <!--@sources--><p>각 숫자는 2026-10-22에 원문(보고서·보도자료 PDF)에서 다시 읽었습니다. 점수와 비율, 비율의 분모(누구 중 몇 %인지)는 원문 표현을 따랐습니다.</p><ul class="checks"><li><a href="https://eiec.kdi.re.kr/policy/materialView.do?num=266065" target="_blank" rel="noopener">금융감독원·한국은행 「2024 전국민 금융이해력 조사」, 만 18~79세 2,400명 면접, 2025-04-29 발표</a></li><li><a href="https://www.kfcpf.or.kr/front/viewAritcle.do?bbsId=BBS_0004&nttId=1879" target="_blank" rel="noopener">한국금융소비자보호재단 「2025 펀드 투자자 조사」, 만 25~64세 2,500명 온라인, 2026-03-12 공개</a></li><li><a href="https://www.kcmi.re.kr/report/report_view?report_no=1481" target="_blank" rel="noopener">자본시장연구원 연구보고서 22-02 「국내 개인투자자의 행태적 편의와 거래행태」(김민기·김준석), 2022-02</a></li></ul><!--/@sources-->
+  </section>
+
+  <section>
+    <h2>함께 보기</h2>
+    <div class="next" style="margin-top:12px">
+      <a href="/maps/korea-investor"><div class="k">데이터 지도</div><div class="t">한국 개인투자자 데이터 지도</div><div class="d">이 질문을 포함한 네 질문의 공개 데이터 24개와 이용 조건</div></a>
+      <a href="/research/credit"><div class="k">연구 · 빚투</div><div class="t">빚을 내 산 주식은 얼마나 되나</div><div class="d">신용융자 잔고 1999–2026</div></a>
+    </div>
+  </section>
+</main>
+<!--@footer-->
+<footer class="site">
+  <span>개인투자자 데이터 연구소 · 무료·비상업 · 투자 권유를 하지 않습니다</span>
+  <span class="links"><a href="/#principles">원칙</a><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+</footer>
+<!--/@footer-->
+</div>
+</body>
+</html>
