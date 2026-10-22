@@ -3,13 +3,27 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>서울 상권 폐업 데이터 지도 · DataReady</title>
+<title>서울 상권 폐업 데이터 지도 · 개인투자자 데이터 연구소</title>
 <meta name="description" content="서울 상권 폐업을 분석할 공개 데이터 28개의 메타데이터와, 상권·행정동·법정동·좌표 키로 서로 잇는 방법." />
+<!--@head-->
 <meta name="theme-color" content="#050505" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href="https://pivoxdata.vercel.app/maps/seoul-closure" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="개인투자자 데이터 연구소" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://pivoxdata.vercel.app/maps/seoul-closure" />
+<meta property="og:title" content="서울 상권 폐업 데이터 지도" />
+<meta property="og:description" content="서울 상권 폐업을 분석할 공개 데이터 28개의 메타데이터와, 상권·행정동·법정동·좌표 키로 서로 잇는 방법." />
+<meta property="og:image" content="https://pivoxdata.vercel.app/og/home.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://pivoxdata.vercel.app/og/home.png" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
+<!--/@head-->
 <style>
 /* Layout: one research question → a key-hub graph (datasets on the sides, join keys in the middle),
    then the order to join them, the time windows they share, and the full catalog. Dark-first, bronze accent. */
@@ -221,10 +235,12 @@ footer p{margin:0 0 6px;max-width:90ch}
 </head>
 <body>
 <div class="wrap">
-  <header class="topbar">
-    <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>DataReady</a>
-    <nav class="nav"><a href="/maps">데이터 지도</a><a href="/">파일 채점</a></nav>
-  </header>
+<!--@nav-->
+<header class="topbar">
+  <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="full">개인투자자 데이터 연구소</span><span class="short">데이터 연구소</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
+</header>
+<!--/@nav-->
 <header class="top">
   <div>
     <div class="eyebrow">데이터 지도 · 수동 조사판</div>

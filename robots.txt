@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://pivoxdata.vercel.app/sitemap.xml

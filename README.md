@@ -1,32 +1,50 @@
-# DataReady — is your data AI-ready?
+# 개인투자자 데이터 연구소 · Korean Retail Investor Data Lab
 
-**▶ Live demo: [pivoxdata.vercel.app](https://pivoxdata.vercel.app)** — drag a CSV onto the page.
-**📖 Case study: [CASE_STUDY.md](CASE_STUDY.md)** — the product thinking, decision by decision.
+**▶ [pivoxdata.vercel.app](https://pivoxdata.vercel.app)** — free, non-commercial. No ads, no payment, no investment advice.
 
-**Check data before you use it.** The site has two halves that answer that one question:
+**한국 개인투자자가 실제로 어떻게 움직였는지 공개 데이터로 확인합니다.** 질문은 넷입니다 — 언제 몰려 사나, 빚을
+얼마나 내나, 어디로 나가나, 매매를 기록하긴 하나. 답이 있는 것은 연구 페이지로, 없는 것은 없다고 적었습니다.
+숫자마다 출처 표·항목 코드·받은 날·이용 조건·검산 결과를 함께 싣고, 데이터를 해석하는 문장은 페이지를 만드는
+단계에서 데이터와 대조해 틀리면 배포 전에 멈춥니다.
 
-- **Your own file → the scorer.** Drop a CSV or Excel file, get a **0–100 AI-readiness score** with
-  prioritized, plain-language fixes — so a non-coder can tell whether a dataset is good enough for
-  AI/analytics *before* wasting a day on it. Runs entirely in the browser; nothing is uploaded.
-- **Public data → [data maps](https://pivoxdata.vercel.app/maps).** For one question, which public
-  datasets can answer it, which keys join them, which periods overlap, and whether each one may be
-  used (terms quoted from each provider). Two maps so far — Seoul store closures and Korean retail
-  investors — plus [one chart drawn by following a map](https://pivoxdata.vercel.app/maps/korea-investor-net-buy).
+| 질문 | 페이지 | 데이터 |
+|---|---|---|
+| 개인은 언제 몰려 샀나 | [`/research/net-buy`](https://pivoxdata.vercel.app/research/net-buy) | ECOS 901Y055 (원작성 한국거래소), 2004–2026 월별 |
+| 빚을 내 산 주식은 얼마나 되나 | [`/research/credit`](https://pivoxdata.vercel.app/research/credit) | ECOS 901Y056 (원작성 금융투자협회) + 901Y014 (한국거래소), 1999–2026 월말 |
+| 개인은 어디로 나가나 | [`/maps/korea-investor`](https://pivoxdata.vercel.app/maps/korea-investor) | 예탁결제원 자료 — 경로·조건만 정리 (API 키 필요) |
+| 개인은 매매를 기록하나 | [`/research/record-habit`](https://pivoxdata.vercel.app/research/record-habit) | 열린 질문 — 물은 공개 조사 0건, 가까운 공식 숫자 3개 |
 
-The site is free and non-commercial: no payment, no ads. That is also why the net-buying chart may
-carry KRX-authored data (ECOS allows non-commercial use with the source named). Adding paid features
-or ads would mean taking that page down first.
+In English: a research site on Korean retail investors built from public data — when they pile in, how much they
+borrow to buy, where they go abroad, and whether they keep a record of their trades. Every number carries its
+source table, fetch date, license terms and a second-reading check (see [`lab/`](lab) and [TRUST.md](TRUST.md)).
 
-**한국어** — **데이터를 쓰기 전에, 써도 되는지 확인합니다.** 사이트는 두 갈래입니다.
+## The lab pipeline · `npm run lab`
 
-- **내 파일 → 채점기.** CSV나 엑셀 파일을 올리면 **0–100점 AI 준비도 점수**와 고칠 것을 쉬운 말로 알려 줍니다.
-  모두 브라우저 안에서 돌고 파일은 어디에도 올라가지 않습니다.
-- **공개 데이터 → [데이터 지도](https://pivoxdata.vercel.app/maps).** 질문 하나에 답할 공개 데이터가 무엇인지,
-  어떤 키로 이어지는지, 기간이 겹치는지, 써도 되는지(기관별 이용 조건 인용)를 한 장에 정리합니다. 지금은 서울 상권 폐업 ·
-  한국 개인투자자 지도 두 개와, 지도를 따라 그린 [개인 순매수 그래프](https://pivoxdata.vercel.app/maps/korea-investor-net-buy)가 있습니다.
+```bash
+npm run lab          # fetch (ECOS) → verify → build: refreshes every number on the research pages
+npm run lab:build    # rebuild pages from the committed lab/data/*.json only (no network)
+```
 
-사이트는 무료·비상업입니다(결제·광고 없음). 그래서 순매수 그래프에 한국거래소 원작성 자료를 출처와 함께 실을 수 있습니다
-(ECOS: 출처를 밝힌 비상업적 이용 허용). 유료 기능이나 광고를 붙이려면 그 페이지부터 내려야 합니다.
+- [`lab/series.mjs`](lab/series.mjs) — every ECOS series the lab uses (table, item code, unit, who compiled it).
+- [`lab/fetch.mjs`](lab/fetch.mjs) → `lab/data/<id>.json` with provenance (table, items, the compiling agency as
+  ECOS reports it, fetch date). The public `sample` key reads 10 rows per call; set `ECOS_KEY` to use a personal key.
+- [`lab/verify.mjs`](lab/verify.mjs) → `lab/data/checks.json`. Each check reads the numbers a second way: months are
+  gap-free; the five investor groups net to zero (±2 백만원 rounding); annual tables equal the sum (flows) or the
+  December value (balances) of the monthly ones; the compiling agency printed on the page equals ECOS's; month-end
+  credit balances equal figures reported in the news from KOFIA's daily data
+  ([`lab/data/crosscheck.json`](lab/data/crosscheck.json)). Known holes are recorded, not smoothed
+  (신용융자 1998-06 and 1998-12 are written as 0 in ECOS).
+- [`lab/build.mjs`](lab/build.mjs) writes numbers into marked regions of each page (`<!--@name-->…<!--/@name-->`), so
+  the figures are in the HTML (readable without JS, indexable), plus the shared nav/footer/OG tags and `sitemap.xml`.
+  Interpretive sentences are guarded with `expect(...)`: if a re-fetch changes the fact a sentence rests on
+  (e.g. the peak month), the build stops instead of publishing a sentence that is no longer true.
+- License: ECOS lets statistics compiled by other agencies be used **non-commercially with the source named**;
+  commercial use needs the compiling agency's approval. That is why the site stays free and ad-free.
+
+## DataReady — the file checker at [`/check`](https://pivoxdata.vercel.app/check)
+
+The lab grew out of DataReady: drop a CSV or Excel file, get a **0–100 AI-readiness score** with prioritized,
+plain-language fixes. Runs entirely in the browser; nothing is uploaded. **📖 Case study:** [CASE_STUDY.md](CASE_STUDY.md).
 
 화면은 한국어 · 영어 둘 다 됩니다. 브라우저 언어를 따르고, 위쪽 버튼이나 `?lang=ko` / `?lang=en`으로 바꿉니다.
 데이터 지도는 한국 공공데이터를 다뤄 한국어로만 있습니다.
@@ -69,10 +87,10 @@ loses points per problem (never below 0). **80–100** AI-ready · **55–79** n
 
 ```bash
 npm install
-npm run dev          # → http://localhost:8099  (drag a CSV/XLSX onto the page)
+npm run dev          # → http://localhost:8099  (lab home; the checker is at /check)
 ```
 
-The app uses native ES modules, so it must be served over HTTP — opening `index.html`
+The app uses native ES modules, so it must be served over HTTP — opening `check.html`
 directly as a `file://` will not load the scorer. `npm run dev` is the one step that matters.
 
 ```bash
@@ -80,7 +98,8 @@ npm run score test-data/customers_messy.csv   # same scorer, from the terminal
 npm run validate                              # precision/recall + oracle agreement gate
 ```
 
-Deploy: static site, zero build step — `vercel deploy` (config in [`vercel.json`](vercel.json)).
+Deploy: static site, no build step on the server — `vercel deploy` (config in [`vercel.json`](vercel.json)). The research
+pages are rebuilt locally with `npm run lab` and committed.
 
 ---
 
@@ -251,11 +270,14 @@ reproduce `verify.py`); the 2.5 MB sample is committed so the demo and CLI work 
 ## Layout
 
 ```
-index.html        the browser demo (drag-drop → score)
+index.html        lab home — the four questions, principles, tools
+research/*.html   research pages (credit, net-buy, record-habit) — numbers written in by lab/build.mjs
+research.css      layout for research pages · charts.mjs  shared line/bar charts (inline SVG, keyboard, CSV)
+lab/              series.mjs · ecos.mjs · fetch.mjs · verify.mjs · build.mjs · data/*.json (with provenance)
+check.html        DataReady, the file checker (drag-drop → score → clean)
 ui.css            shared tokens + base styles for every page (black + bronze, Pretendard)
 maps.html         data maps index — one question, the public datasets for it, how they join
 maps/*.html       the maps themselves (manual research, metadata only — no data is fetched)
-maps/korea-investor-net-buy.html  monthly KOSPI net buying by investor type, 2004–2026 — ECOS 901Y055 values fetched once and embedded (source: KRX via the Bank of Korea; non-commercial use with attribution)
 scorer.mjs        the deterministic scorer — pure function, runs identically in browser + Node
 lang.mjs          display language switch (English default; the browser sets 한국어) — messages go through L(en, ko)
 parse.mjs         CSV/XLSX → rows (Node CLI)
@@ -263,5 +285,6 @@ cli.mjs           score any file from the terminal
 serve.mjs         zero-dependency static server (npm run dev)
 validate.mjs      precision/recall + oracle-agreement gate
 verify.py         3-engine triangulation harness → verified_facts.json
+og/  sitemap.xml  robots.txt  404.html  favicon.svg   sharing and crawling
 PRD.md TRUST.md ANCHOR_DATASET.md   the product thinking
 ```

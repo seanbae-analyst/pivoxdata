@@ -62,3 +62,19 @@ Right now `verify.py` is the independent **oracle** for the dataset analysis. Wh
 scorer in the app exists, it joins as another engine: the app's reported numbers get checked
 against the oracle on the same file, and must agree. Same principle, one layer up — the tool
 is never its own judge.
+
+## The same structure, one layer up: the investor data lab (2026-10)
+The research pages (`/research/*`) publish numbers about Korean retail investors, so they follow the same rules,
+mechanized in [`lab/`](lab):
+
+| Pillar | In the lab |
+|---|---|
+| Triangulation | `lab/verify.mjs` reads every series a second way — annual table vs. monthly sum (flows) or December value (balances); five investor groups net to zero; month-end credit balances vs. KOFIA daily figures reported in the news (`lab/data/crosscheck.json`). Exit 1 on any disagreement. |
+| Fact vs. judgment | Sentences that interpret data are generated from the data and guarded with `expect(...)` in `lab/build.mjs`; a re-fetch that changes the fact behind a sentence stops the build. |
+| Provenance | `lab/data/<id>.json` records table, item codes, unit, fetch date and the compiling agency **as ECOS reports it**; the page prints it and a check confirms the two agree. Readers can download what each chart shows as CSV. |
+| Honest limits | Holes are recorded, not smoothed (credit balance written as 0 for 1998-06 and 1998-12); scope changes are quoted from ECOS footnotes (KOSDAQ from 2002-05, ETF credit from 2007-07); each page lists what its numbers cannot say. |
+
+### The lesson that came with it
+The first net-buying page said the five investor groups sum to zero "in all 273 months". Re-reading the data for
+the lab showed 105 months off by ±1–2 백만원 — ECOS rounds each group separately. The math was never wrong; the
+sentence was too strong. The page now says what was measured, and the check encodes the tolerance.
