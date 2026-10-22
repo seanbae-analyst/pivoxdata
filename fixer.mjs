@@ -8,6 +8,7 @@ import {
   scoreDataset, SENTINELS, PLACEHOLDER_DATE, PII_PATTERNS, dateShape, looksLikePhone,
   variantKey,
 } from "./scorer.mjs";
+import { L, piiName } from "./lang.mjs";
 
 const MONTHS = {
   january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8,
@@ -86,30 +87,30 @@ export function fixDataset(rows, columns, opts = {}) {
       if (typeof v === "string") { const t = v.trim(); if (t !== v) { r[c] = t; trimmed++; } }
     }
     if (trimmed) fixes.push({ code: "trim", column: "(all)", count: trimmed,
-      message: `Trimmed stray whitespace on ${trimmed} value${trimmed > 1 ? "s" : ""}.` });
+      message: L(`Trimmed stray whitespace on ${trimmed} value${trimmed > 1 ? "s" : ""}.`, `값 ${trimmed}개의 앞뒤 공백을 지웠습니다.`) });
   }
 
   // 1. issue-driven fixes — keyed off the exact same detection the score came from
   for (const iss of before.issues) {
     const col = iss.column;
     if (iss.code === "sentinel") {
-      if (!clearSentinels) { skipped.push({ code: "sentinel", column: col, reason: `Sentinel tokens in "${col}" kept — per your choice.` }); continue; }
+      if (!clearSentinels) { skipped.push({ code: "sentinel", column: col, reason: L(`Sentinel tokens in "${col}" kept — per your choice.`, `"${col}" 열의 빈칸 표시(N/A 등)는 고른 대로 그대로 두었습니다.`) }); continue; }
       let n = 0;
       for (const r of out) {
         const t = String(r[col] ?? "").trim().toLowerCase();
         if (t && SENTINELS.has(t)) { r[col] = ""; n++; }
       }
       fixes.push({ code: "sentinel", column: col, count: n,
-        message: `Converted ${n} sentinel token${n > 1 ? "s" : ""} (N/A, NULL, …) in "${col}" to real empty cells.` });
+        message: L(`Converted ${n} sentinel token${n > 1 ? "s" : ""} (N/A, NULL, …) in "${col}" to real empty cells.`, `"${col}" 열의 빈칸 표시(N/A, NULL 등) ${n}개를 진짜 빈칸으로 바꿨습니다.`) });
     } else if (iss.code === "placeholder_date") {
-      if (!clearPlaceholders) { skipped.push({ code: "placeholder_date", column: col, reason: `Placeholder dates in "${col}" kept — per your choice.` }); continue; }
+      if (!clearPlaceholders) { skipped.push({ code: "placeholder_date", column: col, reason: L(`Placeholder dates in "${col}" kept — per your choice.`, `"${col}" 열의 자리만 채운 날짜는 고른 대로 그대로 두었습니다.`) }); continue; }
       let n = 0;
       for (const r of out) {
         const t = String(r[col] ?? "").trim();
         if (PLACEHOLDER_DATE.test(t)) { r[col] = ""; n++; }
       }
       fixes.push({ code: "placeholder_date", column: col, count: n,
-        message: `Cleared ${n} placeholder date${n > 1 ? "s" : ""} (1900-01-01 / 0000-00-00) in "${col}" — they are missing data, not dates.` });
+        message: L(`Cleared ${n} placeholder date${n > 1 ? "s" : ""} (1900-01-01 / 0000-00-00) in "${col}" — they are missing data, not dates.`, `"${col}" 열의 자리만 채운 날짜(1900-01-01 / 0000-00-00) ${n}개를 비웠습니다 — 날짜가 아니라 빠진 값입니다.`) });
     } else if (iss.code === "mixed_date_format") {
       let n = 0;
       for (const r of out) {
@@ -122,18 +123,18 @@ export function fixDataset(rows, columns, opts = {}) {
       }
       fixes.push({ code: "date_normalize", column: col, count: n,
         message: dateTarget === "US"
-          ? `Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to US format (MM/DD/YYYY) — your choice.`
-          : `Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to ISO 8601 (YYYY-MM-DD).` });
+          ? L(`Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to US format (MM/DD/YYYY) — your choice.`, `"${col}" 열의 날짜 ${n}개를 고른 대로 미국식(MM/DD/YYYY)으로 맞췄습니다.`)
+          : L(`Normalized ${n} date${n > 1 ? "s" : ""} in "${col}" to ISO 8601 (YYYY-MM-DD).`, `"${col}" 열의 날짜 ${n}개를 ISO 8601(YYYY-MM-DD)로 맞췄습니다.`) });
     } else if (iss.code === "empty_column") {
-      if (!dropEmptyCols) { skipped.push({ code: "empty_column", column: col, reason: `Empty column "${col}" kept — per your choice.` }); continue; }
+      if (!dropEmptyCols) { skipped.push({ code: "empty_column", column: col, reason: L(`Empty column "${col}" kept — per your choice.`, `"${col}" 열은 비어 있지만 고른 대로 그대로 두었습니다.`) }); continue; }
       cols = cols.filter((c) => c !== col);
       fixes.push({ code: "drop_empty_column", column: col, count: 1,
-        message: `Dropped "${col}" — 100% empty, carries no information.` });
+        message: L(`Dropped "${col}" — 100% empty, carries no information.`, `"${col}" 열을 지웠습니다 — 전부 비어 있어 담긴 정보가 없습니다.`) });
     } else if (iss.code === "pii") {
       if (piiMode === "drop") {
         cols = cols.filter((c) => c !== col);
         fixes.push({ code: "pii_drop", column: col, count: 1,
-          message: `Dropped PII column "${col}" entirely — your choice.` });
+          message: L(`Dropped PII column "${col}" entirely — your choice.`, `개인정보가 든 "${col}" 열을 고른 대로 통째로 지웠습니다.`) });
       } else if (piiMode === "mask") {
         const type = (iss.evidence || "").split("=")[0];
         let n = 0;
@@ -145,16 +146,16 @@ export function fixDataset(rows, columns, opts = {}) {
           else if (type === "phone" && looksLikePhone(t) && !dateShape(t)) { r[col] = maskDigits(t); n++; }
         }
         fixes.push({ code: "pii_mask", column: col, count: n,
-          message: `Masked ${n} ${type} value${n > 1 ? "s" : ""} in "${col}".` });
+          message: L(`Masked ${n} ${type} value${n > 1 ? "s" : ""} in "${col}".`, `"${col}" 열의 ${piiName(type)} ${n}개를 가렸습니다.`) });
       } else {
         skipped.push({ code: "pii", column: col,
-          reason: `PII in "${col}" left as-is — masking or dropping is a governance decision, not a mechanical fix.` });
+          reason: L(`PII in "${col}" left as-is — masking or dropping is a governance decision, not a mechanical fix.`, `"${col}" 열의 개인정보는 그대로 두었습니다 — 가릴지 지울지는 기계적인 수정이 아니라 관리 방침의 문제입니다.`) });
       }
     } else if (iss.code === "value_variants") {
       const choices = unify[col];
       if (!choices || Object.keys(choices).length === 0) {
         skipped.push({ code: "value_variants", column: col,
-          reason: `Multiple spellings in "${col}" left as-is — pick a canonical form to unify them.` });
+          reason: L(`Multiple spellings in "${col}" left as-is — pick a canonical form to unify them.`, `"${col}" 열의 여러 표기는 그대로 두었습니다 — 하나로 맞추려면 기준 표기를 고르세요.`) });
         continue;
       }
       let n = 0;
@@ -166,16 +167,17 @@ export function fixDataset(rows, columns, opts = {}) {
       }
       const picked = [...new Set(Object.values(choices).filter(Boolean))];
       fixes.push({ code: "unify", column: col, count: n,
-        message: `Unified ${n} value${n === 1 ? "" : "s"} in "${col}" to your chosen spelling${picked.length > 1 ? "s" : ""} (${picked.slice(0, 3).map((p) => `"${p}"`).join(", ")}${picked.length > 3 ? ", …" : ""}).` });
+        message: L(`Unified ${n} value${n === 1 ? "" : "s"} in "${col}" to your chosen spelling${picked.length > 1 ? "s" : ""} (${picked.slice(0, 3).map((p) => `"${p}"`).join(", ")}${picked.length > 3 ? ", …" : ""}).`,
+          `"${col}" 열의 값 ${n}개를 고른 표기로 맞췄습니다 (${picked.slice(0, 3).map((p) => `"${p}"`).join(", ")}${picked.length > 3 ? ", …" : ""}).`) });
     } else if (iss.code === "missing" || iss.code === "high_missing") {
       skipped.push({ code: iss.code, column: col,
-        reason: `Missing values in "${col}" left blank — imputation is a judgment, not a fact.` });
+        reason: L(`Missing values in "${col}" left blank — imputation is a judgment, not a fact.`, `"${col}" 열의 빈 값은 비워 두었습니다 — 값을 채워 넣는 것은 사실이 아니라 판단입니다.`) });
     } else if (iss.code === "numeric_text_mix") {
       skipped.push({ code: iss.code, column: col,
-        reason: `"${col}" mixes numbers and words — coercing "thirty" → 30 needs interpretation, left as-is.` });
+        reason: L(`"${col}" mixes numbers and words — coercing "thirty" → 30 needs interpretation, left as-is.`, `"${col}" 열에 숫자와 글자가 섞여 있습니다 — "서른" → 30 같은 변환은 해석이 필요해 그대로 두었습니다.`) });
     } else if (iss.code === "dup_id") {
       skipped.push({ code: "dup_id", column: col,
-        reason: `Duplicate IDs in "${col}": exact duplicate copies are removed by dedupe — if duplicates remain, the rows differ and deciding which record is the truth is your call.` });
+        reason: L(`Duplicate IDs in "${col}": exact duplicate copies are removed by dedupe — if duplicates remain, the rows differ and deciding which record is the truth is your call.`, `"${col}" 열의 중복 ID: 완전히 같은 행은 중복 제거로 지워집니다 — 그래도 남으면 행 내용이 달라서, 어느 기록이 맞는지는 직접 정해야 합니다.`) });
     }
     // dup_rows handled below, AFTER normalization (normalizing can reveal more exact dups)
   }
@@ -190,10 +192,10 @@ export function fixDataset(rows, columns, opts = {}) {
     }
     const removed = out.length - deduped.length;
     if (removed > 0) fixes.push({ code: "dedupe", column: "(rows)", count: removed,
-      message: `Removed ${removed} exact duplicate row${removed > 1 ? "s" : ""}.` });
+      message: L(`Removed ${removed} exact duplicate row${removed > 1 ? "s" : ""}.`, `완전히 같은 행 ${removed}개를 지웠습니다.`) });
     out = deduped;
   } else if (before.issues.some((i) => i.code === "dup_rows")) {
-    skipped.push({ code: "dup_rows", column: "(rows)", reason: "Duplicate rows kept — per your choice." });
+    skipped.push({ code: "dup_rows", column: "(rows)", reason: L("Duplicate rows kept — per your choice.", "중복 행은 고른 대로 그대로 두었습니다.") });
   }
 
   // 3. user-chosen casing normalization per column (never applied unasked)
@@ -207,7 +209,8 @@ export function fixDataset(rows, columns, opts = {}) {
       if (t !== raw) { r[col] = t; n++; }
     }
     if (n) fixes.push({ code: "casing", column: col, count: n,
-      message: `Normalized casing of ${n} value${n > 1 ? "s" : ""} in "${col}" to ${style === "upper" ? "UPPERCASE" : style === "lower" ? "lowercase" : "Title Case"} — your choice.` });
+      message: L(`Normalized casing of ${n} value${n > 1 ? "s" : ""} in "${col}" to ${style === "upper" ? "UPPERCASE" : style === "lower" ? "lowercase" : "Title Case"} — your choice.`,
+        `"${col}" 열의 값 ${n}개를 고른 대로 ${style === "upper" ? "대문자(UPPERCASE)" : style === "lower" ? "소문자(lowercase)" : "첫 글자만 대문자(Title Case)"}로 맞췄습니다.`) });
   }
 
   // 4. drop rows where every remaining field is empty
@@ -216,7 +219,7 @@ export function fixDataset(rows, columns, opts = {}) {
     out = out.filter((r) => cols.some((c) => String(r[c] ?? "").trim() !== ""));
     const removedE = beforeN - out.length;
     if (removedE > 0) fixes.push({ code: "empty_rows", column: "(rows)", count: removedE,
-      message: `Removed ${removedE} completely empty row${removedE > 1 ? "s" : ""}.` });
+      message: L(`Removed ${removedE} completely empty row${removedE > 1 ? "s" : ""}.`, `모든 칸이 빈 행 ${removedE}개를 지웠습니다.`) });
   }
 
   // 5. header rename — the naming convention is the user's judgment
@@ -236,7 +239,8 @@ export function fixDataset(rows, columns, opts = {}) {
       out = out.map((r) => { const nr = {}; for (const c of cols) nr[map[c]] = r[c]; return nr; });
       cols = cols.map((c) => map[c]);
       fixes.push({ code: "headers", column: "(headers)", count: renamed.length,
-        message: `Renamed ${renamed.length} header${renamed.length > 1 ? "s" : ""} to ${headerStyle === "snake" ? "snake_case" : "lowercase"} (e.g. "${renamed[0]}" → "${map[renamed[0]]}") — your choice.` });
+        message: L(`Renamed ${renamed.length} header${renamed.length > 1 ? "s" : ""} to ${headerStyle === "snake" ? "snake_case" : "lowercase"} (e.g. "${renamed[0]}" → "${map[renamed[0]]}") — your choice.`,
+          `열 이름 ${renamed.length}개를 고른 대로 ${headerStyle === "snake" ? "snake_case" : "소문자"}로 바꿨습니다 (예: "${renamed[0]}" → "${map[renamed[0]]}").`) });
     }
   }
 

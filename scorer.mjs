@@ -3,6 +3,8 @@
 // Every issue carries a `type:'fact'` and its raw evidence — scores are judgments
 // built on facts (see TRUST.md). Dimension weights are explicit and tunable.
 
+import { L, piiName } from "./lang.mjs";
+
 export const EMPTY = (v) => v === null || v === undefined || String(v).trim() === "";
 
 export const PII_PATTERNS = {
@@ -173,16 +175,16 @@ export function scoreDataset(rows, columns) {
   for (const col of cols) {
     const s = columnStats[col];
     if (s.missing === n) {
-      add("completeness", "high", col, "empty_column", `Column "${col}" is entirely empty (${n}/${n} missing).`, `missing=${n}`);
+      add("completeness", "high", col, "empty_column", L(`Column "${col}" is entirely empty (${n}/${n} missing).`, `"${col}" 열이 전부 비어 있습니다 (${n}/${n} 빈칸).`), `missing=${n}`);
       completenessPenalty += 12;
     } else if (s.missingRate >= 0.5) {
-      add("completeness", "high", col, "high_missing", `"${col}" is ${(s.missingRate * 100).toFixed(1)}% missing.`, `missing=${s.missing}/${n}`);
+      add("completeness", "high", col, "high_missing", L(`"${col}" is ${(s.missingRate * 100).toFixed(1)}% missing.`, `"${col}" 열의 ${(s.missingRate * 100).toFixed(1)}%가 비어 있습니다.`), `missing=${s.missing}/${n}`);
       completenessPenalty += 8;
     } else if (s.missingRate >= 0.2) {
-      add("completeness", "medium", col, "missing", `"${col}" is ${(s.missingRate * 100).toFixed(1)}% missing.`, `missing=${s.missing}/${n}`);
+      add("completeness", "medium", col, "missing", L(`"${col}" is ${(s.missingRate * 100).toFixed(1)}% missing.`, `"${col}" 열의 ${(s.missingRate * 100).toFixed(1)}%가 비어 있습니다.`), `missing=${s.missing}/${n}`);
       completenessPenalty += 4;
     } else if (s.sentinelCount > 0) {
-      add("completeness", "low", col, "sentinel", `"${col}" has ${s.sentinelCount} placeholder tokens (N/A, NULL, -, ...) hiding as data.`, `sentinel=${s.sentinelCount}`);
+      add("completeness", "low", col, "sentinel", L(`"${col}" has ${s.sentinelCount} placeholder tokens (N/A, NULL, -, ...) hiding as data.`, `"${col}" 열에 값처럼 보이는 빈칸 표시(N/A, NULL, - 등)가 ${s.sentinelCount}개 있습니다.`), `sentinel=${s.sentinelCount}`);
       completenessPenalty += 2;
     }
   }
@@ -197,7 +199,7 @@ export function scoreDataset(rows, columns) {
     if (seen.has(key)) dupRows++; else seen.add(key);
   }
   if (dupRows > 0) {
-    add("consistency", "medium", "(rows)", "dup_rows", `${dupRows} exact duplicate rows.`, `duplicates=${dupRows}`);
+    add("consistency", "medium", "(rows)", "dup_rows", L(`${dupRows} exact duplicate rows.`, `완전히 같은 행이 ${dupRows}개 있습니다.`), `duplicates=${dupRows}`);
     consistencyPenalty += Math.min(15, 3 + (dupRows / n) * 100);
   }
   for (const col of cols) {
@@ -205,30 +207,32 @@ export function scoreDataset(rows, columns) {
     if (s.present === 0) continue;
     const numFrac = s.numericCount / s.present;
     if (numFrac > 0.1 && numFrac < 0.9) {
-      add("consistency", "medium", col, "numeric_text_mix", `"${col}" mixes numbers and text (${(numFrac * 100).toFixed(0)}% numeric).`, `numeric=${s.numericCount}/${s.present}`);
+      add("consistency", "medium", col, "numeric_text_mix", L(`"${col}" mixes numbers and text (${(numFrac * 100).toFixed(0)}% numeric).`, `"${col}" 열에 숫자와 글자가 섞여 있습니다 (숫자 ${(numFrac * 100).toFixed(0)}%).`), `numeric=${s.numericCount}/${s.present}`);
       consistencyPenalty += 6;
     }
     const shapeKeys = Object.keys(s.dateShapes);
     if (shapeKeys.length > 1) {
-      add("consistency", "high", col, "mixed_date_format", `"${col}" uses ${shapeKeys.length} different date formats (${shapeKeys.join(", ")}).`, JSON.stringify(s.dateShapes));
+      add("consistency", "high", col, "mixed_date_format", L(`"${col}" uses ${shapeKeys.length} different date formats (${shapeKeys.join(", ")}).`, `"${col}" 열의 날짜가 ${shapeKeys.length}가지 형식으로 적혀 있습니다 (${shapeKeys.join(", ")}).`), JSON.stringify(s.dateShapes));
       consistencyPenalty += 8;
     }
     if (s.placeholderDateCount > 0) {
-      add("consistency", "high", col, "placeholder_date", `"${col}" has ${s.placeholderDateCount} placeholder dates (1900-01-01 / 0000-00-00).`, `placeholder=${s.placeholderDateCount}`);
+      add("consistency", "high", col, "placeholder_date", L(`"${col}" has ${s.placeholderDateCount} placeholder dates (1900-01-01 / 0000-00-00).`, `"${col}" 열에 자리만 채운 날짜(1900-01-01 / 0000-00-00)가 ${s.placeholderDateCount}개 있습니다.`), `placeholder=${s.placeholderDateCount}`);
       consistencyPenalty += 6;
     }
     if (s.idDupes) {
       const extra = s.idDupes.dups.reduce((sum, [, c]) => sum + (c - 1), 0);
       const ex = s.idDupes.dups.slice(0, 3).map(([v, c]) => `"${v}"×${c}`).join(" · ");
       add("consistency", "high", col, "dup_id",
-        `"${col}" looks like a unique identifier (${(s.idDupes.uniqueRatio * 100).toFixed(1)}% unique) but ${s.idDupes.dups.length} value${s.idDupes.dups.length > 1 ? "s appear" : " appears"} more than once (${ex}).`,
+        L(`"${col}" looks like a unique identifier (${(s.idDupes.uniqueRatio * 100).toFixed(1)}% unique) but ${s.idDupes.dups.length} value${s.idDupes.dups.length > 1 ? "s appear" : " appears"} more than once (${ex}).`,
+          `"${col}" 열은 고유 ID로 보이지만(${(s.idDupes.uniqueRatio * 100).toFixed(1)}% 고유) ${s.idDupes.dups.length}개 값이 두 번 이상 나옵니다 (${ex}).`),
         `dup_values=${s.idDupes.dups.length} extra_rows=${extra}`);
       consistencyPenalty += 8;
     }
     if (s.variantClusters.length > 0) {
       const ex = s.variantClusters[0].forms.slice(0, 3).map((f) => `"${f.raw}"`).join(" / ");
       add("consistency", "medium", col, "value_variants",
-        `"${col}" spells the same value multiple ways (${ex}${s.variantClusters.length > 1 ? ` — and ${s.variantClusters.length - 1} more cluster${s.variantClusters.length > 2 ? "s" : ""}` : ""}).`,
+        L(`"${col}" spells the same value multiple ways (${ex}${s.variantClusters.length > 1 ? ` — and ${s.variantClusters.length - 1} more cluster${s.variantClusters.length > 2 ? "s" : ""}` : ""}).`,
+          `"${col}" 열에서 같은 값이 여러 가지로 적혀 있습니다 (${ex}${s.variantClusters.length > 1 ? ` — 이런 묶음이 ${s.variantClusters.length - 1}개 더` : ""}).`),
         s.variantClusters.map((c) => c.forms.map((f) => `${f.raw}×${f.count}`).join("/")).join(" · "));
       consistencyPenalty += 4;
     }
@@ -240,7 +244,7 @@ export function scoreDataset(rows, columns) {
   for (const col of cols) {
     const s = columnStats[col];
     if (s.piiType) {
-      add("pii", "high", col, "pii", `"${col}" looks like PII (${s.piiType}) — ${s.piiCount} values match.`, `${s.piiType}=${s.piiCount}`);
+      add("pii", "high", col, "pii", L(`"${col}" looks like PII (${s.piiType}) — ${s.piiCount} values match.`, `"${col}" 열은 개인정보(${piiName(s.piiType)})로 보입니다 — ${s.piiCount}개 값이 해당합니다.`), `${s.piiType}=${s.piiCount}`);
       piiPenalty += 15;
     }
   }
@@ -262,7 +266,7 @@ export function scoreDataset(rows, columns) {
       consistency: { score: Math.round(consistencyScore), weight: weights.consistency },
       pii: { score: Math.round(piiScore), weight: weights.pii },
     },
-    weightsNote: "Dimension weights are a judgment, not a fact — tunable. See TRUST.md.",
+    weightsNote: L("Dimension weights are a judgment, not a fact — tunable. See TRUST.md.", "영역별 가중치는 사실이 아니라 판단이며, 바꿀 수 있습니다. TRUST.md 참고."),
     issues: issues.sort((a, b) => sev(b.severity) - sev(a.severity)),
     columnStats,
   };

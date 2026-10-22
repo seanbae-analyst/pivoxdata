@@ -21,6 +21,7 @@
 //   • concentration only counts when a segment's value-share ≥ 2× its row-share
 // No LLM anywhere in this module.
 import { EMPTY, looksLikeIdColumn } from "./scorer.mjs";
+import { L } from "./lang.mjs";
 
 const val = (r, c) => { const v = r[c]; return EMPTY(v) ? "" : String(v).trim(); };
 const isNum = (t) => t !== "" && !isNaN(Number(t));
@@ -91,9 +92,11 @@ export function extractInsights(rows, columns, stats) {
   }
   if (dupIdCol) {
     add("granularity", 1 - 1 / dupFactor,
-      `Your ${fmt(n)} rows describe only ${fmt(dupUnique)} distinct "${dupIdCol}" entities — ${fmt(dupFactor)} rows per entity.`,
-      `a count assumes 1 row = 1 entity`,
-      `Every COUNT(*) and total is duplication-weighted. Dedupe to "${dupIdCol}" before any per-entity claim.`,
+      L(`Your ${fmt(n)} rows describe only ${fmt(dupUnique)} distinct "${dupIdCol}" entities — ${fmt(dupFactor)} rows per entity.`,
+        `${fmt(n)}개 행이 서로 다른 "${dupIdCol}" ${fmt(dupUnique)}개만 담고 있습니다 — 하나당 ${fmt(dupFactor)}행입니다.`),
+      L(`a count assumes 1 row = 1 entity`, `개수를 셀 때는 보통 1행 = 1개로 가정합니다`),
+      L(`Every COUNT(*) and total is duplication-weighted. Dedupe to "${dupIdCol}" before any per-entity claim.`,
+        `모든 개수와 합계가 중복만큼 부풀려집니다. "${dupIdCol}" 하나당 무엇이라고 말하기 전에 "${dupIdCol}" 기준으로 중복을 걷어 내세요.`),
       `rows=${n} unique=${dupUnique}`);
 
     // ---- 2. weighting bias: row-average vs entity-average ----
@@ -115,9 +118,11 @@ export function extractInsights(rows, columns, stats) {
       const bias = (rowAvg / entAvg - 1) * 100;
       if (Math.abs(bias) >= 5) {
         add("weighting_bias", Math.min(1, Math.abs(bias) / 50),
-          `Averaging "${m}" across rows gives ${fmt(rowAvg)}; per-"${dupIdCol}" it is ${fmt(entAvg)} — a ${bias > 0 ? "+" : ""}${pct(bias)} bias.`,
-          `the two would match if 1 row = 1 entity`,
-          `"${m}" repeats on every row of an entity, so heavy entities get over-counted. Average per "${dupIdCol}".`,
+          L(`Averaging "${m}" across rows gives ${fmt(rowAvg)}; per-"${dupIdCol}" it is ${fmt(entAvg)} — a ${bias > 0 ? "+" : ""}${pct(bias)} bias.`,
+            `"${m}" 값을 행 기준으로 평균 내면 ${fmt(rowAvg)}, "${dupIdCol}" 기준으로는 ${fmt(entAvg)}입니다 — ${bias > 0 ? "+" : ""}${pct(bias)} 치우침.`),
+          L(`the two would match if 1 row = 1 entity`, `1행 = 1개라면 두 값이 같아야 합니다`),
+          L(`"${m}" repeats on every row of an entity, so heavy entities get over-counted. Average per "${dupIdCol}".`,
+            `"${m}" 값이 같은 "${dupIdCol}"의 모든 행에 되풀이돼 행이 많은 쪽이 더 크게 셈해집니다. "${dupIdCol}" 기준으로 평균 내세요.`),
           `row_avg=${rowAvg.toFixed(2)} entity_avg=${entAvg.toFixed(2)}`);
         break; // the pattern once, not a listing
       }
@@ -143,9 +148,11 @@ export function extractInsights(rows, columns, stats) {
       if (gap >= 0.25 && (!best || gap > best.gap)) best = { c, hi: rates[0], lo: rates[rates.length - 1], gap };
     }
     if (best) add("structural_missing", cs[m].missingRate,
-      `"${m}" is ${pct(cs[m].missingRate * 100)} blank overall — but ${pct(best.hi.rate * 100)} blank when ${best.c}="${best.hi.k}" vs ${pct(best.lo.rate * 100)} when ${best.c}="${best.lo.k}".`,
-      `random missingness would be flat across segments`,
-      `The blanks follow "${best.c}" — that's structure, not noise. Segment before reporting, and don't impute blindly.`,
+      L(`"${m}" is ${pct(cs[m].missingRate * 100)} blank overall — but ${pct(best.hi.rate * 100)} blank when ${best.c}="${best.hi.k}" vs ${pct(best.lo.rate * 100)} when ${best.c}="${best.lo.k}".`,
+        `"${m}" 열은 전체의 ${pct(cs[m].missingRate * 100)}가 비어 있지만, ${best.c}="${best.hi.k}"에서는 ${pct(best.hi.rate * 100)}, ${best.c}="${best.lo.k}"에서는 ${pct(best.lo.rate * 100)}가 비어 있습니다.`),
+      L(`random missingness would be flat across segments`, `우연히 빠진 값이라면 그룹마다 비슷해야 합니다`),
+      L(`The blanks follow "${best.c}" — that's structure, not noise. Segment before reporting, and don't impute blindly.`,
+        `빈칸이 "${best.c}" 열을 따라 생깁니다 — 우연이 아니라 구조입니다. 그룹을 나눠 보고하고, 무작정 채워 넣지 마세요.`),
       `gap=${pct(best.gap * 100)}`);
   }
 
@@ -171,9 +178,11 @@ export function extractInsights(rows, columns, stats) {
       // guard: "93% of the total in the segment with 93% of the rows" is not an insight
       if (topShare >= 0.4 && topRowShare > 0 && topShare >= 2 * topRowShare) {
         add("concentration", topShare,
-          `${pct(topShare * 100)} of all "${m}" sits in ${c}="${entries[0][0]}" — from only ${pct(topRowShare * 100)} of the rows.`,
-          `its fair share by row count would be ${pct(topRowShare * 100)}`,
-          `One segment moves your whole total — report "${entries[0][0]}" separately or every aggregate is really about it.`,
+          L(`${pct(topShare * 100)} of all "${m}" sits in ${c}="${entries[0][0]}" — from only ${pct(topRowShare * 100)} of the rows.`,
+            `"${m}" 전체의 ${pct(topShare * 100)}가 ${c}="${entries[0][0]}"에 몰려 있습니다 — 행으로는 ${pct(topRowShare * 100)}뿐입니다.`),
+          L(`its fair share by row count would be ${pct(topRowShare * 100)}`, `행 수만큼이라면 ${pct(topRowShare * 100)}여야 합니다`),
+          L(`One segment moves your whole total — report "${entries[0][0]}" separately or every aggregate is really about it.`,
+            `한 그룹이 전체 합계를 움직입니다 — "${entries[0][0]}" 그룹을 따로 보고하지 않으면 모든 합계가 사실상 그 그룹 이야기입니다.`),
           `value_share=${pct(topShare * 100)} row_share=${pct(topRowShare * 100)}`);
       }
       const bigSeg = entries.map(([k, g]) => ({ k, mean: g.sum / g.n, n: g.n }))
@@ -183,9 +192,11 @@ export function extractInsights(rows, columns, stats) {
           .sort((a, b) => Math.abs(b.dev) - Math.abs(a.dev))[0];
         if (Math.abs(far.dev) >= 30) {
           add("segment_gap", Math.min(1, Math.abs(far.dev) / 100) * (far.n / n),
-            `Average "${m}" for ${c}="${far.k}" is ${fmt(far.mean)} — ${far.dev > 0 ? "+" : ""}${pct(far.dev)} vs the overall ${fmt(overall)} (${far.n} rows).`,
-            `overall average ${fmt(overall)}`,
-            `The overall average hides this segment. Any decision based on the mean treats "${far.k}" wrongly.`,
+            L(`Average "${m}" for ${c}="${far.k}" is ${fmt(far.mean)} — ${far.dev > 0 ? "+" : ""}${pct(far.dev)} vs the overall ${fmt(overall)} (${far.n} rows).`,
+              `${c}="${far.k}"의 "${m}" 평균은 ${fmt(far.mean)}입니다 — 전체 평균 ${fmt(overall)}보다 ${far.dev > 0 ? "+" : ""}${pct(far.dev)} (${far.n}행).`),
+            L(`overall average ${fmt(overall)}`, `전체 평균 ${fmt(overall)}`),
+            L(`The overall average hides this segment. Any decision based on the mean treats "${far.k}" wrongly.`,
+              `전체 평균이 이 그룹을 가립니다. 평균으로 내리는 결정은 "${far.k}" 그룹을 잘못 다룹니다.`),
             `dev=${pct(far.dev)} n=${far.n}`);
         }
       }
@@ -202,9 +213,11 @@ export function extractInsights(rows, columns, stats) {
       const k = xs.filter((x) => x >= 3 * med).length;
       const share = xs.slice(-k).reduce((s, x) => s + x, 0) / xs.reduce((s, x) => s + x, 0);
       add("outliers", share,
-        `The largest "${m}" is ${fmt(max)} — ${fmt(max / med)}× the median ${fmt(med)}; ${k} value${k > 1 ? "s" : ""} ≥3× median carry ${pct(share * 100)} of the column's total.`,
-        `median ${fmt(med)}`,
-        `Sums and averages of "${m}" are driven by a handful of rows — check they're real before trusting any total.`,
+        L(`The largest "${m}" is ${fmt(max)} — ${fmt(max / med)}× the median ${fmt(med)}; ${k} value${k > 1 ? "s" : ""} ≥3× median carry ${pct(share * 100)} of the column's total.`,
+          `가장 큰 "${m}" 값은 ${fmt(max)}로 중앙값 ${fmt(med)}의 ${fmt(max / med)}배입니다. 중앙값의 3배 이상인 값 ${k}개가 열 합계의 ${pct(share * 100)}를 차지합니다.`),
+        L(`median ${fmt(med)}`, `중앙값 ${fmt(med)}`),
+        L(`Sums and averages of "${m}" are driven by a handful of rows — check they're real before trusting any total.`,
+          `"${m}" 열의 합계와 평균이 몇 개 행에 좌우됩니다 — 합계를 믿기 전에 그 값이 진짜인지 확인하세요.`),
         `max=${fmt(max)} median=${fmt(med)}`);
     }
   }

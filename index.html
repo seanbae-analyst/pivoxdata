@@ -4,12 +4,18 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DataReady — is your data AI-ready?</title>
-<meta name="description" content="Drop a CSV, get a 0–100 AI-readiness score with prioritized, plain-language fixes. Runs entirely in your browser." />
+<meta name="description" content="Check data before you use it. Drop a CSV for a 0–100 AI-readiness score with plain-language fixes, or open a data map to see which public datasets answer a question and whether you may use them." />
 <meta name="theme-color" content="#050505" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23b8956a'/%3E%3Cpath d='M9 16.5l4.5 4.5L23 11' fill='none' stroke='%23120e09' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
+<script>
+// display language before first paint: ?lang= → saved choice → browser language (ko → 한국어)
+(function(){var l=null;try{l=new URLSearchParams(location.search).get("lang")||localStorage.getItem("dataready.lang");}catch(e){}
+if(l!=="ko"&&l!=="en")l=/^ko\b/i.test(navigator.language||"")?"ko":"en";document.documentElement.lang=l;
+if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?";})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
@@ -25,6 +31,16 @@
   h1{font-size:clamp(36px,6.4vw,58px);line-height:1.06;font-weight:700;letter-spacing:-.035em;margin:20px 0 16px}
   h1 .g{color:var(--bronze)}
   .sub{color:var(--mut);margin:0;font-size:17px;line-height:1.6;max-width:56ch}
+  .ways{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:24px;max-width:760px}
+  @media(max-width:640px){.ways{grid-template-columns:1fr}}
+  /* phone: the two analysis memos are also in the footer, so the top bar keeps only maps + GitHub */
+  @media(max-width:560px){.nav a[href="/analysis"],.nav a[href="/analysis-kr"]{display:none}}
+  .way{display:flex;flex-direction:column;gap:4px;border:1px solid var(--line);border-radius:var(--radius-card);padding:14px 16px;
+    background:var(--surface);color:var(--ink);transition:border-color .15s,background .15s}
+  .way:hover{border-color:var(--bronze-line);background:var(--surface-2);text-decoration:none}
+  .way .w-t{font-size:14.5px;font-weight:600}
+  .way .w-d{font-size:13.5px;color:var(--mut);line-height:1.55}
+  .way .w-go{font-size:13.5px;color:var(--bronze-hi);font-weight:600;margin-top:2px}
 
   .drop{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;cursor:pointer;
     border:1.5px dashed var(--line-2);border-radius:18px;padding:44px 24px;background:var(--surface);
@@ -222,6 +238,28 @@
   .dlbar{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
   .dlbar .opt{border:0;padding:0 0 14px}
   .dlbar .btns{display:flex;flex-wrap:wrap;gap:8px}
+  /* two languages in the markup: <span lang="en"> / <span lang="ko">, the page's lang picks one */
+  html[lang=ko] body [lang=en], html:not([lang=ko]) body [lang=ko]{display:none!important}
+  .langbtn{border:1px solid var(--line-2)!important;color:var(--ink)!important;margin-left:4px}
+  html[lang=ko] body{word-break:keep-all;overflow-wrap:break-word}
+  /* scoring criteria */
+  .crit{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:18px 18px 16px;display:grid;gap:14px}
+  .crit-lead{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.65;max-width:78ch}
+  .verdicts{display:flex;flex-wrap:wrap;gap:8px}
+  .vd{display:inline-flex;align-items:baseline;gap:8px;font-size:13.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line)}
+  .vd b{font-variant-numeric:tabular-nums}
+  .vd.good{background:var(--good-soft);color:var(--good)} .vd.warn{background:var(--warn-soft);color:var(--warn)} .vd.bad{background:var(--bad-soft);color:var(--bad)}
+  .crit-scroll{overflow-x:auto}
+  .crit-t{border-collapse:collapse;width:100%;font-size:14px;min-width:520px}
+  .crit-t th,.crit-t td{text-align:left;vertical-align:top;padding:9px 10px;border-top:1px solid var(--line);line-height:1.55}
+  .crit-t thead th{border-top:0;color:var(--dim);font-weight:500;font-size:13px}
+  .crit-t thead th:last-child{text-align:right}
+  .crit-t tbody th{font-weight:600;white-space:nowrap;width:1%}
+  .crit-t tbody th small{display:block;color:var(--mut);font-weight:500}
+  .crit-t td:last-child{white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink);width:1%}
+  .crit-t td:first-of-type{color:var(--ink-2)}
+  .crit-notes{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--mut);font-size:13.5px;line-height:1.6;max-width:84ch}
+  .crit-notes b{color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -232,20 +270,25 @@
       DataReady
     </button>
     <nav class="nav">
-      <button type="button" class="hidden" id="backlink">← Score another file</button>
-      <a href="/maps" class="home-only">데이터 지도</a>
-      <a href="/analysis" class="home-only">NYC analysis</a>
-      <a href="/analysis-kr" class="home-only">서울 분석</a>
+      <button type="button" class="hidden" id="backlink"><span lang="en">← Score another file</span><span lang="ko">← 다른 파일 채점</span></button>
+      <a href="/maps" class="home-only"><span lang="en">Data maps</span><span lang="ko">데이터 지도</span></a>
+      <a href="/analysis" class="home-only"><span lang="en">NYC analysis</span><span lang="ko">NYC 분석</span></a>
+      <a href="/analysis-kr" class="home-only"><span lang="en">Seoul analysis</span><span lang="ko">서울 분석</span></a>
       <a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a>
+      <button type="button" class="langbtn" id="langbtn"><span lang="en" aria-label="한국어로 보기">한국어</span><span lang="ko" aria-label="View in English">English</span></button>
     </nav>
   </header>
 
   <!-- ============ VIEW 1 : upload ============ -->
   <section id="view-home" class="home">
     <div class="hero">
-      <span class="pill"><i></i>Runs in your browser · nothing is uploaded</span>
-      <h1>Is your data <span class="g">AI-ready?</span></h1>
-      <p class="sub">Drop a CSV or Excel file. Get a 0–100 readiness score, every problem in plain language, and a cleaned file you can download — before you paste it into an AI.</p>
+      <span class="pill"><i></i><span lang="en">Runs in your browser · nothing is uploaded</span><span lang="ko">브라우저 안에서만 · 파일은 올라가지 않습니다</span></span>
+      <h1><span lang="en">Is your data <span class="g">AI-ready?</span></span><span lang="ko">이 데이터, <span class="g">AI에 넣어도 될까?</span></span></h1>
+      <p class="sub"><span lang="en">Drop a CSV or Excel file. Get a 0–100 readiness score, every problem in plain language, and a cleaned file you can download — before you paste it into an AI.</span><span lang="ko">CSV나 엑셀 파일을 올리면 0–100점 준비도 점수, 문제마다 쉬운 설명, 정리된 파일까지 받습니다. AI에 붙여 넣기 전에 확인하세요.</span></p>
+      <div class="ways" aria-label="Two ways to check data before you use it">
+        <a class="way" href="#drop"><span class="w-t"><span lang="en">You have a file</span><span lang="ko">파일이 있다면</span></span><span class="w-d"><span lang="en">Score its quality right here: gaps, mixed formats, duplicates and personal data.</span><span lang="ko">여기서 바로 품질을 채점합니다: 빈칸, 섞인 형식, 중복, 개인정보.</span></span><span class="w-go"><span lang="en">Drop it below ↓</span><span lang="ko">아래에 올리기 ↓</span></span></a>
+        <a class="way" href="/maps"><span class="w-t"><span lang="en">You're looking for public data · in Korean</span><span lang="ko">공개 데이터를 찾는다면 · 데이터 지도</span></span><span class="w-d"><span lang="en">For one question: which Korean public datasets answer it, how they join, which periods overlap, and whether you may use them.</span><span lang="ko">질문 하나에 답할 공개 데이터가 무엇인지, 서로 어떻게 이어지는지, 기간이 겹치는지, 써도 되는지를 정리했습니다.</span></span><span class="w-go"><span lang="en">Open the maps →</span><span lang="ko">지도 보기 →</span></span></a>
+      </div>
     </div>
 
     <label class="drop" id="drop">
@@ -253,50 +296,84 @@
       <div class="ic">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 15v3a2 2 0 002 2h12a2 2 0 002-2v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
       </div>
-      <div class="big">Drop a file here</div>
-      <div class="fmt">CSV, XLSX or XLS — first sheet is scored</div>
-      <span class="btn ghost fake">Choose a file</span>
+      <div class="big"><span lang="en">Drop a file here</span><span lang="ko">여기에 파일을 놓으세요</span></div>
+      <div class="fmt"><span lang="en">CSV, XLSX or XLS — first sheet is scored</span><span lang="ko">CSV, XLSX, XLS — 엑셀은 첫 시트를 채점합니다</span></div>
+      <span class="btn ghost fake"><span lang="en">Choose a file</span><span lang="ko">파일 고르기</span></span>
     </label>
 
-    <div class="sec-h"><h2>No file handy? Try a sample</h2></div>
+    <div class="sec-h"><h2><span lang="en">No file handy? Try a sample</span><span lang="ko">파일이 없다면 샘플로 해 보기</span></h2></div>
     <div class="samples">
-      <button type="button" class="chip" data-src="nyc_restaurant_sample.csv"><span class="s-t">NYC restaurants</span><span class="s-m">5,000 rows · government data</span></button>
-      <button type="button" class="chip" data-src="samples/sales_pipeline.csv"><span class="s-t">Sales pipeline</span><span class="s-m">44 rows · CRM export</span></button>
-      <button type="button" class="chip" data-src="samples/employees.csv"><span class="s-t">Employees</span><span class="s-m">46 rows · HR roster</span></button>
-      <button type="button" class="chip" data-src="samples/customers.csv"><span class="s-t">Customers</span><span class="s-m">16 rows · contact list</span></button>
-      <button type="button" class="chip" data-src="samples/seoul_sanga.csv"><span class="s-t">서울 상가</span><span class="s-m">2,150 rows · Korean public data</span></button>
+      <button type="button" class="chip" data-src="nyc_restaurant_sample.csv"><span class="s-t"><span lang="en">NYC restaurants</span><span lang="ko">뉴욕 식당 위생검사</span></span><span class="s-m"><span lang="en">5,000 rows · government data</span><span lang="ko">5,000행 · 공공데이터</span></span></button>
+      <button type="button" class="chip" data-src="samples/sales_pipeline.csv"><span class="s-t"><span lang="en">Sales pipeline</span><span lang="ko">영업 파이프라인</span></span><span class="s-m"><span lang="en">44 rows · CRM export</span><span lang="ko">44행 · CRM 내보내기</span></span></button>
+      <button type="button" class="chip" data-src="samples/employees.csv"><span class="s-t"><span lang="en">Employees</span><span lang="ko">직원 명부</span></span><span class="s-m"><span lang="en">46 rows · HR roster</span><span lang="ko">46행 · 인사 명부</span></span></button>
+      <button type="button" class="chip" data-src="samples/customers.csv"><span class="s-t"><span lang="en">Customers</span><span lang="ko">고객 목록</span></span><span class="s-m"><span lang="en">16 rows · contact list</span><span lang="ko">16행 · 연락처</span></span></button>
+      <button type="button" class="chip" data-src="samples/seoul_sanga.csv"><span class="s-t">서울 상가</span><span class="s-m"><span lang="en">2,150 rows · Korean public data</span><span lang="ko">2,150행 · 한국 공공데이터</span></span></button>
     </div>
 
-    <div class="sec-h"><h2>How it works</h2></div>
+    <div class="sec-h"><h2><span lang="en">How it works</span><span lang="ko">이렇게 진행됩니다</span></h2></div>
     <div class="steps">
-      <div class="step"><div class="n">1</div><div class="t">Score</div><div class="d">Missing values, mixed formats, duplicates and personal data — each flagged with the raw evidence.</div></div>
-      <div class="step"><div class="n">2</div><div class="t">Clean</div><div class="d">You pick the rules. Only mechanical fixes are applied; anything that needs judgment is left alone.</div></div>
-      <div class="step"><div class="n">3</div><div class="t">Analyze</div><div class="d">See which answers changed after cleanup, and the patterns the cleaned data actually shows.</div></div>
+      <div class="step"><div class="n">1</div><div class="t"><span lang="en">Score</span><span lang="ko">채점</span></div><div class="d"><span lang="en">Missing values, mixed formats, duplicates and personal data — each flagged with the raw evidence.</span><span lang="ko">빈 값, 섞인 형식, 중복, 개인정보를 찾고 하나하나 근거 숫자와 함께 보여 줍니다.</span></div></div>
+      <div class="step"><div class="n">2</div><div class="t"><span lang="en">Clean</span><span lang="ko">정리</span></div><div class="d"><span lang="en">You pick the rules. Only mechanical fixes are applied; anything that needs judgment is left alone.</span><span lang="ko">규칙은 직접 고릅니다. 기계적으로 고칠 수 있는 것만 고치고, 판단이 필요한 것은 건드리지 않습니다.</span></div></div>
+      <div class="step"><div class="n">3</div><div class="t"><span lang="en">Analyze</span><span lang="ko">분석</span></div><div class="d"><span lang="en">See which answers changed after cleanup, and the patterns the cleaned data actually shows.</span><span lang="ko">정리 전후로 바뀐 답과, 정리된 데이터에서 실제로 보이는 패턴을 보여 줍니다.</span></div></div>
     </div>
 
-    <div class="sec-h"><h2>Why bother?</h2><a class="aside" href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">Full experiment →</a></div>
-    <div class="sowhat">
-      <div class="sw-h">We asked an AI the same questions about the <b>sales-pipeline sample</b> — once on the raw file, once after cleaning.</div>
-      <table class="cmp">
-        <thead><tr><th>Question</th><th>AI on the dirty file</th><th>AI on the cleaned file</th></tr></thead>
+    <div class="sec-h" id="criteria"><h2><span lang="en">How the score is measured</span><span lang="ko">AI-ready 점수는 이렇게 잽니다</span></h2><a class="aside" href="https://github.com/seanbae-analyst/pivoxdata/blob/main/scorer.mjs" target="_blank" rel="noopener"><span lang="en">The code: scorer.mjs →</span><span lang="ko">코드: scorer.mjs →</span></a></div>
+    <div class="crit">
+      <p class="crit-lead"><span lang="en">The score is a weighted sum of three areas: <b>completeness 40%</b>, <b>consistency 35%</b> and <b>personal data 25%</b>. Each area starts at 100 and loses the points below for every problem found (never below 0).</span><span lang="ko">점수는 세 영역의 가중합입니다: <b>완전성 40%</b> · <b>일관성 35%</b> · <b>개인정보 25%</b>. 영역마다 100점에서 시작해, 아래 문제가 하나 나올 때마다 표의 점수만큼 깎습니다(0점 아래로는 안 내려갑니다).</span></p>
+      <div class="verdicts">
+        <span class="vd good"><b>80–100</b><span lang="en">AI-ready</span><span lang="ko">AI에 넣어도 됨</span></span>
+        <span class="vd warn"><b>55–79</b><span lang="en">Needs cleanup</span><span lang="ko">정리 필요</span></span>
+        <span class="vd bad"><b>0–54</b><span lang="en">Not ready</span><span lang="ko">아직 안 됨</span></span>
+      </div>
+      <div class="crit-scroll"><table class="crit-t">
+        <thead><tr><th><span lang="en">Area</span><span lang="ko">영역</span></th><th><span lang="en">Counted as a problem</span><span lang="ko">문제로 세는 것</span></th><th><span lang="en">Points off</span><span lang="ko">감점</span></th></tr></thead>
         <tbody>
-          <tr><td class="q">Total pipeline value</td>
-            <td class="bad"><span class="v">$1,818,500</span><small>a duplicate row's $18,500 counted twice</small></td>
+          <tr><th rowspan="4"><span lang="en">Completeness</span><span lang="ko">완전성</span><small>40%</small></th>
+            <td><span lang="en">A column that is entirely empty</span><span lang="ko">전부 비어 있는 열</span></td><td>−12</td></tr>
+          <tr><td><span lang="en">A column 50% or more empty</span><span lang="ko">50% 이상 비어 있는 열</span></td><td>−8</td></tr>
+          <tr><td><span lang="en">A column 20% or more empty</span><span lang="ko">20% 이상 비어 있는 열</span></td><td>−4</td></tr>
+          <tr><td><span lang="en">Blanks dressed as data: N/A, NULL, none, unknown, TBD, “-” (only checked when the column is under 20% empty)</span><span lang="ko">값처럼 적힌 빈칸: N/A, NULL, none, unknown, TBD, “-” (빈칸이 20% 미만인 열만 봅니다)</span></td><td>−2</td></tr>
+          <tr><th rowspan="6"><span lang="en">Consistency</span><span lang="ko">일관성</span><small>35%</small></th>
+            <td><span lang="en">Exact duplicate rows</span><span lang="ko">완전히 같은 행</span></td><td><span lang="en">−3, plus the duplicate share in %, up to −15</span><span lang="ko">−3에 중복 비율(%)만큼 더, 최대 −15</span></td></tr>
+          <tr><td><span lang="en">Numbers and text mixed in one column (10–90% numeric)</span><span lang="ko">한 열에 숫자와 글자가 섞임 (숫자가 10–90%)</span></td><td>−6</td></tr>
+          <tr><td><span lang="en">Dates written more than one way (2021-03-05 · 03/05/2021 · March 5, 2021)</span><span lang="ko">날짜가 두 가지 이상 형식으로 적힘 (2021-03-05 · 03/05/2021 · March 5, 2021)</span></td><td>−8</td></tr>
+          <tr><td><span lang="en">Placeholder dates: 1900-01-01, 0000-00-00</span><span lang="ko">자리만 채운 날짜: 1900-01-01, 0000-00-00</span></td><td>−6</td></tr>
+          <tr><td><span lang="en">An ID column with repeats — its name ends in id / uid / uuid / guid and at least 90% of values are unique</span><span lang="ko">값이 겹치는 ID 열 — 이름이 id / uid / uuid / guid로 끝나고 값의 90% 이상이 서로 다른 열</span></td><td>−8</td></tr>
+          <tr><td><span lang="en">The same value spelled several ways (USA / usa / U.S.A.)</span><span lang="ko">같은 값을 여러 가지로 적음 (USA / usa / U.S.A.)</span></td><td>−4</td></tr>
+          <tr><th><span lang="en">Personal data</span><span lang="ko">개인정보</span><small>25%</small></th>
+            <td><span lang="en">A column where at least 30% of filled values (and at least 3) look like an email address, a phone number or a US Social Security number. A phone number is 10–15 digits with separators, or exactly 10–11 bare digits; decimals, dates and columns named “…code” / “…코드” never count.</span><span lang="ko">채워진 값의 30% 이상(최소 3개)이 이메일, 전화번호, 미국 사회보장번호처럼 보이는 열. 전화번호는 구분자가 있으면 10–15자리, 숫자만이면 정확히 10–11자리입니다. 소수점이 있는 값, 날짜, 이름이 “…code”·“…코드”로 끝나는 열은 세지 않습니다.</span></td><td><span lang="en">−15 per column</span><span lang="ko">열마다 −15</span></td></tr>
+        </tbody>
+      </table></div>
+      <ul class="crit-notes">
+        <li><span lang="en"><b>Facts vs judgment.</b> Every problem comes with its raw evidence (for example <code>missing=26/44</code>), so you can check it yourself. The weights and point values are a judgment, written down here and in <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/TRUST.md" target="_blank" rel="noopener">TRUST.md</a>, and they can be changed.</span><span lang="ko"><b>사실과 판단을 나눕니다.</b> 문제마다 근거 숫자(예: <code>missing=26/44</code>)가 붙어 있어 직접 확인할 수 있습니다. 가중치와 감점은 판단이며, 여기와 <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/TRUST.md" target="_blank" rel="noopener">TRUST.md</a>에 적어 두었고 바꿀 수 있습니다.</span></li>
+        <li><span lang="en"><b>Not measured.</b> Whether the values are true; whether the data represents what you want to study; whether you may use it (see the data maps). Outliers and skew are not scored either — they appear as patterns after cleanup.</span><span lang="ko"><b>재지 않는 것.</b> 값이 사실인지, 알고 싶은 대상을 제대로 대표하는지, 써도 되는 데이터인지(데이터 지도 참고)는 재지 않습니다. 튀는 값·쏠림은 점수에 넣지 않고 정리 뒤 패턴으로 보여 줍니다.</span></li>
+        <li><span lang="en"><b>Known gap.</b> Korean resident registration numbers (주민등록번호) and other non-US ID numbers are not detected yet — only email, phone and US SSN.</span><span lang="ko"><b>아직 못 잡는 것.</b> 주민등록번호 같은 한국 고유식별번호는 아직 찾지 못합니다. 지금은 이메일, 전화번호, 미국 사회보장번호만 봅니다.</span></li>
+      </ul>
+    </div>
+
+    <div class="sec-h"><h2><span lang="en">Why bother?</span><span lang="ko">왜 해야 하나?</span></h2><a class="aside" href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener"><span lang="en">Full experiment →</span><span lang="ko">실험 전체 보기 →</span></a></div>
+    <div class="sowhat">
+      <div class="sw-h"><span lang="en">We asked an AI the same questions about the <b>sales-pipeline sample</b> — once on the raw file, once after cleaning.</span><span lang="ko"><b>영업 파이프라인 샘플</b>에 대해 AI에게 같은 질문을 두 번 했습니다 — 원본 파일로 한 번, 정리한 파일로 한 번.</span></div>
+      <table class="cmp">
+        <thead><tr><th><span lang="en">Question</span><span lang="ko">질문</span></th><th><span lang="en">AI on the dirty file</span><span lang="ko">원본 파일의 AI 답</span></th><th><span lang="en">AI on the cleaned file</span><span lang="ko">정리한 파일의 AI 답</span></th></tr></thead>
+        <tbody>
+          <tr><td class="q"><span lang="en">Total pipeline value</span><span lang="ko">파이프라인 총액</span></td>
+            <td class="bad"><span class="v">$1,818,500</span><small><span lang="en">a duplicate row's $18,500 counted twice</span><span lang="ko">중복 행의 $18,500가 두 번 더해짐</span></small></td>
             <td class="good"><span class="v">$1,800,000</span></td></tr>
-          <tr><td class="q">Earliest close date</td>
-            <td class="bad"><span class="v">1900-01-01</span><small>the placeholder, reported as the answer</small></td>
+          <tr><td class="q"><span lang="en">Earliest close date</span><span lang="ko">가장 이른 마감일</span></td>
+            <td class="bad"><span class="v">1900-01-01</span><small><span lang="en">the placeholder, reported as the answer</span><span lang="ko">자리만 채운 날짜를 답으로 냄</span></small></td>
             <td class="good"><span class="v">2025-01-01</span></td></tr>
-          <tr><td class="q">Real emails handed to the AI</td>
-            <td class="bad"><span class="v">44</span><small>exposed before any model can “handle” them</small></td>
-            <td class="good"><span class="v">0</span><small>masked</small></td></tr>
+          <tr><td class="q"><span lang="en">Real emails handed to the AI</span><span lang="ko">AI에 그대로 넘어간 실제 이메일</span></td>
+            <td class="bad"><span class="v">44</span><small><span lang="en">exposed before any model can “handle” them</span><span lang="ko">모델이 “알아서 처리”하기 전에 이미 넘어감</span></small></td>
+            <td class="good"><span class="v">0</span><small><span lang="en">masked</span><span lang="ko">가림</span></small></td></tr>
         </tbody>
       </table>
-      <div class="sw-note">Cheap-tier model, identical prompts, single-shot runs — transcripts committed unedited. A frontier model self-cleaned the 44-row file, but flipped its “earliest date” answer between two identical runs, and the emails were already sent. Judgments made once, explicitly, beat judgments improvised per-prompt.</div>
+      <div class="sw-note"><span lang="en">Cheap-tier model, identical prompts, single-shot runs — transcripts committed unedited. A frontier model self-cleaned the 44-row file, but flipped its “earliest date” answer between two identical runs, and the emails were already sent. Judgments made once, explicitly, beat judgments improvised per-prompt.</span><span lang="ko">저가형 모델, 같은 프롬프트, 한 번씩 실행했고 대화 기록은 고치지 않고 그대로 올렸습니다. 최상위 모델은 44행 파일을 스스로 정리했지만, 같은 실행 두 번에서 “가장 이른 날짜” 답이 바뀌었고 이메일은 이미 보낸 뒤였습니다. 한 번, 명시적으로 내린 판단이 프롬프트마다 즉흥으로 내린 판단보다 낫습니다.</span></div>
     </div>
 
     <footer class="site">
-      <span>Deterministic scorer — every number is a verifiable fact, checked by 3 independent engines.</span>
-      <span class="links"><a href="/maps">데이터 지도</a><a href="/analysis">NYC 295k analysis</a><a href="/analysis-kr">서울 537k 분석</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+      <span><span lang="en">Deterministic scorer — every number is a verifiable fact, checked by 3 independent engines.</span><span lang="ko">결정적 채점기 — 모든 숫자는 확인 가능한 사실이고, 독립된 엔진 3개로 검증합니다.</span></span>
+      <span class="links"><a href="/maps"><span lang="en">Data maps</span><span lang="ko">데이터 지도</span></a><a href="/analysis"><span lang="en">NYC 295k analysis</span><span lang="ko">NYC 29.5만 행 분석</span></a><a href="/analysis-kr"><span lang="en">Seoul 537k analysis</span><span lang="ko">서울 53.7만 행 분석</span></a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
     </footer>
   </section>
 
@@ -309,75 +386,79 @@
         <div class="meta-sub" id="meta-sub">—</div>
         <div class="scorebox">
           <div class="gauge" id="gauge"><div class="inner"><div class="n" id="score">–</div></div></div>
-          <div><div class="verdict" id="verdict">—</div><div class="verdict-sub">AI-readiness, out of 100</div></div>
+          <div><div class="verdict" id="verdict">—</div><div class="verdict-sub"><span lang="en">AI-readiness, out of 100</span><span lang="ko">AI 준비도 (100점 만점)</span> · <a href="#criteria" class="crit-link" data-home="criteria"><span lang="en">how it's scored</span><span lang="ko">채점 기준</span></a></div></div>
         </div>
         <div class="dims" id="dims"></div>
-        <button type="button" class="btn block" id="analyze-now">Clean &amp; analyze</button>
-        <div class="dlnote">Applies the recommended cleanup, then shows what the numbers say. Insights on dirty data lie, so that step is never skipped.</div>
+        <button type="button" class="btn block" id="analyze-now"><span lang="en">Clean &amp; analyze</span><span lang="ko">정리하고 분석하기</span></button>
+        <div class="dlnote"><span lang="en">Applies the recommended cleanup, then shows what the numbers say. Insights on dirty data lie, so that step is never skipped.</span><span lang="ko">권장 정리를 적용한 뒤 숫자가 말하는 것을 보여 줍니다. 정리 안 된 데이터의 분석은 틀리기 때문에 이 단계는 건너뛰지 않습니다.</span></div>
       </div>
       <div class="note" id="note"></div>
     </aside>
 
     <div class="main">
       <div class="card">
-        <div class="card-h"><h2>Preview</h2><span class="count" id="pv-note"></span></div>
+        <div class="card-h"><h2><span lang="en">Preview</span><span lang="ko">미리보기</span></h2><span class="count" id="pv-note"></span></div>
         <div class="colchips" id="colchips"></div>
         <div class="preview-wrap"><table class="preview"><thead id="pv-head"></thead><tbody id="pv-body"></tbody></table></div>
       </div>
 
       <div class="card">
-        <div class="card-h"><h2><span class="num">1</span>Issues found</h2><span class="count" id="issue-count"></span></div>
+        <div class="card-h"><h2><span class="num">1</span><span lang="en">Issues found</span><span lang="ko">찾은 문제</span></h2><span class="count" id="issue-count"></span></div>
         <div class="sumline" id="sumline"></div>
         <ul class="issues" id="issues"></ul>
       </div>
 
       <div class="card" id="fixcard">
-        <div class="card-h"><h2><span class="num">2</span>Clean it — your rules</h2></div>
-        <p class="lead">Teams want different conventions, so you choose the policy and the tool only executes it. Nothing is guessed.</p>
+        <div class="card-h"><h2><span class="num">2</span><span lang="en">Clean it — your rules</span><span lang="ko">정리 — 규칙은 직접</span></h2></div>
+        <p class="lead"><span lang="en">Teams want different conventions, so you choose the policy and the tool only executes it. Nothing is guessed.</span><span lang="ko">팀마다 원하는 규칙이 달라서, 방침은 직접 고르고 도구는 그대로 실행만 합니다. 추측해서 바꾸는 것은 없습니다.</span></p>
         <div id="fixopts"></div>
         <div class="always" id="alwayskept"></div>
         <div class="applybar">
-          <button type="button" class="btn" id="applyfix">Apply my fixes &amp; analyze</button>
-          <div class="dlnote">Re-scores the file, compares the analytical answers before and after, and lists the patterns in your data.</div>
+          <button type="button" class="btn" id="applyfix"><span lang="en">Apply my fixes &amp; analyze</span><span lang="ko">고른 대로 정리하고 분석하기</span></button>
+          <div class="dlnote"><span lang="en">Re-scores the file, compares the analytical answers before and after, and lists the patterns in your data.</span><span lang="ko">파일을 다시 채점하고, 정리 전후의 분석 답을 비교하고, 데이터의 패턴을 보여 줍니다.</span></div>
         </div>
       </div>
 
       <div class="card hidden" id="fixed">
-        <div class="card-h"><h2><span class="num">3</span>After cleanup</h2><span class="delta" id="delta"></span></div>
+        <div class="card-h"><h2><span class="num">3</span><span lang="en">After cleanup</span><span lang="ko">정리한 뒤</span></h2><span class="delta" id="delta"></span></div>
         <div class="twocol">
-          <div><div class="subh">Applied</div><ul class="fixlist" id="fixlist"></ul></div>
-          <div id="skipcap"><div class="subh">Left alone</div><ul class="skiplist" id="skiplist"></ul></div>
+          <div><div class="subh"><span lang="en">Applied</span><span lang="ko">적용한 것</span></div><ul class="fixlist" id="fixlist"></ul></div>
+          <div id="skipcap"><div class="subh"><span lang="en">Left alone</span><span lang="ko">건드리지 않은 것</span></div><ul class="skiplist" id="skiplist"></ul></div>
         </div>
         <div class="block" id="ba-wrap">
-          <div class="ba-h">So what? The same analysis, both versions of your file</div>
+          <div class="ba-h"><span lang="en">So what? The same analysis, both versions of your file</span><span lang="ko">그래서? 같은 분석을 정리 전후 파일에 모두 돌렸습니다</span></div>
           <div class="ba-scroll"><table class="ba-t">
-            <thead><tr><th></th><th>Before cleanup</th><th>After</th></tr></thead>
+            <thead><tr><th></th><th><span lang="en">Before cleanup</span><span lang="ko">정리 전</span></th><th><span lang="en">After</span><span lang="ko">정리 후</span></th></tr></thead>
             <tbody id="ba-body"></tbody>
           </table></div>
-          <div class="ba-note">Every number above is computed by plain deterministic code on your data, both sides —
+          <div class="ba-note"><span lang="en">Every number above is computed by plain deterministic code on your data, both sides —
           these are the answers an AI (or any analyst) would compute. Highlighted rows changed.
-          <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">We ran this against a real LLM →</a></div>
+          <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">We ran this against a real LLM →</a></span><span lang="ko">위 숫자는 모두 정리 전후 데이터에 같은 코드를 돌려 계산한 값입니다 — AI든 분석가든 계산하게 될 답입니다. 강조된 줄이 바뀐 답입니다.
+          <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/experiment/SO_WHAT.md" target="_blank" rel="noopener">실제 LLM으로 해 본 결과 →</a></span></div>
         </div>
         <div class="block" id="ins-wrap">
-          <div class="ins-h" id="ins-h">What your data says</div>
+          <div class="ins-h" id="ins-h"><span lang="en">What your data says</span><span lang="ko">데이터가 말하는 것</span></div>
           <div id="ins-body"></div>
-          <div class="ba-note">Deterministic pattern detection on the cleaned data — each insight is a recomputable fact,
+          <div class="ba-note"><span lang="en">Deterministic pattern detection on the cleaned data — each insight is a recomputable fact,
           its baseline, and what to do about it. Below-threshold observations stay silent on purpose.
-          The shapes were discovered by <a href="/analysis" target="_blank" rel="noopener">a real 295k-row analysis →</a></div>
+          The shapes were discovered by <a href="/analysis" target="_blank" rel="noopener">a real 295k-row analysis →</a></span><span lang="ko">정리된 데이터에서 규칙으로 찾은 패턴입니다 — 다시 계산할 수 있는 사실, 비교 기준, 할 일을 함께 보여 줍니다. 문턱을 넘지 못한 관찰은 일부러 보여 주지 않습니다.
+          이 패턴들은 <a href="/analysis" target="_blank" rel="noopener">실제 29.5만 행 분석</a>에서 찾았습니다.</span></div>
         </div>
         <div class="dlbar">
           <div class="opt">
             <input type="checkbox" id="opt-bom" checked>
-            <label for="opt-bom">Excel-friendly CSV (UTF-8 BOM)<span class="why">prevents broken Korean / Unicode when opened in Excel</span></label>
+            <label for="opt-bom"><span lang="en">Excel-friendly CSV (UTF-8 BOM)</span><span lang="ko">엑셀용 CSV (UTF-8 BOM)</span><span class="why"><span lang="en">prevents broken Korean / Unicode when opened in Excel</span><span lang="ko">엑셀에서 열 때 한글이 깨지지 않게 합니다</span></span></label>
           </div>
           <div class="btns">
-            <button type="button" class="btn" id="dl">Download cleaned CSV</button>
-            <button type="button" class="btn ghost" id="dlx">Download .xlsx</button>
-            <button type="button" class="btn ghost" id="rescore">Re-score the cleaned data</button>
+            <button type="button" class="btn" id="dl"><span lang="en">Download cleaned CSV</span><span lang="ko">정리된 CSV 받기</span></button>
+            <button type="button" class="btn ghost" id="dlx"><span lang="en">Download .xlsx</span><span lang="ko">.xlsx 받기</span></button>
+            <button type="button" class="btn ghost" id="rescore"><span lang="en">Re-score the cleaned data</span><span lang="ko">정리된 데이터 다시 채점</span></button>
           </div>
-          <div class="dlnote">macOS opens downloads in <b>Numbers</b> by default — that's an OS setting, not the file.
+          <div class="dlnote"><span lang="en">macOS opens downloads in <b>Numbers</b> by default — that's an OS setting, not the file.
           Right-click the file → <b>Open With → Excel</b> (or import into Google Sheets), or use the .xlsx button.
-          The UTF-8 BOM option keeps Korean text intact either way.</div>
+          The UTF-8 BOM option keeps Korean text intact either way.</span><span lang="ko">macOS는 받은 파일을 기본으로 <b>Numbers</b>에서 엽니다 — 파일 문제가 아니라 OS 설정입니다.
+          파일을 오른쪽 클릭 → <b>다음으로 열기 → Excel</b>(또는 Google 스프레드시트로 가져오기)을 쓰거나 .xlsx 버튼을 쓰세요.
+          UTF-8 BOM 옵션을 켜 두면 어느 쪽이든 한글이 깨지지 않습니다.</span></div>
         </div>
       </div>
     </div>
@@ -390,10 +471,12 @@ import { scoreDataset } from "./scorer.mjs";
 import { fixDataset } from "./fixer.mjs";
 import { analyzeBeforeAfter } from "./analyzer.mjs";
 import { extractInsights } from "./insights.mjs";
+import { setLang, L, piiName } from "./lang.mjs";
+setLang(document.documentElement.lang);
 
 const $ = (id) => document.getElementById(id);
 const gColor = (s) => s >= 80 ? "var(--good)" : s >= 55 ? "var(--warn)" : "var(--bad)";
-const verdict = (s) => s >= 80 ? "AI-ready" : s >= 55 ? "Needs cleanup" : "Not ready";
+const verdict = (s) => s >= 80 ? L("AI-ready", "AI에 넣어도 됨") : s >= 55 ? L("Needs cleanup", "정리 필요") : L("Not ready", "아직 안 됨");
 const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const fmtSize = (b) => b == null ? "" : b < 1024*1024 ? (b/1024).toFixed(1)+" KB" : (b/1024/1024).toFixed(1)+" MB";
 
@@ -421,22 +504,22 @@ document.addEventListener("click",(e)=>{
 
 /* ---------- dataset identity ---------- */
 function colKind(stat){
-  if (stat.piiType) return { k: "PII · " + stat.piiType, cls: "k-pii" };
-  if (Object.keys(stat.dateShapes).length) return { k: "date", cls: "k-date" };
-  if (stat.present > 0 && stat.numericCount / stat.present > 0.9) return { k: "number", cls: "k-num" };
-  return { k: "text", cls: "" };
+  if (stat.piiType) return { k: L("PII · ", "개인정보 · ") + piiName(stat.piiType), cls: "k-pii" };
+  if (Object.keys(stat.dateShapes).length) return { k: L("date", "날짜"), cls: "k-date" };
+  if (stat.present > 0 && stat.numericCount / stat.present > 0.9) return { k: L("number", "숫자"), cls: "k-num" };
+  return { k: L("text", "글자"), cls: "" };
 }
 
 function renderMeta(r){
   $("meta-name").textContent = last.name;
   $("meta-sub").textContent =
-    [fmtSize(last.size), `${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns`, "nothing left your browser"]
+    [fmtSize(last.size), L(`${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns`, `${r.rowCount.toLocaleString()}행 × ${r.columnCount}열`), L("nothing left your browser", "브라우저 밖으로 나간 것 없음")]
       .filter(Boolean).join(" · ");
 
   $("colchips").innerHTML = last.columns.map((c)=>{
     const s = r.columnStats[c] || {};
     const { k, cls } = colKind(s);
-    const miss = s.missing ? `<span class="miss">${Math.round((s.missingRate||0)*100)}% empty</span>` : "";
+    const miss = s.missing ? `<span class="miss">${Math.round((s.missingRate||0)*100)}% ${L("empty", "빈칸")}</span>` : "";
     return `<span class="colchip ${cls}">${esc(c)} <span class="k">${k}</span>${miss}</span>`;
   }).join("");
 
@@ -447,9 +530,9 @@ function renderMeta(r){
   $("pv-body").innerHTML = last.rows.slice(0, PR).map((row)=>
     `<tr>${pcols.map((c)=>`<td>${esc(row[c] ?? "")}</td>`).join("")}</tr>`).join("");
   const moreC = last.columns.length - PC, moreR = r.rowCount - PR;
-  $("pv-note").textContent = `First ${Math.min(PR, r.rowCount)} rows` +
-    (moreC > 0 ? ` · ${moreC} more column${moreC>1?"s":""} hidden` : "") +
-    (moreR > 0 ? ` · ${moreR.toLocaleString()} more rows scored` : "");
+  $("pv-note").textContent = L(`First ${Math.min(PR, r.rowCount)} rows`, `처음 ${Math.min(PR, r.rowCount)}행`) +
+    (moreC > 0 ? L(` · ${moreC} more column${moreC>1?"s":""} hidden`, ` · 열 ${moreC}개 더 있음`) : "") +
+    (moreR > 0 ? L(` · ${moreR.toLocaleString()} more rows scored`, ` · 나머지 ${moreR.toLocaleString()}행도 채점함`) : "");
 }
 
 /* ---------- fix options — ask, don't guess ---------- */
@@ -464,39 +547,39 @@ function buildFixOptions(r){
   /* ── Structure ── */
   const struct = [];
   if (codes.has("dup_rows")) struct.push(check("opt-dedupe",
-    "Remove exact duplicate rows", "identical rows add no information and inflate counts"));
+    L("Remove exact duplicate rows", "완전히 같은 행 지우기"), L("identical rows add no information and inflate counts", "같은 행은 정보를 더하지 않고 개수만 부풀립니다")));
   const emptyRowCount = last.rows.filter((row)=> last.columns.every((c)=> String(row[c] ?? "").trim() === "")).length;
   if (emptyRowCount > 0) struct.push(check("opt-erows",
-    `Remove ${emptyRowCount} completely empty row${emptyRowCount>1?"s":""}`, "rows with every field blank"));
+    L(`Remove ${emptyRowCount} completely empty row${emptyRowCount>1?"s":""}`, `모든 칸이 빈 행 ${emptyRowCount}개 지우기`), L("rows with every field blank", "모든 칸이 비어 있는 행")));
   if (codes.has("empty_column")) struct.push(check("opt-empty",
-    "Drop 100%-empty columns", "they carry zero information"));
+    L("Drop 100%-empty columns", "전부 빈 열 지우기"), L("they carry zero information", "담긴 정보가 없습니다")));
   // header naming convention — always offered (the convention is YOUR judgment)
   const snakePreview = last.columns.map((c)=>String(c).normalize("NFKC").trim().toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu,"_").replace(/^_+|_+$/g,""));
   const hdrChanged = last.columns.findIndex((c,i)=> snakePreview[i] !== c);
   struct.push(`
     <div class="optgroup">
-      <div class="q">Column header style${hdrChanged>-1 ? ` <span class="ex" style="font-weight:400">e.g. “${esc(last.columns[hdrChanged])}” → “${esc(snakePreview[hdrChanged])}”</span>` : ""}</div>
+      <div class="q">${L("Column header style", "열 이름 형식")}${hdrChanged>-1 ? ` <span class="ex" style="font-weight:400">${L("e.g.", "예:")} “${esc(last.columns[hdrChanged])}” → “${esc(snakePreview[hdrChanged])}”</span>` : ""}</div>
       <div class="choices">
-        <label class="radio"><input type="radio" name="hdrfmt" value="keep" checked> Keep as-is</label>
+        <label class="radio"><input type="radio" name="hdrfmt" value="keep" checked> ${L("Keep as-is", "그대로")}</label>
         <label class="radio"><input type="radio" name="hdrfmt" value="snake"> snake_case <span class="ex">inspection_date</span></label>
-        <label class="radio"><input type="radio" name="hdrfmt" value="lower"> lowercase <span class="ex">inspection date</span></label>
+        <label class="radio"><input type="radio" name="hdrfmt" value="lower"> ${L("lowercase", "소문자")} <span class="ex">inspection date</span></label>
       </div>
     </div>`);
 
   /* ── Values ── */
   const vals = [];
-  vals.push(check("opt-trim", "Trim stray spaces around values", "\" USA \" → \"USA\" — invisible whitespace breaks joins and groupbys"));
+  vals.push(check("opt-trim", L("Trim stray spaces around values", "값 앞뒤 공백 지우기"), L("\" USA \" → \"USA\" — invisible whitespace breaks joins and groupbys", "\" USA \" → \"USA\" — 보이지 않는 공백이 조인과 그룹 묶기를 깨뜨립니다")));
   if (codes.has("sentinel")) vals.push(check("opt-sent",
-    "Convert N/A, NULL, “-” to real empty cells", "so tools count them as missing instead of as values"));
+    L("Convert N/A, NULL, “-” to real empty cells", "N/A, NULL, “-”를 진짜 빈칸으로 바꾸기"), L("so tools count them as missing instead of as values", "도구가 값이 아니라 빈 값으로 세게 됩니다")));
   if (codes.has("placeholder_date")) vals.push(check("opt-ph",
-    "Clear placeholder dates (1900-01-01 / 0000-00-00)", "they are missing data wearing a date costume"));
+    L("Clear placeholder dates (1900-01-01 / 0000-00-00)", "자리만 채운 날짜(1900-01-01 / 0000-00-00) 비우기"), L("they are missing data wearing a date costume", "날짜 모양을 한 빈 값입니다")));
   if (codes.has("mixed_date_format")) vals.push(`
     <div class="optgroup">
-      <div class="q">Your dates are written multiple ways — which convention do you want?</div>
+      <div class="q">${L("Your dates are written multiple ways — which convention do you want?", "날짜가 여러 형식으로 적혀 있습니다 — 어느 형식으로 맞출까요?")}</div>
       <div class="choices">
         <label class="radio"><input type="radio" name="datefmt" value="ISO" checked> ISO 8601 <span class="ex">2021-03-05</span></label>
-        <label class="radio"><input type="radio" name="datefmt" value="US"> US style <span class="ex">03/05/2021</span></label>
+        <label class="radio"><input type="radio" name="datefmt" value="US"> ${L("US style", "미국식")} <span class="ex">03/05/2021</span></label>
       </div>
     </div>`);
 
@@ -511,9 +594,9 @@ function buildFixOptions(r){
     caseIndex.push({ col: c });
     vals.push(`
     <div class="optgroup">
-      <div class="q">“${esc(c)}” mixes letter cases <span class="ex" style="font-weight:400">(UPPER ×${cc.upper} · lower ×${cc.lower} · Mixed ×${cc.mixed})</span> — normalize?</div>
+      <div class="q">${L(`“${esc(c)}” mixes letter cases`, `“${esc(c)}” 열에 대소문자가 섞여 있습니다`)} <span class="ex" style="font-weight:400">(UPPER ×${cc.upper} · lower ×${cc.lower} · Mixed ×${cc.mixed})</span> — ${L("normalize?", "맞출까요?")}</div>
       <div class="choices">
-        <label class="radio"><input type="radio" name="case-${ki}" value="keep" checked> Leave as-is</label>
+        <label class="radio"><input type="radio" name="case-${ki}" value="keep" checked> ${L("Leave as-is", "그대로")}</label>
         <label class="radio"><input type="radio" name="case-${ki}" value="upper"> UPPERCASE</label>
         <label class="radio"><input type="radio" name="case-${ki}" value="title"> Title Case</label>
         <label class="radio"><input type="radio" name="case-${ki}" value="lower"> lowercase</label>
@@ -530,34 +613,34 @@ function buildFixOptions(r){
       clusterIndex.push({ col: iss.column, key: cl.key, forms: cl.forms });
       vals.push(`
       <div class="optgroup">
-        <div class="q">“${esc(iss.column)}” spells the same value ${cl.forms.length} ways — which one should win?</div>
+        <div class="q">${L(`“${esc(iss.column)}” spells the same value ${cl.forms.length} ways — which one should win?`, `“${esc(iss.column)}” 열에서 같은 값이 ${cl.forms.length}가지로 적혀 있습니다 — 어느 표기로 맞출까요?`)}</div>
         <div class="choices">
           ${cl.forms.slice(0, 4).map((f, fi)=>`
             <label class="radio"><input type="radio" name="unify-${ci}" value="${fi}" ${fi===0?"checked":""}> ${esc(f.raw)} <span class="ex">×${f.count}</span></label>`).join("")}
-          <label class="radio"><input type="radio" name="unify-${ci}" value="custom"> <input type="text" class="customtxt" id="unify-txt-${ci}" placeholder="or type your own…" spellcheck="false"></label>
-          <label class="radio"><input type="radio" name="unify-${ci}" value="keep"> Leave as-is</label>
+          <label class="radio"><input type="radio" name="unify-${ci}" value="custom"> <input type="text" class="customtxt" id="unify-txt-${ci}" placeholder="${L("or type your own…", "또는 직접 입력…")}" spellcheck="false"></label>
+          <label class="radio"><input type="radio" name="unify-${ci}" value="keep"> ${L("Leave as-is", "그대로")}</label>
         </div>
       </div>`);
     }
     if (all.length > 3) vals.push(
-      `<div class="always">…and ${all.length - 3} more spelling cluster${all.length - 3 > 1 ? "s" : ""} in “${esc(iss.column)}” — clean, download, re-upload to continue.</div>`);
+      `<div class="always">${L(`…and ${all.length - 3} more spelling cluster${all.length - 3 > 1 ? "s" : ""} in “${esc(iss.column)}” — clean, download, re-upload to continue.`, `…“${esc(iss.column)}” 열에 이런 묶음이 ${all.length - 3}개 더 있습니다 — 정리하고 받은 파일을 다시 올려 이어 가세요.`)}</div>`);
   }
 
   /* ── Privacy ── */
   const priv = [];
   if (codes.has("pii")) priv.push(`
     <div class="optgroup">
-      <div class="q">Personal data (email / phone) was found — what should happen to it?</div>
+      <div class="q">${L("Personal data (email / phone) was found — what should happen to it?", "개인정보(이메일 / 전화번호)가 있습니다 — 어떻게 할까요?")}</div>
       <div class="choices">
-        <label class="radio"><input type="radio" name="piiopt" value="keep" checked> Keep as-is <span class="ex">just flag it</span></label>
-        <label class="radio"><input type="radio" name="piiopt" value="mask"> Mask values <span class="ex">a***@gmail.com · ***-0182</span></label>
-        <label class="radio"><input type="radio" name="piiopt" value="drop"> Drop the column${r.issues.filter(i=>i.code==="pii").length>1?"s":""} <span class="ex">remove entirely</span></label>
+        <label class="radio"><input type="radio" name="piiopt" value="keep" checked> ${L("Keep as-is", "그대로")} <span class="ex">${L("just flag it", "표시만")}</span></label>
+        <label class="radio"><input type="radio" name="piiopt" value="mask"> ${L("Mask values", "값 가리기")} <span class="ex">a***@gmail.com · ***-0182</span></label>
+        <label class="radio"><input type="radio" name="piiopt" value="drop"> ${L(`Drop the column${r.issues.filter(i=>i.code==="pii").length>1?"s":""}`, "열 지우기")} <span class="ex">${L("remove entirely", "통째로 삭제")}</span></label>
       </div>
     </div>`);
 
   const sec = (title, arr) => arr.length ? `<div class="optsec">${title}</div>` + arr.join("") : "";
   $("fixopts").innerHTML =
-    sec("Structure", struct) + sec("Values", vals) + sec("Privacy", priv);
+    sec(L("Structure", "구조"), struct) + sec(L("Values", "값"), vals) + sec(L("Privacy", "개인정보"), priv);
 
   // typing a custom spelling auto-selects its radio (no extra click needed)
   document.querySelectorAll(".customtxt").forEach((t)=>{
@@ -567,16 +650,16 @@ function buildFixOptions(r){
   });
 
   const kept = [];
-  if (codes.has("missing") || codes.has("high_missing")) kept.push("<b>missing values</b> (imputation is a judgment)");
-  if (codes.has("numeric_text_mix")) kept.push("<b>“thirty” → 30 coercion</b> (needs interpretation)");
+  if (codes.has("missing") || codes.has("high_missing")) kept.push(L("<b>missing values</b> (imputation is a judgment)", "<b>빈 값</b> (채워 넣는 것은 판단입니다)"));
+  if (codes.has("numeric_text_mix")) kept.push(L("<b>“thirty” → 30 coercion</b> (needs interpretation)", "<b>“서른” → 30 변환</b> (해석이 필요합니다)"));
   $("alwayskept").innerHTML = kept.length
-    ? `Always left alone, no matter what: ${kept.join(" · ")} — the tool refuses to guess.` : "";
+    ? L(`Always left alone, no matter what: ${kept.join(" · ")} — the tool refuses to guess.`, `무엇을 골라도 건드리지 않는 것: ${kept.join(" · ")} — 도구는 추측하지 않습니다.`) : "";
 
   $("fixcard").classList.remove("hidden"); // header/trim options exist for every file
 }
 
 /* ---------- render report ---------- */
-function render(r){
+function render(r, navigate = true){
   renderMeta(r);
 
   const c = gColor(r.score);
@@ -588,7 +671,7 @@ function render(r){
   $("dims").innerHTML = Object.entries(r.dimensions).map(([k,d])=>`
     <div class="dim">
       <div class="dim-top">
-        <span class="dim-name">${k === "pii" ? "Personal data" : k[0].toUpperCase() + k.slice(1)}<span class="dim-w">${Math.round(d.weight*100)}%</span></span>
+        <span class="dim-name">${({ completeness: L("Completeness", "완전성"), consistency: L("Consistency", "일관성"), pii: L("Personal data", "개인정보") })[k] ?? k}<span class="dim-w">${Math.round(d.weight*100)}%</span></span>
         <span class="dim-val">${d.score}</span>
       </div>
       <div class="track"><div class="fill" style="width:${d.score}%;background:${gColor(d.score)}"></div></div>
@@ -596,43 +679,44 @@ function render(r){
 
   // per-issue guidance: WHAT to do about it, and whether this tool can do it for you
   const ACTIONS = {
-    empty_column:      { auto: true,  text: "Drop it in the panel below — it carries zero information." },
-    high_missing:      { auto: false, text: "Your call: backfill from the source system, or accept the gaps. Don't let a tool invent values." },
-    missing:           { auto: false, text: "Your call: backfill from the source system, or drop those rows if they're few. Imputation is a judgment." },
-    sentinel:          { auto: true,  text: "Convert to real empties below — otherwise tools count “N/A” as data." },
-    dup_rows:          { auto: true,  text: "Remove below — duplicates inflate every count and bias any model." },
-    dup_id:            { auto: false, text: "Same ID on more than one row: if the rows are exact copies, dedupe below clears them — if they differ, decide which record is the truth before any join or training run." },
-    numeric_text_mix:  { auto: false, text: "Fix by hand: decide what “thirty” means, convert in Sheets/Excel, or drop the text rows." },
-    mixed_date_format: { auto: true,  text: "Unify below — pick ISO or US and every date becomes parseable." },
-    placeholder_date:  { auto: true,  text: "Clear below — 1900-01-01 silently poisons any time-series." },
-    pii:               { auto: true,  text: "Decide below: keep (flagged), mask, or drop the column. Never feed raw PII to an LLM." },
-    value_variants:    { auto: true,  text: "Pick the winning spelling below (or type your own) — variants split your group-bys." },
+    empty_column:      { auto: true,  text: L("Drop it in the panel below — it carries zero information.", "아래에서 지우세요 — 담긴 정보가 없습니다.") },
+    high_missing:      { auto: false, text: L("Your call: backfill from the source system, or accept the gaps. Don't let a tool invent values.", "직접 정하세요: 원래 시스템에서 채우거나, 빈 채로 받아들이세요. 도구가 값을 지어내게 두지 마세요.") },
+    missing:           { auto: false, text: L("Your call: backfill from the source system, or drop those rows if they're few. Imputation is a judgment.", "직접 정하세요: 원래 시스템에서 채우거나, 몇 개 안 되면 그 행을 지우세요. 값을 채워 넣는 것은 판단입니다.") },
+    sentinel:          { auto: true,  text: L("Convert to real empties below — otherwise tools count “N/A” as data.", "아래에서 진짜 빈칸으로 바꾸세요 — 안 그러면 도구가 “N/A”를 값으로 셉니다.") },
+    dup_rows:          { auto: true,  text: L("Remove below — duplicates inflate every count and bias any model.", "아래에서 지우세요 — 중복은 모든 개수를 부풀리고 모델을 치우치게 합니다.") },
+    dup_id:            { auto: false, text: L("Same ID on more than one row: if the rows are exact copies, dedupe below clears them — if they differ, decide which record is the truth before any join or training run.", "같은 ID가 여러 행에 있습니다: 완전히 같은 행이면 아래 중복 제거로 지워지고, 내용이 다르면 조인이나 학습 전에 어느 기록이 맞는지 정하세요.") },
+    numeric_text_mix:  { auto: false, text: L("Fix by hand: decide what “thirty” means, convert in Sheets/Excel, or drop the text rows.", "직접 고치세요: “서른”이 무슨 뜻인지 정해 엑셀·시트에서 바꾸거나, 글자로 된 행을 지우세요.") },
+    mixed_date_format: { auto: true,  text: L("Unify below — pick ISO or US and every date becomes parseable.", "아래에서 맞추세요 — ISO나 미국식을 고르면 모든 날짜를 읽을 수 있습니다.") },
+    placeholder_date:  { auto: true,  text: L("Clear below — 1900-01-01 silently poisons any time-series.", "아래에서 비우세요 — 1900-01-01은 시계열 분석을 조용히 망칩니다.") },
+    pii:               { auto: true,  text: L("Decide below: keep (flagged), mask, or drop the column. Never feed raw PII to an LLM.", "아래에서 정하세요: 그대로(표시만), 가리기, 열 지우기. 개인정보 원본을 LLM에 넣지 마세요.") },
+    value_variants:    { auto: true,  text: L("Pick the winning spelling below (or type your own) — variants split your group-bys.", "아래에서 맞출 표기를 고르세요(직접 입력도 됩니다) — 표기가 갈리면 그룹이 쪼개집니다.") },
   };
 
-  $("issue-count").textContent = r.issues.length ? `${r.issues.length} total` : "";
+  $("issue-count").textContent = r.issues.length ? L(`${r.issues.length} total`, `모두 ${r.issues.length}개`) : "";
   const nAuto = r.issues.filter(i=>ACTIONS[i.code]?.auto).length;
   const nManual = r.issues.length - nAuto;
   $("sumline").innerHTML = r.issues.length
-    ? `<span class="auto"><b>${nAuto}</b> fixable in one click</span><span><b>${nManual}</b> need your judgment</span>`
+    ? L(`<span class="auto"><b>${nAuto}</b> fixable in one click</span><span><b>${nManual}</b> need your judgment</span>`, `<span class="auto">클릭 한 번으로 고칠 수 있는 것 <b>${nAuto}</b></span><span>직접 판단할 것 <b>${nManual}</b></span>`)
     : "";
 
   $("issues").innerHTML = r.issues.map(i=>{
     const a = ACTIONS[i.code];
     const act = a ? `<div class="act ${a.auto?"auto":"manual"}" ${a.auto?'data-goto="fixcard"':''}>
-      <span class="b">${a.auto?"One-click fix":"Needs you"}</span>${esc(a.text)}</div>` : "";
-    const sev = i.severity[0].toUpperCase() + i.severity.slice(1);
+      <span class="b">${a.auto?L("One-click fix","바로 고침"):L("Needs you","직접 판단")}</span>${esc(a.text)}</div>` : "";
+    const sev = L(i.severity[0].toUpperCase() + i.severity.slice(1), { high: "높음", medium: "중간", low: "낮음" }[i.severity] || i.severity);
     return `<li class="issue"><span class="sev ${i.severity}">${sev}</span>
     <div><div class="msg">${esc(i.message)}</div>${act}</div><code class="ev">${esc(i.evidence)}</code></li>`;
   }).join("")
-    || `<li class="issues-empty">No issues found — looks AI-ready.</li>`;
+    || `<li class="issues-empty">${L("No issues found — looks AI-ready.", "찾은 문제가 없습니다 — AI에 넣어도 될 상태로 보입니다.")}</li>`;
 
-  $("note").innerHTML = `<b>${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns.</b> Every issue above is a verifiable <b>fact</b>; the score is a <b>judgment</b> built on those facts. ${r.weightsNote}`;
+  $("note").innerHTML = L(`<b>${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns.</b> Every issue above is a verifiable <b>fact</b>; the score is a <b>judgment</b> built on those facts. ${r.weightsNote}`,
+    `<b>${r.rowCount.toLocaleString()}행 × ${r.columnCount}열.</b> 찾은 문제는 모두 확인할 수 있는 <b>사실</b>이고, 점수는 그 사실 위에 세운 <b>판단</b>입니다. ${r.weightsNote}`);
 
   buildFixOptions(r);
   $("fixed").classList.add("hidden");
   cleaned = null;
 
-  showView("report");
+  if (navigate) showView("report");
 }
 
 /* ---------- parse & score ---------- */
@@ -661,18 +745,19 @@ $("file").addEventListener("change", (e)=> e.target.files[0] && handle(e.target.
 
 document.querySelectorAll(".chip").forEach((btn)=>{
   btn.addEventListener("click", async ()=>{
-    const src = btn.dataset.src, meta = btn.querySelector(".s-m"), label = meta.textContent;
+    const src = btn.dataset.src, meta = btn.querySelector(".s-m"), label = meta.innerHTML;
     const chips = [...document.querySelectorAll(".chip")];
-    chips.forEach(c=>c.disabled=true); btn.classList.add("loading"); meta.textContent = "Scoring…";
+    let failed = false;
+    chips.forEach(c=>c.disabled=true); btn.classList.add("loading"); meta.textContent = L("Scoring…", "채점 중…");
     try{
       const res = await fetch(src);
       if(!res.ok) throw new Error(res.status);
       const text = await res.text();
       handle(new File([text], src.split("/").pop(), {type:"text/csv"}));
-    }catch(err){ meta.textContent = "Failed — click to retry"; }
+    }catch(err){ failed = true; meta.textContent = L("Failed — click to retry", "실패 — 다시 누르세요"); }
     finally{
       chips.forEach(c=>c.disabled=false); btn.classList.remove("loading");
-      if(meta.textContent==="Scoring…") meta.textContent = label;
+      if(!failed) meta.innerHTML = label;
     }
   });
 });
@@ -721,10 +806,10 @@ $("applyfix").addEventListener("click", ()=>{
   cleaned = { rows: res.rows, columns: res.columns, name: last.name, after };
 
   const c = gColor(after.score);
-  $("delta").innerHTML = `Score ${res.before.score} → <b style="color:${c}">${after.score}</b>`;
+  $("delta").innerHTML = `${L("Score", "점수")} ${res.before.score} → <b style="color:${c}">${after.score}</b>`;
   $("fixlist").innerHTML = res.fixes.length
     ? res.fixes.map(f=>`<li>${esc(f.message)}</li>`).join("")
-    : `<li style="color:var(--mut)">No fixes selected.</li>`;
+    : `<li style="color:var(--mut)">${L("No fixes selected.", "고른 정리가 없습니다.")}</li>`;
   $("skipcap").classList.toggle("hidden", res.skipped.length === 0);
   $("skiplist").innerHTML = res.skipped.map(s=>`<li>${esc(s.reason)}</li>`).join("");
 
@@ -738,29 +823,30 @@ $("applyfix").addEventListener("click", ()=>{
     <td>${esc(m.dirty)}${m.note?`<small>${esc(m.note)}</small>`:""}</td>
     <td>${esc(m.clean)}</td></tr>`).join("");
   q(".ba-h").textContent = changed
-    ? `So what? ${changed} analytical answer${changed>1?"s":""} changed — this is what the cleanup was for`
-    : "So what? Your analytical answers were already stable — cleanup made them safe to trust";
+    ? L(`So what? ${changed} analytical answer${changed>1?"s":""} changed — this is what the cleanup was for`, `그래서? 분석 답 ${changed}개가 바뀌었습니다 — 정리한 이유가 이것입니다`)
+    : L("So what? Your analytical answers were already stable — cleanup made them safe to trust", "그래서? 분석 답은 원래 그대로였습니다 — 정리로 믿고 쓸 수 있게 됐습니다");
 
   // insight engine — patterns in the CLEANED data (fact + baseline + so-what)
-  const SHAPE_LABEL = { granularity:"granularity", weighting_bias:"weighting bias",
-    structural_missing:"structural missing", concentration:"concentration",
-    segment_gap:"segment gap", outliers:"outliers" };
+  const SHAPE_LABEL = { granularity:L("granularity","단위 중복"), weighting_bias:L("weighting bias","가중 치우침"),
+    structural_missing:L("structural missing","구조적 결측"), concentration:L("concentration","쏠림"),
+    segment_gap:L("segment gap","그룹 차이"), outliers:L("outliers","튀는 값") };
   const insights = extractInsights(res.rows, res.columns, after);
   $("ins-h").textContent = insights.length
-    ? `What your data says — ${insights.length} pattern${insights.length>1?"s":""} above threshold`
-    : "What your data says";
+    ? L(`What your data says — ${insights.length} pattern${insights.length>1?"s":""} above threshold`, `데이터가 말하는 것 — 문턱을 넘은 패턴 ${insights.length}개`)
+    : L("What your data says", "데이터가 말하는 것");
   $("ins-body").innerHTML = insights.length
     ? insights.map(i=>`<div class="ins-item">
         <span class="shape">${esc(SHAPE_LABEL[i.shape]||i.shape)}</span>
         <div class="fact">${esc(i.fact)}</div>
-        <div class="base">Baseline: ${esc(i.baseline)}</div>
+        <div class="base">${L("Baseline", "비교 기준")}: ${esc(i.baseline)}</div>
         <div class="sw"><b>→</b> ${esc(i.sowhat)}</div></div>`).join("")
-    : `<div class="ins-empty">No headline patterns above threshold — the data is evenly behaved.
-       Honest silence beats trivia; every threshold is documented in <code>insights.mjs</code>.</div>`;
+    : `<div class="ins-empty">${L(`No headline patterns above threshold — the data is evenly behaved.
+       Honest silence beats trivia; every threshold is documented in <code>insights.mjs</code>.`, `문턱을 넘은 패턴이 없습니다 — 데이터가 고르게 퍼져 있습니다. 하찮은 이야기를 지어내기보다 말하지 않습니다. 모든 문턱은 <code>insights.mjs</code>에 적혀 있습니다.`)}</div>`;
 
   $("fixed").classList.remove("hidden");
   const dest = analyzeJump ? $("ins-wrap") : $("fixed");
   analyzeJump = false;
+  if (quietApply) return;
   dest.scrollIntoView({behavior:"smooth", block:"start"});
 });
 
@@ -768,6 +854,30 @@ $("applyfix").addEventListener("click", ()=>{
 // A flag (not a timeout) decides the landing spot — two competing smooth scrolls raced before,
 // and losing the race dropped users at the bottom of the tall results card (the download buttons).
 let analyzeJump = false;
+let quietApply = false; // set while a language switch re-runs the cleanup — no scroll jump
+
+/* ---------- language switch: every message is rebuilt in the other language ---------- */
+$("langbtn").addEventListener("click", ()=>{
+  const next = document.documentElement.lang === "ko" ? "en" : "ko";
+  document.documentElement.lang = next;
+  try { localStorage.setItem("dataready.lang", next); } catch (e) {}
+  setLang(next);
+  document.title = L("DataReady — is your data AI-ready?", "DataReady — 이 데이터, AI에 넣어도 될까?");
+  if (!last || $("view-report").classList.contains("hidden")) return;
+  // report open: re-score in the new language (cleanup choices go back to the defaults)
+  const y = window.scrollY, wasFixed = !$("fixed").classList.contains("hidden");
+  render(scoreDataset(last.rows, last.columns), false);
+  if (wasFixed) { quietApply = true; $("applyfix").click(); quietApply = false; }
+  window.scrollTo(0, y);
+});
+// "how it's scored" from the report goes to the criteria on the home view
+document.addEventListener("click", (e)=>{
+  const a = e.target.closest("[data-home]");
+  if (!a) return;
+  e.preventDefault();
+  showView("home");
+  document.getElementById(a.dataset.home)?.scrollIntoView({ block: "start" });
+});
 $("analyze-now").addEventListener("click", ()=>{
   analyzeJump = true;
   $("applyfix").click();
