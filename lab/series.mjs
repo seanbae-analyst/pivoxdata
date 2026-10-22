@@ -18,11 +18,13 @@ export const SERIES = [
   NB("netbuy_foreign", "S22CC", "외국인 순매수 거래대금"),
   NB("netbuy_other_foreign", "S22CD", "기타외국인 순매수 거래대금"),
   NB("netbuy_other_corp", "S22CF", "기타법인 순매수 거래대금"),
+  NB("buy_total", "S22B", "매수 거래대금 합계"),
   FUND("deposits", "S23A", "투자자 예탁금"),
   FUND("unpaid", "S23D", "위탁매매 미수금"),
   FUND("credit", "S23E", "신용융자 잔고"),
   FUND("short_credit", "S23F", "신용대주 잔고"),
   { id: "mcap_kospi", table: "901Y014", items: ["1040000"], cycle: "M", start: "200501", kind: "balance", unit: "천원", label: "KOSPI 시가총액" },
+  { id: "kospi_value", table: "901Y014", items: ["1060000"], cycle: "M", start: "200501", kind: "flow", unit: "천원", label: "KOSPI 거래대금" },
   { id: "kospi_close", table: "901Y014", items: ["1070000"], cycle: "M", start: "200002", kind: "level", unit: "1980.01.04=100", label: "KOSPI 종가" },
   { id: "mcap_kosdaq", table: "901Y014", items: ["2040000"], cycle: "M", start: "200401", kind: "balance", unit: "천원", label: "KOSDAQ 시가총액" },
 ];

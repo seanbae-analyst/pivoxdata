@@ -129,9 +129,10 @@ export function bars(box, o) {
 }
 
 // CSV of what a chart shows, built in the browser (the data is already on the page).
-export function csvButton(btn, filename, header, rows) {
+// `note` is written as the first line so the source travels with the file.
+export function csvButton(btn, filename, header, rows, note) {
   btn.addEventListener("click", () => {
-    const body = [header, ...rows].map((r) => r.map((c) => (/[",\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : c)).join(",")).join("\n");
+    const body = [...(note ? [[note]] : []), header, ...rows].map((r) => r.map((c) => (/[",\n]/.test(String(c)) ? `"${String(c).replace(/"/g, '""')}"` : c)).join(",")).join("\n");
     const a = document.createElement("a");
     a.href = URL.createObjectURL(new Blob(["﻿" + body], { type: "text/csv;charset=utf-8" }));
     a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);

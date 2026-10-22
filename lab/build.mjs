@@ -93,7 +93,7 @@ function dataset(page, title, desc, url) {
 
 // ---------- data ----------
 const holes = new Set(CHECKS.holes.credit);
-const S = Object.fromEntries(["credit", "deposits", "unpaid", "mcap_kospi", "mcap_kosdaq", "kospi_close", "netbuy_individual", "netbuy_institution", "netbuy_foreign"].map((id) => [id, load(id)]));
+const S = Object.fromEntries(["credit", "deposits", "unpaid", "mcap_kospi", "mcap_kosdaq", "kospi_close", "netbuy_individual", "netbuy_institution", "netbuy_foreign", "netbuy_other_foreign", "netbuy_other_corp"].map((id) => [id, load(id)]));
 const M = Object.fromEntries(Object.entries(S).map(([k, d]) => [k, Object.fromEntries(d.rows)]));
 const fetched = S.credit.fetched_at;
 const checkLi = (ids) => CHECKS.checks.filter((c) => ids.some((p) => c.id.startsWith(p))).map((c) => `<li class="${c.ok ? "" : "fail"}">${esc(c.fact)}</li>`).join("");
@@ -137,6 +137,7 @@ function credit() {
   expect(midHi.cr < p2021.cr, "2022–2024 exceeded the 2021 peak");
   expect(first7?.t === "200703", `credit first ≥ 1조 in ${first7?.t}`);
   expect(cdPeak.t === "200706", `credit/deposit peak moved to ${cdPeak.t}`);
+  expect([dropWon, dropPct, dropPct2].every((r) => kospiChg(r.t) < 0), "a largest-drop month no longer has a falling KOSPI");
   expect(M.unpaid["200704"] > 5e11 && M.unpaid["200705"] < 1e11, "the May 2007 미수금 drop is no longer in the data");
 
   const shiftMonths = months.filter((t) => t >= "200501" && t <= "200812");
@@ -150,6 +151,7 @@ function credit() {
       change: [{ at: dropWon.t, text: `${lbl(dropWon.t)} ${sjo(dropWon.ch)}` }, { at: "202003", text: `2020.03 ${sjo(rows.find((r) => r.t === "202003").ch)}` }],
       shift: [{ at: "200706", series: 1, text: `2007.06 ${jo(won2jo(M.credit["200706"]))}` }, { at: "200511", series: 0, text: `2005.11 ${jo(won2jo(M.unpaid["200511"]))}` }],
     },
+    note: `출처: ECOS(한국은행, ${S.credit.source.compiled_by}·${S.mcap_kospi.source.compiled_by} 원자료) 901Y056·901Y014, ${fetched} 조회. 월말 잔고. 신용융자 1998-06·1998-12는 ECOS에 0으로 적혀 있어 빈칸. 비상업적 이용, 값 변경 없음. https://pivoxdata.vercel.app/research/credit`,
     csv: S.credit.rows.filter((r) => r[0] >= "199806").map(([t]) => [t, holes.has(t) ? "" : M.credit[t], M.deposits[t], M.unpaid[t], M.mcap_kospi[t] && M.mcap_kosdaq[t] ? M.mcap_kospi[t] + M.mcap_kosdaq[t] : ""]),
   };
 
@@ -163,7 +165,7 @@ function credit() {
   const reads = {
     level: `잔고는 2007년 처음 1조 원을 넘었고, ${kmon(p2021.t)} ${jo(p2021.cr)}로 고점을 찍은 뒤 2022~2024년에는 ${jo(midLo.cr)}~${jo(midHi.cr)} 사이에 머물렀습니다. 이후 다시 늘어 <b>${kmon(peak.t)} 말 ${jo(peak.cr)}로 1999년 이후 가장 컸습니다.</b>`,
     ratio: `금액으로는 ${kmon(peak.t)}이 가장 컸지만, <b>시장 크기에 견준 비율은 ${kmon(rPeak.t)}(${rPeak.v.toFixed(2)}%)이 가장 높았습니다.</b> ${kmon(rLast.t)} 비율은 ${rLast.v.toFixed(2)}%입니다. 그사이 신용융자는 ${jo(crAt(rPeak.t))}에서 ${jo(crAt(rLast.t))}로 ${Math.round((crAt(rLast.t) / crAt(rPeak.t) - 1) * 100)}% 늘었고, 코스피·코스닥 시가총액 합은 ${Math.round(rPeak.m).toLocaleString("ko-KR")}조에서 ${Math.round(rLast.m).toLocaleString("ko-KR")}조로 ${Math.round((rLast.m / rPeak.m - 1) * 100)}% 늘었습니다. “사상 최대”라는 말은 금액 기준일 때만 맞습니다.`,
-    change: `원으로는 <b>${kmon(dropWon.t)}(${sjo(dropWon.ch)}, ${spct(dropWon.chp)})</b>에 가장 많이 줄었습니다. 비율로는 ${kmon(dropPct.t)}(${spct(dropPct.chp)})과 ${kmon(dropPct2.t)}(${spct(dropPct2.chp)})이 가장 컸습니다. 세 달 모두 코스피 월말 종가가 전달보다 크게 낮았습니다(${[dropWon, dropPct, dropPct2].map((r) => `${lbl(r.t)} ${spct(kospiChg(r.t))}`).join(", ")}). ${dropWon.t === "202607" ? `2026년 7월에는 28·29일 이틀 연속 서킷브레이커가 발동됐습니다(${`<a href="https://news.mtn.co.kr/news-detail/2026080416155599328" target="_blank" rel="noopener">머니투데이방송 2026-08-04</a>`}). ` : ""}같은 달에 일어났다는 사실까지만 이 표로 말할 수 있습니다.`,
+    change: `원으로는 <b>${kmon(dropWon.t)}(${sjo(dropWon.ch)}, ${spct(dropWon.chp)})</b>에 가장 많이 줄었습니다. 비율로는 ${kmon(dropPct.t)}(${spct(dropPct.chp)})과 ${kmon(dropPct2.t)}(${spct(dropPct2.chp)})이 가장 컸습니다. 세 달 모두 코스피 월말 종가가 전달보다 낮았습니다(${[dropWon, dropPct, dropPct2].map((r) => `${lbl(r.t)} ${spct(kospiChg(r.t))}`).join(", ")}). ${dropWon.t === "202607" ? `2026년 7월에는 28·29일 이틀 연속 서킷브레이커가 발동됐습니다(${`<a href="https://news.mtn.co.kr/news-detail/2026080416155599328" target="_blank" rel="noopener">머니투데이방송 2026-08-04</a>`}). ` : ""}같은 달에 일어났다는 사실까지만 이 표로 말할 수 있습니다.`,
     deposit: `예탁금은 ${kmon(depPeak.t)} ${jo(depPeak.dep)}로 가장 많았습니다. 예탁금에 견준 신용융자는 <b>${kmon(cdPeak.t)} ${cdPeak.v.toFixed(1)}%</b>가 가장 높았고, ${kmon(cdLast.t)}에는 ${cdLast.v.toFixed(1)}%입니다. 빚이 사상 최대일 때 넣어 둔 돈도 함께 많았습니다.`,
     shift: `2005~2006년에는 미수금이 1~2조 원이었고 신용융자는 1조 원이 안 됐습니다. <b>2007년 5월 한 달 새 미수금은 ${jo(won2jo(M.unpaid["200704"]))}에서 ${jo(won2jo(M.unpaid["200705"]))}로 줄고, 신용융자는 ${jo(won2jo(M.credit["200704"]))}에서 ${jo(won2jo(M.credit["200705"]))}로 늘었습니다.</b> 빚의 총량보다 형태가 바뀐 달입니다. 그해 2월 1일 신용거래 제도가 바뀐 뒤 잔고가 하루 약 290억 원씩 늘었고(${`<a href="https://www.fnnews.com/news/200704191735344830" target="_blank" rel="noopener">파이낸셜뉴스 2007-04-19</a>`}), 5월 1일부터는 결제일까지 돈을 채우지 않은 계좌를 30일 동안 현금으로만 사게 하는 미수동결계좌 제도가 시행됐습니다(${`<a href="https://www.kofia.or.kr/brd/m_95/view.do?seq=495" target="_blank" rel="noopener">금융투자협회 공지 2007-04-12</a>`}). 6월 하순에는 증권사들이 새 신용융자를 멈췄습니다(${`<a href="https://www.etoday.co.kr/news/view/131405" target="_blank" rel="noopener">이투데이 2007-06-26</a>`}).`,
   };
@@ -195,7 +197,7 @@ function credit() {
     <p><b>다시 받는 법</b> <code>node lab/fetch.mjs &amp;&amp; node lab/verify.mjs &amp;&amp; node lab/build.mjs</code> — 저장소의 <a href="https://github.com/seanbae-analyst/pivoxdata/tree/main/lab" target="_blank" rel="noopener">lab/</a> 폴더. ECOS 주소 형식: <code>https://ecos.bok.or.kr/api/StatisticSearch/{키}/json/kr/1/10/901Y056/M/{시작월}/{끝월}/S23E</code></p>`;
 
   const meta = `데이터 한국은행 ECOS 901Y056(원작성 ${S.credit.source.compiled_by}) · 901Y014(원작성 ${S.mcap_kospi.source.compiled_by}) · 월말 잔고 · ${lbl(months[0])}–${lbl(last)} · ${fetched} 받음 · 검산 ${CHECKS.checks.length}개 통과`;
-  return { D, stats, reads, yearly, limits, source, meta, facts: { peak, lastR, dropWon, rPeak, rLast, cdPeak } };
+  return { D, stats, reads, yearly, limits, source, meta, facts: { peak, lastR, dropWon, rPeak, rLast, cdPeak, rAtPeak: rr.find((r) => r.t === peak.t).v } };
 }
 
 // ============ research/net-buy ============
@@ -210,6 +212,13 @@ function netbuy() {
   expect(y[lastY] > ytdPrev[1], `${lastY} YTD no longer exceeds every full year (best ${ytdPrev[0]})`);
   const pre = Object.entries(y).filter(([k]) => k < "2020"), post = Object.entries(y).filter(([k]) => k >= "2020");
   const preNeg = pre.filter(([, v]) => v < 0).length, postPos = post.filter(([, v]) => v > 0).map(([k]) => k);
+  // consecutive years with the same sign, from 2020 on: "2020~2022년 순매수, 2023~2025년 순매도, …"
+  const runs = []; post.forEach(([k, v]) => { const sg = v > 0 ? "순매수" : "순매도"; const r = runs.at(-1); if (r && r.sg === sg) r.to = k; else runs.push({ from: k, to: k, sg }); });
+  const yr = (k) => (k === lastY && lastM < 12 ? `${k}년 1–${lastM}월` : `${k}년`);
+  const runTxt = runs.map((r) => (r.from === r.to ? `${yr(r.from)}은 ${r.sg}` : `${r.from}~${yr(r.to)}은 ${r.sg}`)).join(", ");
+  const other = months.filter((t) => t.startsWith(lastY)).reduce((s, t) => s + (M.netbuy_other_foreign[t] ?? 0) + (M.netbuy_other_corp[t] ?? 0), 0);
+  expect(runs.length > 0, "no years after 2019");
+  const readCum = `${pre[0][0]}~${pre.at(-1)[0]}년 ${pre.length}년 중 ${preNeg}년은 개인이 순매도한 해였고, 그 뒤로는 ${runTxt}였습니다. 세 선이 서로를 비추는 것은 누군가 사면 누군가 팔기 때문입니다. 다섯 투자자 구분을 모두 더하면 매달 0이 되고(반올림 ±2백만원 안), ${yr(lastY)}에는 그림에 없는 기타외국인·기타법인이 합쳐 ${fmt(T(other))}였습니다.`;
   const stats = [
     stat(fmt(T(y[lastY])), `${lastY}년 1–${lastM}월 개인 순매수`, `${lastM}개월 만에 이전 최대였던 ${ytdPrev[0]}년 한 해(${fmt(T(ytdPrev[1]))})를 넘었습니다`),
     stat(fmt(T(top[1])), `한 달 최대 · ${lbl(top[0])}`, `2021.01은 ${fmt(T(M.netbuy_individual["202101"]))}`),
@@ -218,9 +227,9 @@ function netbuy() {
   ].join("");
   const by = {}; ROWS.forEach((r) => { const k = r[0].slice(0, 4); by[k] = by[k] || [0, 0, 0, 0, 0]; by[k][0] += r[1]; by[k][1] += r[2]; by[k][2] += r[3]; by[k][3] += r[1] > 0 ? 1 : 0; by[k][4]++; });
   const yearly = Object.entries(by).map(([k, v]) => `<tr><td>${k}${k === lastY && lastM < 12 ? ` (1–${lastM}월)` : ""}</td>${v.slice(0, 3).map((x) => `<td class="${x < 0 ? "neg" : ""}">${fmt(T(x))}</td>`).join("")}<td>${v[3]} / ${v[4]}</td></tr>`).join("");
-  const checks = `<ul class="checks">${checkLi(["months:netbuy", "netbuy:"])}</ul>`;
+  const checks = `<ul class="checks">${checkLi(["months:netbuy", "months:buy_total", "months:kospi_value", "netbuy:", "agency:901Y055"])}</ul>`;
   const meta = `데이터 한국은행 ECOS 901Y055 · ${S.netbuy_individual.fetched_at} 받음 · ${lbl(months[0])}–${lbl(last[0])} · 검산 통과`;
-  return { ROWS, stats, yearly, checks, meta, facts: { ytd: y[lastY], lastY, lastM, ytdPrev, top, pre: [pre[0][0], pre.at(-1)[0], pre.length, preNeg], postPos } };
+  return { ROWS, stats, yearly, checks, meta, readCum, facts: { ytd: y[lastY], lastY, lastM, ytdPrev, top, pre: [pre[0][0], pre.at(-1)[0], pre.length, preNeg], postPos } };
 }
 
 // ============ pages ============
@@ -255,7 +264,7 @@ const fill = {
   },
   "research/net-buy.html": (h, f) => {
     h = region(h, "data", `const ROWS=${JSON.stringify(N.ROWS)};`, f);
-    h = region(h, "meta", N.meta, f); h = region(h, "stats", N.stats, f); h = region(h, "yearly", N.yearly, f); h = region(h, "checks", N.checks, f);
+    h = region(h, "meta", N.meta, f); h = region(h, "stats", N.stats, f); h = region(h, "yearly", N.yearly, f); h = region(h, "checks", N.checks, f); h = region(h, "read-cum", N.readCum, f);
     return h;
   },
   "research/record-habit.html": (h, f) => {
@@ -268,8 +277,8 @@ const fill = {
   },
   "home.html": (h, f) => {
     const [p0, p1, pn, pneg] = N.facts.pre;
-    const nb = `<b>${N.facts.lastY}년 1–${N.facts.lastM}월 개인 순매수 ${(N.facts.ytd / 1e6 > 0 ? "+" : "") + (N.facts.ytd / 1e6).toFixed(1)}조</b> — 2004년 이후 어느 한 해보다 많습니다. ${p0}~${p1}년 ${pn}년 중 ${pneg}년은 개인이 순매도한 해였고, 2020년 이후 순매수한 해는 ${N.facts.postPos.join("·")}년입니다.`;
-    const cr = `<b>신용융자 잔고 ${jo(C.facts.peak.cr)}(${lbl(C.facts.peak.t)})</b>는 금액으로 사상 최대지만, 시가총액에 견주면 ${C.facts.rLast.v.toFixed(2)}%로 ${lbl(C.facts.rPeak.t)}(${C.facts.rPeak.v.toFixed(2)}%)보다 낮습니다.`;
+    const nb = `<b>${N.facts.lastY}년 1–${N.facts.lastM}월 개인 순매수 ${(N.facts.ytd / 1e6 > 0 ? "+" : "") + (N.facts.ytd / 1e6).toFixed(1)}조</b> — 2004년 이후 어느 한 해보다 많습니다. ${p0}~${p1}년 ${pn}년 중 ${pneg}년은 개인이 순매도한 해였고, 2020년 이후 순매수한 해는 ${N.facts.postPos.map((k) => (k === N.facts.lastY && N.facts.lastM < 12 ? `${k}년(1–${N.facts.lastM}월)` : `${k}년`)).join(" · ")}입니다.`;
+    const cr = `<b>신용융자 잔고는 ${lbl(C.facts.peak.t)} 월말 ${jo(C.facts.peak.cr)}로 1999년 이후 금액으로 가장 컸습니다.</b> 그달 시가총액 대비 비율은 ${C.facts.rAtPeak.toFixed(2)}%로, 비율이 가장 높았던 ${lbl(C.facts.rPeak.t)}(${C.facts.rPeak.v.toFixed(2)}%)보다 낮습니다. 투자자 구분이 없는 시장 전체 값입니다.`;
     h = region(h, "q-netbuy", nb, f); h = region(h, "q-credit", cr, f);
     h = region(h, "updated", `${fetched} 기준`, f);
     return h;

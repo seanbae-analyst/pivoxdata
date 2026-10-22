@@ -55,6 +55,17 @@ check("credit:zero-holes", JSON.stringify(holes.credit) === JSON.stringify(["199
   `신용융자 잔고가 0으로 적힌 달 ${holes.credit.join(", ")} — 앞뒤 달은 수천억원이라 빠진 값으로 처리`);
 check("short_credit:zero-holes", holes.short_credit.length > 0, `신용대주 잔고 0인 달 ${holes.short_credit.length}개 — 이 계열은 차트에 쓰지 않음`);
 
+// 5b. which market 901Y055 covers: its total buy value equals KOSPI traded value (901Y014, 천원 → 백만원)
+{
+  const B = Object.fromEntries(load("buy_total").rows), K = load("kospi_value").rows;
+  const diff = K.map(([t, v]) => [t, Math.round(v / 1000) - B[t], B[t]]);
+  const exact = diff.filter(([, d]) => Math.abs(d) <= 1).length, off = diff.filter(([, d]) => Math.abs(d) > 1);
+  const worst = off.length ? off.reduce((a, b) => (Math.abs(b[1] / b[2]) > Math.abs(a[1] / a[2]) ? b : a)) : null;
+  check("netbuy:market=KOSPI", off.every(([, d, b]) => Math.abs(d / b) < 1e-5),
+    `투자자별 매수 합계와 코스피 거래대금이 ${K.length}개월(${K[0][0]}–${K.at(-1)[0]}) 중 ${exact}개월 일치(±1백만원)` +
+    (worst ? `, 나머지 ${off.length}개월도 0.001% 안 (${worst[0]} ${worst[1]}백만원) — 이 표는 코스피입니다` : ` — 이 표는 코스피입니다`));
+}
+
 // 6. who compiled each table: what series.mjs says (and the pages print) = what ECOS reports
 for (const t of [...new Set(SERIES.map((s) => s.table))]) {
   const d = load(SERIES.find((s) => s.table === t).id);

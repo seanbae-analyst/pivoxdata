@@ -54,7 +54,7 @@
 
   <section>
     <h2>2004년부터 쌓은 순매수</h2>
-    <p class="sub">월별 순매수를 처음부터 더해 간 값입니다. 2020년 전까지는 개인이 꾸준히 팔고 기관이 샀습니다. 2020년부터 방향이 뒤집혀 개인이 샀고, 2026년에는 개인이 크게 사는 동안 외국인이 크게 팔았습니다. 세 선이 서로를 비추는 것은 누군가 사면 누군가 팔기 때문입니다(기타법인·기타외국인까지 더하면 매달 0, 반올림 오차 ±2백만원 안).</p>
+    <p class="sub">월별 순매수를 처음부터 더해 간 값입니다. <!--@read-cum-->2004~2019년 16년 중 13년은 개인이 순매도한 해였고, 그 뒤로는 2020~2022년은 순매수, 2023~2025년은 순매도, 2026년 1–9월은 순매수였습니다. 세 선이 서로를 비추는 것은 누군가 사면 누군가 팔기 때문입니다. 다섯 투자자 구분을 모두 더하면 매달 0이 되고(반올림 ±2백만원 안), 2026년 1–9월에는 그림에 없는 기타외국인·기타법인이 합쳐 +58.7조였습니다.<!--/@read-cum--></p>
     <div class="legend"><span style="--c:var(--s-ind)">개인</span><span style="--c:var(--s-ins)">기관투자자</span><span style="--c:var(--s-for)">외국인</span></div>
     <div class="chart" id="cum"></div>
     <div class="live" id="cumLive" aria-live="polite"></div>
@@ -68,9 +68,9 @@
   <section class="note">
     <h2>어디서 왔고, 어떻게 확인했나</h2>
     <p><b>출처</b> 한국은행 ECOS 「1.5.1.3 투자자별 주식거래」(901Y055), 항목 개인·기관투자자·외국인 순매수, 거래대금(백만원). 원작성 기관은 한국거래소입니다. 받은 날은 위에 적었습니다.</p>
-    <p><b>시장 범위</b> 표 이름에 시장이 적혀 있지 않습니다. 2021년 1월 개인 값(22.3조원)이 그달 보도된 코스피 개인 순매수와 같아서 코스피(유가증권시장)로 봤습니다. 코스닥은 들어 있지 않은 것으로 봅니다.</p>
+    <p><b>시장 범위</b> 표 이름에 시장이 적혀 있지 않아, 같은 표의 투자자별 매수 합계(S22B)를 ECOS 「주식시장」 표의 코스피 거래대금과 매달 맞춰 봤습니다. 2005년 이후 모든 달이 맞아서(아래 검산) 이 표는 코스피(유가증권시장)입니다. 코스닥은 들어 있지 않습니다. 처음 이 페이지는 2021년 1월 한 달이 보도와 같다는 데서 코스피로 “봤다”고 적었는데, 이제 확인한 사실입니다.</p>
     <p><b>검산</b> 다섯 투자자 구분(개인·기관·외국인·기타외국인·기타법인)을 더한 값과 연간 표를 월별 값과 맞춰 봤습니다. 처음 이 페이지는 “273개월 모두 0”이라고 적었는데, 다시 재 보니 백만원 단위 반올림 때문에 ±1~2가 남는 달이 있어 고쳤습니다. 기타법인은 2009년 3월부터 따로 집계됩니다. 2026년 값은 최근 공표분이라 나중에 바뀔 수 있습니다.</p>
-    <!--@checks--><ul class="checks"><li class="">개인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기관투자자 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타법인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0 (앞 62개월은 따로 집계되지 않아 비어 있음, 200903부터 값)</li><li class="">273개월 중 168개월은 정확히 0, 나머지도 ±2백만원 안 (반올림)</li><li class="">22개 연도, 연간표와 월별 합의 차이 최대 3백만원 (월별 반올림 12번)</li></ul><!--/@checks-->
+    <!--@checks--><ul class="checks"><li class="">개인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기관투자자 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타외국인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">기타법인 순매수 거래대금: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0 (앞 62개월은 따로 집계되지 않아 비어 있음, 200903부터 값)</li><li class="">매수 거래대금 합계: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">KOSPI 거래대금: 261개월 200501–202609, 빠진 달 0, 숫자 아닌 값 0</li><li class="">273개월 중 168개월은 정확히 0, 나머지도 ±2백만원 안 (반올림)</li><li class="">22개 연도, 연간표와 월별 합의 차이 최대 3백만원 (월별 반올림 12번)</li><li class="">투자자별 매수 합계와 코스피 거래대금이 261개월(200501–202609) 중 260개월 일치(±1백만원), 나머지 1개월도 0.001% 안 (201705 135백만원) — 이 표는 코스피입니다</li><li class="">901Y055 작성기관 — ECOS 표기 “한국거래소”, 페이지 표기 “한국거래소”</li></ul><!--/@checks-->
     <p><b>이용 조건</b> 원작성이 한국거래소라 ECOS에서는 다른 기관 작성 통계입니다. ECOS 통계정보이용지침: “타 기관에서 작성한 통계정보는 출처를 명시하여 비상업적으로 이용할 수 있지만, 상업적으로 이용하고자 하는 경우에는 해당 통계작성기관(저작자)의 승인을 받은 후에 이용하여야 합니다.” 이 페이지는 무료·비상업 사이트에 출처를 밝혀 싣고, 값은 바꾸지 않았습니다. 인용할 때는 “출처: ECOS(한국은행, 한국거래소 원자료), 조회일”처럼 적어 주세요. 조건 해석은 지침 문구를 옮긴 것이며 법률 자문이 아닙니다.</p>
     <p><b>다시 받는 법</b> <code>node lab/fetch.mjs &amp;&amp; node lab/verify.mjs &amp;&amp; node lab/build.mjs</code> — 저장소의 <a href="https://github.com/seanbae-analyst/pivoxdata/tree/main/lab" target="_blank" rel="noopener">lab/</a> 폴더. ECOS 주소 형식: <code>https://ecos.bok.or.kr/api/StatisticSearch/{키}/json/kr/1/10/901Y055/M/{시작월}/{끝월}/S22CB/VA</code> — 항목 코드 S22CB 개인, S22CA 기관투자자, S22CC 외국인, S22CD 기타외국인, S22CF 기타법인. 표본 키(<code>sample</code>)는 한 번에 10행까지라 10개월씩 나눠 받았습니다.</p>
     <div class="tools"><button type="button" class="btn ghost sm" id="csv">이 페이지 데이터 CSV로 받기</button></div>
@@ -164,7 +164,7 @@ function drawCum(){
   svg.addEventListener("focus",()=>show(cur));svg.addEventListener("blur",hide);
 }
 function draw(){drawBars();drawCum()}
-document.getElementById("csv").addEventListener("click",()=>{const body=[["월","개인(백만원)","기관투자자(백만원)","외국인(백만원)"],...ROWS].map(r=>r.join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+body],{type:"text/csv;charset=utf-8"}));a.download="net-buy_"+ROWS[0][0]+"-"+ROWS[ROWS.length-1][0]+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
+document.getElementById("csv").addEventListener("click",()=>{const body=[["출처: ECOS(한국은행, 한국거래소 원자료) 901Y055 투자자별 주식거래(코스피), 순매수 거래대금. 비상업적 이용, 값 변경 없음. https://pivoxdata.vercel.app/research/net-buy"],["월","개인(백만원)","기관투자자(백만원)","외국인(백만원)"],...ROWS].map(r=>r.join(",")).join("\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+body],{type:"text/csv;charset=utf-8"}));a.download="net-buy_"+ROWS[0][0]+"-"+ROWS[ROWS.length-1][0]+".csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});
 draw();let rt;addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(draw,120)});
 </script>
 </body>
