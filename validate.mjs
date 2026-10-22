@@ -582,6 +582,28 @@ console.log("=".repeat(64));
   assert("skip reason quotes the column's own text, not a canned \"thirty\"", why.includes("N/A-ish") && !why.includes("thirty"));
 }
 
+// ---------- (16) UI WIRING — the scorer page uses the shared verdict/decoder, no canned hints ----------
+console.log("\n" + "=".repeat(64));
+console.log("(16) UI WIRING — the browser page shares verdictFor + encoding.mjs");
+console.log("=".repeat(64));
+{
+  const assert = (name, ok) => { console.log(`  ${ok ? "✓" : "✗ FAIL"}  ${name}`); if (!ok) failures++; };
+  // found by content, not by name (the page may be renamed): the HTML that imports the scorer
+  const page = fs.readdirSync(".").filter((f) => f.endsWith(".html"))
+    .find((f) => fs.readFileSync(f, "utf8").includes('from "./scorer.mjs"'));
+  const html = page ? fs.readFileSync(page, "utf8") : "";
+  assert(`scorer page found (${page})`, !!page);
+  assert("renders r.verdict from scorer.mjs (no second verdict formula in the page)",
+    html.includes("r.verdict.label") && !/const verdict = \(s\)/.test(html));
+  assert("CSV bytes go through encoding.mjs (decodeBytes), not Papa.parse(file)",
+    html.includes('from "./encoding.mjs"') && html.includes("decodeBytes(") && !/Papa\.parse\(file\b/.test(html));
+  assert("SheetJS is not render-blocking (no <script src=…xlsx…> in the page; lazy loadXLSX)",
+    !/<script[^>]+src="[^"]*xlsx[^"]*"/i.test(html) && html.includes("loadXLSX("));
+  assert("Excel read options match parse.mjs (cellDates + dateNF yyyy-mm-dd)",
+    html.includes('XLSX_READ_OPTS = { cellDates: true, dateNF: "yyyy-mm-dd" }'));
+  assert("no canned “thirty” / “서른” hint left in the page", !/thirty|서른/.test(html));
+}
+
 console.log("\n" + (failures === 0
   ? "ALL VALIDATIONS PASSED ✓"
   : `${failures} VALIDATION(S) FAILED ✗`));

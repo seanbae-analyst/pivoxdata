@@ -17,7 +17,6 @@ if(l!=="ko"&&l!=="en")l=/^ko\b/i.test(navigator.language||"")?"ko":"en";document
 if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?";})();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
   .wrap{max-width:1120px;margin:0 auto;padding:0 24px 80px}
   @media(max-width:560px){.wrap{padding:0 16px 64px}}
@@ -324,30 +323,33 @@ if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?
         <span class="vd good"><b>80–100</b><span lang="en">AI-ready</span><span lang="ko">AI에 넣어도 됨</span></span>
         <span class="vd warn"><b>55–79</b><span lang="en">Needs cleanup</span><span lang="ko">정리 필요</span></span>
         <span class="vd bad"><b>0–54</b><span lang="en">Not ready</span><span lang="ko">아직 안 됨</span></span>
+        <span class="vd warn"><b><span lang="en">Any personal data</span><span lang="ko">개인정보가 있으면</span></b><span lang="en">Remove personal data first — whatever the score (below 55 stays “Not ready”)</span><span lang="ko">개인정보부터 처리 — 점수와 상관없이 (55점 미만은 “아직 안 됨”)</span></span>
       </div>
       <div class="crit-scroll"><table class="crit-t">
         <thead><tr><th><span lang="en">Area</span><span lang="ko">영역</span></th><th><span lang="en">Counted as a problem</span><span lang="ko">문제로 세는 것</span></th><th><span lang="en">Points off</span><span lang="ko">감점</span></th></tr></thead>
         <tbody>
-          <tr><th rowspan="4"><span lang="en">Completeness</span><span lang="ko">완전성</span><small>40%</small></th>
+          <tr><th rowspan="5"><span lang="en">Completeness</span><span lang="ko">완전성</span><small>40%</small></th>
             <td><span lang="en">A column that is entirely empty</span><span lang="ko">전부 비어 있는 열</span></td><td>−12</td></tr>
           <tr><td><span lang="en">A column 50% or more empty</span><span lang="ko">50% 이상 비어 있는 열</span></td><td>−8</td></tr>
           <tr><td><span lang="en">A column 20% or more empty</span><span lang="ko">20% 이상 비어 있는 열</span></td><td>−4</td></tr>
-          <tr><td><span lang="en">Blanks dressed as data: N/A, NULL, none, unknown, TBD, “-” (counted on top of the rules above; not in an entirely empty column)</span><span lang="ko">값처럼 적힌 빈칸: N/A, NULL, none, unknown, TBD, “-” (위 감점과 따로 셉니다. 전부 빈 열은 제외)</span></td><td>−2</td></tr>
-          <tr><th rowspan="6"><span lang="en">Consistency</span><span lang="ko">일관성</span><small>35%</small></th>
+          <tr><td><span lang="en">Blanks dressed as data: N/A, NULL, none, unknown, TBD, “-”, 미상, 없음, 해당없음, 모름, 무응답, 알 수 없음, 미입력 (counted on top of the rules above; not in an entirely empty column; 없음 is kept as an answer when the same column also says 있음; 기타 is a real category and never counts)</span><span lang="ko">값처럼 적힌 빈칸: N/A, NULL, none, unknown, TBD, “-”, 미상, 없음, 해당없음, 모름, 무응답, 알 수 없음, 미입력 (위 감점과 따로 셉니다. 전부 빈 열은 제외. 같은 열에 “있음”이 있으면 “없음”은 답으로 보고 세지 않습니다. “기타”는 실제 분류라 세지 않습니다)</span></td><td>−2</td></tr>
+          <tr><td><span lang="en">Unreadable characters (�) — in the column names, and in the values (one problem each, for the whole file)</span><span lang="ko">읽을 수 없는 글자(�) — 열 이름에 하나, 값에 하나 (파일 전체에서 각각 한 번)</span></td><td><span lang="en">−8 each</span><span lang="ko">각 −8</span></td></tr>
+          <tr><th rowspan="7"><span lang="en">Consistency</span><span lang="ko">일관성</span><small>35%</small></th>
             <td><span lang="en">Exact duplicate rows</span><span lang="ko">완전히 같은 행</span></td><td><span lang="en">−3, plus the duplicate share in %, up to −15</span><span lang="ko">−3에 중복 비율(%)만큼 더, 최대 −15</span></td></tr>
-          <tr><td><span lang="en">Numbers and text mixed in one column (10–90% numeric)</span><span lang="ko">한 열에 숫자와 글자가 섞임 (숫자가 10–90%)</span></td><td>−6</td></tr>
-          <tr><td><span lang="en">Dates written more than one way (2021-03-05 · 03/05/2021 · March 5, 2021)</span><span lang="ko">날짜가 두 가지 이상 형식으로 적힘 (2021-03-05 · 03/05/2021 · March 5, 2021)</span></td><td>−8</td></tr>
+          <tr><td><span lang="en">Numbers and text mixed in one column (10–90% numeric; not counted in personal-data or ID-number columns, or when units explain all the text)</span><span lang="ko">한 열에 숫자와 글자가 섞임 (숫자가 10–90%. 개인정보·식별번호 열, 단위로 모두 설명되는 경우는 세지 않음)</span></td><td>−6</td></tr>
+          <tr><td><span lang="en">Numbers written with a unit (1,234원 · 1.2만원 · 3억) in a column that is otherwise numbers (at least 90% numbers or unit-numbers)</span><span lang="ko">숫자에 단위가 붙음 (1,234원 · 1.2만원 · 3억) — 숫자 아니면 단위 붙은 숫자가 90% 이상인 열</span></td><td>−6</td></tr>
+          <tr><td><span lang="en">Dates written more than one way (2021-03-05 · 03/05/2021 · March 5, 2021 · 2021.03.05 · 2021. 3. 5. · 2021년 3월 5일 · 2021/03/05 · 21-03-05)</span><span lang="ko">날짜가 두 가지 이상 형식으로 적힘 (2021-03-05 · 03/05/2021 · March 5, 2021 · 2021.03.05 · 2021. 3. 5. · 2021년 3월 5일 · 2021/03/05 · 21-03-05)</span></td><td>−8</td></tr>
           <tr><td><span lang="en">Placeholder dates: 1900-01-01, 0000-00-00</span><span lang="ko">자리만 채운 날짜: 1900-01-01, 0000-00-00</span></td><td>−6</td></tr>
           <tr><td><span lang="en">An ID column with repeats — its name ends in id / uid / uuid / guid and at least 90% of values are unique</span><span lang="ko">값이 겹치는 ID 열 — 이름이 id / uid / uuid / guid로 끝나고 값의 90% 이상이 서로 다른 열</span></td><td>−8</td></tr>
           <tr><td><span lang="en">The same value spelled several ways (USA / usa / U.S.A.)</span><span lang="ko">같은 값을 여러 가지로 적음 (USA / usa / U.S.A.)</span></td><td>−4</td></tr>
           <tr><th><span lang="en">Personal data</span><span lang="ko">개인정보</span><small>25%</small></th>
-            <td><span lang="en">A column where at least 30% of filled values (and at least 3) look like an email address, a phone number or a US Social Security number. A phone number is 10–15 digits with separators, or exactly 10–11 bare digits; decimals, dates and columns named “…code” / “…코드” never count.</span><span lang="ko">채워진 값의 30% 이상(최소 3개)이 이메일, 전화번호, 미국 사회보장번호처럼 보이는 열. 전화번호는 구분자가 있으면 10–15자리, 숫자만이면 정확히 10–11자리입니다. 소수점이 있는 값, 날짜, 이름이 “…code”·“…코드”로 끝나는 열은 세지 않습니다.</span></td><td><span lang="en">−15 per column</span><span lang="ko">열마다 −15</span></td></tr>
+            <td><span lang="en">A column where at least 30% of filled values (and at least 3) look like an email address, a phone number, a US Social Security number, a Korean resident or foreigner registration number (주민등록번호/외국인등록번호), or — only in a column named 계좌 / account number — a bank account number. A phone number is 10–15 digits with separators, exactly 10–11 bare digits, or a Korean number written with dots (010.4567.8901); other decimals, dates and columns named “…code” / “…코드” never count. A registration number is YYMMDD-G######, with or without the hyphen: the first six digits must be a real date, the 7th digit 1–8, and the date not in the future (no checksum — numbers issued since October 2020 don’t have one). Columns named 법인/corp are skipped for it. A business registration number (사업자등록번호, ###-##-##### with a valid check digit) is labelled as a business ID, not personal data, and costs no points.</span><span lang="ko">채워진 값의 30% 이상(최소 3개)이 이메일, 전화번호, 미국 사회보장번호, 주민등록번호/외국인등록번호, 또는 — 열 이름이 계좌·account number일 때만 — 계좌번호처럼 보이는 열. 전화번호는 구분자가 있으면 10–15자리, 숫자만이면 정확히 10–11자리, 또는 점으로 쓴 한국 번호(010.4567.8901)입니다. 그 밖의 소수점 값, 날짜, 이름이 “…code”·“…코드”로 끝나는 열은 세지 않습니다. 주민등록번호는 하이픈이 있든 없든 YYMMDD-G######이고, 앞 6자리가 실제 날짜, 7번째 자리가 1–8, 날짜가 미래가 아니어야 합니다(검증 번호는 보지 않습니다 — 2020년 10월 이후 번호에는 없습니다). 이름에 법인·corp가 들어간 열은 이 검사에서 뺍니다. 사업자등록번호(###-##-#####, 검증 번호가 맞는 것)는 개인정보가 아니라 사업자 식별번호로 표시하고 감점하지 않습니다.</span></td><td><span lang="en">−15 per column</span><span lang="ko">열마다 −15</span></td></tr>
         </tbody>
       </table></div>
       <ul class="crit-notes">
         <li><span lang="en"><b>Facts vs judgment.</b> Every problem comes with its raw evidence (for example <code>missing=26/44</code>), so you can check it yourself. The weights and point values are a judgment, written down here and in <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/TRUST.md" target="_blank" rel="noopener">TRUST.md</a>, and they can be changed.</span><span lang="ko"><b>사실과 판단을 나눕니다.</b> 문제마다 근거 숫자(예: <code>missing=26/44</code>)가 붙어 있어 직접 확인할 수 있습니다. 가중치와 감점은 판단이며, 여기와 <a href="https://github.com/seanbae-analyst/pivoxdata/blob/main/TRUST.md" target="_blank" rel="noopener">TRUST.md</a>에 적어 두었고 바꿀 수 있습니다.</span></li>
         <li><span lang="en"><b>Not measured.</b> Whether the values are true; whether the data represents what you want to study; whether you may use it (see the data maps). Outliers and skew are not scored either — they appear as patterns after cleanup.</span><span lang="ko"><b>재지 않는 것.</b> 값이 사실인지, 알고 싶은 대상을 제대로 대표하는지, 써도 되는 데이터인지(데이터 지도 참고)는 재지 않습니다. 튀는 값·쏠림은 점수에 넣지 않고 정리 뒤 패턴으로 보여 줍니다.</span></li>
-        <li><span lang="en"><b>Known gap.</b> Korean resident registration numbers (주민등록번호) and other non-US ID numbers are not detected yet — only email, phone and US SSN.</span><span lang="ko"><b>아직 못 잡는 것.</b> 주민등록번호 같은 한국 고유식별번호는 아직 찾지 못합니다. 지금은 이메일, 전화번호, 미국 사회보장번호만 봅니다.</span></li>
+        <li><span lang="en"><b>Known gaps.</b> Korean registration numbers are now detected; still not: passport and driver’s licence numbers, partly masked numbers (900101-1******), numbers inside free text, a column where fewer than 30% of values are personal data, bank account numbers in a column whose name does not say account, yy.mm.dd dates, compound amounts (3억 5천만원), and CSVs that are neither UTF-8 nor CP949 (their unreadable characters are reported). A 13-digit number that happens to start with a valid date and a 1–8 (e.g. 2410221234567) can still be read as a registration number.</span><span lang="ko"><b>아직 못 잡는 것.</b> 주민등록번호·외국인등록번호는 이제 찾습니다. 아직 못 찾는 것: 여권·운전면허 번호, 일부를 가린 번호(900101-1******), 긴 글 속에 섞인 번호, 개인정보 값이 30%가 안 되는 열, 이름에 계좌가 없는 열의 계좌번호, yy.mm.dd 날짜, 섞어 쓴 금액(3억 5천만원), UTF-8도 CP949도 아닌 CSV(읽을 수 없는 글자는 알려 줍니다). 우연히 실제 날짜와 1–8로 시작하는 13자리 숫자(예: 2410221234567)는 주민등록번호로 읽힐 수 있습니다.</span></li>
       </ul>
     </div>
 
@@ -384,6 +386,7 @@ if(l==="ko")document.title="DataReady — 이 데이터, AI에 넣어도 될까?
       <div class="card">
         <div class="meta-name" id="meta-name">—</div>
         <div class="meta-sub" id="meta-sub">—</div>
+        <div class="meta-sub hidden" id="meta-enc" role="status" style="color:var(--bronze-hi)"></div>
         <div class="scorebox">
           <div class="gauge" id="gauge"><div class="inner"><div class="n" id="score">–</div></div></div>
           <div><div class="verdict" id="verdict">—</div><div class="verdict-sub"><span lang="en">AI-readiness, out of 100</span><span lang="ko">AI 준비도 (100점 만점)</span> · <a href="#criteria" class="crit-link" data-home="criteria"><span lang="en">how it's scored</span><span lang="ko">채점 기준</span></a></div></div>
@@ -471,12 +474,38 @@ import { scoreDataset } from "./scorer.mjs";
 import { fixDataset } from "./fixer.mjs";
 import { analyzeBeforeAfter } from "./analyzer.mjs";
 import { extractInsights } from "./insights.mjs";
-import { setLang, L, piiName } from "./lang.mjs";
+import { setLang, L, piiName, idKindName } from "./lang.mjs";
+import { decodeBytes } from "./encoding.mjs";
 setLang(document.documentElement.lang);
 
 const $ = (id) => document.getElementById(id);
 const gColor = (s) => s >= 80 ? "var(--good)" : s >= 55 ? "var(--warn)" : "var(--bad)";
-const verdict = (s) => s >= 80 ? L("AI-ready", "AI에 넣어도 됨") : s >= 55 ? L("Needs cleanup", "정리 필요") : L("Not ready", "아직 안 됨");
+// the verdict comes from scorer.mjs (verdictFor) so the CLI and this page always agree —
+// including the personal-data cap; the gauge takes the verdict's tone, not the raw score's
+const TONE = { good: "var(--good)", warn: "var(--warn)", bad: "var(--bad)" };
+
+// SheetJS CE is ~950 KB: loaded only when an Excel file is opened or an .xlsx download is asked
+// for (it used to block every page load from <head>). Pinned version + SRI hash.
+const XLSX_SRC = "https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js";
+const XLSX_SRI = "sha384-EnyY0/GSHQGSxSgMwaIPzSESbqoOLSexfnSMN2AP+39Ckmn92stwABZynq1JyzdT";
+let xlsxLoading = null;
+function loadXLSX(){
+  if (window.XLSX) return Promise.resolve(window.XLSX);
+  return xlsxLoading ||= new Promise((resolve, reject)=>{
+    const sc = document.createElement("script");
+    sc.src = XLSX_SRC; sc.integrity = XLSX_SRI; sc.crossOrigin = "anonymous"; sc.async = true;
+    sc.onload = ()=> window.XLSX ? resolve(window.XLSX) : reject(new Error("SheetJS did not initialise"));
+    sc.onerror = ()=>{ xlsxLoading = null; sc.remove(); reject(new Error("could not load the Excel reader")); };
+    document.head.appendChild(sc);
+  });
+}
+// how the bytes were read — shown in the report whenever it was not plain UTF-8
+const encodingNotice = (enc) => ({
+  cp949: L("Not UTF-8 — read as CP949 (EUC-KR). Check that the Korean text in the preview looks right.", "UTF-8이 아니어서 CP949(EUC-KR)로 읽었습니다. 미리보기의 한글이 제대로 보이는지 확인하세요."),
+  "utf-16le": L("Read as UTF-16 (the file starts with a byte-order mark).", "UTF-16으로 읽었습니다 (파일 앞에 BOM이 있습니다)."),
+  "utf-16be": L("Read as UTF-16 (the file starts with a byte-order mark).", "UTF-16으로 읽었습니다 (파일 앞에 BOM이 있습니다)."),
+  unknown: L("Neither UTF-8 nor CP949 — unreadable bytes are shown as �. See the issues.", "UTF-8도 CP949도 아닙니다 — 읽을 수 없는 글자는 �로 보입니다. 찾은 문제를 보세요."),
+})[enc] || "";
 const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const fmtSize = (b) => b == null ? "" : b < 1024*1024 ? (b/1024).toFixed(1)+" KB" : (b/1024/1024).toFixed(1)+" MB";
 
@@ -505,6 +534,7 @@ document.addEventListener("click",(e)=>{
 /* ---------- dataset identity ---------- */
 function colKind(stat){
   if (stat.piiType) return { k: L("PII · ", "개인정보 · ") + piiName(stat.piiType), cls: "k-pii" };
+  if (stat.idKind) return { k: idKindName(stat.idKind), cls: "" };
   if (Object.keys(stat.dateShapes).length) return { k: L("date", "날짜"), cls: "k-date" };
   if (stat.present > 0 && stat.numericCount / stat.present > 0.9) return { k: L("number", "숫자"), cls: "k-num" };
   return { k: L("text", "글자"), cls: "" };
@@ -515,6 +545,9 @@ function renderMeta(r){
   $("meta-sub").textContent =
     [fmtSize(last.size), L(`${r.rowCount.toLocaleString()} rows × ${r.columnCount} columns`, `${r.rowCount.toLocaleString()}행 × ${r.columnCount}열`), L("nothing left your browser", "브라우저 밖으로 나간 것 없음")]
       .filter(Boolean).join(" · ");
+  const enc = encodingNotice(last.encoding);
+  $("meta-enc").textContent = enc;
+  $("meta-enc").classList.toggle("hidden", !enc);
 
   $("colchips").innerHTML = last.columns.map((c)=>{
     const s = r.columnStats[c] || {};
@@ -571,7 +604,7 @@ function buildFixOptions(r){
   const vals = [];
   vals.push(check("opt-trim", L("Trim stray spaces around values", "값 앞뒤 공백 지우기"), L("\" USA \" → \"USA\" — invisible whitespace breaks joins and groupbys", "\" USA \" → \"USA\" — 보이지 않는 공백이 조인과 그룹 묶기를 깨뜨립니다")));
   if (codes.has("sentinel")) vals.push(check("opt-sent",
-    L("Convert N/A, NULL, “-” to real empty cells", "N/A, NULL, “-”를 진짜 빈칸으로 바꾸기"), L("so tools count them as missing instead of as values", "도구가 값이 아니라 빈 값으로 세게 됩니다")));
+    L("Convert N/A, NULL, “-”, 미상, … to real empty cells", "N/A, NULL, “-”, 미상 등을 진짜 빈칸으로 바꾸기"), L("so tools count them as missing instead of as values", "도구가 값이 아니라 빈 값으로 세게 됩니다")));
   if (codes.has("placeholder_date")) vals.push(check("opt-ph",
     L("Clear placeholder dates (1900-01-01 / 0000-00-00)", "자리만 채운 날짜(1900-01-01 / 0000-00-00) 비우기"), L("they are missing data wearing a date costume", "날짜 모양을 한 빈 값입니다")));
   if (codes.has("mixed_date_format")) vals.push(`
@@ -628,9 +661,10 @@ function buildFixOptions(r){
 
   /* ── Privacy ── */
   const priv = [];
+  const piiFound = [...new Set(r.issues.filter((i)=>i.code === "pii").map((i)=> piiName(r.columnStats[i.column]?.piiType)))].join(" / ");
   if (codes.has("pii")) priv.push(`
     <div class="optgroup">
-      <div class="q">${L("Personal data (email / phone) was found — what should happen to it?", "개인정보(이메일 / 전화번호)가 있습니다 — 어떻게 할까요?")}</div>
+      <div class="q">${L(`Personal data (${esc(piiFound)}) was found — what should happen to it?`, `개인정보(${esc(piiFound)})가 있습니다 — 어떻게 할까요?`)}</div>
       <div class="choices">
         <label class="radio"><input type="radio" name="piiopt" value="keep" checked> ${L("Keep as-is", "그대로")} <span class="ex">${L("just flag it", "표시만")}</span></label>
         <label class="radio"><input type="radio" name="piiopt" value="mask"> ${L("Mask values", "값 가리기")} <span class="ex">a***@gmail.com · ***-0182</span></label>
@@ -651,7 +685,12 @@ function buildFixOptions(r){
 
   const kept = [];
   if (codes.has("missing") || codes.has("high_missing")) kept.push(L("<b>missing values</b> (imputation is a judgment)", "<b>빈 값</b> (채워 넣는 것은 판단입니다)"));
-  if (codes.has("numeric_text_mix")) kept.push(L("<b>“thirty” → 30 coercion</b> (needs interpretation)", "<b>“서른” → 30 변환</b> (해석이 필요합니다)"));
+  const mixIss = r.issues.find((i)=>i.code === "numeric_text_mix");
+  if (mixIss) {
+    const ex = esc((r.columnStats[mixIss.column]?.textSamples || [])[0] ?? "");
+    kept.push(L(`<b>text in number columns</b> such as “${ex}” (turning it into a number needs interpretation)`, `<b>숫자 열에 섞인 글자</b> 예: “${ex}” (숫자로 바꾸려면 해석이 필요합니다)`));
+  }
+  if (codes.has("number_with_unit")) kept.push(L("<b>numbers with units</b> (1.2만원 → 12000 depends on what unit the plain numbers are in)", "<b>단위 붙은 숫자</b> (1.2만원 → 12000은 단위 없는 숫자의 단위에 달려 있습니다)"));
   $("alwayskept").innerHTML = kept.length
     ? L(`Always left alone, no matter what: ${kept.join(" · ")} — the tool refuses to guess.`, `무엇을 골라도 건드리지 않는 것: ${kept.join(" · ")} — 도구는 추측하지 않습니다.`) : "";
 
@@ -662,10 +701,10 @@ function buildFixOptions(r){
 function render(r, navigate = true){
   renderMeta(r);
 
-  const c = gColor(r.score);
+  const c = TONE[r.verdict.tone];
   $("score").textContent = r.score;
   $("score").style.color = c;
-  $("verdict").textContent = verdict(r.score);
+  $("verdict").textContent = r.verdict.label;
   const g = $("gauge"); g.style.setProperty("--p", r.score); g.style.setProperty("--g", c);
 
   $("dims").innerHTML = Object.entries(r.dimensions).map(([k,d])=>`
@@ -685,7 +724,11 @@ function render(r, navigate = true){
     sentinel:          { auto: true,  text: L("Convert to real empties below — otherwise tools count “N/A” as data.", "아래에서 진짜 빈칸으로 바꾸세요 — 안 그러면 도구가 “N/A”를 값으로 셉니다.") },
     dup_rows:          { auto: true,  text: L("Remove below — duplicates inflate every count and bias any model.", "아래에서 지우세요 — 중복은 모든 개수를 부풀리고 모델을 치우치게 합니다.") },
     dup_id:            { auto: false, text: L("Same ID on more than one row: if the rows are exact copies, dedupe below clears them — if they differ, decide which record is the truth before any join or training run.", "같은 ID가 여러 행에 있습니다: 완전히 같은 행이면 아래 중복 제거로 지워지고, 내용이 다르면 조인이나 학습 전에 어느 기록이 맞는지 정하세요.") },
-    numeric_text_mix:  { auto: false, text: L("Fix by hand: decide what “thirty” means, convert in Sheets/Excel, or drop the text rows.", "직접 고치세요: “서른”이 무슨 뜻인지 정해 엑셀·시트에서 바꾸거나, 글자로 된 행을 지우세요.") },
+    numeric_text_mix:  { auto: false, text: (i)=>{ const ex = (r.columnStats[i.column]?.textSamples || []).slice(0, 2).map((t)=>`“${t}”`).join(", ");
+      return L(`Fix by hand: decide what ${ex} should be as numbers, convert in Sheets/Excel, or drop those rows.`, `직접 고치세요: ${ex} 같은 값을 어떤 숫자로 볼지 정해 엑셀·시트에서 바꾸거나, 그 행을 지우세요.`); } },
+    number_with_unit:  { auto: false, text: L("Fix by hand: move the unit into the column name (금액(원)) and keep only numbers — 1.2만원 is 12000 only if the column is in 원.", "직접 고치세요: 단위는 열 이름으로 옮기고(금액(원)) 값에는 숫자만 남기세요 — 1.2만원이 12000인 것은 열 단위가 원일 때뿐입니다.") },
+    unreadable_header: { auto: false, text: L("Re-export the file from its source as UTF-8 — the original letters are not in this file.", "원본에서 UTF-8로 다시 내려받으세요 — 원래 글자가 이 파일에 없습니다.") },
+    unreadable_value:  { auto: false, text: L("Re-export the file from its source as UTF-8 — the original letters are not in this file.", "원본에서 UTF-8로 다시 내려받으세요 — 원래 글자가 이 파일에 없습니다.") },
     mixed_date_format: { auto: true,  text: L("Unify below — pick ISO or US and every date becomes parseable.", "아래에서 맞추세요 — ISO나 미국식을 고르면 모든 날짜를 읽을 수 있습니다.") },
     placeholder_date:  { auto: true,  text: L("Clear below — 1900-01-01 silently poisons any time-series.", "아래에서 비우세요 — 1900-01-01은 시계열 분석을 조용히 망칩니다.") },
     pii:               { auto: true,  text: L("Decide below: keep (flagged), mask, or drop the column. Never feed raw PII to an LLM.", "아래에서 정하세요: 그대로(표시만), 가리기, 열 지우기. 개인정보 원본을 LLM에 넣지 마세요.") },
@@ -701,8 +744,9 @@ function render(r, navigate = true){
 
   $("issues").innerHTML = r.issues.map(i=>{
     const a = ACTIONS[i.code];
+    const aText = a ? (typeof a.text === "function" ? a.text(i) : a.text) : "";
     const act = a ? `<div class="act ${a.auto?"auto":"manual"}" ${a.auto?'data-goto="fixcard"':''}>
-      <span class="b">${a.auto?L("One-click fix","바로 고침"):L("Needs you","직접 판단")}</span>${esc(a.text)}</div>` : "";
+      <span class="b">${a.auto?L("One-click fix","바로 고침"):L("Needs you","직접 판단")}</span>${esc(aText)}</div>` : "";
     const sev = L(i.severity[0].toUpperCase() + i.severity.slice(1), { high: "높음", medium: "중간", low: "낮음" }[i.severity] || i.severity);
     return `<li class="issue"><span class="sev ${i.severity}">${sev}</span>
     <div><div class="msg">${esc(i.message)}</div>${act}</div><code class="ev">${esc(i.evidence)}</code></li>`;
@@ -720,24 +764,32 @@ function render(r, navigate = true){
 }
 
 /* ---------- parse & score ---------- */
-function handle(file){
+// Excel's locale short-date format renders as US "m/d/yy" in SheetJS; dateNF turns only that
+// format into ISO — same options as parse.mjs (XLSX_READ_OPTS), so the CLI and the page agree
+const XLSX_READ_OPTS = { cellDates: true, dateNF: "yyyy-mm-dd" };
+async function handle(file){
   const name = file.name.toLowerCase();
-  const finish = (rows, columns)=>{
-    last = { rows, columns, name: file.name, size: file.size };
+  const finish = (rows, columns, encoding)=>{
+    last = { rows, columns, name: file.name, size: file.size, encoding };
     render(scoreDataset(rows, columns));
   };
-  if(name.endsWith(".xlsx") || name.endsWith(".xls")){
-    const reader = new FileReader();
-    reader.onload = (e)=>{
-      const wb = XLSX.read(e.target.result, {type:"array"});
+  try {
+    const buf = await file.arrayBuffer();
+    if(name.endsWith(".xlsx") || name.endsWith(".xls")){
+      const X = await loadXLSX();
+      const wb = X.read(buf, {type:"array", ...XLSX_READ_OPTS});
       const ws = wb.Sheets[wb.SheetNames[0]];
-      const rows = XLSX.utils.sheet_to_json(ws, {defval:"", raw:false});
-      finish(rows, Object.keys(rows[0]||{}));
-    };
-    reader.readAsArrayBuffer(file);
-  } else {
-    Papa.parse(file, {header:true, dynamicTyping:false, skipEmptyLines:true,
-      complete:(res)=> finish(res.data, res.meta.fields) });
+      const rows = X.utils.sheet_to_json(ws, {defval:"", raw:false});
+      finish(rows, Object.keys(rows[0]||{}), "xlsx");
+    } else {
+      // bytes first: strict UTF-8, else CP949 (Korean public data), else lossy + reported
+      const { text, encoding } = decodeBytes(buf);
+      const res = Papa.parse(text, {header:true, dynamicTyping:false, skipEmptyLines:true});
+      finish(res.data, res.meta.fields || [], encoding);
+    }
+  } catch (err) {
+    console.error(err);
+    alert(L(`Could not read "${file.name}" — ${err.message}`, `"${file.name}" 파일을 읽지 못했습니다 — ${err.message}`));
   }
 }
 
@@ -752,8 +804,8 @@ document.querySelectorAll(".chip").forEach((btn)=>{
     try{
       const res = await fetch(src);
       if(!res.ok) throw new Error(res.status);
-      const text = await res.text();
-      handle(new File([text], src.split("/").pop(), {type:"text/csv"}));
+      const bytes = await res.arrayBuffer();
+      await handle(new File([bytes], src.split("/").pop(), {type:"text/csv"}));
     }catch(err){ failed = true; meta.textContent = L("Failed — click to retry", "실패 — 다시 누르세요"); }
     finally{
       chips.forEach(c=>c.disabled=false); btn.classList.remove("loading");
@@ -805,7 +857,7 @@ $("applyfix").addEventListener("click", ()=>{
   const after = scoreDataset(res.rows, res.columns);
   cleaned = { rows: res.rows, columns: res.columns, name: last.name, after };
 
-  const c = gColor(after.score);
+  const c = TONE[after.verdict.tone];
   $("delta").innerHTML = `${L("Score", "점수")} ${res.before.score} → <b style="color:${c}">${after.score}</b>`;
   $("fixlist").innerHTML = res.fixes.length
     ? res.fixes.map(f=>`<li>${esc(f.message)}</li>`).join("")
@@ -903,8 +955,11 @@ $("dl").addEventListener("click", ()=>{
   URL.revokeObjectURL(a.href);
 });
 
-$("dlx").addEventListener("click", ()=>{
+$("dlx").addEventListener("click", async ()=>{
   if(!cleaned) return;
+  let XLSX;
+  try { XLSX = await loadXLSX(); }
+  catch (err) { alert(L(`Could not load the Excel writer — ${err.message}`, `엑셀 저장 도구를 불러오지 못했습니다 — ${err.message}`)); return; }
   const ws = XLSX.utils.json_to_sheet(
     cleaned.rows.map(r=>Object.fromEntries(cleaned.columns.map(c=>[c, r[c] ?? ""]))),
     { header: cleaned.columns });
