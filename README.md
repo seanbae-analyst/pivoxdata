@@ -17,6 +17,49 @@ The site is free and non-commercial: no payment, no ads. That is also why the ne
 carry KRX-authored data (ECOS allows non-commercial use with the source named). Adding paid features
 or ads would mean taking that page down first.
 
+**한국어** — **데이터를 쓰기 전에, 써도 되는지 확인합니다.** 사이트는 두 갈래입니다.
+
+- **내 파일 → 채점기.** CSV나 엑셀 파일을 올리면 **0–100점 AI 준비도 점수**와 고칠 것을 쉬운 말로 알려 줍니다.
+  모두 브라우저 안에서 돌고 파일은 어디에도 올라가지 않습니다.
+- **공개 데이터 → [데이터 지도](https://pivoxdata.vercel.app/maps).** 질문 하나에 답할 공개 데이터가 무엇인지,
+  어떤 키로 이어지는지, 기간이 겹치는지, 써도 되는지(기관별 이용 조건 인용)를 한 장에 정리합니다. 지금은 서울 상권 폐업 ·
+  한국 개인투자자 지도 두 개와, 지도를 따라 그린 [개인 순매수 그래프](https://pivoxdata.vercel.app/maps/korea-investor-net-buy)가 있습니다.
+
+사이트는 무료·비상업입니다(결제·광고 없음). 그래서 순매수 그래프에 한국거래소 원작성 자료를 출처와 함께 실을 수 있습니다
+(ECOS: 출처를 밝힌 비상업적 이용 허용). 유료 기능이나 광고를 붙이려면 그 페이지부터 내려야 합니다.
+
+화면은 한국어 · 영어 둘 다 됩니다. 브라우저 언어를 따르고, 위쪽 버튼이나 `?lang=ko` / `?lang=en`으로 바꿉니다.
+데이터 지도는 한국 공공데이터를 다뤄 한국어로만 있습니다.
+
+## How the score is measured · AI-ready 점수 기준
+
+Source of truth: [`scorer.mjs`](scorer.mjs). The score is a weighted sum of three areas; each starts at 100 and
+loses points per problem (never below 0). **80–100** AI-ready · **55–79** needs cleanup · **0–54** not ready.
+
+점수는 세 영역의 가중합입니다. 영역마다 100점에서 시작해 문제 하나마다 깎습니다(0점 아래로는 안 내려감).
+**80–100** AI에 넣어도 됨 · **55–79** 정리 필요 · **0–54** 아직 안 됨.
+
+| Area · 영역 | Counted as a problem · 문제로 세는 것 | Points off · 감점 |
+|---|---|---|
+| **Completeness · 완전성 (40%)** | Column entirely empty · 전부 빈 열 | −12 |
+| | Column ≥ 50% empty · 50% 이상 빈 열 | −8 |
+| | Column ≥ 20% empty · 20% 이상 빈 열 | −4 |
+| | Blanks dressed as data (N/A, NULL, none, unknown, TBD, "-"), only in columns under 20% empty · 값처럼 적힌 빈칸 (빈칸 20% 미만인 열만) | −2 |
+| **Consistency · 일관성 (35%)** | Exact duplicate rows · 완전히 같은 행 | −3 + duplicate %, max −15 · 최대 −15 |
+| | Numbers and text mixed in one column (10–90% numeric) · 숫자·글자가 섞인 열 | −6 |
+| | Dates written more than one way (ISO · US slash · "March 5, 2021") · 날짜 형식이 여럿 | −8 |
+| | Placeholder dates 1900-01-01 / 0000-00-00 · 자리만 채운 날짜 | −6 |
+| | ID column with repeats (name ends in id/uid/uuid/guid, ≥ 90% unique) · 값이 겹치는 ID 열 | −8 |
+| | Same value spelled several ways (USA / usa / U.S.A.) · 같은 값의 여러 표기 | −4 |
+| **Personal data · 개인정보 (25%)** | ≥ 30% of filled values (and ≥ 3) look like email, phone or US SSN · 채워진 값의 30% 이상(최소 3개)이 이메일·전화번호·미국 SSN 꼴 | −15 per column · 열마다 |
+
+- **Facts vs judgment · 사실과 판단.** Every issue carries its raw evidence (`missing=26/44`); the weights and points are a
+  judgment, documented in [TRUST.md](TRUST.md) and tunable. 문제마다 근거 숫자가 붙고, 가중치·감점은 적어 둔 판단입니다.
+- **Not measured · 재지 않는 것.** Whether values are true, whether the data represents what you study, whether you may use
+  it (→ data maps). Outliers and skew appear as patterns after cleanup, not in the score. 값의 사실 여부, 대표성, 이용 가능 여부.
+- **Known gap · 아직 못 잡는 것.** Korean resident registration numbers (주민등록번호) and other non-US ID numbers are not
+  detected yet. 지금은 이메일·전화번호·미국 SSN만 봅니다.
+
 > A product-thinking portfolio piece by **Sanghyun Bae**. The full 1-page PRD is in
 > [`PRD.md`](PRD.md); the trust model is in [`TRUST.md`](TRUST.md).
 
@@ -79,11 +122,12 @@ CSV/XLSX in → score across dimensions → a ranked, plain-language issue list,
 | Dimension | Catches |
 |---|---|
 | **Completeness** | empty columns, high-missing columns, sentinel values (`N/A`, `NULL`, `-`) |
-| **Consistency** | mixed date formats, placeholder dates (`1900-01-01`), numeric/text mixing, duplicate rows |
+| **Consistency** | mixed date formats, placeholder dates (`1900-01-01`), numeric/text mixing, duplicate rows, repeated IDs, one value spelled several ways |
 | **PII** | email / phone / SSN-shaped columns → governance flag |
 
 Scores are **judgments built on facts** — the facts underneath are always inspectable, and the
-dimension weights are explicit and tunable. (See `TRUST.md` for why that separation matters.)
+dimension weights are explicit and tunable. (See `TRUST.md` for why that separation matters.) Exact rules and
+point values: [How the score is measured](#how-the-score-is-measured--ai-ready-점수-기준).
 
 ### …and it closes the loop: score → clean → download (v1.1)
 
@@ -213,6 +257,7 @@ maps.html         data maps index — one question, the public datasets for it, 
 maps/*.html       the maps themselves (manual research, metadata only — no data is fetched)
 maps/korea-investor-net-buy.html  monthly KOSPI net buying by investor type, 2004–2026 — ECOS 901Y055 values fetched once and embedded (source: KRX via the Bank of Korea; non-commercial use with attribution)
 scorer.mjs        the deterministic scorer — pure function, runs identically in browser + Node
+lang.mjs          display language switch (English default; the browser sets 한국어) — messages go through L(en, ko)
 parse.mjs         CSV/XLSX → rows (Node CLI)
 cli.mjs           score any file from the terminal
 serve.mjs         zero-dependency static server (npm run dev)

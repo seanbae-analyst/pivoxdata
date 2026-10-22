@@ -8,6 +8,7 @@
 // (The generalized, every-file version of experiment/SO_WHAT.md.)
 import { EMPTY, PII_PATTERNS, looksLikePhone, looksLikeIdColumn, dateShape } from "./scorer.mjs";
 import { toISO } from "./fixer.mjs";
+import { L, piiName } from "./lang.mjs";
 
 const normName = (s) => String(s).normalize("NFKC").trim().toLowerCase()
   .replace(/[^\p{L}\p{N}]+/gu, "_").replace(/^_+|_+$/g, "");
@@ -53,33 +54,33 @@ export function analyzeBeforeAfter(dirty, clean) {
   const push = (label, d, c, note) =>
     out.push({ label, dirty: String(d), clean: String(c), differs: String(d) !== String(c), ...(note ? { note } : {}) });
 
-  push("Rows the analysis runs on", fmt(dirty.rows.length), fmt(clean.rows.length));
+  push(L("Rows the analysis runs on", "분석에 쓰이는 행 수"), fmt(dirty.rows.length), fmt(clean.rows.length));
 
   for (const col of dirty.columns) {
     const s = dirty.stats.columnStats?.[col];
     if (!s || s.present === 0) continue;
     const cc = counterpart(col, clean.columns);
-    const gone = (v) => cc === null ? "— (column removed)" : v;
+    const gone = (v) => cc === null ? L("— (column removed)", "— (열 삭제됨)") : v;
 
     if (s.piiType) {
       const d = piiExposed(dirty.rows, col, s.piiType);
       const c = cc ? piiExposed(clean.rows, cc, s.piiType) : 0;
-      push(`Raw ${s.piiType} values in "${col}" an AI would receive`, fmt(d), cc ? fmt(c) : "0 (column removed)");
+      push(L(`Raw ${s.piiType} values in "${col}" an AI would receive`, `AI가 그대로 받게 될 "${col}" 열의 ${piiName(s.piiType)}`), fmt(d), cc ? fmt(c) : L("0 (column removed)", "0 (열 삭제됨)"));
       continue; // a PII column is not also summed/grouped
     }
     const numFrac = s.numericCount / s.present;
     if (numFrac >= 0.5 && !looksLikeIdColumn(col)) {
       const d = sumOf(dirty.rows, col);
       const c = cc ? sumOf(clean.rows, cc) : null;
-      push(`Total of "${col}"`, fmt(d.sum), gone(c ? fmt(c.sum) : ""),
-        d.excluded ? `${d.excluded} non-numeric value${d.excluded > 1 ? "s" : ""} silently excluded from the dirty sum` : undefined);
+      push(L(`Total of "${col}"`, `"${col}" 합계`), fmt(d.sum), gone(c ? fmt(c.sum) : ""),
+        d.excluded ? L(`${d.excluded} non-numeric value${d.excluded > 1 ? "s" : ""} silently excluded from the dirty sum`, `숫자가 아닌 값 ${d.excluded}개가 정리 전 합계에서 말없이 빠졌습니다`) : undefined);
       continue;
     }
     if (Object.keys(s.dateShapes).length > 0) {
       const d = dateRange(dirty.rows, col), c = cc ? dateRange(clean.rows, cc) : null;
       if (d) {
-        push(`Earliest "${col}"`, d.min, gone(c?.min ?? "—"));
-        push(`Latest "${col}"`, d.max, gone(c?.max ?? "—"));
+        push(L(`Earliest "${col}"`, `가장 이른 "${col}"`), d.min, gone(c?.min ?? "—"));
+        push(L(`Latest "${col}"`, `가장 늦은 "${col}"`), d.max, gone(c?.max ?? "—"));
       }
       continue;
     }
@@ -88,8 +89,8 @@ export function analyzeBeforeAfter(dirty, clean) {
     if (dg.size >= 2 && dg.size <= 20 && !looksLikeIdColumn(col)) {
       const cg = cc ? groups(clean.rows, cc) : null;
       const top = (m) => { const e = [...m.entries()].sort((a, b) => b[1] - a[1])[0]; return `${e[0]} (${fmt(e[1])})`; };
-      push(`Distinct groups a group-by sees in "${col}"`, fmt(dg.size), gone(cg ? fmt(cg.size) : ""));
-      if (cg && cg.size) push(`Most common "${col}"`, top(dg), top(cg));
+      push(L(`Distinct groups a group-by sees in "${col}"`, `"${col}" 열로 묶을 때 생기는 그룹 수`), fmt(dg.size), gone(cg ? fmt(cg.size) : ""));
+      if (cg && cg.size) push(L(`Most common "${col}"`, `가장 많은 "${col}"`), top(dg), top(cg));
     }
   }
   return out.slice(0, 14); // sanity cap for very wide files
