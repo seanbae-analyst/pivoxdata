@@ -65,6 +65,7 @@ const html = `<!doctype html>
   .kick{font-size:30px;font-weight:600;color:var(--bronze-hi);letter-spacing:-.01em}
   .big{font-size:200px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:64px;font-variant-numeric:tabular-nums}
   .bl{font-size:32px;color:var(--mut);margin-top:18px}
+  h1,h2,.cover li span{text-wrap:balance} p,li{text-wrap:pretty}
   h1{font-size:104px;line-height:1.12;letter-spacing:-.04em;margin:80px 0 0;font-weight:800}
   h2{font-size:52px;line-height:1.3;letter-spacing:-.03em;margin:64px 0 0;font-weight:700}
   p{font-size:32px;line-height:1.6;color:var(--ink-2);margin:28px 0 0}

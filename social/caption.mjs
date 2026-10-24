@@ -17,7 +17,10 @@ import { picked } from "./pick.mjs";
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const I = JSON.parse(fs.readFileSync(path.join(ROOT, "trends", "data", "insights.json"), "utf8"));
 const date = I.built_at, dir = path.join(ROOT, "social", "out", date);
-const slides = picked(I.insights);
+// the insights carry line-break characters for the cards (no-break spaces and hyphens, zero-width breaks);
+// the caption gets plain text so a model id can be copied and searched
+const plain = (t) => String(t).replace(/\u200b/g, "").replace(/\u2011/g, "-").replace(/\u00a0/g, " ");
+const slides = picked(I.insights).map((x) => ({ ...x, big: plain(x.big), bl: plain(x.bl), title: plain(x.title), body: plain(x.body), src: plain(x.src) }));
 const MODEL = "claude-opus-5-5";
 
 // ---------- the checks ----------

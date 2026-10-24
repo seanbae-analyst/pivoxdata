@@ -114,6 +114,15 @@ const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > 
 // Instagram cards (social/) are both drawn from these, so they always say the same thing. `big`, `title` and `body`
 // are computed here every week; nothing is written by hand.
 const nm = (r) => (r.group === "provider" ? `AI SDK용 ${r.name}` : r.name); // "DeepSeek" alone would read as DeepSeek's own SDK
+// line breaks: a short name stays on one line (OpenAI&nbsp;Agents), a model id breaks only after "/", and a number is
+// glued to the word before it so "+87%" never starts a line on its own
+const keep = (t) => {
+  const e = esc(t);
+  if (t.includes("/")) return e.replace(/\//g, "/<wbr>").replace(/-/g, "&#8209;"); // model id
+  if (!t.includes(" ")) return e.replace(/-/g, "&#8209;");                        // image-text-to-text
+  return t.length <= 28 ? e.replace(/ /g, "&nbsp;") : e;                          // OpenAI Agents
+};
+const glue = (html) => html.replace(/ (<b>[+−\-]?[\d$])/g, "&nbsp;$1");
 const nTop = ranked(npm).slice(0, 3), pTop = ranked(pypi).slice(0, 3);
 const acc = npm.rows.filter((r) => r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
 const lastN = (a, n) => a.slice(Math.max(0, a.length - n));
@@ -121,28 +130,28 @@ const lv = (x, pkg, n) => lastN(x.W[pkg].map((w) => w.level), n);
 const span = (x, n) => `${wlbl(lastN(x.weeks, n)[0])}–${wlbl(x.weeks.at(-1))}`;
 const insights = [
   { id: "npm", k: "개발자 · JavaScript", big: pp(nTop[0].excess), bl: "대조군보다 더 큰 4주 성장",
-    title: `npm에서 가장 빨리 크는 AI 패키지는 <b>${esc(nm(nTop[0]))}</b>`,
+    title: `npm에서 가장 빨리 크는 AI 패키지는 <b>${keep(nm(nTop[0]))}</b>`,
     body: `4주 다운로드 ${pc(nTop[0].g4)}, 같은 4주 react·lodash 같은 대조군은 ${pc(npm.base)}. 다음은 ${nTop.slice(1).map((r) => `${esc(nm(r))}(${pp(r.excess)})`).join(", ")}.`,
     spark: { values: lv(npm, nTop[0].pkg, 26) }, src: `npm 평일 다운로드 · ${span(npm, 26)}` },
   { id: "accel", k: "가속", big: pp(acc.accel), bl: "4주 성장률이 오른 폭",
-    title: `성장이 가장 빨라지는 쪽은 <b>${esc(nm(acc))}</b>`,
+    title: `성장이 가장 빨라지는 쪽은 <b>${keep(nm(acc))}</b>`,
     body: `4주 성장률이 직전 4주 ${pc(acc.g4 - acc.accel)}에서 ${pc(acc.g4)}로 올라갔습니다.`,
     spark: { values: lv(npm, acc.pkg, 26) }, src: `npm 평일 다운로드 · ${span(npm, 26)}` },
   { id: "provider", k: "앱에 붙이는 모델", big: sh(provUp.now), bl: `Vercel AI SDK 공급자 중 ${provUp.name} 비중`,
-    title: `1년 새 <b>${esc(provUp.name)}</b> ${sh(provUp.then)} → ${sh(provUp.now)}`,
+    title: `1년 새 <b>${keep(provUp.name)}</b> ${sh(provUp.then)}&nbsp;→&nbsp;${sh(provUp.now)}`,
     body: `지금 1위는 ${esc(provLead.name)}(${sh(provLead.now)}), 가장 많이 내린 곳은 ${esc(provDown.name)}(${sh(provDown.then)} → ${sh(provDown.now)}). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.`,
     spark: { values: lastN(provSeries.series[provUp.pkg], 52) }, src: `@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주` },
   { id: "pypi", k: "개발자 · Python", big: pp(pTop[0].excess), bl: "대조군보다 더 큰 4주 성장",
-    title: `파이썬에서 가장 빨리 크는 쪽은 <b>${esc(pTop[0].name)}</b>`,
+    title: `파이썬에서 가장 빨리 크는 쪽은 <b>${keep(pTop[0].name)}</b>`,
     body: `4주 다운로드 ${pc(pTop[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}. 다음은 ${pTop.slice(1).map((r) => `${esc(r.name)}(${pp(r.excess)})`).join(", ")}.`,
     spark: { values: pypi.W[pTop[0].pkg].slice(pypi.from).map((w) => w.level) }, src: `PyPI 평일 다운로드 · ${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주` },
   ...(axTop ? [{ id: "arxiv", k: "연구", big: `${axTop.ratio.toFixed(1)}배`, bl: "AI 논문 속 비율, 1년 전 대비",
-    title: `연구자들이 가장 빠르게 더 쓰는 말은 <b>${esc(axTop.name)}</b>`,
+    title: `연구자들이 가장 빠르게 더 쓰는 말은 <b>${keep(axTop.name)}</b>`,
     body: `최근 3개월 AI 논문의 ${sh(axTop.now)}가 초록에 썼습니다(1년 전 ${sh(axTop.then)}). 가장 많이 쓰인 말은 ${esc(axBiggest.name)}(${sh(axBiggest.now)}).`,
     spark: { values: am.map((m) => axShare(axTop.id, m)) }, src: `arXiv cs.AI·cs.CL·cs.LG · ${mlbl(am[0])}–${mlbl(am.at(-1))}` }] : []),
   { id: "hf", k: "오픈 모델", big: sh(byAuthor[0][1] / genTotal), bl: `텍스트 생성 모델 다운로드 중 ${byAuthor[0][0]} 계열`,
-    title: `오픈 텍스트 생성 모델 다운로드의 ${sh(byAuthor[0][1] / genTotal)}는 <b>${esc(byAuthor[0][0])}</b> 계열`,
-    body: `다음은 ${byAuthor.slice(1, 3).map(([a, v]) => `${esc(a)}(${sh(v / genTotal)})`).join(", ")}. 지금 가장 뜨는 모델은 ${esc(snap.trending[0].id)}(${esc(snap.trending[0].task ?? "")}${snap.trending[0].task ? ", " : ""}${snap.trending[0].created} 공개).${prevSnap ? ` 지난주보다 다운로드 상위 ${snap.top.length}에 새로 든 모델 ${newIn.length}개.` : ""}`,
+    title: `오픈 텍스트 생성 모델 다운로드의 ${sh(byAuthor[0][1] / genTotal)}는 <b>${keep(byAuthor[0][0])}</b>&nbsp;계열`,
+    body: `다음은 ${byAuthor.slice(1, 3).map(([a, v]) => `${esc(a)}(${sh(v / genTotal)})`).join(", ")}. 지금 가장 뜨는 모델은 ${keep(snap.trending[0].id)}(${keep(snap.trending[0].task ?? "")}${snap.trending[0].task ? ", " : ""}${snap.trending[0].created} 공개).${prevSnap ? ` 지난주보다 다운로드 상위 ${snap.top.length}에 새로 든 모델 ${newIn.length}개.` : ""}`,
     spark: { values: byAuthor.slice(0, 6).map(([, v]) => v / genTotal), bars: true, labels: byAuthor.slice(0, 6).map(([a]) => a) }, src: `Hugging Face 다운로드 상위 ${snap.top.length} · ${snap.date}` },
   { id: "capex", k: "자본", big: usd(capex.sum), bl: `빅테크 4사 설비투자 · ${qlbl(cq)}`,
     title: `AI 인프라에 들어가는 돈, 1년 전보다 <b>${pc(capex.yoy, 0)}</b>`,
@@ -162,7 +171,7 @@ function spark(sp, w = 300, h = 64) {
   const X = (i) => (i * w) / (v.length - 1), d = v.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join("");
   return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d}L${w},${h}L0,${h}Z"/><path class="l" d="${d}"/></svg>`;
 }
-const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${x.title}</h3><p>${x.body}</p>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
+const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
 
 // ---------- chart data ----------
 const D = {
@@ -212,7 +221,8 @@ writePages(fills, updated);
 }
 
 // the same insights as data, for the Instagram cards and caption (social/)
-const text = (s) => String(s).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+// plain text for the cards and the caption; non-breaking spaces stay as U+00A0 so the cards keep the same line breaks
+const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map((x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
