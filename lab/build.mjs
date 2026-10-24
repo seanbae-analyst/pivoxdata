@@ -47,13 +47,13 @@ const MARK = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-h
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/"><span class="mark">${MARK}</span><span class="full">개인투자자 데이터 연구소</span><span class="short">데이터 연구소</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/trends">트렌드</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
 </header>
 `;
 const FOOTER = `
 <footer class="site">
   <span>개인투자자 데이터 연구소 · 무료·비상업 · 투자 권유를 하지 않습니다</span>
-  <span class="links"><a href="/#principles">원칙</a><a href="/#research">연구</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+  <span class="links"><a href="/#principles">원칙</a><a href="/#research">연구</a><a href="/trends">기술 트렌드</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
 `;
 function head(page, html) {
@@ -346,6 +346,7 @@ const PAGES = [
     usage: "ECOS 통계정보이용지침: 한국은행이 작성한 통계정보는 출처를 명시하는 한 상업적 용도를 포함하여 무료로 자유롭게 사용, 가공 및 재배포 가능",
     variables: ["가계 해외주식 잔액 (분기말, 십억원)", "가계 해외주식 순취득 (분기, 십억원)", "가계 금융자산 합계 (십억원)", "가계 국내 주식·출자지분 순취득 (십억원)"] }) },
   { file: "research/record-habit.html", path: "/research/record-habit", og: "record-habit" },
+  { file: "trends.html", path: "/trends" },
   { file: "maps.html", path: "/maps" },
   { file: "maps/korea-investor.html", path: "/maps/korea-investor" },
   { file: "maps/seoul-closure.html", path: "/maps/seoul-closure" },

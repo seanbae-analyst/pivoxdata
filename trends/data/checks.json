@@ -1,0 +1,196 @@
+{
+ "checked_at": "2026-10-24",
+ "notes": {
+  "npm": {
+   "until": "2026-10-18",
+   "lastWeek": "2026-10-05",
+   "trimmed": 1,
+   "breaks": [],
+   "weeks": 197
+  },
+  "pypi": {
+   "until": "2026-10-18",
+   "lastWeek": "2026-10-12",
+   "trimmed": 0,
+   "breaks": [
+    {
+     "week": "2026-08-24",
+     "ratio": 0.6516234254526186
+    }
+   ],
+   "weeks": 27
+  }
+ },
+ "checks": [
+  {
+   "id": "npm:present",
+   "ok": true,
+   "fact": "22개 패키지 중 22개 받음"
+  },
+  {
+   "id": "npm:fresh",
+   "ok": true,
+   "fact": "마지막 날 2026-10-23, 받은 날 2026-10-24"
+  },
+  {
+   "id": "npm:days",
+   "ok": true,
+   "fact": "모든 패키지의 날짜가 하루도 빠짐없이 이어짐"
+  },
+  {
+   "id": "npm:point=range",
+   "ok": true,
+   "fact": "기간 API(일별 합)와 지난주 합계 API가 22/22개 패키지에서 같은 숫자 (2026-10-16~2026-10-22)"
+  },
+  {
+   "id": "npm:weeks",
+   "ok": true,
+   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-05 주 (그 뒤 1주는 집계가 덜 끝나 뺌), 총 197주"
+  },
+  {
+   "id": "npm:zero-days",
+   "ok": true,
+   "fact": "2026년에 0으로 적힌 날: openai 15일, @anthropic-ai/sdk 15일, @google/genai 15일, @mistralai/mistralai 17일, @ai-sdk/openai 15일, @ai-sdk/anthropic 15일, @ai-sdk/google 15일, @ai-sdk/mistral 15일, @ai-sdk/xai 15일, @ai-sdk/deepseek 15일, ai 15일, @modelcontextprotocol/sdk 15일, langchain 15일, @langchain/langgraph 15일, @openai/agents 15일, @mastra/core 15일, ollama 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음"
+  },
+  {
+   "id": "npm:breaks",
+   "ok": true,
+   "fact": "대조군(react·lodash·express·typescript·axios)이 한꺼번에 30% 넘게 움직인 주 없음 (연말연시 제외)"
+  },
+  {
+   "id": "pypi:present",
+   "ok": true,
+   "fact": "23개 패키지 중 23개 받음"
+  },
+  {
+   "id": "pypi:fresh",
+   "ok": true,
+   "fact": "마지막 날 2026-10-23, 받은 날 2026-10-24"
+  },
+  {
+   "id": "pypi:days",
+   "ok": true,
+   "fact": "모든 패키지의 날짜가 하루도 빠짐없이 이어짐"
+  },
+  {
+   "id": "pypi:recent≈daily",
+   "ok": true,
+   "fact": "최근 7일 합계 API와 일별 합이 23개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
+  },
+  {
+   "id": "pypi:weeks",
+   "ok": true,
+   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-12 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 27주"
+  },
+  {
+   "id": "pypi:zero-days",
+   "ok": true,
+   "fact": "2026년에 0으로 적힌 날 없음"
+  },
+  {
+   "id": "pypi:breaks",
+   "ok": true,
+   "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후만 비교"
+  },
+  {
+   "id": "arxiv:months",
+   "ok": false,
+   "fact": "12개월 202301–202312, 빠진 달 0 (지난달까지)"
+  },
+  {
+   "id": "arxiv:terms",
+   "ok": true,
+   "fact": "키워드 15개 모두 매달 셈"
+  },
+  {
+   "id": "arxiv:term≤total",
+   "ok": true,
+   "fact": "어느 달도 키워드 논문 수가 그달 AI 논문 전체보다 많지 않음"
+  },
+  {
+   "id": "hf:snapshot",
+   "ok": true,
+   "fact": "2026-10-24 스냅숏: 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 1개)"
+  },
+  {
+   "id": "hf:sorted",
+   "ok": true,
+   "fact": "다운로드 순 목록이 실제로 다운로드 내림차순"
+  },
+  {
+   "id": "sec:msft:fresh",
+   "ok": true,
+   "fact": "Microsoft: 마지막 분기 2026Q2 (분기말 2026-06-30)"
+  },
+  {
+   "id": "sec:msft:two-readings",
+   "ok": true,
+   "fact": "Microsoft: 3개월 공시값과 누적에서 뺀 값이 36개 분기에서 1% 안 (가장 큰 차이 0.00%)"
+  },
+  {
+   "id": "sec:msft:quarters",
+   "ok": true,
+   "fact": "Microsoft: 2019년 이후 30개 분기, 같은 분기 두 번 없음"
+  },
+  {
+   "id": "sec:googl:fresh",
+   "ok": true,
+   "fact": "Alphabet: 마지막 분기 2026Q2 (분기말 2026-06-30)"
+  },
+  {
+   "id": "sec:googl:two-readings",
+   "ok": true,
+   "fact": "Alphabet: 3개월 공시값과 누적에서 뺀 값이 12개 분기에서 1% 안 (가장 큰 차이 0.96%, 백만 달러 반올림·정정 공시)"
+  },
+  {
+   "id": "sec:googl:quarters",
+   "ok": true,
+   "fact": "Alphabet: 2019년 이후 30개 분기, 같은 분기 두 번 없음"
+  },
+  {
+   "id": "sec:amzn:fresh",
+   "ok": true,
+   "fact": "Amazon: 마지막 분기 2026Q2 (분기말 2026-06-30)"
+  },
+  {
+   "id": "sec:amzn:two-readings",
+   "ok": true,
+   "fact": "Amazon: 3개월 공시값과 누적에서 뺀 값이 34개 분기에서 1% 안 (가장 큰 차이 0.99%, 백만 달러 반올림·정정 공시)"
+  },
+  {
+   "id": "sec:amzn:quarters",
+   "ok": true,
+   "fact": "Amazon: 2019년 이후 30개 분기, 같은 분기 두 번 없음"
+  },
+  {
+   "id": "sec:meta:fresh",
+   "ok": true,
+   "fact": "Meta: 마지막 분기 2026Q3 (분기말 2026-09-30)"
+  },
+  {
+   "id": "sec:meta:two-readings",
+   "ok": true,
+   "fact": "Meta: 3개월 값을 따로 공시하지 않아 누적에서 뺀 값 하나뿐 — 두 번째 읽기 없음"
+  },
+  {
+   "id": "sec:meta:quarters",
+   "ok": true,
+   "fact": "Meta: 2019년 이후 31개 분기, 같은 분기 두 번 없음"
+  },
+  {
+   "id": "sec:orcl:fresh",
+   "ok": true,
+   "fact": "Oracle: 마지막 분기 2026Q3 (분기말 2026-08-31)"
+  },
+  {
+   "id": "sec:orcl:two-readings",
+   "ok": true,
+   "fact": "Oracle: 3개월 값을 따로 공시하지 않아 누적에서 뺀 값 하나뿐 — 두 번째 읽기 없음"
+  },
+  {
+   "id": "sec:orcl:quarters",
+   "ok": true,
+   "fact": "Oracle: 2019년 이후 31개 분기, 같은 분기 두 번 없음"
+  }
+ ]
+}

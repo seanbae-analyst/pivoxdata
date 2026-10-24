@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 기술 신호 레이더 · 개인투자자 데이터 연구소</title>
+<meta name="description" content="개발자가 실제로 내려받는 AI 패키지, 논문 키워드, 오픈 모델, 빅테크 설비투자를 매주 같은 방식으로 재서, 대조군보다 빨리 크는 것을 먼저 보여 줍니다." />
+<!--@head-->
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="canonical" href="https://data.pivoxquant.com/trends" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="개인투자자 데이터 연구소" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://data.pivoxquant.com/trends" />
+<meta property="og:title" content="AI 기술 신호 레이더" />
+<meta property="og:description" content="개발자가 실제로 내려받는 AI 패키지, 논문 키워드, 오픈 모델, 빅테크 설비투자를 매주 같은 방식으로 재서, 대조군보다 빨리 크는 것을 먼저 보여 줍니다." />
+<meta property="og:image" content="https://data.pivoxquant.com/og/home.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://data.pivoxquant.com/og/home.png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css" />
+<!--/@head-->
+<link rel="stylesheet" href="/research.css" />
+<style>
+  /* main is a grid: without this a wide table widens the whole column instead of scrolling inside .tbl */
+  main>*{min-width:0}
+  .sigs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:8px}
+  @media(max-width:760px){.sigs{grid-template-columns:1fr}}
+  .sig{border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);padding:18px 20px}
+  .sig .k{font-size:12.5px;color:var(--bronze-hi);font-weight:600}
+  .sig h3{font-size:17px;line-height:1.45;margin:6px 0 8px;font-weight:600;letter-spacing:-.01em}
+  .sig h3 b{color:var(--ink);font-weight:700}
+  .sig p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.65}
+  .tbl td .pkg{display:block;font-size:12px;color:var(--dim);font-weight:400}
+  .tbl td.pos{color:var(--good)} .tbl td.neg{color:var(--bad, #e5484d)}
+  .note-s{font-size:13px;color:var(--mut);margin:8px 0 0;line-height:1.6}
+  .authors{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;max-width:640px}
+  .authors li{display:grid;grid-template-columns:150px 1fr 56px;gap:10px;align-items:center;font-size:14px}
+  .authors .bar{height:10px;border-radius:5px;background:linear-gradient(90deg,var(--bronze-hi) var(--w),transparent var(--w));border:1px solid var(--line)}
+  .authors .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+  @media(max-width:560px){.authors li{grid-template-columns:110px 1fr 50px;font-size:13px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<!--@nav-->
+<header class="topbar">
+  <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="full">개인투자자 데이터 연구소</span><span class="short">데이터 연구소</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/#research">연구</a><a href="/trends">트렌드</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a></nav>
+</header>
+<!--/@nav-->
+<main>
+  <header>
+    <div class="kicker">기술 트렌드 · 매주 갱신</div>
+    <h1>AI 기술 신호 레이더</h1>
+    <p class="lede">기사보다 먼저 움직이는 숫자를 봅니다 — 개발자가 실제로 내려받는 패키지, 연구자가 쓰는 말, 사람들이 받는 오픈 모델, 빅테크가 데이터센터에 쓰는 돈. 매주 같은 방식으로 재고, 크기보다 <b>평소보다 얼마나 빨리 커지는지</b>로 줄을 세웁니다. 아래 문장은 모두 데이터로 계산돼 매주 다시 쓰입니다.</p>
+    <p class="meta"><!--@t-meta--><!--/@t-meta--></p>
+  </header>
+
+  <section>
+    <h2>이번 주 신호</h2>
+    <div class="sigs"><!--@t-signals--><!--/@t-signals--></div>
+  </section>
+
+  <section>
+    <h2>개발자가 실제로 내려받는 것 — JavaScript (npm)</h2>
+    <p class="sub">LLM 회사 SDK, 모델 공급자, 에이전트·도구 패키지. 다운로드는 사람 수가 아니라 설치 횟수이고, 자동 빌드(CI)가 큰 몫을 차지합니다. 그래서 크기보다 같은 소스의 대조군과 견준 변화를 봅니다.</p>
+    <div class="tbl"><table><thead><tr><th>패키지</th><th>평일 하루</th><th>4주 성장</th><th>대조군 대비</th><th>가속</th><th>1년 전 대비</th></tr></thead><tbody><!--@t-npm--><!--/@t-npm--></tbody></table></div>
+    <p class="note-s"><!--@t-npm-note--><!--/@t-npm-note--></p>
+  </section>
+
+  <section>
+    <h2>앱에 어떤 모델을 붙이나</h2>
+    <p class="sub">Vercel AI SDK로 앱을 만들 때 모델마다 따로 설치하는 공급자 패키지(@ai-sdk/openai 등)의 다운로드 비중입니다. 4주 평균, 주마다. 차트를 가리키거나 누르면 그 주 값이 보입니다.</p>
+    <div class="chart" id="prov"></div>
+    <div class="live" id="provLive" aria-live="polite"></div>
+  </section>
+
+  <section>
+    <h2>개발자가 실제로 내려받는 것 — Python (PyPI)</h2>
+    <p class="sub">같은 방식으로 PyPI를 봅니다(알려진 미러 제외).</p>
+    <div class="tbl"><table><thead><tr><th>패키지</th><th>평일 하루</th><th>4주 성장</th><th>대조군 대비</th><th>가속</th></tr></thead><tbody><!--@t-pypi--><!--/@t-pypi--></tbody></table></div>
+    <p class="note-s"><!--@t-pypi-note--><!--/@t-pypi-note--></p>
+  </section>
+
+  <section>
+    <h2>연구자가 쓰는 말 — arXiv</h2>
+    <p class="sub">AI 논문(cs.AI·cs.CL·cs.LG) 중 초록에 그 말이 들어간 비율, 매달. 1년 전보다 가장 빨리 늘어난 다섯 개를 그렸습니다. 단위 %.</p>
+    <div class="chart" id="arxiv"></div>
+    <div class="live" id="arxivLive" aria-live="polite"></div>
+    <details>
+      <summary>키워드 전체 표</summary>
+      <div class="tbl"><table><thead><tr><th>말</th><th>최근 3개월 비율</th><th>1년 전 같은 3개월</th><th>배수</th><th>지난달 논문 수</th></tr></thead><tbody><!--@t-arxiv--><!--/@t-arxiv--></tbody></table></div>
+    </details>
+  </section>
+
+  <section>
+    <h2>사람들이 받는 오픈 모델 — Hugging Face</h2>
+    <p class="sub">지금 뜨는 모델(Hugging Face 트렌딩 순)과, 다운로드 상위 모델 중 텍스트 생성 모델의 30일 다운로드를 만든 곳별로 나눈 비율입니다.</p>
+    <div class="tbl"><table><thead><tr><th>#</th><th>모델</th><th>작업</th><th>30일 다운로드</th><th>공개일</th></tr></thead><tbody><!--@t-hf-trending--><!--/@t-hf-trending--></tbody></table></div>
+    <h3 style="font-size:15px;margin:22px 0 4px">텍스트 생성 모델 다운로드, 만든 곳별</h3>
+    <ul class="authors"><!--@t-hf-authors--><!--/@t-hf-authors--></ul>
+  </section>
+
+  <section>
+    <h2>자본 — 빅테크 설비투자</h2>
+    <p class="sub">회사가 건물·서버·칩 같은 설비에 현금으로 쓴 돈(현금흐름표의 설비 취득), 분기마다. 데이터센터와 AI 반도체에 들어가는 돈이 가장 크게 잡히는 항목입니다. 단위 십억 달러. 회계연도가 다른 회사는 분기 말이 속한 달력 분기로 맞췄습니다.</p>
+    <div class="chart" id="capex"></div>
+    <div class="live" id="capexLive" aria-live="polite"></div>
+    <details>
+      <summary>최근 분기 표</summary>
+      <div class="tbl"><table><thead><tr><th>분기</th><th>Microsoft</th><th>Alphabet</th><th>Amazon</th><th>Meta</th><th>4사 합계</th><th>Oracle</th></tr></thead><tbody><!--@t-capex--><!--/@t-capex--></tbody></table></div>
+    </details>
+  </section>
+
+  <section class="limits">
+    <h2>이 숫자로 말할 수 없는 것</h2>
+    <ul>
+      <li><b>다운로드는 사용자 수가 아닙니다.</b> 한 사람이 여러 번, 자동 빌드가 수천 번 내려받습니다. 그래서 크기 비교보다 같은 소스 안에서의 변화와 비율을 봅니다.</li>
+      <li><b>대조군도 움직입니다.</b> 개학·연말처럼 소스 전체가 함께 오르내리는 때가 있습니다. "대조군 대비"는 그 몫을 뺀 값이지만, 대조군 다섯 개가 소스 전체를 완벽히 대표하지는 않습니다.</li>
+      <li><b>집계가 바뀌거나 늦는 때가 있습니다.</b> PyPI는 2026년 8월 말 한꺼번에 반으로 줄었고, npm은 0으로 적힌 날이 있습니다. 둘 다 아래 검산에 그대로 적고, 계산은 그 몫을 피하도록 했습니다 — 그래도 완전히 피했다고 장담하지 않습니다.</li>
+      <li><b>논문 비율은 초록에 그 말이 있는지만 봅니다.</b> 말이 유행하는 것과 기술이 쓰이는 것은 다릅니다.</li>
+      <li><b>설비투자는 AI만의 돈이 아닙니다.</b> 물류 창고·사무실도 같은 항목에 들어갑니다.</li>
+      <li><b>예측하지 않습니다.</b> 지난 숫자가 어떻게 움직였는지까지만 씁니다. 특정 회사나 종목의 투자 판단을 권하지 않습니다.</li>
+    </ul>
+  </section>
+
+  <section class="note">
+    <h2>어디서 왔고, 어떻게 확인했나</h2>
+    <p><b>출처와 이용 조건</b> (2026-10-24 약관 확인)</p>
+    <ul>
+      <li><b>npm</b> 다운로드 수 공개 API(api.npmjs.org/downloads). 공개 API로 제공되며, 다운로드 수를 다른 곳에 싣는 데 대한 조건은 약관에 따로 적혀 있지 않습니다. npm과 관계가 있거나 승인받은 것처럼 보이지 않게 적습니다.</li>
+      <li><b>PyPI</b> pypistats.org API — 원자료는 PyPI의 BigQuery 공개 데이터셋이며 CC BY 4.0입니다(docs.pypi.org/api/bigquery). pypistats는 결과를 캐시해 하루 한 번만 받으라고 안내합니다.</li>
+      <li><b>arXiv</b> API — 메타데이터는 CC0 1.0. 요청은 3초에 한 번 이하. 이 페이지는 arXiv가 승인하거나 지원하는 것이 아닙니다.</li>
+      <li><b>Hugging Face</b> Hub API — 모델 목록의 다운로드 수(지난 30일, Hub 기준). 다운로드 수를 싣는 데 대한 조건은 약관에 따로 적혀 있지 않습니다.</li>
+      <li><b>SEC EDGAR</b> XBRL companyfacts — 미국 정부 공개 자료. 현금흐름 항목은 연초부터 누적으로 공시돼 분기 값은 차이로 구합니다.</li>
+    </ul>
+    <p>약관 문구를 옮긴 것이며 법률 자문이 아닙니다.</p>
+    <p><b>검산</b> 매주 아래를 다시 확인하고, 하나라도 어긋나면 그 주는 페이지를 바꾸지 않습니다.</p>
+    <ul class="checks"><!--@t-checks--><!--/@t-checks--></ul>
+    <p><b>다시 만드는 법</b> <code>npm run trends</code> — 저장소의 <a href="https://github.com/seanbae-analyst/pivoxdata/tree/main/trends" target="_blank" rel="noopener">trends/</a> 폴더. 지켜보는 패키지·키워드·회사는 <code>trends/series.mjs</code> 한 곳에 있습니다.</p>
+    <div class="tools"><button type="button" class="btn ghost sm" id="csvNpm">npm 주간 수준 CSV</button> <button type="button" class="btn ghost sm" id="csvCapex">설비투자 분기 CSV</button></div>
+  </section>
+</main>
+<!--@footer-->
+<footer class="site">
+  <span>개인투자자 데이터 연구소 · 무료·비상업 · 투자 권유를 하지 않습니다</span>
+  <span class="links"><a href="/#principles">원칙</a><a href="/#research">연구</a><a href="/trends">기술 트렌드</a><a href="/maps">데이터 지도</a><a href="/check">파일 점검</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+</footer>
+<!--/@footer-->
+</div>
+<script type="module">
+import { lines, csvButton } from "/charts.mjs";
+/*@t-data*//*/@t-data*/
+const PAL = ["#C2873F", "#3987e5", "#d55181", "#3fb68b", "#a78bfa", "#9a9590"];
+const pct = (v) => v.toFixed(1) + "%";
+const wk = (t) => `${t.slice(0, 4)}년 ${+t.slice(5, 7)}월 ${+t.slice(8)}일 주`;
+const qmon = (q) => q.slice(0, 4) + ["01", "04", "07", "10"][+q.slice(5) - 1];
+
+// weeks: label a tick at the first week of each January (each quarter on narrow screens is too dense)
+lines(document.getElementById("prov"), {
+  label: "Vercel AI SDK 모델 공급자 패키지 다운로드 비중, 주별 선 차트",
+  months: D.prov.weeks, tlabel: wk, xtick: (t, i) => (i === 0 || t.slice(0, 4) !== D.prov.weeks[i - 1].slice(0, 4) ? t.slice(0, 4) : null),
+  series: D.prov.series.map((s, i) => ({ name: s.name, color: PAL[i], values: s.values.map((v) => (v == null ? null : v * 100)) })),
+  fmt: pct, yfmt: (t) => (t === 0 ? "0" : t + "%"), live: "provLive", min: 0,
+});
+lines(document.getElementById("arxiv"), {
+  label: "AI 논문 중 키워드를 쓴 비율, 월별 선 차트",
+  months: D.arxiv.months, series: D.arxiv.series.map((s, i) => ({ name: s.name.replace(/ \(.*\)$/, ""), color: PAL[i], values: s.values })),
+  fmt: (v) => v.toFixed(2) + "%", yfmt: (t) => (t === 0 ? "0" : t + "%"), live: "arxivLive", min: 0,
+});
+lines(document.getElementById("capex"), {
+  label: "빅테크 설비투자 분기별 선 차트",
+  months: D.capex.quarters.map(qmon), tlabel: (t) => `${t.slice(0, 4)}년 ${(+t.slice(4) + 2) / 3}분기`,
+  series: [{ name: "4사 합계", color: "#f2eee6", values: D.capex.sum, width: 2.5 }, ...D.capex.series.map((s, i) => ({ name: s.name, color: PAL[i], values: s.values, width: 1.5 }))],
+  fmt: (v) => "$" + v.toFixed(1) + "B", yfmt: (t) => (t === 0 ? "0" : "$" + t + "B"), live: "capexLive", min: 0,
+});
+csvButton(document.getElementById("csvNpm"), "npm-weekly-levels.csv", D.csv.npmHead, D.csv.npm, "출처: npm registry download counts API. 값은 그 주 평일(0 제외) 다운로드의 중앙값. https://data.pivoxquant.com/trends");
+csvButton(document.getElementById("csvCapex"), "bigtech-capex-quarterly.csv", D.csv.capexHead, D.csv.capex, "출처: SEC EDGAR XBRL companyfacts (PaymentsToAcquirePropertyPlantAndEquipment / PaymentsToAcquireProductiveAssets). https://data.pivoxquant.com/trends");
+</script>
+</body>
+</html>

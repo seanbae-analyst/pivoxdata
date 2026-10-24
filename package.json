@@ -9,7 +9,9 @@
     "validate": "node --max-old-space-size=4096 validate.mjs",
     "simulate": "node sim.mjs 7 20000 --report",
     "lab": "node lab/fetch.mjs && node lab/verify.mjs && node lab/build.mjs",
-    "lab:build": "node lab/verify.mjs && node lab/build.mjs"
+    "lab:build": "node lab/verify.mjs && node lab/build.mjs",
+    "trends": "node trends/fetch.mjs && node trends/verify.mjs && node trends/build.mjs && node lab/build.mjs",
+    "trends:build": "node trends/verify.mjs && node trends/build.mjs && node lab/build.mjs"
   },
   "dependencies": {
     "papaparse": "^5.4.1",

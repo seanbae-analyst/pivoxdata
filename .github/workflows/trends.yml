@@ -1,0 +1,59 @@
+# Weekly refresh of the trends radar (/trends).
+# fetch → verify → build. When every check passes, the refreshed data and page are committed to main and Vercel
+# publishes them. When a check fails, nothing is committed and an issue is opened with the failing checks —
+# a wrong sentence is never published silently.
+name: trends weekly
+
+on:
+  schedule:
+    - cron: "17 1 * * 1" # Mondays 01:17 UTC (10:17 KST), after npm/PyPI have counted Sunday
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: trends
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch, verify, build
+        id: run
+        shell: bash # -eo pipefail, so a failing step is not hidden by tee
+        env:
+          SEC_CONTACT: ${{ vars.SEC_CONTACT }}
+        run: npm run trends 2>&1 | tee run.log
+
+      - name: Commit refreshed data and page
+        if: success()
+        run: |
+          git config user.name "pivoxdata-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add trends/data trends.html sitemap.xml robots.txt
+          if git diff --cached --quiet; then echo "nothing changed"; exit 0; fi
+          git commit -m "data(trends): weekly refresh $(date -u +%F)"
+          git push
+
+      - name: Open an issue when a check fails
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const log = fs.existsSync("run.log") ? fs.readFileSync("run.log", "utf8") : "(no log)";
+            const failed = log.split("\n").filter((l) => l.startsWith("✗") || /Error|STOPPED/.test(l)).join("\n") || log.slice(-3000);
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: `trends: weekly refresh stopped (${new Date().toISOString().slice(0, 10)})`,
+              body: `The weekly trends job did not publish because a check failed.\n\n\`\`\`\n${failed.slice(0, 6000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });

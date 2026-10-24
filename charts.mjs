@@ -2,7 +2,7 @@
 // Same conventions as the first net-buying page: inline SVG, tooltip on hover/tap, ← → keys move the
 // month, an aria-live line repeats the tooltip for screen readers, redraw on resize. No dependencies.
 //
-//   lines(box, {months, series:[{name, color, values}], fmt, yfmt, live, label, marks, tightFloor})
+//   lines(box, {months, series:[{name, color, values}], fmt, yfmt, live, label, marks, tightFloor, tlabel, xtick})
 //   bars(box,  {months, values, color, fmt, yfmt, live, label, marks, tipExtra})
 // months: ["199901", ...]; values: numbers or null (gap). marks: [{at:"202605", text:"…"}] direct labels.
 // Quarterly pages pass each quarter as its first month ("2026Q2" → "202604", so year ticks land on Q1) and
@@ -28,11 +28,13 @@ function frame(box, { label, narrow, H, m }) {
   return { W, svg, tip, iw: W - m.l - m.r, ih: H - m.t - m.b };
 }
 
-function axes(svg, { W, H, m, iw, ticks, Y, yfmt, months, X, narrow, zeroLine }) {
+function axes(svg, { W, H, m, iw, ticks, Y, yfmt, months, X, narrow, zeroLine, xtick }) {
   ticks.forEach((t) => {
     el("line", { x1: m.l, x2: m.l + iw, y1: Y(t), y2: Y(t), stroke: t === 0 && zeroLine ? "#55524c" : "#1d1c1a", "stroke-width": 1 }, svg);
     el("text", { x: m.l - 8, y: Y(t) + 4, "text-anchor": "end" }, svg).textContent = yfmt(t);
   });
+  // weekly or other non-monthly axes name their own ticks: xtick(t, i, narrow) → label or null
+  if (xtick) { months.forEach((t, i) => { const s = xtick(t, i, narrow); if (s) el("text", { x: X(i), y: H - 8, "text-anchor": "middle" }, svg).textContent = s; }); return; }
   const years = months.filter((t) => t.endsWith("01")).map((t) => +t.slice(0, 4));
   const span = years.length, every = span > 20 ? (narrow ? 5 : 2) : span > 10 ? (narrow ? 3 : 1) : 1;
   months.forEach((t, i) => { if (t.endsWith("01") && +t.slice(0, 4) % every === 0) el("text", { x: X(i), y: H - 8, "text-anchor": "middle" }, svg).textContent = t.slice(0, 4); });
@@ -72,7 +74,7 @@ export function lines(box, o) {
     const all_t = niceTicks(lo, hi, narrow ? 4 : 5), ticks = o.tightFloor ? all_t.filter((t) => t >= lo) : all_t;
     const y0 = o.tightFloor ? lo : Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * iw / Math.max(1, n - 1);
-    axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X, narrow, zeroLine: y0 < 0 });
+    axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X, narrow, zeroLine: y0 < 0, xtick: o.xtick });
     (o.bands || []).forEach((b) => { const i0 = o.months.indexOf(b.from), i1 = o.months.indexOf(b.to); if (i0 < 0 || i1 < 0) return;
       el("rect", { x: X(i0), y: m.t, width: Math.max(2, X(i1) - X(i0)), height: ih, fill: "#f2eee6", "fill-opacity": 0.05 }, svg);
       if (b.text) el("text", { x: X(i0) + 4, y: m.t + 12, class: "note-t" }, svg).textContent = b.text; });
@@ -119,7 +121,7 @@ export function bars(box, o) {
     const nums = vals.filter((v) => v != null), lo = Math.min(0, ...nums), hi = Math.max(0, ...nums);
     const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * bw;
-    axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X: (i) => X(i) + bw / 2, narrow, zeroLine: true });
+    axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X: (i) => X(i) + bw / 2, narrow, zeroLine: true, xtick: o.xtick });
     const g = el("g", {}, svg), gap = bw > 3 ? Math.min(1, bw * 0.25) : 0, rects = [];
     vals.forEach((v, i) => { if (v == null) { rects.push(null); return; } const y = Math.min(Y(0), Y(v)), h = Math.max(1, Math.abs(Y(v) - Y(0)));
       rects.push(el("rect", { x: X(i) + gap / 2, y, width: Math.max(0.6, bw - gap), height: h, fill: typeof o.color === "function" ? o.color(v, i) : o.color, rx: Math.min(2, bw / 3) }, g)); });
