@@ -1,14 +1,15 @@
-// build.mjs — writes the radar's readings into trends.html (marked regions, like lab/build.mjs).
+// build.mjs — writes the radar's readings into index.html (the dashboard) and map.html (marked regions).
 // Every sentence on the page is computed from trends/data, so a new week of data rewrites it; nothing here is a
 // fixed claim that a re-fetch could falsify. The build stops (writes nothing) only when data is missing or the
 // checks in verify.mjs failed — then the weekly job opens an issue instead of publishing.
 //
-// Usage: node trends/build.mjs   (after trends/verify.mjs; lab/build.mjs then adds the shared nav/footer/head)
+// Usage: node trends/build.mjs   (after trends/verify.mjs; also fills the shared head/nav/footer via site.mjs)
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV, SEC } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
+import { writePages } from "./site.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = path.join(ROOT, "trends", "data");
@@ -182,31 +183,37 @@ const capexRows = [...common].reverse().slice(0, 8).map((q) => `<tr><td>${qlbl(q
 const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? ` (${pyBack}주 전 ${sh(sdkThen[p.pkg])})` : ""}`).join(" · ");
 
 // ---------- write ----------
-function region(html, name, content) {
-  const a = new RegExp(`(<!--@${name}-->)[\\s\\S]*?(<!--/@${name}-->)`), b = new RegExp(`(/\\*@${name}\\*/)[\\s\\S]*?(/\\*/@${name}\\*/)`);
-  if (a.test(html)) return html.replace(a, (_, x, y) => x + content + y);
-  if (b.test(html)) return html.replace(b, (_, x, y) => x + content + y);
-  throw new Error(`trends.html: region @${name} not found`);
+// index.html (the dashboard) and map.html get their regions here; site.mjs adds the shared head/nav/footer to every
+// page and rewrites sitemap.xml / robots.txt.
+const sourceStatus = [
+  ["npm", `${npm.fetched} 받음 · ${wlbl(npm.last)}까지 · 패키지 ${NPM.length + NPM_CONTROL.length}개`],
+  ["pypi", `${pypi.fetched} 받음 · ${wlbl(pypi.last)}까지 · 패키지 ${PYPI.length + PYPI_CONTROL.length}개`],
+  ["arxiv", `${AX.fetched_at} 받음 · ${mlbl(am.at(-1))}까지 · 말 ${ARXIV.length}개`],
+  ["hf", `${HFD.fetched_at} 스냅숏 · 상위 ${snap.top.length} + 트렌딩 ${snap.trending.length}`],
+  ["sec", `${SECD.fetched_at} 받음 · ${qlbl(cq)}까지 · 회사 ${SEC.companies.length}곳`],
+];
+const fills = {
+  "index.html": {
+    "t-meta": meta, "t-signals": insightHtml, "t-npm": table(npm, true),
+    "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
+    "t-pypi": table(pypi, false),
+    "t-pypi-note": `${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 ${pypi.weeks.length - pypi.from}주만 비교합니다. 그래서 가속과 1년 전 대비는 아직 없습니다.` : ""} 대조군 중앙값 ${pc(pypi.base)}. LLM SDK 점유: ${sdkLine}.`,
+    "t-arxiv": axTable, "t-hf-trending": trendRows, "t-hf-authors": authorRows, "t-capex": capexRows, "t-checks": checkLi,
+  },
+  "map.html": Object.fromEntries(sourceStatus.map(([id, t]) => [`m-${id}`, esc(t)])),
+};
+writePages(fills, updated);
+// the chart data is a JS comment region (/*@t-data*/…), written separately
+{
+  const file = path.join(ROOT, "index.html"), h = fs.readFileSync(file, "utf8");
+  const next = h.replace(/(\/\*@t-data\*\/)[\s\S]*?(\/\*\/@t-data\*\/)/, (_, a, b) => a + `const D=${JSON.stringify(D)};` + b);
+  if (next === h && !h.includes("/*@t-data*/")) throw new Error("index.html: region @t-data not found");
+  if (next !== h) { fs.writeFileSync(file, next); console.log("wrote index.html (chart data)"); }
 }
-const file = path.join(ROOT, "trends.html"), before = fs.readFileSync(file, "utf8");
-let h = before;
-h = region(h, "t-meta", meta);
-h = region(h, "t-signals", insightHtml);
-h = region(h, "t-npm", table(npm, true));
-h = region(h, "t-npm-note", `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`);
-h = region(h, "t-pypi", table(pypi, false));
-h = region(h, "t-pypi-note", `${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 ${pypi.weeks.length - pypi.from}주만 비교합니다. 그래서 가속과 1년 전 대비는 아직 없습니다.` : ""} 대조군 중앙값 ${pc(pypi.base)}. LLM SDK 점유: ${sdkLine}.`);
-h = region(h, "t-arxiv", axTable);
-h = region(h, "t-hf-trending", trendRows);
-h = region(h, "t-hf-authors", authorRows);
-h = region(h, "t-capex", capexRows);
-h = region(h, "t-checks", checkLi);
-h = region(h, "t-data", `const D=${JSON.stringify(D)};`);
-if (h !== before) { fs.writeFileSync(file, h); console.log("wrote trends.html"); } else console.log("same  trends.html");
 
 // the same insights as data, for the Instagram cards and caption (social/)
 const text = (s) => String(s).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-const out = { built_at: updated, page: "https://data.pivoxquant.com/trends", insights: insights.map((x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) })) };
+const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map((x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

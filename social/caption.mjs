@@ -87,7 +87,7 @@ if (!result.body) console.log(`template caption used — ${result.why}`);
 const caption = `${body}
 
 출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매주 같은 방식으로 계산
-자세히: data.pivoxquant.com/trends
+자세히: data.pivoxquant.com
 다운로드 수는 사용자 수가 아니며, 지난 숫자만 말합니다. 예측이나 투자 권유가 아닙니다.
 
 #AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터`;

@@ -1,5 +1,5 @@
 // build.mjs — the week's Instagram carousel as one HTML page of 1080×1350 slides, drawn from
-// trends/data/insights.json (the same objects the /trends page shows). render.mjs screenshots each slide.
+// trends/data/insights.json (the same objects the dashboard at / shows). render.mjs screenshots each slide.
 //
 // Usage: node social/build.mjs   (after trends/build.mjs)
 import fs from "node:fs";
@@ -14,7 +14,7 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const slides = picked(I.insights);
 if (slides.length < 3) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
 const date = I.built_at, [y, m, d] = date.split("-");
-const foot = `<div class="foot"><span>data.pivoxquant.com/trends</span><span>투자 권유 아님</span></div>`;
+const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>투자 권유 아님</span></div>`;
 
 const cover = `<section class="slide cover">
   <div class="kick">AI 기술 신호 레이더 · ${+y}년 ${+m}월 ${+d}일</div>
@@ -44,7 +44,7 @@ const outro = `<section class="slide outro">
     <li>자본: 미국 SEC 공시의 설비투자</li>
   </ul>
   <p>다운로드 수는 사용자 수가 아닙니다. 지난 숫자만 말하고, 예측하거나 투자를 권하지 않습니다.</p>
-  <div class="url">data.pivoxquant.com/trends</div>
+  <div class="url">data.pivoxquant.com</div>
   ${foot}
 </section>`;
 
@@ -54,6 +54,7 @@ const html = `<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=1080" />
 <meta name="robots" content="noindex" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 <title>Instagram 카드 ${date}</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>

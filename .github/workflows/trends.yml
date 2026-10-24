@@ -1,4 +1,4 @@
-# Weekly refresh of the trends radar (/trends) and the Instagram draft.
+# Weekly refresh of the dashboard (/, AI 기술 신호 레이더) and the Instagram draft.
 #   1. fetch → verify → build. If any check fails, nothing is committed and an issue lists the failing checks —
 #      a wrong sentence is never published silently.
 #   2. The same insights become carousel cards (social/build.mjs, render.mjs) and a caption (social/caption.mjs:
@@ -55,7 +55,7 @@ jobs:
         run: |
           git config user.name "pivoxdata-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add trends/data trends.html sitemap.xml robots.txt social/cards.html social/out
+          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git commit -m "data(trends): weekly refresh $(date -u +%F)"
           git push

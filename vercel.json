@@ -14,8 +14,38 @@
   ],
   "redirects": [
     {
-      "source": "/maps/korea-investor-net-buy",
-      "destination": "/research/net-buy",
+      "source": "/trends",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/research/:path*",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/maps/:path*",
+      "destination": "/map",
+      "permanent": true
+    },
+    {
+      "source": "/maps",
+      "destination": "/map",
+      "permanent": true
+    },
+    {
+      "source": "/check",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/analysis",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/analysis-kr",
+      "destination": "/",
       "permanent": true
     }
   ]

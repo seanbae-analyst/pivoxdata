@@ -1,10 +1,10 @@
 # 인스타그램 주간 카드 — 설정과 흐름
 
-매주 `/trends`의 인사이트로 카드(1080×1350 캐러셀)와 캡션을 만들고, **저장소 소유자가 승인해야** 인스타그램에 올립니다.
+매주 사이트의 인사이트로 카드(1080×1350 캐러셀)와 캡션을 만들고, **저장소 소유자가 승인해야** 인스타그램에 올립니다.
 
 ```
 월요일 10:17 KST  trends.yml
-  ├ 데이터 받기 → 검산 → /trends 다시 만들기        (검산 하나라도 실패 → 아무것도 바꾸지 않고 이슈)
+  ├ 데이터 받기 → 검산 → 대시보드(/) 다시 만들기       (검산 하나라도 실패 → 아무것도 바꾸지 않고 이슈)
   ├ social/build.mjs   인사이트 → 카드 HTML
   ├ social/render.mjs  카드 → social/out/<날짜>/01.png …
   ├ social/caption.mjs Claude가 캡션 본문 작성 → 코드가 숫자·금지어 검사 (2번 실패하면 템플릿 캡션)
@@ -56,7 +56,7 @@ Actions → **trends weekly** → Run workflow. 몇 분 뒤 `[instagram]` 이슈
 
 ```bash
 npm ci
-npm run trends                      # 데이터 → 검산 → /trends
+npm run trends                      # 데이터 → 검산 → 대시보드(/)
 node social/build.mjs && node social/render.mjs && node social/caption.mjs
 node social/publish.mjs social/out/<날짜>/post.json --dry-run   # 게시하지 않고 보낼 내용만 출력
 ```
