@@ -1,5 +1,13 @@
-// pick.mjs — which insights make the week's carousel, in order (the rest stay on the site).
+// pick.mjs — which insights make a carousel, in order (the rest stay on the site).
 // Shared by build.mjs (slides) and caption.mjs (what the caption may talk about).
+//  • event: the big case first, then the cards of its topic tab (it is about something; they give the context)
+//  • roundup: the radar's strongest AI cards
 export const PICK = ["npm", "provider", "arxiv", "pypi", "capex", "hf", "accel"];
 export const MAX = 5;
-export const picked = (insights) => PICK.map((id) => insights.find((x) => x.id === id)).filter(Boolean).slice(0, MAX);
+export function slidesFor(I, plan) {
+  if (plan?.mode === "event") {
+    const topic = I.topics.find((t) => t.id === plan.event.topic) ?? I.topics[0];
+    return [plan.event.card, ...topic.insights.filter((x) => x.id !== plan.event.card.id)].slice(0, MAX);
+  }
+  return PICK.map((id) => I.insights.find((x) => x.id === id)).filter(Boolean).slice(0, MAX);
+}

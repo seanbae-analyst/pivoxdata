@@ -1,4 +1,4 @@
-# Posts an approved weekly carousel to Instagram.
+# Posts an approved carousel (a big case or a roundup) to Instagram.
 # Runs only when the repository OWNER comments /approve (or /reject) on an open "[instagram]" issue opened by
 # trends.yml. The post itself is social/out/<date>/post.json, already committed and checked; this job only sends it.
 name: instagram publish
@@ -48,7 +48,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: "이번 주는 게시하지 않습니다." });
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: "게시하지 않습니다." });
             await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed", state_reason: "not_planned" });
 
       - name: Publish
@@ -73,7 +73,7 @@ jobs:
             const fs = require("fs");
             const file = `social/out/${process.env.POST_DATE}/post.json`;
             const post = JSON.parse(fs.readFileSync(file, "utf8"));
-            execSync(`git config user.name "pivoxdata-bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add ${file} && git commit -m "social: published ${process.env.POST_DATE}" && git push`);
+            execSync(`git config user.name "pivoxdata-bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add ${file} && git commit -m "social: published ${process.env.POST_DATE}" && git pull --rebase && git push`);
             await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `게시했습니다: ${post.published.permalink}` });
             await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed", state_reason: "completed" });
 

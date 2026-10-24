@@ -24,7 +24,7 @@ const NAV = `
 `;
 const FOOTER = `
 <footer class="site">
-  <span>${NAME} · 매주 갱신 · 무료 · 예측이나 투자 권유를 하지 않습니다</span>
+  <span>${NAME} · 매일 갱신 · 무료 · 예측이나 투자 권유를 하지 않습니다</span>
   <span class="links"><a href="/">이번 주 신호</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
 `;

@@ -10,6 +10,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const plan = path.join(ROOT, "social", "plan.json");
+if (fs.existsSync(plan) && JSON.parse(fs.readFileSync(plan, "utf8")).post === false) { console.log("social/plan.json says no draft today — nothing to render"); process.exit(0); }
 const page = path.join(ROOT, "social", "cards.html");
 const date = fs.readFileSync(page, "utf8").match(/data-date="(\d{4}-\d{2}-\d{2})"/)[1];
 const dir = path.join(ROOT, "social", "out", date);

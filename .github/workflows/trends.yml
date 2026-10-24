@@ -1,15 +1,18 @@
-# Weekly refresh of the dashboard (/, AI 기술 신호 레이더) and the Instagram draft.
+# Daily refresh of the dashboard (/, AI 기술 신호 레이더) and, when something big happened, an Instagram draft.
 #   1. fetch → verify → build. If any check fails, nothing is committed and an issue lists the failing checks —
-#      a wrong sentence is never published silently.
-#   2. The same insights become carousel cards (social/build.mjs, render.mjs) and a caption (social/caption.mjs:
-#      Claude writes it, code checks every number against the data and rejects advice/forecast words).
-#   3. Data, page and cards are committed to main (Vercel publishes them), and an "[instagram]" issue asks for
-#      approval. Nothing is posted until the repository owner comments /approve (social-publish.yml).
-name: trends weekly
+#      a wrong sentence is never published silently. build.mjs also looks for big cases (a leader change, a package
+#      far above its usual week, a new all-time high, a phrase crossing 2.5× in papers, a new #1 model, a capex filing).
+#   2. social/plan.mjs decides whether today gets a draft: a big case not drafted before (its subject left alone for
+#      21 days), or a roundup when nothing big has happened for 14 days. Otherwise only the site is refreshed.
+#   3. A draft becomes carousel cards (social/build.mjs, render.mjs — a different drawing and layout each time) and a
+#      caption (social/caption.mjs: Claude writes it, code checks every number against the cards and rejects
+#      advice/forecast words); an "[instagram]" issue asks for approval. Nothing is posted until the repository owner
+#      comments /approve (social-publish.yml).
+name: trends daily
 
 on:
   schedule:
-    - cron: "17 1 * * 1" # Mondays 01:17 UTC (10:17 KST), after npm/PyPI have counted Sunday
+    - cron: "17 1 * * *" # every day 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
   workflow_dispatch: {}
 
 permissions:
@@ -39,8 +42,13 @@ jobs:
           SEC_CONTACT: ${{ vars.SEC_CONTACT }}
         run: npm run trends 2>&1 | tee run.log
 
+      - name: Big case today?
+        id: plan
+        shell: bash
+        run: node social/plan.mjs 2>&1 | tee -a run.log
+
       - name: Instagram cards and caption
-        id: social
+        if: steps.plan.outputs.post == 'true'
         shell: bash
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -48,24 +56,23 @@ jobs:
           node social/build.mjs 2>&1 | tee -a run.log
           node social/render.mjs 2>&1 | tee -a run.log
           node social/caption.mjs 2>&1 | tee -a run.log
-          echo "date=$(node -p 'require("./trends/data/insights.json").built_at')" >> "$GITHUB_OUTPUT"
 
       - name: Commit refreshed data, page and cards
         id: commit
         run: |
           git config user.name "pivoxdata-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out
+          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
-          git commit -m "data(trends): weekly refresh $(date -u +%F)"
-          git push
+          git commit -m "data(trends): daily refresh $(date -u +%F)${{ steps.plan.outputs.post == 'true' && ' + instagram draft' || '' }}"
+          git pull --rebase origin "${GITHUB_REF_NAME}" && git push # the publish job may have pushed meanwhile
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
       - name: Ask for approval to post
-        if: steps.commit.outputs.changed == 'true'
+        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true'
         uses: actions/github-script@v7
         env:
-          POST_DATE: ${{ steps.social.outputs.date }}
+          POST_DATE: ${{ steps.plan.outputs.date }}
         with:
           script: |
             const fs = require("fs");
@@ -75,13 +82,16 @@ jobs:
             const imgs = post.images.map((f) => `<img src="${post.image_base}${f}" width="270">`).join(" ");
             const body = [
               `<!-- instagram-post:${date} -->`,
-              `이번 주 인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
+              post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}` : "**묶음** — 14일 동안 빅 케이스가 없어 요즘 숫자를 모았습니다.",
+              "",
+              `인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
               `이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`,
               "", imgs, "", "**캡션**", "```", post.caption, "```", "",
               "- `/approve` — 이대로 게시 (저장소 소유자만)",
-              "- `/reject` — 이번 주는 게시하지 않음",
+              "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)",
             ].join("\n");
-            await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: `[instagram] ${date} 주간 AI 기술 신호`, body });
+            const title = post.mode === "event" ? `[instagram] ${date} 빅 케이스 — ${post.event.headline}` : `[instagram] ${date} 요즘 AI 기술 신호`;
+            await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: title.slice(0, 200), body });
 
       - name: Open an issue when a check fails
         if: failure()
@@ -91,8 +101,8 @@ jobs:
             const fs = require("fs");
             const log = fs.existsSync("run.log") ? fs.readFileSync("run.log", "utf8") : "(no log)";
             const failed = log.split("\n").filter((l) => l.startsWith("✗") || /Error|STOPPED|failed/.test(l)).join("\n") || log.slice(-3000);
-            await github.rest.issues.create({
-              owner: context.repo.owner, repo: context.repo.repo,
-              title: `trends: weekly refresh stopped (${new Date().toISOString().slice(0, 10)})`,
-              body: `The weekly trends job did not publish because a step failed.\n\n\`\`\`\n${failed.slice(0, 6000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-            });
+            const body = `The daily trends job did not publish because a step failed.\n\n\`\`\`\n${failed.slice(0, 6000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            // one open issue at a time: a failure that repeats daily adds a comment instead of a new issue
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("trends: daily refresh stopped"));
+            if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });
+            else await github.rest.issues.create({ ...context.repo, title: `trends: daily refresh stopped (${new Date().toISOString().slice(0, 10)})`, body });
