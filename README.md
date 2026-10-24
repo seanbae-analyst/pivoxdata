@@ -11,7 +11,7 @@
 |---|---|---|
 | 개인은 언제 몰려 샀나 | [`/research/net-buy`](https://data.pivoxquant.com/research/net-buy) | ECOS 901Y055 (원작성 한국거래소), 2004–2026 월별 |
 | 빚을 내 산 주식은 얼마나 되나 | [`/research/credit`](https://data.pivoxquant.com/research/credit) | ECOS 901Y056 (원작성 금융투자협회) + 901Y014 (한국거래소), 1999–2026 월말 |
-| 개인은 어디로 나가나 | [`/maps/korea-investor`](https://data.pivoxquant.com/maps/korea-investor) | 예탁결제원 자료 — 경로·조건만 정리 (API 키 필요) |
+| 개인은 어디로 나가나 | [`/research/abroad`](https://data.pivoxquant.com/research/abroad) | ECOS 281Y002·281Y001 자금순환 (한국은행 작성), 가계 해외주식 잔액·순취득 2008–2026 분기 — 나라별은 예탁결제원 자료(API 키 필요), [지도](https://data.pivoxquant.com/maps/korea-investor)에 경로만 |
 | 개인은 매매를 기록하나 | [`/research/record-habit`](https://data.pivoxquant.com/research/record-habit) | 열린 질문 — 물은 공개 조사 0건, 가까운 공식 숫자 3개 |
 
 In English: a research site on Korean retail investors built from public data — when they pile in, how much they
@@ -304,7 +304,7 @@ reproduce `verify.py`); the 2.5 MB sample is committed so the demo and CLI work 
 
 ```
 index.html        lab home — the four questions, principles, tools
-research/*.html   research pages (credit, net-buy, record-habit) — numbers written in by lab/build.mjs
+research/*.html   research pages (credit, net-buy, abroad, record-habit) — numbers written in by lab/build.mjs
 research.css      layout for research pages · charts.mjs  shared line/bar charts (inline SVG, keyboard, CSV)
 lab/              series.mjs · ecos.mjs · fetch.mjs · verify.mjs · build.mjs · data/*.json (with provenance)
 check.html        DataReady, the file checker (drag-drop → score → clean)

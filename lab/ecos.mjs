@@ -21,15 +21,17 @@ async function getJson(url, tries = 5) {
   }
 }
 
-// periods: "199806" style for M, "1998" for A
+// periods: "199806" style for M, "2008Q4" for Q, "1998" for A
 function step(p, cycle, n) {
   if (cycle === "A") return String(+p + n);
+  if (cycle === "Q") { const q = +p.slice(0, 4) * 4 + +p.slice(5) - 1 + n; return `${Math.floor(q / 4)}Q${(q % 4) + 1}`; }
   let y = +p.slice(0, 4), m = +p.slice(4) - 1 + n;
   y += Math.floor(m / 12); m = ((m % 12) + 12) % 12;
   return `${y}${String(m + 1).padStart(2, "0")}`;
 }
 export function nowPeriod(cycle) {
   const d = new Date();
+  if (cycle === "Q") return `${d.getFullYear()}Q${Math.floor(d.getMonth() / 3) + 1}`;
   return cycle === "A" ? String(d.getFullYear()) : `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 

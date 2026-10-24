@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-22",
+ "checked_at": "2026-10-24",
  "holes": {
   "credit": [
    "199806",
@@ -176,6 +176,46 @@
    "fact": "KOSDAQ 시가총액: 273개월 200401–202609, 빠진 달 0, 숫자 아닌 값 0"
   },
   {
+   "id": "fresh:hh_foreign_bal",
+   "ok": true,
+   "fact": "가계 해외주식 잔액 (비거주자 발행주식): 마지막 값 2026Q2, 받은 날 2026-10-24"
+  },
+  {
+   "id": "quarters:hh_foreign_bal",
+   "ok": true,
+   "fact": "가계 해외주식 잔액 (비거주자 발행주식): 71분기 2008Q4–2026Q2, 빠진 분기 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:hh_assets_bal",
+   "ok": true,
+   "fact": "가계 금융자산 합계: 마지막 값 2026Q2, 받은 날 2026-10-24"
+  },
+  {
+   "id": "quarters:hh_assets_bal",
+   "ok": true,
+   "fact": "가계 금융자산 합계: 71분기 2008Q4–2026Q2, 빠진 분기 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:hh_foreign_tx",
+   "ok": true,
+   "fact": "가계 해외주식 순취득 (비거주자 발행주식): 마지막 값 2026Q2, 받은 날 2026-10-24"
+  },
+  {
+   "id": "quarters:hh_foreign_tx",
+   "ok": true,
+   "fact": "가계 해외주식 순취득 (비거주자 발행주식): 70분기 2009Q1–2026Q2, 빠진 분기 0, 숫자 아닌 값 0"
+  },
+  {
+   "id": "fresh:hh_domestic_tx",
+   "ok": true,
+   "fact": "가계 국내 주식·출자지분 순취득 (거주자 발행, 비상장 포함): 마지막 값 2026Q2, 받은 날 2026-10-24"
+  },
+  {
+   "id": "quarters:hh_domestic_tx",
+   "ok": true,
+   "fact": "가계 국내 주식·출자지분 순취득 (거주자 발행, 비상장 포함): 70분기 2009Q1–2026Q2, 빠진 분기 0, 숫자 아닌 값 0"
+  },
+  {
    "id": "netbuy:non-empty",
    "ok": true,
    "fact": "순매수 273개월"
@@ -199,6 +239,16 @@
    "id": "balance:deposits:A=Dec",
    "ok": true,
    "fact": "28개 연도 중 28개 연도에서 연간 값 = 12월 값"
+  },
+  {
+   "id": "balance:hh_foreign_bal:A=Q4",
+   "ok": true,
+   "fact": "18개 연도 중 18개 연도에서 연간 값 = 4분기 값"
+  },
+  {
+   "id": "flow:hh_foreign_tx:A=sum",
+   "ok": true,
+   "fact": "가계 해외주식 순취득 (비거주자 발행주식): 17개 연도, 연간표와 분기 합의 차이 최대 0십억원 (분기별 반올림)"
   },
   {
    "id": "credit:zero-holes",
@@ -229,6 +279,16 @@
    "id": "agency:901Y014",
    "ok": true,
    "fact": "901Y014 작성기관 — ECOS 표기 “한국거래소”, 페이지 표기 “한국거래소”"
+  },
+  {
+   "id": "agency:281Y002",
+   "ok": true,
+   "fact": "281Y002 작성기관 — ECOS가 다른 작성기관을 적지 않음(한국은행 직접 작성), 페이지 표기 “한국은행”"
+  },
+  {
+   "id": "agency:281Y001",
+   "ok": true,
+   "fact": "281Y001 작성기관 — ECOS가 다른 작성기관을 적지 않음(한국은행 직접 작성), 페이지 표기 “한국은행”"
   },
   {
    "id": "news:credit:200612",

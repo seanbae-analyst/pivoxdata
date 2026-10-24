@@ -12,18 +12,24 @@ const checks = [];
 const check = (id, ok, fact) => { checks.push({ id, ok, fact }); console.log(`${ok ? "✓" : "✗"}  ${id.padEnd(26)} ${fact}`); };
 
 const nextMonth = (p) => { let y = +p.slice(0, 4), m = +p.slice(4); m++; if (m > 12) { m = 1; y++; } return `${y}${String(m).padStart(2, "0")}`; };
+const nextQuarter = (p) => (p.endsWith("Q4") ? `${+p.slice(0, 4) + 1}Q1` : `${p.slice(0, 5)}${+p.slice(5) + 1}`);
+// periods since year 0, so the distance from the fetch date can be counted in the series' own unit
+const ord = (p, cycle) => (cycle === "Q" ? p.slice(0, 4) * 4 + +p.slice(5) : p.slice(0, 4) * 12 + +p.slice(4));
+const UNIT = { M: "개월", Q: "분기" };
 
-// 1. every monthly series is gap-free from its first month to its last, and every value is a number
+// 1. every series is gap-free from its first period to its last, and every value is a number
 for (const s of SERIES) {
-  const d = load(s.id); let gaps = 0, nulls = 0;
-  // a leading run of empty months means "not reported separately yet", not a hole
+  const d = load(s.id), next = s.cycle === "Q" ? nextQuarter : nextMonth, u = UNIT[s.cycle]; let gaps = 0, nulls = 0;
+  // a leading run of empty periods means "not reported separately yet", not a hole
   const lead = d.rows.findIndex((r) => r[1] !== null);
-  d.rows.forEach((r, i) => { if (i && r[0] !== nextMonth(d.rows[i - 1][0])) gaps++; if (i >= lead && (typeof r[1] !== "number" || !Number.isFinite(r[1]))) nulls++; });
-  const from = lead > 0 ? ` (앞 ${lead}개월은 따로 집계되지 않아 비어 있음, ${d.rows[lead][0]}부터 값)` : "";
-  // a series must be non-empty and reach within 3 months of the day it was fetched (ECOS lags ~5 days)
-  const fetchedM = d.fetched_at.slice(0, 4) * 12 + +d.fetched_at.slice(5, 7), lastM = d.last ? d.last.slice(0, 4) * 12 + +d.last.slice(4) : 0;
-  check(`fresh:${s.id}`, d.n > 0 && fetchedM - lastM <= 3, `${d.label}: 마지막 값 ${d.last ?? "없음"}, 받은 날 ${d.fetched_at}`);
-  check(`months:${s.id}`, d.n > 0 && gaps === 0 && nulls === 0, `${d.label}: ${d.n}개월 ${d.first}–${d.last}, 빠진 달 ${gaps}, 숫자 아닌 값 ${nulls}${from}`);
+  d.rows.forEach((r, i) => { if (i && r[0] !== next(d.rows[i - 1][0])) gaps++; if (i >= lead && (typeof r[1] !== "number" || !Number.isFinite(r[1]))) nulls++; });
+  const from = lead > 0 ? ` (앞 ${lead}${u}은 따로 집계되지 않아 비어 있음, ${d.rows[lead][0]}부터 값)` : "";
+  // a series must be non-empty and recent: monthly within 3 months of the fetch (ECOS lags ~5 days),
+  // quarterly within 3 quarters (자금순환 for a quarter comes out about two and a half months after it ends)
+  const y = +d.fetched_at.slice(0, 4), mo = +d.fetched_at.slice(5, 7);
+  const fetchedP = s.cycle === "Q" ? y * 4 + Math.ceil(mo / 3) : y * 12 + mo, lastP = d.last ? ord(d.last, s.cycle) : 0;
+  check(`fresh:${s.id}`, d.n > 0 && fetchedP - lastP <= 3, `${d.label}: 마지막 값 ${d.last ?? "없음"}, 받은 날 ${d.fetched_at}`);
+  check(`${s.cycle === "Q" ? "quarters" : "months"}:${s.id}`, d.n > 0 && gaps === 0 && nulls === 0, `${d.label}: ${d.n}${u} ${d.first}–${d.last}, 빠진 ${u === "개월" ? "달" : "분기"} ${gaps}, 숫자 아닌 값 ${nulls}${from}`);
 }
 
 // 2. net buying: the five investor groups must net to zero each month (ECOS rounds each to 백만원)
@@ -43,11 +49,20 @@ check("netbuy:sums-to-zero", maxAbs <= 2, `${months.length}개월 중 ${exact}�
   check("netbuy:annual=sum", worst <= 6, `${A.length}개 연도, 연간표와 월별 합의 차이 최대 ${worst}백만원 (월별 반올림 12번)`);
 }
 
-// 4. balances: the annual figure is the December figure (so monthly values are month-end balances)
+// 4. balances: the annual figure is the last period of the year (so monthly/quarterly values are period-end
+//    balances); flows: the annual figure is the sum of the year's periods
 for (const a of ANNUAL.filter((x) => x.id !== "netbuy_individual_A")) {
-  const M = Object.fromEntries(load(a.of).rows), A = load(a.id).rows;
-  const hit = A.filter(([y, v]) => M[`${y}12`] === v).length;
-  check(`balance:${a.of}:A=Dec`, A.length > 0 && hit === A.length, `${A.length}개 연도 중 ${hit}개 연도에서 연간 값 = 12월 값`);
+  const s = SERIES.find((x) => x.id === a.of), M = Object.fromEntries(load(a.of).rows), A = load(a.id).rows;
+  if (s.kind === "flow") {
+    const per = (y) => Object.keys(M).filter((t) => t.startsWith(y));
+    const worst = Math.max(...A.map(([y, v]) => Math.abs(per(y).reduce((x, t) => x + M[t], 0) - v)));
+    // values are printed to 0.1십억원, so four quarters can drift by up to 0.2 from the annual figure
+    check(`flow:${a.of}:A=sum`, A.length > 0 && worst <= 0.2 + 1e-9, `${s.label}: ${A.length}개 연도, 연간표와 분기 합의 차이 최대 ${+worst.toFixed(2)}십억원 (분기별 반올림)`);
+  } else {
+    const end = s.cycle === "Q" ? "Q4" : "12";
+    const hit = A.filter(([y, v]) => M[`${y}${end}`] === v).length;
+    check(`balance:${a.of}:A=${s.cycle === "Q" ? "Q4" : "Dec"}`, A.length > 0 && hit === A.length, `${A.length}개 연도 중 ${hit}개 연도에서 연간 값 = ${s.cycle === "Q" ? "4분기" : "12월"} 값`);
+  }
 }
 
 // 5. known holes: a balance of exactly 0 between non-zero months is a missing value, not a real zero
@@ -75,7 +90,11 @@ check("short_credit:zero-holes", holes.short_credit.length > 0, `신용대주 �
 for (const t of [...new Set(SERIES.map((s) => s.table))]) {
   const d = load(SERIES.find((s) => s.table === t).id);
   const org = d.source.ecos_org_name || "";
-  check(`agency:${t}`, org.startsWith(d.source.compiled_by), `${t} 작성기관 — ECOS 표기 “${org.replace(/\(.*\)$/, "")}”, 페이지 표기 “${d.source.compiled_by}”`);
+  // ECOS fills ORG_NAME only for statistics another agency compiled; the Bank's own tables leave it empty
+  const own = d.source.compiled_by === "한국은행" && org === "";
+  check(`agency:${t}`, own || org.startsWith(d.source.compiled_by), own
+    ? `${t} 작성기관 — ECOS가 다른 작성기관을 적지 않음(한국은행 직접 작성), 페이지 표기 “한국은행”`
+    : `${t} 작성기관 — ECOS 표기 “${org.replace(/\(.*\)$/, "")}”, 페이지 표기 “${d.source.compiled_by}”`);
 }
 
 // 7. a third reading: month-end balances reported in the news from KOFIA's daily figures (crosscheck.json)

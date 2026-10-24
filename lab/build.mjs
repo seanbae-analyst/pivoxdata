@@ -93,17 +93,17 @@ function dataset(page, title, desc, url) {
   const d = page.dataset();
   return {
     "@context": "https://schema.org", "@type": "Dataset", name: title.replace(/ · 개인투자자 데이터 연구소$/, ""), description: desc, url,
-    inLanguage: "ko", isAccessibleForFree: true, temporalCoverage: d.coverage, dateModified: fetched,
+    inLanguage: "ko", isAccessibleForFree: true, temporalCoverage: d.coverage, dateModified: d.modified ?? fetched,
     creator: { "@type": "Organization", name: "개인투자자 데이터 연구소", url: SITE },
     isBasedOn: d.sources.map((x) => ({ "@type": "Dataset", name: x.name, publisher: { "@type": "Organization", name: "한국은행 ECOS" }, creator: { "@type": "Organization", name: x.by } })),
-    usageInfo: "ECOS 통계정보이용지침: 타 기관 작성 통계는 출처를 명시하여 비상업적으로 이용, 상업적 이용은 통계작성기관의 승인 필요",
+    usageInfo: d.usage ?? "ECOS 통계정보이용지침: 타 기관 작성 통계는 출처를 명시하여 비상업적으로 이용, 상업적 이용은 통계작성기관의 승인 필요",
     variableMeasured: d.variables,
   };
 }
 
 // ---------- data ----------
 const holes = new Set(CHECKS.holes.credit);
-const S = Object.fromEntries(["credit", "deposits", "unpaid", "mcap_kospi", "mcap_kosdaq", "kospi_close", "netbuy_individual", "netbuy_institution", "netbuy_foreign", "netbuy_other_foreign", "netbuy_other_corp"].map((id) => [id, load(id)]));
+const S = Object.fromEntries(["credit", "deposits", "unpaid", "mcap_kospi", "mcap_kosdaq", "kospi_close", "netbuy_individual", "netbuy_institution", "netbuy_foreign", "netbuy_other_foreign", "netbuy_other_corp", "hh_foreign_bal", "hh_assets_bal", "hh_foreign_tx", "hh_domestic_tx"].map((id) => [id, load(id)]));
 const M = Object.fromEntries(Object.entries(S).map(([k, d]) => [k, Object.fromEntries(d.rows)]));
 const fetched = S.credit.fetched_at;
 const checkLi = (ids) => CHECKS.checks.filter((c) => ids.some((p) => c.id.startsWith(p))).map((c) => `<li class="${c.ok ? "" : "fail"}">${esc(c.fact)}</li>`).join("");
@@ -246,6 +246,89 @@ function netbuy() {
   return { ROWS, stats, yearly, checks, meta, readCum, facts: { ytd: y[lastY], lastY, lastM, ytdPrev, top, pre: [pre[0][0], pre.at(-1)[0], pre.length, preNeg], postPos } };
 }
 
+// ============ research/abroad ============
+// 자금순환 (flow of funds), 가계 및 비영리단체, quarterly. The quarter-end balance changes by what households
+// bought (net acquisition, 금융거래표) plus everything else — prices, exchange rates, other volume changes.
+const qlbl = (q) => `${q.slice(0, 4)}년 ${q.slice(5)}분기`;
+const qmon = (q) => q.slice(0, 4) + ["01", "04", "07", "10"][+q.slice(5) - 1]; // the chart's period axis
+function abroad() {
+  const L = (id) => Object.fromEntries(S[id].rows);
+  const B = L("hh_foreign_bal"), A = L("hh_assets_bal"), T = L("hh_foreign_tx"), Dm = L("hh_domestic_tx");
+  const qs = S.hh_foreign_bal.rows.map((r) => r[0]);
+  const J = (v) => v / 1e3; // 십억원 → 조원
+  const rows = qs.map((q, i) => {
+    const prev = i ? qs[i - 1] : null, tx = T[q] ?? null;
+    const d = prev ? B[q] - B[prev] : null;
+    return { q, bal: J(B[q]), share: (B[q] / A[q]) * 100, tx: tx == null ? null : J(tx), d: d == null ? null : J(d), other: d == null || tx == null ? null : J(d - tx), dom: Dm[q] == null ? null : J(Dm[q]) };
+  });
+  expect(qs[0] === "2008Q4" && S.hh_foreign_tx.rows[0][0] === "2009Q1", "자금순환 series no longer start at 2008Q4 (balance) / 2009Q1 (flow)");
+  let cum = rows[0].bal; const cumLine = rows.map((r, i) => (i === 0 ? cum : (cum += r.tx)));
+  const first = rows[0], last = rows.at(-1), flows = rows.slice(1);
+  const inc = last.bal - first.bal, bought = flows.reduce((s, r) => s + r.tx, 0), rest = inc - bought;
+  const peak = argmax(rows, (r) => r.bal), sPeak = argmax(rows, (r) => r.share);
+  const pre = rows.filter((r) => r.q < "2020Q1"), preMax = argmax(pre, (r) => r.bal);
+  const y19 = rows.find((r) => r.q === "2019Q4"), y21 = rows.find((r) => r.q === "2021Q4");
+  const txMax = argmax(flows, (r) => r.tx), oMin = argmin(flows, (r) => r.other), domMax = argmax(flows, (r) => r.dom);
+  const sells = flows.filter((r) => r.q >= "2020Q1" && r.tx < 0);
+
+  // guards for the sentences below
+  expect(peak.q === last.q, `the balance peak (${peak.q}) is no longer the latest quarter`);
+  expect(sPeak.q === last.q, `the share peak (${sPeak.q}) is no longer the latest quarter`);
+  expect(preMax.bal < 15 && y21.bal > 4 * y19.bal, "the 2020–2021 jump is no longer in the data");
+  expect(last.tx < 0 && last.d > 0, "latest quarter: no longer 'net selling while the balance grew'");
+  expect(domMax.q === last.q && last.dom > 0, `the largest domestic net acquisition moved to ${domMax.q}`);
+  expect(oMin.tx > 0 && oMin.d < 0, `${oMin.q}: the largest non-transaction fall no longer has buying with a falling balance`);
+
+  const D = {
+    months: qs.map(qmon), quarters: qs,
+    bal: rows.map((r) => r2(r.bal)), cum: cumLine.map(r2), share: rows.map((r) => r2(r.share)),
+    tx: rows.map((r) => (r.tx == null ? null : r2(r.tx))), dom: rows.map((r) => (r.dom == null ? null : r2(r.dom))),
+    marks: {
+      level: [{ at: qmon(y21.q), text: `${y21.q.slice(0, 4)}년 말 ${jo(y21.bal)}` }],
+      flow: [{ at: qmon(txMax.q), text: `${qlbl(txMax.q)} ${sjo(txMax.tx)}` }],
+      share: [{ at: qmon(first.q), text: `${first.share.toFixed(2)}%`, dy: -10 }],
+    },
+    note: `출처: ECOS(한국은행) 281Y002 금융자산부채잔액표·281Y001 금융거래표, 가계 및 비영리단체, ${S.hh_foreign_bal.fetched_at} 조회. 단위 십억원. 값 변경 없음. ${SITE}/research/abroad`,
+    csv: qs.map((q) => [q, B[q], T[q] ?? "", A[q], Dm[q] ?? ""]),
+  };
+
+  const stats = [
+    stat(jo(last.bal), `가계 해외주식 잔액 · ${qlbl(last.q)}`, `${first.q.slice(0, 4)}년 말 ${jo(first.bal)}에서`),
+    stat(`${last.share.toFixed(2)}%`, `가계 금융자산 중 비중 · ${qlbl(last.q)}`, `${first.q.slice(0, 4)}년 말 ${first.share.toFixed(2)}%`),
+    stat(jo(bought), `${flows[0].q.slice(0, 4)}년부터 순취득 누적`, `잔액 증가분 ${jo(inc)}의 ${Math.round((bought / inc) * 100)}%`),
+    stat(sjo(last.tx), `순취득 · ${qlbl(last.q)}`, `같은 분기 잔액은 ${sjo(last.d)}`),
+  ].join("");
+
+  const reads = {
+    level: `${first.q.slice(0, 4)}년 말 ${jo(first.bal)}이던 잔액은 2019년 말까지 15조를 넘은 적이 없습니다. <b>2019년 말 ${jo(y19.bal)}에서 2021년 말 ${jo(y21.bal)}로 2년 새 ${(y21.bal / y19.bal).toFixed(1)}배가 됐고</b>, ${qlbl(last.q)} 말에는 ${jo(last.bal)}로 이 통계가 시작된 뒤 가장 컸습니다.`,
+    split: `${first.q.slice(0, 4)}년 말부터 ${qlbl(last.q)}까지 잔액은 ${jo(inc)} 늘었습니다. <b>그중 가계가 실제로 사들인 금액(순취득 누적)은 ${jo(bought)}, 나머지 ${jo(rest)}는 거래가 아닌 변동</b> — 주가와 환율, 그 밖의 조정 — 입니다. 두 선 사이의 간격이 그 차이입니다.`,
+    flow: `한 분기 순취득이 가장 컸던 때는 <b>${qlbl(txMax.q)}(${sjo(txMax.tx)})</b>입니다. 2020년 이후 순매도한 분기는 ${sells.length}개(${sells.map((r) => `${qlbl(r.q)} ${sjo(r.tx)}`).join(", ")})입니다. ${qlbl(oMin.q)}에는 ${jo(oMin.tx)}를 새로 샀는데도 잔액은 ${jo(-oMin.d)} 줄었습니다. 사고판 금액과 잔액이 다른 방향으로 움직일 수 있다는 뜻입니다.`,
+    share: `가계 금융자산 전체에서 해외주식이 차지하는 비중은 ${first.q.slice(0, 4)}년 말 ${first.share.toFixed(2)}%에서 <b>${qlbl(last.q)} ${last.share.toFixed(2)}%</b>로 커졌습니다. 나머지 ${Math.round(100 - last.share)}%는 예금·보험·연금·국내 주식·채권 같은 다른 금융자산입니다.`,
+    domestic: `${qlbl(last.q)}에 가계는 해외주식을 ${jo(-last.tx)} 순매도했고, 국내 주식·출자지분은 <b>${jo(last.dom)} 순취득해 ${flows[0].q.slice(0, 4)}년 이후 가장 많았습니다</b>. 국내 쪽 항목은 비상장 주식과 출자지분을 포함하므로 상장주식 순매수와 같지 않습니다 — 코스피 개인 순매수는 <a href="/research/net-buy">순매수 연구</a>에 있습니다.`,
+  };
+
+  const years = [...new Set(qs.map((q) => q.slice(0, 4)))];
+  const yearly = years.map((y) => {
+    const yr = rows.filter((r) => r.q.startsWith(y)), end = yr.at(-1), prevEnd = rows.filter((r) => r.q < `${y}Q1`).at(-1);
+    const tx = yr.filter((r) => r.tx != null), sumTx = tx.reduce((s, r) => s + r.tx, 0), sumDom = tx.reduce((s, r) => s + r.dom, 0);
+    const partial = end.q.slice(5) !== "4" ? ` (${end.q.slice(5)}분기)` : "";
+    const other = prevEnd && tx.length ? end.bal - prevEnd.bal - sumTx : null;
+    const td = (v) => (v == null ? "<td>—</td>" : `<td class="${v < 0 ? "neg" : ""}">${sjo(v)}</td>`);
+    return `<tr><td>${y}${partial}</td><td>${jo(end.bal)}</td>${td(tx.length ? sumTx : null)}${td(other)}<td>${end.share.toFixed(2)}%</td>${td(tx.length ? sumDom : null)}</tr>`;
+  }).reverse().join("");
+
+  const source = `
+    <p><b>출처</b> 한국은행 ECOS 「${S.hh_foreign_bal.source.table_name}」(281Y002) — 가계 및 비영리단체(S14) · 자산(A) · 비거주자 발행주식(F072ZZB)·금융자산 합계(F00B). 「${S.hh_foreign_tx.source.table_name}」(281Y001) — 가계 및 비영리단체(S14) · 운용(C) · 비거주자 발행주식(F072ZZB)·거주자 발행주식 및 출자지분(F071ZZB). 단위 십억원. ECOS 공개 표본 키로 ${S.hh_foreign_bal.fetched_at}에 받았습니다.</p>
+    <p><b>작성 기관</b> 한국은행이 직접 작성하는 자금순환 통계입니다. ECOS 표에는 다른 작성기관이 적혀 있지 않습니다.</p>
+    <p><b>이용 조건</b> ECOS 통계정보이용지침: “한국은행이 작성한 통계정보는 출처를 명시하는 한 상업적 용도를 포함하여 무료로 자유롭게 사용, 가공 및 재배포할 수 있습니다.” 인용할 때는 “출처: ECOS(한국은행), ${S.hh_foreign_bal.fetched_at} 조회”처럼 적어 주세요. 조건 해석은 지침 문구를 옮긴 것이며 법률 자문이 아닙니다.</p>
+    <p><b>검산</b> 내려받은 값을 다른 방법으로 한 번 더 읽어 맞춰 봤습니다.</p>
+    <ul class="checks">${checkLi(["quarters:hh_", "fresh:hh_", "balance:hh_", "flow:hh_", "agency:281Y"])}</ul>
+    <p><b>다시 받는 법</b> <code>node lab/fetch.mjs &amp;&amp; node lab/verify.mjs &amp;&amp; node lab/build.mjs</code> — 저장소의 <a href="https://github.com/seanbae-analyst/pivoxdata/tree/main/lab" target="_blank" rel="noopener">lab/</a> 폴더. ECOS 주소 형식: <code>https://ecos.bok.or.kr/api/StatisticSearch/{키}/json/kr/1/10/281Y002/Q/{시작분기}/{끝분기}/S14/F072ZZB/A</code></p>`;
+
+  const meta = `데이터 한국은행 ECOS 281Y002 · 281Y001 (한국은행 작성) · 가계 및 비영리단체 · 분기 · ${qlbl(first.q)}–${qlbl(last.q)} · ${S.hh_foreign_bal.fetched_at} 받음 · 검산 ${CHECKS.checks.length}개 통과`;
+  return { D, stats, reads, yearly, source, meta, facts: { first, last, bought, inc, y19, y21 } };
+}
+
 // ============ pages ============
 const PAGES = [
   { file: "index.html", path: "/", og: "home" },
@@ -257,6 +340,11 @@ const PAGES = [
     coverage: `${S.netbuy_individual.first.replace(/(\d{4})(\d{2})/, "$1-$2")}/${S.netbuy_individual.last.replace(/(\d{4})(\d{2})/, "$1-$2")}`,
     sources: [{ name: `${S.netbuy_individual.source.table_name} (${S.netbuy_individual.source.table})`, by: S.netbuy_individual.source.compiled_by }],
     variables: ["개인 순매수 거래대금 (백만원)", "기관투자자 순매수 거래대금 (백만원)", "외국인 순매수 거래대금 (백만원)"] }) },
+  { file: "research/abroad.html", path: "/research/abroad", dataset: () => ({
+    coverage: `${qmon(S.hh_foreign_bal.first).replace(/(\d{4})(\d{2})/, "$1-$2")}/${S.hh_foreign_bal.last.slice(0, 4)}-${String(+S.hh_foreign_bal.last.slice(5) * 3).padStart(2, "0")}`, modified: S.hh_foreign_bal.fetched_at,
+    sources: [{ name: `${S.hh_foreign_bal.source.table_name} (281Y002)`, by: "한국은행" }, { name: `${S.hh_foreign_tx.source.table_name} (281Y001)`, by: "한국은행" }],
+    usage: "ECOS 통계정보이용지침: 한국은행이 작성한 통계정보는 출처를 명시하는 한 상업적 용도를 포함하여 무료로 자유롭게 사용, 가공 및 재배포 가능",
+    variables: ["가계 해외주식 잔액 (분기말, 십억원)", "가계 해외주식 순취득 (분기, 십억원)", "가계 금융자산 합계 (십억원)", "가계 국내 주식·출자지분 순취득 (십억원)"] }) },
   { file: "research/record-habit.html", path: "/research/record-habit", og: "record-habit" },
   { file: "maps.html", path: "/maps" },
   { file: "maps/korea-investor.html", path: "/maps/korea-investor" },
@@ -267,7 +355,7 @@ const PAGES = [
   { file: "404.html", path: "/404", noindex: true },
 ];
 
-const C = credit(), N = netbuy();
+const C = credit(), N = netbuy(), AB = abroad();
 const fill = {
   "research/credit.html": (h, f) => {
     h = region(h, "data", `const D=${JSON.stringify(C.D)};`, f);
@@ -279,6 +367,13 @@ const fill = {
   "research/net-buy.html": (h, f) => {
     h = region(h, "data", `const ROWS=${JSON.stringify(N.ROWS)};`, f);
     h = region(h, "meta", N.meta, f); h = region(h, "stats", N.stats, f); h = region(h, "yearly", N.yearly, f); h = region(h, "checks", N.checks, f); h = region(h, "read-cum", N.readCum, f); h = region(h, "period", `${kmon(N.ROWS[0][0])}부터 ${kmon(N.ROWS.at(-1)[0])}까지`, f);
+    return h;
+  },
+  "research/abroad.html": (h, f) => {
+    h = region(h, "data", `const D=${JSON.stringify(AB.D)};`, f);
+    h = region(h, "meta", AB.meta, f); h = region(h, "stats", AB.stats, f);
+    for (const k in AB.reads) h = region(h, `read-${k}`, AB.reads[k], f);
+    h = region(h, "yearly", AB.yearly, f); h = region(h, "source", AB.source, f);
     return h;
   },
   "research/record-habit.html": (h, f) => {
@@ -293,7 +388,9 @@ const fill = {
     const [p0, p1, pn, pneg] = N.facts.pre;
     const nb = `<b>${N.facts.lastY}년 1–${N.facts.lastM}월 개인 순매수 ${(N.facts.ytd / 1e6 > 0 ? "+" : "") + (N.facts.ytd / 1e6).toFixed(1)}조</b> — 2004년 이후 어느 한 해보다 많습니다. ${p0}~${p1}년 ${pn}년 중 ${pneg}년은 개인이 순매도한 해였고, 2020년 이후 순매수한 해는 ${N.facts.postPos.map((k) => (k === N.facts.lastY && N.facts.lastM < 12 ? `${k}년(1–${N.facts.lastM}월)` : `${k}년`)).join(" · ")}입니다.`;
     const cr = `<b>신용융자 잔고는 ${lbl(C.facts.peak.t)} 월말 ${jo(C.facts.peak.cr)}로 1999년 이후 금액으로 가장 컸습니다.</b> 그달 시가총액 대비 비율은 ${C.facts.rAtPeak.toFixed(2)}%로, 비율이 가장 높았던 ${lbl(C.facts.rPeak.t)}(${C.facts.rPeak.v.toFixed(2)}%)보다 낮습니다. 투자자 구분이 없는 시장 전체 값입니다.`;
-    h = region(h, "q-netbuy", nb, f); h = region(h, "q-credit", cr, f);
+    const { first: a0, last: a1, bought, inc } = AB.facts;
+    const ab = `<b>가계 해외주식 잔액은 ${qlbl(a1.q)} 말 ${jo(a1.bal)}로, ${a0.q.slice(0, 4)}년 말 ${jo(a0.bal)}의 ${Math.round(a1.bal / a0.bal)}배입니다.</b> 그사이 늘어난 ${jo(inc)} 중 실제로 사들인 돈은 ${jo(bought)}이고 나머지는 주가·환율 같은 거래 밖의 변동입니다. 어느 나라로 갔는지는 이 통계에 없습니다.`;
+    h = region(h, "q-netbuy", nb, f); h = region(h, "q-credit", cr, f); h = region(h, "q-abroad", ab, f);
     h = region(h, "updated", `${fetched} 기준`, f);
     return h;
   },

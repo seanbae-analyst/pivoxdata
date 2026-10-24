@@ -2,9 +2,11 @@
 // Same conventions as the first net-buying page: inline SVG, tooltip on hover/tap, ← → keys move the
 // month, an aria-live line repeats the tooltip for screen readers, redraw on resize. No dependencies.
 //
-//   lines(box, {months, series:[{name, color, values}], fmt, yfmt, live, label, marks})
+//   lines(box, {months, series:[{name, color, values}], fmt, yfmt, live, label, marks, tightFloor})
 //   bars(box,  {months, values, color, fmt, yfmt, live, label, marks, tipExtra})
 // months: ["199901", ...]; values: numbers or null (gap). marks: [{at:"202605", text:"…"}] direct labels.
+// Quarterly pages pass each quarter as its first month ("2026Q2" → "202604", so year ticks land on Q1) and
+// `tlabel` to name it in the tooltip ("2026년 2분기"); without it the tooltip shows "2026.04".
 
 const NS = "http://www.w3.org/2000/svg";
 const el = (n, a = {}, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
@@ -65,7 +67,10 @@ export function lines(box, o) {
     const { W, svg, tip, iw, ih } = frame(box, { label: o.label, narrow, H, m });
     const n = o.months.length, all = o.series.flatMap((s) => s.values).filter((v) => v != null);
     const lo = Math.min(o.min ?? Infinity, ...all), hi = Math.max(...all);
-    const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
+    // tightFloor: a series that dips just below zero (−0.9 on a 0–300 axis) ends the axis at its lowest value
+    // instead of adding a whole tick step (−100) of empty space below it
+    const all_t = niceTicks(lo, hi, narrow ? 4 : 5), ticks = o.tightFloor ? all_t.filter((t) => t >= lo) : all_t;
+    const y0 = o.tightFloor ? lo : Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * iw / Math.max(1, n - 1);
     axes(svg, { W, H, m, iw, ticks, Y, yfmt: o.yfmt, months: o.months, X, narrow, zeroLine: y0 < 0 });
     (o.bands || []).forEach((b) => { const i0 = o.months.indexOf(b.from), i1 = o.months.indexOf(b.to); if (i0 < 0 || i1 < 0) return;
@@ -95,9 +100,9 @@ export function lines(box, o) {
       ln.setAttribute("x1", X(i)); ln.setAttribute("x2", X(i)); ln.setAttribute("visibility", "visible");
       dots.forEach((d, k) => { const v = o.series[k].values[i]; d.setAttribute("visibility", v == null ? "hidden" : "visible"); if (v != null) { d.setAttribute("cx", X(i)); d.setAttribute("cy", Y(v)); } });
       const rows = o.series.map((s) => [s.name, s.values[i], s.color]);
-      tip.innerHTML = `<b>${lbl(o.months[i])}</b>` + rows.map(([nm, v, c]) => `<div class="r"><span><span class="sw" style="background:${c}"></span>${nm}</span><span>${v == null ? "—" : o.fmt(v)}</span></div>`).join("") + (o.tipExtra ? o.tipExtra(i) : "");
+      tip.innerHTML = `<b>${(o.tlabel || lbl)(o.months[i])}</b>` + rows.map(([nm, v, c]) => `<div class="r"><span><span class="sw" style="background:${c}"></span>${nm}</span><span>${v == null ? "—" : o.fmt(v)}</span></div>`).join("") + (o.tipExtra ? o.tipExtra(i) : "");
       tip.hidden = false; placeTip(tip, px ?? X(i), py ?? m.t, W, H);
-      if (live) live.textContent = `${lbl(o.months[i])} · ` + rows.map(([nm, v]) => `${nm} ${v == null ? "값 없음" : o.fmt(v)}`).join(" · ");
+      if (live) live.textContent = `${(o.tlabel || lbl)(o.months[i])} · ` + rows.map(([nm, v]) => `${nm} ${v == null ? "값 없음" : o.fmt(v)}`).join(" · ");
     };
     const hide = () => { ln.setAttribute("visibility", "hidden"); dots.forEach((d) => d.setAttribute("visibility", "hidden")); tip.hidden = true; };
     interact(svg, { n, W, H, iw, m, X, show, hide, pick: (x) => Math.max(0, Math.min(n - 1, Math.round((x - m.l) / iw * (n - 1)))) });
@@ -124,9 +129,9 @@ export function bars(box, o) {
     const live = o.live && document.getElementById(o.live);
     const show = (i, px, py) => {
       hl.setAttribute("x", X(i)); hl.setAttribute("visibility", "visible"); rects.forEach((r, j) => r && r.setAttribute("fill-opacity", j === i ? 1 : 0.55));
-      tip.innerHTML = `<b>${lbl(o.months[i])}</b><div class="r"><span>${o.name}</span><span>${vals[i] == null ? "—" : o.fmt(vals[i])}</span></div>` + (o.tipExtra ? o.tipExtra(i) : "");
+      tip.innerHTML = `<b>${(o.tlabel || lbl)(o.months[i])}</b><div class="r"><span>${o.name}</span><span>${vals[i] == null ? "—" : o.fmt(vals[i])}</span></div>` + (o.tipExtra ? o.tipExtra(i) : "");
       tip.hidden = false; placeTip(tip, px ?? X(i), py ?? Y(Math.max(0, vals[i] ?? 0)), W, H);
-      if (live) live.textContent = `${lbl(o.months[i])} ${o.name} ${vals[i] == null ? "값 없음" : o.fmt(vals[i])}`;
+      if (live) live.textContent = `${(o.tlabel || lbl)(o.months[i])} ${o.name} ${vals[i] == null ? "값 없음" : o.fmt(vals[i])}`;
     };
     const hide = () => { hl.setAttribute("visibility", "hidden"); rects.forEach((r) => r && r.setAttribute("fill-opacity", 1)); tip.hidden = true; };
     interact(svg, { n, W, H, iw, m, X, show, hide, pick: (x) => Math.max(0, Math.min(n - 1, Math.floor((x - m.l) / bw))) });
