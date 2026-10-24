@@ -9,7 +9,7 @@
 
 | 화면 | 내용 |
 |---|---|
-| [`/`](https://data.pivoxquant.com) | 최근 7일 변화(빅 케이스·작은 변화) · 주제 탭 — AI · 양자 · 로보틱스 · 비전 · 보안 · 시스템, 누르면 그 주제 인사이트만 최대 7장 (`/#quantum`처럼 주소로 공유) · 근거(표·차트·방법·검산, 접힘) |
+| [`/`](https://data.pivoxquant.com) | 읽는 법 · 최근 7일 변화(빅 케이스·작은 변화) · 주제 탭 — AI · 양자 · 로보틱스 · 비전 · 보안 · 시스템, 누르면 그 주제 카드만 최대 7장 (`/#quantum`처럼 주소로 공유). 카드마다 "쉽게 말하면" 한 줄, 밑줄 친 말을 누르면 풀이 · 용어 풀이 15개 · 근거(표·차트·방법·검산, 접힘) |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 연구 → 오픈소스 → 개발자 채택 → 모델 → 자본, 데이터마다 잇는 키와 공개 조건 |
 | 인스타그램 | 빅 케이스는 그날, 작은 변화는 일주일치를 모아 만든 카드 — 매번 다른 그림·배치, 소유자가 승인해야 게시 ([social/README.md](social/README.md)) |
 
@@ -34,6 +34,7 @@ trends/fetch.mjs    소스별 받기, 출처·받은 날과 함께 trends/data/*
 trends/signals.mjs  읽는 법 — 주간 수준(0이 아닌 평일의 중앙값), 끊김 감지(대조군만), 대조군 대비 초과 성장
 trends/verify.mjs   검산 → trends/data/checks.json (같은 숫자를 다른 경로로 한 번 더 읽기)
 trends/build.mjs    index.html · map.html 채우기, 변화 찾기(changes.json · state.json), insights.json (카드·캡션의 원천)
+trends/glossary.mjs 용어 풀이 15개 — 페이지의 "용어 풀이"와 카드 속 밑줄 친 말이 같은 문장을 씀
 trends/viz.mjs      인사이트를 그리는 방법 12가지 (선·면적·막대 / 기울기·두 막대·화살표 / 도넛·와플·띠 / 순위 막대·점·시상대)
 trends/site.mjs     모든 페이지 공통 head·상단·하단, sitemap.xml · robots.txt
 social/             오늘 올릴지(plan), 카드(build·render), 캡션(Claude + 숫자 검사), 게시(publish, 승인 후)

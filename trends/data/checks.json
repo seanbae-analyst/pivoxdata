@@ -60,7 +60,7 @@
   {
    "id": "pypi:present",
    "ok": true,
-   "fact": "23개 패키지 중 23개 받음"
+   "fact": "47개 패키지 중 47개 받음"
   },
   {
    "id": "pypi:fresh",
@@ -75,7 +75,7 @@
   {
    "id": "pypi:recent≈daily",
    "ok": true,
-   "fact": "최근 7일 합계 API와 일별 합이 23개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
+   "fact": "최근 7일 합계 API와 일별 합이 47개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
   },
   {
    "id": "pypi:weeks",
@@ -93,19 +93,64 @@
    "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후만 비교"
   },
   {
-   "id": "arxiv:months",
+   "id": "arxiv:ai:months",
    "ok": true,
-   "fact": "이어진 45개월 202301–202609 (지난달까지)"
+   "fact": "AI((cat:cs.AI OR cat:cs.CL OR cat:cs.LG)): 이어진 45개월 202301–202609 (지난달까지)"
   },
   {
-   "id": "arxiv:terms",
+   "id": "arxiv:ai:terms",
    "ok": true,
-   "fact": "키워드 15개 모두 매달 셈"
+   "fact": "AI: 키워드 15개 매달 셈, 분야 전체보다 많은 달 없음"
   },
   {
-   "id": "arxiv:term≤total",
+   "id": "arxiv:quantum:months",
    "ok": true,
-   "fact": "어느 달도 키워드 논문 수가 그달 AI 논문 전체보다 많지 않음"
+   "fact": "양자(cat:quant-ph): 이어진 21개월 202501–202609 (지난달까지)"
+  },
+  {
+   "id": "arxiv:quantum:terms",
+   "ok": true,
+   "fact": "양자: 키워드 5개 매달 셈, 분야 전체보다 많은 달 없음"
+  },
+  {
+   "id": "arxiv:robotics:months",
+   "ok": true,
+   "fact": "로보틱스(cat:cs.RO): 이어진 21개월 202501–202609 (지난달까지)"
+  },
+  {
+   "id": "arxiv:robotics:terms",
+   "ok": true,
+   "fact": "로보틱스: 키워드 5개 매달 셈, 분야 전체보다 많은 달 없음"
+  },
+  {
+   "id": "arxiv:vision:months",
+   "ok": true,
+   "fact": "컴퓨터 비전(cat:cs.CV): 이어진 21개월 202501–202609 (지난달까지)"
+  },
+  {
+   "id": "arxiv:vision:terms",
+   "ok": true,
+   "fact": "컴퓨터 비전: 키워드 5개 매달 셈, 분야 전체보다 많은 달 없음"
+  },
+  {
+   "id": "arxiv:security:months",
+   "ok": true,
+   "fact": "보안(cat:cs.CR): 이어진 21개월 202501–202609 (지난달까지)"
+  },
+  {
+   "id": "arxiv:security:terms",
+   "ok": true,
+   "fact": "보안: 키워드 5개 매달 셈, 분야 전체보다 많은 달 없음"
+  },
+  {
+   "id": "arxiv:systems:months",
+   "ok": true,
+   "fact": "시스템·하드웨어((cat:cs.DC OR cat:cs.AR)): 이어진 21개월 202501–202609 (지난달까지)"
+  },
+  {
+   "id": "arxiv:systems:terms",
+   "ok": true,
+   "fact": "시스템·하드웨어: 키워드 5개 매달 셈, 분야 전체보다 많은 달 없음"
   },
   {
    "id": "hf:snapshot",

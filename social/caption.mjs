@@ -25,13 +25,13 @@ if (plan.post === false) { console.log(`social/plan.json says no draft today (${
 // the insights carry line-break characters for the cards (no-break spaces and hyphens, zero-width breaks);
 // the caption gets plain text so a model id can be copied and searched
 const plain = (t) => String(t).replace(/\u200b/g, "").replace(/\u2011/g, "-").replace(/\u00a0/g, " ");
-const slides = slidesFor(I, plan).map((x) => ({ ...x, big: plain(x.big), bl: plain(x.bl), title: plain(x.title), body: plain(x.body), src: plain(x.src) }));
+const slides = slidesFor(I, plan).map((x) => ({ ...x, big: plain(x.big), bl: plain(x.bl), title: plain(x.title), easy: plain(x.easy ?? ""), body: plain(x.body), src: plain(x.src) }));
 const MODEL = "claude-opus-5-5";
 
 // ---------- the checks ----------
 const BANNED = /(추천|조언|매수|매도|사세요|사야|팔아|파세요|오를\s?것|내릴\s?것|오를지|급등|폭등|폭락|전망|예상|예측|목표가|무조건|보장|대박|BUY|SELL|HOLD)/gi;
 const numbersIn = (s) => (s.match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) => n.replace(/,/g, ""));
-const allowed = new Set([...slides.flatMap((x) => [x.big, x.bl, x.title, x.body, x.src]), date].flatMap(numbersIn));
+const allowed = new Set([...slides.flatMap((x) => [x.big, x.bl, x.title, x.easy ?? "", x.body, x.src]), date].flatMap(numbersIn));
 export function check(body) {
   const problems = [];
   const bad = [...new Set(numbersIn(body).filter((n) => !allowed.has(n)))];
@@ -51,12 +51,13 @@ const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 �
 - 숫자는 주어진 데이터에 적힌 그대로만 쓴다. 반올림·환산·새 계산 금지. 데이터에 없는 숫자(연도·순위 포함)를 만들지 않는다.
 - 일어난 일만 말한다. 앞으로 어떻게 될지, 무엇을 사거나 팔지, 어떤 기술을 써야 할지 말하지 않는다. "추천", "전망", "예상", "매수", "급등" 같은 말을 쓰지 않는다.
 - 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 흐리지 않는다.
+- 코드나 논문을 모르는 사람도 읽게 쓴다. 카드의 "쉽게말하면" 문장을 바탕으로, npm·PyPI·arXiv·Hugging Face·대조군·%p 같은 말은 처음 나올 때 괄호로 짧게 풀어 준다(예: npm(자바스크립트 개발자들이 코드 부품을 내려받는 곳)). 존댓말(~요)로.
 - 해시태그, 링크, 출처 줄, 면책 문구는 쓰지 않는다(코드가 붙인다). 이모지와 줄 앞 번호는 쓰지 않는다.
 - 담백하고 정확한 말투. 과장 금지.`;
 
 async function fromClaude() {
   const client = new Anthropic();
-  const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 내용: x.body, 출처: x.src }));
+  const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 쉽게말하면: x.easy, 내용: x.body, 출처: x.src }));
   const why = plan.mode === "event" ? `빅 케이스(${plan.event.kind}): 1번 카드. 나머지 카드는 같은 주제의 맥락.`
     : plan.mode === "digest" ? `작은 변화 모음: 지난 한 주 동안 잡힌 작은 변화 ${slides.length}가지. 하나하나는 크지 않으니 크게 부풀리지 말 것.`
     : "묶음: 빅 케이스 없이 요즘 숫자를 모은 게시물.";

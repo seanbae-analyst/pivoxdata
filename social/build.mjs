@@ -46,7 +46,7 @@ const design = slides.map((x, i) => {
 
 // ---------- slides ----------
 const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>투자 권유 아님</span></div>`;
-const H = { number: [380, 260], chart: [600, 520], headline: [300, 200] }; // drawing height: [labelled, line]
+const H = { number: [300, 220], chart: [600, 520], headline: [280, 200] }; // drawing height: [labelled, line]
 const chart = (x, s) => s.o ? `<div class="sp">${draw(x.viz[s.o.i], s.format, { w: 896, h: H[s.layout][FITTED.has(s.format) ? 0 : 1], big: true })}</div>` : `<div class="sp"></div>`;
 const kick = (x, i) => `<div class="kick">${String(i + 1).padStart(2, "0")} · ${esc(x.k)}</div>`;
 
@@ -55,6 +55,7 @@ const slideHtml = (x, i) => {
   if (s.layout === "chart") return `<section class="slide l-chart">
   ${kick(x, i)}
   <h2>${esc(x.title)}</h2>
+  ${x.easy ? `<p class="easy-s">${esc(x.easy)}</p>` : ""}
   ${chart(x, s)}
   <div class="row"><div class="big">${esc(x.big)}</div><div class="bl">${esc(x.bl)}</div></div>
   <div class="src">${esc(x.src)}</div>
@@ -64,7 +65,7 @@ const slideHtml = (x, i) => {
   ${kick(x, i)}
   <h2>${esc(x.title)}</h2>
   <div class="row"><div class="big">${esc(x.big)}</div><div class="bl">${esc(x.bl)}</div></div>
-  <p>${esc(x.body)}</p>
+  ${x.easy ? `<p class="easy"><span>쉽게 말하면</span>${esc(x.easy)}</p>` : `<p>${esc(x.body)}</p>`}
   ${chart(x, s)}
   <div class="src">${esc(x.src)}</div>
   ${foot}
@@ -74,7 +75,7 @@ const slideHtml = (x, i) => {
   <div class="big">${esc(x.big)}</div>
   <div class="bl">${esc(x.bl)}</div>
   <h2>${esc(x.title)}</h2>
-  <p>${esc(x.body)}</p>
+  ${x.easy ? `<p class="easy"><span>쉽게 말하면</span>${esc(x.easy)}</p>` : `<p>${esc(x.body)}</p>`}
   ${chart(x, s)}
   <div class="src">${esc(x.src)}</div>
   ${foot}
@@ -152,6 +153,10 @@ const html = `<!doctype html>
   h1{font-size:104px;line-height:1.12;letter-spacing:-.04em;margin:80px 0 0;font-weight:800}
   h2{font-size:52px;line-height:1.3;letter-spacing:-.03em;margin:64px 0 0;font-weight:700}
   p{font-size:32px;line-height:1.6;color:var(--ink-2);margin:28px 0 0}
+  /* the plain-words box: what the number means, for someone who has never seen npm or arXiv */
+  .easy{background:rgba(255,255,255,.05);border-radius:24px;padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
+  .easy span{display:block;font-size:24px;font-weight:700;color:var(--bronze-hi);margin-bottom:6px}
+  .easy-s{font-size:30px;color:var(--ink-2);margin-top:22px}
   .sp{margin-top:auto;margin-bottom:28px}
   .sp .viz:not(.fit){height:260px}
   .src{font-size:24px;color:var(--dim);margin-bottom:28px}

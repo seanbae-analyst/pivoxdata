@@ -19,13 +19,13 @@ const MARK = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-h
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/"><span class="mark">${MARK}</span><span class="full">${NAME}</span><span class="short">신호 레이더</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/">이번 주 신호</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
 const FOOTER = `
 <footer class="site">
   <span>${NAME} · 매일 갱신 · 무료 · 예측이나 투자 권유를 하지 않습니다</span>
-  <span class="links"><a href="/">이번 주 신호</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+  <span class="links"><a href="/">신호</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
 `;
 
