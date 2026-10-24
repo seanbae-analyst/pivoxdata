@@ -171,7 +171,7 @@ function spark(sp, w = 300, h = 64) {
   const X = (i) => (i * w) / (v.length - 1), d = v.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join("");
   return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d}L${w},${h}L0,${h}Z"/><path class="l" d="${d}"/></svg>`;
 }
-const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
+const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p><button type="button" class="more-btn" aria-expanded="false">더 보기</button>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
 
 // ---------- chart data ----------
 const D = {
@@ -203,7 +203,7 @@ const sourceStatus = [
 ];
 const fills = {
   "index.html": {
-    "t-meta": meta, "t-signals": insightHtml, "t-npm": table(npm, true),
+    "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매주 월요일 · 검산 ${CHECKS.checks.length}개 통과`, "t-signals": insightHtml, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
     "t-pypi-note": `${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 ${pypi.weeks.length - pypi.from}주만 비교합니다. 그래서 가속과 1년 전 대비는 아직 없습니다.` : ""} 대조군 중앙값 ${pc(pypi.base)}. LLM SDK 점유: ${sdkLine}.`,

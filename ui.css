@@ -46,7 +46,8 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
 .nav a:hover,.nav button:hover{color:var(--ink);background:var(--surface-2);text-decoration:none}
 .nav a,.nav button{white-space:nowrap}
 .brand .short{display:none}
-@media(max-width:560px){.brand .full{display:none}.brand .short{display:inline}.nav a{padding:7px 8px}.topbar{gap:8px}}
+@media(max-width:560px){.brand .full{display:none}.brand .short{display:inline}.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
+  footer.site .links{gap:0 4px} footer.site .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--bronze);color:#120e09;
