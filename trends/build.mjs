@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 
@@ -72,18 +72,28 @@ const sdkNow = shares(sdkW, 0), sdkThen = shares(sdkW, pyBack);
 
 // ---------- arXiv ----------
 const AX = load("arxiv.json");
-// the unbroken run of months that ends at the latest one (a cut-short backfill can leave older gaps)
-const mAdd = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(4) - 1 + n; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, "0")}`; };
-const am = (() => { const set = new Set(AX.months), out = [AX.months.at(-1)]; while (set.has(mAdd(out[0], -1))) out.unshift(mAdd(out[0], -1)); return out; })();
-const axShare = (id, m) => AX.terms[id][m] / AX.total[m];
 const avg = (a) => a.reduce((s, x) => s + x, 0) / a.length;
-const last3 = am.slice(-3), prev3 = am.length >= 15 ? last3.map((m) => mAdd(m, -12)) : [];
-const axRows = ARXIV.map((t) => {
-  const now = avg(last3.map((m) => axShare(t.id, m))), then = prev3.length === 3 ? avg(prev3.map((m) => axShare(t.id, m))) : null;
-  return { ...t, now, then, ratio: then ? now / then : null, papers: AX.terms[t.id][am.at(-1)] };
-}).sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0));
-const axTop = axRows.filter((r) => r.then >= 0.002)[0]; // a phrase in ≥ 0.2% of papers a year ago, so a ratio means something
-const axBiggest = [...axRows].sort((a, b) => b.now - a.now)[0];
+const mAdd = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(4) - 1 + n; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, "0")}`; };
+// one research field: its unbroken run of months ending at the latest (a cut-short backfill can leave older gaps),
+// each phrase's share of the field's papers, and how the last 3 months compare with the same 3 a year earlier
+function field(f) {
+  const X = AX.domains[f.id], am = (() => { const set = new Set(X.months), out = [X.months.at(-1)]; while (set.has(mAdd(out[0], -1))) out.unshift(mAdd(out[0], -1)); return out; })();
+  const share = (id, m) => X.terms[id][m] / X.total[m];
+  const last3 = am.slice(-3), prev3 = am.length >= 15 ? last3.map((m) => mAdd(m, -12)) : [];
+  const rows = f.terms.map((t) => {
+    const now = avg(last3.map((m) => share(t.id, m))), then = prev3.length === 3 ? avg(prev3.map((m) => share(t.id, m))) : null;
+    const papers3 = last3.reduce((s, m) => s + X.terms[t.id][m], 0);
+    return { ...t, now, then, ratio: then ? now / then : null, papers: X.terms[t.id][am.at(-1)], papers3 };
+  }).sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0));
+  // a ratio means something only for a phrase in ≥ 0.2% of the field a year ago and ≥ 10 papers in the last 3 months
+  const top = rows.filter((r) => r.then >= 0.002 && r.papers3 >= 10)[0] ?? null;
+  const biggest = [...rows].sort((a, b) => b.now - a.now)[0];
+  const growth = prev3.length === 3 ? avg(last3.map((m) => X.total[m])) / avg(prev3.map((m) => X.total[m])) - 1 : null;
+  return { ...f, X, am, share, last3, prev3, rows, top, biggest, growth, monthly: avg(last3.map((m) => X.total[m])) };
+}
+const fields = ARXIV_DOMAINS.filter((f) => AX.domains?.[f.id]?.months?.length).map(field);
+const ai = fields.find((f) => f.id === "ai");
+const { am, last3, rows: axRows, top: axTop, biggest: axBiggest } = ai, axShare = ai.share;
 const axChart = [...axRows].filter((r) => r.then != null).slice(0, 5).map((r) => r.id);
 
 // ---------- Hugging Face ----------
@@ -171,12 +181,24 @@ function spark(sp, w = 300, h = 64) {
   const X = (i) => (i * w) / (v.length - 1), d = v.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join("");
   return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d}L${w},${h}L0,${h}Z"/><path class="l" d="${d}"/></svg>`;
 }
+// ---------- research radar: one card per field ----------
+const fieldsByGrowth = [...fields].filter((f) => f.growth != null).sort((a, b) => b.growth - a.growth);
+const researchHtml = fields.map((f) => {
+  const t = f.top;
+  return `<article class="fld"><div class="top"><span class="k">${esc(f.name)}</span><span class="g ${cls(f.growth)}">${f.growth == null ? "" : `논문 ${pc(f.growth, 0)}`}</span></div>
+  <div class="row"><div class="big">${t ? `${t.ratio.toFixed(1)}배` : "—"}</div>${spark({ values: f.am.map((m) => f.X.total[m]) }, 160, 40)}</div>
+  <h3>${t ? `가장 빨리 늘어난 말 <b>${keep(t.name)}</b>` : "1년 전과 비교할 달이 아직 모자랍니다"}</h3>
+  <p>${t ? `최근 3개월 ${esc(f.name)} 논문의 ${sh(t.now)}(1년 전 ${sh(t.then)}). 가장 많이 쓰인 말은 ${keep(f.biggest.name)}(${sh(f.biggest.now)}).` : ""} 한 달 평균 ${Math.round(f.monthly).toLocaleString("ko-KR")}편.</p>
+  <div class="src">arXiv ${esc(f.scope.replace(/cat:/g, "").replace(/[()]/g, "").replace(/ OR /g, "·"))} · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}</div></article>`;
+}).join("");
+const researchNote = fieldsByGrowth.length ? `최근 3개월 논문 수가 1년 전 같은 3개월보다 가장 많이 는 분야는 ${esc(fieldsByGrowth[0].name)}(${pc(fieldsByGrowth[0].growth, 0)})입니다. “배”는 그 분야 논문 중 그 말을 쓴 비율이 1년 전의 몇 배인지입니다(1년 전 0.2% 이상 · 최근 3개월 10편 이상인 말만).` : "";
+
 const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p><button type="button" class="more-btn" aria-expanded="false">더 보기</button>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
 
 // ---------- chart data ----------
 const D = {
   prov: { weeks: provSeries.weeks, series: provPk.map((p) => ({ name: p.name, values: provSeries.series[p.pkg] })) },
-  arxiv: { months: am, series: axChart.map((id) => ({ name: ARXIV.find((t) => t.id === id).name, values: am.map((m) => r4(axShare(id, m) * 100)) })) },
+  arxiv: { months: am, series: axChart.map((id) => ({ name: ai.terms.find((t) => t.id === id).name, values: am.map((m) => r4(axShare(id, m) * 100)) })) },
   capex: { quarters, series: [...SEC.companies.map((c) => ({ name: c.name, values: quarters.map((q) => (Qs[c.id][q] == null ? null : Math.round(Qs[c.id][q] / 1e8) / 10)) }))], sum: quarters.map((q) => (common.includes(q) ? Math.round(sum4(q) / 1e8) / 10 : null)) },
   csv: {
     npm: npm.weeks.map((w, i) => [w, ...NPM.map((p) => npm.W[p.pkg][i].level ?? "")]), npmHead: ["주 시작(월)", ...NPM.map((p) => p.pkg)],
@@ -197,7 +219,7 @@ const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? 
 const sourceStatus = [
   ["npm", `${npm.fetched} 받음 · ${wlbl(npm.last)}까지 · 패키지 ${NPM.length + NPM_CONTROL.length}개`],
   ["pypi", `${pypi.fetched} 받음 · ${wlbl(pypi.last)}까지 · 패키지 ${PYPI.length + PYPI_CONTROL.length}개`],
-  ["arxiv", `${AX.fetched_at} 받음 · ${mlbl(am.at(-1))}까지 · 말 ${ARXIV.length}개`],
+  ["arxiv", `${AX.fetched_at} 받음 · ${mlbl(am.at(-1))}까지 · 분야 ${fields.length}개 · 말 ${fields.reduce((n, f) => n + f.terms.length, 0)}개`],
   ["hf", `${HFD.fetched_at} 스냅숏 · 상위 ${snap.top.length} + 트렌딩 ${snap.trending.length}`],
   ["sec", `${SECD.fetched_at} 받음 · ${qlbl(cq)}까지 · 회사 ${SEC.companies.length}곳`],
 ];
@@ -207,7 +229,7 @@ const fills = {
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
     "t-pypi-note": `${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 ${pypi.weeks.length - pypi.from}주만 비교합니다. 그래서 가속과 1년 전 대비는 아직 없습니다.` : ""} 대조군 중앙값 ${pc(pypi.base)}. LLM SDK 점유: ${sdkLine}.`,
-    "t-arxiv": axTable, "t-hf-trending": trendRows, "t-hf-authors": authorRows, "t-capex": capexRows, "t-checks": checkLi,
+    "t-arxiv": axTable, "t-research": researchHtml, "t-research-note": researchNote, "t-hf-trending": trendRows, "t-hf-authors": authorRows, "t-capex": capexRows, "t-checks": checkLi,
   },
   "map.html": Object.fromEntries(sourceStatus.map(([id, t]) => [`m-${id}`, esc(t)])),
 };

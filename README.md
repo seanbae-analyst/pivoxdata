@@ -3,12 +3,12 @@
 **▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — 매주 월요일 갱신 · 무료 · 예측이나 투자 권유를 하지 않습니다.
 
 기사보다 먼저 움직이는 숫자를 매주 같은 방식으로 잽니다 — 개발자가 실제로 내려받는 패키지(npm·PyPI), 연구자가
-쓰는 말(arXiv), 사람들이 받는 오픈 모델(Hugging Face), 빅테크가 데이터센터에 쓰는 돈(SEC 공시). 크기보다
+쓰는 말(arXiv — AI·양자·로보틱스·비전·보안·시스템 6개 분야), 사람들이 받는 오픈 모델(Hugging Face), 빅테크가 데이터센터에 쓰는 돈(SEC 공시). 크기보다
 **평소보다 얼마나 빨리 커지는지**로 줄을 세우고, 화면의 문장은 모두 데이터로 계산돼 매주 다시 쓰입니다.
 
 | 화면 | 내용 |
 |---|---|
-| [`/`](https://data.pivoxquant.com) | 이번 주 인사이트 카드 7장 + 근거(표·차트·방법·검산, 접힘) |
+| [`/`](https://data.pivoxquant.com) | 이번 주 인사이트 카드 7장 · 연구 레이더(분야별로 가장 빨리 늘어난 말) · 근거(표·차트·방법·검산, 접힘) |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 연구 → 오픈소스 → 개발자 채택 → 모델 → 자본, 데이터마다 잇는 키와 공개 조건 |
 | 인스타그램 | 같은 인사이트로 만든 주간 카드 — 소유자가 승인해야 게시 ([social/README.md](social/README.md)) |
 
@@ -28,7 +28,7 @@ npm run dev           # http://localhost:8099
 ## 구조
 
 ```
-trends/series.mjs   지켜보는 것 한 곳 — npm·PyPI 패키지(+대조군), arXiv 말, Hugging Face, SEC 회사
+trends/series.mjs   지켜보는 것 한 곳 — npm·PyPI 패키지(+대조군), arXiv 분야·말, Hugging Face, SEC 회사
 trends/fetch.mjs    소스별 받기, 출처·받은 날과 함께 trends/data/*.json 으로
 trends/signals.mjs  읽는 법 — 주간 수준(0이 아닌 평일의 중앙값), 끊김 감지(대조군만), 대조군 대비 초과 성장
 trends/verify.mjs   검산 → trends/data/checks.json (같은 숫자를 다른 경로로 한 번 더 읽기)

@@ -6,7 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV, ARXIV_SCOPE, ARXIV_START, HF, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC } from "./series.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const only = process.argv.slice(2);
@@ -74,12 +74,13 @@ if (want("pypi")) {
   write("pypi.json", { source: { site: "pypistats.org (PyPI BigQuery public dataset, without known mirrors)", url: "https://pypistats.org/api/packages/{package}/overall?mirrors=false", licence: "PyPI BigQuery data: CC BY 4.0 (docs.pypi.org/api/bigquery)" }, fetched_at: today, packages: doc.packages });
 }
 
-// ---------- arXiv: monthly counts, one query per month × phrase, ≥ 3 s apart (arXiv API terms) ----------
+// ---------- arXiv: monthly counts per field, one query per month × phrase, ≥ 3 s apart (arXiv API terms) ----------
 if (want("arxiv")) {
-  const doc = read("arxiv.json", { months: [], total: {}, terms: {} });
+  const old = read("arxiv.json", {});
+  // the file used to hold the AI field only; it becomes domains.ai
+  const doc = old.domains ? old : { domains: old.total ? { ai: { total: old.total, terms: old.terms } } : {} };
   const now = new Date(), lastFull = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 0)); // end of last month
-  const months = []; for (let y = +ARXIV_START.slice(0, 4), m = +ARXIV_START.slice(4); y * 12 + m <= lastFull.getUTCFullYear() * 12 + lastFull.getUTCMonth() + 1; m++) { if (m > 12) { m = 1; y++; } months.push(`${y}${String(m).padStart(2, "0")}`); }
-  const recent = new Set(months.slice(-2)); // late listings still land in the last two months: re-count them
+  const monthsFrom = (start) => { const out = []; for (let y = +start.slice(0, 4), m = +start.slice(4); y * 12 + m <= lastFull.getUTCFullYear() * 12 + lastFull.getUTCMonth() + 1; m++) { if (m > 12) { m = 1; y++; } out.push(`${y}${String(m).padStart(2, "0")}`); } return out; };
   const count = async (q, ym) => {
     const last = new Date(Date.UTC(+ym.slice(0, 4), +ym.slice(4), 0)).getUTCDate();
     // max_results=1, not 0: the API answers 0 with an internal error
@@ -92,18 +93,25 @@ if (want("arxiv")) {
     }
     throw new Error(`arXiv kept failing for ${q} ${ym}`);
   };
-  // newest first: if a run is cut short, the months the page compares (the last 15) are already there
-  for (const ym of [...months].reverse()) {
-    if (doc.total[ym] == null || recent.has(ym)) doc.total[ym] = await count(ARXIV_SCOPE, ym);
-    for (const t of ARXIV) {
-      doc.terms[t.id] ??= {};
-      if (doc.terms[t.id][ym] == null || recent.has(ym)) doc.terms[t.id][ym] = await count(`${ARXIV_SCOPE} AND abs:${t.q}`, ym);
+  const save = () => write("arxiv.json", {
+    source: { site: "arXiv API", url: "https://export.arxiv.org/api/query", licence: "metadata CC0 1.0 (info.arxiv.org/help/license)" }, fetched_at: today,
+    domains: Object.fromEntries(ARXIV_DOMAINS.map((f) => { const d = doc.domains[f.id] ?? { total: {}, terms: {} }; const months = monthsFrom(f.start).filter((m) => d.total[m] != null && f.terms.every((t) => d.terms[t.id]?.[m] != null));
+      return [f.id, { name: f.name, scope: f.scope, months, total: d.total, terms: d.terms, queries: Object.fromEntries(f.terms.map((t) => [t.id, t.q])) }]; })),
+  });
+  // newest month first across all fields, so a cut-short run still has every field's recent months
+  const allMonths = [...new Set(ARXIV_DOMAINS.flatMap((f) => monthsFrom(f.start)))].sort().reverse();
+  const recent = new Set(allMonths.slice(0, 2)); // late listings still land in the last two months: re-count them
+  for (const ym of allMonths) {
+    for (const f of ARXIV_DOMAINS) {
+      if (ym < f.start) continue;
+      const d = (doc.domains[f.id] ??= { total: {}, terms: {} });
+      if (d.total[ym] == null || recent.has(ym)) d.total[ym] = await count(f.scope, ym);
+      for (const t of f.terms) { d.terms[t.id] ??= {}; if (d.terms[t.id][ym] == null || recent.has(ym)) d.terms[t.id][ym] = await count(`${f.scope} AND abs:${t.q}`, ym); }
     }
-    console.log(`arxiv ${ym} total ${doc.total[ym]}`);
-    // months are listed only when the total and every phrase are counted, so a cut-short run leaves no half month
-    const done = months.filter((m) => doc.total[m] != null && ARXIV.every((t) => doc.terms[t.id]?.[m] != null));
-    write("arxiv.json", { source: { site: "arXiv API", scope: ARXIV_SCOPE, url: "https://export.arxiv.org/api/query", licence: "metadata CC0 1.0 (info.arxiv.org/help/license)" }, fetched_at: today, months: done, total: doc.total, terms: doc.terms, queries: Object.fromEntries(ARXIV.map((t) => [t.id, t.q])) });
+    console.log(`arxiv ${ym} ${ARXIV_DOMAINS.filter((f) => ym >= f.start).map((f) => `${f.id} ${doc.domains[f.id].total[ym]}`).join(" · ")}`);
+    save();
   }
+  save();
 }
 
 // ---------- Hugging Face: one snapshot a day of the top-downloaded and trending models ----------

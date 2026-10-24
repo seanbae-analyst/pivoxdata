@@ -75,6 +75,48 @@ export const ARXIV = [
   { id: "embodied", q: "embodied", name: "체화 (embodied)" },
 ];
 
+// More research fields, read the same way (share of the field's papers whose abstract has the phrase).
+// Each field is one or more arXiv categories. They start in 2025-01: 15 months are needed for "the same 3 months a
+// year earlier", and the rest is chart history that older runs can extend.
+export const ARXIV_DOMAINS = [
+  { id: "ai", name: "AI", scope: ARXIV_SCOPE, start: ARXIV_START, terms: ARXIV },
+  { id: "quantum", name: "양자", scope: "cat:quant-ph", start: "202501", terms: [
+    { id: "qec", q: "\"error correction\"", name: "오류 정정 (error correction)" },
+    { id: "logical", q: "\"logical qubit\"", name: "논리 큐비트 (logical qubit)" },
+    { id: "neutral", q: "\"neutral atom\"", name: "중성 원자 (neutral atom)" },
+    { id: "advantage", q: "\"quantum advantage\"", name: "양자 우위 (quantum advantage)" },
+    { id: "variational", q: "variational", name: "변분 알고리즘 (variational)" },
+  ] },
+  { id: "robotics", name: "로보틱스", scope: "cat:cs.RO", start: "202501", terms: [
+    { id: "humanoid", q: "humanoid", name: "휴머노이드 (humanoid)" },
+    { id: "vla", q: "\"vision-language-action\"", name: "VLA (vision-language-action)" },
+    { id: "sim2real", q: "\"sim-to-real\"", name: "시뮬→실제 (sim-to-real)" },
+    { id: "diffpolicy", q: "\"diffusion policy\"", name: "디퓨전 정책 (diffusion policy)" },
+    { id: "manipulation", q: "manipulation", name: "조작 (manipulation)" },
+  ] },
+  { id: "vision", name: "컴퓨터 비전", scope: "cat:cs.CV", start: "202501", terms: [
+    { id: "videogen", q: "\"video generation\"", name: "영상 생성 (video generation)" },
+    { id: "gsplat", q: "\"gaussian splatting\"", name: "가우시안 스플래팅 (gaussian splatting)" },
+    { id: "vlm", q: "\"vision-language\"", name: "비전-언어 (vision-language)" },
+    { id: "worldmodel", q: "\"world model\"", name: "월드 모델 (world model)" },
+    { id: "segmentation", q: "segmentation", name: "분할 (segmentation)" },
+  ] },
+  { id: "security", name: "보안", scope: "cat:cs.CR", start: "202501", terms: [
+    { id: "jailbreak", q: "jailbreak", name: "탈옥 (jailbreak)" },
+    { id: "injection", q: "\"prompt injection\"", name: "프롬프트 인젝션 (prompt injection)" },
+    { id: "pqc", q: "\"post-quantum\"", name: "양자내성암호 (post-quantum)" },
+    { id: "zk", q: "\"zero-knowledge\"", name: "영지식 증명 (zero-knowledge)" },
+    { id: "federated", q: "\"federated learning\"", name: "연합 학습 (federated learning)" },
+  ] },
+  { id: "systems", name: "시스템·하드웨어", scope: "(cat:cs.DC OR cat:cs.AR)", start: "202501", terms: [
+    { id: "kvcache", q: "\"KV cache\"", name: "KV 캐시 (KV cache)" },
+    { id: "llminfer", q: "\"LLM inference\"", name: "LLM 추론 (LLM inference)" },
+    { id: "accelerator", q: "accelerator", name: "가속기 (accelerator)" },
+    { id: "chiplet", q: "chiplet", name: "칩렛 (chiplet)" },
+    { id: "serverless", q: "serverless", name: "서버리스 (serverless)" },
+  ] },
+];
+
 // Hugging Face: one snapshot per run of the most-downloaded and the trending models.
 export const HF = { top: 300, trending: 50 };
 

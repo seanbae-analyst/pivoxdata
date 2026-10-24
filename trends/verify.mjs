@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd } from "./signals.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
@@ -47,18 +47,20 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   check(`${src}:breaks`, true, br.length ? `대조군(${control.map((c) => c.pkg).join("·")})이 한꺼번에 움직인 주: ${br.map((b) => `${b.week} 주 ×${b.ratio.toFixed(2)}`).join(", ")} — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후만 비교` : `대조군(${control.map((c) => c.pkg).join("·")})이 한꺼번에 30% 넘게 움직인 주 없음 (연말연시 제외)`);
 }
 
-// arXiv
+// arXiv — every field: an unbroken run of months ending last month, long enough to compare with a year earlier
 {
-  const d = load("arxiv.json"), all = d.months;
-  // the page reads the unbroken run of months ending last month; it needs 15 (3 recent + the same 3 a year earlier)
+  const d = load("arxiv.json");
   const prev = (x) => { const t = +x.slice(0, 4) * 12 + +x.slice(4) - 2; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, "0")}`; };
-  const set = new Set(all), m = [all.at(-1)]; while (set.has(prev(m[0]))) m.unshift(prev(m[0]));
   const lastFull = (() => { const t = new Date(d.fetched_at + "T00:00:00Z"); t.setUTCDate(0); return t.toISOString().slice(0, 7).replace("-", ""); })();
-  check("arxiv:months", m.length >= 15 && m.at(-1) === lastFull, `이어진 ${m.length}개월 ${m[0]}–${m.at(-1)} (지난달까지)${all.length > m.length ? `, 그 앞 ${all.length - m.length}개월은 따로 있음 (${all[0]}부터)` : ""}`);
-  const missing = ARXIV.filter((t) => m.some((x) => d.terms[t.id]?.[x] == null)).map((t) => t.id);
-  check("arxiv:terms", missing.length === 0, `키워드 ${ARXIV.length}개 모두 매달 셈${missing.length ? ` — 빈 칸: ${missing.join(", ")}` : ""}`);
-  const over = ARXIV.flatMap((t) => m.filter((x) => d.terms[t.id][x] > d.total[x]).map((x) => `${t.id} ${x}`));
-  check("arxiv:term≤total", over.length === 0, `어느 달도 키워드 논문 수가 그달 AI 논문 전체보다 많지 않음${over.length ? ` — 어긋남: ${over.join(", ")}` : ""}`);
+  for (const f of ARXIV_DOMAINS) {
+    const x = d.domains?.[f.id];
+    if (!x || !x.months.length) { check(`arxiv:${f.id}:months`, false, `${f.name}: 받은 달 없음`); continue; }
+    const set = new Set(x.months), m = [x.months.at(-1)]; while (set.has(prev(m[0]))) m.unshift(prev(m[0]));
+    check(`arxiv:${f.id}:months`, m.length >= 15 && m.at(-1) === lastFull, `${f.name}(${f.scope}): 이어진 ${m.length}개월 ${m[0]}–${m.at(-1)} (지난달까지)`);
+    const missing = f.terms.filter((t) => m.some((y) => x.terms[t.id]?.[y] == null)).map((t) => t.id);
+    const over = f.terms.flatMap((t) => m.filter((y) => x.terms[t.id]?.[y] > x.total[y]).map((y) => `${t.id} ${y}`));
+    check(`arxiv:${f.id}:terms`, missing.length === 0 && over.length === 0, `${f.name}: 키워드 ${f.terms.length}개 매달 셈, 분야 전체보다 많은 달 없음${missing.length ? ` — 빈 칸: ${missing.join(", ")}` : ""}${over.length ? ` — 어긋남: ${over.join(", ")}` : ""}`);
+  }
 }
 
 // Hugging Face
