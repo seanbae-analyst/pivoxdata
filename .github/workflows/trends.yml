@@ -2,8 +2,11 @@
 #   1. fetch → verify → build. If any check fails, nothing is committed and an issue lists the failing checks —
 #      a wrong sentence is never published silently. build.mjs also looks for big cases (a leader change, a package
 #      far above its usual week, a new all-time high, a phrase crossing 2.5× in papers, a new #1 model, a capex filing).
+#      It also compares today's readings with yesterday's (trends/data/state.json) for small changes — a new #1, a new
+#      entrant, a share moving 1%p, a month of papers counted, one company's filing — logged in changes.json.
 #   2. social/plan.mjs decides whether today gets a draft: a big case not drafted before (its subject left alone for
-#      21 days), or a roundup when nothing big has happened for 14 days. Otherwise only the site is refreshed.
+#      21 days); else, a week after the last draft, a digest of 3+ small changes; else a roundup after 14 quiet days.
+#      Otherwise only the site is refreshed.
 #   3. A draft becomes carousel cards (social/build.mjs, render.mjs — a different drawing and layout each time) and a
 #      caption (social/caption.mjs: Claude writes it, code checks every number against the cards and rejects
 #      advice/forecast words); an "[instagram]" issue asks for approval. Nothing is posted until the repository owner
@@ -82,7 +85,9 @@ jobs:
             const imgs = post.images.map((f) => `<img src="${post.image_base}${f}" width="270">`).join(" ");
             const body = [
               `<!-- instagram-post:${date} -->`,
-              post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}` : "**묶음** — 14일 동안 빅 케이스가 없어 요즘 숫자를 모았습니다.",
+              post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}`
+                : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
+                : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 숫자를 모았습니다.",
               "",
               `인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
               `이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`,
@@ -90,7 +95,8 @@ jobs:
               "- `/approve` — 이대로 게시 (저장소 소유자만)",
               "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)",
             ].join("\n");
-            const title = post.mode === "event" ? `[instagram] ${date} 빅 케이스 — ${post.event.headline}` : `[instagram] ${date} 요즘 AI 기술 신호`;
+            const title = post.mode === "event" ? `[instagram] ${date} 빅 케이스 — ${post.event.headline}`
+              : post.mode === "digest" ? `[instagram] ${date} 작은 변화 ${post.insights.length}가지` : `[instagram] ${date} 요즘 AI 기술 신호`;
             await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: title.slice(0, 200), body });
 
       - name: Open an issue when a check fails

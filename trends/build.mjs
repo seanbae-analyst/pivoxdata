@@ -121,6 +121,9 @@ const capex = { q: cq, sum: sum4(cq), yoy: common.includes(cqYear) ? sum4(cq) / 
 const capexLead = big4.map((id) => ({ id, name: SEC.companies.find((c) => c.id === id).name, v: Qs[id][cq], yoy: Qs[id][cqYear] ? Qs[id][cq] / Qs[id][cqYear] - 1 : null })).sort((a, b) => b.yoy - a.yoy);
 const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > cq)).map((c) => { const q = Object.keys(Qs[c.id]).filter((x) => x > cq).sort().at(-1); return `${c.name} ${qlbl(q)} ${usd(Qs[c.id][q])}`; });
 
+// the day this build describes: the latest fetch of any source
+const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at].sort().at(-1);
+
 // ---------- insights ----------
 // One object per insight: a big number, a one-line headline, a short body and a small trend line. The page and the
 // Instagram cards (social/) are both drawn from these, so they always say the same thing. `big`, `title` and `body`
@@ -182,6 +185,8 @@ const vizHtml = (x) => { const o = options(x.viz)[0]; return o ? draw(x.viz[o.i]
 // ---------- topic tabs: AI is the radar above; every other topic is one arXiv field + its packages (+ HF tasks) ----------
 const pyRow = (pkg) => pypi.rows.find((r) => r.pkg === pkg);
 const pySpan = `${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주`;
+const topicPk = (t) => (t.pypi ?? []).map(pyRow).filter((r) => r && r.level >= TOPIC_MIN_LEVEL);
+const topicFast = (t) => topicPk(t).filter((r) => r.excess != null).sort((a, b) => b.excess - a.excess);
 function topicCards(t) {
   const f = fields.find((x) => x.id === t.field), out = [];
   const fsrc = f ? `arXiv ${f.scope.replace(/cat:/g, "").replace(/[()]/g, "").replace(/ OR /g, "·")} · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` : "";
@@ -199,8 +204,7 @@ function topicCards(t) {
   if (down) out.push({ id: `${t.id}-falling`, k: "연구 · 줄어든 말", big: pc(down.ratio - 1, 0), bl: "논문 속 비율, 1년 전 대비",
     title: `가장 많이 줄어든 말은 <b>${keep(down.name)}</b>`, body: `최근 3개월 ${sh(down.now)}, 1년 전 ${sh(down.then)}.`,
     viz: [versus(down.then, down.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(down.id, m)))], src: fsrc });
-  const pk = (t.pypi ?? []).map(pyRow).filter((r) => r && r.level >= TOPIC_MIN_LEVEL);
-  const fast = pk.filter((r) => r.excess != null).sort((a, b) => b.excess - a.excess);
+  const pk = topicPk(t), fast = topicFast(t);
   if (fast.length) out.push({ id: `${t.id}-pkg-fast`, k: "개발자 · Python", big: pp(fast[0].excess), bl: "대조군보다 더 큰 4주 성장",
     title: `가장 빨리 더 내려받는 도구는 <b>${keep(fast[0].name)}</b>`,
     body: `4주 다운로드 ${pc(fast[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}.${fast.length > 1 ? ` 다음은 ${fast.slice(1, 3).map((r) => `${keep(r.name)}(${pp(r.excess)})`).join(", ")}.` : ""}`,
@@ -217,31 +221,43 @@ function topicCards(t) {
 }
 const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
 
-// ---------- big cases: what changed enough to post about today (social/plan.mjs decides whether to) ----------
+// ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
 // Each detector looks only at finished periods — the last complete week of downloads, the last full month of papers,
-// a filed quarter — so a lumpy day can't fire one. `key` names the case (it is posted at most once), `subject` what it
-// is about (social/plan.mjs leaves a subject alone for a while after posting it), `score` which one leads.
+// a filed quarter — so a lumpy day can't fire one. `key` names the change (logged and posted at most once), `subject`
+// what it is about (social/plan.mjs leaves a subject alone for a while after posting it), `score` which one leads,
+// `tier` whether it is a big case (drafted the day it appears) or a small change (collected into a weekly digest).
 const topicOfPkg = (pkg) => TOPICS.find((t) => t.pypi?.includes(pkg))?.id ?? "ai";
 const events = [];
-const SURGE = 1.4, ATH = 1.1, PAPER = 2.5;
+const SURGE = 1.4, ATH = 1.1, PAPER = 2.5;      // big
+const SURGE_SMALL = 1.2, ATH_SMALL_WEEKS = 13;  // small: a smaller jump, or any new high over a shorter record
+const tag = (tier, what) => (tier === "big" ? `빅 케이스 · ${what}` : `작은 변화 · ${what}`);
 for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "PyPI", PYPI, PYPI_CONTROL]]) {
   const n = x.weeks.length, wk = x.weeks.at(-1), prior = Math.min(12, n - 1 - x.from);
   if (prior < 6 || x.W[list[0].pkg].at(-1).holiday) continue;
   const usual = (pkg) => median(x.W[pkg].slice(n - 1 - prior, n - 1).map((w) => w.level).filter((v) => v != null));
   const ctrl = median(control.map((p) => x.W[p.pkg].at(-1).level / usual(p.pkg)));
+  // when the AI packages rise together that is one change ("AI 패키지 전반"), and a single package stands out only
+  // against both the controls and its AI peers
+  const peers = list.filter((p) => p.group !== "topic" && x.W[p.pkg].at(-1).level >= MIN_LEVEL && usual(p.pkg)).map((p) => ({ ...p, r: x.W[p.pkg].at(-1).level / usual(p.pkg) })).sort((a, b) => b.r - a.r);
+  const pm = median(peers.map((p) => p.r));
+  if (pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
+    id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: "지난주 AI 패키지 다운로드 중앙값, 직전 평소 대비",
+    title: `지난주 ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
+    viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)} 주` } });
   for (const p of list) {
     const r = x.rows.find((q) => q.pkg === p.pkg), L = x.W[p.pkg].at(-1).level, u = usual(p.pkg), name = nm(p);
     if (L == null || !u || L < (p.group === "topic" ? TOPIC_MIN_LEVEL : MIN_LEVEL)) continue;
-    const vs = L / u / ctrl, topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
-    if (vs >= SURGE) events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "급증", score: 50 + (vs - 1) * 50, topic, card: {
-      id: `ev-surge-${p.pkg}`, k: `빅 케이스 · ${src} 다운로드`, big: `${(L / u).toFixed(1)}배`, bl: "지난주 다운로드, 직전 평소 대비",
+    const vs = L / u / (p.group === "topic" || pm == null ? ctrl : Math.max(ctrl, pm)), topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
+    if (vs >= SURGE_SMALL) { const tier = vs >= SURGE ? "big" : "small"; events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: tier === "big" ? "급증" : "증가", tier, score: 50 + (vs - 1) * 50, topic, card: {
+      id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: "지난주 다운로드, 직전 평소 대비",
       title: `지난주 <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
-      body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
-      viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[n - levels.length])}–${wlbl(wk)}` } });
+      body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배${p.group !== "topic" && pm != null ? `, AI 패키지 전반은 ${pm.toFixed(2)}배` : ""}였습니다.`,
+      viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[n - levels.length])}–${wlbl(wk)}` } }); }
     const hist = x.W[p.pkg].slice(x.from, n - 1).filter((w) => w.level != null);
-    if (hist.length >= 26) { const top = hist.reduce((a, b) => (b.level > a.level ? b : a));
-      if (L > top.level * ATH) events.push({ key: `ath:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "최고치", score: 40 + (L / top.level - 1) * 100, topic, card: {
-        id: `ev-ath-${p.pkg}`, k: `빅 케이스 · ${src} 최고치`, big: man(L), bl: "평일 하루 다운로드, 지난주",
+    if (hist.length >= ATH_SMALL_WEEKS) { const ti = hist.reduce((a, b, i) => (b.level > hist[a].level ? i : a), 0), top = hist[ti], tier = hist.length >= 26 && L > top.level * ATH ? "big" : "small";
+      // a steady grower sets a high every week; a small one counts only when the old high is 8+ weeks old
+      if (L > top.level && (tier === "big" || ti <= hist.length - 8)) events.push({ key: `ath:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "최고치", tier, score: 40 + (L / top.level - 1) * 100, topic, card: {
+        id: `ev-ath-${p.pkg}`, k: tag(tier, `${src} 최고치`), big: man(L), bl: "평일 하루 다운로드, 지난주",
         title: `<b>${keep(name)}</b> 주간 다운로드가 역대 최고`,
         body: `이전 최고(${wlbl(top.week)})보다 ${pc(L / top.level - 1, 0)} 많습니다.${r?.g4 != null ? ` 4주 성장 ${pc(r.g4)}, 대조군 ${pc(x.base)}.` : ""}`,
         viz: [series(lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 104), ["line", "area", "columns"]), versus(top.level, L, man, "이전 최고", "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[Math.max(x.from, n - 104)])}–${wlbl(wk)}` } });
@@ -250,7 +266,7 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
 }
 { // the model app developers wire in most: has the leader changed in four weeks?
   const then = shares(provW, 4), oldLead = provPk.reduce((a, b) => ((then[b.pkg] ?? -1) > (then[a.pkg] ?? -1) ? b : a));
-  if (oldLead.pkg !== provLead.pkg && then[oldLead.pkg] != null) events.push({ key: `flip:provider:${provLead.pkg}:${npm.last}`, subject: "flip:provider", kind: "1위 교체", score: 100, topic: "ai", card: {
+  if (oldLead.pkg !== provLead.pkg && then[oldLead.pkg] != null) events.push({ key: `flip:provider:${provLead.pkg}:${npm.last}`, subject: "flip:provider", kind: "1위 교체", tier: "big", score: 100, topic: "ai", card: {
     id: "ev-flip-provider", k: "빅 케이스 · 1위 교체", big: sh(provLead.now), bl: `Vercel AI SDK 공급자 중 ${provLead.name} 비중`,
     title: `앱에 붙이는 모델 1위, 이제 <b>${keep(provLead.name)}</b>`,
     body: `4주 전 1위는 ${esc(oldLead.name)}(${sh(then[oldLead.pkg])}), 지금은 ${sh(provNow[oldLead.pkg])}. 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.`,
@@ -264,7 +280,7 @@ for (const f of fields) { // a phrase whose share of a field's papers has just c
   for (const r of f.rows) {
     const c = cur(r.id), pv = prev(r.id);
     if (!(c.then >= 0.002 && r.papers3 >= 10 && c.ratio >= PAPER && (pv.ratio ?? 0) < PAPER)) continue;
-    events.push({ key: `paper:${f.id}:${r.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${r.id}`, kind: "연구", score: 60 + c.ratio * 5, topic, card: {
+    events.push({ key: `paper:${f.id}:${r.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${r.id}`, kind: "연구", tier: "big", score: 60 + c.ratio * 5, topic, card: {
       id: `ev-paper-${f.id}-${r.id}`, k: `빅 케이스 · ${tname} 연구`, big: `${c.ratio.toFixed(1)}배`, bl: "논문 속 비율, 1년 전 대비",
       title: `${esc(tname)} 논문 속 <b>${keep(r.name)}</b>, 1년 새 ${c.ratio.toFixed(1)}배`,
       body: `최근 3개월 논문의 ${sh(c.now)}가 초록에 썼습니다(1년 전 ${sh(c.then)}). 한 달 전 같은 계산으로는 ${(pv.ratio ?? 0).toFixed(1)}배였습니다.`,
@@ -275,7 +291,7 @@ for (const f of fields) { // a phrase whose share of a field's papers has just c
   const before = HFD.snapshots.filter((s) => s.date < snap.date && (new Date(snap.date) - new Date(s.date)) / 864e5 <= 14), m = snap.trending[0];
   if (before.length && m && !before.some((s) => s.trending[0]?.id === m.id) && (m.downloads >= 50000 || m.likes >= 1000)) {
     const topic = TOPICS.find((t) => t.hf?.includes(m.task))?.id ?? "ai";
-    events.push({ key: `hf:${m.id}`, subject: `hf:${m.id}`, kind: "새 1위", score: 45, topic, card: {
+    events.push({ key: `hf:${m.id}`, subject: `hf:${m.id}`, kind: "새 1위", tier: "big", score: 45, topic, card: {
       id: "ev-hf-trending", k: "빅 케이스 · 오픈 모델", big: m.downloads >= 50000 ? man(m.downloads) : `♥ ${m.likes.toLocaleString("ko-KR")}`, bl: m.downloads >= 50000 ? "30일 다운로드" : "좋아요",
       title: `Hugging Face 트렌딩 1위가 바뀌었습니다: <b>${keep(m.id)}</b>`,
       body: `${keep(m.task ?? "")}${m.task ? " · " : ""}${m.created} 공개. 직전 1위는 ${keep(before.at(-1).trending[0]?.id ?? "—")}.`,
@@ -284,16 +300,109 @@ for (const f of fields) { // a phrase whose share of a field's papers has just c
 }
 { // all four have filed a new quarter (within 75 days of its end, so an old quarter never fires on a first run)
   const end = new Date(`${cq.slice(0, 4)}-${String(+cq.slice(5) * 3).padStart(2, "0")}-28`);
-  if ((new Date(SECD.fetched_at) - end) / 864e5 <= 75) events.push({ key: `capex:${cq}`, subject: "capex", kind: "공시", score: 90, topic: "ai", card: {
+  if ((new Date(SECD.fetched_at) - end) / 864e5 <= 75) events.push({ key: `capex:${cq}`, subject: "capex", kind: "공시", tier: "big", score: 90, topic: "ai", card: {
     id: "ev-capex", k: "빅 케이스 · 자본", big: usd(capex.sum), bl: `빅테크 4사 설비투자 · ${qlbl(cq)}`,
     title: `빅테크 4사 ${qlbl(cq)} 설비투자, 1년 전보다 <b>${pc(capex.yoy, 0)}</b>`,
     body: `Microsoft·Alphabet·Amazon·Meta 공시 합계. 가장 빨리 늘린 곳은 ${capexLead[0].name}(${pc(capexLead[0].yoy, 0)}).`,
     viz: [series(common.map(sum4), ["columns", "area", "line"]), rank(capexLead, (r) => r.name, (r) => r.yoy, (r) => pc(r.yoy, 0))], src: `SEC 공시 · ${qlbl(common[0])}–${qlbl(cq)}` } });
 }
-events.sort((a, b) => b.score - a.score);
+
+// small changes: today's readings against the last day's (trends/data/state.json keeps one snapshot a day). Nothing
+// fires on the first build, and a source that hasn't moved on since (same week, same month) can't fire either.
+const STATE = path.join(DIR, "state.json");
+const states = fs.existsSync(STATE) ? JSON.parse(fs.readFileSync(STATE, "utf8")).days : [];
+const top5 = (rows, name) => rows.slice(0, 5).map((r) => ({ pkg: r.pkg, name: name(r), excess: r4(r.excess) }));
+const state = {
+  date: updated,
+  npm: { week: npm.last, top: top5(nRank, nm) }, pypi: { week: pypi.last, top: top5(pRank, (r) => r.name) },
+  provider: { week: npm.last, shares: Object.fromEntries(provPk.map((p) => [p.pkg, r4(provNow[p.pkg])])) },
+  topics: Object.fromEntries(TOPICS.filter((t) => t.pypi).map((t) => [t.id, { week: pypi.last, top: top5(topicFast(t), (r) => r.name) }])),
+  hf: { date: snap.date, top: snap.top.slice(0, 20).map((m) => m.id), trending: snap.trending.slice(0, 5).map((m) => m.id) },
+  arxiv: Object.fromEntries(fields.map((f) => [f.id, { last: f.am.at(-1), rising: f.top?.id ?? null }])),
+  sec: Object.fromEntries(SEC.companies.map((c) => [c.id, Object.keys(Qs[c.id]).sort().at(-1)])),
+};
+const prev = states.filter((d) => d.date < updated).at(-1);
+const small = (o) => events.push({ tier: "small", ...o });
+if (prev) {
+  for (const [x, src, id] of [[npm, "npm", "npm"], [pypi, "PyPI", "pypi"]]) { // the ranking by growth over the controls
+    const c = state[id], p = prev[id], rk = id === "npm" ? nRank : pRank;
+    if (c.week === p.week || !c.top.length || !p.top.length) continue;
+    const viz = [rank(rk, (r) => short(r), (r) => r.excess, (r) => pp(r.excess))], src2 = `${src} 평일 다운로드 · ${wlbl(c.week)}까지 4주`;
+    if (c.top[0].pkg !== p.top[0].pkg) small({ key: `rank1:${id}:${c.top[0].pkg}:${c.week}`, subject: `pkg:${c.top[0].pkg}`, kind: "순위", score: 35, topic: "ai", card: {
+      id: `ch-rank1-${id}`, k: tag("small", `${src} 순위`), big: pp(c.top[0].excess), bl: "대조군보다 더 큰 4주 성장",
+      title: `${src}에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: <b>${keep(c.top[0].name)}</b>`, body: `지난번 1위는 ${esc(p.top[0].name)}.`, viz, src: src2 } });
+    else { const inn = c.top.slice(0, 3).filter((r) => !p.top.slice(0, 3).some((q) => q.pkg === r.pkg));
+      if (inn.length) small({ key: `top3:${id}:${inn.map((r) => r.pkg).join("+")}:${c.week}`, subject: `pkg:${inn[0].pkg}`, kind: "순위", score: 25, topic: "ai", card: {
+        id: `ch-top3-${id}`, k: tag("small", `${src} 순위`), big: pp(inn[0].excess), bl: "대조군보다 더 큰 4주 성장",
+        title: `<b>${keep(inn[0].name)}</b>, ${src} 성장 상위 3에 새로`, body: `상위 3: ${c.top.slice(0, 3).map((r) => `${esc(r.name)}(${pp(r.excess)})`).join(", ")}.`, viz, src: src2 } }); }
+  }
+  if (state.provider.week !== prev.provider.week) { // the provider whose share moved most in a week
+    const mv = provPk.map((p) => ({ ...p, now: state.provider.shares[p.pkg], then: prev.provider.shares[p.pkg] })).filter((p) => p.now != null && p.then != null).sort((a, b) => Math.abs(b.now - b.then) - Math.abs(a.now - a.then))[0];
+    if (mv && Math.abs(mv.now - mv.then) >= 0.01) small({ key: `share:${mv.pkg}:${state.provider.week}`, subject: `share:${mv.pkg}`, kind: "비중", score: 20 + Math.abs(mv.now - mv.then) * 1000, topic: "ai", card: {
+      id: "ch-share", k: tag("small", "앱에 붙이는 모델"), big: pp(mv.now - mv.then), bl: `Vercel AI SDK 공급자 중 ${mv.name} 비중, 한 주 사이`,
+      title: `<b>${keep(mv.name)}</b> 비중 ${sh(mv.then)}&nbsp;→&nbsp;${sh(mv.now)}`, body: `1위는 ${esc(provLead.name)}(${sh(provLead.now)}).`,
+      viz: [versus(mv.then, mv.now, sh, "지난번", "지금"), shareOf(provPk.map((p) => [p.name, provNow[p.pkg]]), provPk.indexOf(provPk.find((p) => p.pkg === mv.pkg)))], src: `@ai-sdk 공급자 패키지 다운로드 비중 · ${wlbl(npm.last)}` } });
+  }
+  for (const t of TOPICS.filter((t) => t.pypi)) { // the fastest-growing tool inside each topic
+    const c = state.topics[t.id], p = prev.topics?.[t.id];
+    if (!p || c.week === p.week || !c.top.length || !p.top.length || c.top[0].pkg === p.top[0].pkg) continue;
+    small({ key: `topic1:${t.id}:${c.top[0].pkg}:${c.week}`, subject: `pkg:${c.top[0].pkg}`, kind: "순위", score: 25, topic: t.id, card: {
+      id: `ch-topic1-${t.id}`, k: tag("small", `${t.name} 도구`), big: pp(c.top[0].excess), bl: "대조군보다 더 큰 4주 성장",
+      title: `${esc(t.name)} 도구 중 가장 빨리 크는 것이 바뀌었습니다: <b>${keep(c.top[0].name)}</b>`, body: `지난번 1위는 ${esc(p.top[0].name)}.`,
+      viz: [rank(topicFast(t), short, (r) => r.excess, (r) => pp(r.excess))], src: `PyPI 평일 다운로드 · ${pySpan}` } });
+  }
+  if (state.hf.date !== prev.hf.date) { // models entering the download top 20, and the trending top 5
+    const inTop = snap.top.slice(0, 20).filter((m) => !prev.hf.top.includes(m.id));
+    if (inTop.length) small({ key: `hftop:${inTop.map((m) => m.id).join("+")}:${snap.date}`, subject: `hf:${inTop[0].id}`, kind: "새로 진입", score: 15 + inTop.length * 3, topic: "ai", card: {
+      id: "ch-hftop", k: tag("small", "오픈 모델"), big: `${inTop.length}개`, bl: "다운로드 상위 20에 새로 든 모델",
+      title: `다운로드 상위 20에 새로: <b>${keep(inTop[0].id)}</b>${inTop.length > 1 ? ` 외 ${inTop.length - 1}개` : ""}`, body: `${inTop.slice(0, 3).map((m) => `${keep(m.id)}(${man(m.downloads)})`).join(", ")}.`,
+      viz: inTop.length > 1 ? [rank(inTop, (m) => m.id.split("/").pop(), (m) => m.downloads, (m) => man(m.downloads))] : [], src: `Hugging Face 다운로드 상위 · ${snap.date}` } });
+    const inTr = snap.trending.slice(1, 5).filter((m) => !prev.hf.trending.includes(m.id));
+    if (inTr.length) small({ key: `hftr:${inTr.map((m) => m.id).join("+")}:${snap.date}`, subject: `hf:${inTr[0].id}`, kind: "새로 진입", score: 10 + inTr.length * 2, topic: TOPICS.find((t) => t.hf?.includes(inTr[0].task))?.id ?? "ai", card: {
+      id: "ch-hftr", k: tag("small", "오픈 모델"), big: `${snap.trending.findIndex((m) => m.id === inTr[0].id) + 1}위`, bl: "Hugging Face 트렌딩",
+      title: `트렌딩 상위 5에 새로: <b>${keep(inTr[0].id)}</b>`, body: `${keep(inTr[0].task ?? "")}${inTr[0].task ? " · " : ""}${inTr[0].created} 공개.${inTr.length > 1 ? ` 함께 들어온 모델: ${inTr.slice(1).map((m) => keep(m.id)).join(", ")}.` : ""}`,
+      viz: [rank(snap.trending, (m) => m.id.split("/").pop(), (m) => m.trending ?? 0, (m) => man(m.downloads))], src: `Hugging Face 트렌딩 · ${snap.date}` } });
+  }
+  const newMonth = fields.filter((f) => prev.arxiv?.[f.id] && f.am.at(-1) > prev.arxiv[f.id].last); // a month of papers finished counting
+  if (newMonth.length) { const m = newMonth[0].am.at(-1), yoy = (f) => (f.X.total[mAdd(m, -12)] ? f.X.total[m] / f.X.total[mAdd(m, -12)] - 1 : null), byN = [...newMonth].sort((a, b) => b.X.total[m] - a.X.total[m]);
+    small({ key: `month:${m}`, subject: `month:${m}`, kind: "집계", score: 20, topic: "ai", card: {
+      id: "ch-month", k: tag("small", "연구"), big: `${byN[0].X.total[m].toLocaleString("ko-KR")}편`, bl: `${mlbl(m)} ${byN[0].name} 논문`,
+      title: `${mlbl(m)} 논문 집계가 끝났습니다`, body: `${byN.map((f) => `${esc(f.name)} ${f.X.total[m].toLocaleString("ko-KR")}편${yoy(f) != null ? `(1년 전 대비 ${pc(yoy(f), 0)})` : ""}`).join(", ")}.`,
+      viz: [rank(byN, (f) => f.name, (f) => f.X.total[m], (f) => `${f.X.total[m].toLocaleString("ko-KR")}편`)], src: `arXiv · ${mlbl(m)}` } }); }
+  for (const f of fields) { // the fastest-rising phrase of a field changed
+    const p = prev.arxiv?.[f.id];
+    if (!p || !f.top || p.rising === f.top.id || p.last === f.am.at(-1)) continue;
+    const topic = TOPICS.find((t) => t.field === f.id)?.id ?? "ai", tname = TOPICS.find((t) => t.id === topic).name;
+    small({ key: `rising:${f.id}:${f.top.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${f.top.id}`, kind: "연구", score: 25, topic, card: {
+      id: `ch-rising-${f.id}`, k: tag("small", `${tname} 연구`), big: `${f.top.ratio.toFixed(1)}배`, bl: "논문 속 비율, 1년 전 대비",
+      title: `${esc(tname)} 논문에서 가장 빨리 늘어난 말이 바뀌었습니다: <b>${keep(f.top.name)}</b>`, body: `최근 3개월 ${sh(f.top.now)}(1년 전 ${sh(f.top.then)}).`,
+      viz: [versus(f.top.then, f.top.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(f.top.id, m)))], src: `arXiv · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` } });
+  }
+  for (const c of SEC.companies) { // one company filed a new quarter (the big case waits for all four)
+    const q = state.sec[c.id], pq = prev.sec?.[c.id];
+    if (!pq || q <= pq) continue;
+    const v = Qs[c.id][q], vy = Qs[c.id][`${+q.slice(0, 4) - 1}${q.slice(4)}`], qs = Object.keys(Qs[c.id]).filter((x) => x >= "2019Q1").sort();
+    small({ key: `filing:${c.id}:${q}`, subject: `filing:${c.id}`, kind: "공시", score: 30, topic: "ai", card: {
+      id: `ch-filing-${c.id}`, k: tag("small", "자본"), big: usd(v), bl: `${c.name} 설비투자 · ${qlbl(q)}`,
+      title: `${esc(c.name)}, ${qlbl(q)} 설비투자 공시${vy ? ` — 1년 전보다 <b>${pc(v / vy - 1, 0)}</b>` : ""}`, body: vy ? `1년 전 같은 분기 ${usd(vy)}.` : "",
+      viz: [series(qs.map((x) => Qs[c.id][x]), ["columns", "area", "line"]), ...(vy ? [versus(vy, v, usd, qlbl(`${+q.slice(0, 4) - 1}${q.slice(4)}`), qlbl(q))] : [])], src: `SEC 공시 · ${c.name}` } });
+  }
+}
+events.sort((a, b) => (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
+// one change per subject a day: Mastra's new high and its jump are one story, told by the bigger of the two
+for (let i = events.length - 1; i >= 0; i--) if (events.findIndex((e) => e.subject === events[i].subject) < i) events.splice(i, 1);
 
 // plain text for the cards and the caption; non-breaking spaces stay as U+00A0 so the cards keep the same line breaks
 const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, viz: x.viz });
+
+// every change ever found, kept 60 days (trends/data/changes.json): the page lists the last week's, and
+// social/plan.mjs drafts from it — a big case the day it appears, small ones collected into a weekly digest
+const CHANGES = path.join(DIR, "changes.json"), KEEP_DAYS = 60, ago = (d) => (new Date(updated) - new Date(d)) / 864e5;
+const changeLog = (fs.existsSync(CHANGES) ? JSON.parse(fs.readFileSync(CHANGES, "utf8")).log : []).filter((c) => ago(c.date) <= KEEP_DAYS);
+for (const e of events) if (!changeLog.some((c) => c.key === e.key))
+  changeLog.push({ date: updated, key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) });
+const recentChanges = changeLog.filter((c) => ago(c.date) <= 7).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
 const cardHtml = (list) => list.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p>${text(x.body).length > 60 ? `<button type="button" class="more-btn" aria-expanded="false">더 보기</button>` : ""}${vizHtml(x)}<div class="src">${esc(x.src)}</div></article>`).join("");
 const tabsHtml = topics.map((t, i) => `<button type="button" role="tab" id="tab-${t.id}" aria-controls="panel-${t.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-topic="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("");
 const panelsHtml = topics.map((t, i) => `<div class="insights" role="tabpanel" id="panel-${t.id}" aria-labelledby="tab-${t.id}"${i === 0 ? "" : " hidden"}>${cardHtml(t.cards)}</div>`).join("");
@@ -309,7 +418,6 @@ const D = {
   },
 };
 
-const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at].sort().at(-1);
 const meta = `${updated} 갱신 · 매일 자동 · npm ${wlbl(npm.last)}까지 · PyPI ${wlbl(pypi.last)}까지 · arXiv ${mlbl(am.at(-1))}까지 · Hugging Face ${snap.date} · SEC ${qlbl(cq)}까지 · 검산 ${CHECKS.checks.length}개 통과`;
 const checkLi = CHECKS.checks.map((c) => `<li>${esc(c.fact)}</li>`).join("");
 const axTable = axRows.map((r) => `<tr><td>${esc(r.name)}</td><td>${sh(r.now)}</td><td>${sh(r.then)}</td><td class="${r.ratio > 1 ? "pos" : r.ratio < 1 ? "neg" : ""}">${r.ratio ? r.ratio.toFixed(2) + "배" : "—"}</td><td>${(r.papers ?? 0).toLocaleString("ko-KR")}</td></tr>`).join("");
@@ -329,7 +437,7 @@ const sourceStatus = [
 const fills = {
   "index.html": {
     "t-tabs": tabsHtml, "t-panels": panelsHtml,
-    "t-events": events.slice(0, 3).map((e) => `<li><a href="#${e.topic}"><span class="ek">빅 케이스 · ${esc(e.kind)}</span><span>${glue(e.card.title).replace(/<\/?b>/g, "")}</span></a></li>`).join(""),
+    "t-events": recentChanges.slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><span class="ek">${c.tier === "big" ? "빅 케이스" : "변화"} · ${esc(c.kind)} · ${+c.date.slice(5, 7)}/${+c.date.slice(8)}</span><span>${esc(c.headline)}</span></a></li>`).join(""),
     "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매일 자동 · 검산 ${CHECKS.checks.length}개 통과`, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
@@ -351,9 +459,12 @@ writePages(fills, updated);
 }
 
 // the same insights as data, for the Instagram cards and caption (social/)
-const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, viz: x.viz });
+// today's snapshot (one a day, 60 kept) and the change log
+const writeIf = (file, body) => { const prevBody = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : ""; if (body !== prevBody) { fs.writeFileSync(file, body); console.log(`wrote trends/data/${path.basename(file)}`); } };
+writeIf(STATE, JSON.stringify({ note: "one snapshot of the readings per day; build.mjs compares today's with the last one to find small changes", days: [...states.filter((d) => d.date !== updated), state].slice(-60) }) + "\n");
+writeIf(CHANGES, JSON.stringify({ note: "every change build.mjs found, 60 days; social/plan.mjs drafts from it", log: changeLog }, null, 1) + "\n");
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
-  events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })) };
+  events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

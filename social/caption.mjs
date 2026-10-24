@@ -1,6 +1,7 @@
 // caption.mjs — writes the day's Instagram caption into social/out/<date>/post.json.
 //
-// Claude writes the body from the draft's insights (a big case and its context, or a roundup — social/plan.mjs);
+// Claude writes the body from the draft's insights (a big case and its context, the week's small changes, or a
+// roundup — social/plan.mjs);
 // this code then checks it before anything is posted:
 //  • every number in the body must appear in the insights the carousel shows (no invented or rounded figures);
 //  • no advice or forecast words (추천·매수·전망 …) — the site never tells anyone what to buy or what will happen.
@@ -43,9 +44,9 @@ export function check(body) {
 }
 
 // ---------- Claude ----------
-const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 담당이다. AI 기술 신호(개발자 다운로드, 논문 키워드, 오픈 모델, 빅테크 설비투자)를 매일 재고, 평소와 크게 다른 일(빅 케이스)이 생길 때 카드 뉴스로 올린다. 빅 케이스가 오래 없으면 요즘 숫자를 묶어 올린다.
+const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 담당이다. AI 기술 신호(개발자 다운로드, 논문 키워드, 오픈 모델, 빅테크 설비투자)를 매일 재고, 평소와 크게 다른 일(빅 케이스)이 생길 때 카드 뉴스로 올린다. 작은 변화는 일주일치를 모아 올리고, 아무 일도 오래 없으면 요즘 숫자를 묶어 올린다.
 캡션 본문만 쓴다. 규칙:
-- 빅 케이스면 첫 줄은 그 일을 숫자 하나로 말하는 짧은 한 문장, 이어서 왜 눈에 띄는지(평소·대조군·1년 전과 비교한 숫자). 묶음이면 첫 줄은 가장 눈에 띄는 숫자 하나로 시작.
+- 빅 케이스면 첫 줄은 그 일을 숫자 하나로 말하는 짧은 한 문장, 이어서 왜 눈에 띄는지(평소·대조군·1년 전과 비교한 숫자). 작은 변화 모음이면 첫 줄은 "지난 한 주 작게 바뀐 것"을 한 문장으로, 이어서 카드마다 한두 줄. 요즘 숫자 묶음이면 첫 줄은 가장 눈에 띄는 숫자 하나로 시작.
 - 이어서 카드 순서대로 한두 줄씩, 전체 6~10줄. 줄마다 하나의 사실.
 - 숫자는 주어진 데이터에 적힌 그대로만 쓴다. 반올림·환산·새 계산 금지. 데이터에 없는 숫자(연도·순위 포함)를 만들지 않는다.
 - 일어난 일만 말한다. 앞으로 어떻게 될지, 무엇을 사거나 팔지, 어떤 기술을 써야 할지 말하지 않는다. "추천", "전망", "예상", "매수", "급등" 같은 말을 쓰지 않는다.
@@ -56,7 +57,9 @@ const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 �
 async function fromClaude() {
   const client = new Anthropic();
   const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 내용: x.body, 출처: x.src }));
-  const why = plan.mode === "event" ? `빅 케이스(${plan.event.kind}): 1번 카드. 나머지 카드는 같은 주제의 맥락.` : "묶음: 빅 케이스 없이 요즘 숫자를 모은 게시물.";
+  const why = plan.mode === "event" ? `빅 케이스(${plan.event.kind}): 1번 카드. 나머지 카드는 같은 주제의 맥락.`
+    : plan.mode === "digest" ? `작은 변화 모음: 지난 한 주 동안 잡힌 작은 변화 ${slides.length}가지. 하나하나는 크지 않으니 크게 부풀리지 말 것.`
+    : "묶음: 빅 케이스 없이 요즘 숫자를 모은 게시물.";
   const messages = [{ role: "user", content: `${date} 게시물 — ${why}\n카드 데이터:\n${JSON.stringify(data, null, 1)}\n\n캡션 본문을 써 줘.` }];
   for (let attempt = 1; attempt <= 2; attempt++) {
     const res = await client.beta.messages.create({
@@ -77,7 +80,9 @@ async function fromClaude() {
 
 // ---------- template fallback: only the insights' own sentences ----------
 // (no line numbers: a "2." that is not in the data would fail the number check)
-const template = () => plan.mode === "event"
+const template = () => plan.mode === "digest"
+  ? [`지난 한 주 작게 바뀐 것 ${slides.length}가지`, "", ...slides.map((x) => `· ${x.title} (${x.big})`)].join("\n")
+  : plan.mode === "event"
   ? [slides[0].title, slides[0].body, "", ...slides.slice(1).map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n")
   : [`${slides[0].big} — ${slides[0].title}`, "", ...slides.map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n");
 

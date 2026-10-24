@@ -1,6 +1,6 @@
 // build.mjs — the day's Instagram carousel as one HTML page of 1080×1350 slides, drawn from
 // trends/data/insights.json (the same objects the dashboard at / shows) and social/plan.json (plan.mjs: a big case,
-// or a roundup). render.mjs screenshots each slide.
+// the week's small changes, or a roundup). render.mjs screenshots each slide.
 //
 // No two posts look alike: each insight can be drawn several ways (trends/viz.mjs — a line, columns, before → after,
 // a donut, a waffle, a ranking …) and each slide has three layouts (number first, chart first, headline first).
@@ -31,7 +31,7 @@ const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f 
   .map((f) => JSON.parse(fs.readFileSync(path.join(OUT, f, "design.json"), "utf8")));
 const recent = history.slice(-2), n = history.length;
 const LAYOUTS = ["number", "chart", "headline"];
-const COVERS = plan.mode === "event" ? ["hero", "alert"] : ["list", "grid"];
+const COVERS = plan.mode === "event" ? ["hero", "alert"] : ["list", "grid"]; // digest and roundup share the list/grid covers
 const lastCover = history.filter((h) => h.mode === plan.mode).at(-1)?.cover;
 const cover = COVERS.find((c) => c !== lastCover) ?? COVERS[0];
 
@@ -105,13 +105,13 @@ const covers = {
 </section>`,
   list: `<section class="slide cover c-list">
   <div class="kick">AI 기술 신호 레이더 · ${when}</div>
-  <h1>요즘<br>기사보다 먼저<br>움직인 숫자</h1>
+  <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
   <ol>${slides.slice(0, 3).map((x) => `<li><b>${esc(x.big)}</b><span>${esc(x.title)}</span></li>`).join("")}</ol>
   ${foot}
 </section>`,
   grid: `<section class="slide cover c-grid">
   <div class="kick">AI 기술 신호 레이더 · ${when}</div>
-  <h1>숫자 넷으로 보는<br>요즘 AI 기술</h1>
+  <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
   <div class="tiles">${slides.slice(0, 4).map((x) => `<div class="tile"><div class="tk">${esc(x.k)}</div><div class="tb">${esc(x.big)}</div><div class="tl">${esc(x.bl)}</div></div>`).join("")}</div>
   ${foot}
 </section>`,
