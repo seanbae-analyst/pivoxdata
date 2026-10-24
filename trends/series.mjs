@@ -54,6 +54,17 @@ export const PYPI = [
   { pkg: "torch", group: "infra", name: "PyTorch" },
 ];
 
+// Topic packages (PyPI) for the non-AI topic tabs. Same reading as above; they rank only against each other, with a
+// lower floor (TOPIC_MIN_LEVEL) because a quantum library has thousands of downloads a day, not millions.
+PYPI.push(
+  ...["qiskit", "pennylane", "qutip", "amazon-braket-sdk", "cirq"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
+  ...["mujoco", "gymnasium", "lerobot", "pybullet", "genesis-world"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
+  ...["ultralytics", "diffusers", "timm", "supervision", "opencv-python"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
+  ...["semgrep", "bandit", "presidio-analyzer", "llm-guard", "garak"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
+  ...["triton", "ray", "deepspeed", "flash-attn"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
+);
+export const TOPIC_MIN_LEVEL = 1000;
+
 // arXiv: monthly count of AI papers (cs.AI, cs.CL or cs.LG listed) whose abstract contains the phrase.
 export const ARXIV_SCOPE = "(cat:cs.AI OR cat:cs.CL OR cat:cs.LG)";
 export const ARXIV_START = "202301";
@@ -117,8 +128,19 @@ export const ARXIV_DOMAINS = [
   ] },
 ];
 
-// Hugging Face: one snapshot per run of the most-downloaded and the trending models.
-export const HF = { top: 300, trending: 50 };
+// Hugging Face: one snapshot per run of the most-downloaded and the trending models, plus trending lists for the
+// tasks some topics map to.
+export const HF = { top: 300, trending: 50, tasks: ["robotics", "text-to-image", "image-to-video"] };
+
+// The topic tabs. AI uses the full radar above; every other topic is one arXiv field + its packages (+ HF tasks).
+export const TOPICS = [
+  { id: "ai", name: "AI" },
+  { id: "quantum", name: "양자", field: "quantum", pypi: ["qiskit", "pennylane", "qutip", "amazon-braket-sdk", "cirq"] },
+  { id: "robotics", name: "로보틱스", field: "robotics", pypi: ["mujoco", "gymnasium", "lerobot", "pybullet", "genesis-world"], hf: ["robotics"] },
+  { id: "vision", name: "비전", field: "vision", pypi: ["ultralytics", "diffusers", "timm", "supervision", "opencv-python"], hf: ["text-to-image", "image-to-video"] },
+  { id: "security", name: "보안", field: "security", pypi: ["semgrep", "bandit", "presidio-analyzer", "llm-guard", "garak"] },
+  { id: "systems", name: "시스템", field: "systems", pypi: ["triton", "ray", "vllm", "deepspeed", "flash-attn"] },
+];
 
 // SEC EDGAR XBRL (companyfacts): capital expenditure — cash paid for property and equipment (data centres, servers,
 // chips). Cash-flow facts are filed year-to-date, so fetch.mjs derives each quarter by difference; verify.mjs checks

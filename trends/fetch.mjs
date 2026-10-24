@@ -119,9 +119,11 @@ if (want("hf")) {
   const pick = (m) => ({ id: m.id, author: m.author ?? m.id.split("/")[0], downloads: m.downloads ?? 0, likes: m.likes ?? 0, task: m.pipeline_tag ?? null, created: (m.createdAt ?? "").slice(0, 10), trending: m.trendingScore ?? null });
   const top = await get(`https://huggingface.co/api/models?sort=downloads&direction=-1&limit=${HF.top}`);
   const trending = await get(`https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=${HF.trending}`);
+  const tasks = {};
+  for (const t of HF.tasks) tasks[t] = (await get(`https://huggingface.co/api/models?pipeline_tag=${t}&sort=trendingScore&direction=-1&limit=10`)).map(pick);
   const doc = read("hf.json", { snapshots: [] });
   const snaps = doc.snapshots.filter((s) => s.date !== today);
-  snaps.push({ date: today, top: top.map(pick), trending: trending.map(pick) });
+  snaps.push({ date: today, top: top.map(pick), trending: trending.map(pick), tasks });
   write("hf.json", { source: { site: "Hugging Face Hub API", url: "https://huggingface.co/api/models?sort={downloads|trendingScore}", note: "downloads = last 30 days, as the Hub reports it" }, fetched_at: today, snapshots: snaps.slice(-60) });
   console.log(`hf    snapshot ${today}: top ${top.length}, trending ${trending.length} (${snaps.length} snapshots kept)`);
 }

@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 
@@ -19,7 +19,7 @@ if (CHECKS.checks.some((c) => !c.ok)) { console.error("trends/data/checks.json h
 
 // ---------- formatting ----------
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-const man = (v) => (v >= 1e8 ? (v / 1e8).toFixed(1) + "억" : v >= 1e4 ? Math.round(v / 1e4).toLocaleString("ko-KR") + "만" : Math.round(v).toLocaleString("ko-KR"));
+const man = (v) => (v >= 1e8 ? (v / 1e8).toFixed(1) + "억" : v >= 1e5 ? Math.round(v / 1e4).toLocaleString("ko-KR") + "만" : v >= 1e4 ? (v / 1e4).toFixed(1) + "만" : Math.round(v).toLocaleString("ko-KR"));
 const pc = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%");
 const pp = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%p");
 const sh = (v, d = 1) => (v == null ? "—" : (v * 100).toFixed(d) + "%");
@@ -45,8 +45,9 @@ function downloads(src, list, control) {
 }
 const npm = downloads("npm", NPM, NPM_CONTROL), pypi = downloads("pypi", PYPI, PYPI_CONTROL);
 
-const ranked = (x) => x.rows.filter((r) => r.level >= MIN_LEVEL && r.excess != null).sort((a, b) => b.excess - a.excess);
-const table = (x, yoy) => x.rows.filter((r) => r.level != null).sort((a, b) => (b.excess ?? -9) - (a.excess ?? -9)).map((r) =>
+// topic packages (group "topic") belong to their own tabs, never to the AI rankings or tables
+const ranked = (x) => x.rows.filter((r) => r.group !== "topic" && r.level >= MIN_LEVEL && r.excess != null).sort((a, b) => b.excess - a.excess);
+const table = (x, yoy) => x.rows.filter((r) => r.group !== "topic" && r.level != null).sort((a, b) => (b.excess ?? -9) - (a.excess ?? -9)).map((r) =>
   `<tr><td><b>${esc(r.group === "provider" ? `AI SDK용 ${r.name}` : r.name)}</b><span class="pkg">${esc(r.pkg)}</span></td><td>${man(r.level)}</td><td class="${cls(r.g4)}">${pc(r.g4)}</td><td class="${cls(r.excess)}">${pp(r.excess)}</td><td class="${cls(r.accel)}">${pp(r.accel)}</td>${yoy ? `<td class="${cls(r.yoy)}">${r.yoy == null ? "—" : pc(r.yoy, 0)}</td>` : ""}</tr>`).join("");
 
 // Vercel AI SDK providers: which model app developers wire in, as a share of the provider packages
@@ -181,19 +182,49 @@ function spark(sp, w = 300, h = 64) {
   const X = (i) => (i * w) / (v.length - 1), d = v.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join("");
   return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d}L${w},${h}L0,${h}Z"/><path class="l" d="${d}"/></svg>`;
 }
-// ---------- research radar: one card per field ----------
-const fieldsByGrowth = [...fields].filter((f) => f.growth != null).sort((a, b) => b.growth - a.growth);
-const researchHtml = fields.map((f) => {
-  const t = f.top;
-  return `<article class="fld"><div class="top"><span class="k">${esc(f.name)}</span><span class="g ${cls(f.growth)}">${f.growth == null ? "" : `논문 ${pc(f.growth, 0)}`}</span></div>
-  <div class="row"><div class="big">${t ? `${t.ratio.toFixed(1)}배` : "—"}</div>${spark({ values: f.am.map((m) => f.X.total[m]) }, 160, 40)}</div>
-  <h3>${t ? `가장 빨리 늘어난 말 <b>${keep(t.name)}</b>` : "1년 전과 비교할 달이 아직 모자랍니다"}</h3>
-  <p>${t ? `최근 3개월 ${esc(f.name)} 논문의 ${sh(t.now)}(1년 전 ${sh(t.then)}). 가장 많이 쓰인 말은 ${keep(f.biggest.name)}(${sh(f.biggest.now)}).` : ""} 한 달 평균 ${Math.round(f.monthly).toLocaleString("ko-KR")}편.</p>
-  <div class="src">arXiv ${esc(f.scope.replace(/cat:/g, "").replace(/[()]/g, "").replace(/ OR /g, "·"))} · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}</div></article>`;
-}).join("");
-const researchNote = fieldsByGrowth.length ? `최근 3개월 논문 수가 1년 전 같은 3개월보다 가장 많이 는 분야는 ${esc(fieldsByGrowth[0].name)}(${pc(fieldsByGrowth[0].growth, 0)})입니다. “배”는 그 분야 논문 중 그 말을 쓴 비율이 1년 전의 몇 배인지입니다(1년 전 0.2% 이상 · 최근 3개월 10편 이상인 말만).` : "";
+// ---------- topic tabs: AI is the radar above; every other topic is one arXiv field + its packages (+ HF tasks) ----------
+const pyRow = (pkg) => pypi.rows.find((r) => r.pkg === pkg);
+const pySpan = `${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주`;
+function topicCards(t) {
+  const f = fields.find((x) => x.id === t.field), out = [];
+  const fsrc = f ? `arXiv ${f.scope.replace(/cat:/g, "").replace(/[()]/g, "").replace(/ OR /g, "·")} · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` : "";
+  const ok = (r) => r.then >= 0.002 && r.papers3 >= 10; // same floor as the AI radar
+  if (f && f.growth != null) out.push({ id: `${t.id}-papers`, k: "연구", big: pc(f.growth, 0), bl: "논문 수, 1년 전 같은 3개월 대비",
+    title: `${esc(t.name)} 논문이 1년 새 <b>${pc(f.growth, 0)}</b>`, body: `최근 3개월 한 달 평균 ${Math.round(f.monthly).toLocaleString("ko-KR")}편.`,
+    spark: { values: f.am.map((m) => f.X.total[m]) }, src: fsrc });
+  if (f?.top) out.push({ id: `${t.id}-rising`, k: "연구 · 빨리 늘어난 말", big: `${f.top.ratio.toFixed(1)}배`, bl: "논문 속 비율, 1년 전 대비",
+    title: `가장 빨리 늘어난 말은 <b>${keep(f.top.name)}</b>`, body: `최근 3개월 ${esc(t.name)} 논문의 ${sh(f.top.now)}가 초록에 썼습니다(1년 전 ${sh(f.top.then)}).`,
+    spark: { values: f.am.map((m) => f.share(f.top.id, m)) }, src: fsrc });
+  if (f?.biggest) out.push({ id: `${t.id}-biggest`, k: "연구 · 가장 많이 쓰는 말", big: sh(f.biggest.now), bl: "논문 중 이 말을 쓴 비율",
+    title: `가장 많이 쓰이는 말은 <b>${keep(f.biggest.name)}</b>`, body: f.biggest.then != null ? `1년 전 같은 3개월은 ${sh(f.biggest.then)}였습니다.` : "",
+    spark: { values: f.am.map((m) => f.share(f.biggest.id, m)) }, src: fsrc });
+  const down = f ? f.rows.filter((r) => ok(r) && r.ratio < 0.9).sort((a, b) => a.ratio - b.ratio)[0] : null;
+  if (down) out.push({ id: `${t.id}-falling`, k: "연구 · 줄어든 말", big: pc(down.ratio - 1, 0), bl: "논문 속 비율, 1년 전 대비",
+    title: `가장 많이 줄어든 말은 <b>${keep(down.name)}</b>`, body: `최근 3개월 ${sh(down.now)}, 1년 전 ${sh(down.then)}.`,
+    spark: { values: f.am.map((m) => f.share(down.id, m)) }, src: fsrc });
+  const pk = (t.pypi ?? []).map(pyRow).filter((r) => r && r.level >= TOPIC_MIN_LEVEL);
+  const fast = pk.filter((r) => r.excess != null).sort((a, b) => b.excess - a.excess);
+  if (fast.length) out.push({ id: `${t.id}-pkg-fast`, k: "개발자 · Python", big: pp(fast[0].excess), bl: "대조군보다 더 큰 4주 성장",
+    title: `가장 빨리 더 내려받는 도구는 <b>${keep(fast[0].name)}</b>`,
+    body: `4주 다운로드 ${pc(fast[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}.${fast.length > 1 ? ` 다음은 ${fast.slice(1, 3).map((r) => `${keep(r.name)}(${pp(r.excess)})`).join(", ")}.` : ""}`,
+    spark: { values: pypi.W[fast[0].pkg].slice(pypi.from).map((w) => w.level) }, src: `PyPI 평일 다운로드 · ${pySpan}` });
+  const big = [...pk].sort((a, b) => b.level - a.level)[0];
+  if (big && big.pkg !== fast[0]?.pkg) out.push({ id: `${t.id}-pkg-big`, k: "개발자 · 가장 많이", big: man(big.level), bl: "평일 하루 다운로드",
+    title: `가장 많이 내려받는 도구는 <b>${keep(big.name)}</b>`, body: `4주 다운로드 ${pc(big.g4)}.`,
+    spark: { values: pypi.W[big.pkg].slice(pypi.from).map((w) => w.level) }, src: `PyPI 평일 다운로드 · ${pySpan}` });
+  const hfm = (t.hf ?? []).flatMap((task) => snap.tasks?.[task] ?? []);
+  if (hfm.length) { const m = [...hfm].sort((a, b) => (b.trending ?? 0) - (a.trending ?? 0)), fresh = m[0].downloads < 100; out.push({ id: `${t.id}-hf`, k: "모델", big: fresh ? `♥ ${m[0].likes.toLocaleString("ko-KR")}` : man(m[0].downloads), bl: fresh ? "좋아요 (공개 직후라 다운로드가 아직 적음)" : "30일 다운로드",
+    title: `지금 가장 뜨는 ${esc(t.name)} 모델은 <b>${keep(m[0].id)}</b>`, body: `${keep(m[0].task ?? "")} · ${m[0].created} 공개.${m.length > 1 ? ` 다음은 ${m.slice(1, 3).map((x) => keep(x.id)).join(", ")}.` : ""}`,
+    spark: { values: m.slice(0, 6).map((x) => x.downloads), bars: true }, src: `Hugging Face 트렌딩 · ${(t.hf ?? []).join("·")} · ${snap.date}` }); }
+  return out.slice(0, 7);
+}
+const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
 
-const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p><button type="button" class="more-btn" aria-expanded="false">더 보기</button>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
+// plain text for the cards and the caption; non-breaking spaces stay as U+00A0 so the cards keep the same line breaks
+const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+const cardHtml = (list) => list.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${glue(x.title)}</h3><p>${x.body}</p>${text(x.body).length > 60 ? `<button type="button" class="more-btn" aria-expanded="false">더 보기</button>` : ""}${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
+const tabsHtml = topics.map((t, i) => `<button type="button" role="tab" id="tab-${t.id}" aria-controls="panel-${t.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-topic="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("");
+const panelsHtml = topics.map((t, i) => `<div class="insights" role="tabpanel" id="panel-${t.id}" aria-labelledby="tab-${t.id}"${i === 0 ? "" : " hidden"}>${cardHtml(t.cards)}</div>`).join("");
 
 // ---------- chart data ----------
 const D = {
@@ -225,11 +256,12 @@ const sourceStatus = [
 ];
 const fills = {
   "index.html": {
-    "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매주 월요일 · 검산 ${CHECKS.checks.length}개 통과`, "t-signals": insightHtml, "t-npm": table(npm, true),
+    "t-tabs": tabsHtml, "t-panels": panelsHtml,
+    "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매주 월요일 · 검산 ${CHECKS.checks.length}개 통과`, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
     "t-pypi-note": `${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 ${pypi.weeks.length - pypi.from}주만 비교합니다. 그래서 가속과 1년 전 대비는 아직 없습니다.` : ""} 대조군 중앙값 ${pc(pypi.base)}. LLM SDK 점유: ${sdkLine}.`,
-    "t-arxiv": axTable, "t-research": researchHtml, "t-research-note": researchNote, "t-hf-trending": trendRows, "t-hf-authors": authorRows, "t-capex": capexRows, "t-checks": checkLi,
+    "t-arxiv": axTable, "t-hf-trending": trendRows, "t-hf-authors": authorRows, "t-capex": capexRows, "t-checks": checkLi,
   },
   "map.html": Object.fromEntries(sourceStatus.map(([id, t]) => [`m-${id}`, esc(t)])),
 };
@@ -243,9 +275,8 @@ writePages(fills, updated);
 }
 
 // the same insights as data, for the Instagram cards and caption (social/)
-// plain text for the cards and the caption; non-breaking spaces stay as U+00A0 so the cards keep the same line breaks
-const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
-const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map((x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) })) };
+const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) });
+const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }
