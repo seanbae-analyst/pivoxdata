@@ -1,1 +1,8 @@
-[]
+[
+ {
+  "date": "2026-10-24",
+  "mode": "event",
+  "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
+  "subject": "pkg:amazon-braket-sdk"
+ }
+]

@@ -10,19 +10,25 @@
   "07.png"
  ],
  "image_base": "https://data.pivoxquant.com/social/out/2026-10-24/",
- "caption": "+17.6%p — npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek\n\n· npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek (+17.6%p, 대조군보다 더 큰 4주 성장)\n· 1년 새 Anthropic 24.7% → 31.3% (31.3%, Vercel AI SDK 공급자 중 Anthropic 비중)\n· 연구자들이 가장 빠르게 더 쓰는 말은 월드 모델 (world model) (3.2배, AI 논문 속 비율, 1년 전 대비)\n· 파이썬에서 가장 빨리 크는 쪽은 Anthropic (+8.3%p, 대조군보다 더 큰 4주 성장)\n· AI 인프라에 들어가는 돈, 1년 전보다 +87% ($165.1B, 빅테크 4사 설비투자 · 2026년 2분기)\n\n출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매주 같은 방식으로 계산\n자세히: data.pivoxquant.com\n다운로드 수는 사용자 수가 아니며, 지난 숫자만 말합니다. 예측이나 투자 권유가 아닙니다.\n\n#AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터",
+ "caption": "지난주 amazon-braket-sdk 다운로드가 평소의 2.1배\n평일 하루 5,375회, 직전 7주 평소는 2,543회. 같은 주 대조군은 평소의 1.16배였습니다.\n\n· 양자 논문이 1년 새 +49% (+49%, 논문 수 · 1년 전과 비교)\n· 가장 빨리 늘어난 말은 논리 큐비트 (logical qubit) (1.5배, 이 말을 쓰는 논문 비율 · 1년 전과 비교)\n· 가장 많이 쓰이는 말은 변분 알고리즘 (variational) (7.2%, 논문 중 이 말을 쓴 비율)\n· 가장 많이 줄어든 말은 양자 우위 (quantum advantage) (−11%, 이 말을 쓰는 논문 비율 · 1년 전과 비교)\n\n출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매일 같은 방식으로 계산\n자세히: data.pivoxquant.com\n다운로드 수는 사용자 수가 아니며, 지난 숫자만 말합니다. 예측이나 투자 권유가 아닙니다.\n\n#AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터",
  "caption_source": "template",
  "caption_model": null,
  "caption_note": "no ANTHROPIC_API_KEY",
+ "mode": "event",
+ "event": {
+  "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
+  "kind": "급증",
+  "headline": "지난주 amazon-braket-sdk 다운로드가 평소의 2.1배"
+ },
  "insights": [
-  "npm",
-  "provider",
-  "arxiv",
-  "pypi",
-  "capex"
+  "ev-surge-amazon-braket-sdk",
+  "quantum-papers",
+  "quantum-rising",
+  "quantum-biggest",
+  "quantum-falling"
  ],
  "checked": {
-  "numbers_allowed": 38,
+  "numbers_allowed": 28,
   "problems": []
  }
 }

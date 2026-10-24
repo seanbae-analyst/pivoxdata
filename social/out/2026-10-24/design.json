@@ -1,0 +1,38 @@
+{
+ "date": "2026-10-24",
+ "mode": "event",
+ "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
+ "cover": "hero",
+ "slides": [
+  {
+   "id": "ev-surge-amazon-braket-sdk",
+   "kind": "series",
+   "format": "columns",
+   "layout": "number"
+  },
+  {
+   "id": "quantum-papers",
+   "kind": "series",
+   "format": "area",
+   "layout": "chart"
+  },
+  {
+   "id": "quantum-rising",
+   "kind": "versus",
+   "format": "slope",
+   "layout": "headline"
+  },
+  {
+   "id": "quantum-biggest",
+   "kind": "rank",
+   "format": "hbars",
+   "layout": "number"
+  },
+  {
+   "id": "quantum-falling",
+   "kind": "versus",
+   "format": "bars2",
+   "layout": "chart"
+  }
+ ]
+}

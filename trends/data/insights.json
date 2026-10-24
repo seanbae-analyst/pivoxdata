@@ -1875,8 +1875,8 @@
         },
         {
          "name": "microduck-policies",
-         "value": 23,
-         "label": "♥ 23"
+         "value": 24,
+         "label": "♥ 24"
         }
        ]
       }
@@ -2258,7 +2258,7 @@
      "bl": "30일 다운로드",
      "title": "지금 가장 뜨는 비전 모델은 OpenMOSS‑Team/​MOSS‑Image‑SFT",
      "easy": "지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 비전 모델이에요.",
-     "body": "text‑to‑image · 2026-10-11 공개. 다음은 Lightricks/​LTX‑2.5, OpenMOSS‑Team/​MOSS‑Image‑Base.",
+     "body": "text‑to‑image · 2026-10-11 공개. 다음은 Lightricks/​LTX‑2.5, abenzerps/​Qwen‑Image‑2.1‑Uncensored‑Quantized.",
      "src": "Hugging Face 트렌딩 · text-to-image·image-to-video · 2026-10-24",
      "viz": [
       {
@@ -2275,14 +2275,14 @@
          "label": "209만"
         },
         {
-         "name": "MOSS-Image-Base",
-         "value": 6943,
-         "label": "6,943"
-        },
-        {
          "name": "Qwen-Image-2.1-Uncensored-Quantized",
          "value": 2303585,
          "label": "230만"
+        },
+        {
+         "name": "MOSS-Image-Base",
+         "value": 6943,
+         "label": "6,943"
         },
         {
          "name": "Kromoss",
