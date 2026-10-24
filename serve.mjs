@@ -1,6 +1,5 @@
-// serve.mjs — zero-dependency static server for the DataReady demo.
-// The app uses native ES modules (`import` in check.html and the research pages), which browsers refuse
-// to load over file:// — so the page must be served over HTTP. `npm run dev`.
+// serve.mjs — zero-dependency static server for local preview (`npm run dev`).
+// The dashboard loads charts.mjs as a native ES module, which browsers refuse over file:// — so serve over HTTP.
 import http from "http";
 import fs from "fs";
 import path from "path";
@@ -16,7 +15,8 @@ const TYPES = {
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".csv": "text/csv; charset=utf-8",
-  ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
 };
 
 http
@@ -28,7 +28,7 @@ http
     // a sibling dir sharing ROOT's name as a prefix (…/dataready-evil) can't
     // pass a bare startsWith(ROOT) check.
     if (file !== ROOT && !file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end("forbidden"); }
-    // Vercel serves /maps as maps.html (cleanUrls); do the same here
+    // Vercel serves /map as map.html (cleanUrls); do the same here
     if (!path.extname(file) && fs.existsSync(file + ".html")) file += ".html";
     fs.readFile(file, (err, data) => {
       if (err) { res.writeHead(404, { "content-type": "text/plain" }); return res.end("not found"); }
@@ -36,4 +36,4 @@ http
       res.end(data);
     });
   })
-  .listen(PORT, () => console.log(`DataReady demo → http://localhost:${PORT}`));
+  .listen(PORT, () => console.log(`AI 기술 신호 레이더 → http://localhost:${PORT}`));

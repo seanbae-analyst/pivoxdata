@@ -10,6 +10,8 @@ main{display:grid;gap:48px;padding-top:28px}
 main>header{max-width:760px}
 h1{font-size:clamp(28px,4.6vw,42px);line-height:1.15;letter-spacing:-.03em;margin:0 0 12px;font-weight:700;text-wrap:balance}
 h2{font-size:19px;margin:0 0 6px;letter-spacing:-.015em;font-weight:650;text-wrap:balance}
+h3{text-wrap:balance}
+p,.lede,li{text-wrap:pretty}
 .lede{color:var(--ink-2);max-width:64ch;margin:0;font-size:16px}
 .sub{color:var(--mut);font-size:14px;margin:0 0 14px;max-width:72ch}
 .kicker{color:var(--bronze-hi);font-weight:600;font-size:13.5px;margin-bottom:8px}

@@ -1,0 +1,85 @@
+# Posts an approved carousel (a big case or a roundup) to Instagram.
+# Runs only when the repository OWNER comments /approve (or /reject) on an open "[instagram]" issue opened by
+# trends.yml. The post itself is social/out/<date>/post.json, already committed and checked; this job only sends it.
+name: instagram publish
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: instagram-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      !github.event.issue.pull_request &&
+      github.event.issue.state == 'open' &&
+      startsWith(github.event.issue.title, '[instagram]') &&
+      github.event.comment.author_association == 'OWNER' &&
+      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Which week
+        id: post
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const m = (context.payload.issue.body || "").match(/<!-- instagram-post:(\d{4}-\d{2}-\d{2}) -->/);
+            if (!m) core.setFailed("no <!-- instagram-post:YYYY-MM-DD --> marker in the issue");
+            core.setOutput("date", m ? m[1] : "");
+            core.setOutput("action", context.payload.comment.body.startsWith("/approve") ? "approve" : "reject");
+
+      - name: Reject
+        if: steps.post.outputs.action == 'reject'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: "게시하지 않습니다." });
+            await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed", state_reason: "not_planned" });
+
+      - name: Publish
+        if: steps.post.outputs.action == 'approve'
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+        run: |
+          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set — see social/README.md"; exit 1; }
+          node social/publish.mjs "social/out/${{ steps.post.outputs.date }}/post.json"
+
+      - name: Record and report
+        if: steps.post.outputs.action == 'approve'
+        uses: actions/github-script@v7
+        env:
+          POST_DATE: ${{ steps.post.outputs.date }}
+        with:
+          script: |
+            const { execSync } = require("child_process");
+            const fs = require("fs");
+            const file = `social/out/${process.env.POST_DATE}/post.json`;
+            const post = JSON.parse(fs.readFileSync(file, "utf8"));
+            execSync(`git config user.name "pivoxdata-bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add ${file} && git commit -m "social: published ${process.env.POST_DATE}" && git pull --rebase && git push`);
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `게시했습니다: ${post.published.permalink}` });
+            await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed", state_reason: "completed" });
+
+      - name: Report a failure
+        if: failure() && steps.post.outputs.action == 'approve'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `게시하지 못했습니다. 로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\n고친 뒤 \`/approve\`를 다시 남기면 다시 시도합니다.` });

@@ -18,3 +18,6 @@ nyc_restaurant_full.csv
 .bkit/
 **/.bkit/
 kr_data/
+
+# social/plan.mjs writes the day's decision here for build.mjs and caption.mjs
+social/plan.json
