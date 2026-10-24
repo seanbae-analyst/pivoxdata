@@ -1,0 +1,102 @@
+// caption.mjs — writes the week's Instagram caption into social/out/<date>/post.json.
+//
+// Claude writes the body from the week's insights; this code then checks it before anything is posted:
+//  • every number in the body must appear in the insights the carousel shows (no invented or rounded figures);
+//  • no advice or forecast words (추천·매수·전망 …) — the site never tells anyone what to buy or what will happen.
+// One retry with the problems listed; if it still fails, or there is no ANTHROPIC_API_KEY, a template caption built
+// only from the insights is used instead. The source line, link, disclaimer and hashtags are added by code, never
+// by the model.
+//
+// Usage: node social/caption.mjs   (after social/render.mjs)
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import Anthropic from "@anthropic-ai/sdk";
+import { picked } from "./pick.mjs";
+
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const I = JSON.parse(fs.readFileSync(path.join(ROOT, "trends", "data", "insights.json"), "utf8"));
+const date = I.built_at, dir = path.join(ROOT, "social", "out", date);
+const slides = picked(I.insights);
+const MODEL = "claude-opus-5-5";
+
+// ---------- the checks ----------
+const BANNED = /(추천|조언|매수|매도|사세요|사야|팔아|파세요|오를\s?것|내릴\s?것|오를지|급등|폭등|폭락|전망|예상|예측|목표가|무조건|보장|대박|BUY|SELL|HOLD)/gi;
+const numbersIn = (s) => (s.match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) => n.replace(/,/g, ""));
+const allowed = new Set([...slides.flatMap((x) => [x.big, x.bl, x.title, x.body, x.src]), date].flatMap(numbersIn));
+export function check(body) {
+  const problems = [];
+  const bad = [...new Set(numbersIn(body).filter((n) => !allowed.has(n)))];
+  if (bad.length) problems.push(`데이터에 없는 숫자: ${bad.join(", ")}`);
+  const words = [...new Set(body.match(BANNED) ?? [])];
+  if (words.length) problems.push(`쓰면 안 되는 말: ${words.join(", ")}`);
+  if (body.length > 1200) problems.push(`너무 김: ${body.length}자 (1200자 이하)`);
+  if (/#|https?:\/\//.test(body)) problems.push("해시태그·링크는 코드가 붙이니 본문에 쓰지 말 것");
+  return problems;
+}
+
+// ---------- Claude ----------
+const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 담당이다. 매주 AI 기술 신호(개발자 다운로드, 논문 키워드, 오픈 모델, 빅테크 설비투자)를 카드 뉴스로 올린다.
+캡션 본문만 쓴다. 규칙:
+- 첫 줄은 이번 주 가장 눈에 띄는 숫자 하나로 시작하는 짧은 한 문장.
+- 이어서 카드 순서대로 한두 줄씩, 전체 6~10줄. 줄마다 하나의 사실.
+- 숫자는 주어진 데이터에 적힌 그대로만 쓴다. 반올림·환산·새 계산 금지. 데이터에 없는 숫자(연도·순위 포함)를 만들지 않는다.
+- 일어난 일만 말한다. 앞으로 어떻게 될지, 무엇을 사거나 팔지, 어떤 기술을 써야 할지 말하지 않는다. "추천", "전망", "예상", "매수", "급등" 같은 말을 쓰지 않는다.
+- 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 흐리지 않는다.
+- 해시태그, 링크, 출처 줄, 면책 문구는 쓰지 않는다(코드가 붙인다). 이모지와 줄 앞 번호는 쓰지 않는다.
+- 담백하고 정확한 말투. 과장 금지.`;
+
+async function fromClaude() {
+  const client = new Anthropic();
+  const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 내용: x.body, 출처: x.src }));
+  const messages = [{ role: "user", content: `이번 주(${date}) 카드 데이터:\n${JSON.stringify(data, null, 1)}\n\n캡션 본문을 써 줘.` }];
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const res = await client.beta.messages.create({
+      model: MODEL, max_tokens: 16000, system: SYSTEM, messages,
+      output_config: { effort: "medium" },
+      // if a safety classifier declines, the API re-runs the request on Anthropic's recommended fallback model
+      betas: ["server-side-fallback-2026-07-01"], fallbacks: "default",
+    });
+    if (res.stop_reason === "refusal") return { body: null, why: `refusal (${res.stop_details?.category ?? "unknown"})` };
+    const body = res.content.filter((b) => b.type === "text").map((b) => b.text).join("").trim();
+    const problems = check(body);
+    if (!problems.length) return { body, model: res.model, attempts: attempt };
+    console.log(`caption attempt ${attempt} rejected: ${problems.join(" / ")}`);
+    messages.push({ role: "assistant", content: body }, { role: "user", content: `다음 문제를 고쳐서 본문 전체를 다시 써 줘:\n- ${problems.join("\n- ")}` });
+  }
+  return { body: null, why: "checks failed twice" };
+}
+
+// ---------- template fallback: only the insights' own sentences ----------
+// (no line numbers: a "2." that is not in the data would fail the number check)
+const template = () => [`${slides[0].big} — ${slides[0].title}`, "", ...slides.map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n");
+
+let result = { body: null, why: "no ANTHROPIC_API_KEY" };
+if (process.env.ANTHROPIC_API_KEY) {
+  try { result = await fromClaude(); } catch (e) {
+    if (e instanceof Anthropic.APIError) result = { body: null, why: `API error ${e.status}: ${e.message}` };
+    else throw e;
+  }
+}
+const source = result.body ? "claude" : "template";
+const body = result.body ?? template();
+const problems = check(body);
+if (problems.length) throw new Error(`caption failed its own checks (${source}): ${problems.join(" / ")}`);
+if (!result.body) console.log(`template caption used — ${result.why}`);
+
+const caption = `${body}
+
+출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매주 같은 방식으로 계산
+자세히: data.pivoxquant.com/trends
+다운로드 수는 사용자 수가 아니며, 지난 숫자만 말합니다. 예측이나 투자 권유가 아닙니다.
+
+#AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터`;
+
+const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
+if (images.length < 3) throw new Error(`social/out/${date}: ${images.length} slides — run social/render.mjs first`);
+const postFile = path.join(dir, "post.json");
+const prev = fs.existsSync(postFile) ? JSON.parse(fs.readFileSync(postFile, "utf8")) : {};
+if (prev.published) { console.log(`social/out/${date} was already published (${prev.published.permalink}) — caption left as is`); process.exit(0); }
+const post = { date, images, image_base: `https://data.pivoxquant.com/social/out/${date}/`, caption, caption_source: source, caption_model: result.model ?? null, caption_note: result.why ?? null, insights: slides.map((x) => x.id), checked: { numbers_allowed: allowed.size, problems: [] } };
+fs.writeFileSync(postFile, JSON.stringify(post, null, 1) + "\n");
+console.log(`wrote social/out/${date}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);

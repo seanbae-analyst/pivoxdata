@@ -14,7 +14,11 @@
     "trends:build": "node trends/verify.mjs && node trends/build.mjs && node lab/build.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.3.0",
     "papaparse": "^5.4.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.2"
   }
 }

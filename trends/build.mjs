@@ -108,28 +108,60 @@ const capex = { q: cq, sum: sum4(cq), yoy: common.includes(cqYear) ? sum4(cq) / 
 const capexLead = big4.map((id) => ({ id, name: SEC.companies.find((c) => c.id === id).name, v: Qs[id][cq], yoy: Qs[id][cqYear] ? Qs[id][cq] / Qs[id][cqYear] - 1 : null })).sort((a, b) => b.yoy - a.yoy);
 const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > cq)).map((c) => { const q = Object.keys(Qs[c.id]).filter((x) => x > cq).sort().at(-1); return `${c.name} ${qlbl(q)} ${usd(Qs[c.id][q])}`; });
 
-// ---------- sentences ----------
-// a provider package is named with its SDK, so "DeepSeek" is not read as DeepSeek's own SDK
-const nm = (r) => (r.group === "provider" ? `AI SDK용 ${r.name}` : r.name);
+// ---------- insights ----------
+// One object per insight: a big number, a one-line headline, a short body and a small trend line. The page and the
+// Instagram cards (social/) are both drawn from these, so they always say the same thing. `big`, `title` and `body`
+// are computed here every week; nothing is written by hand.
+const nm = (r) => (r.group === "provider" ? `AI SDK용 ${r.name}` : r.name); // "DeepSeek" alone would read as DeepSeek's own SDK
 const nTop = ranked(npm).slice(0, 3), pTop = ranked(pypi).slice(0, 3);
 const acc = npm.rows.filter((r) => r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
-const signals = [
-  { k: "개발자 · JavaScript", t: `대조군보다 가장 빨리 크는 AI 패키지는 ${nTop.map((r) => `<b>${esc(nm(r))}</b>`).join(" · ")}`,
-    d: `${wlbl(npm.weeks.at(-4))}부터 4주 동안 평일 다운로드가 그 전 4주보다 ${nTop.map((r) => `${esc(nm(r))} ${pc(r.g4)}`).join(", ")} 늘었습니다. 같은 4주 대조군(react·lodash 등)은 ${pc(npm.base)}였습니다. 순위는 이 차이(초과 성장)로 매깁니다.` },
-  { k: "가속", t: `성장이 가장 빨라지는 쪽은 <b>${esc(nm(acc))}</b>`,
-    d: `4주 성장률이 직전 4주의 ${pc(acc.g4 - acc.accel)}에서 ${pc(acc.g4)}로 ${pp(acc.accel)} 올라갔습니다 (npm, ${esc(acc.pkg)}).` },
-  { k: "앱 개발자가 붙이는 모델", t: `Vercel AI SDK 모델 공급자 패키지 중 1위는 <b>${esc(provLead.name)} ${sh(provLead.now)}</b>`,
-    d: `1년 전보다 가장 많이 오른 곳은 ${esc(provUp.name)}(${sh(provUp.then)} → ${sh(provUp.now)}), 가장 많이 내린 곳은 ${esc(provDown.name)}(${sh(provDown.then)} → ${sh(provDown.now)})입니다. 앱에 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.` },
-  { k: "개발자 · Python", t: `파이썬에서 대조군보다 가장 빨리 크는 쪽은 ${pTop.map((r) => `<b>${esc(r.name)}</b>`).join(" · ")}`,
-    d: `4주 성장 ${pTop.map((r) => `${esc(r.name)} ${pc(r.g4)}`).join(", ")}, 대조군(requests·numpy 등) ${pc(pypi.base)}. ${pypi.br.length ? `PyPI 집계가 ${wlbl(pypi.br.at(-1).week)}에 한꺼번에 바뀌어(대조군 ×${pypi.br.at(-1).ratio.toFixed(2)}) 그 뒤 주만 비교합니다.` : ""}` },
-  { k: "연구", t: axTop ? `AI 논문에서 가장 빠르게 늘어난 말은 <b>${esc(axTop.name)}</b>` : "연구 키워드 비교에 1년치가 아직 모자랍니다",
-    d: axTop ? `최근 3개월(${mlbl(last3[0])}–${mlbl(last3.at(-1))}) AI 논문 중 ${sh(axTop.now)}가 초록에 이 말을 썼습니다. 1년 전 같은 3개월은 ${sh(axTop.then)}로, ${axTop.ratio.toFixed(1)}배입니다. 가장 많이 쓰인 말은 ${esc(axBiggest.name)}(${sh(axBiggest.now)})입니다.` : "" },
-  { k: "오픈 모델", t: `Hugging Face에서 지금 가장 뜨는 모델은 <b>${esc(snap.trending[0].id)}</b>`,
-    d: `${esc(snap.trending[0].task ?? "")}${snap.trending[0].task ? " · " : ""}${snap.trending[0].created} 공개. 다운로드 상위 ${snap.top.length}개 중 텍스트 생성 모델의 30일 다운로드는 ${esc(byAuthor[0][0])} 계열이 ${sh(byAuthor[0][1] / genTotal)}로 가장 많습니다.${prevSnap ? ` 지난주(${prevSnap.date})보다 상위 ${snap.top.length}에 새로 든 모델 ${newIn.length}개.` : " 새로 든 모델은 다음 주 스냅숏부터 셉니다."}` },
-  { k: "자본", t: `빅테크 4사 설비투자 ${qlbl(cq)} <b>${usd(capex.sum)}</b>`,
-    d: `Microsoft·Alphabet·Amazon·Meta 합계로, 1년 전 같은 분기보다 ${pc(capex.yoy, 0)}입니다. 최근 4개 분기 합은 ${usd(capex.ttm)}(1년 전 ${usd(capex.ttmPrev)}). 가장 빨리 늘린 곳은 ${capexLead[0].name}(${pc(capexLead[0].yoy, 0)}).${ahead.length ? ` 이미 다음 분기를 공시한 곳: ${ahead.join(", ")}.` : ""}` },
-].filter((s) => s.d);
-const signalHtml = signals.map((s) => `<article class="sig"><div class="k">${s.k}</div><h3>${s.t}</h3><p>${s.d}</p></article>`).join("");
+const lastN = (a, n) => a.slice(Math.max(0, a.length - n));
+const lv = (x, pkg, n) => lastN(x.W[pkg].map((w) => w.level), n);
+const span = (x, n) => `${wlbl(lastN(x.weeks, n)[0])}–${wlbl(x.weeks.at(-1))}`;
+const insights = [
+  { id: "npm", k: "개발자 · JavaScript", big: pp(nTop[0].excess), bl: "대조군보다 더 큰 4주 성장",
+    title: `npm에서 가장 빨리 크는 AI 패키지는 <b>${esc(nm(nTop[0]))}</b>`,
+    body: `4주 다운로드 ${pc(nTop[0].g4)}, 같은 4주 react·lodash 같은 대조군은 ${pc(npm.base)}. 다음은 ${nTop.slice(1).map((r) => `${esc(nm(r))}(${pp(r.excess)})`).join(", ")}.`,
+    spark: { values: lv(npm, nTop[0].pkg, 26) }, src: `npm 평일 다운로드 · ${span(npm, 26)}` },
+  { id: "accel", k: "가속", big: pp(acc.accel), bl: "4주 성장률이 오른 폭",
+    title: `성장이 가장 빨라지는 쪽은 <b>${esc(nm(acc))}</b>`,
+    body: `4주 성장률이 직전 4주 ${pc(acc.g4 - acc.accel)}에서 ${pc(acc.g4)}로 올라갔습니다.`,
+    spark: { values: lv(npm, acc.pkg, 26) }, src: `npm 평일 다운로드 · ${span(npm, 26)}` },
+  { id: "provider", k: "앱에 붙이는 모델", big: sh(provUp.now), bl: `Vercel AI SDK 공급자 중 ${provUp.name} 비중`,
+    title: `1년 새 <b>${esc(provUp.name)}</b> ${sh(provUp.then)} → ${sh(provUp.now)}`,
+    body: `지금 1위는 ${esc(provLead.name)}(${sh(provLead.now)}), 가장 많이 내린 곳은 ${esc(provDown.name)}(${sh(provDown.then)} → ${sh(provDown.now)}). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.`,
+    spark: { values: lastN(provSeries.series[provUp.pkg], 52) }, src: `@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주` },
+  { id: "pypi", k: "개발자 · Python", big: pp(pTop[0].excess), bl: "대조군보다 더 큰 4주 성장",
+    title: `파이썬에서 가장 빨리 크는 쪽은 <b>${esc(pTop[0].name)}</b>`,
+    body: `4주 다운로드 ${pc(pTop[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}. 다음은 ${pTop.slice(1).map((r) => `${esc(r.name)}(${pp(r.excess)})`).join(", ")}.`,
+    spark: { values: pypi.W[pTop[0].pkg].slice(pypi.from).map((w) => w.level) }, src: `PyPI 평일 다운로드 · ${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주` },
+  ...(axTop ? [{ id: "arxiv", k: "연구", big: `${axTop.ratio.toFixed(1)}배`, bl: "AI 논문 속 비율, 1년 전 대비",
+    title: `연구자들이 가장 빠르게 더 쓰는 말은 <b>${esc(axTop.name)}</b>`,
+    body: `최근 3개월 AI 논문의 ${sh(axTop.now)}가 초록에 썼습니다(1년 전 ${sh(axTop.then)}). 가장 많이 쓰인 말은 ${esc(axBiggest.name)}(${sh(axBiggest.now)}).`,
+    spark: { values: am.map((m) => axShare(axTop.id, m)) }, src: `arXiv cs.AI·cs.CL·cs.LG · ${mlbl(am[0])}–${mlbl(am.at(-1))}` }] : []),
+  { id: "hf", k: "오픈 모델", big: sh(byAuthor[0][1] / genTotal), bl: `텍스트 생성 모델 다운로드 중 ${byAuthor[0][0]} 계열`,
+    title: `오픈 텍스트 생성 모델 다운로드의 ${sh(byAuthor[0][1] / genTotal)}는 <b>${esc(byAuthor[0][0])}</b> 계열`,
+    body: `다음은 ${byAuthor.slice(1, 3).map(([a, v]) => `${esc(a)}(${sh(v / genTotal)})`).join(", ")}. 지금 가장 뜨는 모델은 ${esc(snap.trending[0].id)}(${esc(snap.trending[0].task ?? "")}${snap.trending[0].task ? ", " : ""}${snap.trending[0].created} 공개).${prevSnap ? ` 지난주보다 다운로드 상위 ${snap.top.length}에 새로 든 모델 ${newIn.length}개.` : ""}`,
+    spark: { values: byAuthor.slice(0, 6).map(([, v]) => v / genTotal), bars: true, labels: byAuthor.slice(0, 6).map(([a]) => a) }, src: `Hugging Face 다운로드 상위 ${snap.top.length} · ${snap.date}` },
+  { id: "capex", k: "자본", big: usd(capex.sum), bl: `빅테크 4사 설비투자 · ${qlbl(cq)}`,
+    title: `AI 인프라에 들어가는 돈, 1년 전보다 <b>${pc(capex.yoy, 0)}</b>`,
+    body: `Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 ${usd(capex.ttm)}(1년 전 ${usd(capex.ttmPrev)}). 가장 빨리 늘린 곳은 ${capexLead[0].name}(${pc(capexLead[0].yoy, 0)}).`,
+    spark: { values: common.map(sum4), bars: true }, src: `SEC 공시 · ${qlbl(common[0])}–${qlbl(cq)}` },
+];
+
+// a small trend line (or bars) drawn on the server, so the card reads without JavaScript and renders the same in the
+// Instagram renderer
+function spark(sp, w = 300, h = 64) {
+  const v = sp.values.filter((x) => x != null); if (v.length < 2) return "";
+  const lo = sp.bars ? Math.min(0, ...v) : Math.min(...v), hi = Math.max(...v), Y = (x) => h - 4 - ((x - lo) / (hi - lo || 1)) * (h - 10);
+  if (sp.bars) {
+    const bw = w / v.length;
+    return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${v.map((x, i) => `<rect x="${(i * bw + bw * 0.15).toFixed(1)}" y="${Math.min(Y(x), Y(0)).toFixed(1)}" width="${(bw * 0.7).toFixed(1)}" height="${Math.max(1, Math.abs(Y(0) - Y(x))).toFixed(1)}" class="${i === v.length - 1 || (sp.labels && i === 0) ? "hi" : ""}"/>`).join("")}</svg>`;
+  }
+  const X = (i) => (i * w) / (v.length - 1), d = v.map((x, i) => `${i ? "L" : "M"}${X(i).toFixed(1)},${Y(x).toFixed(1)}`).join("");
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true"><path class="a" d="${d}L${w},${h}L0,${h}Z"/><path class="l" d="${d}"/></svg>`;
+}
+const insightHtml = insights.map((x, i) => `<article class="ins${i === 0 ? " lead" : ""}"><div class="k">${x.k}</div><div class="big">${x.big}</div><div class="bl">${esc(x.bl)}</div><h3>${x.title}</h3><p>${x.body}</p>${spark(x.spark)}<div class="src">${esc(x.src)}</div></article>`).join("");
 
 // ---------- chart data ----------
 const D = {
@@ -159,7 +191,7 @@ function region(html, name, content) {
 const file = path.join(ROOT, "trends.html"), before = fs.readFileSync(file, "utf8");
 let h = before;
 h = region(h, "t-meta", meta);
-h = region(h, "t-signals", signalHtml);
+h = region(h, "t-signals", insightHtml);
 h = region(h, "t-npm", table(npm, true));
 h = region(h, "t-npm-note", `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`);
 h = region(h, "t-pypi", table(pypi, false));
@@ -171,3 +203,10 @@ h = region(h, "t-capex", capexRows);
 h = region(h, "t-checks", checkLi);
 h = region(h, "t-data", `const D=${JSON.stringify(D)};`);
 if (h !== before) { fs.writeFileSync(file, h); console.log("wrote trends.html"); } else console.log("same  trends.html");
+
+// the same insights as data, for the Instagram cards and caption (social/)
+const text = (s) => String(s).replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+const out = { built_at: updated, page: "https://data.pivoxquant.com/trends", insights: insights.map((x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), body: text(x.body), src: x.src, spark: x.spark, svg: spark(x.spark, 900, 220) })) };
+const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
+const inext = JSON.stringify(out, null, 1) + "\n";
+if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }
