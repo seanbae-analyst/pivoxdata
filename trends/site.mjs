@@ -120,8 +120,11 @@ export function writePages(fills = {}, lastmod) {
   const BR = path.join(ROOT, "briefs");
   const briefs = fs.existsSync(BR) ? fs.readdirSync(BR, { recursive: true }).map(String).filter((f) => f.endsWith(".html"))
     .map((f) => `/briefs/${f.slice(0, -5).replace(/\\/g, "/")}`.replace(/\/index$/, "")) : [];
-  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
-  fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
+  // both the trends build (the data's day) and social/briefs.mjs (the newest briefing's day) write the sitemap, one
+  // after the other: a page keeps the later of its lastmod already there and this one, so it never goes back
+  const SM = path.join(ROOT, "sitemap.xml"), had = fs.existsSync(SM) ? Object.fromEntries([...fs.readFileSync(SM, "utf8").matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]])) : {};
+  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${[had[SITE + u], lastmod].filter(Boolean).sort().at(-1)}</lastmod></url>`).join("\n");
+  fs.writeFileSync(SM, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
   fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 }
 
