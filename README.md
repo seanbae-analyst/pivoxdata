@@ -13,7 +13,7 @@ IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 
 | [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 게시물마다 같은 이야기를 풀어 쓴 글(마지막 섹션 "IT 컨설팅 관점"), 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 데이터마다 잇는 키와 공개 조건 |
 | 인스타그램 | AX·IT 컨설팅 내용만, 짧은 에디토리얼 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
-| 폰 | 홈 화면에 설치(PWA), 아래 탭 바 · 가로 스와이프 |
+| 폰 | 위아래 스크롤 대신 페이지를 옆으로 넘김(`pager.js`) · 아래 탭 바 · 홈 화면에 설치(PWA) |
 
 ## 돌리는 법
 

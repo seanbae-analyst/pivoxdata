@@ -254,12 +254,25 @@ for (const b of briefs) {
   put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body }));
 }
 
-const listPage = ({ p, title, desc, kicker, h, intro, list, cur }) => shell({ path: p, title, desc, css: CSS, body: `<div class="kicker"><b>AX 브리핑</b>${kicker}</div>
+// phone: a list page as pages turned sideways (/pager.js) — the heading and as many briefings as fit, then a screenful at a
+// time, and a last page for installing and alerts (so the floating install bar goes)
+const LIST_PAGER = `<script type="module">
+import { pager } from "/pager.js";
+const m = document.querySelector("main"), items = [...m.querySelectorAll(".list>li")], install = document.getElementById("install");
+const lead = [...m.children].filter((x) => !x.matches("h2.month, ul.list, #install, script"));
+if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
+pager([
+  items.length ? { id: "list", name: "브리핑", lead, items, list: () => Object.assign(document.createElement("ul"), { className: "list" }) } : { id: "list", name: "브리핑", pages: [lead] },
+  { id: "alerts", name: "알림 받기", pages: [[install]] },
+], { tab: () => "briefs" });
+</script>`;
+const listPage = ({ p, title, desc, kicker, h, intro, list, cur }) => shell({ path: p, title, desc, css: CSS, paged: true, body: `<div class="kicker"><b>AX 브리핑</b>${kicker}</div>
   <h1 class="page">${h}</h1>
   <p class="intro">${intro}</p>
   ${INSTALL}
   ${tabs(cur)}
-  ${list.length ? byMonth(list) : `<p class="intro">첫 브리핑을 준비하고 있어요.</p>`}` });
+  ${list.length ? byMonth(list) : `<p class="intro">첫 브리핑을 준비하고 있어요.</p>`}
+  ${LIST_PAGER}` });
 
 put("index.html", listPage({ p: "/briefs", title: `AX 브리핑 · ${NAME}`, desc: "기업의 AI 전환(AX)을 숫자와 공식 발표로 풀어 쓴 글. 인스타그램 카드의 긴 버전이에요.", kicker: "카드의 긴 버전", h: "AX 브리핑",
   intro: `인스타그램에 올린 이야기를 더 자세히 풀어 쓴 글이에요. 숫자는 매일 재는 데이터에서, 사건은 회사·정부가 직접 낸 발표에서만 가져와요. <a href="/briefs/feed.xml">RSS</a>`, list: briefs, cur: null }));
