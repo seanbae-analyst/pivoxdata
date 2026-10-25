@@ -51,8 +51,14 @@ for (const u of urls) { const { id } = await graph(`${user}/media`, { image_url:
 const { id: carousel } = await graph(`${user}/media`, { media_type: "CAROUSEL", children: children.join(","), caption: post.caption });
 await ready(carousel);
 const { id: media } = await graph(`${user}/media_publish`, { creation_id: carousel });
-const { permalink } = await graph(media, { fields: "permalink" }, "GET");
-
-post.published = { at: new Date().toISOString(), media_id: media, permalink };
-fs.writeFileSync(file, JSON.stringify(post, null, 1) + "\n");
-console.log(`published: ${permalink}`);
+// it is live now: write that down before anything else can fail, or a failed link lookup leaves no record and the
+// next /approve posts the same carousel a second time
+const save = () => fs.writeFileSync(file, JSON.stringify(post, null, 1) + "\n");
+post.published = { at: new Date().toISOString(), media_id: media, permalink: null };
+save();
+for (let i = 0; i < 3 && !post.published.permalink; i++) {
+  try { post.published.permalink = (await graph(media, { fields: "permalink" }, "GET")).permalink ?? null; }
+  catch (e) { console.warn(`permalink lookup failed (${i + 1}/3): ${e.message}`); await sleep(5000); }
+}
+save();
+console.log(`published: ${post.published.permalink ?? `media ${media} (link lookup failed — the post is up)`}`);

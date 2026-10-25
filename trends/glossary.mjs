@@ -25,7 +25,7 @@ export const GLOSSARY = [
   { id: "change", term: "빅 케이스 · 작은 변화", match: [], def: "빅 케이스는 평소와 크게 다른 일(1위가 바뀜, 다운로드가 평소의 1.4배 이상 등)이고, 작은 변화는 어제와 달라진 작은 일(순위 변동, 새로 들어온 모델 등)이에요." },
 ];
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 const rx = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/ /g, "(?: |&nbsp;)");
 // longest spelling first, so "Vercel AI SDK" is explained as itself before "SDK" gets a chance
 const TERMS = GLOSSARY.flatMap((g) => g.match.map((m) => ({ id: g.id, m, re: new RegExp(rx(m)) }))).sort((a, b) => b.m.length - a.m.length);

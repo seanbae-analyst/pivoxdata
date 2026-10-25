@@ -50,8 +50,10 @@ function viaClaudeCode(system, messages) {
 }
 
 // ---------- the checks every published word goes through ----------
-// no advice or forecast words; numbers only from the facts the post was given
-export const BANNED = /(추천|조언|매수|매도|사세요|사야|팔아|파세요|오를\s?것|내릴\s?것|오를지|급등|폭등|폭락|전망|예상|예측|목표가|무조건|보장|대박|BUY|SELL|HOLD)/gi;
+// no advice or forecast words; numbers only from the facts the post was given. BUY·SELL·HOLD only as whole words and
+// 보장 not inside 사회보장·보장성, so a name ("… Holdings", "stakeholder", "한국사회보장정보원") in an announcement's
+// title doesn't sink the post (a fallback that quotes the title has no way to reword it)
+export const BANNED = /(추천|조언|매수|매도|사세요|사야|팔아|파세요|오를\s?것|내릴\s?것|오를지|급등|폭등|폭락|전망|예상|예측|목표가|무조건|(?<!사회)보장(?!성)|대박|(?<![A-Za-z])(?:BUY|SELL|HOLD)(?![A-Za-z]))/gi;
 export const numbersIn = (s) => (String(s).match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) => n.replace(/,/g, ""));
 // whatever comes back is posted as is, so a note to us ("--- 둘째 줄은 제가 덧붙였어요") must not ride along
 export const META = /(덧붙였|카드 데이터|팩트 목록|빼도 돼|본문만|캡션 본문|JSON)/;
