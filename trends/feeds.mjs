@@ -20,10 +20,17 @@ export function cut(s, n = 500) {
   const head = s.slice(0, n), end = Math.max(head.lastIndexOf(". "), head.lastIndexOf("다. "), head.lastIndexOf("? "));
   return end > n * 0.4 ? head.slice(0, end + 1) : head.replace(/\s+\S*$/, "") + "…";
 }
+// the calendar day the feed wrote, in its own offset: "Mon, 26 Oct 2026 08:30:00 +0900" is the 26th (in UTC it would
+// be the 25th); Z and GMT are UTC's day. Atom/ISO and RSS dates are read as written; anything else through Date (UTC).
+const MON = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
 export function isoDate(s) {
   const t = String(s ?? "").trim().replace(/^(\d{4})\.(\d{1,2})\.(\d{1,2})\.?$/, (m, y, mo, d) => `${y}-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`);
   const d = new Date(t);
-  return Number.isNaN(+d) ? null : d.toISOString().slice(0, 10);
+  if (Number.isNaN(+d)) return null;
+  const iso = t.match(/^(\d{4})-(\d{2})-(\d{2})/), rfc = t.match(/^(?:[a-z]+,\s*)?(\d{1,2})\s+([a-z]{3})[a-z]*\.?\s+(\d{4})\b/i);
+  if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  if (rfc && MON[rfc[2].toLowerCase()]) return `${rfc[3]}-${String(MON[rfc[2].toLowerCase()]).padStart(2, "0")}-${rfc[1].padStart(2, "0")}`;
+  return d.toISOString().slice(0, 10);
 }
 // `back` puts the CDATA sections parseFeed set aside back into the field it found
 const tag = (block, names, back) => {
