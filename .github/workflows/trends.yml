@@ -24,6 +24,11 @@ on:
         type: choice
         default: "규칙대로"
         options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "누가 앞서나 지금 올리기", "테스트 초안 (승인 필요)"]
+  # the same choices without the button: push social/request.json ({"post": "news" | "race" | "test"}) to main.
+  # The run's own commit removes the file, so a request is used once (and the bot's push starts no new run).
+  push:
+    branches: [main]
+    paths: ["social/request.json"]
 
 permissions:
   contents: write
@@ -52,11 +57,16 @@ jobs:
           SEC_CONTACT: ${{ vars.SEC_CONTACT }}
         run: npm run trends 2>&1 | tee run.log
 
+      - name: Posting request
+        id: req
+        run: |
+          if [ -f social/request.json ]; then echo "kind=$(node -p 'String(require("./social/request.json").post ?? "")')" >> "$GITHUB_OUTPUT"; fi
+
       - name: Big case today?
         id: plan
         shell: bash
         env:
-          POST_KIND: ${{ inputs.post == '이번 주 AX 사건 지금 올리기' && 'news' || inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || '' }}
+          POST_KIND: ${{ inputs.post == '이번 주 AX 사건 지금 올리기' && 'news' || inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || steps.req.outputs.kind || '' }}
         run: node social/plan.mjs 2>&1 | tee -a run.log
 
       # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,
@@ -84,6 +94,7 @@ jobs:
           git config user.name "pivoxdata-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json briefs
+          if [ -f social/request.json ]; then git rm -q social/request.json; fi # a posting request is used once
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git commit -m "data(trends): daily refresh $(date -u +%F)${{ steps.plan.outputs.post == 'true' && ' + instagram draft' || '' }}"
           git pull --rebase origin "${GITHUB_REF_NAME}" && git push # the publish job may have pushed meanwhile
