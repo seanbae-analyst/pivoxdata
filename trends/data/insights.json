@@ -2148,21 +2148,6 @@
    ]
   },
   {
-   "id": "7b321951a1",
-   "src": "mckinsey",
-   "source": "McKinsey",
-   "kind": "research",
-   "date": "2026-10-11",
-   "title": "McKinsey research shows AI creating more jobs than automation displaces — but 11 million American workers will need help this decade",
-   "summary": "While debates about AI’s impact on the workforce dominate headlines, the biggest challenge ahead will be helping workers find the most direct pathway into growing jobs, write Eric Kutcher and Tanguy Catlin in Fortune.",
-   "link": "https://www.mckinsey.com/mgi/media-center/mckinsey-research-shows-ai-creating-more-jobs-than-automation-displaces-but-11-million-american-workers-will-need-help-this-decade",
-   "score": 2,
-   "domains": [
-    "업무 도구",
-    "AI 에이전트"
-   ]
-  },
-  {
    "id": "d5d7f3826a",
    "src": "msit",
    "source": "과학기술정보통신부",
@@ -2231,6 +2216,18 @@
    "title": "“인공지능 시대의 장원을 찾습니다” 국립과천과학관, 「인공지능 신(新) 과거제」 개최",
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187858",
+   "score": 1,
+   "domains": []
+  },
+  {
+   "id": "e1081fc5ae",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-12",
+   "title": "(관계 부처합동) 인공지능이 폐기물 종류 확인부터 배출 방법 안내까지 한번에! ‘인공지능 폐기물 처리 도우미’ 앱 실증 개시",
+   "summary": "- 과학기술정보통신부·기후에너지환경부, 공공 인공지능 전환 사업(AX 프로젝트) 「내 손안의 인공지능 폐기물 처리 도우미」 앱 시범 서비스 개시 - 서울 은평구 주민 대상 실증...인공지능 폐기물 식별 및 일괄(원스톱) 배출 신청 지원",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187857",
    "score": 1,
    "domains": []
   }

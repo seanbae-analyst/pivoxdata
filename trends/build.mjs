@@ -127,8 +127,12 @@ const capex = { q: cq, sum: sum4(cq), yoy: common.includes(cqYear) ? sum4(cq) / 
 const capexLead = big4.map((id) => ({ id, name: SEC.companies.find((c) => c.id === id).name, v: Qs[id][cq], yoy: Qs[id][cqYear] ? Qs[id][cq] / Qs[id][cqYear] - 1 : null })).sort((a, b) => b.yoy - a.yoy);
 const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > cq)).map((c) => { const q = Object.keys(Qs[c.id]).filter((x) => x > cq).sort().at(-1); return `${c.name} ${qlbl(q)} ${usd(Qs[c.id][q])}`; });
 
-// the day this build describes: the latest fetch of any source
-const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at].sort().at(-1);
+// the day this build describes: the latest fetch of any source — the Ramp AI Index and the announcements included, so
+// a refetch of the news alone moves the 30- and 14-day windows below to the day they were read
+const AXD = load("ax.json"), NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
+const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at, AXD.fetched_at, NEWSD.fetched_at].filter(Boolean).sort().at(-1);
+// "the last n days", for every window below: that day and the n − 1 days before it
+const ago = (d) => (new Date(updated) - new Date(d)) / 864e5, within = (d, n) => ago(d) < n;
 // a finished week named from that day: 지난주 only when it is last week (npm's newest weeks are often still being
 // counted and are left out, so its latest finished week can be two or three weeks back) — otherwise its date
 const wname = (w) => { const d = (new Date(updated) - new Date(w)) / 864e5; return d >= 7 && d < 14 ? "지난주" : wlbl(w); };
@@ -271,7 +275,7 @@ raceCards.splice(3, 0, openRace);
 
 // ---------- AX: how US businesses take up AI (Ramp AI Index via FRED, monthly) ----------
 // values are percent of businesses (55.86 = 55.86%), so they get their own formatters
-const AXD = load("ax.json"), axS = (id) => AXD.series[id].months;
+const axS = (id) => AXD.series[id].months;
 const axMonths = Object.keys(axS("RAMPAIALL")).sort(), axL = axMonths.at(-1);
 const mBack = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(5) - 1 - n; return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`; };
 const axY = mBack(axL, 12), axP = mBack(axL, 1), axLbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(5)}월`;
@@ -334,23 +338,21 @@ const axCards = [
 // ---------- IT domains: the official AX announcements counted per domain (ERP, CRM, cloud …), last 30 days ----------
 // An announcement can count in several domains. The comparison with the 30 days before is shown only once collection
 // has run for 60 days (news.json → since).
-const NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
 const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
-const dAgo = (d) => (new Date(updated) - new Date(d)) / 864e5;
 const newsAll = NEWSD.items.filter((x) => newsSrc[x.src]).filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
   .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, domains: DOMAINS.filter((d) => d.re.test(t)).map((d) => d.id),
     // NEWS.rank: adoptions, deals and rules up; consumer launches and events down — those (below 0) are not counted
     score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
   .filter((x) => x.score >= 0);
 // feeds list only their latest items, so "the 30 days before" is fully counted only 60 days after collection began
-const covered = NEWSD.since != null && dAgo(NEWSD.since) >= 60;
+const covered = NEWSD.since != null && !within(NEWSD.since, 60);
 const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8)}`;
 const domainRows = DOMAINS.map((d) => {
-  const inD = newsAll.filter((x) => x.domains.includes(d.id)), now = inD.filter((x) => dAgo(x.date) < 30), before = inD.filter((x) => dAgo(x.date) >= 30 && dAgo(x.date) < 60);
+  const inD = newsAll.filter((x) => x.domains.includes(d.id)), now = inD.filter((x) => within(x.date, 30)), before = inD.filter((x) => !within(x.date, 30) && within(x.date, 60));
   const by = Object.entries(now.reduce((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
   return { ...d, now, prev: covered ? before.length : null, by };
 }).filter((r) => r.now.length).sort((a, b) => b.now.length - a.now.length);
-const domTotal = newsAll.filter((x) => dAgo(x.date) < 30 && x.domains.length).length;
+const domTotal = newsAll.filter((x) => within(x.date, 30) && x.domains.length).length;
 const domainOverview = domainRows.length > 1 ? [{ id: "dom-all", k: "IT 영역 · 한눈에", big: `${domTotal}건`,
   bl: "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
   title: `발표가 가장 많은 IT 영역은 <b>${keep(domainRows[0].name)}</b>`,
@@ -568,15 +570,15 @@ const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(
 
 // every change ever found, kept 60 days (trends/data/changes.json): the page lists the last week's, and
 // social/plan.mjs drafts from it — a big case the day it appears, small ones collected into a weekly digest
-const CHANGES = path.join(DIR, "changes.json"), KEEP_DAYS = 60, ago = (d) => (new Date(updated) - new Date(d)) / 864e5;
-const changeLog = (fs.existsSync(CHANGES) ? JSON.parse(fs.readFileSync(CHANGES, "utf8")).log : []).filter((c) => ago(c.date) <= KEEP_DAYS);
+const CHANGES = path.join(DIR, "changes.json"), KEEP_DAYS = 60;
+const changeLog = (fs.existsSync(CHANGES) ? JSON.parse(fs.readFileSync(CHANGES, "utf8")).log : []).filter((c) => within(c.date, KEEP_DAYS));
 // a change found again keeps the day it was first found but takes today's wording
 for (const e of events) {
   const entry = { key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) };
   const i = changeLog.findIndex((c) => c.key === e.key);
   if (i < 0) changeLog.push({ date: updated, ...entry }); else changeLog[i] = { date: changeLog[i].date, ...entry };
 }
-const recentChanges = changeLog.filter((c) => ago(c.date) <= 7).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
+const recentChanges = changeLog.filter((c) => within(c.date, 7)).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
 const tone = (x) => (/^[−-]/.test(text(x.big)) ? " down" : "");
 // a card reads top to bottom: what it is about, the finding, the number, the figure (what it shows in its caption),
 // the plain-words line, a note, the latest announcements (IT domains), the source. The figure's data rides along for
@@ -615,7 +617,7 @@ const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? 
 // The last NEWS_DAYS days, the same announcement once (a feed can list it twice), ranked by NEWS.rank: adoptions,
 // deals and rules first. The site lists them with their links; social/story.mjs writes the weekly post from them.
 const NEWS_DAYS = 14;
-const newsItems = newsAll.filter((x) => ago(x.date) <= NEWS_DAYS && x.score > 0) // the list and the posts: the ones that rank
+const newsItems = newsAll.filter((x) => within(x.date, NEWS_DAYS) && x.score > 0) // the list and the posts: the ones that rank
   .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date));
 const KIND = { company: "기업 발표", government: "정부 발표", research: "리서치" };
 const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${KIND[x.kind]} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
