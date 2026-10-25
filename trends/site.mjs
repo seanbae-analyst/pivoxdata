@@ -21,6 +21,21 @@ const NAV = `
   <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
+// on a phone, a tab bar at the bottom (like an app): 홈 · 브리핑 · 사건 · 용어 — the top bar keeps only the name.
+const TABBAR = `
+<nav class="tabbar" aria-label="바로가기">
+  <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
+  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
+  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>사건</span></a>
+  <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
+</nav>
+<script>
+(() => { const t = document.querySelector(".tabbar"); if (!t) return;
+  const mark = () => { const p = location.pathname, h = location.hash, on = p.startsWith("/briefs") ? "briefs" : p === "/" || p === "/index.html" ? (h === "#news" ? "news" : h === "#glossary" ? "glossary" : "home") : "";
+    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on)); };
+  mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
+</script>`;
+
 // on a phone, a bar at the bottom offers the app: one tap on Android (the browser's install prompt), the steps on an
 // iPhone (Safari's share sheet → 홈 화면에 추가). Hidden once installed, or for a week after 닫기.
 const APPBAR = `
@@ -51,7 +66,7 @@ const FOOTER = `
   <span>${NAME} · 매일 갱신 · 무료</span>
   <span class="links"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
-${APPBAR}`;
+${TABBAR}${APPBAR}`;
 
 function head(page, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || NAME;
