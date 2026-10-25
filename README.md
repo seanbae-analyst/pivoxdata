@@ -2,16 +2,18 @@
 
 **▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — 매일 갱신 · 무료.
 
-기사보다 먼저 움직이는 숫자를 매일 같은 방식으로 잽니다 — 개발자가 실제로 내려받는 패키지(npm·PyPI), 연구자가
-쓰는 말(arXiv — AI·양자·로보틱스·비전·보안·시스템 6개 분야), 사람들이 받는 오픈 모델(Hugging Face), 빅테크가 데이터센터에 쓰는 돈(SEC 공시). 크기보다
-**평소보다 얼마나 빨리 커지는지**로 줄을 세우고, 화면의 문장은 모두 데이터로 계산돼 매일 다시 쓰입니다.
-다운로드는 주 단위로 정산이 끝난 숫자만, 논문은 다 지난 달만 씁니다 — 하루치 몰림이 신호로 둔갑하지 않게.
+IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 잽니다. 미국 기업의 AI 결제 도입률(Ramp AI Index)과,
+회사·정부·기관이 **직접 낸 공식 발표**를 IT 영역(ERP·백오피스 / CRM·고객 / 클라우드·인프라 / 데이터·분석 / 업무 도구 /
+보안·규제 / AI 에이전트)별로 나눠 셉니다. 화면의 문장은 모두 데이터로 계산돼 매일 다시 쓰입니다.
+방향과 결정 이력: [CLAUDE.md](CLAUDE.md) · [docs/decisions.md](docs/decisions.md).
 
 | 화면 | 내용 |
 |---|---|
-| [`/`](https://data.pivoxquant.com) | 읽는 법 · 최근 7일 변화(빅 케이스·작은 변화) · 주제 탭 — AI · 양자 · 로보틱스 · 비전 · 보안 · 시스템, 누르면 그 주제 카드만 최대 7장 (`/#quantum`처럼 주소로 공유). 카드마다 "쉽게 말하면" 한 줄, 밑줄 친 말을 누르면 풀이 · 용어 풀이 15개 · 근거(표·차트·방법·검산, 접힘) |
-| [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 연구 → 오픈소스 → 개발자 채택 → 모델 → 자본, 데이터마다 잇는 키와 공개 조건 |
-| 인스타그램 | 빅 케이스는 그날, 작은 변화는 일주일치를 모아 만든 카드 — 매번 다른 그림·배치, 소유자가 승인해야 게시 ([social/README.md](social/README.md)) |
+| [`/`](https://data.pivoxquant.com) | 보고서 형식 — 핵심 숫자(KPI) · 최근 변화 · AX 브리핑 · 공식 발표(원문 링크) · 지표 탭(기업 도입률 / IT 영역별 발표) · 용어 풀이 · 근거 데이터(npm·PyPI·arXiv·Hugging Face·SEC, 접힘) |
+| [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 게시물마다 같은 이야기를 풀어 쓴 글(마지막 섹션 "IT 컨설팅 관점"), 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
+| [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 데이터마다 잇는 키와 공개 조건 |
+| 인스타그램 | AX·IT 컨설팅 내용만, 짧은 에디토리얼 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
+| 폰 | 홈 화면에 설치(PWA), 아래 탭 바 · 가로 스와이프 |
 
 ## 돌리는 법
 
@@ -29,7 +31,8 @@ npm run dev           # http://localhost:8099
 ## 구조
 
 ```
-trends/series.mjs   지켜보는 것 한 곳 — npm·PyPI 패키지(+대조군), arXiv 분야·말, Hugging Face, SEC 회사
+trends/series.mjs   지켜보는 것 한 곳 — AX(Ramp), 공식 발표 출처(NEWS)·IT 영역(DOMAINS), npm·PyPI 패키지(+대조군), arXiv, Hugging Face, SEC 회사
+trends/feeds.mjs    공식 발표 RSS·Atom 읽기 (자기 도메인 링크만)
 trends/fetch.mjs    소스별 받기, 출처·받은 날과 함께 trends/data/*.json 으로
 trends/signals.mjs  읽는 법 — 주간 수준(0이 아닌 평일의 중앙값), 끊김 감지(대조군만), 대조군 대비 초과 성장
 trends/verify.mjs   검산 → trends/data/checks.json (같은 숫자를 다른 경로로 한 번 더 읽기)
@@ -37,11 +40,13 @@ trends/build.mjs    index.html · map.html 채우기, 변화 찾기(changes.json
 trends/glossary.mjs 용어 풀이 15개 — 페이지의 "용어 풀이"와 카드 속 밑줄 친 말이 같은 문장을 씀
 trends/viz.mjs      인사이트를 그리는 방법 12가지 (선·면적·막대 / 기울기·두 막대·화살표 / 도넛·와플·띠 / 순위 막대·점·시상대)
 trends/site.mjs     모든 페이지 공통 head·상단·하단, sitemap.xml · robots.txt
-social/             오늘 올릴지(plan), 카드(build·render), 캡션(Claude + 숫자 검사), 게시(publish, 승인 후)
+social/             오늘 올릴지(plan), 스토리·카드(story·build·render), 캡션, 게시(publish), 웹 브리핑(briefs·roundup), 푸시(notify)
 charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 ```
 
 ## 읽는 법 — 왜 이렇게 재나
+
+아래는 "근거 데이터"(개발자 다운로드·논문·오픈 모델·설비투자)를 재는 방법입니다. 인스타에는 올리지 않습니다.
 
 - **다운로드는 사용자 수가 아닙니다.** 자동 빌드가 큰 몫이라 크기보다 같은 소스 안의 변화를 봅니다.
 - **대조군.** react·lodash·express·typescript·axios(npm), requests·numpy·pandas·urllib3·packaging(PyPI). 순위는
@@ -61,11 +66,11 @@ charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 - **SEC 설비투자**는 연초부터 누적으로 공시돼 분기 값을 차이로 구하고, 3개월 값을 따로 공시한 분기에서는 두 값이
   1% 안에서 맞는지 확인합니다.
 
-## 탭 구성 (IT 컨설팅 관점)
+## 탭 구성 (IT 컨설팅 관점, 2026-10-25)
 
-AX(Ramp AI Index: 업종·규모·AI 회사별 도입률) · **IT 영역별**(공식 AX 발표를 ERP·백오피스 / CRM·고객 / 클라우드·인프라 /
-데이터·분석 / 업무 도구 / 보안·규제 / AI 에이전트로 나눠 최근 30일 건수와 발표가 많은 회사 — `trends/series.mjs` → `DOMAINS`) ·
-누가 앞서나(AI 도구) · 개발 현장(SDK 다운로드·논문·오픈 모델·설비투자). 양자·로보틱스·비전·보안·시스템 기술 주제는 뺐습니다.
+**기업 도입률**(Ramp AI Index: 업종·규모·AI 회사별 도입률) · **IT 영역별 발표**(공식 AX 발표를 7개 IT 영역으로 나눠
+최근 30일 건수와 발표가 많은 회사 — `trends/series.mjs` → `DOMAINS`, 소비자 제품 발표는 빼고 셈). 양자·로보틱스·비전·보안·시스템
+기술 주제와 "누가 앞서나"는 첫 화면에서 뺐고, 다운로드·논문·오픈 모델·설비투자·레이스 데이터는 "근거 데이터"에 남깁니다.
 
 ## 출처와 이용 조건 (2026-10-24 약관 확인)
 

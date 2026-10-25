@@ -6,3 +6,6 @@ __pycache__
 *.pyc
 .DS_Store
 kr_data
+# internal notes for working on the repo, not pages
+CLAUDE.md
+docs
