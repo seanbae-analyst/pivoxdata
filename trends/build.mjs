@@ -280,32 +280,50 @@ const axVs = (r, f = "1년 전", t = "지금") => ({ kind: "versus", from: r.the
 const axRank = (rows, val = (r) => r.now, lab = (r) => pv(r.now)) => ({ kind: "rank", items: rows.slice(0, 7).map((r) => ({ name: r.name, value: r4(val(r)), label: lab(r) })) });
 const indUp = [...axInds].sort((a, b) => (b.now - b.then) - (a.now - a.then)), sizeUp = [...axSizes].sort((a, b) => (b.now - b.then) - (a.now - a.then));
 const devLead = races.find((r) => r.id === "labs-js")?.lead;
+// the figure each card shows on the site, as data: cardfig.js draws it in the browser at the size it gets, with its axis,
+// units and labels; `caption` says what it shows, `alt` reads the same values to a screen reader
+const r1v = (v) => Math.round(v * 10) / 10, axSpan = `${axLbl(axY)} → ${axLbl(axL)}`;
+const figLine = (id) => ({ type: "line", unit: "%", caption: `월별 도입률 · ${axLbl(axMonths[0])}–${axLbl(axL)}`,
+  points: axMonths.map((m) => [axLbl(m), r1v(axS(id)[m])]), ticks: axMonths.map((m, i) => (m.endsWith("-01") ? [i, m.slice(0, 4)] : null)).filter(Boolean),
+  mark: axMonths.includes(axY) ? { i: axMonths.indexOf(axY), text: "1년 전" } : null,
+  alt: `${axLbl(axMonths[0])} ${pv(axS(id)[axMonths[0]])}, 1년 전 ${pv(axS(id)[axY])}, ${axLbl(axL)} ${pv(axS(id)[axL])}` });
+const figBars = (rows, { caption, val = (r) => r.now, lab = (r) => pv(r.now), ref } = {}) => ({ type: "bars", caption, focus: 0, ...(ref ? { ref } : {}),
+  items: rows.map((r) => ({ name: r.name, v: r1v(val(r)), label: lab(r) })), alt: rows.map((r) => `${r.name} ${lab(r)}`).join(", ") });
+const figDumb = (rows, caption) => ({ type: "dumbbell", unit: "%", caption, from: "1년 전", to: "지금", focus: 0,
+  items: rows.map((r) => ({ name: r.name, a: r1v(r.then), b: r1v(r.now), aText: pv(r.then), bText: pv(r.now) })),
+  alt: rows.map((r) => `${r.name} 1년 전 ${pv(r.then)}, 지금 ${pv(r.now)}`).join(" · ") });
+// the sizes in their own order (대기업 → 중소기업); "the bigger, the more" only when the numbers say so
+const bySize = AXSERIES.series.filter((x) => x.group === "size").map((x) => x.name), sizeOrdered = axSizes.every((r, i) => r.name === bySize[i]);
 const axCards = [
   { id: "ax-all", k: "AX · 기업 도입률", big: pv(axAll.now), bl: `AI 도구에 돈을 내는 미국 기업 · ${axLbl(axL)}`,
-    title: `AI 도구에 돈을 내는 미국 기업 <b>${pv(axAll.now)}</b>`,
+    title: `AI 도구에 돈을 내는 미국&nbsp;기업, 1년 새 <b>${ppv(axAll.now - axAll.then)}</b>`,
     easy: `미국 기업 100곳 중 ${of100(axAll.now)}곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 ${of100(axAll.then)}곳이었어요.`,
     body: `지난달보다 ${ppv(axAll.now - axAll.prev)}, 1년 전보다 ${ppv(axAll.now - axAll.then)}. ${axCaveat}`,
-    viz: [pctSeries("RAMPAIALL", 36), axVs(axAll)], src: axSrc },
+    note: `지난달보다 ${ppv(axAll.now - axAll.prev)}. ${axCaveat}`,
+    viz: [pctSeries("RAMPAIALL", 36), axVs(axAll)], fig: figLine("RAMPAIALL"), src: axSrc },
   { id: "ax-vendor", k: "AX · 기업이 고르는 AI", big: pv(axVendors[0].now), bl: `${axVendors[0].name}에 돈을 내는 미국 기업`,
     title: `기업이 가장 많이 돈을 내는 AI는 <b>${keep(axVendors[0].name)}</b>`,
     easy: `미국 기업 100곳 중 ${of100(axVendors[0].now)}곳이 ${esc(axVendors[0].name)}, ${of100(axVendors[1].now)}곳이 ${esc(axVendors[1].name)}에 돈을 내요(둘 다 쓰는 회사도 있어요). 1년 전엔 ${esc(axVendors[0].name)} ${of100(axVendors[0].then)}곳이었어요.`,
     body: `${axVendors.map((r) => `${esc(r.name)} ${pv(r.now)}(1년 전 ${pv(r.then)})`).join(" · ")}.${devLead ? ` 개발자들이 내려받는 AI 회사 SDK(자바스크립트)에서도 1위는 ${esc(devLead.name)}예요.` : ""}`,
-    viz: [axRank(axVendors), axVs(axVendors[0], `1년 전 ${axVendors[0].name}`, `지금 ${axVendors[0].name}`)], src: axSrc },
+    ...(devLead ? { note: `개발자들이 내려받는 AI 회사 SDK(자바스크립트)에서도 1위는 ${esc(devLead.name)}예요.` } : {}),
+    viz: [axRank(axVendors), axVs(axVendors[0], `1년 전 ${axVendors[0].name}`, `지금 ${axVendors[0].name}`)], fig: figDumb(axVendors, `AI 회사별 도입률 · ${axSpan}`), src: axSrc },
   { id: "ax-industry", k: "AX · 업종별", big: pv(axInds[0].now), bl: `${axInds[0].name} 기업의 AI 도입률`,
     title: `업종별 AI 도입 1위는 <b>${keep(axInds[0].name)}</b>`,
     easy: `${esc(axInds[0].name)} 기업은 100곳 중 ${of100(axInds[0].now)}곳이 AI에 돈을 내요. 가장 낮은 곳(${esc(axInds.at(-1).name)})은 100곳 중 ${of100(axInds.at(-1).now)}곳이에요.`,
     body: `${axInds.map((r) => `${esc(r.name)} ${pv(r.now)}`).join(" · ")}.`,
-    viz: [axRank(axInds), series(axMonths.slice(-36).map((m) => axS(axInds[0].id)[m] / 100))], src: axSrc },
+    viz: [axRank(axInds), series(axMonths.slice(-36).map((m) => axS(axInds[0].id)[m] / 100))],
+    fig: figBars(axInds, { caption: `업종별 도입률 · ${axLbl(axL)}`, ref: { v: r1v(axAll.now), label: `전체 ${pv(axAll.now)}` } }), src: axSrc },
   { id: "ax-industry-up", k: "AX · 가장 빨리 바뀌는 업종", big: ppv(indUp[0].now - indUp[0].then), bl: `${indUp[0].name} 기업의 AI 도입률, 1년 새`,
     title: `1년 새 AI 도입이 가장 많이 늘어난 업종은 <b>${keep(indUp[0].name)}</b>`,
     easy: `${esc(indUp[0].name)} 기업 중 AI에 돈을 내는 곳이 1년 전 100곳 중 ${of100(indUp[0].then)}곳에서 지금 ${of100(indUp[0].now)}곳으로 늘었어요.`,
     body: `1년 새 늘어난 폭: ${indUp.map((r) => `${esc(r.name)} ${ppv(r.now - r.then)}`).join(" · ")}.`,
-    viz: [axVs(indUp[0]), axRank(indUp, (r) => r.now - r.then, (r) => ppv(r.now - r.then))], src: axSrc },
+    viz: [axVs(indUp[0]), axRank(indUp, (r) => r.now - r.then, (r) => ppv(r.now - r.then))],
+    fig: figBars(indUp, { caption: `1년 새 늘어난 폭 · ${axSpan}`, val: (r) => r.now - r.then, lab: (r) => ppv(r.now - r.then), ref: { v: r1v(axAll.now - axAll.then), label: `전체 ${ppv(axAll.now - axAll.then)}` } }), src: axSrc },
   { id: "ax-size", k: "AX · 회사 규모별", big: pv(axSizes[0].now), bl: `${axSizes[0].name}의 AI 도입률`,
-    title: `${keep(axSizes[0].name)} <b>${pv(axSizes[0].now)}</b>, ${keep(axSizes.at(-1).name)} ${pv(axSizes.at(-1).now)}`,
-    easy: `회사가 클수록 AI를 더 많이 써요. 1년 새 가장 많이 늘어난 쪽은 ${esc(sizeUp[0].name)}, ${ppv(sizeUp[0].now - sizeUp[0].then)}.`,
+    title: sizeOrdered ? "회사가 <b>클수록</b> AI를 더 많이 써요" : `${keep(axSizes[0].name)} <b>${pv(axSizes[0].now)}</b>, ${keep(axSizes.at(-1).name)} ${pv(axSizes.at(-1).now)}`,
+    easy: `${sizeOrdered ? "회사가 클수록 AI를 더 많이 써요. " : ""}1년 새 가장 많이 늘어난 쪽은 ${esc(sizeUp[0].name)}, ${ppv(sizeUp[0].now - sizeUp[0].then)}.`,
     body: `${axSizes.map((r) => `${esc(r.name)} ${pv(r.now)}(1년 전 ${pv(r.then)})`).join(" · ")}. ${axCaveat}`,
-    viz: [axRank(axSizes), axVs(sizeUp[0], `1년 전 ${sizeUp[0].name}`, `지금 ${sizeUp[0].name}`)], src: axSrc },
+    viz: [axRank(axSizes), axVs(sizeUp[0], `1년 전 ${sizeUp[0].name}`, `지금 ${sizeUp[0].name}`)], fig: figDumb(axSizes, `회사 규모별 도입률 · ${axSpan}`), src: axSrc },
 ];
 // ---------- IT domains: the official AX announcements counted per domain (ERP, CRM, cloud …), last 30 days ----------
 // An announcement can count in several domains. The comparison with the 30 days before is shown only once collection
@@ -326,25 +344,34 @@ const domainRows = DOMAINS.map((d) => {
   const by = Object.entries(now.reduce((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
   return { ...d, now, prev: covered ? before.length : null, by };
 }).filter((r) => r.now.length).sort((a, b) => b.now.length - a.now.length);
-const domainCards = domainRows.map((r) => ({ id: `dom-${r.id}`, k: `IT 영역 · ${r.name}`, big: `${r.now.length}건`,
-  bl: r.prev != null ? `최근 30일 공식 발표 · 그 전 30일 ${r.prev}건` : "최근 30일 공식 발표",
+const domTotal = newsAll.filter((x) => dAgo(x.date) < 30 && x.domains.length).length;
+const domainOverview = domainRows.length > 1 ? [{ id: "dom-all", k: "IT 영역 · 한눈에", big: `${domTotal}건`,
+  bl: "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
+  title: `발표가 가장 많은 IT 영역은 <b>${keep(domainRows[0].name)}</b>`,
+  body: domainRows.map((r) => `${esc(r.name)} ${r.now.length}건`).join(" · "),
+  viz: [rank(domainRows, (r) => r.name, (r) => r.now.length, (r) => `${r.now.length}건`)],
+  fig: { type: "bars", caption: "IT 영역별 공식 발표 · 최근 30일", focus: 0, items: domainRows.map((r) => ({ name: r.name, v: r.now.length, label: `${r.now.length}건` })), alt: domainRows.map((r) => `${r.name} ${r.now.length}건`).join(", ") },
+  src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일" }] : [];
+const domainCards = [...domainOverview, ...domainRows.map((r) => ({ id: `dom-${r.id}`, k: `IT 영역 · ${r.name}`, big: `${r.now.length}건`,
+  bl: `${r.prev != null ? `최근 30일 공식 발표(그 전 30일 ${r.prev}건)` : "최근 30일 공식 발표"} · ${r.about} 이야기`,
   title: r.by[0][1] >= 2 ? `${esc(r.name)}, <b>${keep(r.by[0][0])}</b> 발표가 가장 많아요` : `${esc(r.name)} 공식 발표 <b>${r.now.length}건</b>`,
-  easy: `회사·정부가 직접 낸 AX 발표 중 ${esc(r.about)} 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.`,
   body: `최근: ${r.now.slice(0, 3).map((x) => `${esc(x.source)} ${md(x.date)} — ${esc(x.title)}`).join(" · ")}`,
   viz: [rank(r.by.map(([name, n]) => ({ name, n })), (x) => x.name, (x) => x.n, (x) => `${x.n}건`)],
-  src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에" }));
+  fig: { type: "bars", caption: "발표한 곳 · 최근 30일", focus: 0, items: r.by.slice(0, 5).map(([name, n]) => ({ name, v: n, label: `${n}건` })), alt: r.by.slice(0, 5).map(([name, n]) => `${name} ${n}건`).join(", ") },
+  recent: [...r.now].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3).map((x) => ({ date: md(x.date), source: x.source, title: x.title, link: x.link })),
+  src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일" }))];
 
 // the main view reads like an IT-consulting report: how businesses take up AI, and what the announcements say per IT
 // domain. Developer-side readings (SDK downloads, papers, open models, tool shares) stay in "근거 데이터" below.
 const topics = [{ id: "ax", name: "기업 도입률", cards: axCards }, ...(domainCards.length ? [{ id: "domains", name: "IT 영역별 발표", cards: domainCards }] : [])];
 // the four numbers at the top, like a report's first page
 const kpis = [
-  { v: pv(axAll.now), l: "AI 도구에 돈을 내는 미국 기업", s: `${axLbl(axL)} · 1년 새 ${ppv(axAll.now - axAll.then)}` },
-  { v: pv(axVendors[0].now), l: `기업 결제 1위 AI · ${axVendors[0].name}`, s: `2위 ${axVendors[1].name} ${pv(axVendors[1].now)}` },
-  { v: pv(axInds[0].now), l: `도입률 1위 업종 · ${axInds[0].name}`, s: `1년 새 가장 많이 늘어난 업종 ${indUp[0].name} ${ppv(indUp[0].now - indUp[0].then)}` },
-  ...(domainRows.length ? [{ v: `${domainRows[0].now.length}건`, l: `공식 발표 최다 IT 영역 · ${domainRows[0].name}`, s: "최근 30일 · 회사·정부 발표" }] : []),
+  { v: pv(axAll.now), l: "AI 도구에 돈을 내는 미국 기업", s: `${axLbl(axL)} · 1년 새 ${ppv(axAll.now - axAll.then)}`, href: "#c-ax-all" },
+  { v: pv(axVendors[0].now), l: `기업 결제 1위 AI · ${axVendors[0].name}`, s: `2위 ${axVendors[1].name} ${pv(axVendors[1].now)}`, href: "#c-ax-vendor" },
+  { v: pv(axInds[0].now), l: `도입률 1위 업종 · ${axInds[0].name}`, s: `가장 많이 늘어난 업종 · ${indUp[0].name} ${ppv(indUp[0].now - indUp[0].then)}`, href: "#c-ax-industry" },
+  ...(domainRows.length ? [{ v: `${domainRows[0].now.length}건`, l: `공식 발표 최다 IT 영역 · ${domainRows[0].name}`, s: "최근 30일 · 회사·정부 발표", href: "#domains" }] : []),
 ];
-const kpiHtml = kpis.map((k) => `<li><b>${esc(k.v)}</b><span>${esc(k.l)}</span><small>${esc(k.s)}</small></li>`).join("");
+const kpiHtml = kpis.map((k) => `<li><a href="${k.href}"><b>${esc(k.v)}</b><span>${esc(k.l)}</span><small>${esc(k.s)}</small></a></li>`).join("");
 
 // ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
 // Each detector looks only at finished periods — the last complete week of downloads, the last full month of papers,
@@ -540,21 +567,20 @@ for (const e of events) {
   if (i < 0) changeLog.push({ date: updated, ...entry }); else changeLog[i] = { date: changeLog[i].date, ...entry };
 }
 const recentChanges = changeLog.filter((c) => ago(c.date) <= 7).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
-// a small line icon for where the number comes from (code downloads, papers, models, filings)
-const ICONS = {
-  code: "M8.5 7 4 12l4.5 5M15.5 7 20 12l-4.5 5",
-  paper: "M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5",
-  model: "M12 3l8 4.5v9L12 21l-8-4.5v-9zM12 12l8-4.5M12 12v9M12 12 4 7.5",
-  money: "M3 20h18M5 20v-8M9.7 20v-8M14.3 20v-8M19 20v-8M2.5 10 12 4l9.5 6z",
-};
-const iconOf = (x) => (/^arXiv/.test(x.src) ? "paper" : /^Hugging/.test(x.src) ? "model" : /^SEC/.test(x.src) ? "money" : "code");
-const icon = (x) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[iconOf(x)]}"/></svg>`;
 const tone = (x) => (/^[−-]/.test(text(x.big)) ? " down" : "");
+// a card reads top to bottom: what it is about, the finding, the number, the figure (what it shows in its caption),
+// the plain-words line, a note, the latest announcements (IT domains), the source. The figure's data rides along for
+// cardfig.js, which draws it at the size it gets; the server-drawn picture stays for readers without JavaScript.
+const attr = (s) => esc(s).replace(/"/g, "&quot;");
+const recentHtml = (list) => `<p class="rl">최근 발표</p><ol class="recent">${list.map((r) => `<li><a href="${attr(r.link)}" target="_blank" rel="noopener"><span class="rd">${r.date} · ${esc(r.source)}</span><span class="rt">${esc(r.title)}</span></a></li>`).join("")}</ol>`;
 const cardHtml = (list) => list.map((x, i) => { const used = new Set();
-  return `<article class="ins${i === 0 ? " lead" : ""}${tone(x)}"><div class="txt"><div class="k">${icon(x)}${x.k}</div><div class="big">${x.big}</div><div class="bl">${termify(esc(x.bl), used)}</div><h3>${glue(x.title)}</h3>`
+  return `<article class="ins${i === 0 ? " lead" : ""}${tone(x)}" id="c-${x.id}"><p class="k">${x.k}</p><h3>${glue(x.title)}</h3>`
+    + `<div class="num"><span class="big">${x.big}</span><span class="bl">${termify(esc(x.bl), used)}</span></div>`
+    + `<figure class="fig"${x.fig ? ` data-fig="${attr(JSON.stringify(x.fig))}"` : ""}>${x.fig?.caption ? `<figcaption>${esc(x.fig.caption)}</figcaption>` : ""}<div class="plot">${vizHtml(x)}</div></figure>`
     + (x.easy ? `<p class="easy"><span class="el">쉽게 말하면</span>${termify(x.easy, used)}</p>` : "")
-    + (x.body ? `<p class="detail">${termify(x.body, used)}</p><button type="button" class="more-btn" aria-expanded="false">자세히</button>` : "")
-    + `</div><div class="fig">${vizHtml(x)}<div class="src">${esc(x.src)}</div></div></article>`; }).join("");
+    + (x.note ? `<p class="fine">${termify(x.note, used)}</p>` : "")
+    + (x.recent?.length ? recentHtml(x.recent) : "")
+    + `<p class="src">${esc(x.src)}</p></article>`; }).join("");
 const tabsHtml = topics.map((t, i) => `<button type="button" role="tab" id="tab-${t.id}" aria-controls="panel-${t.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-topic="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("");
 const panelsHtml = topics.map((t, i) => `<div class="insights" role="tabpanel" id="panel-${t.id}" aria-labelledby="tab-${t.id}"${i === 0 ? "" : " hidden"}>${cardHtml(t.cards)}</div>`).join("");
 

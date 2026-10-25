@@ -560,7 +560,7 @@
      "k": "AX · 기업 도입률",
      "big": "55.9%",
      "bl": "AI 도구에 돈을 내는 미국 기업 · 2026년 9월",
-     "title": "AI 도구에 돈을 내는 미국 기업 55.9%",
+     "title": "AI 도구에 돈을 내는 미국 기업, 1년 새 +12.1%p",
      "easy": "미국 기업 100곳 중 56곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 44곳이었어요.",
      "body": "지난달보다 +0.6%p, 1년 전보다 +12.1%p. Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
      "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
@@ -817,7 +817,7 @@
      "k": "AX · 회사 규모별",
      "big": "65.7%",
      "bl": "대기업의 AI 도입률",
-     "title": "대기업 65.7%, 중소기업 50.0%",
+     "title": "회사가 클수록 AI를 더 많이 써요",
      "easy": "회사가 클수록 AI를 더 많이 써요. 1년 새 가장 많이 늘어난 쪽은 중견기업, +14.8%p.",
      "body": "대기업 65.7%(1년 전 51.7%) · 중견기업 62.5%(1년 전 47.7%) · 중소기업 50.0%(1년 전 38.6%). Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
      "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
@@ -860,14 +860,56 @@
    "name": "IT 영역별 발표",
    "insights": [
     {
+     "id": "dom-all",
+     "k": "IT 영역 · 한눈에",
+     "big": "61건",
+     "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
+     "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
+     "easy": "",
+     "body": "AI 에이전트 24건 · 클라우드·인프라 19건 · 보안·규제 12건 · ERP·백오피스 10건 · 업무 도구 8건 · CRM·고객 5건 · 데이터·분석 5건",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "AI 에이전트",
+         "value": 24,
+         "label": "24건"
+        },
+        {
+         "name": "클라우드·인프라",
+         "value": 19,
+         "label": "19건"
+        },
+        {
+         "name": "보안·규제",
+         "value": 12,
+         "label": "12건"
+        },
+        {
+         "name": "ERP·백오피스",
+         "value": 10,
+         "label": "10건"
+        },
+        {
+         "name": "업무 도구",
+         "value": 8,
+         "label": "8건"
+        }
+       ]
+      }
+     ]
+    },
+    {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
      "big": "24건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, SAP 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 스스로 일하는 AI·업무 자동화 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: Snowflake 10/22 — Agentic Analytics: Building a Data Foundation for AI Agents · Anthropic 10/22 — Donating Agent Skills to the Agentic AI Foundation · NVIDIA 10/21 — Bringing the Spark to Europe: Local Intelligence Powers Next Wave of Agents",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -905,11 +947,11 @@
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
      "big": "19건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 클라우드·데이터센터·칩·주권 AI 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: NVIDIA 10/23 — Kazakhstan Expands Compute for Its AI Future · NVIDIA 10/22 — NVIDIA Unveils Minerva to Bring End-to-End Observability for AI Factories · NVIDIA 10/22 — How Companies Are Using NVIDIA DSX to Break the Power Bottleneck",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -947,11 +989,11 @@
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
      "big": "12건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, Anthropic 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 AI 보안·안전·법·규제 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: OpenAI 10/23 — OpenAI and Poland’s NASK partner to advance AI safety and security · Anthropic 10/22 — Donating Agent Skills to the Agentic AI Foundation · McKinsey 10/20 — Securing software in the age of AI: Red Hat CTO Chris Wright",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -989,11 +1031,11 @@
      "id": "dom-erp",
      "k": "IT 영역 · ERP·백오피스",
      "big": "10건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
      "title": "ERP·백오피스, SAP 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 재무·회계·구매·공급망·인사 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: SAP 10/19 — SAP Recognized as a Leader in the 2026 Gartner® Magic Quadrant™ for Cloud ERP for Finance · McKinsey 10/14 — Voices on Planning: The AI-powered future of supply chain · Capgemini 10/13 — Intelligent Finance Operations Hub: Building a unified finance intelligence platform for banking & insurance",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -1021,11 +1063,11 @@
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
      "big": "8건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 전 직원이 쓰는 AI 도구·협업 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: OpenAI 10/22 — Uber brings ChatGPT Work to all employees with OpenAI · Salesforce 10/19 — Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain · OpenAI 10/16 — How Itaú is building generative AI for its entire customer base",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -1058,11 +1100,11 @@
      "id": "dom-crm",
      "k": "IT 영역 · CRM·고객",
      "big": "5건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
      "title": "CRM·고객, Salesforce 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 영업·마케팅·고객 상담 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: Salesforce 10/20 — Salesforce Signs Definitive Agreement to Acquire Braze · Salesforce 10/19 — Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain · Salesforce 10/15 — Tottenham Hotspur Launches Ask Spurs on Agentforce",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -1085,11 +1127,11 @@
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
      "big": "5건",
-     "bl": "최근 30일 공식 발표",
+     "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Snowflake 발표가 가장 많아요",
-     "easy": "회사·정부가 직접 낸 AX 발표 중 데이터 플랫폼·분석·거버넌스 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "easy": "",
      "body": "최근: Snowflake 10/22 — Agentic Analytics: Building a Data Foundation for AI Agents · Snowflake 10/22 — Public Sector Data Modernization for AI Readiness · Snowflake 10/15 — Sovereign Cloud for France: Snowflake and Bleu",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
@@ -1124,13 +1166,13 @@
    "tier": "big",
    "score": 110,
    "topic": "ax",
-   "headline": "AI 도구에 돈을 내는 미국 기업 55.9%",
+   "headline": "AI 도구에 돈을 내는 미국 기업, 1년 새 +12.1%p",
    "card": {
     "id": "ax-all",
     "k": "빅 케이스 · AX 월간 · 2026년 9월",
     "big": "55.9%",
     "bl": "AI 도구에 돈을 내는 미국 기업 · 2026년 9월",
-    "title": "AI 도구에 돈을 내는 미국 기업 55.9%",
+    "title": "AI 도구에 돈을 내는 미국 기업, 1년 새 +12.1%p",
     "easy": "미국 기업 100곳 중 56곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 44곳이었어요.",
     "body": "지난달보다 +0.6%p, 1년 전보다 +12.1%p. Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
