@@ -39,7 +39,7 @@ export const FORMATS = {
   checklist: { name: "체크리스트", how: "업종 평균 숫자로 우리 회사를 점검하는 질문 4~6개, 한 장에 하나씩, 질문마다 근거 숫자 → 정리" },
   weekly: { name: "이번 주 정리", how: "이번 주 한 줄 요약 → 작은 변화 하나씩(무엇이·얼마나·왜 볼 만한가) → 정리" },
   newsweek: { name: "이번 주 AX 사건", how: "표지: 이번 주 AX를 한 문장으로 → 발표 3~5건을 중요한 순서로 한 장에 하나씩(누가·무엇을 발표했나 → 기업 AX 관점에서 왜 눈여겨볼 만한가) → 여러 발표에 공통으로 보이는 흐름 → 정리" },
-  newstheme: { name: "AX 사건 묶어 보기", how: "표지 → 발표들을 2~3개 주제(예: 기업 도입 사례, 정부 정책·규제, AI 플랫폼·인프라)로 묶어 주제마다 한두 장, 주제 안의 발표 내용 → 주제별로 실무자가 볼 점 → 정리" },
+  newstheme: { name: "AX 사건 묶어 보기", how: "표지 → 발표들을 IT 영역(ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트) 2~3개로 묶어 영역마다 한두 장, 영역 안의 발표 내용 → 그 영역 실무자·IT 컨설턴트가 볼 점 → 정리" },
 };
 const candidates = plan.mode === "event"
   ? (/^ax:month/.test(plan.event.key) ? ["monthly", "deepdive", "timeline"] : plan.event.kind === "1위 교체" ? ["breaking", "versus"] : ["breaking"])
@@ -161,7 +161,7 @@ function brief() {
     `형식: ${FORMATS[format].name} — ${FORMATS[format].how}`,
     ...(industry ? [`딥다이브 업종: ${industry}`] : []),
     "",
-    ...(NEWS.length ? ["공식 발표 (이것만 사실로 쓸 수 있음, 번호는 refs에):", ...NEWS.map((n, i) => `[${i + 1}] ${n.source}(${KIND_LABEL[n.kind] ?? "발표"}, ${n.date}) — ${n.title}\n    요약: ${n.summary || "(요약 없음 — 제목만 쓸 것)"}`), ""] : []),
+    ...(NEWS.length ? ["공식 발표 (이것만 사실로 쓸 수 있음, 번호는 refs에):", ...NEWS.map((n, i) => `[${i + 1}] ${n.source}(${KIND_LABEL[n.kind] ?? "발표"}, ${n.date}${n.domains?.length ? `, IT 영역: ${n.domains.join("·")}` : ""}) — ${n.title}\n    요약: ${n.summary || "(요약 없음 — 제목만 쓸 것)"}`), ""] : []),
     "팩트 (이 숫자들만 쓸 수 있음):",
     ...facts.map((f) => `- ${f}`),
     ...(cards.length ? ["", "오늘 카드에 쓰인 문장:", ...cards.map((x) => `- ${x.title} (${x.big}, ${x.bl}). ${x.easy}`)] : []),

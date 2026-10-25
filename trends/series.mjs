@@ -57,11 +57,6 @@ export const PYPI = [
 // Topic packages (PyPI) for the non-AI topic tabs. Same reading as above; they rank only against each other, with a
 // lower floor (TOPIC_MIN_LEVEL) because a quantum library has thousands of downloads a day, not millions.
 PYPI.push(
-  ...["qiskit", "pennylane", "qutip", "amazon-braket-sdk", "cirq"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
-  ...["mujoco", "gymnasium", "lerobot", "pybullet", "genesis-world"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
-  ...["ultralytics", "diffusers", "timm", "supervision", "opencv-python"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
-  ...["semgrep", "bandit", "presidio-analyzer", "llm-guard", "garak"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
-  ...["triton", "ray", "deepspeed", "flash-attn"].map((pkg) => ({ pkg, group: "topic", name: pkg })),
 );
 export const TOPIC_MIN_LEVEL = 1000;
 
@@ -127,57 +122,19 @@ export const ARXIV = [
 // More research fields, read the same way (share of the field's papers whose abstract has the phrase).
 // Each field is one or more arXiv categories. They start in 2025-01: 15 months are needed for "the same 3 months a
 // year earlier", and the rest is chart history that older runs can extend.
+// The site follows AX for IT consulting (2026-10-25): research fields outside AI (quantum, robotics, vision, security,
+// systems) were dropped — what businesses adopt is read from the AX data and the official announcements instead.
 export const ARXIV_DOMAINS = [
   { id: "ai", name: "AI", scope: ARXIV_SCOPE, start: ARXIV_START, terms: ARXIV },
-  { id: "quantum", name: "양자", scope: "cat:quant-ph", start: "202501", terms: [
-    { id: "qec", q: "\"error correction\"", name: "오류 정정 (error correction)" },
-    { id: "logical", q: "\"logical qubit\"", name: "논리 큐비트 (logical qubit)" },
-    { id: "neutral", q: "\"neutral atom\"", name: "중성 원자 (neutral atom)" },
-    { id: "advantage", q: "\"quantum advantage\"", name: "양자 우위 (quantum advantage)" },
-    { id: "variational", q: "variational", name: "변분 알고리즘 (variational)" },
-  ] },
-  { id: "robotics", name: "로보틱스", scope: "cat:cs.RO", start: "202501", terms: [
-    { id: "humanoid", q: "humanoid", name: "휴머노이드 (humanoid)" },
-    { id: "vla", q: "\"vision-language-action\"", name: "VLA (vision-language-action)" },
-    { id: "sim2real", q: "\"sim-to-real\"", name: "시뮬→실제 (sim-to-real)" },
-    { id: "diffpolicy", q: "\"diffusion policy\"", name: "디퓨전 정책 (diffusion policy)" },
-    { id: "manipulation", q: "manipulation", name: "조작 (manipulation)" },
-  ] },
-  { id: "vision", name: "컴퓨터 비전", scope: "cat:cs.CV", start: "202501", terms: [
-    { id: "videogen", q: "\"video generation\"", name: "영상 생성 (video generation)" },
-    { id: "gsplat", q: "\"gaussian splatting\"", name: "가우시안 스플래팅 (gaussian splatting)" },
-    { id: "vlm", q: "\"vision-language\"", name: "비전-언어 (vision-language)" },
-    { id: "worldmodel", q: "\"world model\"", name: "월드 모델 (world model)" },
-    { id: "segmentation", q: "segmentation", name: "분할 (segmentation)" },
-  ] },
-  { id: "security", name: "보안", scope: "cat:cs.CR", start: "202501", terms: [
-    { id: "jailbreak", q: "jailbreak", name: "탈옥 (jailbreak)" },
-    { id: "injection", q: "\"prompt injection\"", name: "프롬프트 인젝션 (prompt injection)" },
-    { id: "pqc", q: "\"post-quantum\"", name: "양자내성암호 (post-quantum)" },
-    { id: "zk", q: "\"zero-knowledge\"", name: "영지식 증명 (zero-knowledge)" },
-    { id: "federated", q: "\"federated learning\"", name: "연합 학습 (federated learning)" },
-  ] },
-  { id: "systems", name: "시스템·하드웨어", scope: "(cat:cs.DC OR cat:cs.AR)", start: "202501", terms: [
-    { id: "kvcache", q: "\"KV cache\"", name: "KV 캐시 (KV cache)" },
-    { id: "llminfer", q: "\"LLM inference\"", name: "LLM 추론 (LLM inference)" },
-    { id: "accelerator", q: "accelerator", name: "가속기 (accelerator)" },
-    { id: "chiplet", q: "chiplet", name: "칩렛 (chiplet)" },
-    { id: "serverless", q: "serverless", name: "서버리스 (serverless)" },
-  ] },
 ];
 
 // Hugging Face: one snapshot per run of the most-downloaded and the trending models, plus trending lists for the
 // tasks some topics map to.
-export const HF = { top: 300, trending: 50, tasks: ["robotics", "text-to-image", "image-to-video"] };
+export const HF = { top: 300, trending: 50, tasks: [] };
 
-// The topic tabs. AI uses the full radar above; every other topic is one arXiv field + its packages (+ HF tasks).
+// The developer-side tab: the radar above (SDK downloads, papers, open models, big-tech capex), shown as context for AX.
 export const TOPICS = [
-  { id: "ai", name: "AI" },
-  { id: "quantum", name: "양자", field: "quantum", pypi: ["qiskit", "pennylane", "qutip", "amazon-braket-sdk", "cirq"] },
-  { id: "robotics", name: "로보틱스", field: "robotics", pypi: ["mujoco", "gymnasium", "lerobot", "pybullet", "genesis-world"], hf: ["robotics"] },
-  { id: "vision", name: "비전", field: "vision", pypi: ["ultralytics", "diffusers", "timm", "supervision", "opencv-python"], hf: ["text-to-image", "image-to-video"] },
-  { id: "security", name: "보안", field: "security", pypi: ["semgrep", "bandit", "presidio-analyzer", "llm-guard", "garak"] },
-  { id: "systems", name: "시스템", field: "systems", pypi: ["triton", "ray", "vllm", "deepspeed", "flash-attn"] },
+  { id: "ai", name: "개발 현장" },
 ];
 
 // SEC EDGAR XBRL (companyfacts): capital expenditure — cash paid for property and equipment (data centres, servers,
@@ -228,7 +185,7 @@ export const SEC = {
 // adoption, partnerships or work (companies), or AI at all (governments, research). `html`: no feed, so the news page's
 // article links are read and each article's own meta tags give the title, summary and date.
 export const NEWS = {
-  days: 45, // items older than this are dropped
+  days: 120, // items older than this are dropped (the IT-domain cards compare the last 30 days with the 30 before)
   sources: [
     { id: "openai", name: "OpenAI", kind: "company", url: "https://openai.com/news/rss.xml", domains: ["openai.com"] },
     { id: "anthropic", name: "Anthropic", kind: "company", html: "https://www.anthropic.com/news", domains: ["anthropic.com"] },
@@ -249,6 +206,7 @@ export const NEWS = {
     { id: "ukgov", name: "영국 정부", kind: "government", url: "https://www.gov.uk/search/news-and-communications.atom?keywords=artificial+intelligence", domains: ["gov.uk"] },
     { id: "nist", name: "미국 NIST", kind: "government", url: "https://www.nist.gov/news-events/news/rss.xml", domains: ["nist.gov"] },
     { id: "mckinsey", name: "McKinsey", kind: "research", url: "https://www.mckinsey.com/insights/rss", domains: ["mckinsey.com"] },
+    { id: "capgemini", name: "Capgemini", kind: "company", url: "https://www.capgemini.com/feed/", domains: ["capgemini.com"] },
   ],
   // AX = AI + business; checked on the title and summary
   ai: /\b(AI|A\.I\.|artificial intelligence|generative|gen ?AI|LLMs?|agentic|AI agents?|Claude|ChatGPT|GPT-?\d[\w.]*|Gemini|Copilot|machine learning)\b|인공지능|생성형|에이전트/i,
@@ -261,3 +219,24 @@ export const NEWS = {
     [-4, /\b(iPhone|Galaxy|gift|holiday|ads?|advertis\w*|sponsor\w*|webinar|podcast|Author Talks)\b|아이폰|갤럭시|가전|공모전|경진대회|축제|페스타|시상식|사전예약|박람회|체험|요금제/i],
   ],
 };
+
+// ---------- IT domains: how an IT consultancy splits the work ----------
+// Each official AX announcement (NEWS) is filed under the domains its title and summary talk about — one may fall in
+// several. build.mjs counts them per domain over the last 30 days (the "IT 영역별" tab) and the weekly news post can
+// group by them.
+export const DOMAINS = [
+  { id: "erp", name: "ERP·백오피스", about: "재무·회계·구매·공급망·인사",
+    re: /\b(ERP|S\/4HANA|Cloud ERP|financ(e|ial) (close|operations|planning)|accounting|procure\w*|spend management|supply chain|human capital|HCM|payroll|Workday|Ariba|Concur|SuccessFactors|back[- ]office)\b|재무|회계|구매 (관리|업무|시스템)|공급망|인사 관리|급여|백오피스|전사적 자원/i },
+  { id: "crm", name: "CRM·고객", about: "영업·마케팅·고객 상담",
+    re: /\b(CRM|customer (engagement|service|experience|support)|contact cent(er|re)|marketing|sales teams?|Agentforce|Braze|commerce|loyalty)\b|고객 (경험|상담|관리)|마케팅|영업|콜센터/i },
+  { id: "cloud", name: "클라우드·인프라", about: "클라우드·데이터센터·칩·주권 AI",
+    re: /\b(cloud|data ?cent(er|re)s?|compute|GPUs?|chips?|Trainium|infrastructure|sovereign\w*|AI factor(y|ies))\b|클라우드|데이터센터|인프라|반도체|컴퓨팅/i },
+  { id: "data", name: "데이터·분석", about: "데이터 플랫폼·분석·거버넌스",
+    re: /\b(data (platform|cloud|governance|foundation|modernization|management|strategy)|analytics|lakehouse|warehouse|business intelligence|semantic layer|databases?)\b|데이터 (플랫폼|분석|관리|거버넌스|산업)|빅데이터/i },
+  { id: "work", name: "업무 도구", about: "전 직원이 쓰는 AI 도구·협업",
+    re: /\b(Copilot|ChatGPT (Work|Enterprise|Business|Edu)|Gemini Enterprise|Workspace|all employees|employees|productivity|workforce|ways of working)\b|전 직원|업무 도구|협업|생산성|일하는 방식/i },
+  { id: "security", name: "보안·규제", about: "AI 보안·안전·법·규제",
+    re: /\b(security|safety|cyber\w*|regulat\w*|AI Act|compliance|privacy|guardrails?|sovereignty)\b|보안|안전|규제|법안|기본법|개인정보|가이드라인/i },
+  { id: "agents", name: "AI 에이전트", about: "스스로 일하는 AI·업무 자동화",
+    re: /\b(agents?|agentic|autonomous|automat\w*|orchestrat\w*)\b|에이전트|자동화|자율/i },
+];

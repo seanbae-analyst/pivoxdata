@@ -33,7 +33,10 @@ const today = I.built_at, days = (a, b) => (new Date(a) - new Date(b)) / 864e5;
 
 const posted = new Set(log.flatMap((p) => [p.key, ...(p.keys ?? [])]));
 const cool = (c) => !log.some((p) => [p.subject, ...(p.subjects ?? [])].includes(c.subject) && days(today, p.date) < SUBJECT_DAYS);
-const unposted = changes.filter((c) => !posted.has(c.key) && cool(c));
+// AX only (2026-10-25): Instagram carries the AX cases (Ramp AI Index) and which AI tools win ("누가 앞서나"), plus the
+// weekly official-announcement post; developer-side changes (downloads, papers, models, capex) stay on the site
+export const AX_TOPICS = new Set(["ax", "race"]);
+const unposted = changes.filter((c) => !posted.has(c.key) && cool(c) && AX_TOPICS.has(c.topic));
 const last = log.at(-1), since = last ? days(today, last.date) : Infinity;
 
 const big = unposted.filter((c) => c.tier === "big" && days(today, c.date) <= BIG_DAYS).sort((a, b) => b.score - a.score);

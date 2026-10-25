@@ -856,551 +856,258 @@
    ]
   },
   {
-   "id": "ai",
-   "name": "AI",
+   "id": "domains",
+   "name": "IT 영역별",
    "insights": [
     {
-     "id": "npm",
-     "k": "개발자 · JavaScript",
-     "big": "+17.6%p",
-     "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek",
-     "easy": "한 달 사이 다운로드가 +33.1% 늘었어요. 같은 기간 react 같은 인기 패키지는 +15.4% — 그보다 +17.6%p 더 빨라요.",
-     "body": "4주 다운로드 +33.1%, 같은 4주 react·lodash 같은 대조군은 +15.4%. 다음은 OpenAI Agents(+14.9%p), AI SDK용 OpenAI(+14.5%p).",
-     "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
+     "id": "dom-agents",
+     "k": "IT 영역 · AI 에이전트",
+     "big": "24건",
+     "bl": "최근 30일 공식 발표",
+     "title": "AI 에이전트, SAP 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 스스로 일하는 AI·업무 자동화 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: Snowflake 10/22 — Agentic Analytics: Building a Data Foundation for AI Agents · Anthropic 10/22 — Donating Agent Skills to the Agentic AI Foundation · NVIDIA 10/21 — Bringing the Spark to Europe: Local Intelligence Powers Next Wave of Agents",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "DeepSeek",
-         "value": 0.1763,
-         "label": "+17.6%p"
+         "name": "SAP",
+         "value": 7,
+         "label": "7건"
         },
         {
-         "name": "OpenAI Agents",
-         "value": 0.1488,
-         "label": "+14.9%p"
+         "name": "McKinsey",
+         "value": 6,
+         "label": "6건"
+        },
+        {
+         "name": "Snowflake",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "NVIDIA",
+         "value": 2,
+         "label": "2건"
         },
         {
          "name": "OpenAI",
-         "value": 0.1446,
-         "label": "+14.5%p"
-        },
-        {
-         "name": "Vercel AI SDK",
-         "value": 0.1258,
-         "label": "+12.6%p"
-        },
-        {
-         "name": "Anthropic",
-         "value": 0.1227,
-         "label": "+12.3%p"
+         "value": 2,
+         "label": "2건"
         }
        ]
-      },
+      }
+     ]
+    },
+    {
+     "id": "dom-cloud",
+     "k": "IT 영역 · 클라우드·인프라",
+     "big": "19건",
+     "bl": "최근 30일 공식 발표",
+     "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 클라우드·데이터센터·칩·주권 AI 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: NVIDIA 10/23 — Kazakhstan Expands Compute for Its AI Future · NVIDIA 10/22 — NVIDIA Unveils Minerva to Bring End-to-End Observability for AI Factories · NVIDIA 10/22 — How Companies Are Using NVIDIA DSX to Break the Power Bottleneck",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "viz": [
       {
-       "kind": "series",
-       "values": [
-        104921,
-        110092,
-        125946,
-        127537,
-        141505,
-        158384,
-        152389,
-        165189.5,
-        177867,
-        199136,
-        207352,
-        198554,
-        232650,
-        243095,
-        263793,
-        289105,
-        307136,
-        317386,
-        323083,
-        356393,
-        421377.5,
-        443213,
-        472319,
-        494193,
-        532102,
-        555910.5
+       "kind": "rank",
+       "items": [
+        {
+         "name": "NVIDIA",
+         "value": 4,
+         "label": "4건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "Databricks",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "SAP",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "Snowflake",
+         "value": 2,
+         "label": "2건"
+        }
        ]
       }
      ]
     },
     {
-     "id": "accel",
-     "k": "가속",
-     "big": "+20.1%p",
-     "bl": "늘어나는 속도가 빨라진 폭",
-     "title": "성장이 가장 빨라지는 쪽은 OpenAI Agents",
-     "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 +10.2%, 최근 4주엔 +30.3% 늘었어요.",
-     "body": "4주 성장률이 직전 4주 +10.2%에서 +30.3%로 올라갔습니다.",
-     "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
+     "id": "dom-security",
+     "k": "IT 영역 · 보안·규제",
+     "big": "12건",
+     "bl": "최근 30일 공식 발표",
+     "title": "보안·규제, Anthropic 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 AI 보안·안전·법·규제 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: OpenAI 10/23 — OpenAI and Poland’s NASK partner to advance AI safety and security · Anthropic 10/22 — Donating Agent Skills to the Agentic AI Foundation · McKinsey 10/20 — Securing software in the age of AI: Red Hat CTO Chris Wright",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
      "viz": [
       {
-       "kind": "versus",
-       "from": 0.1016,
-       "to": 0.3031,
-       "fromText": "+10.2%",
-       "toText": "+30.3%",
-       "fromLabel": "직전 4주",
-       "toLabel": "최근 4주"
-      },
-      {
-       "kind": "series",
-       "values": [
-        96182,
-        100729,
-        115892,
-        124351,
-        140803,
-        163174,
-        154508,
-        177377.5,
-        183602,
-        212074,
-        207077,
-        195612,
-        234770,
-        246553,
-        240248,
-        258123,
-        264454,
-        280049.5,
-        256522,
-        266452,
-        297391.5,
-        328444,
-        322543,
-        335222,
-        403080,
-        436116
-       ]
-      }
-     ]
-    },
-    {
-     "id": "provider",
-     "k": "앱에 붙이는 모델",
-     "big": "31.3%",
-     "bl": "Vercel AI SDK 공급자 중 Anthropic 비중",
-     "title": "1년 새 Anthropic 24.7% → 31.3%",
-     "easy": "AI 앱을 만들 때 연결하는 모델 회사를 100번 세면 31번이 Anthropic. 1년 전엔 25번이었어요.",
-     "body": "지금 1위는 OpenAI(32.2%), 가장 많이 내린 곳은 OpenAI(42.7% → 32.2%). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.",
-     "src": "@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.2467,
-       "to": 0.3128,
-       "fromText": "24.7%",
-       "toText": "31.3%",
-       "fromLabel": "1년 전",
-       "toLabel": "지금"
-      },
-      {
-       "kind": "share",
-       "focus": 1,
-       "parts": [
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Anthropic",
+         "value": 3,
+         "label": "3건"
+        },
         {
          "name": "OpenAI",
-         "value": 0.322
+         "value": 2,
+         "label": "2건"
         },
         {
-         "name": "Anthropic",
-         "value": 0.3128
+         "name": "Snowflake",
+         "value": 2,
+         "label": "2건"
         },
         {
-         "name": "Google",
-         "value": 0.1986
+         "name": "McKinsey",
+         "value": 1,
+         "label": "1건"
         },
-        {
-         "name": "Mistral",
-         "value": 0.0445
-        },
-        {
-         "name": "xAI",
-         "value": 0.0626
-        },
-        {
-         "name": "DeepSeek",
-         "value": 0.0594
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.2489,
-        0.2519,
-        0.2524,
-        0.252,
-        0.2537,
-        0.2517,
-        0.2595,
-        0.2615,
-        0.2608,
-        0.2613,
-        0.2563,
-        0.2554,
-        0.2533,
-        0.2506,
-        0.2504,
-        0.249,
-        0.2511,
-        0.2542,
-        0.2599,
-        0.2664,
-        0.2698,
-        0.2741,
-        0.278,
-        0.2825,
-        0.2882,
-        0.292,
-        0.2939,
-        0.2955,
-        0.295,
-        0.2969,
-        0.2974,
-        0.2971,
-        0.2999,
-        0.3004,
-        0.3006,
-        0.2981,
-        0.2979,
-        0.2994,
-        0.3018,
-        0.3074,
-        0.3098,
-        0.3109,
-        0.3118,
-        0.3128,
-        0.3135,
-        0.3141,
-        0.3133,
-        0.3126,
-        0.3102,
-        0.3091,
-        0.3113,
-        0.3128
-       ]
-      }
-     ]
-    },
-    {
-     "id": "pypi",
-     "k": "개발자 · Python",
-     "big": "+8.3%p",
-     "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "파이썬에서 가장 빨리 크는 쪽은 Anthropic",
-     "easy": "파이썬 개발자들의 다운로드가 한 달 새 +22.7% 늘었어요. 인기 패키지(+14.3%)보다 +8.3%p 더 빨라요.",
-     "body": "4주 다운로드 +22.7%, 대조군(requests·numpy 등) +14.3%. 다음은 DSPy(+5.5%p), MCP SDK(+4.1%p).",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "Anthropic",
-         "value": 0.0835,
-         "label": "+8.3%p"
-        },
-        {
-         "name": "DSPy",
-         "value": 0.0551,
-         "label": "+5.5%p"
-        },
-        {
-         "name": "MCP SDK",
-         "value": 0.0413,
-         "label": "+4.1%p"
-        },
-        {
-         "name": "Transformers",
-         "value": 0.023,
-         "label": "+2.3%p"
-        },
-        {
-         "name": "LangGraph",
-         "value": 0.0177,
-         "label": "+1.8%p"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        4951747,
-        5158821,
-        5470783,
-        5381255,
-        5748442,
-        6520791,
-        6638591,
-        6810853
-       ]
-      }
-     ]
-    },
-    {
-     "id": "arxiv",
-     "k": "연구",
-     "big": "3.2배",
-     "bl": "이 말을 쓰는 AI 논문 비율 · 1년 전과 비교",
-     "title": "연구자들이 가장 빠르게 더 쓰는 말은 월드 모델 (world model)",
-     "easy": "AI 논문 1,000편 중 16편이 이 말을 써요. 1년 전엔 5편이었어요.",
-     "body": "최근 3개월 AI 논문의 1.6%가 초록에 썼습니다(1년 전 0.5%). 가장 많이 쓰인 말은 에이전트 (agent)(21.1%).",
-     "src": "arXiv cs.AI·cs.CL·cs.LG · 2023년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0051,
-       "to": 0.0161,
-       "fromText": "0.5%",
-       "toText": "1.6%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0015,
-        0.0025,
-        0.0023,
-        0.0037,
-        0.002,
-        0.0038,
-        0.0024,
-        0.0024,
-        0.0017,
-        0.0034,
-        0.0023,
-        0.0037,
-        0.0022,
-        0.0023,
-        0.0031,
-        0.0029,
-        0.0047,
-        0.005,
-        0.0027,
-        0.0013,
-        0.0027,
-        0.0047,
-        0.0049,
-        0.0032,
-        0.0042,
-        0.0036,
-        0.0065,
-        0.0041,
-        0.005,
-        0.0066,
-        0.0053,
-        0.0039,
-        0.0061,
-        0.0064,
-        0.0085,
-        0.0111,
-        0.0073,
-        0.0106,
-        0.0103,
-        0.009,
-        0.0118,
-        0.0164,
-        0.016,
-        0.0148,
-        0.0175
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "월드 모델",
-         "value": 3.1518,
-         "label": "3.2배"
-        },
-        {
-         "name": "에이전트",
-         "value": 1.691,
-         "label": "1.7배"
-        },
-        {
-         "name": "체화",
-         "value": 1.4104,
-         "label": "1.4배"
-        },
-        {
-         "name": "MCP",
-         "value": 1.1789,
-         "label": "1.2배"
-        },
-        {
-         "name": "테스트 시점 연산",
-         "value": 1.1682,
-         "label": "1.2배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "hf",
-     "k": "오픈 모델",
-     "big": "45.7%",
-     "bl": "텍스트 생성 모델 다운로드 중 Qwen 계열",
-     "title": "오픈 텍스트 생성 모델 다운로드의 45.7%는 Qwen 계열",
-     "easy": "오픈 AI 모델을 10번 내려받으면 약 5번이 Qwen 모델이에요.",
-     "body": "다음은 openai-community(5.6%), google(4.7%). 지금 가장 뜨는 모델은 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017(image‑text‑to‑text, 2026-10-17 공개).",
-     "src": "Hugging Face 다운로드 상위 300 · 2026-10-25",
-     "viz": [
-      {
-       "kind": "share",
-       "focus": 0,
-       "parts": [
-        {
-         "name": "Qwen",
-         "value": 0.4569
-        },
-        {
-         "name": "openai-community",
-         "value": 0.0557
-        },
-        {
-         "name": "google",
-         "value": 0.0475
-        },
-        {
-         "name": "deepseek-ai",
-         "value": 0.0455
-        },
-        {
-         "name": "lmstudio-community",
-         "value": 0.0397
-        },
-        {
-         "name": "그 밖",
-         "value": 0.3546
-        }
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "Qwen",
-         "value": 0.4569,
-         "label": "45.7%"
-        },
-        {
-         "name": "openai-community",
-         "value": 0.0557,
-         "label": "5.6%"
-        },
-        {
-         "name": "google",
-         "value": 0.0475,
-         "label": "4.7%"
-        },
-        {
-         "name": "deepseek-ai",
-         "value": 0.0455,
-         "label": "4.6%"
-        },
-        {
-         "name": "lmstudio-community",
-         "value": 0.0397,
-         "label": "4.0%"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "capex",
-     "k": "자본",
-     "big": "$165.1B",
-     "bl": "빅테크 4사 설비투자 · 2026년 2분기",
-     "title": "AI 인프라에 들어가는 돈, 1년 전보다 +87%",
-     "easy": "마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요. 1년 전보다 +87% 많아요.",
-     "body": "Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 $510.7B(1년 전 $291.3B). 가장 빨리 늘린 곳은 Microsoft(+110%).",
-     "src": "SEC 공시 · 2019년 1분기–2026년 2분기",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        14330000000,
-        17372000000,
-        18346000000,
-        19009000000,
-        20125000000,
-        20849000000,
-        25065000000,
-        29137000000,
-        27416000000,
-        30877000000,
-        32723000000,
-        36583000000,
-        35518000000,
-        36995000000,
-        39312000000,
-        39259000000,
-        33926000000,
-        33420000000,
-        36947000000,
-        42934000000,
-        44289000000,
-        52852000000,
-        58862000000,
-        72339000000,
-        71902000000,
-        88246000000,
-        97271000000,
-        118632000000,
-        129750000000,
-        165050000000
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 291349000000,
-       "to": 510703000000,
-       "fromText": "$291.3B",
-       "toText": "$510.7B",
-       "fromLabel": "1년 전 4개 분기",
-       "toLabel": "최근 4개 분기"
-      },
-      {
-       "kind": "rank",
-       "items": [
         {
          "name": "Microsoft",
-         "value": 1.0963,
-         "label": "+110%"
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-erp",
+     "k": "IT 영역 · ERP·백오피스",
+     "big": "10건",
+     "bl": "최근 30일 공식 발표",
+     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 재무·회계·구매·공급망·인사 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: SAP 10/19 — SAP Recognized as a Leader in the 2026 Gartner® Magic Quadrant™ for Cloud ERP for Finance · McKinsey 10/14 — Voices on Planning: The AI-powered future of supply chain · Capgemini 10/13 — Intelligent Finance Operations Hub: Building a unified finance intelligence platform for banking & insurance",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "SAP",
+         "value": 7,
+         "label": "7건"
         },
         {
-         "name": "Alphabet",
-         "value": 1.0014,
-         "label": "+100%"
+         "name": "McKinsey",
+         "value": 2,
+         "label": "2건"
         },
         {
-         "name": "Meta",
-         "value": 0.821,
-         "label": "+82%"
+         "name": "Capgemini",
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-work",
+     "k": "IT 영역 · 업무 도구",
+     "big": "8건",
+     "bl": "최근 30일 공식 발표",
+     "title": "업무 도구, OpenAI 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 전 직원이 쓰는 AI 도구·협업 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: OpenAI 10/22 — Uber brings ChatGPT Work to all employees with OpenAI · Salesforce 10/19 — Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain · OpenAI 10/16 — How Itaú is building generative AI for its entire customer base",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "OpenAI",
+         "value": 4,
+         "label": "4건"
         },
         {
-         "name": "Amazon",
-         "value": 0.6844,
-         "label": "+68%"
+         "name": "McKinsey",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "Salesforce",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "SAP",
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-crm",
+     "k": "IT 영역 · CRM·고객",
+     "big": "5건",
+     "bl": "최근 30일 공식 발표",
+     "title": "CRM·고객, Salesforce 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 영업·마케팅·고객 상담 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: Salesforce 10/20 — Salesforce Signs Definitive Agreement to Acquire Braze · Salesforce 10/19 — Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain · Salesforce 10/15 — Tottenham Hotspur Launches Ask Spurs on Agentforce",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Salesforce",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "SAP",
+         "value": 2,
+         "label": "2건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-data",
+     "k": "IT 영역 · 데이터·분석",
+     "big": "5건",
+     "bl": "최근 30일 공식 발표",
+     "title": "데이터·분석, Snowflake 발표가 가장 많아요",
+     "easy": "회사·정부가 직접 낸 AX 발표 중 데이터 플랫폼·분석·거버넌스 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.",
+     "body": "최근: Snowflake 10/22 — Agentic Analytics: Building a Data Foundation for AI Agents · Snowflake 10/22 — Public Sector Data Modernization for AI Readiness · Snowflake 10/15 — Sovereign Cloud for France: Snowflake and Bleu",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Snowflake",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "Microsoft",
+         "value": 1,
+         "label": "1건"
         }
        ]
       }
@@ -2346,1928 +2053,552 @@
    ]
   },
   {
-   "id": "quantum",
-   "name": "양자",
+   "id": "ai",
+   "name": "개발 현장",
    "insights": [
     {
-     "id": "quantum-papers",
-     "k": "연구",
-     "big": "+49%",
-     "bl": "논문 수 · 1년 전과 비교",
-     "title": "양자 논문이 1년 새 +49%",
-     "easy": "양자 분야 논문이 1년 전보다 +49% 많이 나오고 있어요. 한 달에 2,014편꼴이에요.",
-     "body": "최근 3개월 한 달 평균 2,014편.",
-     "src": "arXiv quant-ph · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        1062,
-        1072,
-        1333,
-        1312,
-        1265,
-        1352,
-        1411,
-        1230,
-        1412,
-        1595,
-        1350,
-        1606,
-        1313,
-        1276,
-        1703,
-        1716,
-        1744,
-        1665,
-        1963,
-        1782,
-        2296
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 1351,
-       "to": 2013.6667,
-       "fromText": "1,351편",
-       "toText": "2,014편",
-       "fromLabel": "1년 전 같은 3개월",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "quantum-rising",
-     "k": "연구 · 빨리 늘어난 말",
-     "big": "1.5배",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 빨리 늘어난 말은 논리 큐비트 (logical qubit)",
-     "easy": "양자 논문 1,000편 중 15편이 이 말을 써요. 1년 전엔 11편이었어요.",
-     "body": "최근 3개월 양자 논문의 1.5%가 초록에 썼습니다(1년 전 1.1%).",
-     "src": "arXiv quant-ph · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0105,
-       "to": 0.0154,
-       "fromText": "1.1%",
-       "toText": "1.5%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0094,
-        0.0112,
-        0.0165,
-        0.013,
-        0.0103,
-        0.0126,
-        0.0085,
-        0.0146,
-        0.0085,
-        0.0119,
-        0.0126,
-        0.0112,
-        0.0129,
-        0.0133,
-        0.0135,
-        0.0134,
-        0.0097,
-        0.0156,
-        0.0107,
-        0.0152,
-        0.0205
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "논리 큐비트",
-         "value": 1.4641,
-         "label": "1.5배"
-        },
-        {
-         "name": "중성 원자",
-         "value": 1.2264,
-         "label": "1.2배"
-        },
-        {
-         "name": "오류 정정",
-         "value": 1.0523,
-         "label": "1.1배"
-        },
-        {
-         "name": "변분 알고리즘",
-         "value": 0.9785,
-         "label": "1.0배"
-        },
-        {
-         "name": "양자 우위",
-         "value": 0.8898,
-         "label": "0.9배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "quantum-biggest",
-     "k": "연구 · 가장 많이 쓰는 말",
-     "big": "7.2%",
-     "bl": "논문 중 이 말을 쓴 비율",
-     "title": "가장 많이 쓰이는 말은 변분 알고리즘 (variational)",
-     "easy": "양자 논문에서 가장 흔한 주제어예요. 1,000편 중 72편이 써요.",
-     "body": "1년 전 같은 3개월은 7.4%였습니다.",
-     "src": "arXiv quant-ph · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "변분 알고리즘",
-         "value": 0.0724,
-         "label": "7.2%"
-        },
-        {
-         "name": "오류 정정",
-         "value": 0.0503,
-         "label": "5.0%"
-        },
-        {
-         "name": "양자 우위",
-         "value": 0.0264,
-         "label": "2.6%"
-        },
-        {
-         "name": "중성 원자",
-         "value": 0.0158,
-         "label": "1.6%"
-        },
-        {
-         "name": "논리 큐비트",
-         "value": 0.0154,
-         "label": "1.5%"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0546,
-        0.0868,
-        0.066,
-        0.0823,
-        0.0719,
-        0.0688,
-        0.0773,
-        0.0675,
-        0.0772,
-        0.0727,
-        0.0719,
-        0.0697,
-        0.0724,
-        0.069,
-        0.064,
-        0.0699,
-        0.0791,
-        0.0829,
-        0.0815,
-        0.0612,
-        0.0745
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 0.074,
-       "to": 0.0724,
-       "fromText": "7.4%",
-       "toText": "7.2%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "quantum-falling",
-     "k": "연구 · 줄어든 말",
-     "big": "−11%",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 많이 줄어든 말은 양자 우위 (quantum advantage)",
-     "easy": "1년 전보다 덜 쓰이는 말이에요. 1,000편 중 30편에서 26편으로 줄었어요.",
-     "body": "최근 3개월 2.6%, 1년 전 3.0%.",
-     "src": "arXiv quant-ph · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0296,
-       "to": 0.0264,
-       "fromText": "3.0%",
-       "toText": "2.6%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0226,
-        0.0308,
-        0.0285,
-        0.0191,
-        0.034,
-        0.0266,
-        0.0241,
-        0.0358,
-        0.029,
-        0.0382,
-        0.0311,
-        0.023,
-        0.0213,
-        0.0266,
-        0.0264,
-        0.0321,
-        0.0224,
-        0.024,
-        0.029,
-        0.0213,
-        0.0287
-       ]
-      }
-     ]
-    },
-    {
-     "id": "quantum-pkg-fast",
-     "k": "개발자 · Python",
-     "big": "+71.2%p",
+     "id": "npm",
+     "k": "개발자 · JavaScript",
+     "big": "+17.6%p",
      "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "가장 빨리 더 내려받는 도구는 amazon‑braket‑sdk",
-     "easy": "양자 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(+85.6%).",
-     "body": "4주 다운로드 +85.6%, 대조군(requests·numpy 등) +14.3%. 다음은 cirq(+26.4%p), qutip(+12.7%p).",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
+     "title": "npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek",
+     "easy": "한 달 사이 다운로드가 +33.1% 늘었어요. 같은 기간 react 같은 인기 패키지는 +15.4% — 그보다 +17.6%p 더 빨라요.",
+     "body": "4주 다운로드 +33.1%, 같은 4주 react·lodash 같은 대조군은 +15.4%. 다음은 OpenAI Agents(+14.9%p), AI SDK용 OpenAI(+14.5%p).",
+     "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "amazon-braket-sdk",
-         "value": 0.7124,
-         "label": "+71.2%p"
+         "name": "DeepSeek",
+         "value": 0.1763,
+         "label": "+17.6%p"
         },
         {
-         "name": "cirq",
-         "value": 0.2643,
-         "label": "+26.4%p"
+         "name": "OpenAI Agents",
+         "value": 0.1488,
+         "label": "+14.9%p"
         },
         {
-         "name": "qutip",
-         "value": 0.1271,
-         "label": "+12.7%p"
+         "name": "OpenAI",
+         "value": 0.1446,
+         "label": "+14.5%p"
         },
         {
-         "name": "qiskit",
-         "value": 0.0699,
-         "label": "+7.0%p"
+         "name": "Vercel AI SDK",
+         "value": 0.1258,
+         "label": "+12.6%p"
         },
         {
-         "name": "pennylane",
-         "value": -0.1388,
-         "label": "−13.9%p"
+         "name": "Anthropic",
+         "value": 0.1227,
+         "label": "+12.3%p"
         }
        ]
       },
       {
        "kind": "series",
        "values": [
-        2224,
-        2543,
-        2070,
-        2356,
-        4306,
-        3560,
-        3819,
-        5375
+        104921,
+        110092,
+        125946,
+        127537,
+        141505,
+        158384,
+        152389,
+        165189.5,
+        177867,
+        199136,
+        207352,
+        198554,
+        232650,
+        243095,
+        263793,
+        289105,
+        307136,
+        317386,
+        323083,
+        356393,
+        421377.5,
+        443213,
+        472319,
+        494193,
+        532102,
+        555910.5
        ]
       }
      ]
     },
     {
-     "id": "quantum-pkg-big",
-     "k": "개발자 · 가장 많이",
-     "big": "3.5만",
-     "bl": "평일 하루 다운로드",
-     "title": "가장 많이 내려받는 도구는 qiskit",
-     "easy": "양자 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 3.5만번 내려받아요.",
-     "body": "4주 다운로드 +21.3%.",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
+     "id": "accel",
+     "k": "가속",
+     "big": "+20.1%p",
+     "bl": "늘어나는 속도가 빨라진 폭",
+     "title": "성장이 가장 빨라지는 쪽은 OpenAI Agents",
+     "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 +10.2%, 최근 4주엔 +30.3% 늘었어요.",
+     "body": "4주 성장률이 직전 4주 +10.2%에서 +30.3%로 올라갔습니다.",
+     "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
      "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "qiskit",
-         "value": 35124.25,
-         "label": "3.5만"
-        },
-        {
-         "name": "qutip",
-         "value": 9642.75,
-         "label": "9,643"
-        },
-        {
-         "name": "pennylane",
-         "value": 5432.5,
-         "label": "5,433"
-        },
-        {
-         "name": "amazon-braket-sdk",
-         "value": 4265,
-         "label": "4,265"
-        },
-        {
-         "name": "cirq",
-         "value": 1338,
-         "label": "1,338"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        28998,
-        30035,
-        27132,
-        29632,
-        29800,
-        35321,
-        34799,
-        40577
-       ]
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "robotics",
-   "name": "로보틱스",
-   "insights": [
-    {
-     "id": "robotics-papers",
-     "k": "연구",
-     "big": "+64%",
-     "bl": "논문 수 · 1년 전과 비교",
-     "title": "로보틱스 논문이 1년 새 +64%",
-     "easy": "로보틱스 분야 논문이 1년 전보다 +64% 많이 나오고 있어요. 한 달에 1,516편꼴이에요.",
-     "body": "최근 3개월 한 달 평균 1,516편.",
-     "src": "arXiv cs.RO · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        498,
-        722,
-        1173,
-        814,
-        1007,
-        873,
-        802,
-        785,
-        1180,
-        1031,
-        854,
-        825,
-        700,
-        1056,
-        1507,
-        970,
-        1241,
-        1520,
-        1187,
-        1170,
-        2191
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
       {
        "kind": "versus",
-       "from": 922.3333,
-       "to": 1516,
-       "fromText": "922편",
-       "toText": "1,516편",
-       "fromLabel": "1년 전 같은 3개월",
-       "toLabel": "최근 3개월"
+       "from": 0.1016,
+       "to": 0.3031,
+       "fromText": "+10.2%",
+       "toText": "+30.3%",
+       "fromLabel": "직전 4주",
+       "toLabel": "최근 4주"
+      },
+      {
+       "kind": "series",
+       "values": [
+        96182,
+        100729,
+        115892,
+        124351,
+        140803,
+        163174,
+        154508,
+        177377.5,
+        183602,
+        212074,
+        207077,
+        195612,
+        234770,
+        246553,
+        240248,
+        258123,
+        264454,
+        280049.5,
+        256522,
+        266452,
+        297391.5,
+        328444,
+        322543,
+        335222,
+        403080,
+        436116
+       ]
       }
      ]
     },
     {
-     "id": "robotics-rising",
-     "k": "연구 · 빨리 늘어난 말",
-     "big": "3.0배",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 빨리 늘어난 말은 VLA (vision-language-action)",
-     "easy": "로보틱스 논문 1,000편 중 117편이 이 말을 써요. 1년 전엔 39편이었어요.",
-     "body": "최근 3개월 로보틱스 논문의 11.7%가 초록에 썼습니다(1년 전 3.9%).",
-     "src": "arXiv cs.RO · 2025년 1월–2026년 9월",
+     "id": "provider",
+     "k": "앱에 붙이는 모델",
+     "big": "31.3%",
+     "bl": "Vercel AI SDK 공급자 중 Anthropic 비중",
+     "title": "1년 새 Anthropic 24.7% → 31.3%",
+     "easy": "AI 앱을 만들 때 연결하는 모델 회사를 100번 세면 31번이 Anthropic. 1년 전엔 25번이었어요.",
+     "body": "지금 1위는 OpenAI(32.2%), 가장 많이 내린 곳은 OpenAI(42.7% → 32.2%). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.",
+     "src": "@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주",
      "viz": [
       {
        "kind": "versus",
-       "from": 0.0391,
-       "to": 0.1167,
-       "fromText": "3.9%",
-       "toText": "11.7%",
+       "from": 0.2467,
+       "to": 0.3128,
+       "fromText": "24.7%",
+       "toText": "31.3%",
        "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
+       "toLabel": "지금"
       },
       {
-       "kind": "series",
-       "values": [
-        0.0161,
-        0.018,
-        0.0162,
-        0.0025,
-        0.0407,
-        0.0412,
-        0.0287,
-        0.0395,
-        0.0492,
-        0.0815,
-        0.0796,
-        0.0812,
-        0.0743,
-        0.1023,
-        0.0909,
-        0.0763,
-        0.1241,
-        0.1296,
-        0.0986,
-        0.1256,
-        0.126
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
+       "kind": "share",
+       "focus": 1,
+       "parts": [
         {
-         "name": "VLA",
-         "value": 2.9848,
-         "label": "3.0배"
+         "name": "OpenAI",
+         "value": 0.322
         },
         {
-         "name": "휴머노이드",
-         "value": 1.3641,
-         "label": "1.4배"
+         "name": "Anthropic",
+         "value": 0.3128
         },
         {
-         "name": "조작",
-         "value": 1.2721,
-         "label": "1.3배"
+         "name": "Google",
+         "value": 0.1986
         },
         {
-         "name": "시뮬→실제",
-         "value": 1.2017,
-         "label": "1.2배"
+         "name": "Mistral",
+         "value": 0.0445
         },
         {
-         "name": "디퓨전 정책",
-         "value": 0.8667,
-         "label": "0.9배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "robotics-biggest",
-     "k": "연구 · 가장 많이 쓰는 말",
-     "big": "29.2%",
-     "bl": "논문 중 이 말을 쓴 비율",
-     "title": "가장 많이 쓰이는 말은 조작 (manipulation)",
-     "easy": "로보틱스 논문에서 가장 흔한 주제어예요. 1,000편 중 292편이 써요.",
-     "body": "1년 전 같은 3개월은 22.9%였습니다.",
-     "src": "arXiv cs.RO · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "조작",
-         "value": 0.2916,
-         "label": "29.2%"
+         "name": "xAI",
+         "value": 0.0626
         },
         {
-         "name": "VLA",
-         "value": 0.1167,
-         "label": "11.7%"
-        },
-        {
-         "name": "휴머노이드",
-         "value": 0.0583,
-         "label": "5.8%"
-        },
-        {
-         "name": "시뮬→실제",
-         "value": 0.0382,
-         "label": "3.8%"
-        },
-        {
-         "name": "디퓨전 정책",
-         "value": 0.0179,
-         "label": "1.8%"
+         "name": "DeepSeek",
+         "value": 0.0594
         }
        ]
       },
       {
        "kind": "series",
        "values": [
-        0.1807,
-        0.2105,
-        0.1884,
-        0.1843,
-        0.2344,
-        0.2279,
-        0.2007,
-        0.2446,
-        0.2424,
-        0.2376,
-        0.2553,
-        0.2424,
-        0.2457,
-        0.2737,
-        0.2661,
-        0.2505,
-        0.2748,
-        0.3401,
-        0.2856,
-        0.2752,
-        0.314
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 0.2292,
-       "to": 0.2916,
-       "fromText": "22.9%",
-       "toText": "29.2%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "robotics-falling",
-     "k": "연구 · 줄어든 말",
-     "big": "−13%",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 많이 줄어든 말은 디퓨전 정책 (diffusion policy)",
-     "easy": "1년 전보다 덜 쓰이는 말이에요. 1,000편 중 21편에서 18편으로 줄었어요.",
-     "body": "최근 3개월 1.8%, 1년 전 2.1%.",
-     "src": "arXiv cs.RO · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0207,
-       "to": 0.0179,
-       "fromText": "2.1%",
-       "toText": "1.8%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.004,
-        0.0235,
-        0.0094,
-        0.0074,
-        0.0258,
-        0.0241,
-        0.0137,
-        0.0255,
-        0.0229,
-        0.0165,
-        0.0187,
-        0.0206,
-        0.0157,
-        0.0133,
-        0.0246,
-        0.0113,
-        0.0234,
-        0.0257,
-        0.0168,
-        0.0137,
-        0.0233
+        0.2489,
+        0.2519,
+        0.2524,
+        0.252,
+        0.2537,
+        0.2517,
+        0.2595,
+        0.2615,
+        0.2608,
+        0.2613,
+        0.2563,
+        0.2554,
+        0.2533,
+        0.2506,
+        0.2504,
+        0.249,
+        0.2511,
+        0.2542,
+        0.2599,
+        0.2664,
+        0.2698,
+        0.2741,
+        0.278,
+        0.2825,
+        0.2882,
+        0.292,
+        0.2939,
+        0.2955,
+        0.295,
+        0.2969,
+        0.2974,
+        0.2971,
+        0.2999,
+        0.3004,
+        0.3006,
+        0.2981,
+        0.2979,
+        0.2994,
+        0.3018,
+        0.3074,
+        0.3098,
+        0.3109,
+        0.3118,
+        0.3128,
+        0.3135,
+        0.3141,
+        0.3133,
+        0.3126,
+        0.3102,
+        0.3091,
+        0.3113,
+        0.3128
        ]
       }
      ]
     },
     {
-     "id": "robotics-pkg-fast",
+     "id": "pypi",
      "k": "개발자 · Python",
-     "big": "+23.9%p",
+     "big": "+8.3%p",
      "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "가장 빨리 더 내려받는 도구는 genesis‑world",
-     "easy": "로보틱스 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(+38.2%).",
-     "body": "4주 다운로드 +38.2%, 대조군(requests·numpy 등) +14.3%. 다음은 mujoco(+13.9%p), gymnasium(−2.3%p).",
+     "title": "파이썬에서 가장 빨리 크는 쪽은 Anthropic",
+     "easy": "파이썬 개발자들의 다운로드가 한 달 새 +22.7% 늘었어요. 인기 패키지(+14.3%)보다 +8.3%p 더 빨라요.",
+     "body": "4주 다운로드 +22.7%, 대조군(requests·numpy 등) +14.3%. 다음은 DSPy(+5.5%p), MCP SDK(+4.1%p).",
      "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "genesis-world",
-         "value": 0.2387,
-         "label": "+23.9%p"
+         "name": "Anthropic",
+         "value": 0.0835,
+         "label": "+8.3%p"
         },
         {
-         "name": "mujoco",
-         "value": 0.139,
-         "label": "+13.9%p"
+         "name": "DSPy",
+         "value": 0.0551,
+         "label": "+5.5%p"
         },
         {
-         "name": "gymnasium",
-         "value": -0.0229,
-         "label": "−2.3%p"
+         "name": "MCP SDK",
+         "value": 0.0413,
+         "label": "+4.1%p"
         },
         {
-         "name": "lerobot",
-         "value": -0.0268,
-         "label": "−2.7%p"
-        },
-        {
-         "name": "pybullet",
-         "value": -0.1346,
-         "label": "−13.5%p"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        3383,
-        3067,
-        2624,
-        3557,
-        4348,
-        5221,
-        5352,
-        2536
-       ]
-      }
-     ]
-    },
-    {
-     "id": "robotics-pkg-big",
-     "k": "개발자 · 가장 많이",
-     "big": "17만",
-     "bl": "평일 하루 다운로드",
-     "title": "가장 많이 내려받는 도구는 mujoco",
-     "easy": "로보틱스 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 17만번 내려받아요.",
-     "body": "4주 다운로드 +28.2%.",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "mujoco",
-         "value": 166257.25,
-         "label": "17만"
-        },
-        {
-         "name": "gymnasium",
-         "value": 152459,
-         "label": "15만"
-        },
-        {
-         "name": "pybullet",
-         "value": 12685.75,
-         "label": "1.3만"
-        },
-        {
-         "name": "lerobot",
-         "value": 9571.75,
-         "label": "9,572"
-        },
-        {
-         "name": "genesis-world",
-         "value": 4364.25,
-         "label": "4,364"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        124888,
-        113305,
-        129792,
-        150598,
-        173887,
-        138132,
-        141682,
-        211328
-       ]
-      }
-     ]
-    },
-    {
-     "id": "robotics-hf",
-     "k": "모델",
-     "big": "8.6만",
-     "bl": "30일 다운로드",
-     "title": "지금 가장 뜨는 로보틱스 모델은 nvidia/​GR00T‑N1.7‑3B",
-     "easy": "지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 로보틱스 모델이에요.",
-     "body": "robotics · 2026-02-25 공개. 다음은 LIN‑linlin/​4D‑World‑Models‑Robotic‑Manipulation, pollen‑robotics/​microduck‑policies.",
-     "src": "Hugging Face 트렌딩 · robotics · 2026-10-25",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "GR00T-N1.7-3B",
-         "value": 85602,
-         "label": "8.6만"
-        },
-        {
-         "name": "4D-World-Models-Robotic-Manipulation",
-         "value": 0,
-         "label": "0"
-        },
-        {
-         "name": "microduck-policies",
-         "value": 30421,
-         "label": "3.0만"
-        },
-        {
-         "name": "pi0.5",
-         "value": 144,
-         "label": "144"
-        },
-        {
-         "name": "flux-3-action-base",
-         "value": 2680,
-         "label": "2,680"
-        }
-       ]
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "vision",
-   "name": "비전",
-   "insights": [
-    {
-     "id": "vision-papers",
-     "k": "연구",
-     "big": "+13%",
-     "bl": "논문 수 · 1년 전과 비교",
-     "title": "비전 논문이 1년 새 +13%",
-     "easy": "비전 분야 논문이 1년 전보다 +13% 많이 나오고 있어요. 한 달에 3,322편꼴이에요.",
-     "body": "최근 3개월 한 달 평균 3,322편.",
-     "src": "arXiv cs.CV · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        2052,
-        2232,
-        3910,
-        2564,
-        3290,
-        3049,
-        2864,
-        2994,
-        2981,
-        2887,
-        3249,
-        2915,
-        2445,
-        2670,
-        4063,
-        3296,
-        3969,
-        3334,
-        3008,
-        3308,
-        3649
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 2946.3333,
-       "to": 3321.6667,
-       "fromText": "2,946편",
-       "toText": "3,322편",
-       "fromLabel": "1년 전 같은 3개월",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "vision-rising",
-     "k": "연구 · 빨리 늘어난 말",
-     "big": "4.7배",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 빨리 늘어난 말은 월드 모델 (world model)",
-     "easy": "비전 논문 1,000편 중 29편이 이 말을 써요. 1년 전엔 6편이었어요.",
-     "body": "최근 3개월 비전 논문의 2.9%가 초록에 썼습니다(1년 전 0.6%).",
-     "src": "arXiv cs.CV · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0062,
-       "to": 0.0291,
-       "fromText": "0.6%",
-       "toText": "2.9%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0044,
-        0.0049,
-        0.0079,
-        0.0039,
-        0.0073,
-        0.0131,
-        0.0056,
-        0.005,
-        0.0081,
-        0.0152,
-        0.0126,
-        0.0233,
-        0.0139,
-        0.0191,
-        0.0197,
-        0.0164,
-        0.027,
-        0.0327,
-        0.0239,
-        0.0278,
-        0.0356
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "월드 모델",
-         "value": 4.6855,
-         "label": "4.7배"
-        },
-        {
-         "name": "영상 생성",
-         "value": 1.6248,
-         "label": "1.6배"
-        },
-        {
-         "name": "비전-언어",
-         "value": 1.318,
-         "label": "1.3배"
-        },
-        {
-         "name": "가우시안 스플래팅",
-         "value": 1.0062,
-         "label": "1.0배"
-        },
-        {
-         "name": "분할",
-         "value": 0.871,
-         "label": "0.9배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "vision-biggest",
-     "k": "연구 · 가장 많이 쓰는 말",
-     "big": "15.3%",
-     "bl": "논문 중 이 말을 쓴 비율",
-     "title": "가장 많이 쓰이는 말은 비전-언어 (vision-language)",
-     "easy": "비전 논문에서 가장 흔한 주제어예요. 1,000편 중 153편이 써요.",
-     "body": "1년 전 같은 3개월은 11.6%였습니다.",
-     "src": "arXiv cs.CV · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "비전-언어",
-         "value": 0.1535,
-         "label": "15.3%"
-        },
-        {
-         "name": "분할",
-         "value": 0.1491,
-         "label": "14.9%"
-        },
-        {
-         "name": "영상 생성",
-         "value": 0.0365,
-         "label": "3.6%"
-        },
-        {
-         "name": "가우시안 스플래팅",
-         "value": 0.0323,
-         "label": "3.2%"
-        },
-        {
-         "name": "월드 모델",
-         "value": 0.0291,
-         "label": "2.9%"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0809,
-        0.0932,
-        0.0962,
-        0.0878,
-        0.1246,
-        0.1259,
-        0.1009,
-        0.1202,
-        0.1281,
-        0.1399,
-        0.1323,
-        0.1269,
-        0.1472,
-        0.1551,
-        0.1496,
-        0.1484,
-        0.1562,
-        0.1449,
-        0.1449,
-        0.1584,
-        0.157
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 0.1164,
-       "to": 0.1535,
-       "fromText": "11.6%",
-       "toText": "15.3%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "vision-falling",
-     "k": "연구 · 줄어든 말",
-     "big": "−13%",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 많이 줄어든 말은 분할 (segmentation)",
-     "easy": "1년 전보다 덜 쓰이는 말이에요. 1,000편 중 171편에서 149편으로 줄었어요.",
-     "body": "최근 3개월 14.9%, 1년 전 17.1%.",
-     "src": "arXiv cs.CV · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.1712,
-       "to": 0.1491,
-       "fromText": "17.1%",
-       "toText": "14.9%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.1764,
-        0.1501,
-        0.1537,
-        0.1654,
-        0.1368,
-        0.1561,
-        0.1798,
-        0.1733,
-        0.1603,
-        0.1458,
-        0.1425,
-        0.1441,
-        0.1534,
-        0.1348,
-        0.1405,
-        0.1447,
-        0.1403,
-        0.1329,
-        0.1519,
-        0.1545,
-        0.1409
-       ]
-      }
-     ]
-    },
-    {
-     "id": "vision-pkg-fast",
-     "k": "개발자 · Python",
-     "big": "+19.7%p",
-     "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "가장 빨리 더 내려받는 도구는 supervision",
-     "easy": "비전 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(+34.0%).",
-     "body": "4주 다운로드 +34.0%, 대조군(requests·numpy 등) +14.3%. 다음은 ultralytics(−2.2%p), diffusers(−5.6%p).",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "supervision",
-         "value": 0.1971,
-         "label": "+19.7%p"
-        },
-        {
-         "name": "ultralytics",
-         "value": -0.0222,
-         "label": "−2.2%p"
-        },
-        {
-         "name": "diffusers",
-         "value": -0.0557,
-         "label": "−5.6%p"
-        },
-        {
-         "name": "timm",
-         "value": -0.0573,
-         "label": "−5.7%p"
-        },
-        {
-         "name": "opencv-python",
-         "value": -0.089,
-         "label": "−8.9%p"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        28112,
-        32798,
-        27328,
-        29965,
-        33313,
-        39996,
-        42821,
-        42316
-       ]
-      }
-     ]
-    },
-    {
-     "id": "vision-pkg-big",
-     "k": "개발자 · 가장 많이",
-     "big": "118만",
-     "bl": "평일 하루 다운로드",
-     "title": "가장 많이 내려받는 도구는 opencv‑python",
-     "easy": "비전 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 118만번 내려받아요.",
-     "body": "4주 다운로드 +5.4%.",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "opencv-python",
-         "value": 1180319.5,
-         "label": "118만"
-        },
-        {
-         "name": "timm",
-         "value": 416453.5,
-         "label": "42만"
-        },
-        {
-         "name": "diffusers",
-         "value": 195399,
-         "label": "20만"
-        },
-        {
-         "name": "ultralytics",
-         "value": 163138.5,
-         "label": "16만"
-        },
-        {
-         "name": "supervision",
-         "value": 39611.5,
-         "label": "4.0만"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        1099684,
-        1168697,
-        1120970,
-        1088343,
-        1104096,
-        1175472,
-        1212921,
-        1228789
-       ]
-      }
-     ]
-    },
-    {
-     "id": "vision-hf",
-     "k": "모델",
-     "big": "209만",
-     "bl": "30일 다운로드",
-     "title": "지금 가장 뜨는 비전 모델은 Lightricks/​LTX‑2.5",
-     "easy": "지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 비전 모델이에요.",
-     "body": "image‑to‑video · 2026-07-23 공개. 다음은 OpenMOSS‑Team/​MOSS‑Image‑SFT, abenzerps/​Qwen‑Image‑2.1‑Uncensored‑Quantized.",
-     "src": "Hugging Face 트렌딩 · text-to-image·image-to-video · 2026-10-25",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "LTX-2.5",
-         "value": 2087721,
-         "label": "209만"
-        },
-        {
-         "name": "MOSS-Image-SFT",
-         "value": 9717,
-         "label": "9,717"
-        },
-        {
-         "name": "Qwen-Image-2.1-Uncensored-Quantized",
-         "value": 2303585,
-         "label": "230만"
-        },
-        {
-         "name": "MOSS-Image-Base",
-         "value": 6943,
-         "label": "6,943"
-        },
-        {
-         "name": "Kromoss",
-         "value": 21143,
-         "label": "2.1만"
-        }
-       ]
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "security",
-   "name": "보안",
-   "insights": [
-    {
-     "id": "security-papers",
-     "k": "연구",
-     "big": "+54%",
-     "bl": "논문 수 · 1년 전과 비교",
-     "title": "보안 논문이 1년 새 +54%",
-     "easy": "보안 분야 논문이 1년 전보다 +54% 많이 나오고 있어요. 한 달에 1,016편꼴이에요.",
-     "body": "최근 3개월 한 달 평균 1,016편.",
-     "src": "arXiv cs.CR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        538,
-        630,
-        575,
-        631,
-        776,
-        705,
-        607,
-        623,
-        748,
-        812,
-        623,
-        644,
-        676,
-        669,
-        802,
-        854,
-        1081,
-        964,
-        854,
-        971,
-        1222
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 659.3333,
-       "to": 1015.6667,
-       "fromText": "659편",
-       "toText": "1,016편",
-       "fromLabel": "1년 전 같은 3개월",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "security-rising",
-     "k": "연구 · 빨리 늘어난 말",
-     "big": "1.5배",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 빨리 늘어난 말은 프롬프트 인젝션 (prompt injection)",
-     "easy": "보안 논문 1,000편 중 46편이 이 말을 써요. 1년 전엔 30편이었어요.",
-     "body": "최근 3개월 보안 논문의 4.6%가 초록에 썼습니다(1년 전 3.0%).",
-     "src": "arXiv cs.CR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.03,
-       "to": 0.0461,
-       "fromText": "3.0%",
-       "toText": "4.6%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0037,
-        0.0111,
-        0.0122,
-        0.0254,
-        0.0296,
-        0.0213,
-        0.0297,
-        0.0337,
-        0.0267,
-        0.0345,
-        0.0289,
-        0.0373,
-        0.037,
-        0.0523,
-        0.0524,
-        0.0492,
-        0.0601,
-        0.0622,
-        0.0422,
-        0.0463,
-        0.0499
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "프롬프트 인젝션",
-         "value": 1.5363,
-         "label": "1.5배"
-        },
-        {
-         "name": "영지식 증명",
-         "value": 1.042,
-         "label": "1.0배"
-        },
-        {
-         "name": "양자내성암호",
-         "value": 0.9759,
-         "label": "1.0배"
-        },
-        {
-         "name": "탈옥",
-         "value": 0.8356,
-         "label": "0.8배"
-        },
-        {
-         "name": "연합 학습",
-         "value": 0.5012,
-         "label": "0.5배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "security-biggest",
-     "k": "연구 · 가장 많이 쓰는 말",
-     "big": "4.6%",
-     "bl": "논문 중 이 말을 쓴 비율",
-     "title": "가장 많이 쓰이는 말은 프롬프트 인젝션 (prompt injection)",
-     "easy": "보안 논문에서 가장 흔한 주제어예요. 1,000편 중 46편이 써요.",
-     "body": "1년 전 같은 3개월은 3.0%였습니다.",
-     "src": "arXiv cs.CR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "프롬프트 인젝션",
-         "value": 0.0461,
-         "label": "4.6%"
-        },
-        {
-         "name": "탈옥",
-         "value": 0.0306,
-         "label": "3.1%"
-        },
-        {
-         "name": "양자내성암호",
-         "value": 0.0257,
-         "label": "2.6%"
-        },
-        {
-         "name": "연합 학습",
-         "value": 0.024,
-         "label": "2.4%"
-        },
-        {
-         "name": "영지식 증명",
-         "value": 0.0166,
-         "label": "1.7%"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0037,
-        0.0111,
-        0.0122,
-        0.0254,
-        0.0296,
-        0.0213,
-        0.0297,
-        0.0337,
-        0.0267,
-        0.0345,
-        0.0289,
-        0.0373,
-        0.037,
-        0.0523,
-        0.0524,
-        0.0492,
-        0.0601,
-        0.0622,
-        0.0422,
-        0.0463,
-        0.0499
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 0.03,
-       "to": 0.0461,
-       "fromText": "3.0%",
-       "toText": "4.6%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "security-falling",
-     "k": "연구 · 줄어든 말",
-     "big": "−50%",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 많이 줄어든 말은 연합 학습 (federated learning)",
-     "easy": "1년 전보다 덜 쓰이는 말이에요. 1,000편 중 48편에서 24편으로 줄었어요.",
-     "body": "최근 3개월 2.4%, 1년 전 4.8%.",
-     "src": "arXiv cs.CR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0479,
-       "to": 0.024,
-       "fromText": "4.8%",
-       "toText": "2.4%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0632,
-        0.0619,
-        0.0713,
-        0.0396,
-        0.0593,
-        0.0468,
-        0.0379,
-        0.0498,
-        0.0561,
-        0.032,
-        0.0546,
-        0.0373,
-        0.0385,
-        0.0359,
-        0.0424,
-        0.0293,
-        0.0305,
-        0.0342,
-        0.0234,
-        0.0257,
-        0.0229
-       ]
-      }
-     ]
-    },
-    {
-     "id": "security-pkg-fast",
-     "k": "개발자 · Python",
-     "big": "+4.0%p",
-     "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "가장 빨리 더 내려받는 도구는 garak",
-     "easy": "보안 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(+18.4%).",
-     "body": "4주 다운로드 +18.4%, 대조군(requests·numpy 등) +14.3%. 다음은 llm‑guard(+0.4%p), bandit(−6.2%p).",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "garak",
-         "value": 0.0404,
-         "label": "+4.0%p"
-        },
-        {
-         "name": "llm-guard",
-         "value": 0.0042,
-         "label": "+0.4%p"
-        },
-        {
-         "name": "bandit",
-         "value": -0.0615,
-         "label": "−6.2%p"
-        },
-        {
-         "name": "semgrep",
-         "value": -0.1131,
-         "label": "−11.3%p"
-        },
-        {
-         "name": "presidio-analyzer",
-         "value": -0.1772,
-         "label": "−17.7%p"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        1330,
-        1271,
-        1629,
-        1471,
-        1516,
-        1746,
-        1557,
-        1930
-       ]
-      }
-     ]
-    },
-    {
-     "id": "security-pkg-big",
-     "k": "개발자 · 가장 많이",
-     "big": "102만",
-     "bl": "평일 하루 다운로드",
-     "title": "가장 많이 내려받는 도구는 bandit",
-     "easy": "보안 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 102만번 내려받아요.",
-     "body": "4주 다운로드 +8.2%.",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "bandit",
-         "value": 1020266.5,
-         "label": "102만"
-        },
-        {
-         "name": "semgrep",
-         "value": 811539.25,
-         "label": "81만"
-        },
-        {
-         "name": "presidio-analyzer",
-         "value": 211060.5,
-         "label": "21만"
-        },
-        {
-         "name": "llm-guard",
-         "value": 4413.75,
-         "label": "4,414"
-        },
-        {
-         "name": "garak",
-         "value": 1687.25,
-         "label": "1,687"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        834517,
-        1010974,
-        1011557,
-        915251,
-        918478,
-        1024357,
-        1047112,
-        1091119
-       ]
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "systems",
-   "name": "시스템",
-   "insights": [
-    {
-     "id": "systems-papers",
-     "k": "연구",
-     "big": "+46%",
-     "bl": "논문 수 · 1년 전과 비교",
-     "title": "시스템 논문이 1년 새 +46%",
-     "easy": "시스템 분야 논문이 1년 전보다 +46% 많이 나오고 있어요. 한 달에 634편꼴이에요.",
-     "body": "최근 3개월 한 달 평균 634편.",
-     "src": "arXiv cs.DC·cs.AR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "series",
-       "values": [
-        358,
-        393,
-        452,
-        435,
-        460,
-        411,
-        422,
-        415,
-        465,
-        452,
-        490,
-        432,
-        395,
-        435,
-        518,
-        581,
-        649,
-        624,
-        562,
-        575,
-        764
-       ],
-       "formats": [
-        "columns",
-        "area",
-        "line"
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 434,
-       "to": 633.6667,
-       "fromText": "434편",
-       "toText": "634편",
-       "fromLabel": "1년 전 같은 3개월",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "systems-rising",
-     "k": "연구 · 빨리 늘어난 말",
-     "big": "2.9배",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 빨리 늘어난 말은 KV 캐시 (KV cache)",
-     "easy": "시스템 논문 1,000편 중 50편이 이 말을 써요. 1년 전엔 18편이었어요.",
-     "body": "최근 3개월 시스템 논문의 5.0%가 초록에 썼습니다(1년 전 1.8%).",
-     "src": "arXiv cs.DC·cs.AR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.0176,
-       "to": 0.0503,
-       "fromText": "1.8%",
-       "toText": "5.0%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0112,
-        0.0204,
-        0.0199,
-        0.023,
-        0.0152,
-        0.0146,
-        0.0095,
-        0.0241,
-        0.0194,
-        0.0177,
-        0.0286,
-        0.0417,
-        0.043,
-        0.0414,
-        0.027,
-        0.0413,
-        0.0693,
-        0.0529,
-        0.0356,
-        0.0539,
-        0.0615
-       ]
-      },
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "KV 캐시",
-         "value": 2.8532,
-         "label": "2.9배"
-        },
-        {
-         "name": "칩렛",
-         "value": 1.6053,
-         "label": "1.6배"
-        },
-        {
-         "name": "LLM 추론",
-         "value": 1.1934,
-         "label": "1.2배"
-        },
-        {
-         "name": "가속기",
-         "value": 0.8375,
-         "label": "0.8배"
-        },
-        {
-         "name": "서버리스",
-         "value": 0.6872,
-         "label": "0.7배"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "systems-biggest",
-     "k": "연구 · 가장 많이 쓰는 말",
-     "big": "18.4%",
-     "bl": "논문 중 이 말을 쓴 비율",
-     "title": "가장 많이 쓰이는 말은 가속기 (accelerator)",
-     "easy": "시스템 논문에서 가장 흔한 주제어예요. 1,000편 중 184편이 써요.",
-     "body": "1년 전 같은 3개월은 21.9%였습니다.",
-     "src": "arXiv cs.DC·cs.AR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "가속기",
-         "value": 0.1837,
-         "label": "18.4%"
-        },
-        {
-         "name": "KV 캐시",
-         "value": 0.0503,
-         "label": "5.0%"
-        },
-        {
-         "name": "LLM 추론",
-         "value": 0.0473,
-         "label": "4.7%"
-        },
-        {
-         "name": "서버리스",
-         "value": 0.011,
-         "label": "1.1%"
-        },
-        {
-         "name": "칩렛",
-         "value": 0.0101,
-         "label": "1.0%"
-        }
-       ]
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.1816,
-        0.2443,
-        0.2146,
-        0.2115,
-        0.1957,
-        0.2141,
-        0.2109,
-        0.2193,
-        0.228,
-        0.2058,
-        0.2837,
-        0.2407,
-        0.2076,
-        0.2138,
-        0.2066,
-        0.2341,
-        0.2034,
-        0.2035,
-        0.1797,
-        0.1948,
-        0.1767
-       ]
-      },
-      {
-       "kind": "versus",
-       "from": 0.2194,
-       "to": 0.1837,
-       "fromText": "21.9%",
-       "toText": "18.4%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      }
-     ]
-    },
-    {
-     "id": "systems-falling",
-     "k": "연구 · 줄어든 말",
-     "big": "−31%",
-     "bl": "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-     "title": "가장 많이 줄어든 말은 서버리스 (serverless)",
-     "easy": "1년 전보다 덜 쓰이는 말이에요. 1,000편 중 16편에서 11편으로 줄었어요.",
-     "body": "최근 3개월 1.1%, 1년 전 1.6%.",
-     "src": "arXiv cs.DC·cs.AR · 2025년 1월–2026년 9월",
-     "viz": [
-      {
-       "kind": "versus",
-       "from": 0.016,
-       "to": 0.011,
-       "fromText": "1.6%",
-       "toText": "1.1%",
-       "fromLabel": "1년 전",
-       "toLabel": "최근 3개월"
-      },
-      {
-       "kind": "series",
-       "values": [
-        0.0168,
-        0.0229,
-        0.0133,
-        0.0184,
-        0.0196,
-        0.0024,
-        0.019,
-        0.0096,
-        0.0194,
-        0.0199,
-        0.0122,
-        0.0278,
-        0.0152,
-        0.0138,
-        0.0174,
-        0.012,
-        0.0139,
-        0.0128,
-        0.0142,
-        0.0122,
-        0.0065
-       ]
-      }
-     ]
-    },
-    {
-     "id": "systems-pkg-fast",
-     "k": "개발자 · Python",
-     "big": "+2.3%p",
-     "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-     "title": "가장 빨리 더 내려받는 도구는 ray",
-     "easy": "시스템 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(+16.6%).",
-     "body": "4주 다운로드 +16.6%, 대조군(requests·numpy 등) +14.3%. 다음은 deepspeed(−9.2%p), triton(−10.8%p).",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "ray",
-         "value": 0.0226,
+         "name": "Transformers",
+         "value": 0.023,
          "label": "+2.3%p"
         },
         {
-         "name": "deepspeed",
-         "value": -0.0919,
-         "label": "−9.2%p"
-        },
-        {
-         "name": "triton",
-         "value": -0.108,
-         "label": "−10.8%p"
-        },
-        {
-         "name": "vLLM",
-         "value": -0.2023,
-         "label": "−20.2%p"
-        },
-        {
-         "name": "flash-attn",
-         "value": -0.2853,
-         "label": "−28.5%p"
+         "name": "LangGraph",
+         "value": 0.0177,
+         "label": "+1.8%p"
         }
        ]
       },
       {
        "kind": "series",
        "values": [
-        434078,
-        456687,
-        484422,
-        471230,
-        509981,
-        534896,
-        559638,
-        548432
+        4951747,
+        5158821,
+        5470783,
+        5381255,
+        5748442,
+        6520791,
+        6638591,
+        6810853
        ]
       }
      ]
     },
     {
-     "id": "systems-pkg-big",
-     "k": "개발자 · 가장 많이",
-     "big": "160만",
-     "bl": "평일 하루 다운로드",
-     "title": "가장 많이 내려받는 도구는 triton",
-     "easy": "시스템 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 160만번 내려받아요.",
-     "body": "4주 다운로드 +3.5%.",
-     "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
+     "id": "arxiv",
+     "k": "연구",
+     "big": "3.2배",
+     "bl": "이 말을 쓰는 AI 논문 비율 · 1년 전과 비교",
+     "title": "연구자들이 가장 빠르게 더 쓰는 말은 월드 모델 (world model)",
+     "easy": "AI 논문 1,000편 중 16편이 이 말을 써요. 1년 전엔 5편이었어요.",
+     "body": "최근 3개월 AI 논문의 1.6%가 초록에 썼습니다(1년 전 0.5%). 가장 많이 쓰인 말은 에이전트 (agent)(21.1%).",
+     "src": "arXiv cs.AI·cs.CL·cs.LG · 2023년 1월–2026년 9월",
      "viz": [
       {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "triton",
-         "value": 1596075,
-         "label": "160만"
-        },
-        {
-         "name": "ray",
-         "value": 538236.75,
-         "label": "54만"
-        },
-        {
-         "name": "vLLM",
-         "value": 67202,
-         "label": "6.7만"
-        },
-        {
-         "name": "deepspeed",
-         "value": 42267.75,
-         "label": "4.2만"
-        },
-        {
-         "name": "flash-attn",
-         "value": 10278.5,
-         "label": "1.0만"
-        }
-       ]
+       "kind": "versus",
+       "from": 0.0051,
+       "to": 0.0161,
+       "fromText": "0.5%",
+       "toText": "1.6%",
+       "fromLabel": "1년 전",
+       "toLabel": "최근 3개월"
       },
       {
        "kind": "series",
        "values": [
-        1551951,
-        1590680,
-        1519754,
-        1503669,
-        1481313,
-        1572802,
-        1585952,
-        1744233
+        0.0015,
+        0.0025,
+        0.0023,
+        0.0037,
+        0.002,
+        0.0038,
+        0.0024,
+        0.0024,
+        0.0017,
+        0.0034,
+        0.0023,
+        0.0037,
+        0.0022,
+        0.0023,
+        0.0031,
+        0.0029,
+        0.0047,
+        0.005,
+        0.0027,
+        0.0013,
+        0.0027,
+        0.0047,
+        0.0049,
+        0.0032,
+        0.0042,
+        0.0036,
+        0.0065,
+        0.0041,
+        0.005,
+        0.0066,
+        0.0053,
+        0.0039,
+        0.0061,
+        0.0064,
+        0.0085,
+        0.0111,
+        0.0073,
+        0.0106,
+        0.0103,
+        0.009,
+        0.0118,
+        0.0164,
+        0.016,
+        0.0148,
+        0.0175
+       ]
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "월드 모델",
+         "value": 3.1518,
+         "label": "3.2배"
+        },
+        {
+         "name": "에이전트",
+         "value": 1.691,
+         "label": "1.7배"
+        },
+        {
+         "name": "체화",
+         "value": 1.4104,
+         "label": "1.4배"
+        },
+        {
+         "name": "MCP",
+         "value": 1.1789,
+         "label": "1.2배"
+        },
+        {
+         "name": "테스트 시점 연산",
+         "value": 1.1682,
+         "label": "1.2배"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hf",
+     "k": "오픈 모델",
+     "big": "45.7%",
+     "bl": "텍스트 생성 모델 다운로드 중 Qwen 계열",
+     "title": "오픈 텍스트 생성 모델 다운로드의 45.7%는 Qwen 계열",
+     "easy": "오픈 AI 모델을 10번 내려받으면 약 5번이 Qwen 모델이에요.",
+     "body": "다음은 openai-community(5.6%), google(4.7%). 지금 가장 뜨는 모델은 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017(image‑text‑to‑text, 2026-10-17 공개).",
+     "src": "Hugging Face 다운로드 상위 300 · 2026-10-25",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Qwen",
+         "value": 0.4569
+        },
+        {
+         "name": "openai-community",
+         "value": 0.0557
+        },
+        {
+         "name": "google",
+         "value": 0.0475
+        },
+        {
+         "name": "deepseek-ai",
+         "value": 0.0455
+        },
+        {
+         "name": "lmstudio-community",
+         "value": 0.0397
+        },
+        {
+         "name": "그 밖",
+         "value": 0.3546
+        }
+       ]
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Qwen",
+         "value": 0.4569,
+         "label": "45.7%"
+        },
+        {
+         "name": "openai-community",
+         "value": 0.0557,
+         "label": "5.6%"
+        },
+        {
+         "name": "google",
+         "value": 0.0475,
+         "label": "4.7%"
+        },
+        {
+         "name": "deepseek-ai",
+         "value": 0.0455,
+         "label": "4.6%"
+        },
+        {
+         "name": "lmstudio-community",
+         "value": 0.0397,
+         "label": "4.0%"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "capex",
+     "k": "자본",
+     "big": "$165.1B",
+     "bl": "빅테크 4사 설비투자 · 2026년 2분기",
+     "title": "AI 인프라에 들어가는 돈, 1년 전보다 +87%",
+     "easy": "마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요. 1년 전보다 +87% 많아요.",
+     "body": "Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 $510.7B(1년 전 $291.3B). 가장 빨리 늘린 곳은 Microsoft(+110%).",
+     "src": "SEC 공시 · 2019년 1분기–2026년 2분기",
+     "viz": [
+      {
+       "kind": "series",
+       "values": [
+        14330000000,
+        17372000000,
+        18346000000,
+        19009000000,
+        20125000000,
+        20849000000,
+        25065000000,
+        29137000000,
+        27416000000,
+        30877000000,
+        32723000000,
+        36583000000,
+        35518000000,
+        36995000000,
+        39312000000,
+        39259000000,
+        33926000000,
+        33420000000,
+        36947000000,
+        42934000000,
+        44289000000,
+        52852000000,
+        58862000000,
+        72339000000,
+        71902000000,
+        88246000000,
+        97271000000,
+        118632000000,
+        129750000000,
+        165050000000
+       ],
+       "formats": [
+        "columns",
+        "area",
+        "line"
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 291349000000,
+       "to": 510703000000,
+       "fromText": "$291.3B",
+       "toText": "$510.7B",
+       "fromLabel": "1년 전 4개 분기",
+       "toLabel": "최근 4개 분기"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Microsoft",
+         "value": 1.0963,
+         "label": "+110%"
+        },
+        {
+         "name": "Alphabet",
+         "value": 1.0014,
+         "label": "+100%"
+        },
+        {
+         "name": "Meta",
+         "value": 0.821,
+         "label": "+82%"
+        },
+        {
+         "name": "Amazon",
+         "value": 0.6844,
+         "label": "+68%"
+        }
        ]
       }
      ]
@@ -4596,54 +2927,6 @@
    }
   },
   {
-   "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
-   "subject": "pkg:amazon-braket-sdk",
-   "kind": "급증",
-   "tier": "big",
-   "score": 90.9,
-   "topic": "quantum",
-   "headline": "지난주 amazon‑braket‑sdk 다운로드가 평소의 2.1배",
-   "card": {
-    "id": "ev-surge-amazon-braket-sdk",
-    "k": "빅 케이스 · PyPI 다운로드",
-    "big": "2.1배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 amazon‑braket‑sdk 다운로드가 평소의 2.1배",
-    "easy": "평소 한 주보다 2.1배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 5,375회, 직전 7주 평소는 2,543회. 같은 주 대조군은 평소의 1.16배였습니다.",
-    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       2224,
-       2543,
-       2070,
-       2356,
-       4306,
-       3560,
-       3819,
-       5375
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 2543,
-      "to": 5375,
-      "fromText": "2,543",
-      "toText": "5,375",
-      "fromLabel": "직전 7주 평소",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
    "key": "surge:PyPI:faster-whisper:2026-10-12",
    "subject": "pkg:faster-whisper",
    "kind": "급증",
@@ -4830,102 +3113,6 @@
       "fromText": "37만",
       "toText": "43만",
       "fromLabel": "이전 최고",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "surge:PyPI:mujoco:2026-10-12",
-   "subject": "pkg:mujoco",
-   "kind": "증가",
-   "tier": "small",
-   "score": 65.8,
-   "topic": "robotics",
-   "headline": "지난주 mujoco 다운로드가 평소의 1.5배",
-   "card": {
-    "id": "ev-surge-mujoco",
-    "k": "작은 변화 · PyPI 다운로드",
-    "big": "1.5배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 mujoco 다운로드가 평소의 1.5배",
-    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 21만회, 직전 7주 평소는 14만회. 같은 주 대조군은 평소의 1.16배였습니다.",
-    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       124888,
-       113305,
-       129792,
-       150598,
-       173887,
-       138132,
-       141682,
-       211328
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 138132,
-      "to": 211328,
-      "fromText": "14만",
-      "toText": "21만",
-      "fromLabel": "직전 7주 평소",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "surge:PyPI:qutip:2026-10-12",
-   "subject": "pkg:qutip",
-   "kind": "증가",
-   "tier": "small",
-   "score": 61.9,
-   "topic": "quantum",
-   "headline": "지난주 qutip 다운로드가 평소의 1.4배",
-   "card": {
-    "id": "ev-surge-qutip",
-    "k": "작은 변화 · PyPI 다운로드",
-    "big": "1.4배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 qutip 다운로드가 평소의 1.4배",
-    "easy": "평소 한 주보다 1.4배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 1.2만회, 직전 7주 평소는 8,037회. 같은 주 대조군은 평소의 1.16배였습니다.",
-    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       8037,
-       7879,
-       7572,
-       6870,
-       8898,
-       9310,
-       8791,
-       11572
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 8037,
-      "to": 11572,
-      "fromText": "8,037",
-      "toText": "1.2만",
-      "fromLabel": "직전 7주 평소",
       "toLabel": "지난주"
      }
     ]
@@ -5191,6 +3378,41 @@
    "text": "오픈 텍스트 생성 모델 다운로드 중 제작사별 몫(Hugging Face, 2026-10-25): Qwen 45.7%, openai-community 5.6%, google 4.7%, deepseek-ai 4.6%, lmstudio-community 4.0%"
   },
   {
+   "group": "domain",
+   "id": "dom-agents",
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: SAP 7건, McKinsey 6건, Snowflake 3건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-cloud",
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 19건 · 발표가 많은 곳: NVIDIA 4건, 과학기술정보통신부 3건, Databricks 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-security",
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Anthropic 3건, OpenAI 2건, Snowflake 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-erp",
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 10건 · 발표가 많은 곳: SAP 7건, McKinsey 2건, Capgemini 1건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-work",
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 8건 · 발표가 많은 곳: OpenAI 4건, McKinsey 2건, Salesforce 1건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-crm",
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 5건 · 발표가 많은 곳: Salesforce 3건, SAP 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-data",
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 5건 · 발표가 많은 곳: Snowflake 3건, 과학기술정보통신부 1건, Microsoft 1건"
+  },
+  {
    "group": "radar",
    "id": "npm",
    "text": "개발자 · JavaScript — npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek. 한 달 사이 다운로드가 +33.1% 늘었어요. 같은 기간 react 같은 인기 패키지는 +15.4% — 그보다 +17.6%p 더 빨라요. 4주 다운로드 +33.1%, 같은 4주 react·lodash 같은 대조군은 +15.4%. 다음은 OpenAI Agents(+14.9%p), AI SDK용 OpenAI(+14.5%p)."
@@ -5236,7 +3458,11 @@
    "title": "국가 인공지능 데이터의 체계적 관리·활용을 위한 ｢인공지능 기본법｣, ｢데이터산업법｣ 개정안 국무회의 통과",
    "summary": "- ｢인공지능 기본법｣ 개정으로 정부사업 구축·산출 인공지능 학습용데이터의 확보·제공 확대 - ｢데이터 산업법｣ 개정으로 공공·민간 데이터 소재 정보의 통합 제공 강화",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187861",
-   "score": 7
+   "score": 7,
+   "domains": [
+    "데이터·분석",
+    "보안·규제"
+   ]
   },
   {
    "id": "f47072a36f",
@@ -5247,7 +3473,11 @@
    "title": "NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents",
    "summary": "Demand from AI-natives is pulling the European AI cloud ecosystem forward faster than ever. Developers need compute closer to their data, open models they can customize and serve at scale, and full-stack infrastructure that is secure by design. NVIDIA Cloud Partners across Europe, the Nordics, Africa, and Central Asia are expanding regional compute capacity for […]",
    "link": "https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/",
-   "score": 6
+   "score": 6,
+   "domains": [
+    "클라우드·인프라",
+    "AI 에이전트"
+   ]
   },
   {
    "id": "66bacdc777",
@@ -5258,7 +3488,12 @@
    "title": "Sovereign Cloud for France: Snowflake and Bleu",
    "summary": "Snowflake announces its intent to partner with Bleu to bring AI Data Cloud capabilities to France's regulated markets on sovereign infrastructure.",
    "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/snowflake-bleu-sovereign-cloud-france",
-   "score": 6
+   "score": 6,
+   "domains": [
+    "클라우드·인프라",
+    "데이터·분석",
+    "보안·규제"
+   ]
   },
   {
    "id": "387ffd5d5b",
@@ -5269,7 +3504,8 @@
    "title": "삼성전자, ‘실리콘밸리 미래 통신 서밋 2026’ 개최",
    "summary": "삼성전자가 현지시간 14일부터 15일까지 미국 실리콘밸리 마운틴뷰에서 글로벌 통신 업계 파트너들과 차세대 네트워크의 미래를 논의하는 자리를 마련한다. 삼성전자는 14일에 ‘파트너 데이(Partner Day)’를 진행했고, 15일에는 ‘실리콘밸리 미래 통신 서밋 2026(Silicon Valley Future Wireless Summit 2026)’을 개최한다. 이번 행사에는 주요 이동통신사∙제조사∙정부 기관∙학계 리더 등 100여 명의 통신 전문가들이 참석해 AI와 다가올 6G 시대 소프트웨어 기반의 네트워크 진화 […]",
    "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1%ec%a0%84%ec%9e%90-%ec%8b%a4%eb%a6%ac%ec%bd%98%eb%b0%b8%eb%a6%ac-%eb%af%b8%eb%9e%98-%ed%86%b5%ec%8b%a0-%ec%84%9c%eb%b0%8b-2026-%ea%b0%9c%ec%b5%9c",
-   "score": 5
+   "score": 5,
+   "domains": []
   },
   {
    "id": "88d3f2de2b",
@@ -5280,7 +3516,11 @@
    "title": "AI sovereignty: preserving UK agency in an AI-enabled world",
    "summary": "This letter provides advice to the Minister for AI on how the UK can build capability to make strategic choices about current and future AI technology.",
    "link": "https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world",
-   "score": 4
+   "score": 4,
+   "domains": [
+    "클라우드·인프라",
+    "보안·규제"
+   ]
   },
   {
    "id": "aa57562f0e",
@@ -5291,7 +3531,8 @@
    "title": "물리적 인공지능(피지컬 AI) 기술·산업·정책·투자를 한자리에 「물리적 인공지능 기술 주간(피지컬 AI Tech Week)」 13일 개막",
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스)를 중심으로 정부·산업계·연구계가 함께하는 종합 협력의 장- 범부처 사업설명회, 국제 기술강연, 협력체 교류(얼라이언스 네트워킹)로 실증·사업화 연계 - 물리적 인공지능(피지컬 AI) 기술전시, 이야기 공연(토크 콘서트) 등을 통해 국민이 체감하는 물리적 인공지능(피지컬 AI ) 소개",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187856",
-   "score": 4
+   "score": 4,
+   "domains": []
   },
   {
    "id": "15c1f8ef7a",
@@ -5302,7 +3543,10 @@
    "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
    "summary": "OpenAI and Poland’s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
    "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "보안·규제"
+   ]
   },
   {
    "id": "b21a97b1b2",
@@ -5313,7 +3557,10 @@
    "title": "Kazakhstan Expands Compute for Its AI Future",
    "summary": "Kazakhstan’s AI ecosystem is moving from infrastructure plans to deployment. The shift is visible across the full AI stack — from infrastructure to models to applications. The announcements below — coinciding with a visit to Astana by NVIDIA founder and CEO Jensen Huang — point to the nation’s increasing supply of accelerated computing, along with […]",
    "link": "https://blogs.nvidia.com/blog/kazakhstan-ai-compute-ecosystem/",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "클라우드·인프라"
+   ]
   },
   {
    "id": "381130e24d",
@@ -5324,7 +3571,8 @@
    "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
    "summary": "To help developers rapidly build world models, which help physical AI systems understand and simulate the real world, NVIDIA has expanded the Cosmos platform with new training tools, simulation checkpoints and Cosmos Data Factory blueprints. Ranking top five on six different open models leaderboards, the NVIDIA Cosmos platform gives world model builders the frontier open […]",
    "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
-   "score": 3
+   "score": 3,
+   "domains": []
   },
   {
    "id": "ba6fa07d67",
@@ -5335,7 +3583,10 @@
    "title": "Uber brings ChatGPT Work to all employees with OpenAI",
    "summary": "Uber is rolling out ChatGPT Work to more than 30,000 employees, helping teams research, analyze data, create presentations, and complete complex workflows.",
    "link": "https://openai.com/index/uber-chatgpt-work-rollout",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "업무 도구"
+   ]
   },
   {
    "id": "4b8a59f356",
@@ -5346,7 +3597,10 @@
    "title": "Deploy RFD4-Proteina on Databricks",
    "summary": "Bring RFD4-Proteina to your research data with AI-assisted development and serverless NVIDIA GPU compute....",
    "link": "https://www.databricks.com/blog/deploy-rfd4-proteina-model-databricks",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "클라우드·인프라"
+   ]
   },
   {
    "id": "13a18076dd",
@@ -5357,7 +3611,10 @@
    "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
    "summary": "SAN FRANCISCO & NEW YORK — Salesforce (NYSE: CRM), the world’s #1 AI CRM, today announced it has entered into a definitive agreement to acquire Braze (NASDAQ: BRZE), a leading customer engagement platform, for approximately $5.66 billion in enterprise value. Under the terms of the agreement, holders of Braze Class A common stock will receive […]",
    "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "CRM·고객"
+   ]
   },
   {
    "id": "d650f92872",
@@ -5368,7 +3625,11 @@
    "title": "Advancing digital sovereignty with greater control and choice",
    "summary": "Across my conversations with leaders in government, critical infrastructure and regulated industries, one priority consistently rises to the top: putting technology to work on their most important systems while maintaining the control those systems require. This challenge is becoming more important as advanced cloud and AI capabilities move into public services, regulated processes and essential...",
    "link": "https://blogs.microsoft.com/blog/2026/10/20/advancing-digital-sovereignty-with-greater-control-and-choice/",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "클라우드·인프라",
+    "보안·규제"
+   ]
   },
   {
    "id": "dbaa902542",
@@ -5379,7 +3640,8 @@
    "title": "OpenAI acquires Orchestra Bio",
    "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
    "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
-   "score": 3
+   "score": 3,
+   "domains": []
   },
   {
    "id": "72b1ea2089",
@@ -5390,7 +3652,11 @@
    "title": "Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain",
    "summary": "Madrid named EMEA South hub as Salesforce expands office presence, customer innovation, and AI workforce development across the region. MADRID — October 19, 2026 — Salesforce, the #1 AI CRM, today unveiled plans to invest $1 billion in Spain over the next five years, cementing the country’s role as the growth engine for Salesforce’s EMEA […]",
    "link": "https://www.salesforce.com/news/press-releases/2026/10/19/1-billion-ai-leadership-investment-spain/",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "CRM·고객",
+    "업무 도구"
+   ]
   },
   {
    "id": "65442e7082",
@@ -5401,7 +3667,11 @@
    "title": "How Itaú is building generative AI for its entire customer base",
    "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
    "link": "https://openai.com/index/itau-generative-ai",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "업무 도구",
+    "보안·규제"
+   ]
   },
   {
    "id": "9d653fbf35",
@@ -5412,7 +3682,8 @@
    "title": "What is a forward-deployed engineer?",
    "summary": "Forward-deployed engineers work inside another company’s own systems. Three McKinsey leaders explain how FDEs help companies derive impact from AI.",
    "link": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-a-forward-deployed-engineer",
-   "score": 3
+   "score": 3,
+   "domains": []
   },
   {
    "id": "415ce48789",
@@ -5423,7 +3694,11 @@
    "title": "Snowflake and Orange Business: Sovereign AI for France",
    "summary": "Snowflake and Orange Business collaborate to deliver sovereign data and AI capabilities on trusted French infrastructure for regulated industries.",
    "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/snowflake-orange-business-sovereign-ai-france",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "클라우드·인프라",
+    "보안·규제"
+   ]
   },
   {
    "id": "dd00c04c9b",
@@ -5434,7 +3709,8 @@
    "title": "Sullivan & Cromwell brings legal expertise into agreement review",
    "summary": "In collaboration with OpenAI, Sullivan & Cromwell developed Agreement Analyzer, an AI tool for identifying issues in a draft agreement.",
    "link": "https://openai.com/index/sullivan-cromwell",
-   "score": 3
+   "score": 3,
+   "domains": []
   },
   {
    "id": "87253efeda",
@@ -5445,7 +3721,10 @@
    "title": "Singapore office and government MOU | Anthropic",
    "summary": "Anthropic opens its fifth Asia-Pacific office in Singapore and signs an MOU with the government on AI safety, evaluation, and responsible adoption.",
    "link": "https://www.anthropic.com/news/singapore-office-opening",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "보안·규제"
+   ]
   },
   {
    "id": "f9d6830106",
@@ -5456,7 +3735,10 @@
    "title": "The AI value curve: The economics of applying AI to existing work",
    "summary": "Many organizations are still measuring AI adoption instead of value. The AI value curve helps identify where AI’s automation potential can be deployed most cost-effectively.",
    "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-ai-value-curve-the-economics-of-applying-ai-to-existing-work",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "AI 에이전트"
+   ]
   },
   {
    "id": "a99c1179f7",
@@ -5467,7 +3749,8 @@
    "title": "Industry AI: Deep Industry Knowledge, Forward-Deployed Engineering, Measurable Value",
    "summary": "The hardest industry problems to solve are deeply contextual.",
    "link": "https://news.sap.com/2026/10/industry-ai-deep-industry-knowledge-fde-measurable-value/",
-   "score": 3
+   "score": 3,
+   "domains": []
   },
   {
    "id": "b2b664a3da",
@@ -5478,7 +3761,10 @@
    "title": "The Next Chapter in Spend Management: AI Innovations Across SAP Ariba, SAP Fieldglass, and SAP Concur",
    "summary": "New capabilities and partner innovations help organizations turn spend insights into faster, better-informed decisions.",
    "link": "https://news.sap.com/2026/10/next-chapter-spend-management-ai-innovations-sap-ariba-sap-fieldglass-sap-concur/",
-   "score": 3
+   "score": 3,
+   "domains": [
+    "ERP·백오피스"
+   ]
   },
   {
    "id": "7b321951a1",
@@ -5489,7 +3775,11 @@
    "title": "McKinsey research shows AI creating more jobs than automation displaces — but 11 million American workers will need help this decade",
    "summary": "While debates about AI’s impact on the workforce dominate headlines, the biggest challenge ahead will be helping workers find the most direct pathway into growing jobs, write Eric Kutcher and Tanguy Catlin in Fortune.",
    "link": "https://www.mckinsey.com/mgi/media-center/mckinsey-research-shows-ai-creating-more-jobs-than-automation-displaces-but-11-million-american-workers-will-need-help-this-decade",
-   "score": 2
+   "score": 2,
+   "domains": [
+    "업무 도구",
+    "AI 에이전트"
+   ]
   },
   {
    "id": "d5d7f3826a",
@@ -5500,7 +3790,8 @@
    "title": "과기정통부, 세계은행과 함께 국제 인공지능‧디지털 협력 논의",
    "summary": "- 세계은행과 공동으로 「국제 인공지능‧디지털 정상회의(글로벌 AI‧디지털 서밋)」 개최(10월 19~22일, 서울) - 배경훈 부총리, 60여 개국 장‧차관급 대표들과 인공지능‧디지털 장관회의 개최(10.19.) - 포용적 인공지능‧디지털 전환을 위한 국제협력 등 의장 공동성명문 발표",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187874",
-   "score": 1
+   "score": 1,
+   "domains": []
   },
   {
    "id": "9c805cb308",
@@ -5511,7 +3802,8 @@
    "title": "170만 명이 즐긴 「클릭온 인공지능(AI)」, 시즌2는 더욱 풍성한 프로그램으로 돌아온다",
    "summary": "- 국민 누구나 인공지능을 즐길 수 있는 「2026 클릭온 인공지능(AI) 시즌2」(10.15.~11.25.) 개최 - 지난 6월에 열린 「2026 클릭온 인공지능(AI) 시즌1」은 170만 명 참여",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187869",
-   "score": 1
+   "score": 1,
+   "domains": []
   },
   {
    "id": "66d489d1ba",
@@ -5522,7 +3814,8 @@
    "title": "류제명 제2차관, 「물리적 인공지능 기술의 날(피지컬 AI Tech Day)」 참석",
    "summary": "- '행동하는 두뇌, Intelligence into Action' 주제로 해외 기술 동향과 발전 방향 공유 - \"우수한 기술이 현장 실증·사업화로 이어지도록 적극 지원\"",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187862",
-   "score": 1
+   "score": 1,
+   "domains": []
   },
   {
    "id": "c7febe0b74",
@@ -5533,7 +3826,8 @@
    "title": "배경훈 부총리, 물리적 인공지능 협력체(피지컬 AI 얼라이언스)와 현장 중심의 실질적 성과 창출 가속화",
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스) 간담회를 통해 산업 현장 애로 및 정책 수요 청취 - 한국형 물리적 인공지능 전 주기 개발(K-피지컬 AI 풀스택)·산업별 실증·데이터· 표준 등 추진성과 및 실행과제 점검 - 관계부처 사업·정책금융 연계해 현장 실증과 성공사례 창출 적극 지원",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187859",
-   "score": 1
+   "score": 1,
+   "domains": []
   },
   {
    "id": "3bc0c5d6f4",
@@ -5544,7 +3838,8 @@
    "title": "Building a Safer, More Secure Britain in the age of AI",
    "summary": "Speech delivered by the Minister for Artificial Intelligence …",
    "link": "https://www.gov.uk/government/speeches/building-a-safer-more-secure-britain-in-the-age-of-ai",
-   "score": 1
+   "score": 1,
+   "domains": []
   },
   {
    "id": "bc970cfa64",
@@ -5555,7 +3850,8 @@
    "title": "“인공지능 시대의 장원을 찾습니다” 국립과천과학관, 「인공지능 신(新) 과거제」 개최",
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187858",
-   "score": 1
+   "score": 1,
+   "domains": []
   }
  ]
 }
