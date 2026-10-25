@@ -672,7 +672,7 @@
    "card": {
     "id": "ch-hftr",
     "k": "작은 변화 · 오픈 모델",
-    "big": "5위",
+    "big": "4위",
     "bl": "Hugging Face 트렌딩",
     "title": "트렌딩 상위 5에 새로: XHToken/​Spark‑X2.6‑4B",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
@@ -684,28 +684,28 @@
       "items": [
        {
         "name": "DeepSeek-V4.1-Flash-1017",
-        "value": 1412,
+        "value": 1363,
         "label": "7.3만"
        },
        {
         "name": "flint",
-        "value": 756,
+        "value": 762,
         "label": "4,795"
        },
        {
         "name": "flux-3-image-klein-comfy",
-        "value": 553,
+        "value": 543,
         "label": "59만"
        },
        {
-        "name": "LTX-2.5",
-        "value": 416,
-        "label": "209만"
+        "name": "Spark-X2.6-4B",
+        "value": 420,
+        "label": "2,537"
        },
        {
-        "name": "Spark-X2.6-4B",
-        "value": 416,
-        "label": "2,537"
+        "name": "LTX-2.5",
+        "value": 415,
+        "label": "209만"
        }
       ]
      }

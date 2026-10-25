@@ -265,12 +265,12 @@
   {
    "id": "news:sources",
    "ok": true,
-   "fact": "공식 출처 19곳 중 19곳 응답"
+   "fact": "공식 출처 19곳 중 18곳 응답 — 응답 없음: msit"
   },
   {
    "id": "news:official",
    "ok": true,
-   "fact": "기사 128건 모두 그 회사·기관 자기 도메인의 원문 링크"
+   "fact": "기사 131건 모두 그 회사·기관 자기 도메인의 원문 링크"
   },
   {
    "id": "news:dated",
