@@ -124,17 +124,20 @@ const covers = {
 
 // ---------- story slides ----------
 function storySlides(st) {
-  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, ""));
+  // a number, a closing bracket or % stays on the same line as the particle after it ("36.2%로", "(1년 전 3.5%)로")
+  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, "").replace(/([\d%)])(?=[가-힣])/g, "$1\u2060"));
+  // each line the writer broke on is its own block: when the text grows enough that one has to wrap, it splits evenly
+  const lines = (t) => String(t ?? "").split("\n").map((l) => `<span class="ln">${e(l)}</span>`).join("");
   return st.slides.map((s, i) => {
     const kick = `<div class="kick"><span>${e(s.kicker || (i ? "" : `AX 트렌드 레이더 · ${when}`))}</span><span class="pg">${i + 1} / ${N}</span></div>`;
     const num = s.number ? `<div class="num"><b>${e(s.number)}</b>${s.label ? `<span>${e(s.label)}</span>` : ""}</div>` : "";
     const items = (s.items ?? []).length ? `<ol${s.items.length >= 5 ? ' class="many"' : ""}>${s.items.map((x) => `<li>${e(x)}</li>`).join("")}</ol>` : "";
-    const body = s.body ? `<p class="txt">${e(s.body)}</p>` : "";
-    const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${e(s.title)}</h2>${body}${num}`
-      : s.kind === "quiz" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
-      : s.kind === "end" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}`
-      : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${e(s.title)}</h2>${body}${items}`
-      : `${kick}<h2>${e(s.title)}</h2>${body}${items}`;
+    const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
+    const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${lines(s.title)}</h2>${body}${num}`
+      : s.kind === "quiz" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
+      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}`
+      : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
+      : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
     return `<section class="slide st ${e(s.kind)}">${inner}${foot}</section>`;
   }).join("\n");
 }
@@ -201,24 +204,44 @@ const html = `<!doctype html>
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
   .c-alert .big{font-size:150px;margin-top:auto;color:var(--bronze-hi)} .c-alert .bl{margin-bottom:56px}
 
-  /* story slides: words first — a headline, a few sentences, at most one number */
-  .st .kick{display:flex;justify-content:space-between;gap:20px} .st .kick .pg{color:var(--dim);font-weight:500}
-  .st h2{font-size:64px;line-height:1.28;letter-spacing:-.03em;margin:52px 0 0;font-weight:800;white-space:pre-line}
-  .st .txt{font-size:38px;line-height:1.7;color:var(--ink-2);margin:36px 0 0;white-space:pre-line}
-  .st .num{display:flex;align-items:baseline;gap:24px;margin-top:48px} .st .num b{font-size:150px;font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{font-size:30px;color:var(--mut);line-height:1.4}
-  .st ol{list-style:none;padding:0;margin:44px 0 0;display:grid;gap:20px;counter-reset:i}
-  .st ol li{counter-increment:i;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;font-size:34px;line-height:1.5;color:var(--ink-2);padding:22px 26px;background:var(--surface);border-radius:var(--r-card);border:1px solid var(--line)}
-  .st ol li::before{content:counter(i);width:52px;height:52px;border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:28px}
+  /* story slides: words first — a headline, a few sentences, at most one number. Every size is scaled by --k, which
+     fit() in the page sets per slide so the words fill the slide instead of leaving an empty bottom half. */
+  .st{--k:1} .st.mid>:nth-child(2){margin-top:auto} .st .ln{display:block;text-wrap:balance} .st .txt .ln+.ln{margin-top:.28em}
+  .st .kick{display:flex;justify-content:space-between;gap:calc(var(--k)*20px)} .st .kick .pg{color:var(--dim);font-weight:500}
+  .st h2{font-size:calc(var(--k)*64px);line-height:1.28;letter-spacing:-.03em;margin:calc(var(--k)*52px) 0 0;font-weight:800;white-space:pre-line}
+  .st .txt{font-size:calc(var(--k)*38px);line-height:1.7;color:var(--ink-2);margin:calc(var(--k)*36px) 0 0;white-space:pre-line}
+  .st .num{display:flex;flex-wrap:wrap;align-items:baseline;gap:calc(var(--k)*24px);margin-top:calc(var(--k)*48px)} .st .num b{font-size:calc(var(--k)*150px);font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{flex:1 1 calc(var(--k)*300px);font-size:calc(var(--k)*30px);color:var(--mut);line-height:1.4}
+  .st ol{list-style:none;padding:0;margin:calc(var(--k)*44px) 0 0;display:grid;gap:calc(var(--k)*20px);counter-reset:i}
+  .st ol li{counter-increment:i;display:grid;grid-template-columns:calc(var(--k)*64px) 1fr;gap:calc(var(--k)*20px);align-items:start;font-size:calc(var(--k)*34px);line-height:1.5;color:var(--ink-2);padding:calc(var(--k)*22px) calc(var(--k)*26px);background:var(--surface);border-radius:var(--r-card);border:calc(var(--k)*1px) solid var(--line)}
+  .st ol li::before{content:counter(i);width:calc(var(--k)*52px);height:calc(var(--k)*52px);border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:calc(var(--k)*28px)}
   .st.quiz ol li::before{content:counter(i, upper-alpha)}
-  .st ol.many{gap:14px;margin-top:34px} .st ol.many li{font-size:30px;padding:16px 22px} .st ol.many li::before{width:44px;height:44px;font-size:24px}
-  .st .hint{font-size:28px;color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:36px}
-  .st.cover h2{font-size:92px;line-height:1.16;margin-top:110px} .st.cover .txt{font-size:40px}
-  .st.cover .badge{align-self:flex-start;margin-top:72px;font-size:30px;font-weight:700;padding:12px 24px;border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
-  .st.answer .num b{font-size:180px} .st.end{background:var(--onyx)}
+  .st ol.many{gap:calc(var(--k)*14px);margin-top:calc(var(--k)*34px)} .st ol.many li{font-size:calc(var(--k)*30px);padding:calc(var(--k)*16px) calc(var(--k)*22px)} .st ol.many li::before{width:calc(var(--k)*44px);height:calc(var(--k)*44px);font-size:calc(var(--k)*24px)}
+  .st .hint{font-size:calc(var(--k)*28px);color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:calc(var(--k)*36px)}
+  .st.cover h2{font-size:calc(var(--k)*92px);line-height:1.16;margin-top:calc(var(--k)*110px)} .st.cover .txt{font-size:calc(var(--k)*40px)}
+  .st.cover .badge{align-self:flex-start;margin-top:calc(var(--k)*72px);font-size:calc(var(--k)*30px);font-weight:700;padding:calc(var(--k)*12px) calc(var(--k)*24px);border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
+  .st.answer .num b{font-size:calc(var(--k)*180px)} .st.end{background:var(--onyx)}
 </style>
 </head>
 <body data-date="${date}">
 ${story ? storySlides(story) : `${covers[cover]}\n${slides.map(slideHtml).join("\n")}`}
+<script>
+  // grow each story slide's words (--k, 0.7–1.6×) until they fill it — no empty bottom half. Whatever space is still
+  // left at 1.6× goes above and below the content. render.mjs calls this after the fonts load, since the measurement
+  // depends on them.
+  window.fit = () => {
+    const search = (lo, hi, ok) => { if (ok(hi)) return hi; for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (ok(m)) lo = m; else hi = m; } return lo; };
+    for (const s of document.querySelectorAll(".slide.st")) {
+      s.classList.remove("mid");
+      const set = (k) => s.style.setProperty("--k", k);
+      const height = (k) => { set(k); s.style.height = "auto"; const h = s.offsetHeight; s.style.height = ""; return h; };
+      const k = search(0.7, 1.6, (k) => height(k) <= 1350 - 48);
+      set(k.toFixed(3));
+      if (1350 - height(k) > 120) s.classList.add("mid");
+      set(k.toFixed(3));
+    }
+  };
+  document.fonts.ready.then(window.fit);
+</script>
 </body>
 </html>
 `;
