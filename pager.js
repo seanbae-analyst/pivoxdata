@@ -4,8 +4,9 @@
 //   • pages — fixed pages, each the nodes moved onto it
 //   • items — a list split over as many pages as it needs: each page takes what fits on this screen (measured), in a
 //     fresh list() element under a copy of head; lead (nodes) opens the chapter's first page instead of the head
-// The chapter names on top jump to a chapter and the bars under them show the page within it. Links to #<chapter id>
-// or to anything on a page turn to that page; tab(chapter id) says which bottom-tab-bar item is current, and fit(page)
+// One way to move around, at the bottom (the site's tab bar) — the top only says where you are: the name, the chapter
+// and the page in it, with bars. Links to #<chapter id> or to anything on a page turn to that page; tab(chapter id)
+// says which bottom-tab-bar item is current, and fit(page)
 // may adjust a fixed page once it is laid out on this screen (e.g. fold a paragraph that does not fit).
 // It runs only when <html> has the class "paged": an inline script in <head> sets it on phones before the first paint
 // (so the long page never flashes) and takes it back if the pager has not started in 4 s; "?scroll=1" keeps the long page.
@@ -16,11 +17,10 @@ export function pager(chapters, { tab, fit } = {}) {
   chapters = chapters.filter((c) => c.pages?.some(has) || c.items?.length);
   if (!root.classList.contains("paged")) return;
   if (!chapters.length) { root.classList.remove("paged"); return; }
-  const shell = el("div", "pgr"), nav = el("nav", "pgr-ch"), bars = el("div", "pgr-bars"), track = el("div", "pgr-track");
-  nav.setAttribute("aria-label", "차례");
-  for (const c of chapters) { const a = Object.assign(el("a"), { href: `#${c.id}`, textContent: c.name }); a.dataset.ch = c.id; nav.append(a); }
-  bars.setAttribute("aria-hidden", "true");
-  shell.append(nav, bars, track);
+  const shell = el("div", "pgr"), top = el("div", "pgr-top"), where = el("span", "pgr-where"), bars = el("div", "pgr-bars"), track = el("div", "pgr-track");
+  const brand = document.querySelector(".topbar .brand"); if (brand) top.append(brand.cloneNode(true));
+  top.append(where); bars.setAttribute("aria-hidden", "true");
+  shell.append(top, bars, track);
   document.body.append(shell);
 
   let pages = [], cur = -1, curCh = null, want = null; // want: the page a turn is heading to (a re-measure keeps it)
@@ -53,11 +53,9 @@ export function pager(chapters, { tab, fit } = {}) {
     if (i === cur || !pages[i]) return; cur = i;
     const { c } = pages[i], list = mine(c), k = list.indexOf(pages[i]);
     bars.innerHTML = list.map((_, j) => `<i${j === k ? ' class="on"' : j < k ? ' class="done"' : ""}></i>`).join("");
+    where.innerHTML = `${c.name}${list.length > 1 ? ` <b>${k + 1}</b>/${list.length}` : ""}`;
     if (c === curCh) return;
     curCh = c;
-    for (const a of nav.children) a.toggleAttribute("aria-current", a.dataset.ch === c.id);
-    const a = nav.querySelector(`[data-ch="${c.id}"]`);
-    if (a.offsetLeft < nav.scrollLeft || a.offsetLeft + a.offsetWidth > nav.scrollLeft + nav.clientWidth) nav.scrollTo({ left: a.offsetLeft - 16, behavior: "smooth" });
     // the address follows the chapter (shareable), without a jump
     history.replaceState(history.state, "", c === chapters[0] ? location.pathname + location.search : `#${c.id}`);
     if (tab) { const t = tab(c.id); document.querySelectorAll(".tabbar a").forEach((x) => x.toggleAttribute("aria-current", x.dataset.tab === t)); }
