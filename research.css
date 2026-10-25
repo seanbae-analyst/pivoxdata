@@ -5,7 +5,6 @@
 html[lang=ko] body{word-break:keep-all;overflow-wrap:break-word}
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px 72px}
 @media(max-width:560px){.wrap{padding:0 16px 56px}}
-.brand .mark{color:#120e09}
 main{display:grid;gap:48px;padding-top:28px}
 main>header{max-width:760px}
 h1{font-size:clamp(28px,4.6vw,42px);line-height:1.15;letter-spacing:-.03em;margin:0 0 12px;font-weight:700;text-wrap:balance}

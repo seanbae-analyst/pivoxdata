@@ -35,18 +35,17 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
 
 /* ---------- top bar ---------- */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
-.brand{display:inline-flex;align-items:center;gap:10px;font-weight:650;font-size:15.5px;letter-spacing:-.02em;
-  color:var(--ink);cursor:pointer;background:none;border:0;padding:0;font-family:inherit;text-decoration:none}
+/* the wordmark is text: 'Pivox' ivory + 'Data' bronze — the same as PivoxQuant's and PivoxMap's header logos */
+.brand{display:inline-flex;align-items:center;flex-shrink:0;white-space:nowrap;font-weight:700;font-size:18px;letter-spacing:-.02em;
+  color:#f5f0e8;cursor:pointer;background:none;border:0;padding:0;font-family:inherit;text-decoration:none}
 .brand:hover{text-decoration:none}
-.brand .mark{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
-  background:var(--bronze);color:#120e09}
+.brand .b{color:var(--bronze)}
 .nav{display:flex;align-items:center;gap:4px;font-size:14px}
 .nav a,.nav button{color:var(--mut);padding:7px 11px;border-radius:var(--radius-sm);background:none;border:0;
   font:inherit;cursor:pointer;transition:color .15s,background .15s}
 .nav a:hover,.nav button:hover{color:var(--ink);background:var(--surface-2);text-decoration:none}
 .nav a,.nav button{white-space:nowrap}
-.brand .short{display:none}
-@media(max-width:560px){.brand .full{display:none}.brand .short{display:inline}.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
+@media(max-width:560px){.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
   footer.site .links{gap:0 4px} footer.site .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}}
 
 /* ---------- buttons ---------- */
@@ -64,6 +63,25 @@ footer.site{margin-top:72px;padding:22px 0 8px;border-top:1px solid var(--line);
   display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;justify-content:space-between}
 footer.site a{color:var(--mut)} footer.site a:hover{color:var(--ink)}
 footer.site .links{display:flex;flex-wrap:wrap;gap:4px 16px}
+
+/* ---------- cover (index only) ----------
+   The first screen of PivoxQuant and PivoxMap: one wordmark on black. Same face, tracking and breath as
+   PivoxMap's .pq-cover-wordmark (frontend/src/app/globals.css). Playfair is self-hosted and used only here. */
+@font-face{font-family:"Playfair Display";src:url(/fonts/playfair-display-latin-var.woff2) format("woff2");
+  font-weight:400 900;font-style:normal;font-display:swap}
+.cover{position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;
+  min-height:calc(100vh - 64px);min-height:calc(100dvh - 64px)}
+.cover .spot{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(245,240,232,.03) 0%,rgba(245,240,232,.012) 40%,transparent 75%)}
+.cover-wordmark{position:relative;margin:0 -.22em 0 0;text-align:center;color:#f5f0e8;
+  font-family:"Playfair Display",Georgia,serif;font-weight:500;font-style:normal;text-transform:uppercase;letter-spacing:.22em;line-height:1;
+  font-size:min(clamp(3rem,7vw,6rem),10vw);text-shadow:0 0 24px rgba(245,240,232,.06);animation:cover-breath 4s ease-in-out infinite}
+.cover-wordmark .b{color:var(--bronze)}
+@keyframes cover-breath{0%,100%{transform:scale(1)}50%{transform:scale(1.006)}}
+.cover .cover-next{position:absolute;left:0;right:0;bottom:clamp(28px,5vh,56px);display:flex;justify-content:center}
+.cover .cover-next a{font-size:14px;font-weight:500;color:var(--bronze)}
+.cover .cover-next a:hover{color:#f5f0e8;text-decoration:none}
+@media(prefers-reduced-motion:reduce){.cover-wordmark{animation:none}}
 
 .hidden{display:none!important}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
