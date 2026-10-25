@@ -9,19 +9,23 @@
 // says which bottom-tab-bar item is current, and fit(page)
 // may adjust a fixed page once it is laid out on this screen (e.g. fold a paragraph that does not fit).
 // It runs only when <html> has the class "paged": an inline script in <head> sets it on phones before the first paint
-// (so the long page never flashes) and takes it back if the pager has not started in 4 s; "?scroll=1" keeps the long page.
+// (so the long page never flashes) and takes it back if the pager has not started in 4 s — then, and whenever the pager
+// gives up, document gets an "unpaged" event so the page's long-layout scripts can still run; "?scroll=1" keeps the long
+// page. The address follows the page: a card's own id (#c-ax-industry), else the chapter (#news) with the page in it kept
+// in history.state, so a shared link or the back button lands on the same page.
 const el = (tag, cls) => Object.assign(document.createElement(tag), cls ? { className: cls } : {});
 
 export function pager(chapters, { tab, fit } = {}) {
   const root = document.documentElement, has = (nodes) => nodes?.some(Boolean);
   chapters = chapters.filter((c) => c.pages?.some(has) || c.items?.length);
   if (!root.classList.contains("paged")) return;
-  if (!chapters.length) { root.classList.remove("paged"); return; }
+  if (!chapters.length) { root.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); return; }
   const shell = el("div", "pgr"), top = el("div", "pgr-top"), where = el("span", "pgr-where"), bars = el("div", "pgr-bars"), track = el("div", "pgr-track");
   const brand = document.querySelector(".topbar .brand"); if (brand) top.append(brand.cloneNode(true));
-  top.append(where); bars.setAttribute("aria-hidden", "true");
+  top.append(where); bars.setAttribute("aria-hidden", "true"); where.setAttribute("aria-live", "polite");
   shell.append(top, bars, track);
-  document.body.append(shell);
+  // before the tab bar, so the keyboard reaches the page first and the menu after it
+  const tabbar = document.querySelector(".tabbar"); if (tabbar) tabbar.before(shell); else document.body.append(shell);
 
   let pages = [], cur = -1, curCh = null, want = null; // want: the page a turn is heading to (a re-measure keeps it)
   const add = (c, nodes) => { const p = el("section", "pg"); p.append(...nodes.filter(Boolean)); track.append(p); pages.push({ c, p }); return p; };
@@ -52,13 +56,17 @@ export function pager(chapters, { tab, fit } = {}) {
   function paint() {
     const i = at(); if (pages[i] === want) want = null;
     if (i === cur || !pages[i]) return; cur = i;
-    const { c } = pages[i], list = mine(c), k = list.indexOf(pages[i]);
+    const { c, p } = pages[i], list = mine(c), k = list.indexOf(pages[i]);
+    // only the page in view is there for the keyboard and screen readers; the others wait off to the side
+    pages.forEach((x, j) => { x.p.inert = j !== i; });
     bars.innerHTML = list.map((_, j) => `<i${j === k ? ' class="on"' : j < k ? ' class="done"' : ""}></i>`).join("");
-    where.innerHTML = `${c.name}${list.length > 1 ? ` <b>${k + 1}</b>/${list.length}` : ""}`;
+    where.replaceChildren(c.name, ...(list.length > 1 ? [" ", Object.assign(el("b"), { textContent: k + 1 }), `/${list.length}`] : []));
+    // the address follows the page (shareable, and the back button returns here), without a jump: the first page has
+    // the plain address, a card its own id, any other page its chapter
+    const own = k > 0 && p.querySelector(":scope>[id]")?.id, hash = i === 0 ? "" : `#${own || c.id}`;
+    history.replaceState({ ...(history.state ?? {}), pgr: { c: c.id, k } }, "", (hash || location.pathname + location.search));
     if (c === curCh) return;
     curCh = c;
-    // the address follows the chapter (shareable), without a jump
-    history.replaceState(history.state, "", c === chapters[0] ? location.pathname + location.search : `#${c.id}`);
     if (tab) { const t = tab(c.id); document.querySelectorAll(".tabbar a").forEach((x) => x.toggleAttribute("aria-current", x.dataset.tab === t)); }
   }
 
@@ -81,8 +89,10 @@ export function pager(chapters, { tab, fit } = {}) {
   }, true);
   addEventListener("hashchange", () => turn(location.hash, true));
   addEventListener("keydown", (e) => {
-    if (e.target.closest?.("input,textarea,select,[contenteditable]")) return;
-    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(0, Math.min(pages.length - 1, at() + (e.key === "ArrowRight" ? 1 : -1))), true); }
+    // Alt+← is the browser's back, Shift+← selects text; a chart or a tab list that handles the arrows keeps them
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.target.closest?.("input,textarea,select,[contenteditable]")) return;
+    // counted from the page a turn is already heading to, so two quick presses move two pages
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(0, Math.min(pages.length - 1, (want ? pages.indexOf(want) : at()) + (e.key === "ArrowRight" ? 1 : -1))), true); }
   });
   track.addEventListener("pointerdown", () => { want = null; }, { passive: true }); // the reader took over
   track.addEventListener("scroll", () => {
@@ -92,12 +102,15 @@ export function pager(chapters, { tab, fit } = {}) {
   }, { passive: true, capture: true });
 
   // pages are measured on this screen: measure again when it changes size or the web font arrives
-  const arrived = location.hash; // read before the first paint rewrites the address
+  const arrived = location.hash, was = history.state?.pgr; // read before the first paint rewrites the address
   let size = "";
   const resized = () => { const s = `${track.clientWidth}x${track.clientHeight}`; if (s !== size) { size = s; render(); } };
   addEventListener("resize", resized);
   render(); size = `${track.clientWidth}x${track.clientHeight}`;
-  turn(arrived, false);
+  // back (or a reload) on a list's later page: that page again — its address names only the chapter; otherwise the address
+  const back = was && chapters.find((x) => x.id === was.c), mineBack = back && mine(back);
+  if (mineBack?.length && (!arrived || arrived === `#${back.id}`)) go(pages.indexOf(mineBack[Math.min(was.k, mineBack.length - 1)]), false);
+  else turn(arrived, false);
   document.fonts?.ready.then(() => { render(); });
   root.classList.add("pgr-ready");
 }

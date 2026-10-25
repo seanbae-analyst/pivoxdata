@@ -23,12 +23,21 @@ const bar = (x0, x1, y, h, cls) => {
 };
 const svg = (W, H, alt, inner) => `<svg class="cf" viewBox="0 0 ${r1(W)} ${r1(H)}" width="${r1(W)}" height="${r1(H)}" role="img" aria-label="${esc(alt ?? "")}">${inner}</svg>`;
 
+// the axis a set of values gets: from 0 (or the lowest value below it) to a round number above the highest; a set that is
+// all zero still gets a scale, so nothing divides by zero
+const scale = (vals, n) => { const lo = Math.min(0, ...vals), hi = Math.max(0, ...vals), t = niceTicks(lo, hi > lo ? hi : lo + 1, n);
+  return { ticks: t, bot: t[0], top: t.at(-1), span: t.at(-1) - t[0] || 1 }; };
+
 function line(f, W, H) {
-  const pts = f.points, n = pts.length, vals = pts.map((p) => p[1]), fmt = (v) => `${v.toFixed(1)}${f.unit ?? ""}`;
+  // a missing value drops its point; the mark and the ticks count points, so they go with it
+  const pts = (f.points ?? []).filter((p) => Number.isFinite(p?.[1])); if (!pts.length) return null;
+  if (pts.length !== f.points.length) f = { ...f, points: pts, mark: null, ticks: null };
+  const n = pts.length, vals = pts.map((p) => p[1]), fmt = (v) => `${v.toFixed(1)}${f.unit ?? ""}`;
   H ??= Math.round(clamp(W * 0.5, 150, 220));
-  const ticks = niceTicks(0, Math.max(...vals), H < 180 ? 3 : 4), top = ticks.at(-1), tk = unitOf(f.unit);
+  const { ticks, bot, span } = scale(vals, H < 180 ? 3 : 4), tk = unitOf(f.unit);
   const m = { l: Math.max(...ticks.map((t) => width(tk(t), 11.5))) + 8, r: width(fmt(vals.at(-1)), 13, 700) + 14, t: 14, b: 24 };
-  const iw = W - m.l - m.r, ih = H - m.t - m.b, X = (i) => m.l + (i / (n - 1)) * iw, Y = (v) => m.t + ih - (v / top) * ih;
+  // one point stands at the right end, where the newest value always is
+  const iw = W - m.l - m.r, ih = H - m.t - m.b, X = (i) => m.l + (n > 1 ? i / (n - 1) : 1) * iw, Y = (v) => m.t + ih - ((v - bot) / span) * ih;
   let g = ticks.map((t) => `<line class="${t === 0 ? "base" : "gl"}" x1="${r1(m.l)}" x2="${r1(m.l + iw)}" y1="${r1(Y(t))}" y2="${r1(Y(t))}"/>` + text(m.l - 8, Y(t) + 4, tk(t), "tk", "end")).join("");
   for (const [i, s] of f.ticks ?? []) { const x = X(i), w = width(s, 11.5); g += text(clamp(x, m.l + w / 2, m.l + iw - w / 2), H - 6, s, "tk", "middle"); }
   const d = vals.map((v, i) => `${i ? "L" : "M"}${r1(X(i))},${r1(Y(v))}`).join("");
@@ -41,7 +50,7 @@ function line(f, W, H) {
   const ex = X(n - 1), ey = Y(vals.at(-1));
   g += `<circle class="dot" cx="${r1(ex)}" cy="${r1(ey)}" r="5"/>` + text(ex + 9, Math.max(m.t + 6, ey + 4.5), fmt(vals.at(-1)), "val hi");
   g += `<g class="probe" hidden></g><rect class="hit" x="${r1(m.l)}" y="0" width="${r1(iw)}" height="${r1(H)}"/>`;
-  return { h: H, svg: svg(W, H, f.alt, g), geo: { X, Y, n, m, ih, fmt } };
+  return { h: H, svg: svg(W, H, f.alt, g), geo: { X, Y, n, m, ih, fmt }, f };
 }
 
 // tap a line chart: the month and value under the finger (tap again to clear)
@@ -61,7 +70,8 @@ function probe(plot, f, geo) {
 }
 
 function bars(f, W, H) {
-  const it = f.items, n = it.length, ref = f.ref, refH = ref ? 22 : 0;
+  const it = (f.items ?? []).filter((x) => Number.isFinite(x?.v)), n = it.length, ref = f.ref, refH = ref ? 22 : 0;
+  if (!n) return null;
   const nameW = Math.min(W * 0.42, Math.max(...it.map((x) => width(x.name, 13, 600))) + 12);
   const valW = Math.max(...it.map((x) => width(x.label, 13, 700))) + 10;
   const rowH = H ? clamp((H - refH) / n, 24, 56) : 32, bh = clamp(rowH * 0.46, 10, 18), h = refH + rowH * n;
@@ -86,13 +96,14 @@ function bars(f, W, H) {
 }
 
 function dumbbell(f, W, H) {
-  const it = f.items, n = it.length, legH = 26, axH = 22, tk = unitOf(f.unit);
+  const it = (f.items ?? []).filter((x) => Number.isFinite(x?.a) && Number.isFinite(x?.b)), n = it.length, legH = 26, axH = 22, tk = unitOf(f.unit);
+  if (!n) return null;
   const nameW = Math.min(W * 0.34, Math.max(...it.map((x) => width(x.name, 13, 600))) + 12);
   const right = (x) => (Math.abs(x.b - x.a) < 3 ? `${x.bText} · ${f.from} ${x.aText}` : x.bText); // close dots: say both on the right
   const valW = Math.max(...it.map((x) => width(right(x), 13, 700))) + 12;
   const rowH = H ? clamp((H - legH - axH) / n, 34, 64) : 40, h = legH + rowH * n + axH;
-  const ticks = niceTicks(0, Math.max(...it.flatMap((x) => [x.a, x.b])), 4), top = ticks.at(-1), room = W - nameW - valW - 6;
-  const X = (v) => nameW + 6 + (v / top) * room;
+  const { ticks, bot, span } = scale(it.flatMap((x) => [x.a, x.b]), 4), room = W - nameW - valW - 6;
+  const X = (v) => nameW + 6 + ((v - bot) / span) * room;
   // the key: hollow = before, filled = now
   let g = `<circle class="from" cx="${r1(nameW + 12)}" cy="10" r="5"/>` + text(nameW + 22, 14, f.from, "sub")
     + `<circle class="to" cx="${r1(nameW + 34 + width(f.from, 11.5))}" cy="10" r="5"/>` + text(nameW + 44 + width(f.from, 11.5), 14, f.to, "sub");
@@ -115,9 +126,9 @@ export function drawFig(fig, H = null) {
   const plot = fig.querySelector(".plot"), W = plot?.clientWidth; if (!W) return 0;
   let f; try { f = JSON.parse(fig.dataset.fig); } catch { return 0; }
   const draw = TYPES[f.type]; if (!draw) return 0;
-  const out = draw(f, W, H);
+  const out = draw(f, W, H); if (!out) return 0; // nothing to draw: the server-drawn picture stays
   plot.innerHTML = out.svg; fig.classList.add("drawn");
-  if (f.type === "line") probe(plot, f, out.geo);
+  if (f.type === "line") probe(plot, out.f, out.geo);
   return out.h;
 }
 export const drawAll = (root = document) => { for (const fig of root.querySelectorAll("figure.fig[data-fig]")) drawFig(fig); };

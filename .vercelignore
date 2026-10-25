@@ -9,3 +9,14 @@ kr_data
 # internal notes for working on the repo, not pages
 CLAUDE.md
 docs
+# the pipeline that writes the pages, not pages: its code, state and raw data stay in the repository (public on GitHub)
+# and off the site. social/out/ stays — Instagram fetches each post's images from there.
+.github
+serve.mjs
+trends
+social/*.mjs
+social/*.json
+social/*.txt
+social/*.md
+social/cards.html
+social/roundups
