@@ -70,4 +70,5 @@ export function parseArticle(html, link) {
   const title = cut(squash(decode(meta("og:title"))), 200); // an attribute holds no markup: "<b>" in it is text
   return title && date ? { title, link, date, summary: cut(clean(meta("og:description"))) } : null;
 }
-export const onDomain = (link, domains) => { try { const h = new URL(link).hostname; return domains.some((d) => h === d || h.endsWith(`.${d}`)); } catch { return false; } };
+// a link on the source's own site: http(s) only ("javascript://openai.com/%0a…" has openai.com for a hostname too)
+export const onDomain = (link, domains) => { try { const u = new URL(link), h = u.hostname; return /^https?:$/.test(u.protocol) && domains.some((d) => h === d || h.endsWith(`.${d}`)); } catch { return false; } };
