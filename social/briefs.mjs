@@ -240,7 +240,6 @@ for (const b of briefs) {
   <p class="lede">${esc(plain(a.lede))}</p>
   <p class="meta">${day(st.date)} · ${NAME}</p>
   ${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}
-  <p class="swipe-hint">옆으로 넘겨 보세요 →</p>
   </section>
   ${sections}
   ${a.takeaways?.length ? `<section class="slide sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}

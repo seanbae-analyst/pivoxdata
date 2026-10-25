@@ -23,7 +23,7 @@ on:
         description: "인스타그램"
         type: choice
         default: "규칙대로"
-        options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "누가 앞서나 지금 올리기", "테스트 초안 (승인 필요)"]
+        options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "테스트 초안 (승인 필요)"]
   # the same choices without the button: push social/request.json ({"post": "news" | "race" | "test"}) to main.
   # The run's own commit removes the file, so a request is used once (and the bot's push starts no new run).
   push:
