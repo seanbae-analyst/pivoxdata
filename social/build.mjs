@@ -45,7 +45,7 @@ const design = slides.map((x, i) => {
 });
 
 // ---------- slides ----------
-const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>`;
+const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div>`;
 const H = { number: [300, 220], chart: [600, 520], headline: [280, 200] }; // drawing height: [labelled, line]
 const chart = (x, s) => s.o ? `<div class="sp">${draw(x.viz[s.o.i], s.format, { w: 896, h: H[s.layout][FITTED.has(s.format) ? 0 : 1], big: true })}</div>` : `<div class="sp"></div>`;
 const kick = (x, i) => `<div class="kick">${String(i + 1).padStart(2, "0")} · ${esc(x.k)}</div>`;
@@ -97,7 +97,7 @@ const covers = {
   ${foot}
 </section>`,
   alert: `<section class="slide cover c-alert">
-  <div class="kick">AI 기술 신호 레이더 · ${when}</div>
+  <div class="kick">AX 트렌드 레이더 · ${when}</div>
   <div class="tag">${esc(plan.event?.kind ?? "빅 케이스")}</div>
   <h1>${esc(lead.title)}</h1>
   <div class="big">${esc(lead.big)}</div>
@@ -105,13 +105,13 @@ const covers = {
   ${foot}
 </section>`,
   list: `<section class="slide cover c-list">
-  <div class="kick">AI 기술 신호 레이더 · ${when}</div>
+  <div class="kick">AX 트렌드 레이더 · ${when}</div>
   <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : plan.mode === "race" ? "AI 분야별<br>누가<br>앞서나" : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
   <ol>${slides.slice(0, 3).map((x) => `<li><b>${esc(x.big)}</b><span>${esc(x.title)}</span></li>`).join("")}</ol>
   ${foot}
 </section>`,
   grid: `<section class="slide cover c-grid">
-  <div class="kick">AI 기술 신호 레이더 · ${when}</div>
+  <div class="kick">AX 트렌드 레이더 · ${when}</div>
   <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : plan.mode === "race" ? "개발자가 실제로 받는 숫자로 본<br>분야별 1위" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
   <div class="tiles">${slides.slice(0, 4).map((x) => `<div class="tile"><div class="tk">${esc(x.k)}</div><div class="tb">${esc(x.big)}</div><div class="tl">${esc(x.bl)}</div></div>`).join("")}</div>
   ${foot}
@@ -129,10 +129,12 @@ const html = `<!doctype html>
 <title>Instagram 카드 ${date}</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>
-  :root{--bg:#050505;--surface:#0d0d0d;--line:rgba(255,255,255,.1);--ink:#ededed;--ink-2:#cfcfcf;--mut:#9b9b9b;--dim:#6c6c6c;--bronze:#b8956a;--bronze-hi:#cdab80;--bronze-soft:rgba(184,149,106,.14);--bronze-line:rgba(184,149,106,.45)}
+  /* light by default: the feed is mostly bright, and a dark card full of numbers gets scrolled past. The alert cover
+     stays dark, so a big case still looks different from an ordinary post. */
+  :root{--bg:#f6f2ec;--surface:#ffffff;--line:rgba(30,22,12,.12);--ink:#16120d;--ink-2:#3b342b;--mut:#6e655a;--dim:#968c80;--bronze:#9a7240;--bronze-hi:#8a622f;--bronze-soft:rgba(154,114,64,.12);--bronze-line:rgba(154,114,64,.42)}
   *{box-sizing:border-box} html,body{margin:0;background:#222}
   body{font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;color:var(--ink);word-break:keep-all}
-  .slide{width:1080px;height:1350px;background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.16),transparent 60%),var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
+  .slide{width:1080px;height:1350px;background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.22),transparent 60%),var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
   .kick{font-size:30px;font-weight:600;color:var(--bronze-hi);letter-spacing:-.01em}
   .big{font-size:200px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:64px;font-variant-numeric:tabular-nums}
   .bl{font-size:32px;color:var(--mut);margin-top:18px}
@@ -141,7 +143,7 @@ const html = `<!doctype html>
   h2{font-size:52px;line-height:1.3;letter-spacing:-.03em;margin:64px 0 0;font-weight:700}
   p{font-size:32px;line-height:1.6;color:var(--ink-2);margin:28px 0 0}
   /* the plain-words box: what the number means, for someone who has never seen npm or arXiv */
-  .easy{background:rgba(255,255,255,.05);border-radius:24px;padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
+  .easy{background:#fff;box-shadow:0 1px 0 var(--line) inset,0 0 0 1px var(--line);border-radius:24px;padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
   .easy span{display:block;font-size:24px;font-weight:700;color:var(--bronze-hi);margin-bottom:6px}
   .easy-s{font-size:30px;color:var(--ink-2);margin-top:22px}
   .sp{margin-top:auto;margin-bottom:28px}
@@ -174,11 +176,11 @@ const html = `<!doctype html>
   .c-hero h1{font-size:68px;line-height:1.25;margin-top:56px}
   .c-hero .sp{margin:auto 0 0} .c-hero .sp .viz:not(.fit){height:220px}
   .c-hero .next{font-size:30px;color:var(--mut);margin:28px 0 36px}
-  .c-alert{background:var(--bronze-hi);color:#0b0906}
-  .c-alert .kick{color:#3b2e1d} .c-alert .foot{color:#3b2e1d;border-color:rgba(0,0,0,.18)}
-  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border:4px solid #0b0906;border-radius:999px}
+  .c-alert{background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.28),transparent 60%),#12100d;color:#f4efe7}
+  .c-alert .kick{color:#cdab80} .c-alert .foot{color:#a89f93;border-color:rgba(255,255,255,.14)}
+  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border-radius:999px;background:#cdab80;color:#12100d}
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
-  .c-alert .big{font-size:150px;margin-top:auto} .c-alert .bl{color:#3b2e1d;margin-bottom:56px}
+  .c-alert .big{font-size:150px;margin-top:auto;color:#cdab80} .c-alert .bl{color:#c9c0b4;margin-bottom:56px}
 </style>
 </head>
 <body data-date="${date}">

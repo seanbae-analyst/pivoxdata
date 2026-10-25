@@ -1,12 +1,12 @@
 // fetch.mjs — download every trends series into trends/data/*.json, with provenance.
 // Usage: node trends/fetch.mjs              (all sources)
-//        node trends/fetch.mjs npm pypi     (some sources: npm · pypi · arxiv · hf · sec)
+//        node trends/fetch.mjs npm pypi     (some sources: npm · pypi · arxiv · hf · sec · ax)
 // Re-running is cheap: npm and arXiv re-read only recent periods and keep the rest, PyPI keeps days that
 // pypistats no longer serves (it only has ~180), and Hugging Face adds one dated snapshot per day.
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC, AX } from "./series.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const only = process.argv.slice(2);
@@ -172,4 +172,22 @@ if (want("sec")) {
     await sleep(250); // SEC fair access: ≤ 10 requests per second
   }
   write("sec.json", { source: { site: "SEC EDGAR XBRL companyfacts", url: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", concepts: SEC.concepts, note: "US government data. Quarters derived from year-to-date 10-Q/10-K figures." }, fetched_at: today, companies: out });
+}
+
+// ---------- AX: Ramp AI Index from FRED, monthly, whole history each time (14 small CSVs) ----------
+if (want("ax")) {
+  const out = {};
+  for (const x of AX.series) {
+    const csv = await get(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${x.id}`, "text");
+    const months = {};
+    for (const line of (csv ?? "").trim().split("\n").slice(1)) {
+      const [d, v] = line.split(",");
+      if (v && v !== "." && !Number.isNaN(+v)) months[d.slice(0, 7)] = Math.round(+v * 100) / 100;
+    }
+    out[x.id] = { ...x, months };
+    const k = Object.keys(months);
+    console.log(`ax    ${x.id.padEnd(20)} ${k.length} months → ${k.at(-1)}`);
+    await sleep(500);
+  }
+  write("ax.json", { source: { site: "Ramp AI Index (Ramp Economics Lab) via FRED, Federal Reserve Bank of St. Louis", url: "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}", note: "Share of US businesses on Ramp paying for AI products, % per month. Copyrighted: citation required." }, fetched_at: today, series: out });
 }

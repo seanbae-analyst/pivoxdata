@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, AX } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd } from "./signals.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
@@ -86,6 +86,20 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
     const recent = q.filter((r) => r.q >= "2019Q1"), seq = recent.every((r, i, a) => !i || r.q !== a[i - 1].q);
     check(`sec:${c.id}:quarters`, seq && recent.length > 0, `${c.name}: 2019년 이후 ${recent.length}개 분기, 같은 분기 두 번 없음`);
   }
+}
+
+// AX (Ramp AI Index)
+{
+  const d = load("ax.json"), S = Object.values(d.series);
+  const lasts = S.map((x) => Object.keys(x.months).at(-1)).filter(Boolean), last = lasts.sort()[0];
+  check("ax:present", S.length === AX.series.length && S.every((x) => Object.keys(x.months).length >= 24), `Ramp AI Index ${S.length}개 시리즈, 모두 24개월 이상`);
+  check("ax:fresh", last && ageDays(`${last}-01`, d.fetched_at) <= 100, `가장 늦은 시리즈도 ${last}까지 (월 단위, 한두 달 늦게 나옴)`);
+  check("ax:same-month", new Set(lasts).size === 1, `모든 시리즈의 마지막 달이 같음 (${[...new Set(lasts)].join(", ")})`);
+  const bad = S.flatMap((x) => Object.entries(x.months).filter(([, v]) => !(v >= 0 && v <= 100)).map(([m]) => `${x.id} ${m}`));
+  check("ax:range", bad.length === 0, `모든 값이 0~100% 안${bad.length ? ` — 어긋남: ${bad.join(", ")}` : ""}`);
+  const all = d.series.RAMPAIALL.months, vendors = ["RAMPAIANTHROPIC", "RAMPAIOPENAI", "RAMPAIXAI"].map((id) => d.series[id].months);
+  const over = Object.keys(all).filter((m) => vendors.some((v) => v[m] > all[m] + 0.01));
+  check("ax:vendor-under-all", over.length === 0, `AI 회사별 도입률이 전체 도입률을 넘는 달 없음${over.length ? ` — 어긋남: ${over.join(", ")}` : ""}`);
 }
 
 fs.writeFileSync(path.join(DIR, "checks.json"), JSON.stringify({ checked_at: new Date().toISOString().slice(0, 10), notes, checks }, null, 1) + "\n");

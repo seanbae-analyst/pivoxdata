@@ -236,6 +236,31 @@
    "id": "sec:orcl:quarters",
    "ok": true,
    "fact": "Oracle: 2019년 이후 31개 분기, 같은 분기 두 번 없음"
+  },
+  {
+   "id": "ax:present",
+   "ok": true,
+   "fact": "Ramp AI Index 14개 시리즈, 모두 24개월 이상"
+  },
+  {
+   "id": "ax:fresh",
+   "ok": true,
+   "fact": "가장 늦은 시리즈도 2026-09까지 (월 단위, 한두 달 늦게 나옴)"
+  },
+  {
+   "id": "ax:same-month",
+   "ok": true,
+   "fact": "모든 시리즈의 마지막 달이 같음 (2026-09)"
+  },
+  {
+   "id": "ax:range",
+   "ok": true,
+   "fact": "모든 값이 0~100% 안"
+  },
+  {
+   "id": "ax:vendor-under-all",
+   "ok": true,
+   "fact": "AI 회사별 도입률이 전체 도입률을 넘는 달 없음"
   }
  ]
 }

@@ -36,4 +36,4 @@ http
       res.end(data);
     });
   })
-  .listen(PORT, () => console.log(`AI 기술 신호 레이더 → http://localhost:${PORT}`));
+  .listen(PORT, () => console.log(`AX 트렌드 레이더 → http://localhost:${PORT}`));

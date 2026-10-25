@@ -183,6 +183,31 @@ export const TOPICS = [
 // SEC EDGAR XBRL (companyfacts): capital expenditure — cash paid for property and equipment (data centres, servers,
 // chips). Cash-flow facts are filed year-to-date, so fetch.mjs derives each quarter by difference; verify.mjs checks
 // that four derived quarters add up to the annual 10-K figure. US government data; SEC asks for a User-Agent with contact.
+// ---------- AX: how businesses take up AI ----------
+// Ramp AI Index (Ramp Economics Lab), as published on FRED: the share of US businesses on Ramp's card and bill-pay
+// platform (70,000+) that paid for an AI product that month — overall, by AI company, by company size and by
+// industry. Paid tools only: free tiers and personal accounts are not counted. FRED marks it "copyrighted:
+// citation required", so every card names it.
+export const AX = {
+  source: "Ramp AI Index (FRED)",
+  series: [
+    { id: "RAMPAIALL", group: "all", name: "전체" },
+    { id: "RAMPAIANTHROPIC", group: "vendor", name: "Anthropic" },
+    { id: "RAMPAIOPENAI", group: "vendor", name: "OpenAI" },
+    { id: "RAMPAIXAI", group: "vendor", name: "xAI" },
+    { id: "RAMPAIENTERPRISE", group: "size", name: "대기업" },
+    { id: "RAMPAIMIDMARKET", group: "size", name: "중견기업" },
+    { id: "RAMPAISMB", group: "size", name: "중소기업" },
+    { id: "RAMPAITECH", group: "industry", name: "IT·기술" },
+    { id: "RAMPAIFINANCE", group: "industry", name: "금융·보험" },
+    { id: "RAMPAIMANUFACTURING", group: "industry", name: "제조" },
+    { id: "RAMPAIRETAIL", group: "industry", name: "소매" },
+    { id: "RAMPAICONSTRUCTION", group: "industry", name: "건설" },
+    { id: "RAMPAIHEALTHCARE", group: "industry", name: "의료·복지" },
+    { id: "RAMPAIHOSPITALITY", group: "industry", name: "숙박·외식" },
+  ],
+};
+
 export const SEC = {
   // SEC refuses requests without an e-mail contact; this is the operator's published address (SEC_CONTACT overrides)
   ua: `pivoxdata-trends research ${process.env.SEC_CONTACT || "support@pivoxquant.com"}`,

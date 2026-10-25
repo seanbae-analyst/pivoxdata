@@ -1,4 +1,4 @@
-# AI 기술 신호 레이더
+# AX 트렌드 레이더
 
 **▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — 매일 갱신 · 무료.
 
