@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
@@ -47,9 +47,11 @@ function downloads(src, list, control) {
 }
 const npm = downloads("npm", NPM, NPM_CONTROL), pypi = downloads("pypi", PYPI, PYPI_CONTROL);
 
-// topic packages (group "topic") belong to their own tabs, never to the AI rankings or tables
-const ranked = (x) => x.rows.filter((r) => r.group !== "topic" && r.level >= MIN_LEVEL && r.excess != null).sort((a, b) => b.excess - a.excess);
-const table = (x, yoy) => x.rows.filter((r) => r.group !== "topic" && r.level != null).sort((a, b) => (b.excess ?? -9) - (a.excess ?? -9)).map((r) =>
+// topic packages (group "topic") belong to their own tabs and race-only packages (group "race", e.g. playwright) to
+// the races — neither joins the AI rankings or tables
+const isAI = (r) => r.group !== "topic" && r.group !== "race";
+const ranked = (x) => x.rows.filter((r) => isAI(r) && r.level >= MIN_LEVEL && r.excess != null).sort((a, b) => b.excess - a.excess);
+const table = (x, yoy) => x.rows.filter((r) => isAI(r) && r.level != null).sort((a, b) => (b.excess ?? -9) - (a.excess ?? -9)).map((r) =>
   `<tr><td><b>${esc(r.group === "provider" ? `AI SDK용 ${r.name}` : r.name)}</b><span class="pkg">${esc(r.pkg)}</span></td><td>${man(r.level)}</td><td class="${cls(r.g4)}">${pc(r.g4)}</td><td class="${cls(r.excess)}">${pp(r.excess)}</td><td class="${cls(r.accel)}">${pp(r.accel)}</td>${yoy ? `<td class="${cls(r.yoy)}">${r.yoy == null ? "—" : pc(r.yoy, 0)}</td>` : ""}</tr>`).join("");
 
 // Vercel AI SDK providers: which model app developers wire in, as a share of the provider packages
@@ -220,7 +222,48 @@ function topicCards(t) {
     easy: `지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 ${esc(t.name)} 모델이에요.`, viz: [...(m.length > 2 ? [rank(m, (x) => x.id.split("/").pop(), (x) => (fresh ? x.likes : x.downloads), (x) => (fresh ? `♥ ${x.likes.toLocaleString("ko-KR")}` : man(x.downloads)))] : [])], src: `Hugging Face 트렌딩 · ${(t.hf ?? []).join("·")} · ${snap.date}` }); }
   return out.slice(0, 7);
 }
+
+// ---------- races: who leads each corner of AI (series.mjs RACES), as shares of the race's downloads ----------
+const refLbl = (b) => (b === 52 ? "1년 전" : b === 13 ? "3개월 전" : "4주 전");
+const races = RACES.map((r) => {
+  const x = r.src === "npm" ? npm : pypi, src = r.src === "npm" ? "npm" : "PyPI";
+  const W = Object.fromEntries(r.members.map((m) => [m.pkg, x.W[m.pkg]]));
+  const maxBack = x.weeks.length - x.from - 4; // shares need 4 comparable weeks at the far end
+  const at = (b) => (b <= maxBack ? shares(W, b) : null);
+  const S = { 0: at(0), 4: at(4), 13: at(13), 52: at(52) };
+  const ref = [52, 13, 4].find((b) => S[b] && r.members.some((m) => S[b][m.pkg] != null)) ?? null;
+  const rows = r.members.map((m) => { const q = x.rows.find((y) => y.pkg === m.pkg) ?? {};
+    return { ...m, now: S[0][m.pkg], w4: S[4]?.[m.pkg] ?? null, then: ref ? S[ref][m.pkg] ?? null : null, level: q.level, g4: q.g4, excess: q.excess }; })
+    .filter((y) => y.now != null).sort((a, b) => b.now - a.now);
+  if (rows.length < 2) return null;
+  const lead = rows[0], lead4 = S[4] ? [...rows].filter((y) => y.w4 != null).sort((a, b) => b.w4 - a.w4)[0] : null;
+  // the member whose share moved most since the reference point (a newcomer counts from 0)
+  const mover = ref ? [...rows].sort((a, b) => Math.abs(b.now - (b.then ?? 0)) - Math.abs(a.now - (a.then ?? 0)))[0] : null;
+  const fastest = [...rows].filter((y) => y.excess != null && y.level >= TOPIC_MIN_LEVEL).sort((a, b) => b.excess - a.excess)[0] ?? null;
+  return { ...r, x, src, rows, lead, lead4, ref, mover, fastest, week: x.last, move: mover ? Math.abs(mover.now - (mover.then ?? 0)) : 0 };
+}).filter(Boolean);
+const raceCard = (R, over = {}) => {
+  const { lead, mover, ref, fastest, rows } = R, n10 = Math.round(lead.now * 10);
+  const moved = mover && ref ? (mover.then == null ? `${keep(mover.name)}는 ${refLbl(ref)}엔 없다가 ${sh(mover.now)}` : `${keep(mover.name)} ${sh(mover.then)}&nbsp;→&nbsp;${sh(mover.now)}`) : "";
+  return { id: `race-${R.id}`, k: `레이스 · ${esc(R.name)}`, big: sh(lead.now), bl: `${R.name} 중 ${lead.name}의 몫`,
+    title: `${esc(R.name)} 1위는 <b>${keep(lead.name)}</b>`,
+    easy: `${esc(R.what)}. 이 중에서 10번 내려받으면 약 ${n10}번은 ${esc(lead.name)} 몫이에요.${moved ? ` ${refLbl(ref)}보다 가장 크게 움직인 곳은 ${moved}.` : ""}`,
+    body: `${rows.map((y) => `${esc(y.name)} ${sh(y.now)}`).join(" · ")}.${fastest ? ` 최근 4주 가장 빨리 큰 곳은 ${keep(fastest.name)}(인기 패키지보다 ${pp(fastest.excess)}).` : ""} 다운로드는 사용자 수가 아니라 설치 횟수예요.`,
+    viz: [shareOf(rows.map((y) => [y.name, y.now]), 0), ...(mover && ref ? [versus(mover.then ?? 0, mover.now, sh, refLbl(ref), "지금")] : []), ...(rows.filter((y) => y.excess != null).length > 2 ? [rank([...rows].filter((y) => y.excess != null).sort((a, b) => b.excess - a.excess), (y) => y.name, (y) => y.excess, (y) => pp(y.excess))] : [])],
+    src: `${R.src} 평일 다운로드 4주 평균 · 비중은 이 ${rows.length}개 안에서 · ${wlbl(R.week)}까지`, ...over };
+};
+// open models, by who made them: Hugging Face downloads of text-generation models (no history before the snapshots)
+const openRace = { id: "race-openmodels", k: "레이스 · 오픈 모델 제작사", big: sh(byAuthor[0][1] / genTotal), bl: `오픈 텍스트 생성 모델 다운로드 중 ${byAuthor[0][0]} 몫`,
+  title: `오픈 AI 모델 1위 제작사는 <b>${keep(byAuthor[0][0])}</b>`,
+  easy: `누구나 받아 쓰는 AI 모델(오픈 모델)을 10번 내려받으면 약 ${Math.round(byAuthor[0][1] / genTotal * 10)}번은 ${esc(byAuthor[0][0])}가 만든 모델이에요.`,
+  body: `${byAuthor.slice(0, 5).map(([a, v]) => `${esc(a)} ${sh(v / genTotal)}`).join(" · ")}. Hugging Face 다운로드 상위 ${snap.top.length}개 모델 기준.`,
+  viz: [shareOf([...byAuthor.slice(0, 5).map(([a, v]) => [a, v / genTotal]), ["그 밖", byAuthor.slice(5).reduce((t, [, v]) => t + v, 0) / genTotal]]), rank(byAuthor.map(([a, v]) => ({ name: a, v: v / genTotal })), (y) => y.name, (y) => y.v, (y) => sh(y.v))],
+  src: `Hugging Face 30일 다운로드 · ${snap.date}` };
+// the most-moved races first, the AI labs always near the top
+const raceCards = [...races].sort((a, b) => (b.id.startsWith("labs") - a.id.startsWith("labs")) || b.move - a.move).map((R) => raceCard(R));
+raceCards.splice(3, 0, openRace);
 const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
+topics.splice(1, 0, { id: "race", name: "누가 앞서나", cards: raceCards }); // every race on one tab, not capped at 7
 
 // ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
 // Each detector looks only at finished periods — the last complete week of downloads, the last full month of papers,
@@ -239,7 +282,7 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
   const ctrl = median(control.map((p) => x.W[p.pkg].at(-1).level / usual(p.pkg)));
   // when the AI packages rise together that is one change ("AI 패키지 전반"), and a single package stands out only
   // against both the controls and its AI peers
-  const peers = list.filter((p) => p.group !== "topic" && x.W[p.pkg].at(-1).level >= MIN_LEVEL && usual(p.pkg)).map((p) => ({ ...p, r: x.W[p.pkg].at(-1).level / usual(p.pkg) })).sort((a, b) => b.r - a.r);
+  const peers = list.filter((p) => isAI(p) && x.W[p.pkg].at(-1).level >= MIN_LEVEL && usual(p.pkg)).map((p) => ({ ...p, r: x.W[p.pkg].at(-1).level / usual(p.pkg) })).sort((a, b) => b.r - a.r);
   const pm = median(peers.map((p) => p.r));
   if (pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
     id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: "지난주 AI 패키지 다운로드 · 평소와 비교",
@@ -248,11 +291,11 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
   for (const p of list) {
     const r = x.rows.find((q) => q.pkg === p.pkg), L = x.W[p.pkg].at(-1).level, u = usual(p.pkg), name = nm(p);
     if (L == null || !u || L < (p.group === "topic" ? TOPIC_MIN_LEVEL : MIN_LEVEL)) continue;
-    const vs = L / u / (p.group === "topic" || pm == null ? ctrl : Math.max(ctrl, pm)), topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
+    const vs = L / u / (!isAI(p) || pm == null ? ctrl : Math.max(ctrl, pm)), topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
     if (vs >= SURGE_SMALL) { const tier = vs >= SURGE ? "big" : "small"; events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: tier === "big" ? "급증" : "증가", tier, score: 50 + (vs - 1) * 50, topic, card: {
       id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: "지난주 다운로드 · 평소와 비교",
       title: `지난주 <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
-      body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배${p.group !== "topic" && pm != null ? `, AI 패키지 전반은 ${pm.toFixed(2)}배` : ""}였습니다.`,
+      body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배${isAI(p) && pm != null ? `, AI 패키지 전반은 ${pm.toFixed(2)}배` : ""}였습니다.`,
       easy: `평소 한 주보다 ${(L / u).toFixed(1)}배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.`, viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[n - levels.length])}–${wlbl(wk)}` } }); }
     const hist = x.W[p.pkg].slice(x.from, n - 1).filter((w) => w.level != null);
     if (hist.length >= ATH_SMALL_WEEKS) { const ti = hist.reduce((a, b, i) => (b.level > hist[a].level ? i : a), 0), top = hist[ti], tier = hist.length >= 26 && L > top.level * ATH ? "big" : "small";
@@ -265,14 +308,12 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
     }
   }
 }
-{ // the model app developers wire in most: has the leader changed in four weeks?
-  const then = shares(provW, 4), oldLead = provPk.reduce((a, b) => ((then[b.pkg] ?? -1) > (then[a.pkg] ?? -1) ? b : a));
-  if (oldLead.pkg !== provLead.pkg && then[oldLead.pkg] != null) events.push({ key: `flip:provider:${provLead.pkg}:${npm.last}`, subject: "flip:provider", kind: "1위 교체", tier: "big", score: 100, topic: "ai", card: {
-    id: "ev-flip-provider", k: "빅 케이스 · 1위 교체", big: sh(provLead.now), bl: `Vercel AI SDK 공급자 중 ${provLead.name} 비중`,
-    title: `앱에 붙이는 모델 1위, 이제 <b>${keep(provLead.name)}</b>`,
-    body: `4주 전 1위는 ${esc(oldLead.name)}(${sh(then[oldLead.pkg])}), 지금은 ${sh(provNow[oldLead.pkg])}. 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.`,
-    easy: `AI 앱에 가장 많이 연결되는 모델 회사가 ${esc(oldLead.name)}에서 바뀌었어요.`, viz: [shareOf(provPk.map((p) => [p.name, provNow[p.pkg]]), provPk.indexOf(provLead)), rank([...provPk].sort((a, b) => provNow[b.pkg] - provNow[a.pkg]), (p) => p.name, (p) => provNow[p.pkg], (p) => sh(provNow[p.pkg]))],
-    src: `@ai-sdk 공급자 패키지 다운로드 비중 · ${wlbl(npm.last)}` } });
+for (const R of races) { // a race whose leader changed in four weeks (the app-model race included)
+  if (!R.lead4 || R.lead4.pkg === R.lead.pkg) continue;
+  events.push({ key: `flip:race:${R.id}:${R.lead.pkg}:${R.week}`, subject: `race:${R.id}`, kind: "1위 교체", tier: "big", score: 100, topic: "race",
+    card: raceCard(R, { id: `ev-flip-${R.id}`, k: `빅 케이스 · ${esc(R.name)} 1위 교체`, title: `${esc(R.name)} 1위, 이제 <b>${keep(R.lead.name)}</b>`,
+      easy: `${esc(R.what)}. 4주 전 1위는 ${esc(R.lead4.name)}(${sh(R.lead4.w4)})였는데, 지금은 ${esc(R.lead.name)}가 ${sh(R.lead.now)}로 앞섰어요.`,
+      viz: [versus(R.lead.w4 ?? 0, R.lead.now, sh, "4주 전", "지금"), shareOf(R.rows.map((y) => [y.name, y.now]), 0)] }) });
 }
 for (const f of fields) { // a phrase whose share of a field's papers has just crossed 2.5× its level a year earlier
   if (f.am.length < 16) continue;
