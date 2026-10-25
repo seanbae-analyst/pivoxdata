@@ -23,7 +23,7 @@ on:
         description: "인스타그램"
         type: choice
         default: "규칙대로"
-        options: ["규칙대로", "누가 앞서나 지금 올리기", "테스트 초안 (승인 필요)"]
+        options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "누가 앞서나 지금 올리기", "테스트 초안 (승인 필요)"]
 
 permissions:
   contents: write
@@ -56,7 +56,7 @@ jobs:
         id: plan
         shell: bash
         env:
-          POST_KIND: ${{ inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || '' }}
+          POST_KIND: ${{ inputs.post == '이번 주 AX 사건 지금 올리기' && 'news' || inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || '' }}
         run: node social/plan.mjs 2>&1 | tee -a run.log
 
       # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,

@@ -5225,5 +5225,337 @@
    "id": "capex",
    "text": "자본 — AI 인프라에 들어가는 돈, 1년 전보다 +87%. 마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요. 1년 전보다 +87% 많아요. Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 $510.7B(1년 전 $291.3B). 가장 빨리 늘린 곳은 Microsoft(+110%)."
   }
+ ],
+ "news": [
+  {
+   "id": "d806e2fa42",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-13",
+   "title": "국가 인공지능 데이터의 체계적 관리·활용을 위한 ｢인공지능 기본법｣, ｢데이터산업법｣ 개정안 국무회의 통과",
+   "summary": "- ｢인공지능 기본법｣ 개정으로 정부사업 구축·산출 인공지능 학습용데이터의 확보·제공 확대 - ｢데이터 산업법｣ 개정으로 공공·민간 데이터 소재 정보의 통합 제공 강화",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187861",
+   "score": 7
+  },
+  {
+   "id": "f47072a36f",
+   "src": "nvidia",
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-10-21",
+   "title": "NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents",
+   "summary": "Demand from AI-natives is pulling the European AI cloud ecosystem forward faster than ever. Developers need compute closer to their data, open models they can customize and serve at scale, and full-stack infrastructure that is secure by design. NVIDIA Cloud Partners across Europe, the Nordics, Africa, and Central Asia are expanding regional compute capacity for […]",
+   "link": "https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/",
+   "score": 6
+  },
+  {
+   "id": "66bacdc777",
+   "src": "snowflake",
+   "source": "Snowflake",
+   "kind": "company",
+   "date": "2026-10-15",
+   "title": "Sovereign Cloud for France: Snowflake and Bleu",
+   "summary": "Snowflake announces its intent to partner with Bleu to bring AI Data Cloud capabilities to France's regulated markets on sovereign infrastructure.",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/snowflake-bleu-sovereign-cloud-france",
+   "score": 6
+  },
+  {
+   "id": "387ffd5d5b",
+   "src": "samsung",
+   "source": "삼성전자",
+   "kind": "company",
+   "date": "2026-10-15",
+   "title": "삼성전자, ‘실리콘밸리 미래 통신 서밋 2026’ 개최",
+   "summary": "삼성전자가 현지시간 14일부터 15일까지 미국 실리콘밸리 마운틴뷰에서 글로벌 통신 업계 파트너들과 차세대 네트워크의 미래를 논의하는 자리를 마련한다. 삼성전자는 14일에 ‘파트너 데이(Partner Day)’를 진행했고, 15일에는 ‘실리콘밸리 미래 통신 서밋 2026(Silicon Valley Future Wireless Summit 2026)’을 개최한다. 이번 행사에는 주요 이동통신사∙제조사∙정부 기관∙학계 리더 등 100여 명의 통신 전문가들이 참석해 AI와 다가올 6G 시대 소프트웨어 기반의 네트워크 진화 […]",
+   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1%ec%a0%84%ec%9e%90-%ec%8b%a4%eb%a6%ac%ec%bd%98%eb%b0%b8%eb%a6%ac-%eb%af%b8%eb%9e%98-%ed%86%b5%ec%8b%a0-%ec%84%9c%eb%b0%8b-2026-%ea%b0%9c%ec%b5%9c",
+   "score": 5
+  },
+  {
+   "id": "88d3f2de2b",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-10-19",
+   "title": "AI sovereignty: preserving UK agency in an AI-enabled world",
+   "summary": "This letter provides advice to the Minister for AI on how the UK can build capability to make strategic choices about current and future AI technology.",
+   "link": "https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world",
+   "score": 4
+  },
+  {
+   "id": "aa57562f0e",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-12",
+   "title": "물리적 인공지능(피지컬 AI) 기술·산업·정책·투자를 한자리에 「물리적 인공지능 기술 주간(피지컬 AI Tech Week)」 13일 개막",
+   "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스)를 중심으로 정부·산업계·연구계가 함께하는 종합 협력의 장- 범부처 사업설명회, 국제 기술강연, 협력체 교류(얼라이언스 네트워킹)로 실증·사업화 연계 - 물리적 인공지능(피지컬 AI) 기술전시, 이야기 공연(토크 콘서트) 등을 통해 국민이 체감하는 물리적 인공지능(피지컬 AI ) 소개",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187856",
+   "score": 4
+  },
+  {
+   "id": "15c1f8ef7a",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-23",
+   "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
+   "summary": "OpenAI and Poland’s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
+   "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
+   "score": 3
+  },
+  {
+   "id": "b21a97b1b2",
+   "src": "nvidia",
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-10-23",
+   "title": "Kazakhstan Expands Compute for Its AI Future",
+   "summary": "Kazakhstan’s AI ecosystem is moving from infrastructure plans to deployment. The shift is visible across the full AI stack — from infrastructure to models to applications. The announcements below — coinciding with a visit to Astana by NVIDIA founder and CEO Jensen Huang — point to the nation’s increasing supply of accelerated computing, along with […]",
+   "link": "https://blogs.nvidia.com/blog/kazakhstan-ai-compute-ecosystem/",
+   "score": 3
+  },
+  {
+   "id": "381130e24d",
+   "src": "nvidia",
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-10-22",
+   "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
+   "summary": "To help developers rapidly build world models, which help physical AI systems understand and simulate the real world, NVIDIA has expanded the Cosmos platform with new training tools, simulation checkpoints and Cosmos Data Factory blueprints. Ranking top five on six different open models leaderboards, the NVIDIA Cosmos platform gives world model builders the frontier open […]",
+   "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
+   "score": 3
+  },
+  {
+   "id": "ba6fa07d67",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-22",
+   "title": "Uber brings ChatGPT Work to all employees with OpenAI",
+   "summary": "Uber is rolling out ChatGPT Work to more than 30,000 employees, helping teams research, analyze data, create presentations, and complete complex workflows.",
+   "link": "https://openai.com/index/uber-chatgpt-work-rollout",
+   "score": 3
+  },
+  {
+   "id": "4b8a59f356",
+   "src": "databricks",
+   "source": "Databricks",
+   "kind": "company",
+   "date": "2026-10-21",
+   "title": "Deploy RFD4-Proteina on Databricks",
+   "summary": "Bring RFD4-Proteina to your research data with AI-assisted development and serverless NVIDIA GPU compute....",
+   "link": "https://www.databricks.com/blog/deploy-rfd4-proteina-model-databricks",
+   "score": 3
+  },
+  {
+   "id": "13a18076dd",
+   "src": "salesforce",
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-10-20",
+   "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
+   "summary": "SAN FRANCISCO & NEW YORK — Salesforce (NYSE: CRM), the world’s #1 AI CRM, today announced it has entered into a definitive agreement to acquire Braze (NASDAQ: BRZE), a leading customer engagement platform, for approximately $5.66 billion in enterprise value. Under the terms of the agreement, holders of Braze Class A common stock will receive […]",
+   "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/",
+   "score": 3
+  },
+  {
+   "id": "d650f92872",
+   "src": "microsoft",
+   "source": "Microsoft",
+   "kind": "company",
+   "date": "2026-10-20",
+   "title": "Advancing digital sovereignty with greater control and choice",
+   "summary": "Across my conversations with leaders in government, critical infrastructure and regulated industries, one priority consistently rises to the top: putting technology to work on their most important systems while maintaining the control those systems require. This challenge is becoming more important as advanced cloud and AI capabilities move into public services, regulated processes and essential...",
+   "link": "https://blogs.microsoft.com/blog/2026/10/20/advancing-digital-sovereignty-with-greater-control-and-choice/",
+   "score": 3
+  },
+  {
+   "id": "dbaa902542",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-20",
+   "title": "OpenAI acquires Orchestra Bio",
+   "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
+   "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
+   "score": 3
+  },
+  {
+   "id": "72b1ea2089",
+   "src": "salesforce",
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-10-19",
+   "title": "Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain",
+   "summary": "Madrid named EMEA South hub as Salesforce expands office presence, customer innovation, and AI workforce development across the region. MADRID — October 19, 2026 — Salesforce, the #1 AI CRM, today unveiled plans to invest $1 billion in Spain over the next five years, cementing the country’s role as the growth engine for Salesforce’s EMEA […]",
+   "link": "https://www.salesforce.com/news/press-releases/2026/10/19/1-billion-ai-leadership-investment-spain/",
+   "score": 3
+  },
+  {
+   "id": "65442e7082",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-16",
+   "title": "How Itaú is building generative AI for its entire customer base",
+   "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+   "link": "https://openai.com/index/itau-generative-ai",
+   "score": 3
+  },
+  {
+   "id": "9d653fbf35",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-16",
+   "title": "What is a forward-deployed engineer?",
+   "summary": "Forward-deployed engineers work inside another company’s own systems. Three McKinsey leaders explain how FDEs help companies derive impact from AI.",
+   "link": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-a-forward-deployed-engineer",
+   "score": 3
+  },
+  {
+   "id": "415ce48789",
+   "src": "snowflake",
+   "source": "Snowflake",
+   "kind": "company",
+   "date": "2026-10-15",
+   "title": "Snowflake and Orange Business: Sovereign AI for France",
+   "summary": "Snowflake and Orange Business collaborate to deliver sovereign data and AI capabilities on trusted French infrastructure for regulated industries.",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/snowflake-orange-business-sovereign-ai-france",
+   "score": 3
+  },
+  {
+   "id": "dd00c04c9b",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-15",
+   "title": "Sullivan & Cromwell brings legal expertise into agreement review",
+   "summary": "In collaboration with OpenAI, Sullivan & Cromwell developed Agreement Analyzer, an AI tool for identifying issues in a draft agreement.",
+   "link": "https://openai.com/index/sullivan-cromwell",
+   "score": 3
+  },
+  {
+   "id": "87253efeda",
+   "src": "anthropic",
+   "source": "Anthropic",
+   "kind": "company",
+   "date": "2026-10-14",
+   "title": "Singapore office and government MOU | Anthropic",
+   "summary": "Anthropic opens its fifth Asia-Pacific office in Singapore and signs an MOU with the government on AI safety, evaluation, and responsible adoption.",
+   "link": "https://www.anthropic.com/news/singapore-office-opening",
+   "score": 3
+  },
+  {
+   "id": "f9d6830106",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-14",
+   "title": "The AI value curve: The economics of applying AI to existing work",
+   "summary": "Many organizations are still measuring AI adoption instead of value. The AI value curve helps identify where AI’s automation potential can be deployed most cost-effectively.",
+   "link": "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-ai-value-curve-the-economics-of-applying-ai-to-existing-work",
+   "score": 3
+  },
+  {
+   "id": "a99c1179f7",
+   "src": "sap",
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-10-13",
+   "title": "Industry AI: Deep Industry Knowledge, Forward-Deployed Engineering, Measurable Value",
+   "summary": "The hardest industry problems to solve are deeply contextual.",
+   "link": "https://news.sap.com/2026/10/industry-ai-deep-industry-knowledge-fde-measurable-value/",
+   "score": 3
+  },
+  {
+   "id": "b2b664a3da",
+   "src": "sap",
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-10-12",
+   "title": "The Next Chapter in Spend Management: AI Innovations Across SAP Ariba, SAP Fieldglass, and SAP Concur",
+   "summary": "New capabilities and partner innovations help organizations turn spend insights into faster, better-informed decisions.",
+   "link": "https://news.sap.com/2026/10/next-chapter-spend-management-ai-innovations-sap-ariba-sap-fieldglass-sap-concur/",
+   "score": 3
+  },
+  {
+   "id": "7b321951a1",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-11",
+   "title": "McKinsey research shows AI creating more jobs than automation displaces — but 11 million American workers will need help this decade",
+   "summary": "While debates about AI’s impact on the workforce dominate headlines, the biggest challenge ahead will be helping workers find the most direct pathway into growing jobs, write Eric Kutcher and Tanguy Catlin in Fortune.",
+   "link": "https://www.mckinsey.com/mgi/media-center/mckinsey-research-shows-ai-creating-more-jobs-than-automation-displaces-but-11-million-american-workers-will-need-help-this-decade",
+   "score": 2
+  },
+  {
+   "id": "d5d7f3826a",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-19",
+   "title": "과기정통부, 세계은행과 함께 국제 인공지능‧디지털 협력 논의",
+   "summary": "- 세계은행과 공동으로 「국제 인공지능‧디지털 정상회의(글로벌 AI‧디지털 서밋)」 개최(10월 19~22일, 서울) - 배경훈 부총리, 60여 개국 장‧차관급 대표들과 인공지능‧디지털 장관회의 개최(10.19.) - 포용적 인공지능‧디지털 전환을 위한 국제협력 등 의장 공동성명문 발표",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187874",
+   "score": 1
+  },
+  {
+   "id": "9c805cb308",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-14",
+   "title": "170만 명이 즐긴 「클릭온 인공지능(AI)」, 시즌2는 더욱 풍성한 프로그램으로 돌아온다",
+   "summary": "- 국민 누구나 인공지능을 즐길 수 있는 「2026 클릭온 인공지능(AI) 시즌2」(10.15.~11.25.) 개최 - 지난 6월에 열린 「2026 클릭온 인공지능(AI) 시즌1」은 170만 명 참여",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187869",
+   "score": 1
+  },
+  {
+   "id": "66d489d1ba",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-13",
+   "title": "류제명 제2차관, 「물리적 인공지능 기술의 날(피지컬 AI Tech Day)」 참석",
+   "summary": "- '행동하는 두뇌, Intelligence into Action' 주제로 해외 기술 동향과 발전 방향 공유 - \"우수한 기술이 현장 실증·사업화로 이어지도록 적극 지원\"",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187862",
+   "score": 1
+  },
+  {
+   "id": "c7febe0b74",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-13",
+   "title": "배경훈 부총리, 물리적 인공지능 협력체(피지컬 AI 얼라이언스)와 현장 중심의 실질적 성과 창출 가속화",
+   "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스) 간담회를 통해 산업 현장 애로 및 정책 수요 청취 - 한국형 물리적 인공지능 전 주기 개발(K-피지컬 AI 풀스택)·산업별 실증·데이터· 표준 등 추진성과 및 실행과제 점검 - 관계부처 사업·정책금융 연계해 현장 실증과 성공사례 창출 적극 지원",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187859",
+   "score": 1
+  },
+  {
+   "id": "3bc0c5d6f4",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-10-12",
+   "title": "Building a Safer, More Secure Britain in the age of AI",
+   "summary": "Speech delivered by the Minister for Artificial Intelligence …",
+   "link": "https://www.gov.uk/government/speeches/building-a-safer-more-secure-britain-in-the-age-of-ai",
+   "score": 1
+  },
+  {
+   "id": "bc970cfa64",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-12",
+   "title": "“인공지능 시대의 장원을 찾습니다” 국립과천과학관, 「인공지능 신(新) 과거제」 개최",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187858",
+   "score": 1
+  }
  ]
 }

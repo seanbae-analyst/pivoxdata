@@ -6,7 +6,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC, AX } from "./series.mjs";
+import crypto from "node:crypto";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC, AX, NEWS } from "./series.mjs";
+import { parseFeed, parseArticle, onDomain } from "./feeds.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const only = process.argv.slice(2);
@@ -190,4 +192,44 @@ if (want("ax")) {
     await sleep(500);
   }
   write("ax.json", { source: { site: "Ramp AI Index (Ramp Economics Lab) via FRED, Federal Reserve Bank of St. Louis", url: "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}", note: "Share of US businesses on Ramp paying for AI products, % per month. Copyrighted: citation required." }, fetched_at: today, series: out });
+}
+
+// ---------- AX news: official newsrooms and government press releases (NEWS in series.mjs) ----------
+// One request per feed. A feed that fails is recorded, not fatal: the other sources still count, and verify.mjs
+// decides whether too few answered. Items already kept stay (a feed only shows its latest few) until NEWS.days old.
+if (want("news")) {
+  const prev = read("news.json", { items: [] });
+  const keep = new Map(prev.items.map((x) => [x.id, x]));
+  const since = addDays(today, -NEWS.days), feeds = {};
+  const idOf = (link) => crypto.createHash("sha1").update(link).digest("hex").slice(0, 10);
+  const isAX = (src, x) => { const t = `${x.title} ${x.summary}`; return NEWS.ai.test(t) && (src.kind !== "company" || NEWS.business.test(t)); };
+  for (const src of NEWS.sources) {
+    try {
+      let items = [];
+      if (src.url) items = parseFeed(await get(src.url, "text", 3) ?? "");
+      else { // no feed: the news page's article links, each article read once (its meta tags)
+        const page = await get(src.html, "text", 3) ?? "";
+        const base = new URL(src.html);
+        const links = [...new Set([...page.matchAll(/href="(\/news\/[a-z0-9-]+)"/g)].map((m) => new URL(m[1], base).href))];
+        const known = new Set([...keep.values()].map((x) => x.link).concat(prev.seen?.[src.id] ?? []));
+        for (const link of links.filter((l) => !known.has(l)).slice(0, 20)) {
+          const a = parseArticle(await get(link, "text", 2) ?? "", link);
+          (prev.seen ??= {})[src.id] = [...new Set([...(prev.seen[src.id] ?? []), link])].slice(-300);
+          if (a) items.push(a);
+          await sleep(300);
+        }
+      }
+      const fresh = items.filter((x) => x.date >= since && x.date <= addDays(today, 1) && onDomain(x.link, src.domains));
+      const ax = fresh.filter((x) => isAX(src, x));
+      for (const x of ax) keep.set(idOf(x.link), { id: idOf(x.link), src: src.id, ...x });
+      feeds[src.id] = { ok: true, items: items.length, recent: fresh.length, ax: ax.length };
+      console.log(`news  ${src.id.padEnd(17)} ${String(items.length).padStart(4)} items, ${fresh.length} in ${NEWS.days} days, ${ax.length} AX`);
+    } catch (e) {
+      feeds[src.id] = { ok: false, error: e.message.slice(0, 200) };
+      console.log(`news  ${src.id.padEnd(17)} failed — ${e.message.slice(0, 120)}`);
+    }
+    await sleep(300);
+  }
+  const items = [...keep.values()].filter((x) => x.date >= since).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
+  write("news.json", { source: { note: "Official announcements only: each source's own newsroom, blog or press-release feed (trends/series.mjs NEWS). Titles and summaries as published; links to the original." }, fetched_at: today, feeds, seen: prev.seen ?? {}, items });
 }

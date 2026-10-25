@@ -261,6 +261,21 @@
    "id": "ax:vendor-under-all",
    "ok": true,
    "fact": "AI 회사별 도입률이 전체 도입률을 넘는 달 없음"
+  },
+  {
+   "id": "news:sources",
+   "ok": true,
+   "fact": "공식 출처 19곳 중 19곳 응답"
+  },
+  {
+   "id": "news:official",
+   "ok": true,
+   "fact": "기사 128건 모두 그 회사·기관 자기 도메인의 원문 링크"
+  },
+  {
+   "id": "news:dated",
+   "ok": true,
+   "fact": "모든 기사의 발표일이 최근 45일 안"
   }
  ]
 }

@@ -25,7 +25,7 @@ const slides = slidesFor(I, plan);
 // story.mjs's storyline, when there is one: text-first slides in the order the story goes (otherwise the card layouts)
 const storyFile = path.join(ROOT, "social", "out", I.built_at, "story.json");
 const story = fs.existsSync(storyFile) ? JSON.parse(fs.readFileSync(storyFile, "utf8")) : null;
-if (slides.length < 2) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
+if (!story && slides.length < 2) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
 const date = I.built_at, [y, m, d] = date.split("-");
 
 // ---------- what the last drafts looked like ----------
@@ -87,9 +87,9 @@ const slideHtml = (x, i) => {
 
 const when = `${+y}년 ${+m}월 ${+d}일`, lead = slides[0];
 // the hero cover also draws the case, in a different way from its own slide
-const heroO = options(lead.viz).find((o) => o.format !== design[0].format);
+const heroO = lead && options(lead.viz).find((o) => o.format !== design[0].format);
 const heroViz = heroO ? `<div class="sp">${draw(lead.viz[heroO.i], heroO.format, { w: 896, h: FITTED.has(heroO.format) ? 300 : 220, big: true })}</div>` : "";
-const covers = {
+const covers = story ? {} : { // a story brings its own cover
   hero: `<section class="slide cover c-hero">
   <div class="kick">빅 케이스 · ${esc(plan.event?.kind ?? "")} · ${when}</div>
   <div class="big">${esc(lead.big)}</div>
@@ -138,7 +138,9 @@ function storySlides(st) {
       : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}`
       : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
       : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
-    return `<section class="slide st ${e(s.kind)}">${inner}${foot}</section>`;
+    // a news slide's source and date come from the announcement (story.mjs prints them), never from the model
+    const src = s.src ? `<div class="srcl">${e(s.src)}</div>` : "";
+    return `<section class="slide st ${e(s.kind)}">${inner}${src}${foot}</section>`;
   }).join("\n");
 }
 
@@ -220,6 +222,8 @@ const html = `<!doctype html>
   .st.cover h2{font-size:calc(var(--k)*92px);line-height:1.16;margin-top:calc(var(--k)*110px)} .st.cover .txt{font-size:calc(var(--k)*40px)}
   .st.cover .badge{align-self:flex-start;margin-top:calc(var(--k)*72px);font-size:calc(var(--k)*30px);font-weight:700;padding:calc(var(--k)*12px) calc(var(--k)*24px);border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
   .st.answer .num b{font-size:calc(var(--k)*180px)} .st.end{background:var(--onyx)}
+  .st .srcl{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:25px;line-height:1.4;color:var(--bronze-hi);font-weight:600}
+  .st .srcl+.foot{margin-top:0}
 </style>
 </head>
 <body data-date="${date}">
