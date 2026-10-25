@@ -76,13 +76,14 @@ jobs:
           node social/build.mjs 2>&1 | tee -a run.log
           node social/render.mjs 2>&1 | tee -a run.log
           node social/caption.mjs 2>&1 | tee -a run.log
+          node social/briefs.mjs 2>&1 | tee -a run.log
 
       - name: Commit refreshed data, page and cards
         id: commit
         run: |
           git config user.name "pivoxdata-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json
+          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json briefs
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git commit -m "data(trends): daily refresh $(date -u +%F)${{ steps.plan.outputs.post == 'true' && ' + instagram draft' || '' }}"
           git pull --rebase origin "${GITHUB_REF_NAME}" && git push # the publish job may have pushed meanwhile

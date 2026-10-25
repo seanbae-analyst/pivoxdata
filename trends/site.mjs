@@ -19,13 +19,13 @@ const MARK = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-h
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/"><span class="mark">${MARK}</span><span class="full">${NAME}</span><span class="short">신호 레이더</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
 const FOOTER = `
 <footer class="site">
   <span>${NAME} · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/">신호</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+  <span class="links"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
 `;
 
@@ -73,7 +73,36 @@ export function writePages(fills = {}, lastmod) {
     for (const [name, content] of Object.entries(fills[page.file] ?? {})) h = region(h, name, content, page.file);
     if (h !== before) { fs.writeFileSync(file, h); console.log(`wrote ${page.file}`); } else console.log(`same  ${page.file}`);
   }
-  const urls = PAGES.filter((p) => !p.noindex).map((p) => `  <url><loc>${SITE}${p.path}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
+  // the briefings (social/briefs.mjs writes briefs/*.html) are listed too
+  const BR = path.join(ROOT, "briefs");
+  const briefs = fs.existsSync(BR) ? fs.readdirSync(BR).filter((f) => f.endsWith(".html")).map((f) => (f === "index.html" ? "/briefs" : `/briefs/${f.slice(0, -5)}`)) : [];
+  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
   fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
   fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+}
+
+// a whole page in the site's frame (head tags, top bar, footer) — for pages generated in full, like the briefings
+export function shell({ path: p, title, desc, css = "", body }) {
+  const page = { path: p }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
+  return `<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+${top}
+${head(page, top)}
+<link rel="stylesheet" href="/research.css" />
+<style>${css}</style>
+</head>
+<body>
+<div class="wrap">
+${NAV}
+<main>
+${body}
+</main>
+${FOOTER}
+</div>
+</body>
+</html>
+`;
 }
