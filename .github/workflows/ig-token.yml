@@ -1,0 +1,59 @@
+# ig-token.yml — keeps the Instagram access token alive.
+#
+# The token in the IG_ACCESS_TOKEN secret (Instagram API with Instagram Login) expires about 60 days after it was
+# made. Every 10 days this asks Instagram for a fresh one (refresh_access_token — allowed once the token is a day old
+# and still valid) and writes it back into the IG_ACCESS_TOKEN secret, so automatic posting never stops.
+#
+# Writing a secret needs more than the workflow's own token: a fine-grained personal access token with
+# "Secrets: read and write" on this repository, saved as the secret SECRETS_PAT (social/README.md). Without it, the
+# fresh token can't be saved and an issue says so. A token from Facebook Login (IG_GRAPH_HOST = graph.facebook.com,
+# a page token) does not expire this way and is left alone.
+name: instagram token refresh
+
+on:
+  schedule:
+    - cron: "41 3 */10 * *" # every 10 days, 03:41 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Refresh the token and save it
+        id: refresh
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          GH_TOKEN: ${{ secrets.SECRETS_PAT }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          if [ "${IG_GRAPH_HOST:-graph.instagram.com}" = "graph.facebook.com" ]; then echo "Facebook Login page token: no refresh needed"; exit 0; fi
+          test -n "$IG_ACCESS_TOKEN" || { echo "IG_ACCESS_TOKEN secret is not set" | tee result.txt; exit 1; }
+          res=$(curl -sS --get "https://graph.instagram.com/refresh_access_token" --data-urlencode "grant_type=ig_refresh_token" --data-urlencode "access_token=$IG_ACCESS_TOKEN")
+          new=$(printf '%s' "$res" | jq -r '.access_token // empty')
+          if [ -z "$new" ]; then
+            printf 'Instagram refused the refresh: %s\n' "$(printf '%s' "$res" | jq -c '.error // .' | head -c 400)" | tee result.txt; exit 1
+          fi
+          echo "::add-mask::$new"
+          days=$(( $(printf '%s' "$res" | jq -r '.expires_in // 0') / 86400 ))
+          test -n "$GH_TOKEN" || { echo "Got a fresh token (valid ${days} days) but SECRETS_PAT is not set, so it could not be saved" | tee result.txt; exit 1; }
+          printf '%s' "$new" | gh secret set IG_ACCESS_TOKEN --repo "$REPO"
+          echo "IG_ACCESS_TOKEN refreshed — valid for ${days} more days (until $(date -u -d "+${days} days" +%F))" | tee result.txt
+
+      - name: Open an issue when the refresh fails
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const why = fs.existsSync("result.txt") ? fs.readFileSync("result.txt", "utf8").trim() : "(see the run log)";
+            const body = `The Instagram token could not be refreshed, so automatic posting will stop when the current token expires (about 60 days after it was made).\n\n> ${why}\n\nFix: social/README.md → "인스타그램 토큰 자동 갱신". Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("instagram: token refresh failed"));
+            if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });
+            else await github.rest.issues.create({ ...context.repo, title: `instagram: token refresh failed (${new Date().toISOString().slice(0, 10)})`, body });
