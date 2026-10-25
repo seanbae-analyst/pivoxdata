@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES, NEWS } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES, NEWS, DOMAINS } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
@@ -307,8 +307,36 @@ const axCards = [
     body: `${axSizes.map((r) => `${esc(r.name)} ${pv(r.now)}(1년 전 ${pv(r.then)})`).join(" · ")}. ${axCaveat}`,
     viz: [axRank(axSizes), axVs(sizeUp[0], `1년 전 ${sizeUp[0].name}`, `지금 ${sizeUp[0].name}`)], src: axSrc },
 ];
+// ---------- IT domains: the official AX announcements counted per domain (ERP, CRM, cloud …), last 30 days ----------
+// An announcement can count in several domains. The comparison with the 30 days before is shown only once collection
+// has run for 60 days (news.json → since).
+const NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
+const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
+const dAgo = (d) => (new Date(updated) - new Date(d)) / 864e5;
+const newsAll = NEWSD.items.filter((x) => newsSrc[x.src]).filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
+  .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, domains: DOMAINS.filter((d) => d.re.test(t)).map((d) => d.id),
+    // NEWS.rank: adoptions, deals and rules up; consumer launches and events down — those (below 0) are not counted
+    score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
+  .filter((x) => x.score >= 0);
+// feeds list only their latest items, so "the 30 days before" is fully counted only 60 days after collection began
+const covered = NEWSD.since != null && dAgo(NEWSD.since) >= 60;
+const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8)}`;
+const domainRows = DOMAINS.map((d) => {
+  const inD = newsAll.filter((x) => x.domains.includes(d.id)), now = inD.filter((x) => dAgo(x.date) < 30), before = inD.filter((x) => dAgo(x.date) >= 30 && dAgo(x.date) < 60);
+  const by = Object.entries(now.reduce((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
+  return { ...d, now, prev: covered ? before.length : null, by };
+}).filter((r) => r.now.length).sort((a, b) => b.now.length - a.now.length);
+const domainCards = domainRows.map((r) => ({ id: `dom-${r.id}`, k: `IT 영역 · ${r.name}`, big: `${r.now.length}건`,
+  bl: r.prev != null ? `최근 30일 공식 발표 · 그 전 30일 ${r.prev}건` : "최근 30일 공식 발표",
+  title: r.by[0][1] >= 2 ? `${esc(r.name)}, <b>${keep(r.by[0][0])}</b> 발표가 가장 많아요` : `${esc(r.name)} 공식 발표 <b>${r.now.length}건</b>`,
+  easy: `회사·정부가 직접 낸 AX 발표 중 ${esc(r.about)} 이야기만 센 숫자예요. 많을수록 그 영역의 AI 도입·제휴·규제 소식이 활발하다는 뜻이에요.`,
+  body: `최근: ${r.now.slice(0, 3).map((x) => `${esc(x.source)} ${md(x.date)} — ${esc(x.title)}`).join(" · ")}`,
+  viz: [rank(r.by.map(([name, n]) => ({ name, n })), (x) => x.name, (x) => x.n, (x) => `${x.n}건`)],
+  src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에" }));
+
 const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
-topics.splice(1, 0, { id: "race", name: "누가 앞서나", cards: raceCards }); // every race on one tab, not capped at 7
+topics.unshift({ id: "race", name: "누가 앞서나", cards: raceCards }); // which AI tools companies and developers pick
+if (domainCards.length) topics.unshift({ id: "domains", name: "IT 영역별", cards: domainCards }); // ERP, CRM, cloud … in the announcements
 topics.unshift({ id: "ax", name: "AX", cards: axCards }); // the site's lead: how businesses take up AI
 
 // ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
@@ -544,12 +572,7 @@ const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? 
 // The last NEWS_DAYS days, the same announcement once (a feed can list it twice), ranked by NEWS.rank: adoptions,
 // deals and rules first. The site lists them with their links; social/story.mjs writes the weekly post from them.
 const NEWS_DAYS = 14;
-const NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
-const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
-const newsItems = NEWSD.items.filter((x) => newsSrc[x.src] && ago(x.date) <= NEWS_DAYS)
-  .filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
-  .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
-  .filter((x) => x.score > 0)
+const newsItems = newsAll.filter((x) => ago(x.date) <= NEWS_DAYS && x.score > 0) // the list and the posts: the ones that rank
   .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date));
 const KIND = { company: "기업 발표", government: "정부 발표", research: "리서치" };
 const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${KIND[x.kind]} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
@@ -603,13 +626,14 @@ const factList = [
   { group: "ax", id: "ax-note", text: `Ramp AI Index: 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잼. 무료 도구·개인 결제는 안 잡힘. 미국 기준.` },
   ...races.map((R) => ({ group: "race", id: `race-${R.id}`, text: `${R.name}(${R.what}) — ${R.src} 다운로드 중 몫, ${wlbl(R.week)}까지 4주: ${R.rows.map((y) => `${y.name} ${sh(y.now)}${y.then != null && R.ref ? `(${refLbl(R.ref)} ${sh(y.then)})` : R.ref ? `(${refLbl(R.ref)}엔 없음)` : ""}`).join(", ")}` })),
   { group: "race", id: "race-openmodels", text: text(`오픈 텍스트 생성 모델 다운로드 중 제작사별 몫(Hugging Face, ${snap.date}): ${byAuthor.slice(0, 5).map(([a, v]) => `${a} ${sh(v / genTotal)}`).join(", ")}`) },
+  ...domainRows.map((r) => ({ group: "domain", id: `dom-${r.id}`, text: `IT 영역 ${r.name}(${r.about}): 최근 30일 회사·정부 공식 AX 발표 ${r.now.length}건${r.prev != null ? `, 그 전 30일 ${r.prev}건` : ""} · 발표가 많은 곳: ${r.by.slice(0, 3).map(([n, k]) => `${n} ${k}건`).join(", ")}` })),
   ...insights.map((x) => ({ group: "radar", id: x.id, text: text(`${x.k} — ${x.title}. ${x.easy ?? ""} ${x.body}`) })),
 ];
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
   facts: factList,
   // the official announcements the weekly AX news post may use — as published, with the source and its link
-  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score }) => ({ id, src, source, kind, date, title, summary, link, score })) };
+  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score, domains }) => ({ id, src, source, kind, date, title, summary, link, score, domains: domains.map((d) => DOMAINS.find((x) => x.id === d).name) })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

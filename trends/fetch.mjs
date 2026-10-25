@@ -231,5 +231,6 @@ if (want("news")) {
     await sleep(300);
   }
   const items = [...keep.values()].filter((x) => x.date >= since).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id));
-  write("news.json", { source: { note: "Official announcements only: each source's own newsroom, blog or press-release feed (trends/series.mjs NEWS). Titles and summaries as published; links to the original." }, fetched_at: today, feeds, seen: prev.seen ?? {}, items });
+  // since: the day collection began — feeds show only their latest items, so a period before it is not fully counted
+  write("news.json", { since: prev.since ?? today, source: { note: "Official announcements only: each source's own newsroom, blog or press-release feed (trends/series.mjs NEWS). Titles and summaries as published; links to the original." }, fetched_at: today, feeds, seen: prev.seen ?? {}, items });
 }
