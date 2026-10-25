@@ -79,7 +79,7 @@ function head(page, html) {
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css" />
+<link rel="stylesheet" href="/ui.css?v=3" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 `;
   if (page.noindex) return `\n<meta name="robots" content="noindex" />${common}`;
@@ -126,7 +126,11 @@ export function writePages(fills = {}, lastmod) {
 }
 
 // a whole page in the site's frame (head tags, top bar, footer) — for pages generated in full, like the briefings
-export function shell({ path: p, title, desc, css = "", body }) {
+// phones: pages turned sideways instead of one long scroll (/pager.js) — set before the first paint so the long page never
+// flashes; "?scroll=1" keeps the long page, and a pager that has not started in 4 s gives it back. index.html has a copy.
+export const PAGED_HEAD = `<script>if (matchMedia("(max-width: 640px)").matches && !/[?&]scroll=/.test(location.search)) { const r = document.documentElement; r.classList.add("paged"); setTimeout(() => { if (!r.classList.contains("pgr-ready")) r.classList.remove("paged"); }, 4000); }</script>`;
+
+export function shell({ path: p, title, desc, css = "", body, paged = false }) {
   const page = { path: p }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
   return `<!doctype html>
 <html lang="ko">
@@ -134,7 +138,7 @@ export function shell({ path: p, title, desc, css = "", body }) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 ${top}
-${head(page, top)}
+${head(page, top)}${paged ? `\n${PAGED_HEAD}` : ""}
 <link rel="stylesheet" href="/research.css" />
 <style>${css}</style>
 </head>
