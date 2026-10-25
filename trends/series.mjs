@@ -200,7 +200,8 @@ export const NEWS = {
     { id: "databricks", name: "Databricks", kind: "company", url: "https://www.databricks.com/feed", domains: ["databricks.com"] },
     { id: "snowflake", name: "Snowflake", kind: "company", url: "https://www.snowflake.com/feed/", domains: ["snowflake.com"] },
     { id: "samsung", name: "삼성전자", kind: "company", url: "https://news.samsung.com/kr/feed", domains: ["samsung.com"] },
-    { id: "skt", name: "SK텔레콤", kind: "company", url: "https://news.sktelecom.com/feed", domains: ["sktelecom.com"] },
+    // its feed stamps true UTC ("Thu, 22 Oct 2026 23:38:30 +0000" for a release its page dates 10-23 08:38 KST): Korean days
+    { id: "skt", name: "SK텔레콤", kind: "company", url: "https://news.sktelecom.com/feed", domains: ["sktelecom.com"], tz: 9 },
     { id: "msit", name: "과학기술정보통신부", kind: "government", url: "https://www.msit.go.kr/user/rss/rss.do?bbsSeqNo=94", domains: ["msit.go.kr"] },
     { id: "eu", name: "EU 집행위원회", kind: "government", url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en", domains: ["ec.europa.eu"] },
     { id: "ukgov", name: "영국 정부", kind: "government", url: "https://www.gov.uk/search/news-and-communications.atom?keywords=artificial+intelligence", domains: ["gov.uk"] },

@@ -22,11 +22,13 @@ export function cut(s, n = 500) {
 }
 // the calendar day the feed wrote, in its own offset: "Mon, 26 Oct 2026 08:30:00 +0900" is the 26th (in UTC it would
 // be the 25th); Z and GMT are UTC's day. Atom/ISO and RSS dates are read as written; anything else through Date (UTC).
+// `tz` (hours) is for a feed that stamps true UTC times for a place whose day is another: the instant's day there.
 const MON = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
-export function isoDate(s) {
+export function isoDate(s, tz) {
   const t = String(s ?? "").trim().replace(/^(\d{4})\.(\d{1,2})\.(\d{1,2})\.?$/, (m, y, mo, d) => `${y}-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`);
   const d = new Date(t);
   if (Number.isNaN(+d)) return null;
+  if (tz != null) return new Date(+d + tz * 36e5).toISOString().slice(0, 10);
   const iso = t.match(/^(\d{4})-(\d{2})-(\d{2})/), rfc = t.match(/^(?:[a-z]+,\s*)?(\d{1,2})\s+([a-z]{3})[a-z]*\.?\s+(\d{4})\b/i);
   if (iso) return `${iso[1]}-${iso[2]}-${iso[3]}`;
   if (rfc && MON[rfc[2].toLowerCase()]) return `${rfc[3]}-${String(MON[rfc[2].toLowerCase()]).padStart(2, "0")}-${rfc[1].padStart(2, "0")}`;
@@ -45,7 +47,7 @@ const atomLink = (block) => {
   const alt = links.find((a) => !/rel=["'](?!alternate)/i.test(a)) ?? links[0] ?? "";
   return decode((alt.match(/href=["']([^"']+)["']/i) ?? [])[1] ?? "");
 };
-export function parseFeed(xml) {
+export function parseFeed(xml, tz) {
   // a CDATA section may hold anything, "</item>" too: the sections are set aside (as \0n\0 — NUL never occurs in XML)
   // while the items and their fields are cut, so one can't end an item early
   const cd = [], x = String(xml).replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, (m) => `\0${cd.push(m) - 1}\0`);
@@ -56,7 +58,7 @@ export function parseFeed(xml) {
     return {
       title: cut(text(tag(b, ["title"], back)), 200),
       link: /^https?:\/\//.test(rssLink) ? rssLink : atomLink(b) || clean(tag(b, ["guid", "id"], back)),
-      date: isoDate(clean(tag(b, ["pubDate", "published", "dc:date", "updated"], back))),
+      date: isoDate(clean(tag(b, ["pubDate", "published", "dc:date", "updated"], back)), tz),
       summary: cut(clean(tag(b, ["description", "summary", "content:encoded", "content"], back))),
     };
   }).filter((x) => x.title && /^https:\/\//.test(x.link) && x.date);

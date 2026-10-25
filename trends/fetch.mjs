@@ -206,7 +206,7 @@ if (want("news")) {
   for (const src of NEWS.sources) {
     try {
       let items = [];
-      if (src.url) items = parseFeed(await get(src.url, "text", 3) ?? "");
+      if (src.url) items = parseFeed(await get(src.url, "text", 3) ?? "", src.tz);
       else { // no feed: the news page's article links, each article read once (its meta tags)
         const page = await get(src.html, "text", 3) ?? "";
         const base = new URL(src.html);
