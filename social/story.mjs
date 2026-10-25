@@ -76,14 +76,15 @@ const textOf = (s) => [s.kicker, s.title, s.body, s.number, s.label, ...(s.items
 const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end"]);
 function check(story) {
   const p = [];
-  if (!Array.isArray(story?.slides) || story.slides.length < 4 || story.slides.length > 12) p.push(`장 수는 4~12장 (지금 ${story?.slides?.length ?? 0})`);
+  if (!Array.isArray(story?.slides) || story.slides.length < 4 || story.slides.length > 10) p.push(`장 수는 4~10장 (지금 ${story?.slides?.length ?? 0})`);
   else {
     if (story.slides[0].kind !== "cover") p.push("첫 장은 kind=cover");
     story.slides.forEach((s, i) => {
       if (!KINDS.has(s.kind)) p.push(`${i + 1}장: kind는 ${[...KINDS].join("/")} 중 하나`);
       if (!s.title || plain(s.title).length > 70) p.push(`${i + 1}장: 제목은 1~70자`);
-      if (plain(s.body).length > 300) p.push(`${i + 1}장: 본문은 300자 이하 (지금 ${plain(s.body).length}자)`);
-      if ((s.items ?? []).length > 6 || (s.items ?? []).some((x) => plain(x).length > 90)) p.push(`${i + 1}장: 항목은 6개 이하, 각 90자 이하`);
+      // the cards stay short; the long explanation is the web briefing (article, below)
+      if (plain(s.body).length > 140) p.push(`${i + 1}장: 본문은 140자 이하로 짧게 (지금 ${plain(s.body).length}자) — 자세한 설명은 웹 브리핑에`);
+      if ((s.items ?? []).length > 6 || (s.items ?? []).some((x) => plain(x).length > 70)) p.push(`${i + 1}장: 항목은 6개 이하, 각 70자 이하`);
     });
   }
   const all = [...(story?.slides ?? []).map(textOf), story?.caption ?? ""].map(plain).join("\n");
@@ -119,8 +120,8 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 인스타그램 카드뉴스 
 독자는 AI 도입에 관심 있는 직장인·기업 실무자·IT 컨설턴트다.
 
 규칙:
-- 게시물 하나에 이야기 하나. 표지에서 질문이나 반전으로 시작해, 장마다 한 걸음씩 나아가고, 마지막 장에서 정리한다. 장 수는 이야기에 맞게 정한다(4~12장).
-- 시각화보다 글로 설명한다. 장마다 제목(한 문장)과 본문(2~4문장, 300자 이하)을 충분히 쓴다.
+- 게시물 하나에 이야기 하나. 표지에서 질문이나 반전으로 시작해, 장마다 한 걸음씩 나아가고, 마지막 장에서 정리한다. 장 수는 이야기에 맞게 정한다(4~10장).
+- 카드는 짧고 간단하게: 장마다 제목(한 문장)과 본문 1~2문장(140자 이하). 핵심만 남기고, 배경·자세한 해설은 따로 쓰는 웹 브리핑에 맡긴다.
 - 숫자는 주어진 팩트에 적힌 그대로만 쓴다. 반올림·환산·새 계산(차이, 배수 등) 금지. 팩트에 없는 숫자는 쓰지 않는다.
 - 팩트에 없는 사실(회사 소개, 사례, 이유, 업종별 AI 활용 예)을 사실처럼 쓰지 않는다. 해석은 "~로 볼 수 있어요", "~를 뜻해요"처럼 해석임이 드러나게 쓴다.
 - 앞으로 어떻게 될지 단정하지 않는다. 무엇을 사거나 팔라고 하지 않는다. "추천", "전망", "예상", "급등" 같은 말을 쓰지 않는다.
@@ -128,7 +129,7 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 인스타그램 카드뉴스 
 - Ramp AI Index는 미국 기업, 유료 결제 기준이라는 점을, 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 필요한 곳에서 한 번씩 밝힌다.
 - 문법: 조사는 앞말의 받침에 맞춘다. 숫자·영어 뒤에서도 읽는 소리 기준이다(Anthropic은, OpenAI는, 12.1%p는, 3위로, SDK를). 띄어쓰기는 표준어 규정대로, 문장 끝은 ~요/~예요/~이에요로 맞춘다(받침 없으면 ~예요, 있으면 ~이에요).
 - 줄바꿈: 본문은 한 문장이나 한 뜻 덩어리마다 줄을 바꾼다("\n"). 한 줄은 한 호흡(대략 40자 안쪽)으로. 단어·숫자 중간이나 조사 앞에서 끊지 않는다. 제목이 20자를 넘으면 뜻이 나뉘는 곳에서 한 번만 "\n"으로 끊는다.
-- 캡션은 게시물 내용을 5~10줄로 요약한 본문만. 해시태그·링크·출처 줄은 쓰지 않는다(코드가 붙인다).
+- 캡션은 게시물 내용을 4~8줄로 짧게 요약한 본문만. 해시태그·링크·출처 줄은 쓰지 않는다(코드가 붙인다).
 
 출력은 JSON 하나만, 다른 글 없이:
 {"slides":[{"kind":"cover|text|number|list|quiz|answer|end","refs":[발표 번호(AX 사건 게시물만)],"kicker":"짧은 머리말(선택)","title":"제목","body":"본문(선택)","number":"강조할 숫자(number·answer 장, 팩트 숫자 그대로)","label":"숫자 설명(선택)","items":["목록 항목(list·quiz·end 장, 선택)"]}],"caption":"캡션 본문"}`;
@@ -142,7 +143,7 @@ const NEWS_RULES = `
 - 금액·수치는 발표에 적힌 숫자 그대로 쓴다(예: $1 billion은 "$1 billion"으로, 원화·다른 단위로 바꾸지 않는다).
 - 발표 3~5건을 고른다. 기업의 AI 도입·전환, 기업 간 협력·인수, 정부 정책·규제를 소비자 제품 소식보다 앞에 둔다.
 - 사건을 말하는 장마다 "refs"에 그 발표 번호를 적는다(예: [2]). 표지와 마지막 장은 비워도 된다. 출처 줄은 코드가 붙인다.
-- 캡션은 이번 주 사건을 회사·기관 이름과 함께 5~10줄로.`;
+- 캡션은 이번 주 사건을 회사·기관 이름과 함께 4~8줄로.`;
 
 function brief() {
   const what = plan.mode === "event" ? `오늘의 빅 케이스(${plan.event.kind}): ${plain(plan.event.headline)}`
@@ -202,7 +203,7 @@ function fromCards() {
   const [lead, ...rest] = cards;
   const slides = [
     { kind: "cover", kicker: FORMATS[format].name, title: lead.title, body: lead.easy || lead.body },
-    ...cards.map((x) => ({ kind: "number", kicker: x.k ? plain(x.k) : "", number: x.big, label: x.bl, title: x.title, body: [x.easy, x.body].filter(Boolean).join(" ").slice(0, 300) })),
+    ...cards.map((x) => ({ kind: "number", kicker: x.k ? plain(x.k) : "", number: x.big, label: x.bl, title: x.title, body: (x.easy || x.body || "").slice(0, 140) })),
     { kind: "end", title: "정리", items: cards.map((x) => `${x.title} (${x.big})`).slice(0, 6) },
   ];
   const caption = [lead.title, lead.easy || lead.body, "", ...rest.map((x) => `· ${x.title} (${x.big})`)].join("\n");
@@ -214,8 +215,8 @@ function fromNews() {
   const top = NEWS.slice(0, 5);
   const slides = [
     { kind: "cover", kicker: FORMATS[format].name, title: `이번 주 AX 사건 ${top.length}가지`, body: "회사와 정부가 직접 낸 발표만 모았어요." },
-    ...top.map((n, i) => ({ kind: "text", refs: [i + 1], kicker: n.source, title: n.title.slice(0, 70), body: n.summary.slice(0, 280) })),
-    { kind: "end", title: "정리", items: top.map((n) => `${n.source}: ${n.title}`.slice(0, 90)) },
+    ...top.map((n, i) => ({ kind: "text", refs: [i + 1], kicker: n.source, title: n.title.slice(0, 70), body: n.summary.slice(0, 140) })),
+    { kind: "end", title: "정리", items: top.map((n) => `${n.source}: ${n.title}`.slice(0, 70)) },
   ];
   return { slides, caption: [`이번 주 AX 사건 ${top.length}가지 — 공식 발표만`, "", ...top.map((n) => `· ${n.source}: ${n.title}`)].join("\n") };
 }
@@ -248,6 +249,66 @@ const source = result.story ? "claude" : "cards";
 const left = check(story);
 if (left.length && source === "claude") throw new Error(`story failed its own checks: ${left.join(" / ")}`);
 if (!result.story) console.log(`story from the cards — ${result.why}`);
+// ---------- the web version: the same story explained at more length, for the site's "AX 브리핑" (social/briefs.mjs) ----------
+const ARTICLE_RULES = `
+이번에는 같은 이야기를 웹사이트 'AX 브리핑' 글로 더 풀어서 쓴다. 카드보다 자세하게 — 배경, 숫자가 뜻하는 것, 기업·실무자가 읽을 점까지.
+- 구성: 제목, 리드(2~3문장), 섹션 3~8개(소제목 + 본문 2~4문단, 문단 사이는 빈 줄), 정리(핵심 3~5줄).
+- 사실·숫자·말투 규칙은 카드와 같다. 해석은 해석임이 드러나게. 한 문단은 2~4문장, 줄바꿈은 문단 사이에만.
+- 카드 스토리의 흐름을 따르되 같은 문장을 반복하지 말고 더 설명한다.
+출력은 JSON 하나만, 다른 글 없이:
+{"title":"제목","lede":"리드","sections":[{"heading":"소제목","body":"문단\\n\\n문단","refs":[발표 번호(AX 사건만)]}],"takeaways":["핵심 한 줄"]}`;
+function checkArticle(a) {
+  const p = [];
+  if (!a?.title || plain(a.title).length > 80) p.push("제목은 1~80자");
+  if (!a?.lede || plain(a.lede).length > 400) p.push("리드는 1~400자");
+  if (!Array.isArray(a?.sections) || a.sections.length < 3 || a.sections.length > 8) p.push(`섹션은 3~8개 (지금 ${a?.sections?.length ?? 0})`);
+  (a?.sections ?? []).forEach((x, i) => {
+    if (!x.heading || plain(x.heading).length > 60) p.push(`섹션 ${i + 1}: 소제목은 1~60자`);
+    if (!x.body || plain(x.body).length > 1400) p.push(`섹션 ${i + 1}: 본문은 1~1400자`);
+    const refs = x.refs ?? [];
+    if (!Array.isArray(refs) || refs.some((r) => !Number.isInteger(r) || r < 1 || r > NEWS.length)) p.push(`섹션 ${i + 1}: refs는 발표 번호 목록`);
+    if (NEWS.length) { const t = squash(`${x.heading} ${x.body}`); for (let k = 0; k + 24 <= t.length; k += 4) if (SRC.includes(t.slice(k, k + 24))) { p.push(`섹션 ${i + 1}: 발표문 문장을 그대로 옮김`); break; } }
+  });
+  if (NEWS.length && !(a?.sections ?? []).some((x) => x.refs?.length)) p.push("어떤 발표를 다루는지 섹션 refs에 번호를 적을 것");
+  if (!Array.isArray(a?.takeaways) || a.takeaways.length < 2 || a.takeaways.length > 6) p.push("정리는 2~6줄");
+  const all = plain([a?.title, a?.lede, ...(a?.sections ?? []).flatMap((x) => [x.heading, x.body]), ...(a?.takeaways ?? [])].join("\n"));
+  const bad = [...new Set(numbersIn(all).filter((n) => !allowed.has(n)))];
+  if (bad.length) p.push(`팩트에 없는 숫자: ${bad.join(", ")}`);
+  const words = [...new Set(all.match(BANNED) ?? [])];
+  if (words.length) p.push(`쓰면 안 되는 말: ${words.join(", ")}`);
+  if (META.test(all)) p.push("글이 아닌 메모가 섞임");
+  if (/[^\S\n]{2,}/.test(all) || /[^\S\n][.,!?)]/.test(all)) p.push("두 칸 띄어쓰기나 문장부호 앞 빈칸");
+  return p;
+}
+async function articleFromClaude(route, st) {
+  const messages = [{ role: "user", content: `${brief()}\n\n카드 스토리(이 흐름을 따라 더 풀어 쓸 것):\n${JSON.stringify(st.slides.map(({ src, ...x }) => x))}\n\n웹 브리핑 JSON만.` }];
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const res = await ask(route, (NEWS.length ? SYSTEM + NEWS_RULES : SYSTEM) + ARTICLE_RULES, messages);
+    if (res.refusal) return null;
+    let a = null, problems;
+    try { a = parse(res.text); problems = checkArticle(a); } catch (e) { problems = [`JSON으로 읽을 수 없음: ${e.message}`]; }
+    if (!problems.length) return a;
+    console.log(`article attempt ${attempt} rejected: ${problems.join(" / ")}`);
+    messages.push({ role: "assistant", content: res.text }, { role: "user", content: `다음 문제를 고쳐서 JSON 전체를 다시 써 줘:\n- ${problems.join("\n- ")}` });
+  }
+  return null;
+}
+// no Claude, or it failed: the story's own slides, one section each
+const articleFromSlides = (st) => {
+  const [cover, ...rest] = st.slides, end = rest.at(-1)?.kind === "end" ? rest.pop() : null;
+  return { title: plain(cover.title).replace(/\n/g, " "), lede: plain(cover.body ?? "").replace(/\n/g, " "),
+    sections: rest.map((x) => ({ heading: plain(x.title).replace(/\n/g, " "), body: [x.number ? `${x.number} — ${x.label ?? ""}` : "", plain(x.body ?? "").replace(/\n/g, " "), ...(x.items ?? []).map((i) => `· ${i}`)].filter(Boolean).join("\n\n"), refs: x.refs ?? [] })),
+    takeaways: end?.items ?? [] };
+};
+let article = null;
+if (route && result.story) {
+  try { article = await articleFromClaude(route, story); } catch (e) { if (!(e instanceof ClaudeUnavailable)) throw e; console.log(`article: ${e.message}`); }
+}
+story.article = { ...(article ?? articleFromSlides(story)), source: article ? "claude" : "slides" };
+// each section's sources, from the announcements themselves (with their links), like the slides' source lines
+if (NEWS.length) for (const x of story.article.sections) x.sources = (x.refs ?? []).map((r) => ({ source: NEWS[r - 1].source, kind: NEWS[r - 1].kind, date: NEWS[r - 1].date, title: NEWS[r - 1].title, link: NEWS[r - 1].link }));
+console.log(`article: ${story.article.sections.length} sections (${story.article.source})`);
+
 fs.mkdirSync(dir, { recursive: true });
-fs.writeFileSync(path.join(dir, "story.json"), JSON.stringify({ date, mode: plan.mode, format, format_name: FORMATS[format].name, industry, source, via: result.story ? route : null, model: result.model ?? null, proofread: Boolean(result.proofread), note: result.why ?? null, ...story }, null, 1) + "\n");
+fs.writeFileSync(path.join(dir, "story.json"), JSON.stringify({ date, mode: plan.mode, topic: plan.event?.topic ?? null, format, format_name: FORMATS[format].name, industry, source, via: result.story ? route : null, model: result.model ?? null, proofread: Boolean(result.proofread), note: result.why ?? null, ...story }, null, 1) + "\n");
 console.log(`wrote social/out/${slot}/story.json (${FORMATS[format].name}, ${story.slides.length} slides, ${source}${result.story ? ` via ${route}` : ""})`);

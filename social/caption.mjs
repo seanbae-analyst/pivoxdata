@@ -118,13 +118,14 @@ if (!result.body) console.log(`template caption used — ${result.why}`);
 const isAX = plan.mode === "event" && plan.event?.topic === "ax";
 const usesDownloads = !isAX && plan.mode !== "news";
 const sourcesLine = plan.mode === "news"
-  ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"}\n원문 링크는 data.pivoxquant.com 에서`
+  ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"} — 원문 링크는 브리핑에`
   : isAX ? "출처: Ramp AI Index (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 결제 데이터"
   : "출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매일 같은 방식으로 계산";
 const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능"
   : isAX ? "#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드"
   : "#AX #AI #인공지능 #개발자 #기술트렌드 #LLM #IT컨설팅";
-const caption = [body, "", sourcesLine, ...(plan.mode === "news" ? [] : ["자세히: data.pivoxquant.com"]), ...(usesDownloads ? ["다운로드 수는 사용자 수가 아니라 설치 횟수예요."] : []), "", tags].join("\n");
+// the long version of this post is its briefing page (social/briefs.mjs), at the post's folder name
+const caption = [body, "", `자세한 풀이: data.pivoxquant.com/briefs/${slot}`, sourcesLine, ...(usesDownloads ? ["다운로드 수는 사용자 수가 아니라 설치 횟수예요."] : []), "", tags].join("\n");
 
 const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
 if (images.length < 3) throw new Error(`social/out/${slot}: ${images.length} slides — run social/render.mjs first`);

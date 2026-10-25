@@ -136,7 +136,7 @@ function storySlides(st) {
     const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
     const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${lines(s.title)}</h2>${body}${num}`
       : s.kind === "quiz" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
-      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}`
+      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="more">자세한 풀이는 웹에서 · data.pivoxquant.com/briefs</div>`
       : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
       : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
     // a news slide's source and date come from the announcement (story.mjs prints them), never from the model
@@ -223,6 +223,7 @@ const html = `<!doctype html>
   .st.cover h2{font-size:calc(var(--k)*92px);line-height:1.16;margin-top:calc(var(--k)*110px)} .st.cover .txt{font-size:calc(var(--k)*40px)}
   .st.cover .badge{align-self:flex-start;margin-top:calc(var(--k)*72px);font-size:calc(var(--k)*30px);font-weight:700;padding:calc(var(--k)*12px) calc(var(--k)*24px);border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
   .st.answer .num b{font-size:calc(var(--k)*180px)} .st.end{background:var(--onyx)}
+  .st .more{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:26px;font-weight:600;color:var(--bronze-hi)} .st .more+.foot{margin-top:0}
   .st .srcl{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:25px;line-height:1.4;color:var(--bronze-hi);font-weight:600}
   .st .srcl+.foot{margin-top:0}
 </style>
