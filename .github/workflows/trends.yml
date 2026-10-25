@@ -16,7 +16,12 @@ name: trends daily
 on:
   schedule:
     - cron: "17 1 * * *" # every day 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_draft:
+        description: "오늘 올릴 변화가 없어도 인스타 초안을 만들기 (테스트용)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -48,6 +53,8 @@ jobs:
       - name: Big case today?
         id: plan
         shell: bash
+        env:
+          FORCE_DRAFT: ${{ inputs.force_draft }}
         run: node social/plan.mjs 2>&1 | tee -a run.log
 
       # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,

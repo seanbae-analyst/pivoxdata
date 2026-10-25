@@ -11,6 +11,8 @@
 //
 // Usage: node social/plan.mjs            (after trends/build.mjs)
 //        node social/plan.mjs --dry-run  (print the decision, change nothing)
+//        node social/plan.mjs --force    (draft even when the rules say not today — for testing the pipeline; the
+//                                         best there is: a new big case, else the waiting small changes, else a roundup)
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -33,8 +35,12 @@ const big = unposted.filter((c) => c.tier === "big" && days(today, c.date) <= BI
 const smalls = unposted.filter((c) => c.tier === "small" && (!last || c.date > last.date)).sort((a, b) => b.score - a.score)
   .filter((c, i, a) => a.findIndex((x) => x.subject === c.subject) === i).slice(0, DIGEST_MAX);
 
+const force = process.argv.includes("--force") || process.env.FORCE_DRAFT === "true";
 let plan;
-if (last?.date === today) plan = { post: false, why: `already drafted today (${last.key})` };
+if (force) plan = big.length ? { post: true, mode: "event", date: today, event: big[0], why: `forced; big case: ${big[0].headline}` }
+  : smalls.length ? { post: true, mode: "digest", date: today, items: smalls, why: `forced; ${smalls.length} small change(s)` }
+  : { post: true, mode: "roundup", date: today, why: "forced; nothing new, so a roundup" };
+else if (last?.date === today) plan = { post: false, why: `already drafted today (${last.key})` };
 else if (big.length) plan = { post: true, mode: "event", date: today, event: big[0], why: `big case: ${big[0].headline}` };
 else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: true, mode: "digest", date: today, items: smalls, why: `${smalls.length} small changes since ${last?.date ?? "the start"}` };
 else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
