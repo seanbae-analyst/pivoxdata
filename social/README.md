@@ -7,6 +7,9 @@
 `AUTO_PUBLISH` 를 `false` 로 만드세요. 그러면 `[instagram]` 이슈가 열리고, 소유자가 `/approve` 를 달아야 올라갑니다.
 Run workflow의 "테스트 초안 (승인 필요)"와, 자동 게시가 실패한 날은 늘 승인 이슈로 돌아갑니다.
 
+**직접 만든 게시물**(예: 고정 게시물)은 `social/out/<폴더>/post.json` 을 커밋한 뒤 Actions → **instagram publish** → Run workflow 에
+폴더 이름(`2026-10-25-91` 같은)을 넣으면 승인 댓글 없이 바로 올라갑니다. 같은 표식의 `[instagram]` 이슈가 열려 있으면 링크를 남기고 닫습니다.
+
 ```
 매일 10:17 KST  trends.yml
   ├ 데이터 받기 → 검산 → 대시보드(/) 다시 만들기 + 변화 찾기 → trends/data/changes.json   (검산 실패 → 이슈)

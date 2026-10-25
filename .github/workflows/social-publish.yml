@@ -1,11 +1,18 @@
 # Posts an approved carousel (a big case or a roundup) to Instagram.
-# Runs only when the repository OWNER comments /approve (or /reject) on an open "[instagram]" issue opened by
-# trends.yml. The post itself is social/out/<date>/post.json, already committed and checked; this job only sends it.
+# Runs when the repository OWNER comments /approve (or /reject) on an open "[instagram]" issue opened by
+# trends.yml — or from Actions → "instagram publish" → Run workflow with a folder name (a post made by hand, e.g. the
+# pinned brand posts; only people with write access can run it). The post itself is social/out/<slot>/post.json,
+# already committed; this job only sends it. An open "[instagram]" issue carrying the same marker is closed with the link.
 name: instagram publish
 
 on:
   issue_comment:
     types: [created]
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "social/out/<폴더>/post.json 을 바로 게시 (예: 2026-10-25-91)"
+        required: true
 
 permissions:
   contents: write
@@ -18,11 +25,12 @@ concurrency:
 jobs:
   publish:
     if: >-
+      github.event_name == 'workflow_dispatch' || (
       !github.event.issue.pull_request &&
       github.event.issue.state == 'open' &&
       startsWith(github.event.issue.title, '[instagram]') &&
       github.event.comment.author_association == 'OWNER' &&
-      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject'))
+      (startsWith(github.event.comment.body, '/approve') || startsWith(github.event.comment.body, '/reject')))
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -38,6 +46,14 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const SLOT = /^\d{4}-\d{2}-\d{2}(?:-\d+)?$/;
+            if (context.eventName === "workflow_dispatch") {
+              const slot = (context.payload.inputs?.slot || "").trim();
+              if (!SLOT.test(slot)) core.setFailed(`slot must look like YYYY-MM-DD or YYYY-MM-DD-N, got "${slot}"`);
+              core.setOutput("date", SLOT.test(slot) ? slot : "");
+              core.setOutput("action", "approve");
+              return;
+            }
             const m = (context.payload.issue.body || "").match(/<!-- instagram-post:(\d{4}-\d{2}-\d{2}(?:-\d+)?) -->/);
             if (!m) core.setFailed("no <!-- instagram-post:YYYY-MM-DD --> marker in the issue");
             core.setOutput("date", m ? m[1] : "");
@@ -74,11 +90,20 @@ jobs:
             const file = `social/out/${process.env.POST_DATE}/post.json`;
             const post = JSON.parse(fs.readFileSync(file, "utf8"));
             execSync(`git config user.name "pivoxdata-bot" && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" && git add ${file} && git commit -m "social: published ${process.env.POST_DATE}" && git pull --rebase && git push`);
-            await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `게시했습니다: ${post.published.permalink}` });
-            await github.rest.issues.update({ ...context.repo, issue_number: context.issue.number, state: "closed", state_reason: "completed" });
+            // the approving issue, or (Run workflow) any open "[instagram]" issue that carries this post's marker
+            const marker = `<!-- instagram-post:${process.env.POST_DATE} -->`;
+            const issues = context.eventName === "workflow_dispatch"
+              ? (await github.paginate(github.rest.issues.listForRepo, { ...context.repo, state: "open", per_page: 100 }))
+                  .filter((i) => !i.pull_request && i.title.startsWith("[instagram]") && (i.body || "").includes(marker)).map((i) => i.number)
+              : [context.issue.number];
+            for (const n of issues) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: n, body: `게시했습니다: ${post.published.permalink}` });
+              await github.rest.issues.update({ ...context.repo, issue_number: n, state: "closed", state_reason: "completed" });
+            }
+            core.notice(`published ${process.env.POST_DATE}: ${post.published.permalink}`);
 
       - name: Report a failure
-        if: failure() && steps.post.outputs.action == 'approve'
+        if: failure() && steps.post.outputs.action == 'approve' && github.event_name == 'issue_comment'
         uses: actions/github-script@v7
         with:
           script: |
