@@ -126,7 +126,7 @@ const covers = story ? {} : { // a story brings its own cover
 // ---------- story slides ----------
 function storySlides(st) {
   // a number, a closing bracket or % stays on the same line as the particle after it ("36.2%로", "(1년 전 3.5%)로")
-  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, "").replace(/([\d%)])(?=[가-힣])/g, "$1\u2060"));
+  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, "").replace(/([\d%)])(?=[가-힣])/g, "$1\u2060").replace(/·(?=\S)/g, "·\u200b")); // a list joined by · may break after it
   // each line the writer broke on is its own block: when the text grows enough that one has to wrap, it splits evenly
   const lines = (t) => String(t ?? "").split("\n").map((l) => `<span class="ln">${e(l)}</span>`).join("");
   return st.slides.map((s, i) => {
@@ -226,6 +226,16 @@ const html = `<!doctype html>
   .st .more{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:26px;font-weight:600;color:var(--bronze-hi)} .st .more+.foot{margin-top:0}
   .st .srcl{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:25px;line-height:1.4;color:var(--bronze-hi);font-weight:600}
   .st .srcl+.foot{margin-top:0}
+  /* editorial (2026-10-25), like the site: no pill badge, no numbered circles or boxed rows — hairline rules and type;
+     bronze for the numbers, the source line and the series name only */
+  .st .kick{padding-bottom:calc(var(--k)*18px);border-bottom:1px solid var(--line)}
+  .st.cover .badge{padding:0;border-radius:0;background:none;color:var(--bronze-hi);font-weight:600;margin-top:calc(var(--k)*64px)}
+  .st ol{gap:0;border-top:1px solid var(--line-2)}
+  .st ol li,.st ol.many li{background:none;border:0;border-radius:0;border-bottom:1px solid var(--line);padding:calc(var(--k)*18px) 0;grid-template-columns:calc(var(--k)*44px) 1fr}
+  .st ol li::before,.st ol.many li::before{width:auto;height:auto;border-radius:0;background:none;display:block;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums}
+  .st.end ol li{background:none}
+  .st .hint{color:var(--mut);font-weight:600}
+  .st .more{color:var(--mut);font-weight:500}
 </style>
 </head>
 <body data-date="${slot}">
