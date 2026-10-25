@@ -123,7 +123,21 @@ OneSignalDeferred.push(async (OneSignal) => {
 });
 </script>`;
 
+// the phone deck: progress bars and ‹ › buttons that follow the sideways scroll (CSS does the swiping)
+const DECK = `<script>
+(() => { const deck = document.getElementById("deck"), nav = document.querySelector(".deck-nav"); if (!deck || !nav) return;
+  const slides = [...deck.children], bars = nav.querySelector(".bars");
+  bars.innerHTML = slides.map(() => "<i></i>").join("");
+  const at = () => Math.round(deck.scrollLeft / deck.clientWidth);
+  const paint = () => { const i = at(); [...bars.children].forEach((b, k) => b.classList.toggle("on", k <= i)); nav.querySelector('[data-go="-1"]').disabled = i === 0; nav.querySelector('[data-go="1"]').disabled = i === slides.length - 1; };
+  deck.addEventListener("scroll", () => requestAnimationFrame(paint), { passive: true });
+  nav.addEventListener("click", (e) => { const d = +e.target.closest("button")?.dataset.go; if (d) deck.scrollTo({ left: (at() + d) * deck.clientWidth, behavior: "smooth" }); });
+  addEventListener("resize", paint); paint();
+})();
+</script>`;
+
 const CSS = `
+  main>*,article{min-width:0}
   .kicker{display:inline-flex;width:fit-content;gap:8px;align-items:center;padding:5px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:13px;color:var(--ink-2);margin:28px 0 16px}
   .kicker b{color:var(--bronze-hi);font-weight:600} .kicker a{color:var(--ink-2)}
   article{max-width:720px}
@@ -163,7 +177,23 @@ const CSS = `
   .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
   .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
   .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
-  @media(max-width:560px){.pn{grid-template-columns:1fr}.pn .next{text-align:left}}
+  .swipe-hint,.deck-nav{display:none}
+  @media(max-width:640px){
+    .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;width:calc(100% + 32px);overscroll-behavior-x:contain}
+    .deck::-webkit-scrollbar{display:none}
+    .deck>.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;padding:18px 16px 8px;height:calc(100svh - 150px);overflow-y:auto;border-right:1px solid var(--line)}
+    .deck>.slide.first{display:flex;flex-direction:column;justify-content:center}
+    .deck>.slide h2{margin-top:0;font-size:22px} .deck>.slide p{font-size:16px;line-height:1.8}
+    .deck>.slide.sum{margin:0;border:0;border-radius:0;background:none} .deck>.slide.basis{margin:0}
+    .deck .kicker{margin-top:0} h1.page{font-size:28px}
+    .swipe-hint{display:block;margin-top:auto;font-size:13.5px;color:var(--bronze-hi)}
+    .deck-nav{display:flex;align-items:center;gap:10px;margin:10px 0 0}
+    .deck-nav button{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+    .deck-nav button:disabled{opacity:.3}
+    .deck-nav .bars{flex:1;display:flex;gap:4px} .deck-nav .bars i{flex:1;height:3px;border-radius:2px;background:var(--line-2)} .deck-nav .bars i.on{background:var(--bronze)}
+    .pn{grid-template-columns:1fr}.pn .next{text-align:left}
+    body.has-appbar .deck>.slide{height:calc(100svh - 230px)}
+  }
 `;
 
 // ---------- write ----------
@@ -178,18 +208,27 @@ const put = (rel, html) => {
 
 for (const b of briefs) {
   const { st, post } = b, a = st.article;
-  const sections = a.sections.map((x) => `<h2>${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}`).join("");
+  const sections = a.sections.map((x) => `<section class="slide"><h2>${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
   const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = same[i - 1], older = same[i + 1];
   const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
+  // on a phone the briefing reads like the cards: one section per slide, swiped sideways (DECK below); on a wide
+  // screen the same slides are just the article's sections, one after another
   const body = `<article>
+  <div class="deck" id="deck">
+  <section class="slide first">
   <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/${b.series}">${esc(SERIES[b.series]?.name ?? st.format_name ?? "")}</a></div>
   <h1 class="page">${esc(plain(a.title))}</h1>
   <p class="lede">${esc(plain(a.lede))}</p>
   <p class="meta">${day(st.date)} · ${NAME}</p>
   ${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}
+  <p class="swipe-hint">옆으로 넘겨 보세요 →</p>
+  </section>
   ${sections}
-  ${a.takeaways?.length ? `<section class="sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}
-  <section class="basis"><h2>근거</h2>${basis(b)}</section>
+  ${a.takeaways?.length ? `<section class="slide sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}
+  <section class="slide basis"><h2>근거</h2>${basis(b)}</section>
+  </div>
+  <div class="deck-nav" aria-hidden="true"><button type="button" data-go="-1" aria-label="이전">‹</button><div class="bars"></div><button type="button" data-go="1" aria-label="다음">›</button></div>
+  ${DECK}
   ${newer || older ? `<nav class="pn" aria-label="같은 시리즈">${older ? `<a href="/briefs/${older.slot}"><small>← 이전 ${esc(SERIES[b.series].name)}</small>${esc(plain(older.st.article.title))}</a>` : "<span></span>"}${newer ? `<a class="next" href="/briefs/${newer.slot}"><small>다음 ${esc(SERIES[b.series].name)} →</small>${esc(plain(newer.st.article.title))}</a>` : ""}</nav>` : ""}
   ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list">${related.map(item).join("")}</ul></section>` : ""}
   <div class="links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${esc(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 신호</a></div>
