@@ -21,12 +21,37 @@ const NAV = `
   <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
+// on a phone, a bar at the bottom offers the app: one tap on Android (the browser's install prompt), the steps on an
+// iPhone (Safari's share sheet → 홈 화면에 추가). Hidden once installed, or for a week after 닫기.
+const APPBAR = `
+<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 브리핑 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
+<div class="appsheet" id="appsheet" hidden><div class="in"><b>홈 화면에 추가하기</b><ol id="appsheet-steps"></ol><button type="button" id="appsheet-ok">확인</button></div></div>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id), bar = $("appbar");
+  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches) return;
+  try { if (+localStorage.getItem("appbar-x") > Date.now() - 7 * 864e5) return; } catch {}
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let ev = null;
+  const steps = ios
+    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"]
+    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"];
+  $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
+  const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });
+  addEventListener("appinstalled", () => show(false));
+  setTimeout(() => show(true), 1200);
+  $("appbar-go").addEventListener("click", async () => { if (ev) { ev.prompt(); await ev.userChoice; ev = null; show(false); } else $("appsheet").hidden = false; });
+  $("appsheet-ok").addEventListener("click", () => { $("appsheet").hidden = true; });
+  $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
+})();
+</script>`;
 const FOOTER = `
 <footer class="site">
   <span>${NAME} · 매일 갱신 · 무료</span>
   <span class="links"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
 </footer>
-`;
+${APPBAR}`;
 
 function head(page, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || NAME;
