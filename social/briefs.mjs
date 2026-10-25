@@ -179,9 +179,10 @@ const CSS = `
   .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
   .swipe-hint,.deck-nav{display:none}
   @media(max-width:640px){
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
     .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;width:calc(100% + 32px);overscroll-behavior-x:contain}
     .deck::-webkit-scrollbar{display:none}
-    .deck>.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;padding:18px 16px 8px;height:calc(100svh - 150px);overflow-y:auto;border-right:1px solid var(--line)}
+    .deck>.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;padding:18px 16px 8px;height:calc(100svh - 150px - 68px);overflow-y:auto;border-right:1px solid var(--line)}
     .deck>.slide.first{display:flex;flex-direction:column;justify-content:center}
     .deck>.slide h2{margin-top:0;font-size:22px} .deck>.slide p{font-size:16px;line-height:1.8}
     .deck>.slide.sum{margin:0;border:0;border-radius:0;background:none} .deck>.slide.basis{margin:0}
@@ -192,7 +193,7 @@ const CSS = `
     .deck-nav button:disabled{opacity:.3}
     .deck-nav .bars{flex:1;display:flex;gap:4px} .deck-nav .bars i{flex:1;height:3px;border-radius:2px;background:var(--line-2)} .deck-nav .bars i.on{background:var(--bronze)}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
-    body.has-appbar .deck>.slide{height:calc(100svh - 230px)}
+    body.has-appbar .deck>.slide{height:calc(100svh - 230px - 68px)}
   }
 `;
 
