@@ -198,8 +198,10 @@ if (want("ax")) {
 // One request per feed. A feed that fails is recorded, not fatal: the other sources still count, and verify.mjs
 // decides whether too few answered. Items already kept stay (a feed only shows its latest few) until NEWS.days old.
 if (want("news")) {
-  const prev = read("news.json", { items: [] });
-  const keep = new Map(prev.items.map((x) => [x.id, x]));
+  const prev = read("news.json", { items: [] }), srcs = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
+  // a stored item stays only while its source is watched and its link passes that source's domains as they are now:
+  // a source removed or narrowed in series.mjs would otherwise fail verify's news:official until NEWS.days passed
+  const keep = new Map(prev.items.filter((x) => srcs[x.src] && onDomain(x.link, srcs[x.src].domains)).map((x) => [x.id, x]));
   const since = addDays(today, -NEWS.days), feeds = {};
   const idOf = (link) => crypto.createHash("sha1").update(link).digest("hex").slice(0, 10);
   const isAX = (src, x) => { const t = `${x.title} ${x.summary}`; return NEWS.ai.test(t) && (src.kind !== "company" || NEWS.business.test(t)); };
