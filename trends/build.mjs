@@ -334,10 +334,17 @@ const domainCards = domainRows.map((r) => ({ id: `dom-${r.id}`, k: `IT 영역 ·
   viz: [rank(r.by.map(([name, n]) => ({ name, n })), (x) => x.name, (x) => x.n, (x) => `${x.n}건`)],
   src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 원문 링크는 AX 사건 칸에" }));
 
-const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
-topics.unshift({ id: "race", name: "누가 앞서나", cards: raceCards }); // which AI tools companies and developers pick
-if (domainCards.length) topics.unshift({ id: "domains", name: "IT 영역별", cards: domainCards }); // ERP, CRM, cloud … in the announcements
-topics.unshift({ id: "ax", name: "AX", cards: axCards }); // the site's lead: how businesses take up AI
+// the main view reads like an IT-consulting report: how businesses take up AI, and what the announcements say per IT
+// domain. Developer-side readings (SDK downloads, papers, open models, tool shares) stay in "근거 데이터" below.
+const topics = [{ id: "ax", name: "기업 도입률", cards: axCards }, ...(domainCards.length ? [{ id: "domains", name: "IT 영역별 발표", cards: domainCards }] : [])];
+// the four numbers at the top, like a report's first page
+const kpis = [
+  { v: pv(axAll.now), l: "AI 도구에 돈을 내는 미국 기업", s: `${axLbl(axL)} · 1년 새 ${ppv(axAll.now - axAll.then)}` },
+  { v: pv(axVendors[0].now), l: `기업 결제 1위 AI · ${axVendors[0].name}`, s: `2위 ${axVendors[1].name} ${pv(axVendors[1].now)}` },
+  { v: pv(axInds[0].now), l: `도입률 1위 업종 · ${axInds[0].name}`, s: `1년 새 가장 많이 늘어난 업종 ${indUp[0].name} ${ppv(indUp[0].now - indUp[0].then)}` },
+  ...(domainRows.length ? [{ v: `${domainRows[0].now.length}건`, l: `공식 발표 최다 IT 영역 · ${domainRows[0].name}`, s: "최근 30일 · 회사·정부 발표" }] : []),
+];
+const kpiHtml = kpis.map((k) => `<li><b>${esc(k.v)}</b><span>${esc(k.l)}</span><small>${esc(k.s)}</small></li>`).join("");
 
 // ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
 // Each detector looks only at finished periods — the last complete week of downloads, the last full month of papers,
@@ -348,7 +355,7 @@ const topicOfPkg = (pkg) => TOPICS.find((t) => t.pypi?.includes(pkg))?.id ?? "ai
 const events = [];
 const SURGE = 1.4, ATH = 1.1, PAPER = 2.5;      // big
 const SURGE_SMALL = 1.2, ATH_SMALL_WEEKS = 13;  // small: a smaller jump, or any new high over a shorter record
-const tag = (tier, what) => (tier === "big" ? `빅 케이스 · ${what}` : `작은 변화 · ${what}`);
+const tag = (tier, what) => what; // plain label (the tier stays in the data; "빅 케이스" read as a gimmick)
 for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "PyPI", PYPI, PYPI_CONTROL]]) {
   const n = x.weeks.length, wk = x.weeks.at(-1), prior = Math.min(12, n - 1 - x.from);
   if (prior < 6 || x.W[list[0].pkg].at(-1).holiday) continue;
@@ -591,7 +598,8 @@ const sourceStatus = [
 const fills = {
   "index.html": {
     "t-tabs": tabsHtml, "t-panels": panelsHtml, "t-glossary": glossaryHtml(), "t-news": newsHtml,
-    "t-events": recentChanges.slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><time datetime="${c.date}">${+c.date.slice(5, 7)}/${+c.date.slice(8)}</time><span class="badge">${c.tier === "big" ? "빅 케이스" : "작은 변화"}</span><span class="et">${esc(c.headline)}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join(""),
+    "t-kpi": kpiHtml,
+    "t-events": recentChanges.filter((c) => c.topic === "ax" || c.topic === "domains").slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><time datetime="${c.date}">${+c.date.slice(5, 7)}/${+c.date.slice(8)}</time><span class="badge">${c.tier === "big" ? "주요 변화" : "변화"}</span><span class="et">${esc(c.headline)}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join(""),
     "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매일 자동 · 검산 ${CHECKS.checks.length}개 통과`, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
@@ -624,10 +632,7 @@ const factList = [
     const who = x.group === "vendor" ? `미국 기업 중 ${x.name}에 돈을 내는 비율` : x.group === "all" ? "AI 도구에 돈을 내는 미국 기업 비율(전체)" : `${x.name} 기업 중 AI 도구에 돈을 내는 비율`;
     return { group: "ax", id: `ax-${x.id}`, text: `${who}: ${axLbl(axL)} ${pv(r.now)} · 지난달 ${pv(r.prev)} · 1년 전(${axLbl(axY)}) ${pv(r.then)} · 1년 새 ${ppv(r.now - r.then)} · 처음 잰 ${axLbl(axMonths[0])} ${pv(first)}` }; }),
   { group: "ax", id: "ax-note", text: `Ramp AI Index: 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잼. 무료 도구·개인 결제는 안 잡힘. 미국 기준.` },
-  ...races.map((R) => ({ group: "race", id: `race-${R.id}`, text: `${R.name}(${R.what}) — ${R.src} 다운로드 중 몫, ${wlbl(R.week)}까지 4주: ${R.rows.map((y) => `${y.name} ${sh(y.now)}${y.then != null && R.ref ? `(${refLbl(R.ref)} ${sh(y.then)})` : R.ref ? `(${refLbl(R.ref)}엔 없음)` : ""}`).join(", ")}` })),
-  { group: "race", id: "race-openmodels", text: text(`오픈 텍스트 생성 모델 다운로드 중 제작사별 몫(Hugging Face, ${snap.date}): ${byAuthor.slice(0, 5).map(([a, v]) => `${a} ${sh(v / genTotal)}`).join(", ")}`) },
   ...domainRows.map((r) => ({ group: "domain", id: `dom-${r.id}`, text: `IT 영역 ${r.name}(${r.about}): 최근 30일 회사·정부 공식 AX 발표 ${r.now.length}건${r.prev != null ? `, 그 전 30일 ${r.prev}건` : ""} · 발표가 많은 곳: ${r.by.slice(0, 3).map(([n, k]) => `${n} ${k}건`).join(", ")}` })),
-  ...insights.map((x) => ({ group: "radar", id: x.id, text: text(`${x.k} — ${x.title}. ${x.easy ?? ""} ${x.body}`) })),
 ];
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
