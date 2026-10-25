@@ -214,7 +214,7 @@ const put = (rel, html) => {
 
 for (const b of briefs) {
   const { st, post } = b, a = st.article;
-  const sections = a.sections.map((x) => `<section class="part"><h2>${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
+  const sections = a.sections.map((x, i) => `<section class="part"><h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
   const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = same[i - 1], older = same[i + 1];
   const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
   // one article: on a wide screen the sections one after another; on a phone pages turned sideways (ARTICLE_PAGER)
@@ -285,7 +285,33 @@ for (const f of fs.readdirSync(DIR, { recursive: true }).map(String)) {
   if (fs.statSync(full).isFile() && !written.has(f.replace(/\\/g, "/"))) { fs.rmSync(full); console.log(`removed briefs/${f}`); }
 }
 
-// the home page: the latest three (not the monthly roundups), and the shared frame (nav, sitemap with the briefings)
-const home = briefs.filter((b) => b.series !== "roundup").slice(0, 3).map((b) => `<li><a href="/briefs/${b.slot}"><time datetime="${b.st.date}">${md(b.st.date)}</time><span class="badge">${esc(SERIES[b.series]?.name ?? "브리핑")}</span><span class="et">${esc(plain(b.st.article.title))}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join("");
-writePages({ "index.html": { "t-briefs": home } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
+// the home page leads with a story, not numbers (2026-10-26): the newest weekly briefing (이번 주 AX 사건; else the newest
+// that isn't a monthly roundup) in its beats — each announcement's heading, its first sentence and its source — then the
+// common thread and the IT-consulting view, and a link to the whole piece. Every sentence is the briefing's own (checked
+// when it was written). Which section is which comes from its sources: one source is an announcement, several are the
+// common thread, none (the last) is the view.
+// the first n sentences of a paragraph (as many as fit in max characters, at least one)
+const sentences = (t, n = 1, max = 180) => {
+  const all = plain(t).replace(/\s+/g, " ").trim().match(/.+?[요다]\.(?=\s|$)|.+$/g) ?? [];
+  return all.slice(0, n).reduce((out, x) => (!out || (out + " " + x).length <= max ? (out ? `${out} ${x.trim()}` : x.trim()) : out), "");
+};
+const featured = briefs.find((b) => b.series === "news") ?? briefs.find((b) => b.series !== "roundup") ?? null;
+function storyHtml(b) {
+  if (!b) return "";
+  const a = b.st.article, secs = a.sections.map((x, i) => ({ ...x, i })), last = secs.at(-1);
+  const view = secs.length > 1 && !last.sources?.length ? last : null, rest = secs.filter((x) => x !== view);
+  const thread = rest.filter((x) => (x.sources?.length ?? 0) > 1), beats = rest.filter((x) => !thread.includes(x));
+  const href = (x) => `/briefs/${b.slot}${x ? `#s${x.i + 1}` : ""}`;
+  const src = (x) => (x.sources?.length === 1 ? `${esc(x.sources[0].source)} ${KIND[x.sources[0].kind] ?? "발표"} · ${md(x.sources[0].date)}` : "");
+  return `<div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="${b.st.date}">${+b.st.date.slice(5, 7)}월 ${+b.st.date.slice(8, 10)}일</time> · ${esc(SERIES[b.series]?.name ?? "")}</p>`
+    + `<h2 class="st-t" id="h-story"><a href="${href()}">${esc(plain(a.title))}</a></h2><p class="st-lede">${esc(plain(a.lede))}</p></div>`
+    + `<ol class="beats">${beats.map((x, k) => `<li><a href="${href(x)}"><span class="bn">${k + 1}</span><b>${esc(plain(x.heading))}</b><span class="bs">${esc(sentences(x.body))}</span>${src(x) ? `<small>${src(x)}</small>` : ""}</a></li>`).join("")}</ol>`
+    + `<div class="st-view">${thread.map((x) => `<p class="sv-k">공통 흐름</p><p class="sv-h">${esc(plain(x.heading).replace(/^공통 흐름\s*[:：]\s*/, ""))}</p><p>${esc(sentences(x.body, 3, 200))}</p>`).join("")}`
+    + (view ? `<p class="sv-k">IT 컨설팅 관점 · ${esc(plain(view.heading))}</p>${plain(view.body).split(/\n{2,}/).slice(0, 3).map((t) => `<p class="sv-q">${esc(sentences(t, 2, 170))}</p>`).join("")}` : "")
+    + `<a class="st-more" href="${href()}">이야기 전체 읽기 →</a></div>`;
+}
+// the home page: the story above, then the earlier briefings (not the monthly roundups), and the shared frame (nav,
+// sitemap with the briefings)
+const home = briefs.filter((b) => b.series !== "roundup" && b !== featured).slice(0, 3).map((b) => `<li><a href="/briefs/${b.slot}"><time datetime="${b.st.date}">${md(b.st.date)}</time><span class="badge">${esc(SERIES[b.series]?.name ?? "브리핑")}</span><span class="et">${esc(plain(b.st.article.title))}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join("");
+writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": home } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
 console.log(`${briefs.length} briefing(s), ${present.length} series, ${TAGS.size} tags at ${SITE}/briefs`);
