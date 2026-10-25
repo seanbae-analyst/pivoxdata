@@ -164,8 +164,16 @@ Run workflow의 "테스트 초안 (승인 필요)"와, 자동 게시가 실패�
 1. [developers.facebook.com](https://developers.facebook.com) → 앱 만들기 → 사용 사례에서 **Instagram API**(인스타그램 로그인 방식) 추가.
 2. 앱의 Instagram 설정에서 게시할 **비즈니스 계정을 연결**하고 권한 `instagram_business_basic`, `instagram_business_content_publish` 로 **액세스 토큰을 생성**합니다. 본인 계정에만 게시하므로 앱 검수(App Review) 없이 개발 모드로 됩니다.
 3. 화면에 나오는 **인스타그램 사용자 ID**와 **토큰**을 복사합니다.
-4. 토큰은 60일 동안 유효합니다. 만료 전에 아래 주소로 연장하세요(새 토큰이 나오면 GitHub 시크릿을 바꿔 넣기).
-   `https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=<토큰>`
+4. 토큰은 60일 동안 유효합니다. **자동 갱신**: `.github/workflows/ig-token.yml`이 10일마다 새 토큰을 받아 `IG_ACCESS_TOKEN` 시크릿을
+   바꿔 넣습니다. 시크릿을 쓰려면 한 번만 아래 "인스타그램 토큰 자동 갱신"의 `SECRETS_PAT`를 넣어 두세요. 실패하면 이슈가 열립니다.
+
+#### 인스타그램 토큰 자동 갱신 (한 번만)
+
+GitHub → 오른쪽 위 프로필 → **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**
+- 이름 `pivoxdata secrets`, 만료 최대(1년), Repository access: **Only select repositories → pivoxdata**
+- Permissions → Repository permissions → **Secrets: Read and write** (나머지는 건드리지 않음) → Generate
+- 나온 값을 저장소 Settings → Secrets and variables → Actions → New repository secret, 이름 **`SECRETS_PAT`** 로 저장.
+  (이 값은 이 저장소의 시크릿만 바꿀 수 있습니다. 1년 뒤 만료되면 같은 방법으로 새로 넣기 — 만료되면 갱신 실패 이슈가 열립니다.)
 
 페이스북 페이지에 연결된 계정을 Facebook 로그인으로 쓰고 있다면 저장소 변수 `IG_GRAPH_HOST` 를 `graph.facebook.com` 으로 두면 됩니다.
 
