@@ -40,8 +40,9 @@ export function pager(chapters, { tab, fit } = {}) {
       let p, list, first = true;
       const open = () => { list = c.list(); p = add(c, [...(first && c.lead ? c.lead : [copy(c.head)]), list]); first = false; };
       open();
-      // fill the page until the next item would make it scroll, then start the next page with that item
-      for (const it of c.items) { list.append(it); if (list.children.length > 1 && p.scrollHeight > p.clientHeight + 1) { open(); list.append(it); } }
+      // fill the page until the next item would make it scroll, then start the next page with that item; an item may be
+      // a few nodes that stay together (a group's heading and its first entry)
+      for (const it of c.items) { const unit = [it].flat(); list.append(...unit); if (list.children.length > unit.length && p.scrollHeight > p.clientHeight + 1) { open(); list.append(...unit); } }
     }
     for (const c of chapters) mine(c).forEach((x, k, all) => { x.p.setAttribute("role", "group"); x.p.setAttribute("aria-roledescription", "페이지"); x.p.setAttribute("aria-label", `${c.name} ${k + 1}/${all.length}`); });
     const i = keep ? pages.indexOf(mine(keep.c)[Math.min(keep.k, mine(keep.c).length - 1)]) : 0;
