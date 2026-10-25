@@ -579,8 +579,20 @@ writePages(fills, updated);
 const writeIf = (file, body) => { const prevBody = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : ""; if (body !== prevBody) { fs.writeFileSync(file, body); console.log(`wrote trends/data/${path.basename(file)}`); } };
 writeIf(STATE, JSON.stringify({ note: "one snapshot of the readings per day; build.mjs compares today's with the last one to find small changes", days: [...states.filter((d) => d.date !== updated), state].slice(-60) }) + "\n");
 writeIf(CHANGES, JSON.stringify({ note: "every change build.mjs found, 60 days; social/plan.mjs drafts from it", log: changeLog }, null, 1) + "\n");
+// facts for the storyline writer (social/story.mjs): plain sentences, each with its numbers already written out,
+// so a story can only say what is here. Grouped: ax (Ramp AI Index), race (who leads each corner), radar (the rest).
+const factList = [
+  ...AXSERIES.series.map((x) => { const r = axRow(x), first = axS(x.id)[axMonths[0]];
+    const who = x.group === "vendor" ? `미국 기업 중 ${x.name}에 돈을 내는 비율` : x.group === "all" ? "AI 도구에 돈을 내는 미국 기업 비율(전체)" : `${x.name} 기업 중 AI 도구에 돈을 내는 비율`;
+    return { group: "ax", id: `ax-${x.id}`, text: `${who}: ${axLbl(axL)} ${pv(r.now)} · 지난달 ${pv(r.prev)} · 1년 전(${axLbl(axY)}) ${pv(r.then)} · 1년 새 ${ppv(r.now - r.then)} · 처음 잰 ${axLbl(axMonths[0])} ${pv(first)}` }; }),
+  { group: "ax", id: "ax-note", text: `Ramp AI Index: 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잼. 무료 도구·개인 결제는 안 잡힘. 미국 기준.` },
+  ...races.map((R) => ({ group: "race", id: `race-${R.id}`, text: `${R.name}(${R.what}) — ${R.src} 다운로드 중 몫, ${wlbl(R.week)}까지 4주: ${R.rows.map((y) => `${y.name} ${sh(y.now)}${y.then != null && R.ref ? `(${refLbl(R.ref)} ${sh(y.then)})` : R.ref ? `(${refLbl(R.ref)}엔 없음)` : ""}`).join(", ")}` })),
+  { group: "race", id: "race-openmodels", text: text(`오픈 텍스트 생성 모델 다운로드 중 제작사별 몫(Hugging Face, ${snap.date}): ${byAuthor.slice(0, 5).map(([a, v]) => `${a} ${sh(v / genTotal)}`).join(", ")}`) },
+  ...insights.map((x) => ({ group: "radar", id: x.id, text: text(`${x.k} — ${x.title}. ${x.easy ?? ""} ${x.body}`) })),
+];
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
-  events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })) };
+  events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
+  facts: factList };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }
