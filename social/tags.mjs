@@ -5,7 +5,7 @@ import { NEWS } from "../trends/series.mjs";
 export const SERIES = {
   news: { name: "이번 주 AX 사건", about: "회사·정부가 직접 낸 공식 발표로 보는 한 주의 AX" },
   monthly: { name: "월간 AX 리포트", about: "Ramp AI Index로 보는 미국 기업의 AI 도입, 매달" },
-  breaking: { name: "빅 케이스", about: "평소와 크게 다른 일이 생긴 날" },
+  breaking: { name: "주요 변화", about: "평소와 크게 다른 일이 생긴 날" },
   tools: { name: "누가 앞서나", about: "분야마다 기업·개발자가 실제로 고르는 AI 도구" },
   weekly: { name: "이번 주 정리", about: "한 주 동안 잡힌 작은 변화" },
   roundup: { name: "월간 정리", about: "한 달 동안의 브리핑을 한 편으로" },
