@@ -3,11 +3,16 @@
 # trends.yml — or from Actions → "instagram publish" → Run workflow with a folder name (a post made by hand, e.g. the
 # pinned brand posts; only people with write access can run it). The post itself is social/out/<slot>/post.json,
 # already committed; this job only sends it. An open "[instagram]" issue carrying the same marker is closed with the link.
+# A hand-made post can also go up on its own: commit its post.json with "auto_publish": true and, once it reaches main,
+# the publish-queued job posts every such unpublished folder in name order (merging the PR is the approval).
 name: instagram publish
 
 on:
   issue_comment:
     types: [created]
+  push:
+    branches: [main]
+    paths: ["social/out/**/post.json"]
   workflow_dispatch:
     inputs:
       slot:
@@ -25,7 +30,7 @@ concurrency:
 jobs:
   publish:
     if: >-
-      github.event_name == 'workflow_dispatch' || (
+      github.event_name == 'workflow_dispatch' || (github.event_name == 'issue_comment' &&
       !github.event.issue.pull_request &&
       github.event.issue.state == 'open' &&
       startsWith(github.event.issue.title, '[instagram]') &&
@@ -108,3 +113,57 @@ jobs:
         with:
           script: |
             await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `게시하지 못했습니다. 로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\n고친 뒤 \`/approve\`를 다시 남기면 다시 시도합니다.` });
+
+  # Hand-made posts committed with "auto_publish": true (e.g. the pinned brand posts) — published in folder order,
+  # one at a time. The bot's own "published" commit uses GITHUB_TOKEN, which does not start another run.
+  publish-queued:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Publish queued posts
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+        run: |
+          queued=$(for f in social/out/*/post.json; do
+            node -e 'const p = JSON.parse(require("fs").readFileSync(process.argv[1], "utf8")); process.exit(p.auto_publish === true && !p.published ? 0 : 1)' "$f" && echo "$f"
+          done | sort)
+          if [ -z "$queued" ]; then echo "nothing queued"; exit 0; fi
+          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set — see social/README.md"; exit 1; }
+          git config user.name "pivoxdata-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for f in $queued; do
+            slot=$(basename "$(dirname "$f")")
+            node social/publish.mjs "$f"
+            git add "$f" && git commit -m "social: published $slot" && git pull --rebase && git push
+            echo "$slot" >> "$RUNNER_TEMP/published.txt"
+          done
+
+      - name: Close their issues
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const list = `${process.env.RUNNER_TEMP}/published.txt`;
+            if (!fs.existsSync(list)) return;
+            const open = (await github.paginate(github.rest.issues.listForRepo, { ...context.repo, state: "open", per_page: 100 }))
+              .filter((i) => !i.pull_request && i.title.startsWith("[instagram]"));
+            for (const slot of fs.readFileSync(list, "utf8").split("\n").filter(Boolean)) {
+              const post = JSON.parse(fs.readFileSync(`social/out/${slot}/post.json`, "utf8"));
+              core.notice(`published ${slot}: ${post.published.permalink}`);
+              for (const i of open.filter((i) => (i.body || "").includes(`<!-- instagram-post:${slot} -->`))) {
+                await github.rest.issues.createComment({ ...context.repo, issue_number: i.number, body: `게시했습니다: ${post.published.permalink}` });
+                await github.rest.issues.update({ ...context.repo, issue_number: i.number, state: "closed", state_reason: "completed" });
+              }
+            }
