@@ -1,0 +1,18 @@
+{
+ "date": "2026-10-25",
+ "slot": "2026-10-25-93",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-25-93/",
+ "caption": "사기 전에 한 번 멈추고, 이유를 적고, 나중에 돌아봅니다.\n\nPivoxQuant는 개인 투자 기록 도구예요.\n① 멈춤: 사기 전, 일곱 가지 질문에 답하며 이유를 적어요\n② 기록: 산 이유와 사려다 만 이유가 한자리에 남아요\n③ 거울: 처음에 적은 '내 방식'과 최근 30일 실제 거래의 간극을 보여 줘요\n\n점수도, 종목 고르기도, 사라·팔라는 신호도 없습니다.\n미국·한국 주식 · 클로즈드 베타 · 무료\n🔗 pivoxquant.com\n\n관측 자료이며 투자 권유가 아닙니다.\n\n#투자기록 #투자일지 #매매일지 #주식기록 #개인투자자 #PivoxQuant",
+ "caption_source": "manual",
+ "mode": "pinned",
+ "product": "quant",
+ "source": "seanbae-analyst/pivoxquant docs/marketing/instagram/pinned (Pivox 고정 게시물)"
+}
