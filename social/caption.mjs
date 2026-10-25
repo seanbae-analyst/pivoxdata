@@ -5,13 +5,20 @@
 // this code then checks it before anything is posted:
 //  • every number in the body must appear in the insights the carousel shows (no invented or rounded figures);
 //  • no advice or forecast words (추천·매수·전망 …) — the site never tells anyone what to buy or what will happen.
-// One retry with the problems listed; if it still fails, or there is no ANTHROPIC_API_KEY, a template caption built
-// only from the insights is used instead. The source line, link, disclaimer and hashtags are added by code, never
+// One retry with the problems listed; if it still fails, or no way to reach Claude is set up, a template caption
+// built only from the insights is used instead.
+//
+// Two ways to reach Claude, tried in this order:
+//  • CLAUDE_CODE_OAUTH_TOKEN — a Claude subscription token from `claude setup-token`, used through the Claude Code
+//    CLI (`claude -p`), so captions cost nothing beyond the subscription (they share its usage limits);
+//  • ANTHROPIC_API_KEY — an API key from console.anthropic.com, used through the SDK and billed per use. The source line, link, disclaimer and hashtags are added by code, never
 // by the model.
 //
 // Usage: node social/caption.mjs   (after social/render.mjs)
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import Anthropic from "@anthropic-ai/sdk";
 import { slidesFor } from "./pick.mjs";
@@ -40,6 +47,8 @@ export function check(body) {
   if (words.length) problems.push(`쓰면 안 되는 말: ${words.join(", ")}`);
   if (body.length > 1200) problems.push(`너무 김: ${body.length}자 (1200자 이하)`);
   if (/#|https?:\/\//.test(body)) problems.push("해시태그·링크는 코드가 붙이니 본문에 쓰지 말 것");
+  // whatever comes back is posted as is, so a note to us ("--- 둘째 줄은 제가 덧붙였어요") must not ride along
+  if (/^\s*(-{3,}|\*{3,}|_{3,})\s*$/m.test(body) || /(덧붙였|카드 데이터|빼도 돼|본문만|캡션 본문)/.test(body)) problems.push("캡션이 아닌 메모·구분선이 섞임: 게시될 본문만 쓸 것");
   return problems;
 }
 
@@ -53,28 +62,49 @@ const SYSTEM = `너는 한국어 데이터 연구 사이트의 인스타그램 �
 - 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 흐리지 않는다.
 - 코드나 논문을 모르는 사람도 읽게 쓴다. 카드의 "쉽게말하면" 문장을 바탕으로, npm·PyPI·arXiv·Hugging Face·대조군·%p 같은 말은 처음 나올 때 괄호로 짧게 풀어 준다(예: npm(자바스크립트 개발자들이 코드 부품을 내려받는 곳)). 존댓말(~요)로.
 - 해시태그, 링크, 출처 줄, 면책 문구는 쓰지 않는다(코드가 붙인다). 이모지와 줄 앞 번호는 쓰지 않는다.
-- 담백하고 정확한 말투. 과장 금지.`;
+- 카드에 없는 사실(회사·제품 소개, 배경 설명, 이유 추측)을 덧붙이지 않는다. 용어 풀이만 예외.
+- 담백하고 정확한 말투. 과장 금지.
+- 캡션 본문만 출력한다. 구분선(---), 설명, 메모, "이렇게 썼어요" 같은 덧말을 붙이지 않는다. 출력한 글이 그대로 게시된다.`;
 
-async function fromClaude() {
-  const client = new Anthropic();
+// ---------- the two ways to Claude: each takes the conversation so far, returns { text, model } or { refusal } ----------
+class ClaudeCodeError extends Error {}
+async function viaApi(messages) {
+  const res = await new Anthropic().beta.messages.create({
+    model: MODEL, max_tokens: 16000, system: SYSTEM, messages,
+    output_config: { effort: "medium" },
+    // if a safety classifier declines, the API re-runs the request on Anthropic's recommended fallback model
+    betas: ["server-side-fallback-2026-07-01"], fallbacks: "default",
+  });
+  if (res.stop_reason === "refusal") return { refusal: res.stop_details?.category ?? "unknown" };
+  return { text: res.content.filter((b) => b.type === "text").map((b) => b.text).join("").trim(), model: res.model };
+}
+function viaClaudeCode(messages) {
+  // `claude -p` takes one prompt, so a retry carries the earlier draft inside it. No tools, no saved session, and it
+  // runs outside the repository so it never picks up project files as context.
+  const prompt = messages.map((m) => (m.role === "user" ? m.content : `(직전에 네가 쓴 본문)\n${m.content}`)).join("\n\n");
+  const r = spawnSync("claude", ["-p", "--output-format", "json", "--model", MODEL, "--system-prompt", SYSTEM, "--tools", "", "--no-session-persistence"],
+    { input: prompt, encoding: "utf8", cwd: os.tmpdir(), timeout: 300_000, maxBuffer: 1 << 24 });
+  if (r.error) throw new ClaudeCodeError(r.error.code === "ENOENT" ? "claude CLI not installed" : r.error.message);
+  let out;
+  try { out = JSON.parse(r.stdout); } catch { throw new ClaudeCodeError(`exit ${r.status}: ${(r.stderr || r.stdout).trim().slice(0, 300)}`); }
+  if (out.is_error) throw new ClaudeCodeError(String(out.result ?? out.terminal_reason ?? "error").slice(0, 300));
+  if (out.stop_reason === "refusal") return { refusal: "claude code" };
+  return { text: String(out.result ?? "").trim(), model: Object.keys(out.modelUsage ?? {})[0] ?? MODEL };
+}
+
+async function fromClaude(ask) {
   const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 쉽게말하면: x.easy, 내용: x.body, 출처: x.src }));
   const why = plan.mode === "event" ? `빅 케이스(${plan.event.kind}): 1번 카드. 나머지 카드는 같은 주제의 맥락.`
     : plan.mode === "digest" ? `작은 변화 모음: 지난 한 주 동안 잡힌 작은 변화 ${slides.length}가지. 하나하나는 크지 않으니 크게 부풀리지 말 것.`
     : "묶음: 빅 케이스 없이 요즘 숫자를 모은 게시물.";
   const messages = [{ role: "user", content: `${date} 게시물 — ${why}\n카드 데이터:\n${JSON.stringify(data, null, 1)}\n\n캡션 본문을 써 줘.` }];
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const res = await client.beta.messages.create({
-      model: MODEL, max_tokens: 16000, system: SYSTEM, messages,
-      output_config: { effort: "medium" },
-      // if a safety classifier declines, the API re-runs the request on Anthropic's recommended fallback model
-      betas: ["server-side-fallback-2026-07-01"], fallbacks: "default",
-    });
-    if (res.stop_reason === "refusal") return { body: null, why: `refusal (${res.stop_details?.category ?? "unknown"})` };
-    const body = res.content.filter((b) => b.type === "text").map((b) => b.text).join("").trim();
-    const problems = check(body);
-    if (!problems.length) return { body, model: res.model, attempts: attempt };
+    const res = await ask(messages);
+    if (res.refusal) return { body: null, why: `refusal (${res.refusal})` };
+    const problems = check(res.text);
+    if (!problems.length) return { body: res.text, model: res.model, attempts: attempt };
     console.log(`caption attempt ${attempt} rejected: ${problems.join(" / ")}`);
-    messages.push({ role: "assistant", content: body }, { role: "user", content: `다음 문제를 고쳐서 본문 전체를 다시 써 줘:\n- ${problems.join("\n- ")}` });
+    messages.push({ role: "assistant", content: res.text }, { role: "user", content: `다음 문제를 고쳐서 본문 전체를 다시 써 줘:\n- ${problems.join("\n- ")}` });
   }
   return { body: null, why: "checks failed twice" };
 }
@@ -87,10 +117,13 @@ const template = () => plan.mode === "digest"
   ? [slides[0].title, slides[0].body, "", ...slides.slice(1).map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n")
   : [`${slides[0].big} — ${slides[0].title}`, "", ...slides.map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n");
 
-let result = { body: null, why: "no ANTHROPIC_API_KEY" };
-if (process.env.ANTHROPIC_API_KEY) {
-  try { result = await fromClaude(); } catch (e) {
+let result = { body: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
+const via = process.env.CLAUDE_CODE_OAUTH_TOKEN ? ["Claude Code", viaClaudeCode] : process.env.ANTHROPIC_API_KEY ? ["API", viaApi] : null;
+if (via) {
+  try { result = await fromClaude(via[1]); } catch (e) {
+    // a Claude that can't be reached falls back to the template caption; any other error is a bug and stops the job
     if (e instanceof Anthropic.APIError) result = { body: null, why: `API error ${e.status}: ${e.message}` };
+    else if (e instanceof ClaudeCodeError) result = { body: null, why: `Claude Code: ${e.message}` };
     else throw e;
   }
 }
@@ -113,6 +146,6 @@ if (images.length < 3) throw new Error(`social/out/${date}: ${images.length} sli
 const postFile = path.join(dir, "post.json");
 const prev = fs.existsSync(postFile) ? JSON.parse(fs.readFileSync(postFile, "utf8")) : {};
 if (prev.published) { console.log(`social/out/${date} was already published (${prev.published.permalink}) — caption left as is`); process.exit(0); }
-const post = { date, images, image_base: `https://data.pivoxquant.com/social/out/${date}/`, caption, caption_source: source, caption_model: result.model ?? null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: allowed.size, problems: [] } };
+const post = { date, images, image_base: `https://data.pivoxquant.com/social/out/${date}/`, caption, caption_source: source, caption_via: result.body ? via[0] : null, caption_model: result.model ?? null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: allowed.size, problems: [] } };
 fs.writeFileSync(postFile, JSON.stringify(post, null, 1) + "\n");
 console.log(`wrote social/out/${date}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);

@@ -76,7 +76,11 @@
 - 본문의 **모든 숫자는 그 게시물 카드에 적힌 숫자**여야 합니다. 반올림하거나 새로 계산한 숫자는 거절됩니다.
 - **추천·매수·매도·전망·예상·급등** 같은 말은 거절됩니다. 지난 숫자만 말하고 예측하거나 권하지 않습니다.
 - 출처 줄, 링크, 면책 문구("예측이나 투자 권유가 아닙니다"), 해시태그는 모델이 아니라 코드가 붙입니다.
-- 모델: `claude-opus-5-5` (안전 분류기가 거절하면 Anthropic 권장 모델로 다시 시도하는 `fallbacks: "default"` 켜 둠).
+- 모델: `claude-opus-5-5`. 부르는 길은 둘, 이 순서로 씁니다:
+  - **Claude 구독** — `CLAUDE_CODE_OAUTH_TOKEN`(`claude setup-token`으로 만든 토큰)이 있으면 Claude Code CLI(`claude -p`)로. 구독 외 비용 없음, 구독 사용 한도를 같이 씀.
+  - **API 키** — `ANTHROPIC_API_KEY`가 있으면 SDK로. 쓴 만큼 결제(안전 분류기가 거절하면 권장 모델로 다시 시도하는 `fallbacks: "default"` 켜 둠).
+  - 둘 다 없거나 연결이 안 되면(토큰 만료 등) 템플릿 캡션으로 넘어가고, 승인 이슈에 이유가 적힙니다.
+- 모델이 돌려준 글이 그대로 게시되므로, 본문 밖의 메모·구분선(---)이 섞이면 거절하고 다시 쓰게 합니다.
 
 ## 한 번만 하면 되는 설정
 
@@ -96,7 +100,8 @@
 
 | 종류 | 이름 | 값 |
 |---|---|---|
-| Secret | `ANTHROPIC_API_KEY` | Claude API 키 (없으면 템플릿 캡션으로 돌아감) |
+| Secret | `CLAUDE_CODE_OAUTH_TOKEN` | Claude 구독 토큰 — 컴퓨터 터미널에서 `claude setup-token` 실행 후 나오는 값 (캡션용, 권장) |
+| Secret (선택) | `ANTHROPIC_API_KEY` | 구독 대신 API 키로 쓰려면 (둘 다 없으면 템플릿 캡션) |
 | Secret | `IG_USER_ID` | 1-3의 인스타그램 사용자 ID |
 | Secret | `IG_ACCESS_TOKEN` | 1-3의 토큰 |
 | Variable (선택) | `IG_GRAPH_HOST` | 기본 `graph.instagram.com` |
