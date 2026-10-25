@@ -19,7 +19,7 @@ const I = JSON.parse(fs.readFileSync(path.join(ROOT, "trends", "data", "insights
 const planFile = path.join(ROOT, "social", "plan.json");
 const plan = fs.existsSync(planFile) ? JSON.parse(fs.readFileSync(planFile, "utf8")) : { mode: "roundup", date: I.built_at };
 if (plan.post === false) { console.log(`social/plan.json says no draft today (${plan.why}) — nothing to build`); process.exit(0); }
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 
 const slides = slidesFor(I, plan);
 // story.mjs's storyline, when there is one: text-first slides in the order the story goes (otherwise the card layouts)

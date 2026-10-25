@@ -20,7 +20,7 @@ const CHECKS = load("checks.json");
 if (CHECKS.checks.some((c) => !c.ok)) { console.error("trends/data/checks.json has failed checks — run node trends/verify.mjs and fix first"); process.exit(1); }
 
 // ---------- formatting ----------
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 const man = (v) => (v >= 1e8 ? (v / 1e8).toFixed(1) + "억" : v >= 1e5 ? Math.round(v / 1e4).toLocaleString("ko-KR") + "만" : v >= 1e4 ? (v / 1e4).toFixed(1) + "만" : Math.round(v).toLocaleString("ko-KR"));
 const pc = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%");
 const pp = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%p");
@@ -474,7 +474,8 @@ const state = {
 };
 const prev = states.filter((d) => d.date < updated).at(-1);
 const small = (o) => events.push({ tier: "small", ...o });
-if (prev && prev.ax?.last !== axL) { // a new month of the Ramp AI Index: the monthly AX report
+if (prev?.ax && prev.ax.last !== axL) { // a new month of the Ramp AI Index: the monthly AX report (a snapshot from before
+  // ax was tracked has no ax.last to compare with, so the first day with ax fires nothing — like every other first reading)
   events.push({ key: `ax:month:${axL}`, subject: `ax:month:${axL}`, kind: "AX 월간", tier: "big", score: 110, topic: "ax", // the lead story: ahead of any other big case that day
     // same id as the tab's card, so the post doesn't show it twice (pick.mjs drops the topic card with the case's id)
     card: { ...axCards[0], k: `빅 케이스 · AX 월간 · ${axLbl(axL)}` } });
@@ -553,7 +554,7 @@ events.sort((a, b) => (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.s
 for (let i = events.length - 1; i >= 0; i--) if (events.findIndex((e) => e.subject === events[i].subject) < i) events.splice(i, 1);
 
 // plain text for the cards and the caption; non-breaking spaces stay as U+00A0 so the cards keep the same line breaks
-const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+const text = (s) => String(s).replace(/<wbr>/g, "\u200b").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, "\u00a0").replace(/&#8209;/g, "\u2011").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&amp;/g, "&"); // &amp; last, or "&amp;lt;" would come out as "<"
 const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(x.title), easy: text(x.easy ?? ""), body: text(x.body), src: x.src, viz: x.viz });
 
 // every change ever found, kept 60 days (trends/data/changes.json): the page lists the last week's, and
@@ -571,7 +572,7 @@ const tone = (x) => (/^[−-]/.test(text(x.big)) ? " down" : "");
 // a card reads top to bottom: what it is about, the finding, the number, the figure (what it shows in its caption),
 // the plain-words line, a note, the latest announcements (IT domains), the source. The figure's data rides along for
 // cardfig.js, which draws it at the size it gets; the server-drawn picture stays for readers without JavaScript.
-const attr = (s) => esc(s).replace(/"/g, "&quot;");
+const attr = esc;
 const recentHtml = (list) => `<p class="rl">최근 발표</p><ol class="recent">${list.map((r) => `<li><a href="${attr(r.link)}" target="_blank" rel="noopener"><span class="rd">${r.date} · ${esc(r.source)}</span><span class="rt">${esc(r.title)}</span></a></li>`).join("")}</ol>`;
 const cardHtml = (list) => list.map((x, i) => { const used = new Set();
   return `<article class="ins${i === 0 ? " lead" : ""}${tone(x)}" id="c-${x.id}"><p class="k">${x.k}</p><h3>${glue(x.title)}</h3>`

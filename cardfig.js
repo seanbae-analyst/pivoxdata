@@ -9,7 +9,7 @@
 // in the text colours, never the bar's. The server-drawn picture inside stays for readers without JavaScript.
 import { niceTicks } from "/charts.mjs";
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 const r1 = (v) => Math.round(v * 10) / 10;
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 const ctx = document.createElement("canvas").getContext("2d");

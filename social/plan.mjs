@@ -65,10 +65,11 @@ else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: tru
 else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
 else plan = { post: false, why: `no new big case; ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
 
-// the post's folder: social/out/<date>, or <date>-2, -3 … when a post from that day is already up (a manual run after
-// the daily one), so a second post never overwrites the first one's images or caption
+// the post's folder: social/out/<date>, or <date>-2, -3 … when that day already has a folder (a manual run after
+// the daily one), so a second post never overwrites the first one's images or caption — published or not: a draft
+// still waiting for /approve keeps its folder, or the approval issue would post cards nobody reviewed
 if (plan.post) {
-  const OUTD = path.join(ROOT, "social", "out"), taken = (s) => read(path.join(OUTD, s, "post.json"), {}).published;
+  const OUTD = path.join(ROOT, "social", "out"), taken = (s) => fs.existsSync(path.join(OUTD, s));
   let slot = today;
   for (let n = 2; taken(slot); n++) slot = `${today}-${n}`;
   plan.slot = slot;

@@ -131,7 +131,7 @@ body.has-tabbar .pgr{bottom:calc(61px + env(safe-area-inset-bottom))}
 .pgr-bars i{flex:1;border-radius:1px;background:var(--line-2)} .pgr-bars i.done{background:var(--dim)} .pgr-bars i.on{background:var(--bronze)}
 .pgr-track{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 .pgr-track::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overscroll-behavior:contain;
+.pg{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overscroll-behavior:auto contain;
   display:flex;flex-direction:column;padding:18px 16px 20px}
 .pg>*{flex-shrink:0} .pg>:first-child{margin-top:0}
 .pg .appbar{position:static;margin:16px 0 0;box-shadow:none}

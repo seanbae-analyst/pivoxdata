@@ -2,7 +2,8 @@
 // every day) and fall back to the last copy seen; so do styles and scripts (a stale stylesheet would not match a new page),
 // while icons and fonts are cached. Push alerts: OneSignal's worker,
 // imported here so one service worker covers both (the page script registers this file, social/briefs.mjs).
-importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+// an ad blocker or an office network that blocks OneSignal must not take offline reading down with it
+try { importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js"); } catch {}
 const CACHE = "ax-radar-v3";
 const SHELL = ["/", "/briefs", "/ui.css", "/research.css", "/pager.js", "/favicon.svg", "/icons/icon-192.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
