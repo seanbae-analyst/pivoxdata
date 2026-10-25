@@ -17,16 +17,24 @@ const read = (f, d) => { try { return JSON.parse(fs.readFileSync(path.join(DIR, 
 const write = (f, doc) => fs.writeFileSync(path.join(DIR, f), JSON.stringify(doc) + "\n");
 const UA = { "User-Agent": "pivoxdata-trends/1.0 (+https://github.com/seanbae-analyst/pivoxdata)" };
 
-async function get(url, as = "json", tries = 5) {
+// GitHub's runners share IP addresses, so a source can say "too many requests" (429) to a run that sent only a
+// few: wait as long as it asks (Retry-After), else back off up to two minutes, before giving up
+async function get(url, as = "json", tries = 8) {
   for (let i = 0; ; i++) {
+    let wait = Math.min(120_000, 2000 * 2 ** i);
     try {
       const res = await fetch(url, { headers: url.includes("sec.gov") ? { "User-Agent": SEC.ua } : UA });
       if (res.status === 404) return null;
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const after = Number(res.headers.get("retry-after"));
+        if (res.status === 429 && after > 0) wait = Math.min(300_000, after * 1000 + 1000);
+        throw new Error(`HTTP ${res.status}`);
+      }
       return as === "json" ? await res.json() : await res.text();
     } catch (e) {
       if (i >= tries - 1) throw new Error(`${url}: ${e.message}`);
-      await sleep(1500 * 2 ** i);
+      console.log(`      ${e.message} — retrying in ${Math.round(wait / 1000)}s`);
+      await sleep(wait);
     }
   }
 }
@@ -46,13 +54,13 @@ if (want("npm")) {
       const j = await get(`https://api.npmjs.org/downloads/range/${from}:${to}/${p.pkg.replace("/", "%2F")}`);
       for (const r of j?.downloads ?? []) days.push([r.day, r.downloads]);
       from = addDays(to, 1);
-      await sleep(300);
+      await sleep(1000);
     }
     // the point API's last-week total, kept as an independent second reading for verify.mjs
     const wk = await get(`https://api.npmjs.org/downloads/point/last-week/${p.pkg.replace("/", "%2F")}`);
     doc.packages[p.pkg] = { ...p, days, last_week: wk ? { start: wk.start, end: wk.end, downloads: wk.downloads } : null };
     console.log(`npm   ${p.pkg.padEnd(28)} ${days.length} days → ${days.at(-1)?.[0]}`);
-    await sleep(300);
+    await sleep(1000); // npm rate-limits per IP; 44 requests a day spread over a minute is plenty
   }
   write("npm.json", { source: { site: "npm registry download counts API", url: "https://api.npmjs.org/downloads/range/{start}:{end}/{package}", docs: "https://github.com/npm/registry/blob/main/docs/download-counts.md" }, fetched_at: today, ...doc, packages: doc.packages });
 }
