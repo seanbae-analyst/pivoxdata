@@ -5,7 +5,7 @@
 
 **승인 방식으로 돌리려면** 저장소 Settings → Secrets and variables → Actions → **Variables** 탭에서
 `AUTO_PUBLISH` 를 `false` 로 만드세요. 그러면 `[instagram]` 이슈가 열리고, 소유자가 `/approve` 를 달아야 올라갑니다.
-테스트용 강제 실행(force_draft)과, 자동 게시가 실패한 날은 늘 승인 이슈로 돌아갑니다.
+Run workflow의 "테스트 초안 (승인 필요)"와, 자동 게시가 실패한 날은 늘 승인 이슈로 돌아갑니다.
 
 ```
 매일 10:17 KST  trends.yml
@@ -20,7 +20,7 @@
   ├ social/caption.mjs Claude가 캡션 본문 작성 → 코드가 숫자·금지어 검사 (2번 실패하면 템플릿 캡션)
   ├ main에 커밋 → Vercel 배포 (이미지가 data.pivoxquant.com/social/out/… 에 공개됨)
   ├ social/publish.mjs 인스타그램에 바로 게시 → 닫힌 "[게시됨] <날짜> …" 이슈로 기록 (카드·캡션·링크)
-  └ (AUTO_PUBLISH=false · 강제 테스트 · 게시 실패일 때) "[instagram] <날짜> …" 승인 이슈
+  └ (AUTO_PUBLISH=false · 테스트 초안 · 게시 실패일 때) "[instagram] <날짜> …" 승인 이슈
      소유자가 /approve → social-publish.yml → 게시 → 링크 남기고 닫음 · /reject → 게시하지 않고 닫음
 ```
 
@@ -79,7 +79,7 @@
 
 - 본문의 **모든 숫자는 그 게시물 카드에 적힌 숫자**여야 합니다. 반올림하거나 새로 계산한 숫자는 거절됩니다.
 - **추천·매수·매도·전망·예상·급등** 같은 말은 거절됩니다. 지난 숫자만 말하고 예측하거나 권하지 않습니다.
-- 출처 줄, 링크, 면책 문구("예측이나 투자 권유가 아닙니다"), 해시태그는 모델이 아니라 코드가 붙입니다.
+- 출처 줄, 링크, "다운로드는 설치 횟수" 안내, 해시태그는 모델이 아니라 코드가 붙입니다.
 - 모델: `claude-opus-5-5`. 부르는 길은 둘, 이 순서로 씁니다:
   - **Claude 구독** — `CLAUDE_CODE_OAUTH_TOKEN`(`claude setup-token`으로 만든 토큰)이 있으면 Claude Code CLI(`claude -p`)로. 구독 외 비용 없음, 구독 사용 한도를 같이 씀.
   - **API 키** — `ANTHROPIC_API_KEY`가 있으면 SDK로. 쓴 만큼 결제(안전 분류기가 거절하면 권장 모델로 다시 시도하는 `fallbacks: "default"` 켜 둠).
@@ -118,7 +118,10 @@
 
 Actions → **trends daily** → Run workflow. 빅 케이스가 있거나(또는 첫 실행이면) 몇 분 뒤 `[instagram]` 이슈가 열립니다.
 카드와 캡션을 보고 `/approve`.
-테스트로 오늘 올릴 변화가 없어도 초안을 보고 싶으면 Run workflow 창에서 **"오늘 올릴 변화가 없어도 인스타 초안을 만들기"**를 체크하세요.
+손으로 돌릴 때(Actions → trends daily → Run workflow) "인스타그램" 칸에서 고릅니다:
+- **규칙대로** — 매일 자동 실행과 같음 (빅 케이스 → 바로 게시, 작은 변화는 일주일치를 모아서)
+- **누가 앞서나 지금 올리기** — 분야별 1위 레이스 캐러셀을 지금 바로 게시
+- **테스트 초안 (승인 필요)** — 오늘 올릴 게 없어도 초안을 만들고, `/approve` 해야 게시
 
 ## 로컬에서
 

@@ -1,6 +1,6 @@
 # AI 기술 신호 레이더
 
-**▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — 매일 갱신 · 무료 · 예측이나 투자 권유를 하지 않습니다.
+**▶ [data.pivoxquant.com](https://data.pivoxquant.com)** — 매일 갱신 · 무료.
 
 기사보다 먼저 움직이는 숫자를 매일 같은 방식으로 잽니다 — 개발자가 실제로 내려받는 패키지(npm·PyPI), 연구자가
 쓰는 말(arXiv — AI·양자·로보틱스·비전·보안·시스템 6개 분야), 사람들이 받는 오픈 모델(Hugging Face), 빅테크가 데이터센터에 쓰는 돈(SEC 공시). 크기보다

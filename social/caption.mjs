@@ -95,6 +95,7 @@ function viaClaudeCode(messages) {
 async function fromClaude(ask) {
   const data = slides.map((x, i) => ({ card: i + 1, 분야: x.k, 큰숫자: x.big, 큰숫자설명: x.bl, 제목: x.title, 쉽게말하면: x.easy, 내용: x.body, 출처: x.src }));
   const why = plan.mode === "event" ? `빅 케이스(${plan.event.kind}): 1번 카드. 나머지 카드는 같은 주제의 맥락.`
+    : plan.mode === "race" ? `누가 앞서나: AI 분야마다 경쟁하는 도구들 중 개발자가 실제로 가장 많이 내려받는 1위와 그 변화. 카드마다 분야 이름과 1위, 크게 움직인 곳을 한두 줄로. 다운로드 몫은 그 분야 안에서의 비율이고 사용자 수가 아니라는 점을 한 번 말할 것.`
     : plan.mode === "digest" ? `작은 변화 모음: 지난 한 주 동안 잡힌 작은 변화 ${slides.length}가지. 하나하나는 크지 않으니 크게 부풀리지 말 것.`
     : "묶음: 빅 케이스 없이 요즘 숫자를 모은 게시물.";
   const messages = [{ role: "user", content: `${date} 게시물 — ${why}\n카드 데이터:\n${JSON.stringify(data, null, 1)}\n\n캡션 본문을 써 줘.` }];
@@ -111,7 +112,9 @@ async function fromClaude(ask) {
 
 // ---------- template fallback: only the insights' own sentences ----------
 // (no line numbers: a "2." that is not in the data would fail the number check)
-const template = () => plan.mode === "digest"
+const template = () => plan.mode === "race"
+  ? ["AI 분야별로 누가 앞서나 — 개발자가 실제로 내려받는 숫자로", "", ...slides.map((x) => `· ${x.title} (${x.big})`)].join("\n")
+  : plan.mode === "digest"
   ? [`지난 한 주 작게 바뀐 것 ${slides.length}가지`, "", ...slides.map((x) => `· ${x.title} (${x.big})`)].join("\n")
   : plan.mode === "event"
   ? [slides[0].title, slides[0].body, "", ...slides.slice(1).map((x) => `· ${x.title} (${x.big}, ${x.bl})`)].join("\n")
@@ -137,7 +140,7 @@ const caption = `${body}
 
 출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매일 같은 방식으로 계산
 자세히: data.pivoxquant.com
-다운로드 수는 사용자 수가 아니며, 지난 숫자만 말합니다. 예측이나 투자 권유가 아닙니다.
+다운로드 수는 사용자 수가 아니라 설치 횟수예요.
 
 #AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터`;
 

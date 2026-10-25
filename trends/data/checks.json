@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-24",
+ "checked_at": "2026-10-25",
  "notes": {
   "npm": {
    "until": "2026-10-18",
@@ -25,12 +25,12 @@
   {
    "id": "npm:present",
    "ok": true,
-   "fact": "22개 패키지 중 22개 받음"
+   "fact": "31개 패키지 중 31개 받음"
   },
   {
    "id": "npm:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-23, 받은 날 2026-10-24"
+   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-24"
   },
   {
    "id": "npm:days",
@@ -40,7 +40,7 @@
   {
    "id": "npm:point=range",
    "ok": true,
-   "fact": "기간 API(일별 합)와 지난주 합계 API가 22/22개 패키지에서 같은 숫자 (2026-10-16~2026-10-22)"
+   "fact": "기간 API(일별 합)와 지난주 합계 API가 31/31개 패키지에서 같은 숫자 (2026-10-16~2026-10-22)"
   },
   {
    "id": "npm:weeks",
@@ -50,7 +50,7 @@
   {
    "id": "npm:zero-days",
    "ok": true,
-   "fact": "2026년에 0으로 적힌 날: openai 15일, @anthropic-ai/sdk 15일, @google/genai 15일, @mistralai/mistralai 17일, @ai-sdk/openai 15일, @ai-sdk/anthropic 15일, @ai-sdk/google 15일, @ai-sdk/mistral 15일, @ai-sdk/xai 15일, @ai-sdk/deepseek 15일, ai 15일, @modelcontextprotocol/sdk 15일, langchain 15일, @langchain/langgraph 15일, @openai/agents 15일, @mastra/core 15일, ollama 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음"
+   "fact": "2026년에 0으로 적힌 날: openai 16일, @anthropic-ai/sdk 16일, @google/genai 16일, @mistralai/mistralai 18일, @ai-sdk/openai 16일, @ai-sdk/anthropic 16일, @ai-sdk/google 16일, @ai-sdk/mistral 16일, @ai-sdk/xai 16일, @ai-sdk/deepseek 16일, ai 16일, @modelcontextprotocol/sdk 16일, langchain 16일, @langchain/langgraph 16일, @openai/agents 16일, @mastra/core 16일, ollama 17일, @openai/codex 16일, @anthropic-ai/claude-code 16일, opencode-ai 16일, @google/gemini-cli 16일, @qwen-code/qwen-code 16일, @voltagent/core 16일, @browserbasehq/stagehand 15일, puppeteer 16일, playwright 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음"
   },
   {
    "id": "npm:breaks",
@@ -60,12 +60,12 @@
   {
    "id": "pypi:present",
    "ok": true,
-   "fact": "47개 패키지 중 47개 받음"
+   "fact": "70개 패키지 중 70개 받음"
   },
   {
    "id": "pypi:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-23, 받은 날 2026-10-24"
+   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-25"
   },
   {
    "id": "pypi:days",
@@ -75,7 +75,7 @@
   {
    "id": "pypi:recent≈daily",
    "ok": true,
-   "fact": "최근 7일 합계 API와 일별 합이 47개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
+   "fact": "최근 7일 합계 API와 일별 합이 70개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
   },
   {
    "id": "pypi:weeks",

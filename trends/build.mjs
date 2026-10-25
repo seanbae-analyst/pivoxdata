@@ -313,7 +313,7 @@ for (const R of races) { // a race whose leader changed in four weeks (the app-m
   events.push({ key: `flip:race:${R.id}:${R.lead.pkg}:${R.week}`, subject: `race:${R.id}`, kind: "1위 교체", tier: "big", score: 100, topic: "race",
     card: raceCard(R, { id: `ev-flip-${R.id}`, k: `빅 케이스 · ${esc(R.name)} 1위 교체`, title: `${esc(R.name)} 1위, 이제 <b>${keep(R.lead.name)}</b>`,
       easy: `${esc(R.what)}. 4주 전 1위는 ${esc(R.lead4.name)}(${sh(R.lead4.w4)})였는데, 지금은 ${esc(R.lead.name)}가 ${sh(R.lead.now)}로 앞섰어요.`,
-      viz: [versus(R.lead.w4 ?? 0, R.lead.now, sh, "4주 전", "지금"), shareOf(R.rows.map((y) => [y.name, y.now]), 0)] }) });
+      viz: [rank(R.rows, (y) => y.name, (y) => y.now, (y) => sh(y.now)), versus(R.lead.w4 ?? 0, R.lead.now, sh, `4주 전 ${R.lead.name}`, `지금 ${R.lead.name}`), shareOf(R.rows.map((y) => [y.name, y.now]), 0)] }) });
 }
 for (const f of fields) { // a phrase whose share of a field's papers has just crossed 2.5× its level a year earlier
   if (f.am.length < 16) continue;

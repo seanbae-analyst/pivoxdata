@@ -292,6 +292,373 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
+   "subject": "race:labs-js",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+   "card": {
+    "id": "ev-flip-labs-js",
+    "k": "빅 케이스 · AI 회사 SDK · 자바스크립트 1위 교체",
+    "big": "37.0%",
+    "bl": "AI 회사 SDK · 자바스크립트 중 Anthropic의 몫",
+    "title": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+    "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.0%로 앞섰어요.",
+    "body": "Anthropic 37.0% · OpenAI 36.2% · Google 20.4% · Mistral 6.4%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +9.4%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Anthropic",
+        "value": 0.3702,
+        "label": "37.0%"
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3619,
+        "label": "36.2%"
+       },
+       {
+        "name": "Google",
+        "value": 0.2038,
+        "label": "20.4%"
+       },
+       {
+        "name": "Mistral",
+        "value": 0.064,
+        "label": "6.4%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.3553,
+      "to": 0.3702,
+      "fromText": "35.5%",
+      "toText": "37.0%",
+      "fromLabel": "4주 전 Anthropic",
+      "toLabel": "지금 Anthropic"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "Anthropic",
+        "value": 0.3702
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3619
+       },
+       {
+        "name": "Google",
+        "value": 0.2038
+       },
+       {
+        "name": "Mistral",
+        "value": 0.064
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "flip:race:vector:qdrant-client:2026-10-12",
+   "subject": "race:vector",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "벡터 DB 1위, 이제 Qdrant",
+   "card": {
+    "id": "ev-flip-vector",
+    "k": "빅 케이스 · 벡터 DB 1위 교체",
+    "big": "23.8%",
+    "bl": "벡터 DB 중 Qdrant의 몫",
+    "title": "벡터 DB 1위, 이제 Qdrant",
+    "easy": "AI가 문서를 기억하고 찾아오게 하는 저장소. 4주 전 1위는 FAISS(21.8%)였는데, 지금은 Qdrant가 23.8%로 앞섰어요.",
+    "body": "Qdrant 23.8% · FAISS 22.9% · LanceDB 13.6% · Chroma 13.4% · Weaviate 12.0% · Pinecone 7.9% · Milvus 6.4%. 최근 4주 가장 빨리 큰 곳은 Qdrant(인기 패키지보다 +4.3%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 7개 안에서 · 10월 12일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Qdrant",
+        "value": 0.2384,
+        "label": "23.8%"
+       },
+       {
+        "name": "FAISS",
+        "value": 0.2287,
+        "label": "22.9%"
+       },
+       {
+        "name": "LanceDB",
+        "value": 0.1359,
+        "label": "13.6%"
+       },
+       {
+        "name": "Chroma",
+        "value": 0.1342,
+        "label": "13.4%"
+       },
+       {
+        "name": "Weaviate",
+        "value": 0.1199,
+        "label": "12.0%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.2077,
+      "to": 0.2384,
+      "fromText": "20.8%",
+      "toText": "23.8%",
+      "fromLabel": "4주 전 Qdrant",
+      "toLabel": "지금 Qdrant"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "Qdrant",
+        "value": 0.2384
+       },
+       {
+        "name": "FAISS",
+        "value": 0.2287
+       },
+       {
+        "name": "LanceDB",
+        "value": 0.1359
+       },
+       {
+        "name": "Chroma",
+        "value": 0.1342
+       },
+       {
+        "name": "Weaviate",
+        "value": 0.1199
+       },
+       {
+        "name": "Pinecone",
+        "value": 0.0789
+       },
+       {
+        "name": "Milvus",
+        "value": 0.0641
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "flip:race:voice:faster-whisper:2026-10-12",
+   "subject": "race:voice",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "음성 AI 1위, 이제 faster‑whisper",
+   "card": {
+    "id": "ev-flip-voice",
+    "k": "빅 케이스 · 음성 AI 1위 교체",
+    "big": "38.8%",
+    "bl": "음성 AI 중 faster-whisper의 몫",
+    "title": "음성 AI 1위, 이제 faster‑whisper",
+    "easy": "말을 글로(받아쓰기), 글을 말로(목소리) 바꾸는 AI. 4주 전 1위는 ElevenLabs(40.1%)였는데, 지금은 faster-whisper가 38.8%로 앞섰어요.",
+    "body": "faster-whisper 38.8% · ElevenLabs 33.1% · Whisper 16.2% · Deepgram 11.8%. 최근 4주 가장 빨리 큰 곳은 faster‑whisper(인기 패키지보다 +49.0%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "faster-whisper",
+        "value": 0.3884,
+        "label": "38.8%"
+       },
+       {
+        "name": "ElevenLabs",
+        "value": 0.3308,
+        "label": "33.1%"
+       },
+       {
+        "name": "Whisper",
+        "value": 0.1625,
+        "label": "16.2%"
+       },
+       {
+        "name": "Deepgram",
+        "value": 0.1183,
+        "label": "11.8%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.2904,
+      "to": 0.3884,
+      "fromText": "29.0%",
+      "toText": "38.8%",
+      "fromLabel": "4주 전 faster-whisper",
+      "toLabel": "지금 faster-whisper"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "faster-whisper",
+        "value": 0.3884
+       },
+       {
+        "name": "ElevenLabs",
+        "value": 0.3308
+       },
+       {
+        "name": "Whisper",
+        "value": 0.1625
+       },
+       {
+        "name": "Deepgram",
+        "value": 0.1183
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "surge:PyPI:faster-whisper:2026-10-12",
+   "subject": "pkg:faster-whisper",
+   "kind": "급증",
+   "tier": "big",
+   "score": 80,
+   "topic": "ai",
+   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-faster-whisper",
+    "k": "빅 케이스 · PyPI 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 57만회, 직전 7주 평소는 30만회. 같은 주 대조군은 평소의 1.16배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       237656,
+       285645,
+       294361,
+       304896,
+       356143,
+       419208,
+       491489,
+       567273
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 304896,
+      "to": 567273,
+      "fromText": "30만",
+      "toText": "57만",
+      "fromLabel": "직전 7주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "surge:npm:playwright:2026-10-05",
+   "subject": "pkg:playwright",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.6,
+   "topic": "ai",
+   "headline": "지난주 Playwright 다운로드가 평소의 1.5배",
+   "card": {
+    "id": "ev-surge-playwright",
+    "k": "작은 변화 · npm 다운로드",
+    "big": "1.5배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Playwright 다운로드가 평소의 1.5배",
+    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2,194만회, 직전 12주 평소는 1,442만회. 같은 주 대조군은 평소의 1.25배였습니다.",
+    "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       8072786,
+       7856978,
+       8057228,
+       8159135,
+       8967022,
+       9107951,
+       9121580,
+       9794577.5,
+       10197527,
+       10879435,
+       10321202,
+       10965426,
+       11559248,
+       11835586,
+       12373633,
+       12882422,
+       13225461,
+       14152175.5,
+       14176564,
+       14659070,
+       16063000,
+       17341990,
+       17232949,
+       17996101,
+       21627650,
+       21935429.5
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 14417817,
+      "to": 21935429.5,
+      "fromText": "1,442만",
+      "toText": "2,194만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
   }
  ]
 }

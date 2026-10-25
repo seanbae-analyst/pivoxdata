@@ -19,10 +19,11 @@ on:
     - cron: "17 1 * * *" # every day 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
   workflow_dispatch:
     inputs:
-      force_draft:
-        description: "오늘 올릴 변화가 없어도 인스타 초안을 만들기 (테스트용)"
-        type: boolean
-        default: false
+      post:
+        description: "인스타그램"
+        type: choice
+        default: "규칙대로"
+        options: ["규칙대로", "누가 앞서나 지금 올리기", "테스트 초안 (승인 필요)"]
 
 permissions:
   contents: write
@@ -55,7 +56,7 @@ jobs:
         id: plan
         shell: bash
         env:
-          FORCE_DRAFT: ${{ inputs.force_draft }}
+          POST_KIND: ${{ inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || '' }}
         run: node social/plan.mjs 2>&1 | tee -a run.log
 
       # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,
@@ -88,11 +89,11 @@ jobs:
 
       # automatic posting (the default): a draft that passed the caption checks is posted right away, after the commit
       # above has put its images on the site. Set the repository variable AUTO_PUBLISH to "false" to go back to
-      # approving each post. A forced test run (force_draft) always waits for approval. If posting fails, the draft
+      # approving each post. A test draft (Run workflow → "테스트 초안") always waits for approval. If posting fails, the draft
       # falls back to an approval issue, so nothing is lost.
       - name: Post to Instagram automatically
         id: auto
-        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.force_draft != true
+        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.post != '테스트 초안 (승인 필요)'
         continue-on-error: true
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
@@ -122,6 +123,7 @@ jobs:
               `<!-- instagram-post:${date} -->`,
               post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}`
                 : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
+                : post.mode === "race" ? "**누가 앞서나** — AI 분야별 1위와 그 변화."
                 : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 숫자를 모았습니다.",
               "",
               `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
@@ -132,7 +134,7 @@ jobs:
                    "- `/approve` — 이대로 게시 (저장소 소유자만)",
                    "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]),
             ].join("\n");
-            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AI 기술 신호";
+            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : post.mode === "race" ? "누가 앞서나" : "요즘 AI 기술 신호";
             const title = post.published ? `[게시됨] ${date} ${what}` : `[instagram] ${date} ${what}`;
             const issue = await github.rest.issues.create({ ...context.repo, title: title.slice(0, 200), body });
             // a posted draft is a record, not a question: closed at once (it still notifies the owner)
