@@ -22,6 +22,9 @@ if (plan.post === false) { console.log(`social/plan.json says no draft today (${
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 const slides = slidesFor(I, plan);
+// story.mjs's storyline, when there is one: text-first slides in the order the story goes (otherwise the card layouts)
+const storyFile = path.join(ROOT, "social", "out", I.built_at, "story.json");
+const story = fs.existsSync(storyFile) ? JSON.parse(fs.readFileSync(storyFile, "utf8")) : null;
 if (slides.length < 2) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
 const date = I.built_at, [y, m, d] = date.split("-");
 
@@ -119,6 +122,23 @@ const covers = {
 };
 
 
+// ---------- story slides ----------
+function storySlides(st) {
+  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, ""));
+  return st.slides.map((s, i) => {
+    const kick = `<div class="kick"><span>${e(s.kicker || (i ? "" : `AX 트렌드 레이더 · ${when}`))}</span><span class="pg">${i + 1} / ${N}</span></div>`;
+    const num = s.number ? `<div class="num"><b>${e(s.number)}</b>${s.label ? `<span>${e(s.label)}</span>` : ""}</div>` : "";
+    const items = (s.items ?? []).length ? `<ol${s.items.length >= 5 ? ' class="many"' : ""}>${s.items.map((x) => `<li>${e(x)}</li>`).join("")}</ol>` : "";
+    const body = s.body ? `<p class="txt">${e(s.body)}</p>` : "";
+    const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${e(s.title)}</h2>${body}${num}`
+      : s.kind === "quiz" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
+      : s.kind === "end" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}`
+      : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${e(s.title)}</h2>${body}${items}`
+      : `${kick}<h2>${e(s.title)}</h2>${body}${items}`;
+    return `<section class="slide st ${e(s.kind)}">${inner}${foot}</section>`;
+  }).join("\n");
+}
+
 const html = `<!doctype html>
 <html lang="ko">
 <head>
@@ -181,17 +201,35 @@ const html = `<!doctype html>
   .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border-radius:999px;background:#cdab80;color:#12100d}
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
   .c-alert .big{font-size:150px;margin-top:auto;color:#cdab80} .c-alert .bl{color:#c9c0b4;margin-bottom:56px}
+
+  /* story slides: words first — a headline, a few sentences, at most one number */
+  .st .kick{display:flex;justify-content:space-between;gap:20px} .st .kick .pg{color:var(--dim);font-weight:500}
+  .st h2{font-size:64px;line-height:1.25;letter-spacing:-.035em;margin:52px 0 0;font-weight:800}
+  .st .txt{font-size:38px;line-height:1.7;color:var(--ink-2);margin:36px 0 0;white-space:pre-line}
+  .st .num{display:flex;align-items:baseline;gap:24px;margin-top:48px} .st .num b{font-size:150px;font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{font-size:30px;color:var(--mut);line-height:1.4}
+  .st ol{list-style:none;padding:0;margin:44px 0 0;display:grid;gap:20px;counter-reset:i}
+  .st ol li{counter-increment:i;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;font-size:34px;line-height:1.5;color:var(--ink-2);padding:22px 26px;background:#fff;border-radius:22px;box-shadow:0 0 0 1px var(--line)}
+  .st ol li::before{content:counter(i);width:52px;height:52px;border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:28px}
+  .st.quiz ol li::before{content:counter(i, upper-alpha)}
+  .st ol.many{gap:14px;margin-top:34px} .st ol.many li{font-size:30px;padding:16px 22px} .st ol.many li::before{width:44px;height:44px;font-size:24px}
+  .st .hint{font-size:28px;color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:36px}
+  .st.cover h2{font-size:92px;line-height:1.16;margin-top:110px} .st.cover .txt{font-size:40px}
+  .st.cover .badge{align-self:flex-start;margin-top:72px;font-size:30px;font-weight:800;padding:12px 26px;border-radius:999px;background:var(--bronze);color:#fff}
+  .st.answer .num b{font-size:180px} .st.end{background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.28),transparent 60%),#12100d;color:#f4efe7}
+  .st.end .kick{color:#cdab80} .st.end .txt,.st.end ol li{color:#d9d1c6} .st.end ol li{background:rgba(255,255,255,.06);box-shadow:none} .st.end ol li::before{background:rgba(205,171,128,.18);color:#cdab80}
+  .st.end .foot{color:#a89f93;border-color:rgba(255,255,255,.14)} .st.end .url{font-size:40px;font-weight:700;color:#cdab80;margin-top:auto;margin-bottom:36px}
 </style>
 </head>
 <body data-date="${date}">
-${covers[cover]}
-${slides.map(slideHtml).join("\n")}
+${story ? storySlides(story) : `${covers[cover]}\n${slides.map(slideHtml).join("\n")}`}
 </body>
 </html>
 `;
 const file = path.join(ROOT, "social", "cards.html");
 const before = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
-if (html !== before) { fs.writeFileSync(file, html); console.log(`wrote social/cards.html (${slides.length + 1} slides, ${plan.mode}, cover ${cover}: ${design.map((s) => `${s.id}=${s.format}/${s.layout}`).join(" ")})`); }
+if (html !== before) { fs.writeFileSync(file, html); console.log(story ? `wrote social/cards.html (story: ${story.format}, ${story.slides.length} slides)` : `wrote social/cards.html (${slides.length + 1} slides, ${plan.mode}, cover ${cover}: ${design.map((s) => `${s.id}=${s.format}/${s.layout}`).join(" ")})`); }
 else console.log("same  social/cards.html");
 fs.mkdirSync(path.join(OUT, date), { recursive: true });
-fs.writeFileSync(path.join(OUT, date, "design.json"), JSON.stringify({ date, mode: plan.mode, key: plan.event?.key ?? null, cover, slides: design.map(({ o, ...s }) => s) }, null, 1) + "\n");
+fs.writeFileSync(path.join(OUT, date, "design.json"), JSON.stringify(story
+  ? { date, mode: plan.mode, key: plan.event?.key ?? null, format: story.format, industry: story.industry ?? null, slides: [] }
+  : { date, mode: plan.mode, key: plan.event?.key ?? null, cover, slides: design.map(({ o, ...s }) => s) }, null, 1) + "\n");

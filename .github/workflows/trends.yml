@@ -72,6 +72,7 @@ jobs:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          node social/story.mjs 2>&1 | tee -a run.log
           node social/build.mjs 2>&1 | tee -a run.log
           node social/render.mjs 2>&1 | tee -a run.log
           node social/caption.mjs 2>&1 | tee -a run.log
