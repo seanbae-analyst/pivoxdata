@@ -36,8 +36,12 @@ function head(page, html) {
   const common = `
 <meta name="theme-color" content="#050505" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 `;
   if (page.noindex) return `\n<meta name="robots" content="noindex" />${common}`;
   return `
@@ -75,7 +79,8 @@ export function writePages(fills = {}, lastmod) {
   }
   // the briefings (social/briefs.mjs writes briefs/*.html) are listed too
   const BR = path.join(ROOT, "briefs");
-  const briefs = fs.existsSync(BR) ? fs.readdirSync(BR).filter((f) => f.endsWith(".html")).map((f) => (f === "index.html" ? "/briefs" : `/briefs/${f.slice(0, -5)}`)) : [];
+  const briefs = fs.existsSync(BR) ? fs.readdirSync(BR, { recursive: true }).map(String).filter((f) => f.endsWith(".html"))
+    .map((f) => `/briefs/${f.slice(0, -5).replace(/\\/g, "/")}`.replace(/\/index$/, "")) : [];
   const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
   fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
   fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
