@@ -55,7 +55,14 @@ jobs:
         shell: bash # -eo pipefail, so a failing step is not hidden by tee
         env:
           SEC_CONTACT: ${{ vars.SEC_CONTACT }}
-        run: npm run trends 2>&1 | tee run.log
+        # a posting request (push) on a day the data was already fetched reuses it: verify + build only, ~8 min faster
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
+            echo "data already fetched today — verify and build only" | tee run.log
+            npm run trends:build 2>&1 | tee -a run.log
+          else
+            npm run trends 2>&1 | tee run.log
+          fi
 
       - name: Posting request
         id: req
