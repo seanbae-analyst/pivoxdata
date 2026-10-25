@@ -55,3 +55,9 @@ export const BANNED = /(추천|조언|매수|매도|사세요|사야|팔아|파�
 export const numbersIn = (s) => (String(s).match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) => n.replace(/,/g, ""));
 // whatever comes back is posted as is, so a note to us ("--- 둘째 줄은 제가 덧붙였어요") must not ride along
 export const META = /(덧붙였|카드 데이터|팩트 목록|빼도 돼|본문만|캡션 본문|JSON)/;
+
+// the AI-written tells a reader spots at once: stock phrases, and the same hedge closing every paragraph
+export const CLICHE = /(눈여겨볼 만|주목할 만|시사하는 바|시사점|새로운 시대|패러다임|게임 ?체인저|본격화|가속화|의미심장|혁신적인 변화|하는 모습이에요|모습을 보여|흐름으로 볼 수 있어요|알아볼게요|살펴볼게요|함께 살펴)/g;
+export const hedges = (t) => (String(t).match(/볼 수 있어요|읽을 수 있어요/g) ?? []).length;
+export const STYLE = `- 기자처럼 쓴다: 구체적인 사실을 먼저, 짧은 평서문으로. 꾸밈말과 상투어를 쓰지 않는다("눈여겨볼 만해요", "주목할 만해요", "시사점", "새로운 시대", "패러다임", "게임 체인저", "본격화", "가속화", "~하는 모습이에요", "살펴볼게요" 같은 말 금지).
+- 해석은 꼭 필요한 곳에만 짧게 한다. 문단마다 "~로 볼 수 있어요"로 끝내지 않는다(글 전체에서 두세 번 이하). 같은 맺음말을 되풀이하지 않는다.`;

@@ -70,6 +70,24 @@
   .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
   .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
   .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
+  /* editorial (2026-10-25): no pills or boxed cards — plain labels, hairline rules, bronze only where it means something */
+  .kicker{display:block;padding:0;border:0;border-radius:0;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);margin-right:8px}
+  .chips{gap:4px 14px}
+  .chip,.chip.company{padding:0;border:0;border-radius:0;font-size:13px;color:var(--mut)} .chip.company{color:var(--mut)}
+  .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
+  .list{gap:0;border-top:1px solid var(--line-2)}
+  .list li{border-bottom:1px solid var(--line);padding-bottom:12px}
+  .list .card,.list .card:hover{padding:16px 0 4px;border:0;border-radius:0;background:none}
+  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
+  .list .chips{margin:6px 0 0}
+  .tabs{gap:2px;border-bottom:1px solid var(--line)}
+  .tabs a{border:0;border-radius:0;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs a[aria-current]{background:none;border-bottom-color:var(--bronze)}
+  .sum{border:0;border-top:2px solid var(--bronze-line);border-radius:0;background:none;padding:18px 0 0}
+  .pn a{border:0;border-top:1px solid var(--line-2);border-radius:0;background:none;padding:14px 0}
+  .install{background:none;border:0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);border-radius:0;padding:14px 0}
+  .install .alerts{border-top:1px solid var(--line)}
   .swipe-hint,.deck-nav{display:none}
   @media(max-width:640px){
     main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
