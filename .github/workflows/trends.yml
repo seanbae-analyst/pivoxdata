@@ -9,8 +9,9 @@
 #      Otherwise only the site is refreshed.
 #   3. A draft becomes carousel cards (social/build.mjs, render.mjs — a different drawing and layout each time) and a
 #      caption (social/caption.mjs: Claude writes it, code checks every number against the cards and rejects
-#      advice/forecast words); an "[instagram]" issue asks for approval. Nothing is posted until the repository owner
-#      comments /approve (social-publish.yml).
+#      advice/forecast words), and is posted to Instagram right away; a closed "[게시됨]" issue records it.
+#      With the repository variable AUTO_PUBLISH set to "false" (or on a forced test run, or when posting fails) an
+#      "[instagram]" issue asks for approval instead, and the owner's /approve posts it (social-publish.yml).
 name: trends daily
 
 on:
@@ -85,17 +86,37 @@ jobs:
           git pull --rebase origin "${GITHUB_REF_NAME}" && git push # the publish job may have pushed meanwhile
           echo "changed=true" >> "$GITHUB_OUTPUT"
 
-      - name: Ask for approval to post
+      # automatic posting (the default): a draft that passed the caption checks is posted right away, after the commit
+      # above has put its images on the site. Set the repository variable AUTO_PUBLISH to "false" to go back to
+      # approving each post. A forced test run (force_draft) always waits for approval. If posting fails, the draft
+      # falls back to an approval issue, so nothing is lost.
+      - name: Post to Instagram automatically
+        id: auto
+        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.force_draft != true
+        continue-on-error: true
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+        run: |
+          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set"; exit 1; }
+          file="social/out/${{ steps.plan.outputs.date }}/post.json"
+          node social/publish.mjs "$file"
+          git add "$file" && git commit -m "social: published ${{ steps.plan.outputs.date }} (automatic)" && git pull --rebase origin "${GITHUB_REF_NAME}" && git push
+
+      - name: Report the post, or ask for approval
         if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true'
         uses: actions/github-script@v7
         env:
           POST_DATE: ${{ steps.plan.outputs.date }}
+          AUTO: ${{ steps.auto.outcome }}
         with:
           script: |
             const fs = require("fs");
             const date = process.env.POST_DATE;
             const post = JSON.parse(fs.readFileSync(`social/out/${date}/post.json`, "utf8"));
-            if (post.published) return;
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const imgs = post.images.map((f) => `<img src="${post.image_base}${f}" width="270">`).join(" ");
             const body = [
               `<!-- instagram-post:${date} -->`,
@@ -103,15 +124,19 @@ jobs:
                 : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
                 : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 숫자를 모았습니다.",
               "",
-              `인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
-              `이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`,
+              `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
+              ...(post.published ? [] : [`이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`]),
               "", imgs, "", "**캡션**", "```", post.caption, "```", "",
-              "- `/approve` — 이대로 게시 (저장소 소유자만)",
-              "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)",
+              ...(post.published ? [`**자동으로 게시했습니다:** ${post.published.permalink}`, "", "내리려면 인스타그램 앱에서 직접 삭제하세요. 자동 게시를 끄려면 저장소 변수 `AUTO_PUBLISH`를 `false`로."]
+                : [...(process.env.AUTO === "failure" ? [`⚠️ 자동 게시가 실패해 승인으로 돌렸습니다. 로그: ${run}`, ""] : []),
+                   "- `/approve` — 이대로 게시 (저장소 소유자만)",
+                   "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]),
             ].join("\n");
-            const title = post.mode === "event" ? `[instagram] ${date} 빅 케이스 — ${post.event.headline}`
-              : post.mode === "digest" ? `[instagram] ${date} 작은 변화 ${post.insights.length}가지` : `[instagram] ${date} 요즘 AI 기술 신호`;
-            await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title: title.slice(0, 200), body });
+            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AI 기술 신호";
+            const title = post.published ? `[게시됨] ${date} ${what}` : `[instagram] ${date} ${what}`;
+            const issue = await github.rest.issues.create({ ...context.repo, title: title.slice(0, 200), body });
+            // a posted draft is a record, not a question: closed at once (it still notifies the owner)
+            if (post.published) await github.rest.issues.update({ ...context.repo, issue_number: issue.data.number, state: "closed", state_reason: "completed" });
 
       - name: Open an issue when a check fails
         if: failure()

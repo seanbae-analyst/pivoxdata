@@ -1,7 +1,11 @@
 # 인스타그램 카드 — 설정과 흐름
 
-정해진 요일이 아니라 **변화가 생겼을 때** 카드(1080×1350 캐러셀)와 캡션을 만들고, **저장소 소유자가 승인해야** 올립니다.
-큰 변화(빅 케이스)는 그날 바로, 작은 변화는 일주일치를 모아서.
+정해진 요일이 아니라 **변화가 생겼을 때** 카드(1080×1350 캐러셀)와 캡션을 만들고, **검사를 통과하면 바로 인스타그램에 올립니다.**
+큰 변화(빅 케이스)는 그날 바로, 작은 변화는 일주일치를 모아서. 올린 뒤에는 닫힌 `[게시됨]` 이슈로 기록이 남습니다.
+
+**승인 방식으로 돌리려면** 저장소 Settings → Secrets and variables → Actions → **Variables** 탭에서
+`AUTO_PUBLISH` 를 `false` 로 만드세요. 그러면 `[instagram]` 이슈가 열리고, 소유자가 `/approve` 를 달아야 올라갑니다.
+테스트용 강제 실행(force_draft)과, 자동 게시가 실패한 날은 늘 승인 이슈로 돌아갑니다.
 
 ```
 매일 10:17 KST  trends.yml
@@ -15,9 +19,9 @@
   ├ social/render.mjs  카드 → social/out/<날짜>/01.png …
   ├ social/caption.mjs Claude가 캡션 본문 작성 → 코드가 숫자·금지어 검사 (2번 실패하면 템플릿 캡션)
   ├ main에 커밋 → Vercel 배포 (이미지가 data.pivoxquant.com/social/out/… 에 공개됨)
-  └ "[instagram] <날짜> 빅 케이스 — …" 이슈: 카드 미리보기 + 캡션
-소유자가 이슈에 /approve  →  social-publish.yml → social/publish.mjs → 인스타그램 게시 → 이슈에 링크 남기고 닫음
-                /reject   →  게시하지 않고 닫음
+  ├ social/publish.mjs 인스타그램에 바로 게시 → 닫힌 "[게시됨] <날짜> …" 이슈로 기록 (카드·캡션·링크)
+  └ (AUTO_PUBLISH=false · 강제 테스트 · 게시 실패일 때) "[instagram] <날짜> …" 승인 이슈
+     소유자가 /approve → social-publish.yml → 게시 → 링크 남기고 닫음 · /reject → 게시하지 않고 닫음
 ```
 
 ## 빅 케이스
