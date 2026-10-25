@@ -17,6 +17,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { shell, writePages, SITE, NAME } from "../trends/site.mjs";
 import { SERIES, THEMES, INDUSTRIES, seriesOf, companyId } from "./tags.mjs";
+import { APP_ID } from "./notify-config.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "social", "out"), RU = path.join(ROOT, "social", "roundups"), DIR = path.join(ROOT, "briefs");
@@ -73,14 +74,53 @@ const byMonth = (list) => {
 };
 const present = Object.keys(SERIES).filter((id) => briefs.some((b) => b.series === id));
 const tabs = (cur) => present.length > 1 ? `<nav class="tabs" aria-label="시리즈"><a href="/briefs"${cur ? "" : ' aria-current="page"'}>전체 <span>${briefs.length}</span></a>${present.map((id) => `<a href="/briefs/series/${id}"${cur === id ? ' aria-current="page"' : ""}>${esc(SERIES[id].name)} <span>${briefs.filter((b) => b.series === id).length}</span></a>`).join("")}</nav>` : "";
-// the phone install box (PWA); push alerts plug in here once a push service is set up
-const INSTALL = `<aside class="install" id="install"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 브리핑을 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button><small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가"</small></aside>
+// the phone install box (PWA) and the push alerts (OneSignal: the topics are tags, social/notify.mjs sends to them)
+const INSTALL = `<aside class="install" id="install">
+  <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 브리핑을 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
+  <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
+  <div class="row alerts"><b>새 브리핑 알림</b>
+    <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
+    <label><input type="checkbox" value="monthly" checked /> 월간 리포트</label>
+    <label><input type="checkbox" value="other" /> 그 밖의 브리핑</label>
+    <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>
+  </div>
+  <small id="push-state" aria-live="polite"></small>
+</aside>
 <script>
-(() => { let ev; const btn = document.getElementById("install-btn"), ios = document.getElementById("install-ios");
-  if (matchMedia("(display-mode: standalone)").matches) { document.getElementById("install").hidden = true; return; }
-  if (/iphone|ipad|ipod/i.test(navigator.userAgent)) ios.hidden = false;
-  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; btn.hidden = false; });
-  btn.addEventListener("click", async () => { if (!ev) return; ev.prompt(); await ev.userChoice; ev = null; btn.hidden = true; }); })();
+(() => { let ev; const $ = (id) => document.getElementById(id), standalone = matchMedia("(display-mode: standalone)").matches, ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (standalone) document.querySelector(".install .row").hidden = true;
+  else if (ios) $("install-ios").hidden = false;
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; $("install-btn").hidden = false; });
+  $("install-btn").addEventListener("click", async () => { if (!ev) return; ev.prompt(); await ev.userChoice; ev = null; $("install-btn").hidden = true; });
+})();
+</script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async (OneSignal) => {
+  await OneSignal.init({ appId: "${APP_ID}", serviceWorkerPath: "sw.js", serviceWorkerParam: { scope: "/" } });
+  const $ = (id) => document.getElementById(id), boxes = [...document.querySelectorAll(".alerts input")];
+  const show = async () => {
+    const on = OneSignal.Notifications.permission && OneSignal.User.PushSubscription.optedIn;
+    const tags = on ? await OneSignal.User.getTags() : {};
+    if (on) boxes.forEach((b) => (b.checked = tags[b.value] === "1"));
+    $("push-on").textContent = on ? "주제 저장" : "알림 받기"; $("push-off").hidden = !on;
+    $("push-state").textContent = on ? "알림이 켜져 있어요. 주제를 바꾸고 저장할 수 있어요." : "";
+  };
+  $("push-on").addEventListener("click", async () => {
+    const picked = boxes.filter((b) => b.checked).map((b) => b.value);
+    if (!picked.length) { $("push-state").textContent = "받을 주제를 하나 이상 골라 주세요."; return; }
+    if (!OneSignal.Notifications.isPushSupported()) { $("push-state").textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? "아이폰은 먼저 홈 화면에 추가한 뒤, 그 앱에서 알림을 켤 수 있어요." : "이 브라우저는 알림을 지원하지 않아요."; return; }
+    await OneSignal.Notifications.requestPermission();
+    if (!OneSignal.Notifications.permission) { $("push-state").textContent = "브라우저에서 알림이 허용되지 않았어요."; return; }
+    await OneSignal.User.PushSubscription.optIn();
+    await OneSignal.User.addTags(Object.fromEntries(boxes.map((b) => [b.value, b.checked ? "1" : "0"])));
+    await show(); $("push-state").textContent = "알림을 켰어요. 새 브리핑이 올라오면 알려 드릴게요.";
+  });
+  $("push-off").addEventListener("click", async () => { await OneSignal.User.PushSubscription.optOut(); await show(); $("push-state").textContent = "알림을 껐어요."; });
+  OneSignal.User.PushSubscription.addEventListener("change", show);
+  await show();
+});
 </script>`;
 
 const CSS = `
@@ -116,9 +156,13 @@ const CSS = `
   .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .list .chips{margin:8px 4px 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
-  .install{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;max-width:760px;margin:0 0 24px;padding:14px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
-  .install b{color:var(--ink)} .install button{margin-left:auto;font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
-  .install small{width:100%;color:var(--mut)} .install[hidden],.install [hidden]{display:none}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:16px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
+  .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--bronze-line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install input{accent-color:var(--bronze);width:16px;height:16px}
+  .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
+  .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
+  .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
   @media(max-width:560px){.pn{grid-template-columns:1fr}.pn .next{text-align:left}}
 `;
 

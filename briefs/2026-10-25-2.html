@@ -62,9 +62,13 @@
   .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .list .chips{margin:8px 4px 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
-  .install{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;max-width:760px;margin:0 0 24px;padding:14px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
-  .install b{color:var(--ink)} .install button{margin-left:auto;font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
-  .install small{width:100%;color:var(--mut)} .install[hidden],.install [hidden]{display:none}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:16px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
+  .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--bronze-line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install input{accent-color:var(--bronze);width:16px;height:16px}
+  .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
+  .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
+  .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
   @media(max-width:560px){.pn{grid-template-columns:1fr}.pn .next{text-align:left}}
 </style>
 </head>
