@@ -159,12 +159,17 @@
 <div class="wrap">
 <!--@nav-->
 <header class="topbar">
-  <a class="brand" href="/"><span class="mark"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></span><span class="full">AX 트렌드 레이더</span><span class="short">신호 레이더</span></a>
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
   <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 <!--/@nav-->
+<section class="cover" id="cover" aria-label="PivoxData">
+  <div class="spot" aria-hidden="true"></div>
+  <p class="cover-wordmark">Pivox<span class="b">Data</span></p>
+  <div class="cover-next"><a href="#start">시작하기 <span aria-hidden="true">→</span></a></div>
+</section>
 <main>
-  <header class="hero">
+  <header class="hero" id="start">
     <div class="kicker"><span class="dot"></span>매일 갱신 · 무료</div>
     <h1>AX 트렌드 레이더</h1>
     <p class="lede"><span class="l-full">기업이 AI를 얼마나, 어디에, 어떤 도구로 들이는지 — <b>AX(AI 전환)</b>를 매일 같은 방식으로 숫자로 봅니다. 업종별 도입률, 기업이 돈을 내는 AI, 개발 현장의 도구 경쟁, 빅테크가 쓰는 돈까지.</span><span class="l-short">기업의 <b>AI 전환(AX)</b>을 매일 숫자로 봅니다 — 업종별 도입률, 기업이 고르는 AI, 도구 경쟁.</span></p>
@@ -364,6 +369,15 @@ document.addEventListener("click", (e) => {
 addEventListener("keydown", (e) => { if (e.key === "Escape" && tipFor) { const t = tipFor; hideTip(); t.focus(); } });
 addEventListener("resize", hideTip);
 tip.addEventListener("click", (e) => { const a = e.target.closest("a"); if (!a) return; const g = document.querySelector(a.getAttribute("href")); hideTip(); if (g) { g.classList.remove("flash"); void g.offsetWidth; g.classList.add("flash"); setTimeout(() => g.classList.remove("flash"), 2400); } });
+// cover (first screen, like PivoxQuant / PivoxMap): a click anywhere on it moves on to the dashboard; the keyboard
+// and the wheel just scroll. A shared address with a hash (/#quantum, /#glossary) skips the cover and lands on its section.
+const cover = document.getElementById("cover"), start = document.getElementById("start");
+cover.addEventListener("click", (e) => { e.preventDefault(); start.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); });
+if (location.hash && location.hash !== "#cover") {
+  const topic = tabs.some((b) => `#${b.dataset.topic}` === location.hash);
+  const target = topic ? document.querySelector('[role="tablist"]').closest("section") : document.getElementById(decodeURIComponent(location.hash.slice(1)));
+  if (target) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+}
 const more = document.getElementById("more");
 let drawn = false;
 const open = () => { if (more.open && !drawn) { drawn = true; charts(); } };

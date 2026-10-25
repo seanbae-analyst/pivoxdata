@@ -15,10 +15,9 @@ export const PAGES = [
   { file: "404.html", path: "/404", noindex: true },
 ];
 
-const MARK = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19V13M12 19V8M19 19V4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>`;
 const NAV = `
 <header class="topbar">
-  <a class="brand" href="/"><span class="mark">${MARK}</span><span class="full">${NAME}</span><span class="short">신호 레이더</span></a>
+  <a class="brand" href="/" aria-label="PivoxData — ${NAME} 처음으로">Pivox<span class="b">Data</span></a>
   <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
