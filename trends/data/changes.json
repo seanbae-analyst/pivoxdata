@@ -662,6 +662,58 @@
   },
   {
    "date": "2026-10-25",
+   "key": "hftr:XHToken/Spark-X2.6-4B:2026-10-25",
+   "subject": "hf:XHToken/Spark-X2.6-4B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: XHToken/​Spark‑X2.6‑4B",
+   "card": {
+    "id": "ch-hftr",
+    "k": "작은 변화 · 오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: XHToken/​Spark‑X2.6‑4B",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑generation · 2026-10-19 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-10-25",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 1412,
+        "label": "7.3만"
+       },
+       {
+        "name": "flint",
+        "value": 756,
+        "label": "4,795"
+       },
+       {
+        "name": "flux-3-image-klein-comfy",
+        "value": 553,
+        "label": "59만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 416,
+        "label": "209만"
+       },
+       {
+        "name": "Spark-X2.6-4B",
+        "value": 416,
+        "label": "2,537"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
    "key": "ax:month:2026-09",
    "subject": "ax:month:2026-09",
    "kind": "AX 월간",

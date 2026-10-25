@@ -1,0 +1,38 @@
+{
+ "date": "2026-10-25",
+ "mode": "event",
+ "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
+ "cover": "alert",
+ "slides": [
+  {
+   "id": "ev-flip-labs-js",
+   "kind": "rank",
+   "format": "dots",
+   "layout": "chart"
+  },
+  {
+   "id": "race-labs-js",
+   "kind": "share",
+   "format": "donut",
+   "layout": "headline"
+  },
+  {
+   "id": "race-labs-app",
+   "kind": "share",
+   "format": "waffle",
+   "layout": "number"
+  },
+  {
+   "id": "race-labs-py",
+   "kind": "share",
+   "format": "stack",
+   "layout": "chart"
+  },
+  {
+   "id": "race-openmodels",
+   "kind": "rank",
+   "format": "podium",
+   "layout": "headline"
+  }
+ ]
+}
