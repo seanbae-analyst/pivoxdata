@@ -78,8 +78,7 @@ jobs:
 
       # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,
       # from `claude setup-token`); an API key (ANTHROPIC_API_KEY) also works; with neither, a template caption is used
-      - name: Install Claude Code
-        if: steps.plan.outputs.post == 'true'
+      - name: Install Claude Code # every run: the cards on a posting day, the monthly roundup at the start of a month
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Instagram cards and caption
@@ -93,6 +92,16 @@ jobs:
           node social/build.mjs 2>&1 | tee -a run.log
           node social/render.mjs 2>&1 | tee -a run.log
           node social/caption.mjs 2>&1 | tee -a run.log
+
+      # the web side, every run: last month's roundup once a month (roundup.mjs), then the briefing pages, series, tags,
+      # RSS and the home page's latest three (briefs.mjs)
+      - name: Briefings (web)
+        shell: bash
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          node social/roundup.mjs 2>&1 | tee -a run.log
           node social/briefs.mjs 2>&1 | tee -a run.log
 
       - name: Commit refreshed data, page and cards
@@ -100,7 +109,7 @@ jobs:
         run: |
           git config user.name "pivoxdata-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json briefs
+          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs
           if [ -f social/request.json ]; then git rm -q social/request.json; fi # a posting request is used once
           if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
           git commit -m "data(trends): daily refresh $(date -u +%F)${{ steps.plan.outputs.post == 'true' && ' + instagram draft' || '' }}"

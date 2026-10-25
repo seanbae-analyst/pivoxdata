@@ -16,6 +16,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { slidesFor } from "./pick.mjs";
 import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn } from "./claude.mjs";
+import { THEMES, INDUSTRIES, tagPrompt, pickTags, companyId, seriesOf } from "./tags.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f, empty) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : empty);
@@ -256,7 +257,8 @@ const ARTICLE_RULES = `
 - 사실·숫자·말투 규칙은 카드와 같다. 해석은 해석임이 드러나게. 한 문단은 2~4문장, 줄바꿈은 문단 사이에만.
 - 카드 스토리의 흐름을 따르되 같은 문장을 반복하지 말고 더 설명한다.
 출력은 JSON 하나만, 다른 글 없이:
-{"title":"제목","lede":"리드","sections":[{"heading":"소제목","body":"문단\\n\\n문단","refs":[발표 번호(AX 사건만)]}],"takeaways":["핵심 한 줄"]}`;
+{"title":"제목","lede":"리드","sections":[{"heading":"소제목","body":"문단\\n\\n문단","refs":[발표 번호(AX 사건만)]}],"takeaways":["핵심 한 줄"],"themes":["주제"],"industries":["업종"]}
+${tagPrompt()}`;
 function checkArticle(a) {
   const p = [];
   if (!a?.title || plain(a.title).length > 80) p.push("제목은 1~80자");
@@ -305,6 +307,15 @@ if (route && result.story) {
   try { article = await articleFromClaude(route, story); } catch (e) { if (!(e instanceof ClaudeUnavailable)) throw e; console.log(`article: ${e.message}`); }
 }
 story.article = { ...(article ?? articleFromSlides(story)), source: article ? "claude" : "slides" };
+// how the archive files it (social/tags.mjs): a series, themes and industries from the fixed lists, and the companies
+// whose announcements the post used
+story.article.tags = {
+  themes: pickTags(story.article.themes, THEMES, 3),
+  industries: pickTags(story.article.industries, INDUSTRIES, 3),
+  companies: [...new Map((story.sources ?? []).map((x) => [companyId(x.source), { id: companyId(x.source), name: x.source }])).values()],
+};
+delete story.article.themes; delete story.article.industries;
+story.series = seriesOf({ mode: plan.mode, format, topic: plan.event?.topic ?? null });
 // each section's sources, from the announcements themselves (with their links), like the slides' source lines
 if (NEWS.length) for (const x of story.article.sections) x.sources = (x.refs ?? []).map((r) => ({ source: NEWS[r - 1].source, kind: NEWS[r - 1].kind, date: NEWS[r - 1].date, title: NEWS[r - 1].title, link: NEWS[r - 1].link }));
 console.log(`article: ${story.article.sections.length} sections (${story.article.source})`);
