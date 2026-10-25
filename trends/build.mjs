@@ -317,7 +317,7 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
   if (ctrl != null && pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
     id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: `${wname(wk)} AI 패키지 다운로드 · 평소와 비교`,
     title: `${wname(wk)} ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
-    easy: `${src} AI 패키지들이 한꺼번에 평소보다 많이 내려받아졌어요. 시장 전체(대조군 ${ctrl.toFixed(2)}배)보다도 높아요.`, viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)} 주` } });
+    easy: `${src} AI 패키지들이 한꺼번에 평소보다 많이 내려받아졌어요. 시장 전체(대조군 ${ctrl.toFixed(2)}배)보다도 높아요.`, viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)}` } });
   for (const p of list) {
     const r = x.rows.find((q) => q.pkg === p.pkg), L = x.W[p.pkg].at(-1).level, u = usual(p.pkg), name = nm(p);
     if (L == null || !u || L < MIN_LEVEL) continue;
