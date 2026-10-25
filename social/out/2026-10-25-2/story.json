@@ -1,0 +1,295 @@
+{
+ "date": "2026-10-25",
+ "mode": "news",
+ "topic": null,
+ "format": "newsweek",
+ "format_name": "이번 주 AX 사건",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "model": "claude-opus-5-5",
+ "proofread": true,
+ "note": null,
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI를 '쓰는 것'에서\n'고르고 지키는 것'으로",
+   "body": "회사는 직원 모두에게 AI를 나눠 주고,\n나라와 기관은 주권과 안전을 이야기했어요.\n공식 발표 8건 중 5건을 골랐어요."
+  },
+  {
+   "kind": "number",
+   "refs": [
+    8
+   ],
+   "kicker": "인수",
+   "title": "Salesforce는\nBraze를 인수해요",
+   "number": "$5.66 billion",
+   "label": "Braze 인수 기업가치(약)",
+   "body": "Salesforce는 고객 소통 플랫폼 Braze를\n인수하는 최종 계약을 맺었다고 발표했어요.\nCRM(고객 관리 시스템)에 고객 접점까지\n한데 묶으려는 움직임으로 볼 수 있어요.",
+   "src": "출처 · Salesforce 공식 발표 · 10/20"
+  },
+  {
+   "kind": "number",
+   "refs": [
+    6
+   ],
+   "kicker": "전사 도입",
+   "title": "Uber는 전 직원에게\nAI를 나눠 줘요",
+   "number": "30,000",
+   "label": "ChatGPT Work를 받는 Uber 직원 수(이상)",
+   "body": "OpenAI는 Uber가 30,000명 넘는 직원에게\nChatGPT Work를 도입한다고 발표했어요.\nAI를 일부 팀이 아닌 전사 업무 도구로\n쓰려는 흐름으로 볼 수 있어요.",
+   "src": "출처 · OpenAI 공식 발표 · 10/22"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    2
+   ],
+   "kicker": "정책",
+   "title": "영국 정부는 'AI 주권'을 짚었어요",
+   "body": "영국 정부는 AI를 스스로 고르고 다룰 힘,\n즉 'AI 주권'을 키울 방법을 담은\nAI 담당 장관 자문 서한을 공개했어요.\n기업에도 어떤 AI에 기댈지가\n전략 문제임을 보여 준다고 볼 수 있어요.",
+   "src": "출처 · 영국 정부 보도자료 · 10/19"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1
+   ],
+   "kicker": "인프라",
+   "title": "NVIDIA는 유럽 등지에서\n클라우드 파트너를 넓혀요",
+   "body": "NVIDIA는 유럽·북유럽·아프리카·중앙아시아\n클라우드 파트너들이 지역 컴퓨팅을\n늘리고 있다고 발표했어요.\n데이터 가까이에서 AI를 돌리려는\n수요를 보여 준다고 볼 수 있어요.",
+   "src": "출처 · NVIDIA 공식 발표 · 10/21"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    3
+   ],
+   "kicker": "안전",
+   "title": "OpenAI는 폴란드 NASK와\nAI 안전 연구에 손잡았어요",
+   "body": "OpenAI는 NASK와\nAI 안전·보안, 기술 연구에서\n협력한다고 발표했어요.\nAI 회사가 각국 기관과 안전장치를\n함께 다루는 흐름으로 볼 수 있어요.",
+   "src": "출처 · OpenAI 공식 발표 · 10/23"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    6,
+    8
+   ],
+   "kicker": "공통 흐름",
+   "title": "도입 다음 질문은\n'누구의 AI를, 어디서'예요",
+   "body": "회사는 AI를 전사로 넓히고,\n나라와 기관은 주권과 안전을 챙겼어요.\n도입 속도만큼 선택권과 통제가\n중요해지고 있다는 뜻으로 볼 수 있어요.",
+   "src": "출처 · NVIDIA · 영국 정부 · OpenAI · Salesforce 발표 5건"
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "kicker": "정리",
+   "title": "이번 주 AX 한눈에 보기",
+   "items": [
+    "Salesforce: Braze 인수 최종 계약",
+    "Uber: 30,000명 넘는 직원에게 ChatGPT Work",
+    "영국 정부: AI 주권 자문 서한 공개",
+    "NVIDIA: 유럽 등지 클라우드 파트너 확장",
+    "OpenAI: 폴란드 NASK와 AI 안전 협력"
+   ],
+   "body": "AI를 얼마나 쓰느냐에 더해\n어떻게 고르고 지키느냐를 본 한 주였어요."
+  }
+ ],
+ "caption": "이번 주 AX 사건, 공식 발표 5건을 모았어요.\nSalesforce는 고객 소통 플랫폼 Braze를 약 $5.66 billion(기업가치)에 인수하는 최종 계약을 맺었다고 발표했어요.\nOpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 밝혔어요.\n영국 정부는 'AI 주권'을 키울 방법을 담은 장관 자문 서한을 공개했어요.\nNVIDIA는 유럽 등지의 클라우드 파트너들이 지역 컴퓨팅을 늘리고 있다고, OpenAI는 폴란드 NASK와 AI 안전 연구에서 협력한다고 발표했어요.\n도입 다음 질문은 '누구의 AI를, 어디서, 얼마나 안전하게'로 볼 수 있어요.",
+ "sources": [
+  {
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-10-21",
+   "title": "NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents",
+   "link": "https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/",
+   "id": "f47072a36f"
+  },
+  {
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-10-19",
+   "title": "AI sovereignty: preserving UK agency in an AI-enabled world",
+   "link": "https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world",
+   "id": "88d3f2de2b"
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-23",
+   "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
+   "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
+   "id": "15c1f8ef7a"
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-22",
+   "title": "Uber brings ChatGPT Work to all employees with OpenAI",
+   "link": "https://openai.com/index/uber-chatgpt-work-rollout",
+   "id": "ba6fa07d67"
+  },
+  {
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-10-20",
+   "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
+   "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/",
+   "id": "13a18076dd"
+  }
+ ],
+ "article": {
+  "title": "AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건",
+  "lede": "이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.",
+  "sections": [
+   {
+    "heading": "Salesforce, 고객 소통 플랫폼 Braze 인수 계약",
+    "body": "Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요. 인수 규모는 기업가치 기준 약 $5.66 billion이에요. 발표문에서 Salesforce는 자신을 '세계 1위 AI CRM'이라고 소개했고, Braze를 '선도적인 고객 소통 플랫폼'이라고 표현했어요. 두 표현 모두 Salesforce의 말이에요.\n\nCRM은 고객 정보와 영업·상담 이력을 관리하는 시스템이에요. 고객 소통 플랫폼은 고객에게 메시지를 보내고 그 반응을 이어 가는 도구예요. 둘이 한 회사 제품군 안에 들어오면 고객 데이터와 고객 접점을 한곳에서 다루게 된다고 볼 수 있어요.\n\n기업 AX 관점에서는 AI가 결국 고객 데이터 위에서 돌아간다는 점을 눈여겨볼 만해요. 지금 쓰는 CRM과 마케팅 도구가 어느 회사 제품군에 속하는지가 AI를 어디까지 활용할 수 있는지와 연결될 수 있다는 뜻으로 읽을 수 있어요.",
+    "refs": [
+     8
+    ],
+    "sources": [
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-10-20",
+      "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
+      "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/"
+     }
+    ]
+   },
+   {
+    "heading": "Uber, 30,000명 넘는 직원에게 ChatGPT Work",
+    "body": "OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요. 발표에 따르면 직원들은 이 도구를 자료 조사, 데이터 분석, 발표 자료 만들기, 복잡한 업무 흐름 처리에 쓰게 돼요.\n\n눈여겨볼 점은 대상이 전 직원이라는 거예요. AI를 일부 개발팀이나 시범 부서에만 주는 단계를 넘어선 사례예요. 문서·메일처럼 누구나 쓰는 기본 업무 도구로 다루는 방식으로 볼 수 있어요.\n\n발표에 적힌 쓰임새가 조사·분석·문서 작업이라는 점은 사무직 전반의 일상 업무와 맞닿아 있다고 볼 수 있어요. 실무자에게는 질문이 바뀐다는 뜻으로 읽을 수 있어요. 'AI를 누가 쓸 수 있나'에서 '어떤 업무에 어떻게 쓰나'로요.",
+    "refs": [
+     6
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-22",
+      "title": "Uber brings ChatGPT Work to all employees with OpenAI",
+      "link": "https://openai.com/index/uber-chatgpt-work-rollout"
+     }
+    ]
+   },
+   {
+    "heading": "영국 정부, 'AI 주권' 자문 서한 공개",
+    "body": "영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요. AI 담당 장관에게 보내는 자문 서한이에요. 영국이 지금과 앞으로의 AI 기술을 두고 전략적인 선택을 할 역량을 어떻게 키울 수 있는지를 다뤄요.\n\n발표 요약의 초점은 '전략적 선택을 할 역량'에 있어요. 그래서 여기서 말하는 주권은 모든 것을 직접 만든다는 뜻보다 가까운 의미가 따로 있다고 읽을 수 있어요. 어떤 AI를 쓰고 무엇에 기댈지를 스스로 고를 수 있는 힘이에요.\n\n기업에도 비슷한 질문이 생긴다고 볼 수 있어요. 특정 AI에 업무가 깊이 묶이면 나중에 고를 수 있는 선택지가 좁아질 수 있어요. 그런 점에서 어떤 모델과 클라우드를 쓸지는 단순한 IT 구매를 넘어선 전략 문제로 볼 수 있어요.",
+    "refs": [
+     2
+    ],
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-10-19",
+      "title": "AI sovereignty: preserving UK agency in an AI-enabled world",
+      "link": "https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world"
+     }
+    ]
+   },
+   {
+    "heading": "NVIDIA, 유럽 등지에서 클라우드 파트너 확장",
+    "body": "NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요. 대상 지역은 유럽·북유럽·아프리카·중앙아시아예요. 발표 제목에는 '주권', '개방', '안전한 AI 에이전트'라는 말이 함께 들어 있어요. AI 에이전트는 여러 단계의 일을 스스로 이어서 처리하는 AI를 말해요.\n\nNVIDIA는 확장의 배경으로 AI 네이티브 기업들의 수요를 들었어요. NVIDIA의 설명에 따르면 개발자에게 필요한 것은 세 가지예요. 데이터 가까이에 있는 컴퓨팅, 직접 고쳐서 대규모로 서비스할 수 있는 공개 모델, 처음부터 보안을 고려해 설계한 인프라예요.\n\n기업 AX 관점에서는 '데이터가 있는 곳에서 AI를 돌린다'는 요구를 눈여겨볼 만해요. 데이터를 어디에 두고 어디서 처리하는지가 AI 도입 설계의 중요한 조건이 되고 있다고 볼 수 있어요. 영국 정부가 말한 주권과도 맞닿는 대목이에요.",
+    "refs": [
+     1
+    ],
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-10-21",
+      "title": "NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents",
+      "link": "https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI, 폴란드 NASK와 AI 안전 협력",
+    "body": "OpenAI는 폴란드의 NASK와 협력한다고 발표했어요. 협력 분야는 AI 안전·보안과 기술 연구예요. 발표에 따르면 목표는 안전장치를 강화하고 더 회복력 있는 디지털 생태계를 뒷받침하는 거예요.\n\nAI 회사가 한 나라의 기관과 안전·보안 연구를 함께 한다는 점에서 읽을 수 있는 게 있어요. AI 안전이 회사 혼자의 과제를 넘어 공공 영역과 함께 다루는 주제가 되고 있다는 뜻으로 볼 수 있어요.\n\n기업 실무자에게는 AI 도입 검토 항목에 보안과 안전장치가 함께 올라가는 흐름으로 읽을 수 있어요. 어떤 AI를 쓰느냐만큼 확인할 거리가 하나 더 있다고 볼 수 있어요. 그 AI가 어떤 안전 기준 아래에서 운영되는지예요.",
+    "refs": [
+     3
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-23",
+      "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
+      "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 도입 다음 질문은 '누구의 AI를, 어디서'",
+    "body": "다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요. 다른 쪽은 선택과 통제를 이야기하는 움직임이에요. 영국 정부는 주권을, NVIDIA는 지역 인프라를, OpenAI와 NASK는 안전을 다뤘어요.\n\n도입이 넓어지는 흐름은 데이터에서도 보여요. Ramp AI Index는 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 재는 지표예요. 이 지표에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%였어요. 1년 전 43.8%에서 12.1%p(퍼센트포인트) 오른 수치예요. 다만 미국 기업의 유료 결제 기준이라 무료 도구나 개인 결제는 잡히지 않아요.\n\n인프라에 들어가는 돈도 커지고 있어요. 마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈은 1년 전보다 +87% 많았어요. 최근 4개 분기를 합치면 $510.7B이고, 1년 전에는 $291.3B였어요. 도입이 넓어지고 인프라가 커지면서 '누구의 AI를, 어디서 돌리느냐'가 더 중요한 질문이 되고 있다고 볼 수 있어요.",
+    "refs": [
+     1,
+     2,
+     3,
+     6,
+     8
+    ],
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-10-21",
+      "title": "NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents",
+      "link": "https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/"
+     },
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-10-19",
+      "title": "AI sovereignty: preserving UK agency in an AI-enabled world",
+      "link": "https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-23",
+      "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
+      "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-22",
+      "title": "Uber brings ChatGPT Work to all employees with OpenAI",
+      "link": "https://openai.com/index/uber-chatgpt-work-rollout"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-10-20",
+      "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
+      "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/"
+     }
+    ]
+   },
+   {
+    "heading": "실무자가 짚어 볼 점",
+    "body": "이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요. 일부 팀의 실험인지, 전사 업무 도구인지예요.\n\n다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요. 데이터를 어디에 두고 어디서 처리하는지, 안전·보안 기준이 무엇인지도 질문거리예요. 이런 질문이 도입 속도만큼 중요해지고 있다고 읽을 수 있어요.\n\n다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요. 이후 공개되는 내용을 함께 살펴볼 필요가 있어요.",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "Salesforce는 Braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요.",
+   "OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.",
+   "영국 정부는 AI 주권 자문 서한을, NVIDIA는 유럽 등지의 클라우드 파트너 확장을 발표했어요.",
+   "OpenAI는 폴란드 NASK와 AI 안전·보안 협력을 발표했어요.",
+   "AI를 얼마나 쓰느냐에 더해 누구의 AI를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요."
+  ],
+  "source": "claude"
+ }
+}

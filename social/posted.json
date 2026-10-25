@@ -10,5 +10,19 @@
   "mode": "event",
   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
   "subject": "race:labs-js"
+ },
+ {
+  "date": "2026-10-25",
+  "slot": "2026-10-25-2",
+  "mode": "news",
+  "key": "news:2026-10-25",
+  "subject": "news",
+  "news": [
+   "f47072a36f",
+   "88d3f2de2b",
+   "15c1f8ef7a",
+   "ba6fa07d67",
+   "13a18076dd"
+  ]
  }
 ]

@@ -1,0 +1,33 @@
+{
+ "date": "2026-10-25",
+ "slot": "2026-10-25-2",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-25-2/",
+ "caption": "이번 주 AX 사건, 공식 발표 5건을 모았어요.\nSalesforce는 고객 소통 플랫폼 Braze를 약 $5.66 billion(기업가치)에 인수하는 최종 계약을 맺었다고 발표했어요.\nOpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 밝혔어요.\n영국 정부는 'AI 주권'을 키울 방법을 담은 장관 자문 서한을 공개했어요.\nNVIDIA는 유럽 등지의 클라우드 파트너들이 지역 컴퓨팅을 늘리고 있다고, OpenAI는 폴란드 NASK와 AI 안전 연구에서 협력한다고 발표했어요.\n도입 다음 질문은 '누구의 AI를, 어디서, 얼마나 안전하게'로 볼 수 있어요.\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-10-25-2\n출처(공식 발표): NVIDIA · 영국 정부 · OpenAI · Salesforce — 원문 링크는 브리핑에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newsweek",
+  "format_name": "이번 주 AX 사건",
+  "source": "claude",
+  "slides": 8
+ },
+ "caption_model": "claude-opus-5-5",
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 200,
+  "problems": []
+ }
+}

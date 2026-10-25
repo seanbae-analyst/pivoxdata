@@ -8,10 +8,12 @@
 <title>Instagram 카드 2026-10-25</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>
-  :root{--bg:#050505;--surface:#0d0d0d;--line:rgba(255,255,255,.1);--ink:#ededed;--ink-2:#cfcfcf;--mut:#9b9b9b;--dim:#6c6c6c;--bronze:#b8956a;--bronze-hi:#cdab80;--bronze-soft:rgba(184,149,106,.14);--bronze-line:rgba(184,149,106,.45)}
+  /* PivoxQuant's look (frontend/CLAUDE.md, 2026-10-11): Vantablack + ivory + bronze, Pretendard only, 14px card
+     corners, no bronze glow, no wide letter-spacing. A big case is told apart by the bronze band on its cover. */
+  :root{--bg:#050505;--onyx:#111111;--surface:rgba(245,240,232,.04);--line:rgba(245,240,232,.08);--ink:#f5f0e8;--ink-2:rgba(245,240,232,.82);--mut:rgba(245,240,232,.65);--dim:rgba(245,240,232,.5);--bronze:#b8956a;--bronze-hi:#b8956a;--bronze-soft:rgba(184,149,106,.12);--bronze-line:rgba(184,149,106,.42);--r-card:14px;--r-cta:10px}
   *{box-sizing:border-box} html,body{margin:0;background:#222}
   body{font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;color:var(--ink);word-break:keep-all}
-  .slide{width:1080px;height:1350px;background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.16),transparent 60%),var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
+  .slide{width:1080px;height:1350px;background:var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
   .kick{font-size:30px;font-weight:600;color:var(--bronze-hi);letter-spacing:-.01em}
   .big{font-size:200px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:64px;font-variant-numeric:tabular-nums}
   .bl{font-size:32px;color:var(--mut);margin-top:18px}
@@ -20,7 +22,7 @@
   h2{font-size:52px;line-height:1.3;letter-spacing:-.03em;margin:64px 0 0;font-weight:700}
   p{font-size:32px;line-height:1.6;color:var(--ink-2);margin:28px 0 0}
   /* the plain-words box: what the number means, for someone who has never seen npm or arXiv */
-  .easy{background:rgba(255,255,255,.05);border-radius:24px;padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
+  .easy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
   .easy span{display:block;font-size:24px;font-weight:700;color:var(--bronze-hi);margin-bottom:6px}
   .easy-s{font-size:30px;color:var(--ink-2);margin-top:22px}
   .sp{margin-top:auto;margin-bottom:28px}
@@ -55,89 +57,65 @@
   .c-list li span{font-size:34px;line-height:1.4;color:var(--ink-2)}
   .c-grid h1{font-size:84px}
   .c-grid .tiles{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:72px}
-  .c-grid .tile{border:1px solid var(--bronze-line);border-radius:28px;padding:30px 30px 34px;background:var(--bronze-soft)}
+  .c-grid .tile{border:1px solid var(--bronze-line);border-radius:var(--r-card);padding:30px 30px 34px;background:var(--bronze-soft)}
   .c-grid .tk{font-size:26px;color:var(--bronze-hi);font-weight:600} .c-grid .tb{font-size:84px;font-weight:800;letter-spacing:-.04em;margin-top:14px;font-variant-numeric:tabular-nums}
   .c-grid .tl{font-size:24px;color:var(--mut);margin-top:10px;line-height:1.4}
   .c-hero .big{font-size:260px;margin-top:110px;color:var(--bronze-hi)}
   .c-hero h1{font-size:68px;line-height:1.25;margin-top:56px}
   .c-hero .sp{margin:auto 0 0} .c-hero .sp .viz:not(.fit){height:220px}
   .c-hero .next{font-size:30px;color:var(--mut);margin:28px 0 36px}
-  .c-alert{background:var(--bronze-hi);color:#0b0906}
-  .c-alert .kick{color:#3b2e1d} .c-alert .foot{color:#3b2e1d;border-color:rgba(0,0,0,.18)}
-  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border:4px solid #0b0906;border-radius:999px}
+  .c-alert{border-top:14px solid var(--bronze)}
+  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
-  .c-alert .big{font-size:150px;margin-top:auto} .c-alert .bl{color:#3b2e1d;margin-bottom:56px}
-  .outro ul{margin:56px 0 0;padding-left:36px;font-size:32px;line-height:1.6;color:var(--ink-2)} .outro li{margin-bottom:14px}
-  .outro .url{font-size:48px;font-weight:700;color:var(--bronze-hi);margin-top:auto;margin-bottom:48px}
+  .c-alert .big{font-size:150px;margin-top:auto;color:var(--bronze-hi)} .c-alert .bl{margin-bottom:56px}
+
+  /* story slides: words first — a headline, a few sentences, at most one number. Every size is scaled by --k, which
+     fit() in the page sets per slide so the words fill the slide instead of leaving an empty bottom half. */
+  .st{--k:1} .st.mid>:nth-child(2){margin-top:auto} .st .ln{display:block;text-wrap:balance} .st .txt .ln+.ln{margin-top:.28em}
+  .st .kick{display:flex;justify-content:space-between;gap:calc(var(--k)*20px)} .st .kick .pg{color:var(--dim);font-weight:500}
+  .st h2{font-size:calc(var(--k)*64px);line-height:1.28;letter-spacing:-.03em;margin:calc(var(--k)*52px) 0 0;font-weight:800;white-space:pre-line}
+  .st .txt{font-size:calc(var(--k)*38px);line-height:1.7;color:var(--ink-2);margin:calc(var(--k)*36px) 0 0;white-space:pre-line}
+  .st .num{display:flex;flex-wrap:wrap;align-items:baseline;gap:calc(var(--k)*24px);margin-top:calc(var(--k)*48px)} .st .num b{font-size:calc(var(--k)*150px);font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{flex:1 1 calc(var(--k)*300px);font-size:calc(var(--k)*30px);color:var(--mut);line-height:1.4}
+  .st ol{list-style:none;padding:0;margin:calc(var(--k)*44px) 0 0;display:grid;gap:calc(var(--k)*20px);counter-reset:i}
+  .st ol li{counter-increment:i;display:grid;grid-template-columns:calc(var(--k)*64px) 1fr;gap:calc(var(--k)*20px);align-items:start;font-size:calc(var(--k)*34px);line-height:1.5;color:var(--ink-2);padding:calc(var(--k)*22px) calc(var(--k)*26px);background:var(--surface);border-radius:var(--r-card);border:calc(var(--k)*1px) solid var(--line)}
+  .st ol li::before{content:counter(i);width:calc(var(--k)*52px);height:calc(var(--k)*52px);border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:calc(var(--k)*28px)}
+  .st.quiz ol li::before{content:counter(i, upper-alpha)}
+  .st ol.many{gap:calc(var(--k)*14px);margin-top:calc(var(--k)*34px)} .st ol.many li{font-size:calc(var(--k)*30px);padding:calc(var(--k)*16px) calc(var(--k)*22px)} .st ol.many li::before{width:calc(var(--k)*44px);height:calc(var(--k)*44px);font-size:calc(var(--k)*24px)}
+  .st .hint{font-size:calc(var(--k)*28px);color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:calc(var(--k)*36px)}
+  .st.cover h2{font-size:calc(var(--k)*92px);line-height:1.16;margin-top:calc(var(--k)*110px)} .st.cover .txt{font-size:calc(var(--k)*40px)}
+  .st.cover .badge{align-self:flex-start;margin-top:calc(var(--k)*72px);font-size:calc(var(--k)*30px);font-weight:700;padding:calc(var(--k)*12px) calc(var(--k)*24px);border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
+  .st.answer .num b{font-size:calc(var(--k)*180px)} .st.end{background:var(--onyx)}
+  .st .more{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:26px;font-weight:600;color:var(--bronze-hi)} .st .more+.foot{margin-top:0}
+  .st .srcl{margin-top:auto;padding-top:28px;margin-bottom:26px;font-size:25px;line-height:1.4;color:var(--bronze-hi);font-weight:600}
+  .st .srcl+.foot{margin-top:0}
 </style>
 </head>
-<body data-date="2026-10-25">
-<section class="slide cover c-alert">
-  <div class="kick">AI 기술 신호 레이더 · 2026년 10월 25일</div>
-  <div class="tag">1위 교체</div>
-  <h1>AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic</h1>
-  <div class="big">37.0%</div>
-  <div class="bl">AI 회사 SDK · 자바스크립트 중 Anthropic의 몫</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide l-chart">
-  <div class="kick">01 · 빅 케이스 · AI 회사 SDK · 자바스크립트 1위 교체</div>
-  <h2>AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic</h2>
-  <p class="easy-s">웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.0%로 앞섰어요.</p>
-  <div class="sp"><svg class="viz fit" viewBox="0 0 896 600" aria-hidden="true"><text x="338.0" y="86.9" class="v" text-anchor="end" font-size="31.3">Anthropic</text><line x1="358.4" y1="75.0" x2="698.9" y2="75.0" class="grid" stroke-width="2"/><circle cx="698.9" cy="75.0" r="16.0" class="hi"/><text x="722.7" y="86.9" class="v" font-size="31.3">37.0%</text><text x="338.0" y="236.9" class="m" text-anchor="end" font-size="31.3">OpenAI</text><line x1="358.4" y1="225.0" x2="691.2" y2="225.0" class="grid" stroke-width="2"/><circle cx="691.2" cy="225.0" r="16.0" class="dim"/><text x="715.0" y="236.9" class="m" font-size="31.3">36.2%</text><text x="338.0" y="386.9" class="m" text-anchor="end" font-size="31.3">Google</text><line x1="358.4" y1="375.0" x2="545.8" y2="375.0" class="grid" stroke-width="2"/><circle cx="545.8" cy="375.0" r="16.0" class="dim"/><text x="569.6" y="386.9" class="m" font-size="31.3">20.4%</text><text x="338.0" y="536.9" class="m" text-anchor="end" font-size="31.3">Mistral</text><line x1="358.4" y1="525.0" x2="417.3" y2="525.0" class="grid" stroke-width="2"/><circle cx="417.3" cy="525.0" r="16.0" class="dim"/><text x="441.1" y="536.9" class="m" font-size="31.3">6.4%</text></svg></div>
-  <div class="row"><div class="big">37.0%</div><div class="bl">AI 회사 SDK · 자바스크립트 중 Anthropic의 몫</div></div>
-  <div class="src">npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide l-headline">
-  <div class="kick">02 · 레이스 · AI 회사 SDK · 자바스크립트</div>
-  <h2>AI 회사 SDK · 자바스크립트 1위는 Anthropic</h2>
-  <div class="row"><div class="big">37.0%</div><div class="bl">AI 회사 SDK · 자바스크립트 중 Anthropic의 몫</div></div>
-  <p class="easy"><span>쉽게 말하면</span>웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 이 중에서 10번 내려받으면 약 4번은 Anthropic 몫이에요. 1년 전보다 가장 크게 움직인 곳은 OpenAI 62.5% → 36.2%.</p>
-  <div class="sp"><svg class="viz fit" viewBox="0 0 896 280" aria-hidden="true"><circle cx="140.0" cy="140.0" r="95.2" class="seg hi" stroke-width="50.4" stroke-dasharray="215.5 382.7" stroke-dashoffset="0.0" transform="rotate(-90 140.0 140.0)"/><circle cx="140.0" cy="140.0" r="95.2" class="seg dim2" stroke-width="50.4" stroke-dasharray="210.5 387.7" stroke-dashoffset="-221.5" transform="rotate(-90 140.0 140.0)"/><circle cx="140.0" cy="140.0" r="95.2" class="seg dim" stroke-width="50.4" stroke-dasharray="115.9 482.2" stroke-dashoffset="-438.0" transform="rotate(-90 140.0 140.0)"/><circle cx="140.0" cy="140.0" r="95.2" class="seg dim2" stroke-width="50.4" stroke-dasharray="32.3 565.9" stroke-dashoffset="-559.9" transform="rotate(-90 140.0 140.0)"/><text x="313.6" y="117.6" class="v" font-size="64.6">37.0%</text><text x="313.6" y="168.6" font-size="34.0">Anthropic</text><text x="313.6" y="212.8" class="m" font-size="28.9">4개로 나눈 비중</text></svg></div>
-  <div class="src">npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide l-number">
-  <div class="kick">03 · 레이스 · 앱에 연결하는 모델</div>
-  <div class="big">32.2%</div>
-  <div class="bl">앱에 연결하는 모델 중 OpenAI의 몫</div>
-  <h2>앱에 연결하는 모델 1위는 OpenAI</h2>
-  <p class="easy"><span>쉽게 말하면</span>AI 앱을 만들 때 어느 회사 모델을 연결하나 (Vercel AI SDK). 이 중에서 10번 내려받으면 약 3번은 OpenAI 몫이에요. 1년 전보다 가장 크게 움직인 곳은 OpenAI 42.7% → 32.2%.</p>
-  <div class="sp"><svg class="viz fit" viewBox="0 0 896 300" aria-hidden="true"><rect x="0.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="30.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="60.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="90.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="120.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="150.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="180.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="210.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="240.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="270.0" y="270.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="0.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="30.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="60.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="90.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="120.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="150.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="180.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="210.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="240.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="270.0" y="240.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="0.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="30.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="60.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="90.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="120.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="150.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="180.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="210.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="240.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="270.0" y="210.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="0.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="30.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="hi"/><rect x="60.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="180.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="150.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="120.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="90.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="60.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="30.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="0.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="30.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="60.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="90.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="120.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="150.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="180.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="210.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="240.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><rect x="270.0" y="0.0" width="24.0" height="24.0" rx="4.8" class="dim2"/><text x="330.0" y="126.0" class="v" font-size="51.0">100칸 중 32칸</text><text x="330.0" y="177.0" font-size="34.0">OpenAI</text><text x="330.0" y="221.2" class="m" font-size="28.9">32.2%</text></svg></div>
-  <div class="src">npm 평일 다운로드 4주 평균 · 비중은 이 6개 안에서 · 10월 5일 주까지</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide l-chart">
-  <div class="kick">04 · 레이스 · AI 회사 SDK · 파이썬</div>
-  <h2>AI 회사 SDK · 파이썬 1위는 OpenAI</h2>
-  <p class="easy-s">AI·데이터 개발자가 어느 회사 AI를 코드에 붙이나. 이 중에서 10번 내려받으면 약 5번은 OpenAI 몫이에요. 4주 전보다 가장 크게 움직인 곳은 Anthropic 24.5% → 26.3%.</p>
-  <div class="sp"><svg class="viz fit" viewBox="0 0 896 600" aria-hidden="true"><rect x="0.0" y="0" width="431.3" height="216.0" class="hi"/><rect x="435.3" y="0" width="232.0" height="216.0" class="dim2"/><rect x="671.3" y="0" width="199.8" height="216.0" class="dim"/><rect x="875.1" y="0" width="16.9" height="216.0" class="dim2"/><text x="0.0" y="263.6" class="v" font-size="30.6">OpenAI</text><text x="0.0" y="304.4" class="m" font-size="28.9">48.6%</text><text x="435.3" y="263.6" class="m" font-size="30.6">Anthropic</text><text x="435.3" y="304.4" class="m" font-size="28.9">26.3%</text><text x="671.3" y="263.6" class="m" font-size="30.6">Google</text><text x="671.3" y="304.4" class="m" font-size="28.9">22.7%</text></svg></div>
-  <div class="row"><div class="big">48.6%</div><div class="bl">AI 회사 SDK · 파이썬 중 OpenAI의 몫</div></div>
-  <div class="src">PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide l-headline">
-  <div class="kick">05 · 레이스 · 오픈 모델 제작사</div>
-  <h2>오픈 AI 모델 1위 제작사는 Qwen</h2>
-  <div class="row"><div class="big">45.7%</div><div class="bl">오픈 텍스트 생성 모델 다운로드 중 Qwen 몫</div></div>
-  <p class="easy"><span>쉽게 말하면</span>누구나 받아 쓰는 AI 모델(오픈 모델)을 10번 내려받으면 약 5번은 Qwen가 만든 모델이에요.</p>
-  <div class="sp"><svg class="viz fit" viewBox="0 0 896 280" aria-hidden="true"><rect x="29.9" y="164.9" width="238.9" height="115.1" rx="14.9" class="dim"/><text x="149.3" y="110.5" class="m" text-anchor="middle" font-size="30.6">openai-commun…</text><text x="149.3" y="149.6" class="m" text-anchor="middle" font-size="30.6">5.6%</text><text x="149.3" y="232.9" class="rk" text-anchor="middle" font-size="44.2">2</text><rect x="328.5" y="115.6" width="238.9" height="164.4" rx="14.9" class="hi"/><text x="448.0" y="61.2" class="v" text-anchor="middle" font-size="30.6">Qwen</text><text x="448.0" y="100.3" class="v" text-anchor="middle" font-size="30.6">45.7%</text><text x="448.0" y="183.6" class="rk" text-anchor="middle" font-size="44.2">1</text><rect x="627.2" y="201.1" width="238.9" height="78.9" rx="14.9" class="dim"/><text x="746.7" y="146.7" class="m" text-anchor="middle" font-size="30.6">google</text><text x="746.7" y="185.8" class="m" text-anchor="middle" font-size="30.6">4.7%</text><text x="746.7" y="248.4" class="rk" text-anchor="middle" font-size="44.2">3</text></svg></div>
-  <div class="src">Hugging Face 30일 다운로드 · 2026-10-25</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
-<section class="slide outro">
-  <div class="kick">어떻게 쟀나</div>
-  <h2>매일 같은 방식으로 재고,<br>평소와 크게 다를 때 올립니다</h2>
-  <ul>
-    <li>개발자 다운로드: npm · PyPI(CC BY 4.0) — 대조군(react·numpy 등)과 견줘 평소보다 얼마나 더 컸는지 봅니다</li>
-    <li>연구: arXiv 논문 초록(CC0)</li>
-    <li>오픈 모델: Hugging Face 다운로드</li>
-    <li>자본: 미국 SEC 공시의 설비투자</li>
-  </ul>
-  <p>다운로드 수는 사용자 수가 아니라 설치 횟수예요. 지난 숫자로 지금 어디까지 왔는지를 봅니다.</p>
-  <div class="url">data.pivoxquant.com</div>
-  <div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>
-</section>
+<body data-date="2026-10-25-2">
+<section class="slide st cover"><div class="kick"><span>이번 주 AX 사건</span><span class="pg">1 / 8</span></div><div class="badge">이번 주 AX 사건</div><h2><span class="ln">AI를 '쓰는 것'에서</span><span class="ln">'고르고 지키는 것'으로</span></h2><p class="txt"><span class="ln">회사는 직원 모두에게 AI를 나눠 주고,</span><span class="ln">나라와 기관은 주권과 안전을 이야기했어요.</span><span class="ln">공식 발표 8⁠건 중 5⁠건을 골랐어요.</span></p><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st number"><div class="kick"><span>인수</span><span class="pg">2 / 8</span></div><div class="num"><b>$5.66 billion</b><span>Braze 인수 기업가치(약)</span></div><h2><span class="ln">Salesforce는</span><span class="ln">Braze를 인수해요</span></h2><p class="txt"><span class="ln">Salesforce는 고객 소통 플랫폼 Braze를</span><span class="ln">인수하는 최종 계약을 맺었다고 발표했어요.</span><span class="ln">CRM(고객 관리 시스템)⁠에 고객 접점까지</span><span class="ln">한데 묶으려는 움직임으로 볼 수 있어요.</span></p><div class="srcl">출처 · Salesforce 공식 발표 · 10/20</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st number"><div class="kick"><span>전사 도입</span><span class="pg">3 / 8</span></div><div class="num"><b>30,000</b><span>ChatGPT Work를 받는 Uber 직원 수(이상)</span></div><h2><span class="ln">Uber는 전 직원에게</span><span class="ln">AI를 나눠 줘요</span></h2><p class="txt"><span class="ln">OpenAI는 Uber가 30,000⁠명 넘는 직원에게</span><span class="ln">ChatGPT Work를 도입한다고 발표했어요.</span><span class="ln">AI를 일부 팀이 아닌 전사 업무 도구로</span><span class="ln">쓰려는 흐름으로 볼 수 있어요.</span></p><div class="srcl">출처 · OpenAI 공식 발표 · 10/22</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st text"><div class="kick"><span>정책</span><span class="pg">4 / 8</span></div><h2><span class="ln">영국 정부는 'AI 주권'을 짚었어요</span></h2><p class="txt"><span class="ln">영국 정부는 AI를 스스로 고르고 다룰 힘,</span><span class="ln">즉 'AI 주권'을 키울 방법을 담은</span><span class="ln">AI 담당 장관 자문 서한을 공개했어요.</span><span class="ln">기업에도 어떤 AI에 기댈지가</span><span class="ln">전략 문제임을 보여 준다고 볼 수 있어요.</span></p><div class="srcl">출처 · 영국 정부 보도자료 · 10/19</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st text"><div class="kick"><span>인프라</span><span class="pg">5 / 8</span></div><h2><span class="ln">NVIDIA는 유럽 등지에서</span><span class="ln">클라우드 파트너를 넓혀요</span></h2><p class="txt"><span class="ln">NVIDIA는 유럽·북유럽·아프리카·중앙아시아</span><span class="ln">클라우드 파트너들이 지역 컴퓨팅을</span><span class="ln">늘리고 있다고 발표했어요.</span><span class="ln">데이터 가까이에서 AI를 돌리려는</span><span class="ln">수요를 보여 준다고 볼 수 있어요.</span></p><div class="srcl">출처 · NVIDIA 공식 발표 · 10/21</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st text"><div class="kick"><span>안전</span><span class="pg">6 / 8</span></div><h2><span class="ln">OpenAI는 폴란드 NASK와</span><span class="ln">AI 안전 연구에 손잡았어요</span></h2><p class="txt"><span class="ln">OpenAI는 NASK와</span><span class="ln">AI 안전·보안, 기술 연구에서</span><span class="ln">협력한다고 발표했어요.</span><span class="ln">AI 회사가 각국 기관과 안전장치를</span><span class="ln">함께 다루는 흐름으로 볼 수 있어요.</span></p><div class="srcl">출처 · OpenAI 공식 발표 · 10/23</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st text"><div class="kick"><span>공통 흐름</span><span class="pg">7 / 8</span></div><h2><span class="ln">도입 다음 질문은</span><span class="ln">'누구의 AI를, 어디서'예요</span></h2><p class="txt"><span class="ln">회사는 AI를 전사로 넓히고,</span><span class="ln">나라와 기관은 주권과 안전을 챙겼어요.</span><span class="ln">도입 속도만큼 선택권과 통제가</span><span class="ln">중요해지고 있다는 뜻으로 볼 수 있어요.</span></p><div class="srcl">출처 · NVIDIA · 영국 정부 · OpenAI · Salesforce 발표 5⁠건</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<section class="slide st end"><div class="kick"><span>정리</span><span class="pg">8 / 8</span></div><h2><span class="ln">이번 주 AX 한눈에 보기</span></h2><p class="txt"><span class="ln">AI를 얼마나 쓰느냐에 더해</span><span class="ln">어떻게 고르고 지키느냐를 본 한 주였어요.</span></p><ol class="many"><li>Salesforce: Braze 인수 최종 계약</li><li>Uber: 30,000⁠명 넘는 직원에게 ChatGPT Work</li><li>영국 정부: AI 주권 자문 서한 공개</li><li>NVIDIA: 유럽 등지 클라우드 파트너 확장</li><li>OpenAI: 폴란드 NASK와 AI 안전 협력</li></ol><div class="more">자세한 풀이는 웹에서 · data.pivoxquant.com/briefs</div><div class="foot"><span>data.pivoxquant.com</span><span>AX 트렌드 레이더</span></div></section>
+<script>
+  // grow each story slide's words (--k, 0.7–1.6×) until they fill it — no empty bottom half. Whatever space is still
+  // left at 1.6× goes above and below the content. render.mjs calls this after the fonts load, since the measurement
+  // depends on them.
+  window.fit = () => {
+    const search = (lo, hi, ok) => { if (ok(hi)) return hi; for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (ok(m)) lo = m; else hi = m; } return lo; };
+    for (const s of document.querySelectorAll(".slide.st")) {
+      s.classList.remove("mid");
+      const set = (k) => s.style.setProperty("--k", k);
+      const height = (k) => { set(k); s.style.height = "auto"; const h = s.offsetHeight; s.style.height = ""; return h; };
+      const k = search(0.7, 1.6, (k) => height(k) <= 1350 - 48);
+      set(k.toFixed(3));
+      if (1350 - height(k) > 120) s.classList.add("mid");
+      set(k.toFixed(3));
+    }
+  };
+  document.fonts.ready.then(window.fit);
+</script>
 </body>
 </html>
