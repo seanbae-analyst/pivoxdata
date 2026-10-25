@@ -14,5 +14,6 @@
  "caption_source": "manual",
  "mode": "pinned",
  "product": "quant",
- "source": "seanbae-analyst/pivoxquant docs/marketing/instagram/pinned (Pivox 고정 게시물)"
+ "source": "seanbae-analyst/pivoxquant docs/marketing/instagram/pinned (Pivox 고정 게시물)",
+ "auto_publish": true
 }
