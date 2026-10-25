@@ -1,0 +1,18 @@
+{
+ "date": "2026-10-25",
+ "slot": "2026-10-25-92",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-25-92/",
+ "caption": "같은 '등록일자'가 파일마다 다른 이름으로. REG_DT, 등록일, CRT_DATE…\n\nPivoxMap은 표준 사전과 파일을 올리면 컬럼마다 표준용어를 제안해요.\n① 자동 확정: 확신 있는 건 바로 붙이고, 애매한 것만 사람이 승인\n② 쌓이는 사전: 승인·수정이 동의어로 쌓여 다음 파일부터 자동으로\n③ 증빙까지: 리포트·CSV, 평가 증빙 xlsx 내보내기\n\n파일은 브라우저 안에서 읽어요. 서버로 가는 건 컬럼명과 값의 형식뿐, 원본 값은 0.\n🔗 map.pivoxquant.com\n\n#데이터표준화 #데이터품질 #공공데이터 #표준용어 #메타데이터 #PivoxMap",
+ "caption_source": "manual",
+ "mode": "pinned",
+ "product": "map",
+ "source": "seanbae-analyst/pivoxquant docs/marketing/instagram/pinned (Pivox 고정 게시물)"
+}
