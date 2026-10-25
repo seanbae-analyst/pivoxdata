@@ -250,7 +250,12 @@ ${story ? storySlides(story) : `${covers[cover]}\n${slides.map(slideHtml).join("
       s.classList.remove("mid");
       const set = (k) => s.style.setProperty("--k", k);
       const height = (k) => { set(k); s.style.height = "auto"; const h = s.offsetHeight; s.style.height = ""; return h; };
-      const k = search(0.7, 1.6, (k) => height(k) <= 1350 - 48);
+      // as large as fits the slide, but no larger than keeps each line the writer broke on (.ln) on one line — unless
+      // that would mean small type (under 1×); leftover space then goes above and below
+      const oneLine = (k) => { set(k); return [...s.querySelectorAll(".st .ln")].every((l) => { const cs = getComputedStyle(l), lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.5; return l.offsetHeight < lh * 1.5; }); };
+      const kH = search(0.7, 1.6, (k) => height(k) <= 1350 - 48);
+      const kW = oneLine(kH) ? kH : search(0.7, kH, oneLine);
+      const k = kW >= 1 ? kW : kH;
       set(k.toFixed(3));
       if (1350 - height(k) > 120) s.classList.add("mid");
       set(k.toFixed(3));
