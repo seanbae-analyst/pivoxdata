@@ -28,11 +28,21 @@
 <link rel="stylesheet" href="/ui.css?v=4" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 
+<script>(() => { const r = document.documentElement;
+  if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
+  r.classList.add("paged");
+  setTimeout(() => { if (r.classList.contains("pgr-ready") || !r.classList.contains("paged")) return; r.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); }, 4000);
+  const wide = matchMedia("(min-width: 900px)"), grown = (e) => { if (e.matches && r.classList.contains("paged")) location.reload(); };
+  if (wide.addEventListener) wide.addEventListener("change", grown); else wide.addListener(grown);
+})();</script>
 <link rel="stylesheet" href="/research.css" />
 <style>
+  /* the briefings read like the rest of the site (2026-10-25): plain labels, hairline rules, bronze only where it means
+     something — no pills, no boxed cards. main's children sit on their own margins (no grid gap between every line). */
+  main{gap:0}
   main>*,article{min-width:0}
-  .kicker{display:inline-flex;width:fit-content;gap:8px;align-items:center;padding:5px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:13px;color:var(--ink-2);margin:28px 0 16px}
-  .kicker b{color:var(--bronze-hi);font-weight:600} .kicker a{color:var(--ink-2)}
+  .kicker{width:fit-content;font-size:13px;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);font-weight:600;margin-right:8px} .kicker a{color:var(--ink-2)}
   article{max-width:720px}
   h1.page{font-size:clamp(28px,4.4vw,40px);line-height:1.25;letter-spacing:-.03em;margin:0 0 12px;word-break:keep-all}
   .lede{font-size:18px;line-height:1.75;color:var(--ink-2);margin:0 0 8px}
@@ -41,71 +51,51 @@
   article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
   .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
   .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
-  .sum{margin:44px 0 0;padding:22px 24px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface)}
+  .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
   .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
   .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
   .srcs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14px} .srcs .d{color:var(--dim);font-size:12.5px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
-  .chip{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--line-2);color:var(--mut)} .chip:hover{color:var(--ink);text-decoration:none;border-color:var(--bronze-line)}
-  .chip.company{color:var(--bronze-hi);border-color:var(--bronze-line)}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0}
+  .chip{font-size:13px;color:var(--mut)} .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
   .pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
-  .pn a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);color:var(--ink-2);font-size:14.5px;line-height:1.5}
-  .pn a:hover{border-color:var(--line-2);text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
+  .pn a{display:block;padding:14px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px;line-height:1.5}
+  .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
   .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
-  .links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
-  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
-  .tabs a{font-size:14px;padding:7px 12px;border-radius:var(--radius-cta);border:1px solid var(--line);color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
-  .tabs a[aria-current]{background:var(--surface-2);color:var(--ink);border-color:var(--line-2)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
+  .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;margin:4px 0 8px;border-bottom:1px solid var(--line)}
+  .tabs a{font-size:14px;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
+  .tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--bronze)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
   h2.month{font-size:15px;color:var(--mut);font-weight:600;margin:32px 0 10px}
-  .list{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:760px}
-  .list li{padding:0} .list .card{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);color:var(--ink-2);text-decoration:none;transition:border-color .2s}
-  .list .card:hover{border-color:var(--line-2)} .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
+  .list{list-style:none;margin:0;padding:0;display:grid;max-width:760px;border-top:1px solid var(--line-2)}
+  .list li{padding:0 0 12px;border-bottom:1px solid var(--line)}
+  .list .card{display:block;padding:16px 0 4px;color:var(--ink-2);text-decoration:none}
+  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
+  .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
   .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .list .chips{margin:8px 4px 0}
+  .list .chips{margin:6px 0 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
-  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:16px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
   .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
-  .install .alerts{padding-top:10px;border-top:1px solid var(--bronze-line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
   .install input{accent-color:var(--bronze);width:16px;height:16px}
   .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
   .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
   .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
-  /* editorial (2026-10-25): no pills or boxed cards — plain labels, hairline rules, bronze only where it means something */
-  .kicker{display:block;padding:0;border:0;border-radius:0;color:var(--mut);margin:28px 0 12px}
-  .kicker b{color:var(--bronze-hi);margin-right:8px}
-  .chips{gap:4px 14px}
-  .chip,.chip.company{padding:0;border:0;border-radius:0;font-size:13px;color:var(--mut)} .chip.company{color:var(--mut)}
-  .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
-  .list{gap:0;border-top:1px solid var(--line-2)}
-  .list li{border-bottom:1px solid var(--line);padding-bottom:12px}
-  .list .card,.list .card:hover{padding:16px 0 4px;border:0;border-radius:0;background:none}
-  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
-  .list .chips{margin:6px 0 0}
-  .tabs{gap:2px;border-bottom:1px solid var(--line)}
-  .tabs a{border:0;border-radius:0;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px}
-  .tabs a[aria-current]{background:none;border-bottom-color:var(--bronze)}
-  .sum{border:0;border-top:2px solid var(--bronze-line);border-radius:0;background:none;padding:18px 0 0}
-  .pn a{border:0;border-top:1px solid var(--line-2);border-radius:0;background:none;padding:14px 0}
-  .install{background:none;border:0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);border-radius:0;padding:14px 0}
-  .install .alerts{border-top:1px solid var(--line)}
-  .swipe-hint,.deck-nav{display:none}
+  /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
+  @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
   @media(max-width:640px){
     main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
-    .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;width:calc(100% + 32px);overscroll-behavior-x:contain}
-    .deck::-webkit-scrollbar{display:none}
-    .deck>.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;padding:18px 16px 8px;height:calc(100svh - 150px - 68px);overflow-y:auto;border-right:1px solid var(--line)}
-    .deck>.slide.first{display:flex;flex-direction:column;justify-content:center}
-    .deck>.slide h2{margin-top:0;font-size:22px} .deck>.slide p{font-size:16px;line-height:1.8}
-    .deck>.slide.sum{margin:0;border:0;border-radius:0;background:none} .deck>.slide.basis{margin:0}
-    .deck .kicker{margin-top:0} h1.page{font-size:28px}
-    .swipe-hint{display:block;margin-top:auto;font-size:13.5px;color:var(--bronze-hi)}
-    .deck-nav{display:flex;align-items:center;gap:10px;margin:10px 0 0}
-    .deck-nav button{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
-    .deck-nav button:disabled{opacity:.3}
-    .deck-nav .bars{flex:1;display:flex;gap:4px} .deck-nav .bars i{flex:1;height:3px;border-radius:2px;background:var(--line-2)} .deck-nav .bars i.on{background:var(--bronze)}
+    h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
-    body.has-appbar .deck>.slide{height:calc(100svh - 230px - 68px)}
   }
+  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
+  .pg .art-head{margin:auto 0}
+  .pg .art-head .kicker{margin-top:0}
+  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
+  .pg .flow p{font-size:16px;line-height:1.8}
+  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
+  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
+  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
 </style>
 </head>
 <body>
@@ -113,56 +103,57 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 
 <main>
-<article>
-  <div class="deck" id="deck">
-  <section class="slide first">
+<article class="brief">
+  <header class="art-head">
   <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/news">이번 주 AX 사건</a></div>
   <h1 class="page">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</h1>
   <p class="lede">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</p>
   <p class="meta">2026년 10월 25일 · AX 트렌드 레이더</p>
   <div class="chips"><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-ukgov">영국 정부</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div>
-  </section>
-  <section class="slide"><h2>Salesforce, 고객 소통 플랫폼 Braze 인수 계약</h2><p>Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요. 인수 규모는 기업가치 기준 약 $5.66 billion이에요. 발표문에서 Salesforce는 자신을 '세계 1위 AI CRM'이라고 소개했고, Braze를 '선도적인 고객 소통 플랫폼'이라고 표현했어요. 두 표현 모두 Salesforce의 말이에요.</p><p>CRM은 고객 정보와 영업·상담 이력을 관리하는 시스템이에요. 고객 소통 플랫폼은 고객에게 메시지를 보내고 그 반응을 이어 가는 도구예요. 둘이 한 회사 제품군 안에 들어오면 고객 데이터와 고객 접점을 한곳에서 다루게 된다고 볼 수 있어요.</p><p>기업 AX 관점에서는 AI가 결국 고객 데이터 위에서 돌아간다는 점을 눈여겨볼 만해요. 지금 쓰는 CRM과 마케팅 도구가 어느 회사 제품군에 속하는지가 AI를 어디까지 활용할 수 있는지와 연결될 수 있다는 뜻으로 읽을 수 있어요.</p><p class="src">출처 · <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="slide"><h2>Uber, 30,000명 넘는 직원에게 ChatGPT Work</h2><p>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요. 발표에 따르면 직원들은 이 도구를 자료 조사, 데이터 분석, 발표 자료 만들기, 복잡한 업무 흐름 처리에 쓰게 돼요.</p><p>눈여겨볼 점은 대상이 전 직원이라는 거예요. AI를 일부 개발팀이나 시범 부서에만 주는 단계를 넘어선 사례예요. 문서·메일처럼 누구나 쓰는 기본 업무 도구로 다루는 방식으로 볼 수 있어요.</p><p>발표에 적힌 쓰임새가 조사·분석·문서 작업이라는 점은 사무직 전반의 일상 업무와 맞닿아 있다고 볼 수 있어요. 실무자에게는 질문이 바뀐다는 뜻으로 읽을 수 있어요. 'AI를 누가 쓸 수 있나'에서 '어떤 업무에 어떻게 쓰나'로요.</p><p class="src">출처 · <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a></p></section><section class="slide"><h2>영국 정부, 'AI 주권' 자문 서한 공개</h2><p>영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요. AI 담당 장관에게 보내는 자문 서한이에요. 영국이 지금과 앞으로의 AI 기술을 두고 전략적인 선택을 할 역량을 어떻게 키울 수 있는지를 다뤄요.</p><p>발표 요약의 초점은 '전략적 선택을 할 역량'에 있어요. 그래서 여기서 말하는 주권은 모든 것을 직접 만든다는 뜻보다 가까운 의미가 따로 있다고 읽을 수 있어요. 어떤 AI를 쓰고 무엇에 기댈지를 스스로 고를 수 있는 힘이에요.</p><p>기업에도 비슷한 질문이 생긴다고 볼 수 있어요. 특정 AI에 업무가 깊이 묶이면 나중에 고를 수 있는 선택지가 좁아질 수 있어요. 그런 점에서 어떤 모델과 클라우드를 쓸지는 단순한 IT 구매를 넘어선 전략 문제로 볼 수 있어요.</p><p class="src">출처 · <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a></p></section><section class="slide"><h2>NVIDIA, 유럽 등지에서 클라우드 파트너 확장</h2><p>NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요. 대상 지역은 유럽·북유럽·아프리카·중앙아시아예요. 발표 제목에는 '주권', '개방', '안전한 AI 에이전트'라는 말이 함께 들어 있어요. AI 에이전트는 여러 단계의 일을 스스로 이어서 처리하는 AI를 말해요.</p><p>NVIDIA는 확장의 배경으로 AI 네이티브 기업들의 수요를 들었어요. NVIDIA의 설명에 따르면 개발자에게 필요한 것은 세 가지예요. 데이터 가까이에 있는 컴퓨팅, 직접 고쳐서 대규모로 서비스할 수 있는 공개 모델, 처음부터 보안을 고려해 설계한 인프라예요.</p><p>기업 AX 관점에서는 '데이터가 있는 곳에서 AI를 돌린다'는 요구를 눈여겨볼 만해요. 데이터를 어디에 두고 어디서 처리하는지가 AI 도입 설계의 중요한 조건이 되고 있다고 볼 수 있어요. 영국 정부가 말한 주권과도 맞닿는 대목이에요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a></p></section><section class="slide"><h2>OpenAI, 폴란드 NASK와 AI 안전 협력</h2><p>OpenAI는 폴란드의 NASK와 협력한다고 발표했어요. 협력 분야는 AI 안전·보안과 기술 연구예요. 발표에 따르면 목표는 안전장치를 강화하고 더 회복력 있는 디지털 생태계를 뒷받침하는 거예요.</p><p>AI 회사가 한 나라의 기관과 안전·보안 연구를 함께 한다는 점에서 읽을 수 있는 게 있어요. AI 안전이 회사 혼자의 과제를 넘어 공공 영역과 함께 다루는 주제가 되고 있다는 뜻으로 볼 수 있어요.</p><p>기업 실무자에게는 AI 도입 검토 항목에 보안과 안전장치가 함께 올라가는 흐름으로 읽을 수 있어요. 어떤 AI를 쓰느냐만큼 확인할 거리가 하나 더 있다고 볼 수 있어요. 그 AI가 어떤 안전 기준 아래에서 운영되는지예요.</p><p class="src">출처 · <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a></p></section><section class="slide"><h2>공통 흐름: 도입 다음 질문은 '누구의 AI를, 어디서'</h2><p>다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요. 다른 쪽은 선택과 통제를 이야기하는 움직임이에요. 영국 정부는 주권을, NVIDIA는 지역 인프라를, OpenAI와 NASK는 안전을 다뤘어요.</p><p>도입이 넓어지는 흐름은 데이터에서도 보여요. Ramp AI Index는 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 재는 지표예요. 이 지표에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%였어요. 1년 전 43.8%에서 12.1%p(퍼센트포인트) 오른 수치예요. 다만 미국 기업의 유료 결제 기준이라 무료 도구나 개인 결제는 잡히지 않아요.</p><p>인프라에 들어가는 돈도 커지고 있어요. 마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈은 1년 전보다 +87% 많았어요. 최근 4개 분기를 합치면 $510.7B이고, 1년 전에는 $291.3B였어요. 도입이 넓어지고 인프라가 커지면서 '누구의 AI를, 어디서 돌리느냐'가 더 중요한 질문이 되고 있다고 볼 수 있어요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a> / <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a> / <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a> / <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a> / <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="slide"><h2>실무자가 짚어 볼 점</h2><p>이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요. 일부 팀의 실험인지, 전사 업무 도구인지예요.</p><p>다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요. 데이터를 어디에 두고 어디서 처리하는지, 안전·보안 기준이 무엇인지도 질문거리예요. 이런 질문이 도입 속도만큼 중요해지고 있다고 읽을 수 있어요.</p><p>다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요. 이후 공개되는 내용을 함께 살펴볼 필요가 있어요.</p></section>
-  <section class="slide sum"><h2>정리</h2><ul><li>Salesforce는 Braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요.</li><li>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.</li><li>영국 정부는 AI 주권 자문 서한을, NVIDIA는 유럽 등지의 클라우드 파트너 확장을 발표했어요.</li><li>OpenAI는 폴란드 NASK와 AI 안전·보안 협력을 발표했어요.</li><li>AI를 얼마나 쓰느냐에 더해 누구의 AI를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요.</li></ul></section>
-  <section class="slide basis"><h2>근거</h2><p>회사·기관이 직접 낸 발표만 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs"><li><a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 — NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents</a> <span class="d">10/21</span></li><li><a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 — AI sovereignty: preserving UK agency in an AI-enabled world</a> <span class="d">10/19</span></li><li><a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 — OpenAI and Poland’s NASK partner to advance AI safety and security</a> <span class="d">10/23</span></li><li><a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 — Uber brings ChatGPT Work to all employees with OpenAI</a> <span class="d">10/22</span></li><li><a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 — Salesforce Signs Definitive Agreement to Acquire Braze</a> <span class="d">10/20</span></li></ul></section>
-  </div>
-  <div class="deck-nav" aria-hidden="true"><button type="button" data-go="-1" aria-label="이전">‹</button><div class="bars"></div><button type="button" data-go="1" aria-label="다음">›</button></div>
-  <script>
-(() => { const deck = document.getElementById("deck"), nav = document.querySelector(".deck-nav"); if (!deck || !nav) return;
-  const slides = [...deck.children], bars = nav.querySelector(".bars");
-  bars.innerHTML = slides.map(() => "<i></i>").join("");
-  const at = () => Math.round(deck.scrollLeft / deck.clientWidth);
-  const paint = () => { const i = at(); [...bars.children].forEach((b, k) => b.classList.toggle("on", k <= i)); nav.querySelector('[data-go="-1"]').disabled = i === 0; nav.querySelector('[data-go="1"]').disabled = i === slides.length - 1; };
-  deck.addEventListener("scroll", () => requestAnimationFrame(paint), { passive: true });
-  nav.addEventListener("click", (e) => { const d = +e.target.closest("button")?.dataset.go; if (d) deck.scrollTo({ left: (at() + d) * deck.clientWidth, behavior: "smooth" }); });
-  addEventListener("resize", paint); paint();
-})();
-</script>
+  </header>
+  <section class="part"><h2>Salesforce, 고객 소통 플랫폼 Braze 인수 계약</h2><p>Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요. 인수 규모는 기업가치 기준 약 $5.66 billion이에요. 발표문에서 Salesforce는 자신을 '세계 1위 AI CRM'이라고 소개했고, Braze를 '선도적인 고객 소통 플랫폼'이라고 표현했어요. 두 표현 모두 Salesforce의 말이에요.</p><p>CRM은 고객 정보와 영업·상담 이력을 관리하는 시스템이에요. 고객 소통 플랫폼은 고객에게 메시지를 보내고 그 반응을 이어 가는 도구예요. 둘이 한 회사 제품군 안에 들어오면 고객 데이터와 고객 접점을 한곳에서 다루게 된다고 볼 수 있어요.</p><p>기업 AX 관점에서는 AI가 결국 고객 데이터 위에서 돌아간다는 점을 눈여겨볼 만해요. 지금 쓰는 CRM과 마케팅 도구가 어느 회사 제품군에 속하는지가 AI를 어디까지 활용할 수 있는지와 연결될 수 있다는 뜻으로 읽을 수 있어요.</p><p class="src">출처 · <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="part"><h2>Uber, 30,000명 넘는 직원에게 ChatGPT Work</h2><p>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요. 발표에 따르면 직원들은 이 도구를 자료 조사, 데이터 분석, 발표 자료 만들기, 복잡한 업무 흐름 처리에 쓰게 돼요.</p><p>눈여겨볼 점은 대상이 전 직원이라는 거예요. AI를 일부 개발팀이나 시범 부서에만 주는 단계를 넘어선 사례예요. 문서·메일처럼 누구나 쓰는 기본 업무 도구로 다루는 방식으로 볼 수 있어요.</p><p>발표에 적힌 쓰임새가 조사·분석·문서 작업이라는 점은 사무직 전반의 일상 업무와 맞닿아 있다고 볼 수 있어요. 실무자에게는 질문이 바뀐다는 뜻으로 읽을 수 있어요. 'AI를 누가 쓸 수 있나'에서 '어떤 업무에 어떻게 쓰나'로요.</p><p class="src">출처 · <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a></p></section><section class="part"><h2>영국 정부, 'AI 주권' 자문 서한 공개</h2><p>영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요. AI 담당 장관에게 보내는 자문 서한이에요. 영국이 지금과 앞으로의 AI 기술을 두고 전략적인 선택을 할 역량을 어떻게 키울 수 있는지를 다뤄요.</p><p>발표 요약의 초점은 '전략적 선택을 할 역량'에 있어요. 그래서 여기서 말하는 주권은 모든 것을 직접 만든다는 뜻보다 가까운 의미가 따로 있다고 읽을 수 있어요. 어떤 AI를 쓰고 무엇에 기댈지를 스스로 고를 수 있는 힘이에요.</p><p>기업에도 비슷한 질문이 생긴다고 볼 수 있어요. 특정 AI에 업무가 깊이 묶이면 나중에 고를 수 있는 선택지가 좁아질 수 있어요. 그런 점에서 어떤 모델과 클라우드를 쓸지는 단순한 IT 구매를 넘어선 전략 문제로 볼 수 있어요.</p><p class="src">출처 · <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a></p></section><section class="part"><h2>NVIDIA, 유럽 등지에서 클라우드 파트너 확장</h2><p>NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요. 대상 지역은 유럽·북유럽·아프리카·중앙아시아예요. 발표 제목에는 '주권', '개방', '안전한 AI 에이전트'라는 말이 함께 들어 있어요. AI 에이전트는 여러 단계의 일을 스스로 이어서 처리하는 AI를 말해요.</p><p>NVIDIA는 확장의 배경으로 AI 네이티브 기업들의 수요를 들었어요. NVIDIA의 설명에 따르면 개발자에게 필요한 것은 세 가지예요. 데이터 가까이에 있는 컴퓨팅, 직접 고쳐서 대규모로 서비스할 수 있는 공개 모델, 처음부터 보안을 고려해 설계한 인프라예요.</p><p>기업 AX 관점에서는 '데이터가 있는 곳에서 AI를 돌린다'는 요구를 눈여겨볼 만해요. 데이터를 어디에 두고 어디서 처리하는지가 AI 도입 설계의 중요한 조건이 되고 있다고 볼 수 있어요. 영국 정부가 말한 주권과도 맞닿는 대목이에요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a></p></section><section class="part"><h2>OpenAI, 폴란드 NASK와 AI 안전 협력</h2><p>OpenAI는 폴란드의 NASK와 협력한다고 발표했어요. 협력 분야는 AI 안전·보안과 기술 연구예요. 발표에 따르면 목표는 안전장치를 강화하고 더 회복력 있는 디지털 생태계를 뒷받침하는 거예요.</p><p>AI 회사가 한 나라의 기관과 안전·보안 연구를 함께 한다는 점에서 읽을 수 있는 게 있어요. AI 안전이 회사 혼자의 과제를 넘어 공공 영역과 함께 다루는 주제가 되고 있다는 뜻으로 볼 수 있어요.</p><p>기업 실무자에게는 AI 도입 검토 항목에 보안과 안전장치가 함께 올라가는 흐름으로 읽을 수 있어요. 어떤 AI를 쓰느냐만큼 확인할 거리가 하나 더 있다고 볼 수 있어요. 그 AI가 어떤 안전 기준 아래에서 운영되는지예요.</p><p class="src">출처 · <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a></p></section><section class="part"><h2>공통 흐름: 도입 다음 질문은 '누구의 AI를, 어디서'</h2><p>다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요. 다른 쪽은 선택과 통제를 이야기하는 움직임이에요. 영국 정부는 주권을, NVIDIA는 지역 인프라를, OpenAI와 NASK는 안전을 다뤘어요.</p><p>도입이 넓어지는 흐름은 데이터에서도 보여요. Ramp AI Index는 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 재는 지표예요. 이 지표에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%였어요. 1년 전 43.8%에서 12.1%p(퍼센트포인트) 오른 수치예요. 다만 미국 기업의 유료 결제 기준이라 무료 도구나 개인 결제는 잡히지 않아요.</p><p>인프라에 들어가는 돈도 커지고 있어요. 마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈은 1년 전보다 +87% 많았어요. 최근 4개 분기를 합치면 $510.7B이고, 1년 전에는 $291.3B였어요. 도입이 넓어지고 인프라가 커지면서 '누구의 AI를, 어디서 돌리느냐'가 더 중요한 질문이 되고 있다고 볼 수 있어요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a> / <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a> / <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a> / <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a> / <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="part"><h2>실무자가 짚어 볼 점</h2><p>이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요. 일부 팀의 실험인지, 전사 업무 도구인지예요.</p><p>다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요. 데이터를 어디에 두고 어디서 처리하는지, 안전·보안 기준이 무엇인지도 질문거리예요. 이런 질문이 도입 속도만큼 중요해지고 있다고 읽을 수 있어요.</p><p>다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요. 이후 공개되는 내용을 함께 살펴볼 필요가 있어요.</p></section>
+  <section class="sum"><h2>정리</h2><ul><li>Salesforce는 Braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요.</li><li>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.</li><li>영국 정부는 AI 주권 자문 서한을, NVIDIA는 유럽 등지의 클라우드 파트너 확장을 발표했어요.</li><li>OpenAI는 폴란드 NASK와 AI 안전·보안 협력을 발표했어요.</li><li>AI를 얼마나 쓰느냐에 더해 누구의 AI를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요.</li></ul></section>
+  <section class="basis"><h2>근거</h2><p>회사·기관이 직접 낸 발표만 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs"><li><a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 — NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents</a> <span class="d">10/21</span></li><li><a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 — AI sovereignty: preserving UK agency in an AI-enabled world</a> <span class="d">10/19</span></li><li><a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 — OpenAI and Poland’s NASK partner to advance AI safety and security</a> <span class="d">10/23</span></li><li><a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 — Uber brings ChatGPT Work to all employees with OpenAI</a> <span class="d">10/22</span></li><li><a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 — Salesforce Signs Definitive Agreement to Acquire Braze</a> <span class="d">10/20</span></li></ul></section>
   
   
-  <div class="links"><a href="/briefs">← 브리핑 전체</a><a href="https://www.instagram.com/p/De6FGlbHLJo/" target="_blank" rel="noopener">인스타그램 카드로 보기</a><a href="/">오늘의 신호</a></div>
+  <div class="more-links"><a href="/briefs">← 브리핑 전체</a><a href="https://www.instagram.com/p/De6FGlbHLJo/" target="_blank" rel="noopener">인스타그램 카드로 보기</a><a href="/">오늘의 AX 지표</a></div>
 </article>
+<script type="module">
+import { pager } from "/pager.js";
+const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s);
+const flow = [...art.querySelectorAll(".part")].flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; });
+const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "본문" }), " →");
+pager([
+  { id: "top", name: "브리핑", pages: [[$(".art-head"), hint]] },
+  { id: "text", name: "본문", items: flow, list: () => Object.assign(document.createElement("div"), { className: "flow" }) },
+  { id: "sum", name: "정리", pages: [[$(".sum")]] },
+  { id: "basis", name: "근거", pages: [[$(".basis")]] },
+  { id: "next", name: "더 읽기", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+], { tab: () => "briefs" });
+</script>
 </main>
 
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
   <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
   <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
-  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>사건</span></a>
+  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
 </nav>
 <script>
 (() => { const t = document.querySelector(".tabbar"); if (!t) return;
+  // the menus say where you are: the tab bar by section, the top bar's links by page (/briefs, /map)
   const mark = () => { const p = location.pathname, h = location.hash, on = p.startsWith("/briefs") ? "briefs" : p === "/" || p === "/index.html" ? (h === "#news" ? "news" : h === "#glossary" ? "glossary" : "home") : "";
-    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on)); };
+    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on));
+    document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
   mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
 </script>
 <div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 브리핑 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
@@ -170,7 +161,8 @@
 <script>
 (() => {
   const $ = (id) => document.getElementById(id), bar = $("appbar");
-  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches) return;
+  // (not over the phone pages: their first page links to installing — /briefs#alerts)
+  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches || document.documentElement.classList.contains("paged")) return;
   try { if (+localStorage.getItem("appbar-x") > Date.now() - 7 * 864e5) return; } catch {}
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let ev = null;

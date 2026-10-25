@@ -123,23 +123,30 @@ OneSignalDeferred.push(async (OneSignal) => {
 });
 </script>`;
 
-// the phone deck: progress bars and ‹ › buttons that follow the sideways scroll (CSS does the swiping)
-const DECK = `<script>
-(() => { const deck = document.getElementById("deck"), nav = document.querySelector(".deck-nav"); if (!deck || !nav) return;
-  const slides = [...deck.children], bars = nav.querySelector(".bars");
-  bars.innerHTML = slides.map(() => "<i></i>").join("");
-  const at = () => Math.round(deck.scrollLeft / deck.clientWidth);
-  const paint = () => { const i = at(); [...bars.children].forEach((b, k) => b.classList.toggle("on", k <= i)); nav.querySelector('[data-go="-1"]').disabled = i === 0; nav.querySelector('[data-go="1"]').disabled = i === slides.length - 1; };
-  deck.addEventListener("scroll", () => requestAnimationFrame(paint), { passive: true });
-  nav.addEventListener("click", (e) => { const d = +e.target.closest("button")?.dataset.go; if (d) deck.scrollTo({ left: (at() + d) * deck.clientWidth, behavior: "smooth" }); });
-  addEventListener("resize", paint); paint();
-})();
+// phone: the briefing as pages turned sideways (/pager.js), like the cards it explains and like every page of the site —
+// the title page, then the text a screenful at a time (a section's heading stays with its first paragraph, so no page
+// starts with a heading alone and nothing is cut off under a button), the summary, the sources, what to read next
+const ARTICLE_PAGER = `<script type="module">
+import { pager } from "/pager.js";
+const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s);
+const flow = [...art.querySelectorAll(".part")].flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; });
+const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "본문" }), " →");
+pager([
+  { id: "top", name: "브리핑", pages: [[$(".art-head"), hint]] },
+  { id: "text", name: "본문", items: flow, list: () => Object.assign(document.createElement("div"), { className: "flow" }) },
+  { id: "sum", name: "정리", pages: [[$(".sum")]] },
+  { id: "basis", name: "근거", pages: [[$(".basis")]] },
+  { id: "next", name: "더 읽기", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+], { tab: () => "briefs" });
 </script>`;
 
 const CSS = `
+  /* the briefings read like the rest of the site (2026-10-25): plain labels, hairline rules, bronze only where it means
+     something — no pills, no boxed cards. main's children sit on their own margins (no grid gap between every line). */
+  main{gap:0}
   main>*,article{min-width:0}
-  .kicker{display:inline-flex;width:fit-content;gap:8px;align-items:center;padding:5px 12px;border:1px solid var(--line-2);border-radius:999px;font-size:13px;color:var(--ink-2);margin:28px 0 16px}
-  .kicker b{color:var(--bronze-hi);font-weight:600} .kicker a{color:var(--ink-2)}
+  .kicker{width:fit-content;font-size:13px;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);font-weight:600;margin-right:8px} .kicker a{color:var(--ink-2)}
   article{max-width:720px}
   h1.page{font-size:clamp(28px,4.4vw,40px);line-height:1.25;letter-spacing:-.03em;margin:0 0 12px;word-break:keep-all}
   .lede{font-size:18px;line-height:1.75;color:var(--ink-2);margin:0 0 8px}
@@ -148,71 +155,51 @@ const CSS = `
   article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
   .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
   .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
-  .sum{margin:44px 0 0;padding:22px 24px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface)}
+  .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
   .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
   .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
   .srcs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14px} .srcs .d{color:var(--dim);font-size:12.5px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
-  .chip{font-size:12.5px;padding:3px 10px;border-radius:999px;border:1px solid var(--line-2);color:var(--mut)} .chip:hover{color:var(--ink);text-decoration:none;border-color:var(--bronze-line)}
-  .chip.company{color:var(--bronze-hi);border-color:var(--bronze-line)}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0}
+  .chip{font-size:13px;color:var(--mut)} .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
   .pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
-  .pn a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);color:var(--ink-2);font-size:14.5px;line-height:1.5}
-  .pn a:hover{border-color:var(--line-2);text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
+  .pn a{display:block;padding:14px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px;line-height:1.5}
+  .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
   .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
-  .links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
-  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
-  .tabs a{font-size:14px;padding:7px 12px;border-radius:var(--radius-cta);border:1px solid var(--line);color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
-  .tabs a[aria-current]{background:var(--surface-2);color:var(--ink);border-color:var(--line-2)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
+  .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;margin:4px 0 8px;border-bottom:1px solid var(--line)}
+  .tabs a{font-size:14px;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
+  .tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--bronze)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
   h2.month{font-size:15px;color:var(--mut);font-weight:600;margin:32px 0 10px}
-  .list{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:760px}
-  .list li{padding:0} .list .card{display:block;padding:20px 22px;border:1px solid var(--line);border-radius:var(--radius-card);background:var(--surface);color:var(--ink-2);text-decoration:none;transition:border-color .2s}
-  .list .card:hover{border-color:var(--line-2)} .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
+  .list{list-style:none;margin:0;padding:0;display:grid;max-width:760px;border-top:1px solid var(--line-2)}
+  .list li{padding:0 0 12px;border-bottom:1px solid var(--line)}
+  .list .card{display:block;padding:16px 0 4px;color:var(--ink-2);text-decoration:none}
+  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
+  .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
   .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .list .chips{margin:8px 4px 0}
+  .list .chips{margin:6px 0 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
-  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:16px 18px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:var(--bronze-soft);font-size:14px;color:var(--ink-2)}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
   .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
-  .install .alerts{padding-top:10px;border-top:1px solid var(--bronze-line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
   .install input{accent-color:var(--bronze);width:16px;height:16px}
   .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
   .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
   .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
-  /* editorial (2026-10-25): no pills or boxed cards — plain labels, hairline rules, bronze only where it means something */
-  .kicker{display:block;padding:0;border:0;border-radius:0;color:var(--mut);margin:28px 0 12px}
-  .kicker b{color:var(--bronze-hi);margin-right:8px}
-  .chips{gap:4px 14px}
-  .chip,.chip.company{padding:0;border:0;border-radius:0;font-size:13px;color:var(--mut)} .chip.company{color:var(--mut)}
-  .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
-  .list{gap:0;border-top:1px solid var(--line-2)}
-  .list li{border-bottom:1px solid var(--line);padding-bottom:12px}
-  .list .card,.list .card:hover{padding:16px 0 4px;border:0;border-radius:0;background:none}
-  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
-  .list .chips{margin:6px 0 0}
-  .tabs{gap:2px;border-bottom:1px solid var(--line)}
-  .tabs a{border:0;border-radius:0;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px}
-  .tabs a[aria-current]{background:none;border-bottom-color:var(--bronze)}
-  .sum{border:0;border-top:2px solid var(--bronze-line);border-radius:0;background:none;padding:18px 0 0}
-  .pn a{border:0;border-top:1px solid var(--line-2);border-radius:0;background:none;padding:14px 0}
-  .install{background:none;border:0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);border-radius:0;padding:14px 0}
-  .install .alerts{border-top:1px solid var(--line)}
-  .swipe-hint,.deck-nav{display:none}
+  /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
+  @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
   @media(max-width:640px){
     main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
-    .deck{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px;width:calc(100% + 32px);overscroll-behavior-x:contain}
-    .deck::-webkit-scrollbar{display:none}
-    .deck>.slide{flex:0 0 100%;scroll-snap-align:start;scroll-snap-stop:always;box-sizing:border-box;padding:18px 16px 8px;height:calc(100svh - 150px - 68px);overflow-y:auto;border-right:1px solid var(--line)}
-    .deck>.slide.first{display:flex;flex-direction:column;justify-content:center}
-    .deck>.slide h2{margin-top:0;font-size:22px} .deck>.slide p{font-size:16px;line-height:1.8}
-    .deck>.slide.sum{margin:0;border:0;border-radius:0;background:none} .deck>.slide.basis{margin:0}
-    .deck .kicker{margin-top:0} h1.page{font-size:28px}
-    .swipe-hint{display:block;margin-top:auto;font-size:13.5px;color:var(--bronze-hi)}
-    .deck-nav{display:flex;align-items:center;gap:10px;margin:10px 0 0}
-    .deck-nav button{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line-2);background:var(--surface);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
-    .deck-nav button:disabled{opacity:.3}
-    .deck-nav .bars{flex:1;display:flex;gap:4px} .deck-nav .bars i{flex:1;height:3px;border-radius:2px;background:var(--line-2)} .deck-nav .bars i.on{background:var(--bronze)}
+    h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
-    body.has-appbar .deck>.slide{height:calc(100svh - 230px - 68px)}
   }
+  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
+  .pg .art-head{margin:auto 0}
+  .pg .art-head .kicker{margin-top:0}
+  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
+  .pg .flow p{font-size:16px;line-height:1.8}
+  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
+  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
+  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
 `;
 
 // ---------- write ----------
@@ -227,31 +214,27 @@ const put = (rel, html) => {
 
 for (const b of briefs) {
   const { st, post } = b, a = st.article;
-  const sections = a.sections.map((x) => `<section class="slide"><h2>${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
+  const sections = a.sections.map((x) => `<section class="part"><h2>${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
   const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = same[i - 1], older = same[i + 1];
   const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
-  // on a phone the briefing reads like the cards: one section per slide, swiped sideways (DECK below); on a wide
-  // screen the same slides are just the article's sections, one after another
-  const body = `<article>
-  <div class="deck" id="deck">
-  <section class="slide first">
+  // one article: on a wide screen the sections one after another; on a phone pages turned sideways (ARTICLE_PAGER)
+  const body = `<article class="brief">
+  <header class="art-head">
   <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/${b.series}">${esc(SERIES[b.series]?.name ?? st.format_name ?? "")}</a></div>
   <h1 class="page">${esc(plain(a.title))}</h1>
   <p class="lede">${esc(plain(a.lede))}</p>
   <p class="meta">${day(st.date)} · ${NAME}</p>
   ${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}
-  </section>
+  </header>
   ${sections}
-  ${a.takeaways?.length ? `<section class="slide sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}
-  <section class="slide basis"><h2>근거</h2>${basis(b)}</section>
-  </div>
-  <div class="deck-nav" aria-hidden="true"><button type="button" data-go="-1" aria-label="이전">‹</button><div class="bars"></div><button type="button" data-go="1" aria-label="다음">›</button></div>
-  ${DECK}
+  ${a.takeaways?.length ? `<section class="sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}
+  <section class="basis"><h2>근거</h2>${basis(b)}</section>
   ${newer || older ? `<nav class="pn" aria-label="같은 시리즈">${older ? `<a href="/briefs/${older.slot}"><small>← 이전 ${esc(SERIES[b.series].name)}</small>${esc(plain(older.st.article.title))}</a>` : "<span></span>"}${newer ? `<a class="next" href="/briefs/${newer.slot}"><small>다음 ${esc(SERIES[b.series].name)} →</small>${esc(plain(newer.st.article.title))}</a>` : ""}</nav>` : ""}
   ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list">${related.map(item).join("")}</ul></section>` : ""}
-  <div class="links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${esc(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 신호</a></div>
-</article>`;
-  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body }));
+  <div class="more-links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${esc(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
+</article>
+${ARTICLE_PAGER}`;
+  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true }));
 }
 
 // phone: a list page as pages turned sideways (/pager.js) — the heading and as many briefings as fit, then a screenful at a
