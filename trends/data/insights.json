@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-24",
+ "built_at": "2026-10-25",
  "page": "https://data.pivoxquant.com/",
  "insights": [
   {
@@ -78,51 +78,51 @@
   {
    "id": "accel",
    "k": "가속",
-   "big": "+20.1%p",
+   "big": "+38.3%p",
    "bl": "늘어나는 속도가 빨라진 폭",
-   "title": "성장이 가장 빨라지는 쪽은 OpenAI Agents",
-   "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 +10.2%, 최근 4주엔 +30.3% 늘었어요.",
-   "body": "4주 성장률이 직전 4주 +10.2%에서 +30.3%로 올라갔습니다.",
+   "title": "성장이 가장 빨라지는 쪽은 OpenCode",
+   "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 −3.5%, 최근 4주엔 +34.8% 늘었어요.",
+   "body": "4주 성장률이 직전 4주 −3.5%에서 +34.8%로 올라갔습니다.",
    "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
    "viz": [
     {
      "kind": "versus",
-     "from": 0.1016,
-     "to": 0.3031,
-     "fromText": "+10.2%",
-     "toText": "+30.3%",
+     "from": -0.0349,
+     "to": 0.3479,
+     "fromText": "−3.5%",
+     "toText": "+34.8%",
      "fromLabel": "직전 4주",
      "toLabel": "최근 4주"
     },
     {
      "kind": "series",
      "values": [
-      96182,
-      100729,
-      115892,
-      124351,
-      140803,
-      163174,
-      154508,
-      177377.5,
-      183602,
-      212074,
-      207077,
-      195612,
-      234770,
-      246553,
-      240248,
-      258123,
-      264454,
-      280049.5,
-      256522,
-      266452,
-      297391.5,
-      328444,
-      322543,
-      335222,
-      403080,
-      436116
+      158365,
+      273030,
+      182815,
+      156568,
+      210168,
+      244883,
+      175994,
+      267865,
+      231988,
+      497299,
+      229686,
+      316089,
+      287464,
+      332073,
+      273085,
+      401531,
+      330351,
+      477002,
+      289717,
+      377744,
+      334983.5,
+      427790,
+      419575,
+      476973,
+      498716,
+      532571
      ]
     }
    ]
@@ -631,51 +631,51 @@
     {
      "id": "accel",
      "k": "가속",
-     "big": "+20.1%p",
+     "big": "+38.3%p",
      "bl": "늘어나는 속도가 빨라진 폭",
-     "title": "성장이 가장 빨라지는 쪽은 OpenAI Agents",
-     "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 +10.2%, 최근 4주엔 +30.3% 늘었어요.",
-     "body": "4주 성장률이 직전 4주 +10.2%에서 +30.3%로 올라갔습니다.",
+     "title": "성장이 가장 빨라지는 쪽은 OpenCode",
+     "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 −3.5%, 최근 4주엔 +34.8% 늘었어요.",
+     "body": "4주 성장률이 직전 4주 −3.5%에서 +34.8%로 올라갔습니다.",
      "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
      "viz": [
       {
        "kind": "versus",
-       "from": 0.1016,
-       "to": 0.3031,
-       "fromText": "+10.2%",
-       "toText": "+30.3%",
+       "from": -0.0349,
+       "to": 0.3479,
+       "fromText": "−3.5%",
+       "toText": "+34.8%",
        "fromLabel": "직전 4주",
        "toLabel": "최근 4주"
       },
       {
        "kind": "series",
        "values": [
-        96182,
-        100729,
-        115892,
-        124351,
-        140803,
-        163174,
-        154508,
-        177377.5,
-        183602,
-        212074,
-        207077,
-        195612,
-        234770,
-        246553,
-        240248,
-        258123,
-        264454,
-        280049.5,
-        256522,
-        266452,
-        297391.5,
-        328444,
-        322543,
-        335222,
-        403080,
-        436116
+        158365,
+        273030,
+        182815,
+        156568,
+        210168,
+        244883,
+        175994,
+        267865,
+        231988,
+        497299,
+        229686,
+        316089,
+        287464,
+        332073,
+        273085,
+        401531,
+        330351,
+        477002,
+        289717,
+        377744,
+        334983.5,
+        427790,
+        419575,
+        476973,
+        498716,
+        532571
        ]
       }
      ]
@@ -1097,6 +1097,943 @@
          "name": "Amazon",
          "value": 0.6844,
          "label": "+68%"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "race",
+   "name": "누가 앞서나",
+   "insights": [
+    {
+     "id": "race-labs-js",
+     "k": "레이스 · AI 회사 SDK · 자바스크립트",
+     "big": "37.0%",
+     "bl": "AI 회사 SDK · 자바스크립트 중 Anthropic의 몫",
+     "title": "AI 회사 SDK · 자바스크립트 1위는 Anthropic",
+     "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 이 중에서 10번 내려받으면 약 4번은 Anthropic 몫이에요. 1년 전보다 가장 크게 움직인 곳은 OpenAI 62.5% → 36.2%.",
+     "body": "Anthropic 37.0% · OpenAI 36.2% · Google 20.4% · Mistral 6.4%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +9.4%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Anthropic",
+         "value": 0.3702
+        },
+        {
+         "name": "OpenAI",
+         "value": 0.3619
+        },
+        {
+         "name": "Google",
+         "value": 0.2038
+        },
+        {
+         "name": "Mistral",
+         "value": 0.064
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.625,
+       "to": 0.3619,
+       "fromText": "62.5%",
+       "toText": "36.2%",
+       "fromLabel": "1년 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Anthropic",
+         "value": 0.094,
+         "label": "+9.4%p"
+        },
+        {
+         "name": "OpenAI",
+         "value": 0.0392,
+         "label": "+3.9%p"
+        },
+        {
+         "name": "Google",
+         "value": 0.0235,
+         "label": "+2.4%p"
+        },
+        {
+         "name": "Mistral",
+         "value": -0.117,
+         "label": "−11.7%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-labs-app",
+     "k": "레이스 · 앱에 연결하는 모델",
+     "big": "32.2%",
+     "bl": "앱에 연결하는 모델 중 OpenAI의 몫",
+     "title": "앱에 연결하는 모델 1위는 OpenAI",
+     "easy": "AI 앱을 만들 때 어느 회사 모델을 연결하나 (Vercel AI SDK). 이 중에서 10번 내려받으면 약 3번은 OpenAI 몫이에요. 1년 전보다 가장 크게 움직인 곳은 OpenAI 42.7% → 32.2%.",
+     "body": "OpenAI 32.2% · Anthropic 31.3% · Google 19.9% · xAI 6.3% · DeepSeek 5.9% · Mistral 4.4%. 최근 4주 가장 빨리 큰 곳은 DeepSeek(인기 패키지보다 +17.6%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "npm 평일 다운로드 4주 평균 · 비중은 이 6개 안에서 · 10월 5일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "OpenAI",
+         "value": 0.322
+        },
+        {
+         "name": "Anthropic",
+         "value": 0.3128
+        },
+        {
+         "name": "Google",
+         "value": 0.1986
+        },
+        {
+         "name": "xAI",
+         "value": 0.0626
+        },
+        {
+         "name": "DeepSeek",
+         "value": 0.0594
+        },
+        {
+         "name": "Mistral",
+         "value": 0.0445
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.4269,
+       "to": 0.322,
+       "fromText": "42.7%",
+       "toText": "32.2%",
+       "fromLabel": "1년 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "DeepSeek",
+         "value": 0.1763,
+         "label": "+17.6%p"
+        },
+        {
+         "name": "OpenAI",
+         "value": 0.1446,
+         "label": "+14.5%p"
+        },
+        {
+         "name": "Anthropic",
+         "value": 0.1227,
+         "label": "+12.3%p"
+        },
+        {
+         "name": "Google",
+         "value": 0.1106,
+         "label": "+11.1%p"
+        },
+        {
+         "name": "xAI",
+         "value": 0.0609,
+         "label": "+6.1%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-labs-py",
+     "k": "레이스 · AI 회사 SDK · 파이썬",
+     "big": "48.6%",
+     "bl": "AI 회사 SDK · 파이썬 중 OpenAI의 몫",
+     "title": "AI 회사 SDK · 파이썬 1위는 OpenAI",
+     "easy": "AI·데이터 개발자가 어느 회사 AI를 코드에 붙이나. 이 중에서 10번 내려받으면 약 5번은 OpenAI 몫이에요. 4주 전보다 가장 크게 움직인 곳은 Anthropic 24.5% → 26.3%.",
+     "body": "OpenAI 48.6% · Anthropic 26.3% · Google 22.7% · Mistral 2.3%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +8.3%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "OpenAI",
+         "value": 0.4858
+        },
+        {
+         "name": "Anthropic",
+         "value": 0.2634
+        },
+        {
+         "name": "Google",
+         "value": 0.2275
+        },
+        {
+         "name": "Mistral",
+         "value": 0.0233
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.2452,
+       "to": 0.2634,
+       "fromText": "24.5%",
+       "toText": "26.3%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Anthropic",
+         "value": 0.0835,
+         "label": "+8.3%p"
+        },
+        {
+         "name": "OpenAI",
+         "value": -0.0126,
+         "label": "−1.3%p"
+        },
+        {
+         "name": "Google",
+         "value": -0.0417,
+         "label": "−4.2%p"
+        },
+        {
+         "name": "Mistral",
+         "value": -0.2098,
+         "label": "−21.0%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-openmodels",
+     "k": "레이스 · 오픈 모델 제작사",
+     "big": "45.7%",
+     "bl": "오픈 텍스트 생성 모델 다운로드 중 Qwen 몫",
+     "title": "오픈 AI 모델 1위 제작사는 Qwen",
+     "easy": "누구나 받아 쓰는 AI 모델(오픈 모델)을 10번 내려받으면 약 5번은 Qwen가 만든 모델이에요.",
+     "body": "Qwen 45.7% · openai-community 5.6% · google 4.7% · deepseek-ai 4.6% · lmstudio-community 4.0%. Hugging Face 다운로드 상위 300개 모델 기준.",
+     "src": "Hugging Face 30일 다운로드 · 2026-10-24",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Qwen",
+         "value": 0.4569
+        },
+        {
+         "name": "openai-community",
+         "value": 0.0557
+        },
+        {
+         "name": "google",
+         "value": 0.0475
+        },
+        {
+         "name": "deepseek-ai",
+         "value": 0.0455
+        },
+        {
+         "name": "lmstudio-community",
+         "value": 0.0397
+        },
+        {
+         "name": "그 밖",
+         "value": 0.3546
+        }
+       ]
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Qwen",
+         "value": 0.4569,
+         "label": "45.7%"
+        },
+        {
+         "name": "openai-community",
+         "value": 0.0557,
+         "label": "5.6%"
+        },
+        {
+         "name": "google",
+         "value": 0.0475,
+         "label": "4.7%"
+        },
+        {
+         "name": "deepseek-ai",
+         "value": 0.0455,
+         "label": "4.6%"
+        },
+        {
+         "name": "lmstudio-community",
+         "value": 0.0397,
+         "label": "4.0%"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-coding",
+     "k": "레이스 · AI 코딩 도구",
+     "big": "56.6%",
+     "bl": "AI 코딩 도구 중 Codex의 몫",
+     "title": "AI 코딩 도구 1위는 Codex",
+     "easy": "터미널에서 코드를 대신 짜 주는 AI 도구. 이 중에서 10번 내려받으면 약 6번은 Codex 몫이에요. 1년 전보다 가장 크게 움직인 곳은 Claude Code 89.2% → 35.2%.",
+     "body": "Codex 56.6% · Claude Code 35.2% · OpenCode 7.0% · Gemini CLI 1.0% · Qwen Code 0.2%. 최근 4주 가장 빨리 큰 곳은 OpenCode(인기 패키지보다 +19.4%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "npm 평일 다운로드 4주 평균 · 비중은 이 5개 안에서 · 10월 5일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Codex",
+         "value": 0.5656
+        },
+        {
+         "name": "Claude Code",
+         "value": 0.3519
+        },
+        {
+         "name": "OpenCode",
+         "value": 0.0704
+        },
+        {
+         "name": "Gemini CLI",
+         "value": 0.0103
+        },
+        {
+         "name": "Qwen Code",
+         "value": 0.0018
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.8924,
+       "to": 0.3519,
+       "fromText": "89.2%",
+       "toText": "35.2%",
+       "fromLabel": "1년 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "OpenCode",
+         "value": 0.1937,
+         "label": "+19.4%p"
+        },
+        {
+         "name": "Codex",
+         "value": 0.0077,
+         "label": "+0.8%p"
+        },
+        {
+         "name": "Qwen Code",
+         "value": -0.0849,
+         "label": "−8.5%p"
+        },
+        {
+         "name": "Gemini CLI",
+         "value": -0.1014,
+         "label": "−10.1%p"
+        },
+        {
+         "name": "Claude Code",
+         "value": -0.4278,
+         "label": "−42.8%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-agents-js",
+     "k": "레이스 · 에이전트 도구 · 자바스크립트",
+     "big": "48.8%",
+     "bl": "에이전트 도구 · 자바스크립트 중 LangGraph의 몫",
+     "title": "에이전트 도구 · 자바스크립트 1위는 LangGraph",
+     "easy": "AI가 여러 단계를 스스로 하게 만드는 개발 도구. 이 중에서 10번 내려받으면 약 5번은 LangGraph 몫이에요. 1년 전보다 가장 크게 움직인 곳은 LangGraph 65.3% → 48.8%.",
+     "body": "LangGraph 48.8% · OpenAI Agents 25.7% · Mastra 25.1% · VoltAgent 0.4%. 최근 4주 가장 빨리 큰 곳은 VoltAgent(인기 패키지보다 +18.8%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "LangGraph",
+         "value": 0.4878
+        },
+        {
+         "name": "OpenAI Agents",
+         "value": 0.2568
+        },
+        {
+         "name": "Mastra",
+         "value": 0.2513
+        },
+        {
+         "name": "VoltAgent",
+         "value": 0.004
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.6531,
+       "to": 0.4878,
+       "fromText": "65.3%",
+       "toText": "48.8%",
+       "fromLabel": "1년 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "VoltAgent",
+         "value": 0.1879,
+         "label": "+18.8%p"
+        },
+        {
+         "name": "OpenAI Agents",
+         "value": 0.1488,
+         "label": "+14.9%p"
+        },
+        {
+         "name": "Mastra",
+         "value": 0.1053,
+         "label": "+10.5%p"
+        },
+        {
+         "name": "LangGraph",
+         "value": 0.0226,
+         "label": "+2.3%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-browser",
+     "k": "레이스 · AI의 웹 브라우저 조작",
+     "big": "88.3%",
+     "bl": "AI의 웹 브라우저 조작 중 Playwright의 몫",
+     "title": "AI의 웹 브라우저 조작 1위는 Playwright",
+     "easy": "AI가 웹사이트를 직접 누르고 입력하게 하는 도구. 이 중에서 10번 내려받으면 약 9번은 Playwright 몫이에요. 1년 전보다 가장 크게 움직인 곳은 Playwright 76.9% → 88.3%.",
+     "body": "Playwright 88.3% · Puppeteer 10.2% · Stagehand (AI용) 1.4%. 최근 4주 가장 빨리 큰 곳은 Playwright(인기 패키지보다 +11.2%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "npm 평일 다운로드 4주 평균 · 비중은 이 3개 안에서 · 10월 5일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Playwright",
+         "value": 0.8831
+        },
+        {
+         "name": "Puppeteer",
+         "value": 0.1025
+        },
+        {
+         "name": "Stagehand (AI용)",
+         "value": 0.0144
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.7694,
+       "to": 0.8831,
+       "fromText": "76.9%",
+       "toText": "88.3%",
+       "fromLabel": "1년 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Playwright",
+         "value": 0.1117,
+         "label": "+11.2%p"
+        },
+        {
+         "name": "Stagehand (AI용)",
+         "value": 0.0688,
+         "label": "+6.9%p"
+        },
+        {
+         "name": "Puppeteer",
+         "value": -0.0584,
+         "label": "−5.8%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-voice",
+     "k": "레이스 · 음성 AI",
+     "big": "38.8%",
+     "bl": "음성 AI 중 faster-whisper의 몫",
+     "title": "음성 AI 1위는 faster‑whisper",
+     "easy": "말을 글로(받아쓰기), 글을 말로(목소리) 바꾸는 AI. 이 중에서 10번 내려받으면 약 4번은 faster-whisper 몫이에요. 4주 전보다 가장 크게 움직인 곳은 faster‑whisper 29.0% → 38.8%.",
+     "body": "faster-whisper 38.8% · ElevenLabs 33.1% · Whisper 16.2% · Deepgram 11.8%. 최근 4주 가장 빨리 큰 곳은 faster‑whisper(인기 패키지보다 +49.0%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "faster-whisper",
+         "value": 0.3884
+        },
+        {
+         "name": "ElevenLabs",
+         "value": 0.3308
+        },
+        {
+         "name": "Whisper",
+         "value": 0.1625
+        },
+        {
+         "name": "Deepgram",
+         "value": 0.1183
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.2904,
+       "to": 0.3884,
+       "fromText": "29.0%",
+       "toText": "38.8%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "faster-whisper",
+         "value": 0.4905,
+         "label": "+49.0%p"
+        },
+        {
+         "name": "Deepgram",
+         "value": 0.006,
+         "label": "+0.6%p"
+        },
+        {
+         "name": "Whisper",
+         "value": -0.0604,
+         "label": "−6.0%p"
+        },
+        {
+         "name": "ElevenLabs",
+         "value": -0.1348,
+         "label": "−13.5%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-local",
+     "k": "레이스 · 모델 직접 돌리기",
+     "big": "77.0%",
+     "bl": "모델 직접 돌리기 중 Ollama의 몫",
+     "title": "모델 직접 돌리기 1위는 Ollama",
+     "easy": "내 컴퓨터나 회사 서버에서 AI 모델을 돌리는 도구. 이 중에서 10번 내려받으면 약 8번은 Ollama 몫이에요. 4주 전보다 가장 크게 움직인 곳은 SGLang 12.5% → 6.2%.",
+     "body": "Ollama 77.0% · vLLM 10.5% · SGLang 6.2% · MLX (맥) 3.2% · llama.cpp 3.1%. 최근 4주 가장 빨리 큰 곳은 MLX (맥)(인기 패키지보다 −3.7%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 5개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Ollama",
+         "value": 0.7697
+        },
+        {
+         "name": "vLLM",
+         "value": 0.1052
+        },
+        {
+         "name": "SGLang",
+         "value": 0.0623
+        },
+        {
+         "name": "MLX (맥)",
+         "value": 0.0319
+        },
+        {
+         "name": "llama.cpp",
+         "value": 0.0309
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.1254,
+       "to": 0.0623,
+       "fromText": "12.5%",
+       "toText": "6.2%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "MLX (맥)",
+         "value": -0.0369,
+         "label": "−3.7%p"
+        },
+        {
+         "name": "Ollama",
+         "value": -0.0798,
+         "label": "−8.0%p"
+        },
+        {
+         "name": "llama.cpp",
+         "value": -0.1157,
+         "label": "−11.6%p"
+        },
+        {
+         "name": "vLLM",
+         "value": -0.2023,
+         "label": "−20.2%p"
+        },
+        {
+         "name": "SGLang",
+         "value": -0.6578,
+         "label": "−65.8%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-vector",
+     "k": "레이스 · 벡터 DB",
+     "big": "23.8%",
+     "bl": "벡터 DB 중 Qdrant의 몫",
+     "title": "벡터 DB 1위는 Qdrant",
+     "easy": "AI가 문서를 기억하고 찾아오게 하는 저장소. 이 중에서 10번 내려받으면 약 2번은 Qdrant 몫이에요. 4주 전보다 가장 크게 움직인 곳은 Weaviate 16.6% → 12.0%.",
+     "body": "Qdrant 23.8% · FAISS 22.9% · LanceDB 13.6% · Chroma 13.4% · Weaviate 12.0% · Pinecone 7.9% · Milvus 6.4%. 최근 4주 가장 빨리 큰 곳은 Qdrant(인기 패키지보다 +4.3%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 7개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Qdrant",
+         "value": 0.2384
+        },
+        {
+         "name": "FAISS",
+         "value": 0.2287
+        },
+        {
+         "name": "LanceDB",
+         "value": 0.1359
+        },
+        {
+         "name": "Chroma",
+         "value": 0.1342
+        },
+        {
+         "name": "Weaviate",
+         "value": 0.1199
+        },
+        {
+         "name": "Pinecone",
+         "value": 0.0789
+        },
+        {
+         "name": "Milvus",
+         "value": 0.0641
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.1662,
+       "to": 0.1199,
+       "fromText": "16.6%",
+       "toText": "12.0%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Qdrant",
+         "value": 0.0428,
+         "label": "+4.3%p"
+        },
+        {
+         "name": "Chroma",
+         "value": -0.0068,
+         "label": "−0.7%p"
+        },
+        {
+         "name": "Pinecone",
+         "value": -0.0406,
+         "label": "−4.1%p"
+        },
+        {
+         "name": "FAISS",
+         "value": -0.0573,
+         "label": "−5.7%p"
+        },
+        {
+         "name": "LanceDB",
+         "value": -0.1535,
+         "label": "−15.3%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-finetune",
+     "k": "레이스 · 모델 맞춤 학습",
+     "big": "73.4%",
+     "bl": "모델 맞춤 학습 중 PEFT의 몫",
+     "title": "모델 맞춤 학습 1위는 PEFT",
+     "easy": "공개 모델을 우리 데이터로 더 가르치는 도구 (파인튜닝). 이 중에서 10번 내려받으면 약 7번은 PEFT 몫이에요. 4주 전보다 가장 크게 움직인 곳은 PEFT 69.7% → 73.4%.",
+     "body": "PEFT 73.4% · TRL 20.0% · Unsloth 6.7%. 최근 4주 가장 빨리 큰 곳은 PEFT(인기 패키지보다 −6.3%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 3개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "PEFT",
+         "value": 0.7336
+        },
+        {
+         "name": "TRL",
+         "value": 0.1998
+        },
+        {
+         "name": "Unsloth",
+         "value": 0.0667
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.6974,
+       "to": 0.7336,
+       "fromText": "69.7%",
+       "toText": "73.4%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "PEFT",
+         "value": -0.0627,
+         "label": "−6.3%p"
+        },
+        {
+         "name": "TRL",
+         "value": -0.2216,
+         "label": "−22.2%p"
+        },
+        {
+         "name": "Unsloth",
+         "value": -0.2862,
+         "label": "−28.6%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-agents-py",
+     "k": "레이스 · 에이전트 도구 · 파이썬",
+     "big": "61.1%",
+     "bl": "에이전트 도구 · 파이썬 중 LangGraph의 몫",
+     "title": "에이전트 도구 · 파이썬 1위는 LangGraph",
+     "easy": "AI가 여러 단계를 스스로 하게 만드는 개발 도구. 이 중에서 10번 내려받으면 약 6번은 LangGraph 몫이에요. 4주 전보다 가장 크게 움직인 곳은 LangGraph 60.4% → 61.1%.",
+     "body": "LangGraph 61.1% · OpenAI Agents 16.3% · Google ADK 11.9% · Pydantic AI 7.2% · CrewAI 2.8% · smolagents 0.6%. 최근 4주 가장 빨리 큰 곳은 LangGraph(인기 패키지보다 +1.8%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 6개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "LangGraph",
+         "value": 0.6112
+        },
+        {
+         "name": "OpenAI Agents",
+         "value": 0.1631
+        },
+        {
+         "name": "Google ADK",
+         "value": 0.1193
+        },
+        {
+         "name": "Pydantic AI",
+         "value": 0.0724
+        },
+        {
+         "name": "CrewAI",
+         "value": 0.0282
+        },
+        {
+         "name": "smolagents",
+         "value": 0.0059
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.604,
+       "to": 0.6112,
+       "fromText": "60.4%",
+       "toText": "61.1%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "LangGraph",
+         "value": 0.0177,
+         "label": "+1.8%p"
+        },
+        {
+         "name": "smolagents",
+         "value": 0.0005,
+         "label": "+0.0%p"
+        },
+        {
+         "name": "OpenAI Agents",
+         "value": -0.0059,
+         "label": "−0.6%p"
+        },
+        {
+         "name": "Google ADK",
+         "value": -0.0189,
+         "label": "−1.9%p"
+        },
+        {
+         "name": "Pydantic AI",
+         "value": -0.021,
+         "label": "−2.1%p"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "race-quality",
+     "k": "레이스 · AI 품질 관리",
+     "big": "84.7%",
+     "bl": "AI 품질 관리 중 Langfuse의 몫",
+     "title": "AI 품질 관리 1위는 Langfuse",
+     "easy": "AI 답변이 맞는지 평가하고 지켜보는 도구. 이 중에서 10번 내려받으면 약 8번은 Langfuse 몫이에요. 4주 전보다 가장 크게 움직인 곳은 Phoenix 2.5% → 2.0%.",
+     "body": "Langfuse 84.7% · DeepEval 9.4% · Ragas 3.8% · Phoenix 2.0%. 최근 4주 가장 빨리 큰 곳은 Ragas(인기 패키지보다 +11.2%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+     "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+     "viz": [
+      {
+       "kind": "share",
+       "focus": 0,
+       "parts": [
+        {
+         "name": "Langfuse",
+         "value": 0.8471
+        },
+        {
+         "name": "DeepEval",
+         "value": 0.0945
+        },
+        {
+         "name": "Ragas",
+         "value": 0.038
+        },
+        {
+         "name": "Phoenix",
+         "value": 0.0204
+        }
+       ]
+      },
+      {
+       "kind": "versus",
+       "from": 0.0245,
+       "to": 0.0204,
+       "fromText": "2.5%",
+       "toText": "2.0%",
+       "fromLabel": "4주 전",
+       "toLabel": "지금"
+      },
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Ragas",
+         "value": 0.1123,
+         "label": "+11.2%p"
+        },
+        {
+         "name": "Langfuse",
+         "value": 0.0965,
+         "label": "+9.7%p"
+        },
+        {
+         "name": "DeepEval",
+         "value": 0.0909,
+         "label": "+9.1%p"
+        },
+        {
+         "name": "Phoenix",
+         "value": -0.1134,
+         "label": "−11.3%p"
         }
        ]
       }
@@ -3036,6 +3973,254 @@
  ],
  "events": [
   {
+   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
+   "subject": "race:labs-js",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+   "card": {
+    "id": "ev-flip-labs-js",
+    "k": "빅 케이스 · AI 회사 SDK · 자바스크립트 1위 교체",
+    "big": "37.0%",
+    "bl": "AI 회사 SDK · 자바스크립트 중 Anthropic의 몫",
+    "title": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+    "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.0%로 앞섰어요.",
+    "body": "Anthropic 37.0% · OpenAI 36.2% · Google 20.4% · Mistral 6.4%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +9.4%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Anthropic",
+        "value": 0.3702,
+        "label": "37.0%"
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3619,
+        "label": "36.2%"
+       },
+       {
+        "name": "Google",
+        "value": 0.2038,
+        "label": "20.4%"
+       },
+       {
+        "name": "Mistral",
+        "value": 0.064,
+        "label": "6.4%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.3553,
+      "to": 0.3702,
+      "fromText": "35.5%",
+      "toText": "37.0%",
+      "fromLabel": "4주 전 Anthropic",
+      "toLabel": "지금 Anthropic"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "Anthropic",
+        "value": 0.3702
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3619
+       },
+       {
+        "name": "Google",
+        "value": 0.2038
+       },
+       {
+        "name": "Mistral",
+        "value": 0.064
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "flip:race:vector:qdrant-client:2026-10-12",
+   "subject": "race:vector",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "벡터 DB 1위, 이제 Qdrant",
+   "card": {
+    "id": "ev-flip-vector",
+    "k": "빅 케이스 · 벡터 DB 1위 교체",
+    "big": "23.8%",
+    "bl": "벡터 DB 중 Qdrant의 몫",
+    "title": "벡터 DB 1위, 이제 Qdrant",
+    "easy": "AI가 문서를 기억하고 찾아오게 하는 저장소. 4주 전 1위는 FAISS(21.8%)였는데, 지금은 Qdrant가 23.8%로 앞섰어요.",
+    "body": "Qdrant 23.8% · FAISS 22.9% · LanceDB 13.6% · Chroma 13.4% · Weaviate 12.0% · Pinecone 7.9% · Milvus 6.4%. 최근 4주 가장 빨리 큰 곳은 Qdrant(인기 패키지보다 +4.3%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 7개 안에서 · 10월 12일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Qdrant",
+        "value": 0.2384,
+        "label": "23.8%"
+       },
+       {
+        "name": "FAISS",
+        "value": 0.2287,
+        "label": "22.9%"
+       },
+       {
+        "name": "LanceDB",
+        "value": 0.1359,
+        "label": "13.6%"
+       },
+       {
+        "name": "Chroma",
+        "value": 0.1342,
+        "label": "13.4%"
+       },
+       {
+        "name": "Weaviate",
+        "value": 0.1199,
+        "label": "12.0%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.2077,
+      "to": 0.2384,
+      "fromText": "20.8%",
+      "toText": "23.8%",
+      "fromLabel": "4주 전 Qdrant",
+      "toLabel": "지금 Qdrant"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "Qdrant",
+        "value": 0.2384
+       },
+       {
+        "name": "FAISS",
+        "value": 0.2287
+       },
+       {
+        "name": "LanceDB",
+        "value": 0.1359
+       },
+       {
+        "name": "Chroma",
+        "value": 0.1342
+       },
+       {
+        "name": "Weaviate",
+        "value": 0.1199
+       },
+       {
+        "name": "Pinecone",
+        "value": 0.0789
+       },
+       {
+        "name": "Milvus",
+        "value": 0.0641
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "flip:race:voice:faster-whisper:2026-10-12",
+   "subject": "race:voice",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "음성 AI 1위, 이제 faster‑whisper",
+   "card": {
+    "id": "ev-flip-voice",
+    "k": "빅 케이스 · 음성 AI 1위 교체",
+    "big": "38.8%",
+    "bl": "음성 AI 중 faster-whisper의 몫",
+    "title": "음성 AI 1위, 이제 faster‑whisper",
+    "easy": "말을 글로(받아쓰기), 글을 말로(목소리) 바꾸는 AI. 4주 전 1위는 ElevenLabs(40.1%)였는데, 지금은 faster-whisper가 38.8%로 앞섰어요.",
+    "body": "faster-whisper 38.8% · ElevenLabs 33.1% · Whisper 16.2% · Deepgram 11.8%. 최근 4주 가장 빨리 큰 곳은 faster‑whisper(인기 패키지보다 +49.0%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "PyPI 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "faster-whisper",
+        "value": 0.3884,
+        "label": "38.8%"
+       },
+       {
+        "name": "ElevenLabs",
+        "value": 0.3308,
+        "label": "33.1%"
+       },
+       {
+        "name": "Whisper",
+        "value": 0.1625,
+        "label": "16.2%"
+       },
+       {
+        "name": "Deepgram",
+        "value": 0.1183,
+        "label": "11.8%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.2904,
+      "to": 0.3884,
+      "fromText": "29.0%",
+      "toText": "38.8%",
+      "fromLabel": "4주 전 faster-whisper",
+      "toLabel": "지금 faster-whisper"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "faster-whisper",
+        "value": 0.3884
+       },
+       {
+        "name": "ElevenLabs",
+        "value": 0.3308
+       },
+       {
+        "name": "Whisper",
+        "value": 0.1625
+       },
+       {
+        "name": "Deepgram",
+        "value": 0.1183
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
    "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
    "subject": "pkg:amazon-braket-sdk",
    "kind": "급증",
@@ -3077,6 +4262,54 @@
       "to": 5375,
       "fromText": "2,543",
       "toText": "5,375",
+      "fromLabel": "직전 7주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "surge:PyPI:faster-whisper:2026-10-12",
+   "subject": "pkg:faster-whisper",
+   "kind": "급증",
+   "tier": "big",
+   "score": 80,
+   "topic": "ai",
+   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-faster-whisper",
+    "k": "빅 케이스 · PyPI 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 57만회, 직전 7주 평소는 30만회. 같은 주 대조군은 평소의 1.16배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       237656,
+       285645,
+       294361,
+       304896,
+       356143,
+       419208,
+       491489,
+       567273
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 304896,
+      "to": 567273,
+      "fromText": "30만",
+      "toText": "57만",
       "fromLabel": "직전 7주 평소",
       "toLabel": "지난주"
      }
@@ -3318,6 +4551,72 @@
       "fromText": "8,037",
       "toText": "1.2만",
       "fromLabel": "직전 7주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "surge:npm:playwright:2026-10-05",
+   "subject": "pkg:playwright",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.6,
+   "topic": "ai",
+   "headline": "지난주 Playwright 다운로드가 평소의 1.5배",
+   "card": {
+    "id": "ev-surge-playwright",
+    "k": "작은 변화 · npm 다운로드",
+    "big": "1.5배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Playwright 다운로드가 평소의 1.5배",
+    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2,194만회, 직전 12주 평소는 1,442만회. 같은 주 대조군은 평소의 1.25배였습니다.",
+    "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       8072786,
+       7856978,
+       8057228,
+       8159135,
+       8967022,
+       9107951,
+       9121580,
+       9794577.5,
+       10197527,
+       10879435,
+       10321202,
+       10965426,
+       11559248,
+       11835586,
+       12373633,
+       12882422,
+       13225461,
+       14152175.5,
+       14176564,
+       14659070,
+       16063000,
+       17341990,
+       17232949,
+       17996101,
+       21627650,
+       21935429.5
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 14417817,
+      "to": 21935429.5,
+      "fromText": "1,442만",
+      "toText": "2,194만",
+      "fromLabel": "직전 12주 평소",
       "toLabel": "지난주"
      }
     ]

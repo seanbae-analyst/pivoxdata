@@ -45,7 +45,7 @@ const design = slides.map((x, i) => {
 });
 
 // ---------- slides ----------
-const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>투자 권유 아님</span></div>`;
+const foot = `<div class="foot"><span>data.pivoxquant.com</span><span>AI 기술 신호 레이더</span></div>`;
 const H = { number: [300, 220], chart: [600, 520], headline: [280, 200] }; // drawing height: [labelled, line]
 const chart = (x, s) => s.o ? `<div class="sp">${draw(x.viz[s.o.i], s.format, { w: 896, h: H[s.layout][FITTED.has(s.format) ? 0 : 1], big: true })}</div>` : `<div class="sp"></div>`;
 const kick = (x, i) => `<div class="kick">${String(i + 1).padStart(2, "0")} · ${esc(x.k)}</div>`;
@@ -106,13 +106,13 @@ const covers = {
 </section>`,
   list: `<section class="slide cover c-list">
   <div class="kick">AI 기술 신호 레이더 · ${when}</div>
-  <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
+  <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : plan.mode === "race" ? "AI 분야별<br>누가<br>앞서나" : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
   <ol>${slides.slice(0, 3).map((x) => `<li><b>${esc(x.big)}</b><span>${esc(x.title)}</span></li>`).join("")}</ol>
   ${foot}
 </section>`,
   grid: `<section class="slide cover c-grid">
   <div class="kick">AI 기술 신호 레이더 · ${when}</div>
-  <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
+  <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : plan.mode === "race" ? "개발자가 실제로 받는 숫자로 본<br>분야별 1위" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
   <div class="tiles">${slides.slice(0, 4).map((x) => `<div class="tile"><div class="tk">${esc(x.k)}</div><div class="tb">${esc(x.big)}</div><div class="tl">${esc(x.bl)}</div></div>`).join("")}</div>
   ${foot}
 </section>`,
@@ -127,7 +127,7 @@ const outro = `<section class="slide outro">
     <li>오픈 모델: Hugging Face 다운로드</li>
     <li>자본: 미국 SEC 공시의 설비투자</li>
   </ul>
-  <p>다운로드 수는 사용자 수가 아닙니다. 지난 숫자만 말하고, 예측하거나 투자를 권하지 않습니다.</p>
+  <p>다운로드 수는 사용자 수가 아니라 설치 횟수예요. 지난 숫자로 지금 어디까지 왔는지를 봅니다.</p>
   <div class="url">data.pivoxquant.com</div>
   ${foot}
 </section>`;

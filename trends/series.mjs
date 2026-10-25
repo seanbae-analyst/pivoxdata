@@ -65,6 +65,44 @@ PYPI.push(
 );
 export const TOPIC_MIN_LEVEL = 1000;
 
+// ---------- races: who is winning in each corner of AI, by what developers actually install ----------
+// Each race is a handful of rival packages in one source; the page shows each one's share of the race's downloads,
+// how that share moved (4 weeks, 3 months, a year — PyPI only since its count changed in 2026-08), and who grows
+// fastest. A change of leader is a big case. `what` explains the corner in everyday words.
+// Packages not watched elsewhere are added to NPM / PYPI with group "race": fetched like the rest, never ranked
+// among the AI packages. (langsmith is left out of the quality race: langchain installs it, so its count is langchain's.)
+const m = (pkg, name) => ({ pkg, name });
+export const RACES = [
+  { id: "labs-js", name: "AI 회사 SDK · 자바스크립트", what: "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나", src: "npm",
+    members: [m("openai", "OpenAI"), m("@anthropic-ai/sdk", "Anthropic"), m("@google/genai", "Google"), m("@mistralai/mistralai", "Mistral")] },
+  { id: "labs-py", name: "AI 회사 SDK · 파이썬", what: "AI·데이터 개발자가 어느 회사 AI를 코드에 붙이나", src: "pypi",
+    members: [m("openai", "OpenAI"), m("anthropic", "Anthropic"), m("google-genai", "Google"), m("mistralai", "Mistral")] },
+  { id: "labs-app", name: "앱에 연결하는 모델", what: "AI 앱을 만들 때 어느 회사 모델을 연결하나 (Vercel AI SDK)", src: "npm",
+    members: [m("@ai-sdk/openai", "OpenAI"), m("@ai-sdk/anthropic", "Anthropic"), m("@ai-sdk/google", "Google"), m("@ai-sdk/xai", "xAI"), m("@ai-sdk/deepseek", "DeepSeek"), m("@ai-sdk/mistral", "Mistral")] },
+  { id: "coding", name: "AI 코딩 도구", what: "터미널에서 코드를 대신 짜 주는 AI 도구", src: "npm",
+    members: [m("@openai/codex", "Codex"), m("@anthropic-ai/claude-code", "Claude Code"), m("opencode-ai", "OpenCode"), m("@google/gemini-cli", "Gemini CLI"), m("@qwen-code/qwen-code", "Qwen Code")] },
+  { id: "agents-py", name: "에이전트 도구 · 파이썬", what: "AI가 여러 단계를 스스로 하게 만드는 개발 도구", src: "pypi",
+    members: [m("langgraph", "LangGraph"), m("openai-agents", "OpenAI Agents"), m("google-adk", "Google ADK"), m("pydantic-ai", "Pydantic AI"), m("crewai", "CrewAI"), m("smolagents", "smolagents")] },
+  { id: "agents-js", name: "에이전트 도구 · 자바스크립트", what: "AI가 여러 단계를 스스로 하게 만드는 개발 도구", src: "npm",
+    members: [m("@langchain/langgraph", "LangGraph"), m("@mastra/core", "Mastra"), m("@openai/agents", "OpenAI Agents"), m("@voltagent/core", "VoltAgent")] },
+  { id: "vector", name: "벡터 DB", what: "AI가 문서를 기억하고 찾아오게 하는 저장소", src: "pypi",
+    members: [m("qdrant-client", "Qdrant"), m("faiss-cpu", "FAISS"), m("chromadb", "Chroma"), m("lancedb", "LanceDB"), m("weaviate-client", "Weaviate"), m("pinecone", "Pinecone"), m("pymilvus", "Milvus")] },
+  { id: "local", name: "모델 직접 돌리기", what: "내 컴퓨터나 회사 서버에서 AI 모델을 돌리는 도구", src: "pypi",
+    members: [m("ollama", "Ollama"), m("vllm", "vLLM"), m("sglang", "SGLang"), m("mlx-lm", "MLX (맥)"), m("llama-cpp-python", "llama.cpp")] },
+  { id: "browser", name: "AI의 웹 브라우저 조작", what: "AI가 웹사이트를 직접 누르고 입력하게 하는 도구", src: "npm",
+    members: [m("@browserbasehq/stagehand", "Stagehand (AI용)"), m("puppeteer", "Puppeteer"), m("playwright", "Playwright")] },
+  { id: "voice", name: "음성 AI", what: "말을 글로(받아쓰기), 글을 말로(목소리) 바꾸는 AI", src: "pypi",
+    members: [m("faster-whisper", "faster-whisper"), m("elevenlabs", "ElevenLabs"), m("openai-whisper", "Whisper"), m("deepgram-sdk", "Deepgram")] },
+  { id: "quality", name: "AI 품질 관리", what: "AI 답변이 맞는지 평가하고 지켜보는 도구", src: "pypi",
+    members: [m("langfuse", "Langfuse"), m("deepeval", "DeepEval"), m("ragas", "Ragas"), m("arize-phoenix", "Phoenix")] },
+  { id: "finetune", name: "모델 맞춤 학습", what: "공개 모델을 우리 데이터로 더 가르치는 도구 (파인튜닝)", src: "pypi",
+    members: [m("peft", "PEFT"), m("trl", "TRL"), m("unsloth", "Unsloth")] },
+];
+for (const r of RACES) for (const x of r.members) {
+  const list = r.src === "npm" ? NPM : PYPI;
+  if (!list.some((p) => p.pkg === x.pkg)) list.push({ pkg: x.pkg, group: "race", name: x.name });
+}
+
 // arXiv: monthly count of AI papers (cs.AI, cs.CL or cs.LG listed) whose abstract contains the phrase.
 export const ARXIV_SCOPE = "(cat:cs.AI OR cat:cs.CL OR cat:cs.LG)";
 export const ARXIV_START = "202301";
