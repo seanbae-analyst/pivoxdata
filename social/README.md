@@ -52,7 +52,10 @@ Run workflow의 "테스트 초안 (승인 필요)"와, 자동 게시가 실패�
   숫자는 브리핑에 있는 것만, 섹션마다 근거 브리핑 링크.
 - **RSS**: `/briefs/feed.xml` (최근 30편) — 나중에 이메일(RSS → 메일)도 이걸로.
 - **폰 설치(PWA)**: `manifest.webmanifest` · `sw.js` · `icons/`. 안드로이드 크롬은 "앱 설치" 버튼, 아이폰은 사파리 공유 → "홈 화면에 추가".
-  푸시 알림은 푸시 서비스(OneSignal) 키를 넣으면 붙입니다.
+- **푸시 알림(OneSignal)**: `/briefs`의 "새 브리핑 알림"에서 주제(이번 주 AX 사건 / 월간 리포트 / 그 밖의 브리핑)를 골라 켭니다
+  (주제 = OneSignal 태그 `news`·`monthly`·`other`, 앱 ID는 `social/notify-config.mjs`). `social/notify.mjs`가 인스타 게시가 끝난
+  브리핑(월간 정리는 쓰인 직후)을 그 주제를 고른 사람에게 한 번씩 보냅니다(`social/notified.json`). 페이지가 사이트에 뜬 걸 확인한 뒤 보내고,
+  최근 3일 것만 보냅니다. 키: GitHub Secret `ONESIGNAL_REST_KEY`. 아이폰은 홈 화면에 추가한 앱에서만 알림을 켤 수 있어요.
 
 ## AX 사건 — 공식 발표만 (매주)
 

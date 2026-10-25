@@ -122,7 +122,7 @@ jobs:
       # falls back to an approval issue, so nothing is lost.
       - name: Post to Instagram automatically
         id: auto
-        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.post != '테스트 초안 (승인 필요)'
+        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.post != '테스트 초안 (승인 필요)' && steps.req.outputs.kind != 'test'
         continue-on-error: true
         env:
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
@@ -134,6 +134,18 @@ jobs:
           file="social/out/${{ steps.plan.outputs.date }}/post.json"
           node social/publish.mjs "$file"
           git add "$file" && git commit -m "social: published ${{ steps.plan.outputs.date }} (automatic)" && git pull --rebase origin "${GITHUB_REF_NAME}" && git push
+
+      # push alerts (OneSignal) for briefings that just became public: the post's briefing once it is on Instagram, a
+      # monthly roundup once written — to the readers who chose that topic on /briefs. Never fails the run.
+      - name: Push alerts for new briefings
+        continue-on-error: true
+        env:
+          ONESIGNAL_REST_KEY: ${{ secrets.ONESIGNAL_REST_KEY }}
+        run: |
+          git pull -q --rebase origin "${GITHUB_REF_NAME}" || true
+          node social/notify.mjs
+          git add social/notified.json
+          if ! git diff --cached --quiet; then git commit -m "social: push alerts sent" && git pull --rebase origin "${GITHUB_REF_NAME}" && git push; fi
 
       - name: Report the post, or ask for approval
         if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true'

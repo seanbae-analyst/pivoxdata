@@ -1,6 +1,8 @@
 // sw.js — makes the site installable as an app and readable offline: pages come from the network first (they change
-// every day) and fall back to the last copy seen; styles and icons are cached. Push alerts will be added here.
-const CACHE = "ax-radar-v1";
+// every day) and fall back to the last copy seen; styles and icons are cached. Push alerts: OneSignal's worker,
+// imported here so one service worker covers both (the page script registers this file, social/briefs.mjs).
+importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js");
+const CACHE = "ax-radar-v2";
 const SHELL = ["/", "/briefs", "/ui.css", "/research.css", "/favicon.svg", "/icons/icon-192.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
