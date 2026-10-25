@@ -15,7 +15,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { slidesFor } from "./pick.mjs";
-import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn } from "./claude.mjs";
+import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn, CLICHE, hedges, STYLE } from "./claude.mjs";
 import { THEMES, INDUSTRIES, tagPrompt, pickTags, companyId, seriesOf } from "./tags.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -93,6 +93,9 @@ function check(story) {
   if (bad.length) p.push(`팩트에 없는 숫자: ${bad.join(", ")} — 팩트에 적힌 숫자를 그대로만 쓸 것(반올림·계산 금지)`);
   const words = [...new Set(all.match(BANNED) ?? [])];
   if (words.length) p.push(`쓰면 안 되는 말: ${words.join(", ")}`);
+  const stock = [...new Set(all.match(CLICHE) ?? [])];
+  if (stock.length) p.push(`상투어: ${stock.join(", ")} — 구체적인 말로 바꿀 것`);
+  if (hedges(all) > 3) p.push(`"~볼 수 있어요"가 ${hedges(all)}번 — 세 번 이하로, 같은 맺음말 반복 금지`);
   if (META.test(all) || /^\s*(-{3,}|\*{3,})\s*$/m.test(story?.caption ?? "")) p.push("게시물이 아닌 메모가 섞임");
   if (!story?.caption || plain(story.caption).length > 1400) p.push("caption은 1~1400자");
   if (/#|https?:\/\//.test(story?.caption ?? "")) p.push("캡션에 해시태그·링크 쓰지 말 것(코드가 붙임)");
@@ -121,10 +124,11 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 인스타그램 카드뉴스 
 독자는 AI 도입에 관심 있는 직장인·기업 실무자·IT 컨설턴트다.
 
 규칙:
+${STYLE}
 - 게시물 하나에 이야기 하나. 표지에서 질문이나 반전으로 시작해, 장마다 한 걸음씩 나아가고, 마지막 장에서 정리한다. 장 수는 이야기에 맞게 정한다(4~10장).
 - 카드는 짧고 간단하게: 장마다 제목(한 문장)과 본문 1~2문장(140자 이하). 핵심만 남기고, 배경·자세한 해설은 따로 쓰는 웹 브리핑에 맡긴다.
 - 숫자는 주어진 팩트에 적힌 그대로만 쓴다. 반올림·환산·새 계산(차이, 배수 등) 금지. 팩트에 없는 숫자는 쓰지 않는다.
-- 팩트에 없는 사실(회사 소개, 사례, 이유, 업종별 AI 활용 예)을 사실처럼 쓰지 않는다. 해석은 "~로 볼 수 있어요", "~를 뜻해요"처럼 해석임이 드러나게 쓴다.
+- 팩트에 없는 사실(회사 소개, 사례, 이유, 업종별 AI 활용 예)을 사실처럼 쓰지 않는다. 해석은 "~라는 뜻이에요", "~로 읽혀요"처럼 해석임이 드러나게 쓴다.
 - 앞으로 어떻게 될지 단정하지 않는다. 무엇을 사거나 팔라고 하지 않는다. "추천", "전망", "예상", "급등" 같은 말을 쓰지 않는다.
 - 쉬운 존댓말(~요). 전문 용어(SDK, %p, Ramp AI Index 등)는 처음 나올 때 짧게 풀어 준다.
 - Ramp AI Index는 미국 기업, 유료 결제 기준이라는 점을, 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 필요한 곳에서 한 번씩 밝힌다.
@@ -139,7 +143,7 @@ const NEWS_RULES = `
 이번 게시물은 공식 발표(회사 뉴스룸·정부 보도자료·리서치)를 모은 'AX 사건'이다. 추가 규칙:
 - 발표에 적힌 것만 쓴다. 발표의 제목·요약에 없는 사실(배경, 금액, 고객 수, 다른 회사 이야기)을 더하지 않는다.
 - 누가 말했는지 밝힌다: "OO는 ~했다고 발표했어요", "과학기술정보통신부는 ~라고 밝혔어요". 회사의 자평(최고, 혁신적, 업계 최초 등)은 그 회사의 말로만 옮긴다.
-- 기업 AX 관점의 의미는 해석임이 드러나게 쓴다("~로 볼 수 있어요"). 발표한 회사를 평가하거나 응원하지 않는다.
+- 기업 AX 관점의 의미는 필요한 곳에만 짧게, 해석임이 드러나게 쓴다. 발표한 회사를 평가하거나 응원하지 않는다.
 - 발표문 문장을 그대로 옮기지 않고 우리 말로 짧게 바꿔 쓴다. 영어 제목도 번역해 풀어 쓴다. 회사·제품 이름은 원래 표기 그대로.
 - 금액·수치는 발표에 적힌 숫자 그대로 쓴다(예: $1 billion은 "$1 billion"으로, 원화·다른 단위로 바꾸지 않는다).
 - 발표 3~5건을 고른다. 기업의 AI 도입·전환, 기업 간 협력·인수, 정부 정책·규제를 소비자 제품 소식보다 앞에 둔다.
@@ -279,6 +283,9 @@ function checkArticle(a) {
   const words = [...new Set(all.match(BANNED) ?? [])];
   if (words.length) p.push(`쓰면 안 되는 말: ${words.join(", ")}`);
   if (META.test(all)) p.push("글이 아닌 메모가 섞임");
+  const stock = [...new Set(all.match(CLICHE) ?? [])];
+  if (stock.length) p.push(`상투어: ${stock.join(", ")} — 구체적인 말로 바꿀 것`);
+  if (hedges(all) > 3) p.push(`"~볼 수 있어요"가 ${hedges(all)}번 — 세 번 이하로`);
   if (/[^\S\n]{2,}/.test(all) || /[^\S\n][.,!?)]/.test(all)) p.push("두 칸 띄어쓰기나 문장부호 앞 빈칸");
   return p;
 }

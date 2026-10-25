@@ -182,6 +182,40 @@
   .authors .bar{height:10px;border-radius:5px;background:linear-gradient(90deg,var(--bronze-hi) var(--w),transparent var(--w));border:1px solid var(--line)}
   .authors .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
   @media(max-width:560px){.authors li{grid-template-columns:110px 1fr 50px;font-size:13px}}
+  /* ---------- editorial (2026-10-25): less of the AI-template look — like PivoxQuant's black-and-gold refresh.
+     No pills, no boxed-everything, no icon tiles or tinted gradients: plain labels, hairline rules, type doing the
+     work; bronze only for the numbers and what is selected. Overrides the rules above, on every screen. ---------- */
+  .hero .kicker{display:block;padding:0;border:0;border-radius:0;font-size:13px;color:var(--mut);margin-bottom:14px}
+  .hero .kicker .dot{display:none}
+  .events{border:0;border-radius:0;background:none;border-top:1px solid var(--line-2)}
+  .events li{border-bottom:1px solid var(--line)} .events li+li{border-top:0}
+  .events a{padding:14px 2px;gap:14px} .events a:hover{background:none} .events a:hover .et{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+  .events .badge,.events .big .badge{padding:0;border:0;border-radius:0;background:none;font-size:12.5px;font-weight:600;color:var(--mut)}
+  .events .big .badge{color:var(--bronze-hi)}
+  .events .big .et{font-weight:600}
+  .tabs{gap:2px;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .tabs button,.tabs button:hover{min-height:44px;padding:0 12px;border:0;border-radius:0;background:none;color:var(--mut);font-weight:600;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .tabs button[aria-selected="true"]{background:none;color:var(--ink);border-bottom-color:var(--bronze)}
+  .tabs button[aria-selected="true"] .n{color:var(--dim)}
+  .ins,.ins.lead{border:0;border-top:1px solid var(--line-2);border-radius:0;background:none;padding:18px 0 4px}
+  .ins:hover{transform:none;border-color:var(--line-2)}
+  .ins.lead{background:none;border-top-color:var(--bronze-line)}
+  .ins .ico{display:none} .ins .k{font-weight:600;color:var(--mut)}
+  .ins .easy{padding:0;background:none;border-radius:0;color:var(--ink-2)}
+  .ins .easy .el{display:inline;margin:0 6px 0 0;color:var(--bronze-hi)}
+  .insights{gap:8px 28px}
+  .how{display:none}
+  .gl{border:0;border-top:1px solid var(--line);border-radius:0;background:none;padding:14px 0}
+  .glossary dl{gap:0 28px}
+  @media(max-width:640px){
+    .events a{padding:13px 0}
+    #briefs .events,#news .events{border-top:0}
+    #briefs .events li,#news .events li{border:0;border-top:2px solid var(--line-2);border-radius:0;background:none}
+    #briefs .events li:first-child{border-top-color:var(--bronze);background:none}
+    #briefs .events a,#news .events a{padding:14px 2px 6px;min-height:0}
+    .insights>.ins{flex-basis:84%}
+    .ins,.ins.lead{padding:16px 0 4px}
+  }
 </style>
 </head>
 <body>

@@ -9,7 +9,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn } from "./claude.mjs";
+import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn, CLICHE, hedges, STYLE } from "./claude.mjs";
 import { THEMES, INDUSTRIES, SERIES, tagPrompt, pickTags, companyId, seriesOf } from "./tags.mjs";
 
 const MIN = 2;
@@ -36,7 +36,8 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 에디터다. AX(기업의 AI
 규칙:
 - 주어진 브리핑에 적힌 것만 쓴다. 숫자는 브리핑에 적힌 그대로(반올림·계산 금지). 새 사실을 더하지 않는다.
 - 한 달을 관통하는 흐름 2~4개를 찾아 섹션으로 나누고, 섹션마다 근거가 된 브리핑 번호를 refs에 적는다.
-- 해석은 "~로 볼 수 있어요"처럼 해석임이 드러나게. 앞으로를 단정하지 않고, 무엇을 사라·하라고 하지 않는다. "추천", "전망", "예상" 같은 말을 쓰지 않는다.
+${STYLE}
+- 해석은 해석임이 드러나게. 앞으로를 단정하지 않고, 무엇을 사라·하라고 하지 않는다. "추천", "전망", "예상" 같은 말을 쓰지 않는다.
 - 쉬운 존댓말(~요). 조사·띄어쓰기를 바르게, 한 문단 2~4문장, 문단 사이는 빈 줄.
 출력은 JSON 하나만, 다른 글 없이:
 {"title":"제목","lede":"리드 2~3문장","sections":[{"heading":"소제목","body":"문단\\n\\n문단","refs":[브리핑 번호]}],"takeaways":["핵심 한 줄"],"themes":["주제"],"industries":["업종"]}
@@ -58,6 +59,9 @@ function check(a) {
   const words = [...new Set(all.match(BANNED) ?? [])];
   if (words.length) p.push(`쓰면 안 되는 말: ${words.join(", ")}`);
   if (META.test(all)) p.push("글이 아닌 메모가 섞임");
+  const stock = [...new Set(all.match(CLICHE) ?? [])];
+  if (stock.length) p.push(`상투어: ${stock.join(", ")} — 구체적인 말로 바꿀 것`);
+  if (hedges(all) > 3) p.push(`"~볼 수 있어요"가 ${hedges(all)}번 — 세 번 이하로`);
   return p;
 }
 
