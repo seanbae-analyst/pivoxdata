@@ -26,9 +26,9 @@ import { ask, pickRoute, ClaudeUnavailable, BANNED, META, numbersIn } from "./cl
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const I = JSON.parse(fs.readFileSync(path.join(ROOT, "trends", "data", "insights.json"), "utf8"));
-const date = I.built_at, dir = path.join(ROOT, "social", "out", date);
 const planFile = path.join(ROOT, "social", "plan.json");
 const plan = fs.existsSync(planFile) ? JSON.parse(fs.readFileSync(planFile, "utf8")) : { mode: "roundup" };
+const date = I.built_at, slot = plan.slot ?? date, dir = path.join(ROOT, "social", "out", slot);
 if (plan.post === false) { console.log(`social/plan.json says no draft today (${plan.why}) — no caption`); process.exit(0); }
 // the insights carry line-break characters for the cards (no-break spaces and hyphens, zero-width breaks);
 // the caption gets plain text so a model id can be copied and searched
@@ -127,10 +127,10 @@ const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설
 const caption = [body, "", sourcesLine, ...(plan.mode === "news" ? [] : ["자세히: data.pivoxquant.com"]), ...(usesDownloads ? ["다운로드 수는 사용자 수가 아니라 설치 횟수예요."] : []), "", tags].join("\n");
 
 const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
-if (images.length < 3) throw new Error(`social/out/${date}: ${images.length} slides — run social/render.mjs first`);
+if (images.length < 3) throw new Error(`social/out/${slot}: ${images.length} slides — run social/render.mjs first`);
 const postFile = path.join(dir, "post.json");
 const prev = fs.existsSync(postFile) ? JSON.parse(fs.readFileSync(postFile, "utf8")) : {};
-if (prev.published) { console.log(`social/out/${date} was already published (${prev.published.permalink}) — caption left as is`); process.exit(0); }
-const post = { date, images, image_base: `https://data.pivoxquant.com/social/out/${date}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_model: result.model ?? null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: allowed.size, problems: [] } };
+if (prev.published) { console.log(`social/out/${slot} was already published (${prev.published.permalink}) — caption left as is`); process.exit(0); }
+const post = { date, ...(slot !== date ? { slot } : {}), images, image_base: `https://data.pivoxquant.com/social/out/${slot}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_model: result.model ?? null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: allowed.size, problems: [] } };
 fs.writeFileSync(postFile, JSON.stringify(post, null, 1) + "\n");
-console.log(`wrote social/out/${date}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);
+console.log(`wrote social/out/${slot}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);

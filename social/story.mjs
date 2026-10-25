@@ -22,7 +22,7 @@ const read = (f, empty) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "ut
 const I = read(path.join(ROOT, "trends", "data", "insights.json"));
 const plan = read(path.join(ROOT, "social", "plan.json"), { mode: "roundup" });
 if (plan.post === false) { console.log(`social/plan.json says no draft today (${plan.why}) — no story`); process.exit(0); }
-const date = I.built_at, OUT = path.join(ROOT, "social", "out"), dir = path.join(OUT, date);
+const date = I.built_at, slot = plan.slot ?? date, OUT = path.join(ROOT, "social", "out"), dir = path.join(OUT, slot);
 const plain = (t) => String(t ?? "").replace(/​/g, "").replace(/‑/g, "-").replace(/ /g, " ");
 
 // ---------- formats ----------
@@ -44,7 +44,7 @@ const candidates = plan.mode === "event"
   ? (/^ax:month/.test(plan.event.key) ? ["monthly", "deepdive", "timeline"] : plan.event.kind === "1위 교체" ? ["breaking", "versus"] : ["breaking"])
   : plan.mode === "news" ? ["newsweek", "newstheme"]
   : plan.mode === "digest" ? ["weekly", "checklist"] : plan.mode === "race" ? ["guide", "versus", "quiz"] : ["explainer", "quiz", "timeline", "checklist"];
-const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < date && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
+const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < slot && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
   .map((f) => read(path.join(OUT, f, "design.json"), {}));
 const recentFormats = history.slice(-2).map((h) => h.format);
 const format = candidates.find((c) => !recentFormats.includes(c)) ?? candidates[0];
@@ -241,7 +241,7 @@ for (const sl of story.slides) if (sl.refs?.length) sl.src = `출처 · ${srcLin
 if (NEWS.length) {
   story.sources = used.map((r) => ({ source: NEWS[r - 1].source, kind: NEWS[r - 1].kind, date: NEWS[r - 1].date, title: NEWS[r - 1].title, link: NEWS[r - 1].link, id: NEWS[r - 1].id }));
   // only the announcements the post told count as used; the others stay available for next week
-  const LOG = path.join(ROOT, "social", "posted.json"), log = read(LOG, []), e = log.findLast((x) => x.date === date && x.mode === "news");
+  const LOG = path.join(ROOT, "social", "posted.json"), log = read(LOG, []), e = log.findLast((x) => (x.slot ?? x.date) === slot && x.mode === "news");
   if (e) { e.news = story.sources.map((x) => x.id); fs.writeFileSync(LOG, JSON.stringify(log, null, 1) + "\n"); }
 }
 const source = result.story ? "claude" : "cards";
@@ -250,4 +250,4 @@ if (left.length && source === "claude") throw new Error(`story failed its own ch
 if (!result.story) console.log(`story from the cards — ${result.why}`);
 fs.mkdirSync(dir, { recursive: true });
 fs.writeFileSync(path.join(dir, "story.json"), JSON.stringify({ date, mode: plan.mode, format, format_name: FORMATS[format].name, industry, source, via: result.story ? route : null, model: result.model ?? null, proofread: Boolean(result.proofread), note: result.why ?? null, ...story }, null, 1) + "\n");
-console.log(`wrote social/out/${date}/story.json (${FORMATS[format].name}, ${story.slides.length} slides, ${source}${result.story ? ` via ${route}` : ""})`);
+console.log(`wrote social/out/${slot}/story.json (${FORMATS[format].name}, ${story.slides.length} slides, ${source}${result.story ? ` via ${route}` : ""})`);
