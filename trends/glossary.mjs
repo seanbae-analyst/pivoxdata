@@ -1,9 +1,10 @@
 // glossary.mjs — the words the radar uses, explained for someone who has never written code or read a paper.
 // build.mjs renders them as the "용어 풀이" section and turns the first mention of each in a card into a tappable
 // word that shows the same explanation (one source, so the two never disagree).
-//
+import { esc } from "./site.mjs";
+
 // `match`: the spellings that count as a mention in card text, longest first where one contains another.
-export const GLOSSARY = [
+const GLOSSARY = [
   { id: "ax", term: "AX (AI 전환)", match: ["AX"], def: "AI Transformation. 회사가 일하는 방식과 서비스에 AI를 들여 바꾸는 일이에요. 디지털 전환(DX)의 AI판이라고 보면 돼요." },
   { id: "ramp", term: "Ramp AI Index", match: ["Ramp"], def: "미국 기업 7만여 곳의 법인카드·송금 기록으로, AI 도구에 돈을 낸 회사가 몇 %인지 매달 세는 지표예요. 무료 도구나 개인 결제는 안 잡혀요. 미국 연준(FRED)에도 올라와요." },
   { id: "erp", term: "ERP", match: ["ERP"], def: "Enterprise Resource Planning. 회사의 재무·회계·구매·재고·인사 같은 살림을 한 시스템에서 관리하는 소프트웨어예요(예: SAP, Oracle, Workday). IT 컨설팅에서 가장 큰 사업 영역 중 하나예요." },
@@ -25,7 +26,6 @@ export const GLOSSARY = [
   { id: "change", term: "빅 케이스 · 작은 변화", match: [], def: "빅 케이스는 평소와 크게 다른 일(1위가 바뀜, 다운로드가 평소의 1.4배 이상 등)이고, 작은 변화는 어제와 달라진 작은 일(순위 변동, 새로 들어온 모델 등)이에요." },
 ];
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 const rx = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/ /g, "(?: |&nbsp;)");
 // longest spelling first, so "Vercel AI SDK" is explained as itself before "SDK" gets a chance
 const TERMS = GLOSSARY.flatMap((g) => g.match.map((m) => ({ id: g.id, m, re: new RegExp(rx(m)) }))).sort((a, b) => b.m.length - a.m.length);

@@ -7,13 +7,13 @@ import { fileURLToPath } from "node:url";
 import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, AX, NEWS } from "./series.mjs";
 import { onDomain } from "./feeds.mjs";
 import { weekTable, breaks } from "./signals.mjs";
+import { addMonths, lastFullMonth } from "./dates.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const load = (f) => JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"));
 const checks = [];
 const check = (id, ok, fact) => { checks.push({ id, ok, fact }); console.log(`${ok ? "✓" : "✗"}  ${id.padEnd(30)} ${fact}`); };
 const ageDays = (d, ref) => Math.round((new Date(ref) - new Date(d)) / 864e5);
-const fmt = (n) => Math.round(n).toLocaleString("en-US");
 const notes = {};
 // freshness is measured from the day of the check, not from a file's own fetched_at: a file that was not fetched again
 // is as old as it is, whatever date it carries
@@ -59,8 +59,7 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
 // arXiv — every field: an unbroken run of months ending last month, long enough to compare with a year earlier
 {
   const d = load("arxiv.json");
-  const prev = (x) => { const t = +x.slice(0, 4) * 12 + +x.slice(4) - 2; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, "0")}`; };
-  const lastFull = (() => { const t = new Date(runDay + "T00:00:00Z"); t.setUTCDate(0); return t.toISOString().slice(0, 7).replace("-", ""); })();
+  const prev = (x) => addMonths(x, -1), lastFull = lastFullMonth(runDay);
   for (const f of ARXIV_DOMAINS) {
     const x = d.domains?.[f.id];
     if (!x || !x.months.length) { check(`arxiv:${f.id}:months`, false, `${f.name}: 받은 달 없음`); continue; }
@@ -114,8 +113,8 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   check("ax:same-month", new Set(lasts).size === 1, `모든 시리즈의 마지막 달이 같음 (${[...new Set(lasts)].join(", ")})`);
   // each series an unbroken run of months from the same first month: the page reads every series at this month, last
   // month, a year ago and the first month, so a gap (FRED writes "." for a month it lacks) would stop the build
-  const mi = (m) => +m.slice(0, 4) * 12 + +m.slice(5, 7);
-  const run = S.map((x) => { const k = Object.keys(x.months).sort(); return { id: x.id, first: k[0], gaps: k.length ? mi(k.at(-1)) - mi(k[0]) + 1 - k.length : null }; });
+  const run = S.map((x) => { const k = Object.keys(x.months).sort(); let gaps = 0; for (let m = k[0]; k.length && m < k.at(-1); m = addMonths(m, 1)) gaps += !(m in x.months);
+    return { id: x.id, first: k[0], gaps: k.length ? gaps : null }; });
   const broken = run.filter((r) => r.gaps !== 0 || r.first !== run[0].first);
   check("ax:months", broken.length === 0, `모든 시리즈가 ${run[0]?.first}부터 빠진 달 없이 이어짐${broken.length ? ` — 어긋남: ${broken.map((r) => `${r.id}(${r.gaps == null ? "달 없음" : r.gaps ? `빠진 달 ${r.gaps}개` : `${r.first}부터`})`).join(", ")}` : ""}`);
   const bad = S.flatMap((x) => Object.entries(x.months).filter(([, v]) => !(v >= 0 && v <= 100)).map(([m]) => `${x.id} ${m}`));

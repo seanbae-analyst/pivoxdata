@@ -9,6 +9,7 @@ import { fileURLToPath } from "node:url";
 import crypto from "node:crypto";
 import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, HF, SEC, AX, NEWS } from "./series.mjs";
 import { parseFeed, parseArticle, onDomain } from "./feeds.mjs";
+import { addDays, addMonths, lastFullMonth } from "./dates.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const only = process.argv.slice(2);
@@ -40,7 +41,6 @@ async function get(url, as = "json", tries = 8) {
     }
   }
 }
-const addDays = (d, n) => { const t = new Date(d + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); };
 
 // ---------- npm: daily downloads, read in ≤ 365-day windows (the API's limit) ----------
 if (want("npm")) {
@@ -89,8 +89,8 @@ if (want("arxiv")) {
   const old = read("arxiv.json", {});
   // the file used to hold the AI field only; it becomes domains.ai
   const doc = old.domains ? old : { domains: old.total ? { ai: { total: old.total, terms: old.terms } } : {} };
-  const now = new Date(), lastFull = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 0)); // end of last month
-  const monthsFrom = (start) => { const out = []; for (let y = +start.slice(0, 4), m = +start.slice(4); y * 12 + m <= lastFull.getUTCFullYear() * 12 + lastFull.getUTCMonth() + 1; m++) { if (m > 12) { m = 1; y++; } out.push(`${y}${String(m).padStart(2, "0")}`); } return out; };
+  const lastFull = lastFullMonth(today);
+  const monthsFrom = (start) => { const out = []; for (let m = start; m <= lastFull; m = addMonths(m, 1)) out.push(m); return out; };
   const count = async (q, ym) => {
     const last = new Date(Date.UTC(+ym.slice(0, 4), +ym.slice(4), 0)).getUTCDate();
     // max_results=1, not 0: the API answers 0 with an internal error
@@ -129,11 +129,9 @@ if (want("hf")) {
   const pick = (m) => ({ id: m.id, author: m.author ?? m.id.split("/")[0], downloads: m.downloads ?? 0, likes: m.likes ?? 0, task: m.pipeline_tag ?? null, created: (m.createdAt ?? "").slice(0, 10), trending: m.trendingScore ?? null });
   const top = await get(`https://huggingface.co/api/models?sort=downloads&direction=-1&limit=${HF.top}`);
   const trending = await get(`https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=${HF.trending}`);
-  const tasks = {};
-  for (const t of HF.tasks) tasks[t] = (await get(`https://huggingface.co/api/models?pipeline_tag=${t}&sort=trendingScore&direction=-1&limit=10`)).map(pick);
   const doc = read("hf.json", { snapshots: [] });
   const snaps = doc.snapshots.filter((s) => s.date !== today);
-  snaps.push({ date: today, top: top.map(pick), trending: trending.map(pick), tasks });
+  snaps.push({ date: today, top: top.map(pick), trending: trending.map(pick) });
   write("hf.json", { source: { site: "Hugging Face Hub API", url: "https://huggingface.co/api/models?sort={downloads|trendingScore}", note: "downloads = last 30 days, as the Hub reports it" }, fetched_at: today, snapshots: snaps.slice(-60) });
   console.log(`hf    snapshot ${today}: top ${top.length}, trending ${trending.length} (${snaps.length} snapshots kept)`);
 }

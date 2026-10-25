@@ -5,11 +5,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
 export const NAME = "AX 트렌드 레이더";
+// text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
+export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export const PAGES = [
+const PAGES = [
   { file: "index.html", path: "/" },
   { file: "map.html", path: "/map" },
   { file: "404.html", path: "/404", noindex: true },
@@ -131,7 +133,7 @@ export function writePages(fills = {}, lastmod) {
 // a whole page in the site's frame (head tags, top bar, footer) — for pages generated in full, like the briefings
 // phones: pages turned sideways instead of one long scroll (/pager.js) — set before the first paint so the long page never
 // flashes; "?scroll=1" keeps the long page, and a pager that has not started in 4 s gives it back. index.html has a copy.
-export const PAGED_HEAD = `<script>if (matchMedia("(max-width: 640px)").matches && !/[?&]scroll=/.test(location.search)) { const r = document.documentElement; r.classList.add("paged"); setTimeout(() => { if (!r.classList.contains("pgr-ready")) r.classList.remove("paged"); }, 4000); }</script>`;
+const PAGED_HEAD = `<script>if (matchMedia("(max-width: 640px)").matches && !/[?&]scroll=/.test(location.search)) { const r = document.documentElement; r.classList.add("paged"); setTimeout(() => { if (!r.classList.contains("pgr-ready")) r.classList.remove("paged"); }, 4000); }</script>`;
 
 export function shell({ path: p, title, desc, css = "", body, paged = false }) {
   const page = { path: p }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;

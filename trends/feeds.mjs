@@ -5,17 +5,17 @@
 const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", hellip: "…", mdash: "—", ndash: "–", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“" };
 // a number past Unicode (&#99999999;) stays as written — String.fromCodePoint would throw and lose the whole feed
 const cp = (n) => (n <= 0x10ffff ? String.fromCodePoint(n) : null);
-export const decode = (s) => String(s ?? "")
+const decode = (s) => String(s ?? "")
   .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, "$1")
   .replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (m, e) => (e[0] === "#" ? cp(e[1] === "x" || e[1] === "X" ? parseInt(e.slice(2), 16) : +e.slice(1)) ?? m : ENT[e.toLowerCase()] ?? m));
 const strip = (s) => s.replace(/<!--[\s\S]*?(-->|$)/g, " ").replace(/<(script|style)[\s\S]*?<\/\1>/gi, " ").replace(/<[^>]+>/g, " ");
 const squash = (s) => s.replace(/\s+/g, " ").trim();
 // a summary may itself be escaped HTML (decode once more), and some carry a word processor's metadata in a comment
-export const clean = (s) => squash(strip(decode(decode(s))));
+const clean = (s) => squash(strip(decode(decode(s))));
 // a title is text: the feed's layer is decoded, markup dropped, and only then the title's own entities — so a tag
 // written as text ("&amp;lt;b&amp;gt;") reads "<b>" instead of being decoded into a tag and deleted
 const text = (s) => squash(decode(strip(decode(s))));
-export function cut(s, n = 500) {
+function cut(s, n = 500) {
   if (s.length <= n) return s;
   const head = s.slice(0, n), end = Math.max(head.lastIndexOf(". "), head.lastIndexOf("다. "), head.lastIndexOf("? "));
   return end > n * 0.4 ? head.slice(0, end + 1) : head.replace(/\s+\S*$/, "") + "…";
@@ -24,7 +24,7 @@ export function cut(s, n = 500) {
 // be the 25th); Z and GMT are UTC's day. Atom/ISO and RSS dates are read as written; anything else through Date (UTC).
 // `tz` (hours) is for a feed that stamps true UTC times for a place whose day is another: the instant's day there.
 const MON = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12 };
-export function isoDate(s, tz) {
+function isoDate(s, tz) {
   const t = String(s ?? "").trim().replace(/^(\d{4})\.(\d{1,2})\.(\d{1,2})\.?$/, (m, y, mo, d) => `${y}-${mo.padStart(2, "0")}-${d.padStart(2, "0")}`);
   const d = new Date(t);
   if (Number.isNaN(+d)) return null;
