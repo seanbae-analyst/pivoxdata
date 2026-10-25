@@ -14,6 +14,10 @@ on:
   schedule:
     - cron: "41 3 */10 * *" # every 10 days, 03:41 UTC
   workflow_dispatch:
+  # or on request without the button: change social/token-refresh.txt on main (any content, e.g. the date)
+  push:
+    branches: [main]
+    paths: ["social/token-refresh.txt"]
 
 permissions:
   contents: read
