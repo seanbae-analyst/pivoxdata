@@ -106,8 +106,12 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
 // AX news (official announcements). A dead feed or two is reported, not fatal; the posts quote only what is here.
 if (fs.existsSync(path.join(DIR, "news.json"))) {
   const d = load("news.json"), srcs = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
-  const live = NEWS.sources.filter((x) => d.feeds[x.id]?.ok), dead = NEWS.sources.filter((x) => !d.feeds[x.id]?.ok).map((x) => x.id);
-  check("news:sources", live.length >= NEWS.sources.length * 0.6, `공식 출처 ${NEWS.sources.length}곳 중 ${live.length}곳 응답${dead.length ? ` — 응답 없음: ${dead.join(", ")}` : ""}`);
+  // a source counts only when it answered with something to read — feed items, or article links on its news page — as
+  // fetch recorded it. Named when it didn't; under 60% answering is the run or the parser failing, not a feed or two
+  const live = (x) => { const f = d.feeds[x.id]; return !!f?.ok && (x.html ? f.links > 0 : f.items > 0); };
+  const why = (f) => (!f ? "기록 없음" : f.ok ? "항목 0" : /HTTP \d+/.exec(f.error)?.[0] ?? (/no feed items/.test(f.error) ? "피드 항목 없음" : /no article links/.test(f.error) ? "기사 링크 없음" : "연결 실패"));
+  const up = NEWS.sources.filter(live), down = NEWS.sources.filter((x) => !live(x));
+  check("news:sources", up.length >= NEWS.sources.length * 0.6, `공식 출처 ${NEWS.sources.length}곳 중 ${up.length}곳이 피드·기사 목록으로 응답${down.length ? ` — 못 읽음: ${down.map((x) => `${x.id}(${why(d.feeds[x.id])})`).join(", ")}` : ""}`);
   const off = d.items.filter((x) => !srcs[x.src] || !onDomain(x.link, srcs[x.src].domains));
   check("news:official", off.length === 0, `기사 ${d.items.length}건 모두 그 회사·기관 자기 도메인의 원문 링크${off.length ? ` — 어긋남: ${off.map((x) => x.link).join(", ")}` : ""}`);
   const badDate = d.items.filter((x) => !(ageDays(x.date, d.fetched_at) >= -1 && ageDays(x.date, d.fetched_at) <= NEWS.days));

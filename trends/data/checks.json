@@ -215,7 +215,7 @@
   {
    "id": "news:sources",
    "ok": true,
-   "fact": "공식 출처 20곳 중 20곳 응답"
+   "fact": "공식 출처 20곳 중 19곳이 피드·기사 목록으로 응답 — 못 읽음: anthropic(항목 0)"
   },
   {
    "id": "news:official",
