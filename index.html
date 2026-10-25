@@ -229,9 +229,8 @@ if (matchMedia("(max-width: 640px)").matches && !/[?&]scroll=/.test(location.sea
     .ins,.ins.lead{padding:16px 0 4px}
   }
   /* ---------- phone pages (pager.js): the cover, then one card or one screenful of a list per page ---------- */
-  .pg .pg-brand{margin:0 0 22px}
   .pg>.hero h1{font-size:34px}
-  @media(max-height:700px){.pg .pg-brand,.pg .kpi small{display:none} .pg>.hero h1{font-size:30px}}
+  @media(max-height:700px){.pg .kpi small{display:none} .pg>.hero h1{font-size:30px}}
   .pg-hint{margin:auto 0 0;padding-top:20px;font-size:13.5px;color:var(--mut)} .pg-hint b{color:var(--bronze-hi);font-weight:600}
   .pg>.ins{flex:1 0 auto;border-top:0;padding:0}
   .pg .ins .big,.pg .ins.lead .big{font-size:52px}
@@ -518,14 +517,13 @@ csvButton(document.getElementById("csvCapex"), "bigtech-capex-quarterly.csv", D.
 import { pager } from "/pager.js";
 const $ = (s) => document.querySelector(s), all = (s) => [...document.querySelectorAll(s)];
 const make = (tag, cls, html) => Object.assign(document.createElement(tag), { className: cls, innerHTML: html });
-const brand = make("p", "pg-brand", ""); brand.append($(".topbar .brand").cloneNode(true));
 const basis = make("div", "pg-more", `<div class="sec-h"><h2>근거 데이터</h2></div>
   <p>화면의 숫자가 어디서 왔고 어떻게 계산·검산했는지예요. 개발자가 내려받는 패키지(npm·PyPI), 논문(arXiv), 오픈 모델(Hugging Face), 빅테크 설비투자(SEC)의 표와 차트도 여기에 있어요.</p>
   <p>표가 길어서 위아래로 읽는 화면으로 열려요.</p><a class="pg-btn" href="/?scroll=1#more">근거 데이터 열기</a>`);
 const links = $("footer.site .links")?.cloneNode(true); if (links) { links.className = "pg-links"; basis.append(links); }
 const changes = 'section[aria-labelledby="h-changes"]', ul = () => make("ul", "events", ""), dl = () => make("dl", "gl-list", "");
 pager([
-  { id: "start", name: "요약", pages: [[brand, $("main>header.hero"), $("#appbar"), make("p", "pg-hint", "옆으로 넘기면 <b>브리핑 · 지표 · 공식 발표</b> →")]] },
+  { id: "start", name: "요약", pages: [[$("main>header.hero"), $("#appbar"), make("p", "pg-hint", "옆으로 넘기면 <b>브리핑 · 지표 · 공식 발표</b> →")]] },
   { id: "briefs", name: "브리핑", head: $("#briefs .sec-h"), items: all("#briefs .events>li"), list: ul },
   { id: "ax", name: "도입률", pages: all("#panel-ax>.ins").map((c) => [c]) },
   { id: "domains", name: "IT 영역", pages: all("#panel-domains>.ins").map((c) => [c]) },
