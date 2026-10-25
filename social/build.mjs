@@ -124,17 +124,20 @@ const covers = {
 
 // ---------- story slides ----------
 function storySlides(st) {
-  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, ""));
+  // a number, a closing bracket or % stays on the same line as the particle after it ("36.2%로", "(1년 전 3.5%)로")
+  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, "").replace(/([\d%)])(?=[가-힣])/g, "$1\u2060"));
+  // each line the writer broke on is its own block: when the text grows enough that one has to wrap, it splits evenly
+  const lines = (t) => String(t ?? "").split("\n").map((l) => `<span class="ln">${e(l)}</span>`).join("");
   return st.slides.map((s, i) => {
     const kick = `<div class="kick"><span>${e(s.kicker || (i ? "" : `AX 트렌드 레이더 · ${when}`))}</span><span class="pg">${i + 1} / ${N}</span></div>`;
     const num = s.number ? `<div class="num"><b>${e(s.number)}</b>${s.label ? `<span>${e(s.label)}</span>` : ""}</div>` : "";
     const items = (s.items ?? []).length ? `<ol${s.items.length >= 5 ? ' class="many"' : ""}>${s.items.map((x) => `<li>${e(x)}</li>`).join("")}</ol>` : "";
-    const body = s.body ? `<p class="txt">${e(s.body)}</p>` : "";
-    const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${e(s.title)}</h2>${body}${num}`
-      : s.kind === "quiz" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
-      : s.kind === "end" ? `${kick}<h2>${e(s.title)}</h2>${body}${items}`
-      : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${e(s.title)}</h2>${body}${items}`
-      : `${kick}<h2>${e(s.title)}</h2>${body}${items}`;
+    const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
+    const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${lines(s.title)}</h2>${body}${num}`
+      : s.kind === "quiz" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
+      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}`
+      : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
+      : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
     return `<section class="slide st ${e(s.kind)}">${inner}${foot}</section>`;
   }).join("\n");
 }
@@ -149,12 +152,12 @@ const html = `<!doctype html>
 <title>Instagram 카드 ${date}</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>
-  /* light by default: the feed is mostly bright, and a dark card full of numbers gets scrolled past. The alert cover
-     stays dark, so a big case still looks different from an ordinary post. */
-  :root{--bg:#f6f2ec;--surface:#ffffff;--line:rgba(30,22,12,.12);--ink:#16120d;--ink-2:#3b342b;--mut:#6e655a;--dim:#968c80;--bronze:#9a7240;--bronze-hi:#8a622f;--bronze-soft:rgba(154,114,64,.12);--bronze-line:rgba(154,114,64,.42)}
+  /* PivoxQuant's look (frontend/CLAUDE.md, 2026-10-11): Vantablack + ivory + bronze, Pretendard only, 14px card
+     corners, no bronze glow, no wide letter-spacing. A big case is told apart by the bronze band on its cover. */
+  :root{--bg:#050505;--onyx:#111111;--surface:rgba(245,240,232,.04);--line:rgba(245,240,232,.08);--ink:#f5f0e8;--ink-2:rgba(245,240,232,.82);--mut:rgba(245,240,232,.65);--dim:rgba(245,240,232,.5);--bronze:#b8956a;--bronze-hi:#b8956a;--bronze-soft:rgba(184,149,106,.12);--bronze-line:rgba(184,149,106,.42);--r-card:14px;--r-cta:10px}
   *{box-sizing:border-box} html,body{margin:0;background:#222}
   body{font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;color:var(--ink);word-break:keep-all}
-  .slide{width:1080px;height:1350px;background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.22),transparent 60%),var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
+  .slide{width:1080px;height:1350px;background:var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}
   .kick{font-size:30px;font-weight:600;color:var(--bronze-hi);letter-spacing:-.01em}
   .big{font-size:200px;font-weight:800;letter-spacing:-.05em;line-height:1;margin-top:64px;font-variant-numeric:tabular-nums}
   .bl{font-size:32px;color:var(--mut);margin-top:18px}
@@ -163,7 +166,7 @@ const html = `<!doctype html>
   h2{font-size:52px;line-height:1.3;letter-spacing:-.03em;margin:64px 0 0;font-weight:700}
   p{font-size:32px;line-height:1.6;color:var(--ink-2);margin:28px 0 0}
   /* the plain-words box: what the number means, for someone who has never seen npm or arXiv */
-  .easy{background:#fff;box-shadow:0 1px 0 var(--line) inset,0 0 0 1px var(--line);border-radius:24px;padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
+  .easy{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-card);padding:26px 30px;color:var(--ink);font-size:33px;line-height:1.55}
   .easy span{display:block;font-size:24px;font-weight:700;color:var(--bronze-hi);margin-bottom:6px}
   .easy-s{font-size:30px;color:var(--ink-2);margin-top:22px}
   .sp{margin-top:auto;margin-bottom:28px}
@@ -189,39 +192,56 @@ const html = `<!doctype html>
   .c-list li span{font-size:34px;line-height:1.4;color:var(--ink-2)}
   .c-grid h1{font-size:84px}
   .c-grid .tiles{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:72px}
-  .c-grid .tile{border:1px solid var(--bronze-line);border-radius:28px;padding:30px 30px 34px;background:var(--bronze-soft)}
+  .c-grid .tile{border:1px solid var(--bronze-line);border-radius:var(--r-card);padding:30px 30px 34px;background:var(--bronze-soft)}
   .c-grid .tk{font-size:26px;color:var(--bronze-hi);font-weight:600} .c-grid .tb{font-size:84px;font-weight:800;letter-spacing:-.04em;margin-top:14px;font-variant-numeric:tabular-nums}
   .c-grid .tl{font-size:24px;color:var(--mut);margin-top:10px;line-height:1.4}
   .c-hero .big{font-size:260px;margin-top:110px;color:var(--bronze-hi)}
   .c-hero h1{font-size:68px;line-height:1.25;margin-top:56px}
   .c-hero .sp{margin:auto 0 0} .c-hero .sp .viz:not(.fit){height:220px}
   .c-hero .next{font-size:30px;color:var(--mut);margin:28px 0 36px}
-  .c-alert{background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.28),transparent 60%),#12100d;color:#f4efe7}
-  .c-alert .kick{color:#cdab80} .c-alert .foot{color:#a89f93;border-color:rgba(255,255,255,.14)}
-  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border-radius:999px;background:#cdab80;color:#12100d}
+  .c-alert{border-top:14px solid var(--bronze)}
+  .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
-  .c-alert .big{font-size:150px;margin-top:auto;color:#cdab80} .c-alert .bl{color:#c9c0b4;margin-bottom:56px}
+  .c-alert .big{font-size:150px;margin-top:auto;color:var(--bronze-hi)} .c-alert .bl{margin-bottom:56px}
 
-  /* story slides: words first — a headline, a few sentences, at most one number */
-  .st .kick{display:flex;justify-content:space-between;gap:20px} .st .kick .pg{color:var(--dim);font-weight:500}
-  .st h2{font-size:64px;line-height:1.25;letter-spacing:-.035em;margin:52px 0 0;font-weight:800}
-  .st .txt{font-size:38px;line-height:1.7;color:var(--ink-2);margin:36px 0 0;white-space:pre-line}
-  .st .num{display:flex;align-items:baseline;gap:24px;margin-top:48px} .st .num b{font-size:150px;font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{font-size:30px;color:var(--mut);line-height:1.4}
-  .st ol{list-style:none;padding:0;margin:44px 0 0;display:grid;gap:20px;counter-reset:i}
-  .st ol li{counter-increment:i;display:grid;grid-template-columns:64px 1fr;gap:20px;align-items:start;font-size:34px;line-height:1.5;color:var(--ink-2);padding:22px 26px;background:#fff;border-radius:22px;box-shadow:0 0 0 1px var(--line)}
-  .st ol li::before{content:counter(i);width:52px;height:52px;border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:28px}
+  /* story slides: words first — a headline, a few sentences, at most one number. Every size is scaled by --k, which
+     fit() in the page sets per slide so the words fill the slide instead of leaving an empty bottom half. */
+  .st{--k:1} .st.mid>:nth-child(2){margin-top:auto} .st .ln{display:block;text-wrap:balance} .st .txt .ln+.ln{margin-top:.28em}
+  .st .kick{display:flex;justify-content:space-between;gap:calc(var(--k)*20px)} .st .kick .pg{color:var(--dim);font-weight:500}
+  .st h2{font-size:calc(var(--k)*64px);line-height:1.28;letter-spacing:-.03em;margin:calc(var(--k)*52px) 0 0;font-weight:800;white-space:pre-line}
+  .st .txt{font-size:calc(var(--k)*38px);line-height:1.7;color:var(--ink-2);margin:calc(var(--k)*36px) 0 0;white-space:pre-line}
+  .st .num{display:flex;flex-wrap:wrap;align-items:baseline;gap:calc(var(--k)*24px);margin-top:calc(var(--k)*48px)} .st .num b{font-size:calc(var(--k)*150px);font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{flex:1 1 calc(var(--k)*300px);font-size:calc(var(--k)*30px);color:var(--mut);line-height:1.4}
+  .st ol{list-style:none;padding:0;margin:calc(var(--k)*44px) 0 0;display:grid;gap:calc(var(--k)*20px);counter-reset:i}
+  .st ol li{counter-increment:i;display:grid;grid-template-columns:calc(var(--k)*64px) 1fr;gap:calc(var(--k)*20px);align-items:start;font-size:calc(var(--k)*34px);line-height:1.5;color:var(--ink-2);padding:calc(var(--k)*22px) calc(var(--k)*26px);background:var(--surface);border-radius:var(--r-card);border:calc(var(--k)*1px) solid var(--line)}
+  .st ol li::before{content:counter(i);width:calc(var(--k)*52px);height:calc(var(--k)*52px);border-radius:50%;background:var(--bronze-soft);color:var(--bronze-hi);display:grid;place-items:center;font-weight:800;font-size:calc(var(--k)*28px)}
   .st.quiz ol li::before{content:counter(i, upper-alpha)}
-  .st ol.many{gap:14px;margin-top:34px} .st ol.many li{font-size:30px;padding:16px 22px} .st ol.many li::before{width:44px;height:44px;font-size:24px}
-  .st .hint{font-size:28px;color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:36px}
-  .st.cover h2{font-size:92px;line-height:1.16;margin-top:110px} .st.cover .txt{font-size:40px}
-  .st.cover .badge{align-self:flex-start;margin-top:72px;font-size:30px;font-weight:800;padding:12px 26px;border-radius:999px;background:var(--bronze);color:#fff}
-  .st.answer .num b{font-size:180px} .st.end{background:radial-gradient(1200px 700px at 85% -10%,rgba(184,149,106,.28),transparent 60%),#12100d;color:#f4efe7}
-  .st.end .kick{color:#cdab80} .st.end .txt,.st.end ol li{color:#d9d1c6} .st.end ol li{background:rgba(255,255,255,.06);box-shadow:none} .st.end ol li::before{background:rgba(205,171,128,.18);color:#cdab80}
-  .st.end .foot{color:#a89f93;border-color:rgba(255,255,255,.14)} .st.end .url{font-size:40px;font-weight:700;color:#cdab80;margin-top:auto;margin-bottom:36px}
+  .st ol.many{gap:calc(var(--k)*14px);margin-top:calc(var(--k)*34px)} .st ol.many li{font-size:calc(var(--k)*30px);padding:calc(var(--k)*16px) calc(var(--k)*22px)} .st ol.many li::before{width:calc(var(--k)*44px);height:calc(var(--k)*44px);font-size:calc(var(--k)*24px)}
+  .st .hint{font-size:calc(var(--k)*28px);color:var(--bronze-hi);font-weight:700;margin-top:auto;margin-bottom:calc(var(--k)*36px)}
+  .st.cover h2{font-size:calc(var(--k)*92px);line-height:1.16;margin-top:calc(var(--k)*110px)} .st.cover .txt{font-size:calc(var(--k)*40px)}
+  .st.cover .badge{align-self:flex-start;margin-top:calc(var(--k)*72px);font-size:calc(var(--k)*30px);font-weight:700;padding:calc(var(--k)*12px) calc(var(--k)*24px);border-radius:var(--r-cta);background:var(--bronze);color:var(--bg)}
+  .st.answer .num b{font-size:calc(var(--k)*180px)} .st.end{background:var(--onyx)}
 </style>
 </head>
 <body data-date="${date}">
 ${story ? storySlides(story) : `${covers[cover]}\n${slides.map(slideHtml).join("\n")}`}
+<script>
+  // grow each story slide's words (--k, 0.7–1.6×) until they fill it — no empty bottom half. Whatever space is still
+  // left at 1.6× goes above and below the content. render.mjs calls this after the fonts load, since the measurement
+  // depends on them.
+  window.fit = () => {
+    const search = (lo, hi, ok) => { if (ok(hi)) return hi; for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (ok(m)) lo = m; else hi = m; } return lo; };
+    for (const s of document.querySelectorAll(".slide.st")) {
+      s.classList.remove("mid");
+      const set = (k) => s.style.setProperty("--k", k);
+      const height = (k) => { set(k); s.style.height = "auto"; const h = s.offsetHeight; s.style.height = ""; return h; };
+      const k = search(0.7, 1.6, (k) => height(k) <= 1350 - 48);
+      set(k.toFixed(3));
+      if (1350 - height(k) > 120) s.classList.add("mid");
+      set(k.toFixed(3));
+    }
+  };
+  document.fonts.ready.then(window.fit);
+</script>
 </body>
 </html>
 `;

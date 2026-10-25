@@ -21,7 +21,7 @@ const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePa
 try {
   const p = await browser.newPage({ viewport: { width: 1080, height: 1350 }, deviceScaleFactor: 1 });
   await p.goto(pathToFileURL(page).href, { waitUntil: "networkidle" });
-  await p.evaluate(() => document.fonts.ready);
+  await p.evaluate(async () => { await document.fonts.ready; window.fit?.(); });
   const slides = await p.locator(".slide").all();
   const files = [];
   for (const [i, s] of slides.entries()) {

@@ -78,6 +78,15 @@ function check(story) {
   if (META.test(all) || /^\s*(-{3,}|\*{3,})\s*$/m.test(story?.caption ?? "")) p.push("게시물이 아닌 메모가 섞임");
   if (!story?.caption || plain(story.caption).length > 1400) p.push("caption은 1~1400자");
   if (/#|https?:\/\//.test(story?.caption ?? "")) p.push("캡션에 해시태그·링크 쓰지 말 것(코드가 붙임)");
+  // typography a reader notices at once: double spaces, a space before punctuation, unmatched brackets, a title
+  // broken into more than two lines
+  (story?.slides ?? []).forEach((sl, i) => {
+    const t = textOf(sl);
+    if (/[^\S\n]{2,}/.test(t)) p.push(`${i + 1}장: 띄어쓰기가 두 칸인 곳이 있음`);
+    if (/[^\S\n][.,!?)]/.test(t)) p.push(`${i + 1}장: 문장부호·닫는 괄호 앞에 빈칸`);
+    if ((t.match(/\(/g) ?? []).length !== (t.match(/\)/g) ?? []).length) p.push(`${i + 1}장: 괄호 짝이 맞지 않음`);
+    if (String(sl.title ?? "").split("\n").length > 2) p.push(`${i + 1}장: 제목 줄바꿈은 한 번까지`);
+  });
   return p;
 }
 
@@ -93,6 +102,8 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 인스타그램 카드뉴스 
 - 앞으로 어떻게 될지 단정하지 않는다. 무엇을 사거나 팔라고 하지 않는다. "추천", "전망", "예상", "급등" 같은 말을 쓰지 않는다.
 - 쉬운 존댓말(~요). 전문 용어(SDK, %p, Ramp AI Index 등)는 처음 나올 때 짧게 풀어 준다.
 - Ramp AI Index는 미국 기업, 유료 결제 기준이라는 점을, 다운로드는 사용자 수가 아니라 설치 횟수라는 점을 필요한 곳에서 한 번씩 밝힌다.
+- 문법: 조사는 앞말의 받침에 맞춘다. 숫자·영어 뒤에서도 읽는 소리 기준이다(Anthropic은, OpenAI는, 12.1%p는, 3위로, SDK를). 띄어쓰기는 표준어 규정대로, 문장 끝은 ~요/~예요/~이에요로 맞춘다(받침 없으면 ~예요, 있으면 ~이에요).
+- 줄바꿈: 본문은 한 문장이나 한 뜻 덩어리마다 줄을 바꾼다("\n"). 한 줄은 한 호흡(대략 40자 안쪽)으로. 단어·숫자 중간이나 조사 앞에서 끊지 않는다. 제목이 20자를 넘으면 뜻이 나뉘는 곳에서 한 번만 "\n"으로 끊는다.
 - 캡션은 게시물 내용을 5~10줄로 요약한 본문만. 해시태그·링크·출처 줄은 쓰지 않는다(코드가 붙인다).
 
 출력은 JSON 하나만, 다른 글 없이:
@@ -129,6 +140,26 @@ async function fromClaude(route) {
   return { story: null, why: "checks failed twice" };
 }
 
+// ---------- proofreading: a second read that may fix only grammar, spacing and line breaks ----------
+const PROOF = `너는 한국어 교정자다. 인스타그램 카드뉴스 JSON을 받아 같은 구조의 JSON으로 돌려준다.
+고치는 것: 맞춤법, 띄어쓰기, 조사(앞말 받침에 맞게 — 숫자·영어는 읽는 소리 기준), 어색한 문장, 문장 끝(~요 존댓말 통일), 줄바꿈("\\n": 본문은 한 문장·한 뜻 덩어리마다, 제목은 20자를 넘을 때 뜻이 나뉘는 곳에서 한 번만, 단어·숫자 중간이나 조사 앞에서 끊지 않기).
+고치지 않는 것: 숫자(한 글자도), 사실, 장 수와 순서, kind, 내용의 뜻. 새 내용을 더하지 않는다.
+출력은 JSON 하나만, 다른 글 없이.`;
+// the figures (not the 1–10 used for counts and wording like "1위") must stay exactly as they were, each as often
+const numbersOf = (st) => numbersIn([...st.slides.map(textOf), st.caption].map(plain).join("\n")).filter((n) => !/^([1-9]|10)$/.test(n)).sort().join(" ");
+async function proofread(route, story) {
+  const res = await ask(route, PROOF, [{ role: "user", content: JSON.stringify({ slides: story.slides, caption: story.caption }) }]);
+  if (res.refusal) return null;
+  let out;
+  try { out = parse(res.text); } catch { return null; }
+  // the proofreader must leave every number and the slide order exactly as they were
+  if (out?.slides?.length !== story.slides.length || out.slides.some((x, i) => x.kind !== story.slides[i].kind) || numbersOf(out) !== numbersOf(story) || check(out).length) {
+    console.log(`proofread discarded: ${check(out ?? {}).join(" / ") || "numbers or slide order changed"}`);
+    return null;
+  }
+  return out;
+}
+
 // ---------- fallback: a plain story from the day's cards ----------
 function fromCards() {
   const [lead, ...rest] = cards;
@@ -144,7 +175,13 @@ function fromCards() {
 let result = { story: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
 const route = pickRoute();
 if (route) {
-  try { result = await fromClaude(route); } catch (e) {
+  try {
+    result = await fromClaude(route);
+    if (result.story) {
+      const fixed = await proofread(route, result.story);
+      if (fixed) result = { ...result, story: fixed, proofread: true };
+    }
+  } catch (e) {
     if (e instanceof ClaudeUnavailable) result = { story: null, why: e.message };
     else throw e;
   }
@@ -155,5 +192,5 @@ const left = check(story);
 if (left.length && source === "claude") throw new Error(`story failed its own checks: ${left.join(" / ")}`);
 if (!result.story) console.log(`story from the cards — ${result.why}`);
 fs.mkdirSync(dir, { recursive: true });
-fs.writeFileSync(path.join(dir, "story.json"), JSON.stringify({ date, mode: plan.mode, format, format_name: FORMATS[format].name, industry, source, via: result.story ? route : null, model: result.model ?? null, note: result.why ?? null, ...story }, null, 1) + "\n");
+fs.writeFileSync(path.join(dir, "story.json"), JSON.stringify({ date, mode: plan.mode, format, format_name: FORMATS[format].name, industry, source, via: result.story ? route : null, model: result.model ?? null, proofread: Boolean(result.proofread), note: result.why ?? null, ...story }, null, 1) + "\n");
 console.log(`wrote social/out/${date}/story.json (${FORMATS[format].name}, ${story.slides.length} slides, ${source}${result.story ? ` via ${route}` : ""})`);
