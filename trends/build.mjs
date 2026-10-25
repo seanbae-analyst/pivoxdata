@@ -27,6 +27,10 @@ const pp = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "")
 const sh = (v, d = 1) => (v == null ? "—" : (v * 100).toFixed(d) + "%");
 const usd = (v) => "$" + (v / 1e9).toFixed(1) + "B";
 const wlbl = (w) => `${+w.slice(5, 7)}월 ${+w.slice(8)}일 주`;
+// a week with its year when that isn't `ref`'s, so a range that crosses a year says so ("2024년 10월 14일 주–2026년
+// 10월 5일 주" — without the years it read backwards)
+const wyr = (w, ref) => (w.slice(0, 4) === ref.slice(0, 4) ? wlbl(w) : `${w.slice(0, 4)}년 ${wlbl(w)}`);
+const wspan = (a, b) => `${wyr(a, b)}–${wyr(b, a)}`;
 const mlbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(4)}월`;
 const qlbl = (q) => `${q.slice(0, 4)}년 ${q.slice(5)}분기`;
 const cls = (v) => (v == null ? "" : v < 0 ? "neg" : "pos");
@@ -125,6 +129,9 @@ const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > 
 
 // the day this build describes: the latest fetch of any source
 const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at].sort().at(-1);
+// a finished week named from that day: 지난주 only when it is last week (npm's newest weeks are often still being
+// counted and are left out, so its latest finished week can be two or three weeks back) — otherwise its date
+const wname = (w) => { const d = (new Date(updated) - new Date(w)) / 864e5; return d >= 7 && d < 14 ? "지난주" : wlbl(w); };
 
 // ---------- insights ----------
 // One object per insight: a big number, a one-line headline, a short body and a small trend line. The page and the
@@ -144,7 +151,7 @@ const nRank = ranked(npm), pRank = ranked(pypi), nTop = nRank.slice(0, 3), pTop 
 const acc = npm.rows.filter((r) => isAI(r) && r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
 const lastN = (a, n) => a.slice(Math.max(0, a.length - n));
 const lv = (x, pkg, n) => lastN(x.W[pkg].map((w) => w.level), n);
-const span = (x, n) => `${wlbl(lastN(x.weeks, n)[0])}–${wlbl(x.weeks.at(-1))}`;
+const span = (x, n) => wspan(lastN(x.weeks, n)[0], x.weeks.at(-1));
 // data shapes for viz.mjs — each insight lists the ones it can be drawn from, best first
 const series = (values, formats) => ({ kind: "series", values: values.map(r4), ...(formats ? { formats } : {}) });
 const versus = (from, to, fmt, fromLabel, toLabel) => ({ kind: "versus", from: r4(from), to: r4(to), fromText: fmt(from), toText: fmt(to), fromLabel, toLabel });
@@ -167,7 +174,7 @@ const insights = [
   { id: "pypi", k: "개발자 · Python", big: pp(pTop[0].excess), bl: "인기 패키지보다 더 늘어난 폭 · 4주",
     title: `파이썬에서 가장 빨리 크는 쪽은 <b>${keep(pTop[0].name)}</b>`,
     body: `4주 다운로드 ${pc(pTop[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}. 다음은 ${pTop.slice(1).map((r) => `${esc(r.name)}(${pp(r.excess)})`).join(", ")}.`,
-    easy: `파이썬 개발자들의 다운로드가 한 달 새 ${pc(pTop[0].g4)} 늘었어요. 인기 패키지(${pc(pypi.base)})보다 ${pp(pTop[0].excess)} 더 빨라요.`, viz: [rank(pRank, short, (r) => r.excess, (r) => pp(r.excess)), series(pypi.W[pTop[0].pkg].slice(pypi.from).map((w) => w.level))], src: `PyPI 평일 다운로드 · ${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주` },
+    easy: `파이썬 개발자들의 다운로드가 한 달 새 ${pc(pTop[0].g4)} 늘었어요. 인기 패키지(${pc(pypi.base)})보다 ${pp(pTop[0].excess)} 더 빨라요.`, viz: [rank(pRank, short, (r) => r.excess, (r) => pp(r.excess)), series(pypi.W[pTop[0].pkg].slice(pypi.from).map((w) => w.level))], src: `PyPI 평일 다운로드 · ${wspan(pypi.weeks[pypi.from], pypi.last)}` },
   ...(axTop ? [{ id: "arxiv", k: "연구", big: `${axTop.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 AI 논문 비율 · 1년 전과 비교",
     title: `연구자들이 가장 빠르게 더 쓰는 말은 <b>${keep(axTop.name)}</b>`,
     body: `최근 3개월 AI 논문의 ${sh(axTop.now)}가 초록에 썼습니다(1년 전 ${sh(axTop.then)}). 가장 많이 쓰인 말은 ${esc(axBiggest.name)}(${sh(axBiggest.now)}).`,
@@ -186,7 +193,7 @@ const insights = [
 const vizHtml = (x) => { const o = options(x.viz)[0]; return o ? draw(x.viz[o.i], o.format) : ""; };
 // ---------- topic tabs: AI is the radar above; every other topic is one arXiv field + its packages (+ HF tasks) ----------
 const pyRow = (pkg) => pypi.rows.find((r) => r.pkg === pkg);
-const pySpan = `${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주`;
+const pySpan = wspan(pypi.weeks[pypi.from], pypi.last);
 const topicPk = (t) => (t.pypi ?? []).map(pyRow).filter((r) => r && r.level >= TOPIC_MIN_LEVEL);
 const topicFast = (t) => topicPk(t).filter((r) => r.excess != null).sort((a, b) => b.excess - a.excess);
 function topicCards(t) {
@@ -395,26 +402,26 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
   const peers = list.filter((p) => isAI(p) && x.W[p.pkg].at(-1).level >= MIN_LEVEL && usual(p.pkg)).map((p) => ({ ...p, r: x.W[p.pkg].at(-1).level / usual(p.pkg) })).sort((a, b) => b.r - a.r);
   const pm = median(peers.map((p) => p.r));
   if (ctrl != null && pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
-    id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: "지난주 AI 패키지 다운로드 · 평소와 비교",
-    title: `지난주 ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
+    id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: `${wname(wk)} AI 패키지 다운로드 · 평소와 비교`,
+    title: `${wname(wk)} ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
     easy: `${src} AI 패키지들이 한꺼번에 평소보다 많이 내려받아졌어요. 시장 전체(대조군 ${ctrl.toFixed(2)}배)보다도 높아요.`, viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)} 주` } });
   for (const p of list) {
     const r = x.rows.find((q) => q.pkg === p.pkg), L = x.W[p.pkg].at(-1).level, u = usual(p.pkg), name = nm(p);
     if (L == null || !u || L < (p.group === "topic" ? TOPIC_MIN_LEVEL : MIN_LEVEL)) continue;
     const vs = L / u / (!isAI(p) || pm == null ? ctrl : Math.max(ctrl, pm)), topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
     if (ctrl != null && vs >= SURGE_SMALL) { const tier = vs >= SURGE ? "big" : "small"; events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: tier === "big" ? "급증" : "증가", tier, score: 50 + (vs - 1) * 50, topic, card: {
-      id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: "지난주 다운로드 · 평소와 비교",
-      title: `지난주 <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
+      id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: `${wname(wk)} 다운로드 · 평소와 비교`,
+      title: `${wname(wk)} <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
       body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배${isAI(p) && pm != null ? `, AI 패키지 전반은 ${pm.toFixed(2)}배` : ""}였습니다.`,
-      easy: `평소 한 주보다 ${(L / u).toFixed(1)}배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.`, viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[n - levels.length])}–${wlbl(wk)}` } }); }
+      easy: `평소 한 주보다 ${(L / u).toFixed(1)}배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.`, viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, wname(wk))], src: `${src} 평일 다운로드 · ${wspan(x.weeks[n - levels.length], wk)}` } }); }
     const hist = x.W[p.pkg].slice(x.from, n - 1).filter((w) => w.level != null);
     if (hist.length >= ATH_SMALL_WEEKS) { const ti = hist.reduce((a, b, i) => (b.level > hist[a].level ? i : a), 0), top = hist[ti], tier = hist.length >= 26 && L > top.level * ATH ? "big" : "small";
       // a steady grower sets a high every week; a small one counts only when the old high is 8+ weeks old
       if (L > top.level && (tier === "big" || ti <= hist.length - 8)) events.push({ key: `ath:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "최고치", tier, score: 40 + (L / top.level - 1) * 100, topic, card: {
-        id: `ev-ath-${p.pkg}`, k: tag(tier, `${src} 최고치`), big: man(L), bl: "평일 하루 다운로드, 지난주",
+        id: `ev-ath-${p.pkg}`, k: tag(tier, `${src} 최고치`), big: man(L), bl: `평일 하루 다운로드, ${wname(wk)}`,
         title: `<b>${keep(name)}</b> 주간 다운로드가 역대 최고`,
-        body: `이전 최고(${wlbl(top.week)})보다 ${pc(L / top.level - 1, 0)} 많습니다.${r?.g4 != null ? ` 4주 성장 ${pc(r.g4)}, 대조군 ${pc(x.base)}.` : ""}`,
-        easy: `기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 ${pc(L / top.level - 1, 0)} 많아요.`, viz: [series(lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 104), ["line", "area", "columns"]), versus(top.level, L, man, "이전 최고", "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[Math.max(x.from, n - 104)])}–${wlbl(wk)}` } });
+        body: `이전 최고(${wyr(top.week, wk)})보다 ${pc(L / top.level - 1, 0)} 많습니다.${r?.g4 != null ? ` 4주 성장 ${pc(r.g4)}, 대조군 ${pc(x.base)}.` : ""}`,
+        easy: `기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 ${pc(L / top.level - 1, 0)} 많아요.`, viz: [series(lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 104), ["line", "area", "columns"]), versus(top.level, L, man, "이전 최고", wname(wk))], src: `${src} 평일 다운로드 · ${wspan(x.weeks[Math.max(x.from, n - 104)], wk)}` } });
     }
   }
 }
