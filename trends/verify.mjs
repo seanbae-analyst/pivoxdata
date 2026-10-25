@@ -95,6 +95,12 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   check("ax:present", S.length === AX.series.length && S.every((x) => Object.keys(x.months).length >= 24), `Ramp AI Index ${S.length}개 시리즈, 모두 24개월 이상`);
   check("ax:fresh", last && ageDays(`${last}-01`, d.fetched_at) <= 100, `가장 늦은 시리즈도 ${last}까지 (월 단위, 한두 달 늦게 나옴)`);
   check("ax:same-month", new Set(lasts).size === 1, `모든 시리즈의 마지막 달이 같음 (${[...new Set(lasts)].join(", ")})`);
+  // each series an unbroken run of months from the same first month: the page reads every series at this month, last
+  // month, a year ago and the first month, so a gap (FRED writes "." for a month it lacks) would stop the build
+  const mi = (m) => +m.slice(0, 4) * 12 + +m.slice(5, 7);
+  const run = S.map((x) => { const k = Object.keys(x.months).sort(); return { id: x.id, first: k[0], gaps: k.length ? mi(k.at(-1)) - mi(k[0]) + 1 - k.length : null }; });
+  const broken = run.filter((r) => r.gaps !== 0 || r.first !== run[0].first);
+  check("ax:months", broken.length === 0, `모든 시리즈가 ${run[0]?.first}부터 빠진 달 없이 이어짐${broken.length ? ` — 어긋남: ${broken.map((r) => `${r.id}(${r.gaps == null ? "달 없음" : r.gaps ? `빠진 달 ${r.gaps}개` : `${r.first}부터`})`).join(", ")}` : ""}`);
   const bad = S.flatMap((x) => Object.entries(x.months).filter(([, v]) => !(v >= 0 && v <= 100)).map(([m]) => `${x.id} ${m}`));
   check("ax:range", bad.length === 0, `모든 값이 0~100% 안${bad.length ? ` — 어긋남: ${bad.join(", ")}` : ""}`);
   const all = d.series.RAMPAIALL.months, vendors = ["RAMPAIANTHROPIC", "RAMPAIOPENAI", "RAMPAIXAI"].map((id) => d.series[id].months);
