@@ -118,19 +118,6 @@ const covers = {
 </section>`,
 };
 
-const outro = `<section class="slide outro">
-  <div class="kick">어떻게 쟀나</div>
-  <h2>매일 같은 방식으로 재고,<br>평소와 크게 다를 때 올립니다</h2>
-  <ul>
-    <li>개발자 다운로드: npm · PyPI(CC BY 4.0) — 대조군(react·numpy 등)과 견줘 평소보다 얼마나 더 컸는지 봅니다</li>
-    <li>연구: arXiv 논문 초록(CC0)</li>
-    <li>오픈 모델: Hugging Face 다운로드</li>
-    <li>자본: 미국 SEC 공시의 설비투자</li>
-  </ul>
-  <p>다운로드 수는 사용자 수가 아니라 설치 횟수예요. 지난 숫자로 지금 어디까지 왔는지를 봅니다.</p>
-  <div class="url">data.pivoxquant.com</div>
-  ${foot}
-</section>`;
 
 const html = `<!doctype html>
 <html lang="ko">
@@ -192,20 +179,17 @@ const html = `<!doctype html>
   .c-alert .tag{display:inline-block;align-self:flex-start;margin-top:120px;font-size:44px;font-weight:800;padding:14px 30px;border:4px solid #0b0906;border-radius:999px}
   .c-alert h1{font-size:92px;line-height:1.16;margin-top:56px}
   .c-alert .big{font-size:150px;margin-top:auto} .c-alert .bl{color:#3b2e1d;margin-bottom:56px}
-  .outro ul{margin:56px 0 0;padding-left:36px;font-size:32px;line-height:1.6;color:var(--ink-2)} .outro li{margin-bottom:14px}
-  .outro .url{font-size:48px;font-weight:700;color:var(--bronze-hi);margin-top:auto;margin-bottom:48px}
 </style>
 </head>
 <body data-date="${date}">
 ${covers[cover]}
 ${slides.map(slideHtml).join("\n")}
-${outro}
 </body>
 </html>
 `;
 const file = path.join(ROOT, "social", "cards.html");
 const before = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
-if (html !== before) { fs.writeFileSync(file, html); console.log(`wrote social/cards.html (${slides.length + 2} slides, ${plan.mode}, cover ${cover}: ${design.map((s) => `${s.id}=${s.format}/${s.layout}`).join(" ")})`); }
+if (html !== before) { fs.writeFileSync(file, html); console.log(`wrote social/cards.html (${slides.length + 1} slides, ${plan.mode}, cover ${cover}: ${design.map((s) => `${s.id}=${s.format}/${s.layout}`).join(" ")})`); }
 else console.log("same  social/cards.html");
 fs.mkdirSync(path.join(OUT, date), { recursive: true });
 fs.writeFileSync(path.join(OUT, date, "design.json"), JSON.stringify({ date, mode: plan.mode, key: plan.event?.key ?? null, cover, slides: design.map(({ o, ...s }) => s) }, null, 1) + "\n");
