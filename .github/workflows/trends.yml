@@ -16,7 +16,12 @@ name: trends daily
 on:
   schedule:
     - cron: "17 1 * * *" # every day 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force_draft:
+        description: "오늘 올릴 변화가 없어도 인스타 초안을 만들기 (테스트용)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -48,12 +53,21 @@ jobs:
       - name: Big case today?
         id: plan
         shell: bash
+        env:
+          FORCE_DRAFT: ${{ inputs.force_draft }}
         run: node social/plan.mjs 2>&1 | tee -a run.log
+
+      # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,
+      # from `claude setup-token`); an API key (ANTHROPIC_API_KEY) also works; with neither, a template caption is used
+      - name: Install Claude Code
+        if: steps.plan.outputs.post == 'true'
+        run: npm install -g @anthropic-ai/claude-code
 
       - name: Instagram cards and caption
         if: steps.plan.outputs.post == 'true'
         shell: bash
         env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           node social/build.mjs 2>&1 | tee -a run.log
@@ -89,7 +103,7 @@ jobs:
                 : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
                 : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 숫자를 모았습니다.",
               "",
-              `인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
+              `인스타그램 캐러셀 초안입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
               `이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`,
               "", imgs, "", "**캡션**", "```", post.caption, "```", "",
               "- `/approve` — 이대로 게시 (저장소 소유자만)",
