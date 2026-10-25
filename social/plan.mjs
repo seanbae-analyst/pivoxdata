@@ -62,15 +62,23 @@ else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: tru
 else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
 else plan = { post: false, why: `no new big case; ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
 
-console.log(`${plan.post ? "draft" : "skip "} — ${plan.why}`);
+// the post's folder: social/out/<date>, or <date>-2, -3 … when a post from that day is already up (a manual run after
+// the daily one), so a second post never overwrites the first one's images or caption
+if (plan.post) {
+  const OUTD = path.join(ROOT, "social", "out"), taken = (s) => read(path.join(OUTD, s, "post.json"), {}).published;
+  let slot = today;
+  for (let n = 2; taken(slot); n++) slot = `${today}-${n}`;
+  plan.slot = slot;
+}
+console.log(`${plan.post ? "draft" : "skip "} — ${plan.why}${plan.slot && plan.slot !== today ? ` (folder ${plan.slot})` : ""}`);
 if (!process.argv.includes("--dry-run")) {
   fs.writeFileSync(path.join(ROOT, "social", "plan.json"), JSON.stringify(plan, null, 1) + "\n");
   if (plan.post) {
-    const entry = { date: today, mode: plan.mode, key: plan.event?.key ?? `${plan.mode}:${today}`, subject: plan.event?.subject ?? plan.mode };
+    const entry = { date: today, ...(plan.slot !== today ? { slot: plan.slot } : {}), mode: plan.mode, key: plan.event?.key ?? `${plan.mode}:${today}`, subject: plan.event?.subject ?? plan.mode };
     if (plan.items) Object.assign(entry, { keys: plan.items.map((c) => c.key), subjects: plan.items.map((c) => c.subject) });
     if (plan.news) entry.news = plan.news.map((n) => n.id); // story.mjs narrows this to the ones the post used
     log.push(entry);
     fs.writeFileSync(LOG, JSON.stringify(log, null, 1) + "\n");
   }
-  if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `post=${plan.post}\ndate=${today}\n`);
+  if (process.env.GITHUB_OUTPUT) fs.appendFileSync(process.env.GITHUB_OUTPUT, `post=${plan.post}\ndate=${plan.slot ?? today}\n`);
 }

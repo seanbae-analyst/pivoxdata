@@ -23,14 +23,15 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 const slides = slidesFor(I, plan);
 // story.mjs's storyline, when there is one: text-first slides in the order the story goes (otherwise the card layouts)
-const storyFile = path.join(ROOT, "social", "out", I.built_at, "story.json");
+const slot = plan.slot ?? I.built_at; // the post's folder (plan.mjs: <date>, or <date>-2 for a second post that day)
+const storyFile = path.join(ROOT, "social", "out", slot, "story.json");
 const story = fs.existsSync(storyFile) ? JSON.parse(fs.readFileSync(storyFile, "utf8")) : null;
 if (!story && slides.length < 2) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
 const date = I.built_at, [y, m, d] = date.split("-");
 
 // ---------- what the last drafts looked like ----------
 const OUT = path.join(ROOT, "social", "out");
-const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < date && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
+const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < slot && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
   .map((f) => JSON.parse(fs.readFileSync(path.join(OUT, f, "design.json"), "utf8")));
 const recent = history.slice(-2), n = history.length;
 const LAYOUTS = ["number", "chart", "headline"];
@@ -226,7 +227,7 @@ const html = `<!doctype html>
   .st .srcl+.foot{margin-top:0}
 </style>
 </head>
-<body data-date="${date}">
+<body data-date="${slot}">
 ${story ? storySlides(story) : `${covers[cover]}\n${slides.map(slideHtml).join("\n")}`}
 <script>
   // grow each story slide's words (--k, 0.7–1.6×) until they fill it — no empty bottom half. Whatever space is still
@@ -253,7 +254,7 @@ const file = path.join(ROOT, "social", "cards.html");
 const before = fs.existsSync(file) ? fs.readFileSync(file, "utf8") : "";
 if (html !== before) { fs.writeFileSync(file, html); console.log(story ? `wrote social/cards.html (story: ${story.format}, ${story.slides.length} slides)` : `wrote social/cards.html (${slides.length + 1} slides, ${plan.mode}, cover ${cover}: ${design.map((s) => `${s.id}=${s.format}/${s.layout}`).join(" ")})`); }
 else console.log("same  social/cards.html");
-fs.mkdirSync(path.join(OUT, date), { recursive: true });
-fs.writeFileSync(path.join(OUT, date, "design.json"), JSON.stringify(story
+fs.mkdirSync(path.join(OUT, slot), { recursive: true });
+fs.writeFileSync(path.join(OUT, slot, "design.json"), JSON.stringify(story
   ? { date, mode: plan.mode, key: plan.event?.key ?? null, format: story.format, industry: story.industry ?? null, slides: [] }
   : { date, mode: plan.mode, key: plan.event?.key ?? null, cover, slides: design.map(({ o, ...s }) => s) }, null, 1) + "\n");
