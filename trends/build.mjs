@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES, NEWS } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
@@ -540,6 +540,21 @@ const axTable = axRows.map((r) => `<tr><td>${esc(r.name)}</td><td>${sh(r.now)}</
 const capexRows = [...common].reverse().slice(0, 8).map((q) => `<tr><td>${qlbl(q)}</td>${big4.map((id) => `<td>${usd(Qs[id][q])}</td>`).join("")}<td><b>${usd(sum4(q))}</b></td><td>${Qs.orcl[q] != null ? usd(Qs.orcl[q]) : "—"}</td></tr>`).join("");
 const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? ` (${pyBack}주 전 ${sh(sdkThen[p.pkg])})` : ""}`).join(" · ");
 
+// ---------- AX news: what companies and governments announced (trends/data/news.json, official sources only) ----------
+// The last NEWS_DAYS days, the same announcement once (a feed can list it twice), ranked by NEWS.rank: adoptions,
+// deals and rules first. The site lists them with their links; social/story.mjs writes the weekly post from them.
+const NEWS_DAYS = 14;
+const NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
+const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
+const newsItems = NEWSD.items.filter((x) => newsSrc[x.src] && ago(x.date) <= NEWS_DAYS)
+  .filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
+  .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date));
+const KIND = { company: "기업 발표", government: "정부 발표", research: "리서치" };
+const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${KIND[x.kind]} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
+  : `<li class="news empty">최근 ${NEWS_DAYS}일 동안 모은 공식 발표가 없어요.</li>`;
+
 // ---------- write ----------
 // index.html (the dashboard) and map.html get their regions here; site.mjs adds the shared head/nav/footer to every
 // page and rewrites sitemap.xml / robots.txt.
@@ -552,7 +567,7 @@ const sourceStatus = [
 ];
 const fills = {
   "index.html": {
-    "t-tabs": tabsHtml, "t-panels": panelsHtml, "t-glossary": glossaryHtml(),
+    "t-tabs": tabsHtml, "t-panels": panelsHtml, "t-glossary": glossaryHtml(), "t-news": newsHtml,
     "t-events": recentChanges.slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><time datetime="${c.date}">${+c.date.slice(5, 7)}/${+c.date.slice(8)}</time><span class="badge">${c.tier === "big" ? "빅 케이스" : "작은 변화"}</span><span class="et">${esc(c.headline)}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join(""),
     "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매일 자동 · 검산 ${CHECKS.checks.length}개 통과`, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
@@ -592,7 +607,9 @@ const factList = [
 ];
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
-  facts: factList };
+  facts: factList,
+  // the official announcements the weekly AX news post may use — as published, with the source and its link
+  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score }) => ({ id, src, source, kind, date, title, summary, link, score })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

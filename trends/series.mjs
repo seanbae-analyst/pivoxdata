@@ -220,3 +220,44 @@ export const SEC = {
     { cik: "0001341439", id: "orcl", name: "Oracle" },
   ],
 };
+
+// ---------- AX news: primary sources only ----------
+// What companies and governments announced themselves — their own newsrooms, blogs and press-release feeds, never
+// media reports or aggregators — so every sentence a post makes can point to who said it, when, and where. An item
+// is kept only if its link is on the source's own domain (`domains`) and it reads as AX: AI together with business
+// adoption, partnerships or work (companies), or AI at all (governments, research). `html`: no feed, so the news page's
+// article links are read and each article's own meta tags give the title, summary and date.
+export const NEWS = {
+  days: 45, // items older than this are dropped
+  sources: [
+    { id: "openai", name: "OpenAI", kind: "company", url: "https://openai.com/news/rss.xml", domains: ["openai.com"] },
+    { id: "anthropic", name: "Anthropic", kind: "company", html: "https://www.anthropic.com/news", domains: ["anthropic.com"] },
+    { id: "google-ai", name: "Google", kind: "company", url: "https://blog.google/technology/ai/rss/", domains: ["blog.google"] },
+    { id: "google-cloud", name: "Google Cloud", kind: "company", url: "https://blog.google/products/google-cloud/rss/", domains: ["blog.google"] },
+    { id: "microsoft", name: "Microsoft", kind: "company", url: "https://blogs.microsoft.com/feed/", domains: ["microsoft.com"] },
+    { id: "microsoft-source", name: "Microsoft", kind: "company", url: "https://news.microsoft.com/source/feed/", domains: ["microsoft.com"] },
+    { id: "amazon", name: "Amazon", kind: "company", url: "https://www.aboutamazon.com/news/rss.xml", domains: ["aboutamazon.com"] },
+    { id: "nvidia", name: "NVIDIA", kind: "company", url: "https://blogs.nvidia.com/feed/", domains: ["nvidia.com"] },
+    { id: "salesforce", name: "Salesforce", kind: "company", url: "https://www.salesforce.com/news/feed/", domains: ["salesforce.com"] },
+    { id: "sap", name: "SAP", kind: "company", url: "https://news.sap.com/feed/", domains: ["sap.com"] },
+    { id: "databricks", name: "Databricks", kind: "company", url: "https://www.databricks.com/feed", domains: ["databricks.com"] },
+    { id: "snowflake", name: "Snowflake", kind: "company", url: "https://www.snowflake.com/feed/", domains: ["snowflake.com"] },
+    { id: "samsung", name: "삼성전자", kind: "company", url: "https://news.samsung.com/kr/feed", domains: ["samsung.com"] },
+    { id: "skt", name: "SK텔레콤", kind: "company", url: "https://news.sktelecom.com/feed", domains: ["sktelecom.com"] },
+    { id: "msit", name: "과학기술정보통신부", kind: "government", url: "https://www.msit.go.kr/user/rss/rss.do?bbsSeqNo=94", domains: ["msit.go.kr"] },
+    { id: "eu", name: "EU 집행위원회", kind: "government", url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en", domains: ["ec.europa.eu"] },
+    { id: "ukgov", name: "영국 정부", kind: "government", url: "https://www.gov.uk/search/news-and-communications.atom?keywords=artificial+intelligence", domains: ["gov.uk"] },
+    { id: "nist", name: "미국 NIST", kind: "government", url: "https://www.nist.gov/news-events/news/rss.xml", domains: ["nist.gov"] },
+    { id: "mckinsey", name: "McKinsey", kind: "research", url: "https://www.mckinsey.com/insights/rss", domains: ["mckinsey.com"] },
+  ],
+  // AX = AI + business; checked on the title and summary
+  ai: /\b(AI|A\.I\.|artificial intelligence|generative|gen ?AI|LLMs?|agentic|AI agents?|Claude|ChatGPT|GPT-?\d[\w.]*|Gemini|Copilot|machine learning)\b|인공지능|생성형|에이전트/i,
+  business: /\b(enterprises?|business(es)?|compan(y|ies)|customers?|clients?|organi[sz]ations?|banks?|banking|insurers?|insurance|retail(ers)?|manufactur\w*|healthcare|hospitals?|public sector|governments?|deploy\w*|adopt\w*|partner\w*|collaborat\w*|agreements?|roll(s|ed|ing)? out|at scale|workforce|employees|workers|productivity|transformation|operations|industr(y|ies))\b|기업|도입|협력|협업|업무|파트너|MOU|협약|계약|전환|고객|산업|공공|제조|금융|AX/i,
+  // ranking among the AX items (build.mjs): an adoption, a deal or a rule outranks a product page or an event
+  rank: [
+    [3, /\b(deploy\w*|roll(s|ed|ing)? out|brings? \S+( \S+)? to (all )?(its )?(employees|customers|workers)|partner(s|ship|ing)?|agreements?|acquir\w*|MOU|memorandum|invest(s|ment|ing)?|customers? (are|is) using|cuts? costs?)\b|도입|협약|업무협약|파트너십|인수|투자|구축|전사|공급 계약/i],
+    [3, /\b(Act|regulat\w*|laws?|legislation|guidance|safety institute|executive order|sovereign\w*)\b|법\b|법」|법,|규제|기본법|가이드라인|국무회의|개정안|시행령/i],
+    [2, /\b(survey|research shows|report|study|index|data shows)\b|조사|보고서|연구 결과|실태/i],
+    [-4, /\b(iPhone|Galaxy|gift|holiday|ads?|advertis\w*|sponsor\w*|webinar|podcast|Author Talks)\b|아이폰|갤럭시|가전|공모전|경진대회|축제|페스타|시상식|사전예약|박람회|체험|요금제/i],
+  ],
+};

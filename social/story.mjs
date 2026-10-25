@@ -37,9 +37,12 @@ export const FORMATS = {
   explainer: { name: "개념 풀이", how: "AX가 뭔지 쉬운 말로 → DX와 다른 점 → 지금 어디까지 왔나(숫자) → 업종·규모별로 다른 속도 → 기업이 먼저 보는 것 → 정리" },
   checklist: { name: "체크리스트", how: "업종 평균 숫자로 우리 회사를 점검하는 질문 4~6개, 한 장에 하나씩, 질문마다 근거 숫자 → 정리" },
   weekly: { name: "이번 주 정리", how: "이번 주 한 줄 요약 → 작은 변화 하나씩(무엇이·얼마나·왜 볼 만한가) → 정리" },
+  newsweek: { name: "이번 주 AX 사건", how: "표지: 이번 주 AX를 한 문장으로 → 발표 3~5건을 중요한 순서로 한 장에 하나씩(누가·무엇을 발표했나 → 기업 AX 관점에서 왜 눈여겨볼 만한가) → 여러 발표에 공통으로 보이는 흐름 → 정리" },
+  newstheme: { name: "AX 사건 묶어 보기", how: "표지 → 발표들을 2~3개 주제(예: 기업 도입 사례, 정부 정책·규제, AI 플랫폼·인프라)로 묶어 주제마다 한두 장, 주제 안의 발표 내용 → 주제별로 실무자가 볼 점 → 정리" },
 };
 const candidates = plan.mode === "event"
   ? (/^ax:month/.test(plan.event.key) ? ["monthly", "deepdive", "timeline"] : plan.event.kind === "1위 교체" ? ["breaking", "versus"] : ["breaking"])
+  : plan.mode === "news" ? ["newsweek", "newstheme"]
   : plan.mode === "digest" ? ["weekly", "checklist"] : plan.mode === "race" ? ["guide", "versus", "quiz"] : ["explainer", "quiz", "timeline", "checklist"];
 const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < date && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
   .map((f) => read(path.join(OUT, f, "design.json"), {}));
@@ -56,6 +59,19 @@ const facts = I.facts.map((f) => plain(f.text));
 const cards = slidesFor(I, plan).map((x) => ({ ...x, title: plain(x.title), easy: plain(x.easy), body: plain(x.body), big: plain(x.big), bl: plain(x.bl) }));
 const allowed = new Set([...facts, ...cards.flatMap((x) => [x.big, x.bl, x.title, x.easy, x.body]), date].flatMap(numbersIn));
 for (let n = 1; n <= 10; n++) allowed.add(String(n)); // slide counts and list numbering ("3가지", "1.")
+// a news post: the official announcements plan.mjs picked, numbered [1]…[n] for Claude; each news slide names the ones
+// it tells (refs) and code — not Claude — prints their source and date on it
+const NEWS = plan.mode === "news" ? plan.news ?? [] : [];
+const newsText = NEWS.map((n) => `${n.title} ${n.summary}`);
+for (const n of [...newsText, ...NEWS.map((x) => x.date)].flatMap(numbersIn)) allowed.add(n);
+const squash = (t) => plain(t).replace(/[\s"'“”‘’.,·:;!?()「」『』｢｣\[\]-]/g, "");
+const SRC = newsText.map(squash).join("|");
+const KIND_LABEL = { company: "공식 발표", government: "보도자료", research: "리서치" };
+const srcLine = (refs) => { // one or two: each with its date; more (a summing-up slide): the names and the count
+  const ns = refs.map((r) => NEWS[r - 1]);
+  return ns.length > 2 ? `${[...new Set(ns.map((n) => n.source))].join(" · ")} 발표 ${ns.length}건`
+    : ns.map((n) => `${n.source} ${KIND_LABEL[n.kind] ?? "발표"} · ${+n.date.slice(5, 7)}/${+n.date.slice(8)}`).join(" / ");
+};
 const textOf = (s) => [s.kicker, s.title, s.body, s.number, s.label, ...(s.items ?? [])].filter(Boolean).join("\n");
 const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end"]);
 function check(story) {
@@ -78,6 +94,14 @@ function check(story) {
   if (META.test(all) || /^\s*(-{3,}|\*{3,})\s*$/m.test(story?.caption ?? "")) p.push("게시물이 아닌 메모가 섞임");
   if (!story?.caption || plain(story.caption).length > 1400) p.push("caption은 1~1400자");
   if (/#|https?:\/\//.test(story?.caption ?? "")) p.push("캡션에 해시태그·링크 쓰지 말 것(코드가 붙임)");
+  if (NEWS.length) (story?.slides ?? []).forEach((sl, i) => {
+    const refs = sl.refs ?? [];
+    if (!Array.isArray(refs) || refs.some((r) => !Number.isInteger(r) || r < 1 || r > NEWS.length)) p.push(`${i + 1}장: refs는 발표 번호(1~${NEWS.length}) 목록`);
+    else if (!["cover", "end"].includes(sl.kind) && !refs.length) p.push(`${i + 1}장: 어떤 발표를 말하는지 refs에 번호를 적을 것`);
+    // our words, not theirs: no 24 characters in a row copied from an announcement
+    const t = squash(textOf(sl));
+    for (let k = 0; k + 24 <= t.length; k += 4) if (SRC.includes(t.slice(k, k + 24))) { p.push(`${i + 1}장: 발표문 문장을 그대로 옮김 — 우리 말로 바꿔 쓸 것`); break; }
+  });
   // typography a reader notices at once: double spaces, a space before punctuation, unmatched brackets, a title
   // broken into more than two lines
   (story?.slides ?? []).forEach((sl, i) => {
@@ -107,18 +131,31 @@ const SYSTEM = `너는 'AX 트렌드 레이더'의 인스타그램 카드뉴스 
 - 캡션은 게시물 내용을 5~10줄로 요약한 본문만. 해시태그·링크·출처 줄은 쓰지 않는다(코드가 붙인다).
 
 출력은 JSON 하나만, 다른 글 없이:
-{"slides":[{"kind":"cover|text|number|list|quiz|answer|end","kicker":"짧은 머리말(선택)","title":"제목","body":"본문(선택)","number":"강조할 숫자(number·answer 장, 팩트 숫자 그대로)","label":"숫자 설명(선택)","items":["목록 항목(list·quiz·end 장, 선택)"]}],"caption":"캡션 본문"}`;
+{"slides":[{"kind":"cover|text|number|list|quiz|answer|end","refs":[발표 번호(AX 사건 게시물만)],"kicker":"짧은 머리말(선택)","title":"제목","body":"본문(선택)","number":"강조할 숫자(number·answer 장, 팩트 숫자 그대로)","label":"숫자 설명(선택)","items":["목록 항목(list·quiz·end 장, 선택)"]}],"caption":"캡션 본문"}`;
+
+const NEWS_RULES = `
+이번 게시물은 공식 발표(회사 뉴스룸·정부 보도자료·리서치)를 모은 'AX 사건'이다. 추가 규칙:
+- 발표에 적힌 것만 쓴다. 발표의 제목·요약에 없는 사실(배경, 금액, 고객 수, 다른 회사 이야기)을 더하지 않는다.
+- 누가 말했는지 밝힌다: "OO는 ~했다고 발표했어요", "과학기술정보통신부는 ~라고 밝혔어요". 회사의 자평(최고, 혁신적, 업계 최초 등)은 그 회사의 말로만 옮긴다.
+- 기업 AX 관점의 의미는 해석임이 드러나게 쓴다("~로 볼 수 있어요"). 발표한 회사를 평가하거나 응원하지 않는다.
+- 발표문 문장을 그대로 옮기지 않고 우리 말로 짧게 바꿔 쓴다. 영어 제목도 번역해 풀어 쓴다. 회사·제품 이름은 원래 표기 그대로.
+- 금액·수치는 발표에 적힌 숫자 그대로 쓴다(예: $1 billion은 "$1 billion"으로, 원화·다른 단위로 바꾸지 않는다).
+- 발표 3~5건을 고른다. 기업의 AI 도입·전환, 기업 간 협력·인수, 정부 정책·규제를 소비자 제품 소식보다 앞에 둔다.
+- 사건을 말하는 장마다 "refs"에 그 발표 번호를 적는다(예: [2]). 표지와 마지막 장은 비워도 된다. 출처 줄은 코드가 붙인다.
+- 캡션은 이번 주 사건을 회사·기관 이름과 함께 5~10줄로.`;
 
 function brief() {
   const what = plan.mode === "event" ? `오늘의 빅 케이스(${plan.event.kind}): ${plain(plan.event.headline)}`
     : plan.mode === "digest" ? `지난 한 주의 작은 변화 ${plan.items.length}가지: ${plan.items.map((c) => plain(c.headline)).join(" / ")}`
-    : plan.mode === "race" ? "분야별로 기업·개발자가 실제로 고르는 AI 도구(누가 앞서나)" : "요즘 AX 흐름 정리 (특별한 사건 없는 날)";
+    : plan.mode === "race" ? "분야별로 기업·개발자가 실제로 고르는 AI 도구(누가 앞서나)"
+    : plan.mode === "news" ? `이번 주 AX 사건 — 회사·정부의 공식 발표 ${NEWS.length}건 중에서` : "요즘 AX 흐름 정리 (특별한 사건 없는 날)";
   return [
     `날짜: ${date}`,
     `이번 게시물: ${what}`,
     `형식: ${FORMATS[format].name} — ${FORMATS[format].how}`,
     ...(industry ? [`딥다이브 업종: ${industry}`] : []),
     "",
+    ...(NEWS.length ? ["공식 발표 (이것만 사실로 쓸 수 있음, 번호는 refs에):", ...NEWS.map((n, i) => `[${i + 1}] ${n.source}(${KIND_LABEL[n.kind] ?? "발표"}, ${n.date}) — ${n.title}\n    요약: ${n.summary || "(요약 없음 — 제목만 쓸 것)"}`), ""] : []),
     "팩트 (이 숫자들만 쓸 수 있음):",
     ...facts.map((f) => `- ${f}`),
     ...(cards.length ? ["", "오늘 카드에 쓰인 문장:", ...cards.map((x) => `- ${x.title} (${x.big}, ${x.bl}). ${x.easy}`)] : []),
@@ -129,7 +166,7 @@ const parse = (t) => { const m = String(t).match(/\{[\s\S]*\}/); if (!m) throw n
 async function fromClaude(route) {
   const messages = [{ role: "user", content: `${brief()}\n\n이 형식으로 스토리를 써 줘. JSON만.` }];
   for (let attempt = 1; attempt <= 2; attempt++) {
-    const res = await ask(route, SYSTEM, messages);
+    const res = await ask(route, NEWS.length ? SYSTEM + NEWS_RULES : SYSTEM, messages);
     if (res.refusal) return { story: null, why: `refusal (${res.refusal})` };
     let story = null, problems;
     try { story = parse(res.text); problems = check(story); } catch (e) { problems = [`JSON으로 읽을 수 없음: ${e.message}`]; }
@@ -143,7 +180,7 @@ async function fromClaude(route) {
 // ---------- proofreading: a second read that may fix only grammar, spacing and line breaks ----------
 const PROOF = `너는 한국어 교정자다. 인스타그램 카드뉴스 JSON을 받아 같은 구조의 JSON으로 돌려준다.
 고치는 것: 맞춤법, 띄어쓰기, 조사(앞말 받침에 맞게 — 숫자·영어는 읽는 소리 기준), 어색한 문장, 문장 끝(~요 존댓말 통일), 줄바꿈("\\n": 본문은 한 문장·한 뜻 덩어리마다, 제목은 20자를 넘을 때 뜻이 나뉘는 곳에서 한 번만, 단어·숫자 중간이나 조사 앞에서 끊지 않기).
-고치지 않는 것: 숫자(한 글자도), 사실, 장 수와 순서, kind, 내용의 뜻. 새 내용을 더하지 않는다.
+고치지 않는 것: 숫자(한 글자도), 사실, 장 수와 순서, kind, refs, 내용의 뜻. 새 내용을 더하지 않는다.
 출력은 JSON 하나만, 다른 글 없이.`;
 // the figures (not the 1–10 used for counts and wording like "1위") must stay exactly as they were, each as often
 const numbersOf = (st) => numbersIn([...st.slides.map(textOf), st.caption].map(plain).join("\n")).filter((n) => !/^([1-9]|10)$/.test(n)).sort().join(" ");
@@ -153,7 +190,7 @@ async function proofread(route, story) {
   let out;
   try { out = parse(res.text); } catch { return null; }
   // the proofreader must leave every number and the slide order exactly as they were
-  if (out?.slides?.length !== story.slides.length || out.slides.some((x, i) => x.kind !== story.slides[i].kind) || numbersOf(out) !== numbersOf(story) || check(out).length) {
+  if (out?.slides?.length !== story.slides.length || out.slides.some((x, i) => x.kind !== story.slides[i].kind || JSON.stringify(x.refs ?? []) !== JSON.stringify(story.slides[i].refs ?? [])) || numbersOf(out) !== numbersOf(story) || check(out).length) {
     console.log(`proofread discarded: ${check(out ?? {}).join(" / ") || "numbers or slide order changed"}`);
     return null;
   }
@@ -172,6 +209,17 @@ function fromCards() {
   return { slides, caption };
 }
 
+// ---------- fallback for a news post: the announcements as published, one per slide ----------
+function fromNews() {
+  const top = NEWS.slice(0, 5);
+  const slides = [
+    { kind: "cover", kicker: FORMATS[format].name, title: `이번 주 AX 사건 ${top.length}가지`, body: "회사와 정부가 직접 낸 발표만 모았어요." },
+    ...top.map((n, i) => ({ kind: "text", refs: [i + 1], kicker: n.source, title: n.title.slice(0, 70), body: n.summary.slice(0, 280) })),
+    { kind: "end", title: "정리", items: top.map((n) => `${n.source}: ${n.title}`.slice(0, 90)) },
+  ];
+  return { slides, caption: [`이번 주 AX 사건 ${top.length}가지 — 공식 발표만`, "", ...top.map((n) => `· ${n.source}: ${n.title}`)].join("\n") };
+}
+
 let result = { story: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
 const route = pickRoute();
 if (route) {
@@ -186,7 +234,16 @@ if (route) {
     else throw e;
   }
 }
-const story = result.story ?? fromCards();
+const story = result.story ?? (NEWS.length ? fromNews() : fromCards());
+// the source line on each news slide is printed from the announcement itself, never written by the model
+const used = [...new Set(story.slides.flatMap((sl) => sl.refs ?? []))].sort((a, b) => a - b);
+for (const sl of story.slides) if (sl.refs?.length) sl.src = `출처 · ${srcLine(sl.refs)}`;
+if (NEWS.length) {
+  story.sources = used.map((r) => ({ source: NEWS[r - 1].source, kind: NEWS[r - 1].kind, date: NEWS[r - 1].date, title: NEWS[r - 1].title, link: NEWS[r - 1].link, id: NEWS[r - 1].id }));
+  // only the announcements the post told count as used; the others stay available for next week
+  const LOG = path.join(ROOT, "social", "posted.json"), log = read(LOG, []), e = log.findLast((x) => x.date === date && x.mode === "news");
+  if (e) { e.news = story.sources.map((x) => x.id); fs.writeFileSync(LOG, JSON.stringify(log, null, 1) + "\n"); }
+}
 const source = result.story ? "claude" : "cards";
 const left = check(story);
 if (left.length && source === "claude") throw new Error(`story failed its own checks: ${left.join(" / ")}`);

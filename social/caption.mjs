@@ -37,7 +37,8 @@ const slides = slidesFor(I, plan).map((x) => ({ ...x, big: plain(x.big), bl: pla
 const storyFile = path.join(dir, "story.json"), story = fs.existsSync(storyFile) ? JSON.parse(fs.readFileSync(storyFile, "utf8")) : null;
 
 // ---------- the checks ----------
-const allowed = new Set([...slides.flatMap((x) => [x.big, x.bl, x.title, x.easy ?? "", x.body, x.src]), ...(story ? (I.facts ?? []).map((f) => plain(f.text)) : []), date].flatMap(numbersIn));
+const allowed = new Set([...slides.flatMap((x) => [x.big, x.bl, x.title, x.easy ?? "", x.body, x.src]), ...(story ? (I.facts ?? []).map((f) => plain(f.text)) : []),
+  ...(plan.news ?? []).flatMap((n) => [n.title, n.summary, n.date]), date].flatMap(numbersIn));
 if (story) for (let n = 1; n <= 10; n++) allowed.add(String(n)); // as story.mjs allows: counts and list numbering
 export function check(body) {
   const problems = [];
@@ -86,7 +87,9 @@ async function fromClaude(route) {
 
 // ---------- template fallback: only the insights' own sentences ----------
 // (no line numbers: a "2." that is not in the data would fail the number check)
-const template = () => plan.mode === "race"
+const template = () => plan.mode === "news"
+  ? ["이번 주 AX 사건 — 회사·정부의 공식 발표만", "", ...(story?.sources ?? []).map((x) => `· ${x.source}: ${plain(x.title)}`)].join("\n")
+  : plan.mode === "race"
   ? ["AI 분야별로 누가 앞서나 — 개발자가 실제로 내려받는 숫자로", "", ...slides.map((x) => `· ${x.title} (${x.big})`)].join("\n")
   : plan.mode === "digest"
   ? [`지난 한 주 작게 바뀐 것 ${slides.length}가지`, "", ...slides.map((x) => `· ${x.title} (${x.big})`)].join("\n")
@@ -97,7 +100,7 @@ const template = () => plan.mode === "race"
 let result = { body: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
 const route = pickRoute();
 if (story?.caption && !check(plain(story.caption)).length) result = { body: plain(story.caption), model: story.model, why: story.note, via: story.via, from: story.source };
-else if (route) {
+else if (route && plan.mode !== "news") { // a news post's caption comes with its story (written from the announcements)
   try { result = { ...(await fromClaude(route)), via: route }; } catch (e) {
     // a Claude that can't be reached falls back to the template caption; any other error is a bug and stops the job
     if (e instanceof ClaudeUnavailable) result = { body: null, why: e.message };
@@ -110,13 +113,18 @@ const problems = check(body);
 if (problems.length) throw new Error(`caption failed its own checks (${source}): ${problems.join(" / ")}`);
 if (!result.body) console.log(`template caption used — ${result.why}`);
 
-const caption = `${body}
-
-출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매일 같은 방식으로 계산
-자세히: data.pivoxquant.com
-다운로드 수는 사용자 수가 아니라 설치 횟수예요.
-
-#AI #인공지능 #개발자 #기술트렌드 #LLM #오픈소스 #데이터`;
+// the footer names the sources this post actually used: the announcements for a news post, the Ramp AI Index (its
+// licence asks for the citation) for an AX post, the download and paper counts otherwise
+const isAX = plan.mode === "event" && plan.event?.topic === "ax";
+const usesDownloads = !isAX && plan.mode !== "news";
+const sourcesLine = plan.mode === "news"
+  ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"}\n원문 링크는 data.pivoxquant.com 에서`
+  : isAX ? "출처: Ramp AI Index (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 결제 데이터"
+  : "출처: npm · PyPI(CC BY 4.0) · arXiv(CC0) · Hugging Face · SEC 공시 — 매일 같은 방식으로 계산";
+const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능"
+  : isAX ? "#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드"
+  : "#AX #AI #인공지능 #개발자 #기술트렌드 #LLM #IT컨설팅";
+const caption = [body, "", sourcesLine, ...(plan.mode === "news" ? [] : ["자세히: data.pivoxquant.com"]), ...(usesDownloads ? ["다운로드 수는 사용자 수가 아니라 설치 횟수예요."] : []), "", tags].join("\n");
 
 const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
 if (images.length < 3) throw new Error(`social/out/${date}: ${images.length} slides — run social/render.mjs first`);

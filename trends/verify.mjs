@@ -4,7 +4,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, AX } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, AX, NEWS } from "./series.mjs";
+import { onDomain } from "./feeds.mjs";
 import { weekly, lastSunday, breaks, trimEnd } from "./signals.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
@@ -100,6 +101,17 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   const all = d.series.RAMPAIALL.months, vendors = ["RAMPAIANTHROPIC", "RAMPAIOPENAI", "RAMPAIXAI"].map((id) => d.series[id].months);
   const over = Object.keys(all).filter((m) => vendors.some((v) => v[m] > all[m] + 0.01));
   check("ax:vendor-under-all", over.length === 0, `AI 회사별 도입률이 전체 도입률을 넘는 달 없음${over.length ? ` — 어긋남: ${over.join(", ")}` : ""}`);
+}
+
+// AX news (official announcements). A dead feed or two is reported, not fatal; the posts quote only what is here.
+if (fs.existsSync(path.join(DIR, "news.json"))) {
+  const d = load("news.json"), srcs = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
+  const live = NEWS.sources.filter((x) => d.feeds[x.id]?.ok), dead = NEWS.sources.filter((x) => !d.feeds[x.id]?.ok).map((x) => x.id);
+  check("news:sources", live.length >= NEWS.sources.length * 0.6, `공식 출처 ${NEWS.sources.length}곳 중 ${live.length}곳 응답${dead.length ? ` — 응답 없음: ${dead.join(", ")}` : ""}`);
+  const off = d.items.filter((x) => !srcs[x.src] || !onDomain(x.link, srcs[x.src].domains));
+  check("news:official", off.length === 0, `기사 ${d.items.length}건 모두 그 회사·기관 자기 도메인의 원문 링크${off.length ? ` — 어긋남: ${off.map((x) => x.link).join(", ")}` : ""}`);
+  const badDate = d.items.filter((x) => !(ageDays(x.date, d.fetched_at) >= -1 && ageDays(x.date, d.fetched_at) <= NEWS.days));
+  check("news:dated", badDate.length === 0, `모든 기사의 발표일이 최근 ${NEWS.days}일 안${badDate.length ? ` — 어긋남: ${badDate.map((x) => `${x.src} ${x.date}`).join(", ")}` : ""}`);
 }
 
 fs.writeFileSync(path.join(DIR, "checks.json"), JSON.stringify({ checked_at: new Date().toISOString().slice(0, 10), notes, checks }, null, 1) + "\n");

@@ -65,4 +65,5 @@ charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 
 npm 다운로드 수 API · pypistats(PyPI BigQuery 공개 데이터, CC BY 4.0) · arXiv API(메타데이터 CC0) · Hugging Face Hub
 API · SEC EDGAR XBRL(미국 정부 공개 자료). npm·Hugging Face는 다운로드 수를 다른 곳에 싣는 조건을 약관에 따로 적지
-않았습니다 — 집계만 싣고 출처를 밝힙니다. 자세한 문구는 [데이터 지도](https://data.pivoxquant.com/map). 법률 자문이 아닙니다.
+않았습니다 — 집계만 싣고 출처를 밝힙니다. AX 지표는 Ramp AI Index(Ramp Economics Lab, FRED 제공 — 인용 표시 조건)이고, "AX 사건"은 각 회사·기관이
+직접 낸 발표(뉴스룸·공식 블로그·보도자료 RSS)의 제목·요약과 원문 링크만 싣습니다 — 본문을 옮겨 싣지 않습니다. 자세한 문구는 [데이터 지도](https://data.pivoxquant.com/map). 법률 자문이 아닙니다.

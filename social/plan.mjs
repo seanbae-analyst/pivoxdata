@@ -4,6 +4,8 @@
 // It drafts from trends/data/changes.json (every change trends/build.mjs found, 60 days):
 //  • event   — a big case found in the last BIG_DAYS days that was never drafted, whose subject (a package, a phrase,
 //              a leader) wasn't drafted in the last SUBJECT_DAYS days. The highest score wins.
+//  • news    — no big case, NEWS_GAP days since the last news post, and at least NEWS_MIN official announcements
+//              (trends/data/insights.json → news) from the last NEWS_WINDOW days that no post used: "이번 주 AX 사건".
 //  • digest  — no big case, DIGEST_DAYS since the last draft, and at least DIGEST_MIN small changes since then:
 //              the best DIGEST_MAX of them (one per subject) in one carousel.
 //  • roundup — nothing at all for QUIET_DAYS: the radar's strongest cards, so the account doesn't go silent.
@@ -14,11 +16,13 @@
 //        node social/plan.mjs --force    (draft even when the rules say not today — for testing the pipeline; the
 //                                         best there is: a new big case, else the waiting small changes, else a roundup)
 //        node social/plan.mjs --race     (a "누가 앞서나" carousel now: the races that moved most — POST_KIND=race)
+//        node social/plan.mjs --news     (this week's AX news now — POST_KIND=news)
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const BIG_DAYS = 3, SUBJECT_DAYS = 21, DIGEST_DAYS = 7, DIGEST_MIN = 3, DIGEST_MAX = 5, QUIET_DAYS = 14;
+export const NEWS_GAP = 6, NEWS_WINDOW = 7, NEWS_MIN = 3, NEWS_MAX = 8;
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (f, empty) => (fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, "utf8")) : empty);
 const I = read(path.join(ROOT, "trends", "data", "insights.json"));
@@ -36,15 +40,24 @@ const big = unposted.filter((c) => c.tier === "big" && days(today, c.date) <= BI
 const smalls = unposted.filter((c) => c.tier === "small" && (!last || c.date > last.date)).sort((a, b) => b.score - a.score)
   .filter((c, i, a) => a.findIndex((x) => x.subject === c.subject) === i).slice(0, DIGEST_MAX);
 
+// official announcements no post used yet, best first (trends/build.mjs ranks them); the story picks from these
+const usedNews = new Set(log.flatMap((p) => p.news ?? []));
+const lastNews = log.filter((p) => p.mode === "news").at(-1);
+const news = (I.news ?? []).filter((n) => !usedNews.has(n.id) && days(today, n.date) <= NEWS_WINDOW && n.score >= 3).slice(0, NEWS_MAX);
+const newsDue = news.length >= NEWS_MIN && (!lastNews || days(today, lastNews.date) >= NEWS_GAP);
+
 const force = process.argv.includes("--force") || process.env.FORCE_DRAFT === "true" || process.env.POST_KIND === "test";
 const raceNow = process.argv.includes("--race") || process.env.POST_KIND === "race";
+const newsNow = process.argv.includes("--news") || process.env.POST_KIND === "news";
 let plan;
 if (raceNow) plan = { post: true, mode: "race", date: today, why: "races requested" };
+else if (newsNow) plan = news.length ? { post: true, mode: "news", date: today, news, why: `news requested; ${news.length} announcement(s)` } : { post: false, why: `news requested, but no unused official announcement from the last ${NEWS_WINDOW} days` };
 else if (force) plan = big.length ? { post: true, mode: "event", date: today, event: big[0], why: `forced; big case: ${big[0].headline}` }
   : smalls.length ? { post: true, mode: "digest", date: today, items: smalls, why: `forced; ${smalls.length} small change(s)` }
   : { post: true, mode: "roundup", date: today, why: "forced; nothing new, so a roundup" };
 else if (last?.date === today) plan = { post: false, why: `already drafted today (${last.key})` };
 else if (big.length) plan = { post: true, mode: "event", date: today, event: big[0], why: `big case: ${big[0].headline}` };
+else if (newsDue) plan = { post: true, mode: "news", date: today, news, why: `${news.length} official announcement(s) this week` };
 else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: true, mode: "digest", date: today, items: smalls, why: `${smalls.length} small changes since ${last?.date ?? "the start"}` };
 else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
 else plan = { post: false, why: `no new big case; ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
@@ -55,6 +68,7 @@ if (!process.argv.includes("--dry-run")) {
   if (plan.post) {
     const entry = { date: today, mode: plan.mode, key: plan.event?.key ?? `${plan.mode}:${today}`, subject: plan.event?.subject ?? plan.mode };
     if (plan.items) Object.assign(entry, { keys: plan.items.map((c) => c.key), subjects: plan.items.map((c) => c.subject) });
+    if (plan.news) entry.news = plan.news.map((n) => n.id); // story.mjs narrows this to the ones the post used
     log.push(entry);
     fs.writeFileSync(LOG, JSON.stringify(log, null, 1) + "\n");
   }
