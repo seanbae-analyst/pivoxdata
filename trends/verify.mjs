@@ -6,7 +6,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, AX, NEWS } from "./series.mjs";
 import { onDomain } from "./feeds.mjs";
-import { weekly, lastSunday, breaks, trimEnd } from "./signals.mjs";
+import { weekTable, breaks } from "./signals.mjs";
 
 const DIR = path.join(path.dirname(fileURLToPath(import.meta.url)), "data");
 const load = (f) => JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"));
@@ -37,8 +37,7 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
     check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)`);
   }
   // 4. what the method had to work around — reported, not hidden
-  const until = lastSunday(all.map((p) => P[p.pkg].days));
-  const W = trimEnd(Object.fromEntries(all.map((p) => [p.pkg, weekly(P[p.pkg].days, until)])));
+  const { until, W } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
   const wk = Object.values(W)[0], last = wk.at(-1).week;
   const zeros = list.map((p) => [p.pkg, P[p.pkg].days.filter(([t, v]) => v === 0 && t >= "2026-01-01").length]).filter(([, z]) => z);
   const br = breaks(Object.fromEntries(control.map((p) => [p.pkg, W[p.pkg]])));

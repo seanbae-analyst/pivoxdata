@@ -8,7 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES, NEWS, DOMAINS } from "./series.mjs";
-import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
+import { weekTable, breaks, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
 import { termify, glossaryHtml } from "./glossary.mjs";
@@ -35,8 +35,7 @@ const r4 = (v) => (v == null ? null : Math.round(v * 1e4) / 1e4);
 // ---------- downloads (npm, PyPI) ----------
 function downloads(src, list, control) {
   const d = load(`${src}.json`), P = d.packages, all = [...list, ...control];
-  const until = lastSunday(all.map((p) => P[p.pkg].days));
-  const W = trimEnd(Object.fromEntries(all.map((p) => [p.pkg, weekly(P[p.pkg].days, until)])));
+  const { W } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
   const br = breaks(Object.fromEntries(control.map((p) => [p.pkg, W[p.pkg]])));
   const from = br.length ? br.at(-1).i : 0, weeks = W[all[0].pkg].map((x) => x.week);
   const R = Object.fromEntries(all.map((p) => [p.pkg, readings(W[p.pkg], from)]));

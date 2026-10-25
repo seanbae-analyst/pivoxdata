@@ -15,10 +15,11 @@ const addDays = (s, n) => { const t = new Date(s + "T00:00:00Z"); t.setUTCDate(t
 export const median = (a) => { const s = a.filter((x) => x != null).sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : null; };
 const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null);
 
-// days [[YYYY-MM-DD, n], ...] → complete Monday–Sunday weeks up to `until` (a Sunday) → [{week: Monday, level, zeros}]
-export function weekly(days, until) {
+// days [[YYYY-MM-DD, n], ...] → complete Monday–Sunday weeks from `start` up to `until` (a Sunday) →
+// [{week: Monday, level, zeros}]; a week before the package's first day has no level
+export function weekly(days, until, start = days[0][0]) {
   const by = new Map(days);
-  const first = days[0][0], wd = new Date(first + "T00:00:00Z").getUTCDay(), mon = addDays(first, (8 - wd) % 7); // first Monday on/after start
+  const wd = new Date(start + "T00:00:00Z").getUTCDay(), mon = addDays(start, (8 - wd) % 7); // first Monday on/after start
   const out = [];
   for (let m = mon; addDays(m, 6) <= until; m = addDays(m, 7)) {
     const wk = [0, 1, 2, 3, 4].map((i) => by.get(addDays(m, i)));
@@ -53,6 +54,14 @@ export function breaks(controlWeeks) {
   const out = [];
   for (const f of flagged) { const last = out.at(-1); if (last && f.i - last.i <= 4) { if (Math.abs(Math.log(f.ratio)) > Math.abs(Math.log(last.ratio))) out[out.length - 1] = f; } else out.push(f); }
   return out;
+}
+
+// every package of a source on one calendar of weeks, from the earliest first day of any of them to the last Sunday all
+// have, so week i is the same week for each: everything below indexes them together (a break's week, the last 4 or 8
+// weeks), and pypistats serves a package added later only ~180 days. Trailing weeks not finished counting are dropped.
+export function weekTable(daysByPkg) {
+  const D = Object.values(daysByPkg), until = lastSunday(D), start = D.map((d) => d[0][0]).sort()[0];
+  return { until, W: trimEnd(Object.fromEntries(Object.entries(daysByPkg).map(([k, d]) => [k, weekly(d, until, start)]))) };
 }
 
 // drop trailing weeks the source has not finished counting (most packages without a weekly level)
