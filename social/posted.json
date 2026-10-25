@@ -4,5 +4,11 @@
   "mode": "event",
   "key": "surge:PyPI:amazon-braket-sdk:2026-10-12",
   "subject": "pkg:amazon-braket-sdk"
+ },
+ {
+  "date": "2026-10-25",
+  "mode": "event",
+  "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
+  "subject": "race:labs-js"
  }
 ]

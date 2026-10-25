@@ -399,7 +399,7 @@
    "title": "오픈 텍스트 생성 모델 다운로드의 45.7%는 Qwen 계열",
    "easy": "오픈 AI 모델을 10번 내려받으면 약 5번이 Qwen 모델이에요.",
    "body": "다음은 openai-community(5.6%), google(4.7%). 지금 가장 뜨는 모델은 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017(image‑text‑to‑text, 2026-10-17 공개).",
-   "src": "Hugging Face 다운로드 상위 300 · 2026-10-24",
+   "src": "Hugging Face 다운로드 상위 300 · 2026-10-25",
    "viz": [
     {
      "kind": "share",
@@ -952,7 +952,7 @@
      "title": "오픈 텍스트 생성 모델 다운로드의 45.7%는 Qwen 계열",
      "easy": "오픈 AI 모델을 10번 내려받으면 약 5번이 Qwen 모델이에요.",
      "body": "다음은 openai-community(5.6%), google(4.7%). 지금 가장 뜨는 모델은 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017(image‑text‑to‑text, 2026-10-17 공개).",
-     "src": "Hugging Face 다운로드 상위 300 · 2026-10-24",
+     "src": "Hugging Face 다운로드 상위 300 · 2026-10-25",
      "viz": [
       {
        "kind": "share",
@@ -1333,7 +1333,7 @@
      "title": "오픈 AI 모델 1위 제작사는 Qwen",
      "easy": "누구나 받아 쓰는 AI 모델(오픈 모델)을 10번 내려받으면 약 5번은 Qwen가 만든 모델이에요.",
      "body": "Qwen 45.7% · openai-community 5.6% · google 4.7% · deepseek-ai 4.6% · lmstudio-community 4.0%. Hugging Face 다운로드 상위 300개 모델 기준.",
-     "src": "Hugging Face 30일 다운로드 · 2026-10-24",
+     "src": "Hugging Face 30일 다운로드 · 2026-10-25",
      "viz": [
       {
        "kind": "share",
@@ -2780,40 +2780,40 @@
     {
      "id": "robotics-hf",
      "k": "모델",
-     "big": "♥ 24",
-     "bl": "좋아요 (공개 직후라 다운로드가 아직 적음)",
-     "title": "지금 가장 뜨는 로보틱스 모델은 LIN‑linlin/​4D‑World‑Models‑Robotic‑Manipulation",
+     "big": "8.6만",
+     "bl": "30일 다운로드",
+     "title": "지금 가장 뜨는 로보틱스 모델은 nvidia/​GR00T‑N1.7‑3B",
      "easy": "지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 로보틱스 모델이에요.",
-     "body": "robotics · 2026-09-17 공개. 다음은 nvidia/​GR00T‑N1.7‑3B, Embodied‑AI‑6/​pi0.5.",
-     "src": "Hugging Face 트렌딩 · robotics · 2026-10-24",
+     "body": "robotics · 2026-02-25 공개. 다음은 LIN‑linlin/​4D‑World‑Models‑Robotic‑Manipulation, Embodied‑AI‑6/​pi0.5.",
+     "src": "Hugging Face 트렌딩 · robotics · 2026-10-25",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "4D-World-Models-Robotic-Manipulation",
-         "value": 24,
-         "label": "♥ 24"
+         "name": "GR00T-N1.7-3B",
+         "value": 85602,
+         "label": "8.6만"
         },
         {
-         "name": "GR00T-N1.7-3B",
-         "value": 171,
-         "label": "♥ 171"
+         "name": "4D-World-Models-Robotic-Manipulation",
+         "value": 0,
+         "label": "0"
         },
         {
          "name": "pi0.5",
-         "value": 14,
-         "label": "♥ 14"
-        },
-        {
-         "name": "flux-3-action-base",
-         "value": 158,
-         "label": "♥ 158"
+         "value": 144,
+         "label": "144"
         },
         {
          "name": "microduck-policies",
-         "value": 24,
-         "label": "♥ 24"
+         "value": 30421,
+         "label": "3.0만"
+        },
+        {
+         "name": "flux-3-action-base",
+         "value": 2680,
+         "label": "2,680"
         }
        ]
       }
@@ -3191,25 +3191,25 @@
     {
      "id": "vision-hf",
      "k": "모델",
-     "big": "9,717",
+     "big": "209만",
      "bl": "30일 다운로드",
-     "title": "지금 가장 뜨는 비전 모델은 OpenMOSS‑Team/​MOSS‑Image‑SFT",
+     "title": "지금 가장 뜨는 비전 모델은 Lightricks/​LTX‑2.5",
      "easy": "지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 비전 모델이에요.",
-     "body": "text‑to‑image · 2026-10-11 공개. 다음은 Lightricks/​LTX‑2.5, abenzerps/​Qwen‑Image‑2.1‑Uncensored‑Quantized.",
-     "src": "Hugging Face 트렌딩 · text-to-image·image-to-video · 2026-10-24",
+     "body": "image‑to‑video · 2026-07-23 공개. 다음은 OpenMOSS‑Team/​MOSS‑Image‑SFT, abenzerps/​Qwen‑Image‑2.1‑Uncensored‑Quantized.",
+     "src": "Hugging Face 트렌딩 · text-to-image·image-to-video · 2026-10-25",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "MOSS-Image-SFT",
-         "value": 9717,
-         "label": "9,717"
-        },
-        {
          "name": "LTX-2.5",
          "value": 2087721,
          "label": "209만"
+        },
+        {
+         "name": "MOSS-Image-SFT",
+         "value": 9717,
+         "label": "9,717"
         },
         {
          "name": "Qwen-Image-2.1-Uncensored-Quantized",
@@ -4618,6 +4618,57 @@
       "toText": "2,194만",
       "fromLabel": "직전 12주 평소",
       "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "hftr:XHToken/Spark-X2.6-4B:2026-10-25",
+   "subject": "hf:XHToken/Spark-X2.6-4B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: XHToken/​Spark‑X2.6‑4B",
+   "card": {
+    "id": "ch-hftr",
+    "k": "작은 변화 · 오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: XHToken/​Spark‑X2.6‑4B",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑generation · 2026-10-19 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-10-25",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 1412,
+        "label": "7.3만"
+       },
+       {
+        "name": "flint",
+        "value": 756,
+        "label": "4,795"
+       },
+       {
+        "name": "flux-3-image-klein-comfy",
+        "value": 553,
+        "label": "59만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 416,
+        "label": "209만"
+       },
+       {
+        "name": "Spark-X2.6-4B",
+        "value": 416,
+        "label": "2,537"
+       }
+      ]
      }
     ]
    }
