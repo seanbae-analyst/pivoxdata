@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 export const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
-export const NAME = "AI 기술 신호 레이더";
+export const NAME = "AX 트렌드 레이더";
 
 export const PAGES = [
   { file: "index.html", path: "/" },

@@ -1,4 +1,4 @@
-# Daily refresh of the dashboard (/, AI 기술 신호 레이더) and, when something big happened, an Instagram draft.
+# Daily refresh of the dashboard (/, AX 트렌드 레이더) and, when something big happened, an Instagram draft.
 #   1. fetch → verify → build. If any check fails, nothing is committed and an issue lists the failing checks —
 #      a wrong sentence is never published silently. build.mjs also looks for big cases (a leader change, a package
 #      far above its usual week, a new all-time high, a phrase crossing 2.5× in papers, a new #1 model, a capex filing).

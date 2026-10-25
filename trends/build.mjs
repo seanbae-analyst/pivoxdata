@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES } from "./series.mjs";
 import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
@@ -142,7 +142,7 @@ const keep = (t) => {
 };
 const glue = (html) => html.replace(/ (<b>[+−\-]?[\d$])/g, "&nbsp;$1");
 const nRank = ranked(npm), pRank = ranked(pypi), nTop = nRank.slice(0, 3), pTop = pRank.slice(0, 3);
-const acc = npm.rows.filter((r) => r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
+const acc = npm.rows.filter((r) => isAI(r) && r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
 const lastN = (a, n) => a.slice(Math.max(0, a.length - n));
 const lv = (x, pkg, n) => lastN(x.W[pkg].map((w) => w.level), n);
 const span = (x, n) => `${wlbl(lastN(x.weeks, n)[0])}–${wlbl(x.weeks.at(-1))}`;
@@ -262,8 +262,54 @@ const openRace = { id: "race-openmodels", k: "레이스 · 오픈 모델 제작�
 // the most-moved races first, the AI labs always near the top
 const raceCards = [...races].sort((a, b) => (b.id.startsWith("labs") - a.id.startsWith("labs")) || b.move - a.move).map((R) => raceCard(R));
 raceCards.splice(3, 0, openRace);
+
+// ---------- AX: how US businesses take up AI (Ramp AI Index via FRED, monthly) ----------
+// values are percent of businesses (55.86 = 55.86%), so they get their own formatters
+const AXD = load("ax.json"), axS = (id) => AXD.series[id].months;
+const axMonths = Object.keys(axS("RAMPAIALL")).sort(), axL = axMonths.at(-1);
+const mBack = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(5) - 1 - n; return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`; };
+const axY = mBack(axL, 12), axP = mBack(axL, 1), axLbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(5)}월`;
+const pv = (v) => `${v.toFixed(1)}%`, ppv = (d) => `${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(1)}%p`, of100 = (v) => Math.round(v);
+const axRow = (x) => { const m = axS(x.id); return { ...x, now: m[axL], prev: m[axP] ?? null, then: m[axY] ?? null }; };
+const axG = (g) => AXSERIES.series.filter((x) => x.group === g).map(axRow).sort((a, b) => b.now - a.now);
+const axAll = axRow(AXSERIES.series[0]), axVendors = axG("vendor"), axSizes = axG("size"), axInds = axG("industry");
+const axSrc = `Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · ${axLbl(axMonths[0])}–${axLbl(axL)}`;
+const axCaveat = "Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.";
+const pctSeries = (id, n) => series(axMonths.slice(-n).map((m) => axS(id)[m] / 100));
+const axVs = (r, f = "1년 전", t = "지금") => ({ kind: "versus", from: r.then / 100, to: r.now / 100, fromText: pv(r.then), toText: pv(r.now), fromLabel: f, toLabel: t });
+const axRank = (rows, val = (r) => r.now, lab = (r) => pv(r.now)) => ({ kind: "rank", items: rows.slice(0, 7).map((r) => ({ name: r.name, value: r4(val(r)), label: lab(r) })) });
+const indUp = [...axInds].sort((a, b) => (b.now - b.then) - (a.now - a.then)), sizeUp = [...axSizes].sort((a, b) => (b.now - b.then) - (a.now - a.then));
+const devLead = races.find((r) => r.id === "labs-js")?.lead;
+const axCards = [
+  { id: "ax-all", k: "AX · 기업 도입률", big: pv(axAll.now), bl: `AI 도구에 돈을 내는 미국 기업 · ${axLbl(axL)}`,
+    title: `AI 도구에 돈을 내는 미국 기업 <b>${pv(axAll.now)}</b>`,
+    easy: `미국 기업 100곳 중 ${of100(axAll.now)}곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 ${of100(axAll.then)}곳이었어요.`,
+    body: `지난달보다 ${ppv(axAll.now - axAll.prev)}, 1년 전보다 ${ppv(axAll.now - axAll.then)}. ${axCaveat}`,
+    viz: [pctSeries("RAMPAIALL", 36), axVs(axAll)], src: axSrc },
+  { id: "ax-vendor", k: "AX · 기업이 고르는 AI", big: pv(axVendors[0].now), bl: `${axVendors[0].name}에 돈을 내는 미국 기업`,
+    title: `기업이 가장 많이 돈을 내는 AI는 <b>${keep(axVendors[0].name)}</b>`,
+    easy: `미국 기업 100곳 중 ${of100(axVendors[0].now)}곳이 ${esc(axVendors[0].name)}, ${of100(axVendors[1].now)}곳이 ${esc(axVendors[1].name)}에 돈을 내요(둘 다 쓰는 회사도 있어요). 1년 전엔 ${esc(axVendors[0].name)} ${of100(axVendors[0].then)}곳이었어요.`,
+    body: `${axVendors.map((r) => `${esc(r.name)} ${pv(r.now)}(1년 전 ${pv(r.then)})`).join(" · ")}.${devLead ? ` 개발자들이 내려받는 AI 회사 SDK(자바스크립트)에서도 1위는 ${esc(devLead.name)}예요.` : ""}`,
+    viz: [axRank(axVendors), axVs(axVendors[0], `1년 전 ${axVendors[0].name}`, `지금 ${axVendors[0].name}`)], src: axSrc },
+  { id: "ax-industry", k: "AX · 업종별", big: pv(axInds[0].now), bl: `${axInds[0].name} 기업의 AI 도입률`,
+    title: `업종별 AI 도입 1위는 <b>${keep(axInds[0].name)}</b>`,
+    easy: `${esc(axInds[0].name)} 기업은 100곳 중 ${of100(axInds[0].now)}곳이 AI에 돈을 내요. 가장 낮은 곳(${esc(axInds.at(-1).name)})은 100곳 중 ${of100(axInds.at(-1).now)}곳이에요.`,
+    body: `${axInds.map((r) => `${esc(r.name)} ${pv(r.now)}`).join(" · ")}.`,
+    viz: [axRank(axInds), series(axMonths.slice(-36).map((m) => axS(axInds[0].id)[m] / 100))], src: axSrc },
+  { id: "ax-industry-up", k: "AX · 가장 빨리 바뀌는 업종", big: ppv(indUp[0].now - indUp[0].then), bl: `${indUp[0].name} 기업의 AI 도입률, 1년 새`,
+    title: `1년 새 AI 도입이 가장 많이 늘어난 업종은 <b>${keep(indUp[0].name)}</b>`,
+    easy: `${esc(indUp[0].name)} 기업 중 AI에 돈을 내는 곳이 1년 전 100곳 중 ${of100(indUp[0].then)}곳에서 지금 ${of100(indUp[0].now)}곳으로 늘었어요.`,
+    body: `1년 새 늘어난 폭: ${indUp.map((r) => `${esc(r.name)} ${ppv(r.now - r.then)}`).join(" · ")}.`,
+    viz: [axVs(indUp[0]), axRank(indUp, (r) => r.now - r.then, (r) => ppv(r.now - r.then))], src: axSrc },
+  { id: "ax-size", k: "AX · 회사 규모별", big: pv(axSizes[0].now), bl: `${axSizes[0].name}의 AI 도입률`,
+    title: `${keep(axSizes[0].name)} <b>${pv(axSizes[0].now)}</b>, ${keep(axSizes.at(-1).name)} ${pv(axSizes.at(-1).now)}`,
+    easy: `회사가 클수록 AI를 더 많이 써요. 1년 새 가장 많이 늘어난 쪽은 ${esc(sizeUp[0].name)}, ${ppv(sizeUp[0].now - sizeUp[0].then)}.`,
+    body: `${axSizes.map((r) => `${esc(r.name)} ${pv(r.now)}(1년 전 ${pv(r.then)})`).join(" · ")}. ${axCaveat}`,
+    viz: [axRank(axSizes), axVs(sizeUp[0], `1년 전 ${sizeUp[0].name}`, `지금 ${sizeUp[0].name}`)], src: axSrc },
+];
 const topics = TOPICS.map((t) => ({ ...t, cards: t.id === "ai" ? insights : topicCards(t) })).filter((t) => t.cards.length);
 topics.splice(1, 0, { id: "race", name: "누가 앞서나", cards: raceCards }); // every race on one tab, not capped at 7
+topics.unshift({ id: "ax", name: "AX", cards: axCards }); // the site's lead: how businesses take up AI
 
 // ---------- changes: big cases and small ones (social/plan.mjs decides what to post) ----------
 // Each detector looks only at finished periods — the last complete week of downloads, the last full month of papers,
@@ -311,7 +357,7 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
 for (const R of races) { // a race whose leader changed in four weeks (the app-model race included)
   if (!R.lead4 || R.lead4.pkg === R.lead.pkg) continue;
   events.push({ key: `flip:race:${R.id}:${R.lead.pkg}:${R.week}`, subject: `race:${R.id}`, kind: "1위 교체", tier: "big", score: 100, topic: "race",
-    card: raceCard(R, { id: `ev-flip-${R.id}`, k: `빅 케이스 · ${esc(R.name)} 1위 교체`, title: `${esc(R.name)} 1위, 이제 <b>${keep(R.lead.name)}</b>`,
+    card: raceCard(R, { k: `빅 케이스 · ${esc(R.name)} 1위 교체`, title: `${esc(R.name)} 1위, 이제 <b>${keep(R.lead.name)}</b>`,
       easy: `${esc(R.what)}. 4주 전 1위는 ${esc(R.lead4.name)}(${sh(R.lead4.w4)})였는데, 지금은 ${esc(R.lead.name)}가 ${sh(R.lead.now)}로 앞섰어요.`,
       viz: [rank(R.rows, (y) => y.name, (y) => y.now, (y) => sh(y.now)), versus(R.lead.w4 ?? 0, R.lead.now, sh, `4주 전 ${R.lead.name}`, `지금 ${R.lead.name}`), shareOf(R.rows.map((y) => [y.name, y.now]), 0)] }) });
 }
@@ -362,9 +408,19 @@ const state = {
   hf: { date: snap.date, top: snap.top.slice(0, 20).map((m) => m.id), trending: snap.trending.slice(0, 5).map((m) => m.id) },
   arxiv: Object.fromEntries(fields.map((f) => [f.id, { last: f.am.at(-1), rising: f.top?.id ?? null }])),
   sec: Object.fromEntries(SEC.companies.map((c) => [c.id, Object.keys(Qs[c.id]).sort().at(-1)])),
+  ax: { last: axL, vendorLead: axVendors[0].id },
 };
 const prev = states.filter((d) => d.date < updated).at(-1);
 const small = (o) => events.push({ tier: "small", ...o });
+if (prev && prev.ax?.last !== axL) { // a new month of the Ramp AI Index: the monthly AX report
+  events.push({ key: `ax:month:${axL}`, subject: `ax:month:${axL}`, kind: "AX 월간", tier: "big", score: 110, topic: "ax", // the lead story: ahead of any other big case that day
+    // same id as the tab's card, so the post doesn't show it twice (pick.mjs drops the topic card with the case's id)
+    card: { ...axCards[0], k: `빅 케이스 · AX 월간 · ${axLbl(axL)}` } });
+  const pl = prev.ax?.vendorLead && AXSERIES.series.find((x) => x.id === prev.ax.vendorLead);
+  if (pl && pl.id !== axVendors[0].id) events.push({ key: `ax:flip:${axVendors[0].id}:${axL}`, subject: "ax:vendor", kind: "1위 교체", tier: "big", score: 100, topic: "ax",
+    card: { ...axCards[1], k: "빅 케이스 · 기업이 고르는 AI 1위 교체", title: `기업이 가장 많이 돈을 내는 AI, 이제 <b>${keep(axVendors[0].name)}</b>`,
+      easy: `지난달 1위는 ${esc(pl.name)}였는데, ${axLbl(axL)}엔 ${esc(axVendors[0].name)}가 ${pv(axVendors[0].now)}로 앞섰어요.` } });
+}
 if (prev) {
   for (const [x, src, id] of [[npm, "npm", "npm"], [pypi, "PyPI", "pypi"]]) { // the ranking by growth over the controls
     const c = state[id], p = prev[id], rk = id === "npm" ? nRank : pRank;

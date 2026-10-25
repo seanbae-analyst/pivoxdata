@@ -83,7 +83,9 @@ function viaClaudeCode(messages) {
   // runs outside the repository so it never picks up project files as context.
   const prompt = messages.map((m) => (m.role === "user" ? m.content : `(직전에 네가 쓴 본문)\n${m.content}`)).join("\n\n");
   const r = spawnSync("claude", ["-p", "--output-format", "json", "--model", MODEL, "--system-prompt", SYSTEM, "--tools", "", "--no-session-persistence"],
-    { input: prompt, encoding: "utf8", cwd: os.tmpdir(), timeout: 300_000, maxBuffer: 1 << 24 });
+    // a token copied from a terminal often carries a line break; any whitespace in it makes the header invalid
+    { input: prompt, encoding: "utf8", cwd: os.tmpdir(), timeout: 300_000, maxBuffer: 1 << 24,
+      env: { ...process.env, CLAUDE_CODE_OAUTH_TOKEN: (process.env.CLAUDE_CODE_OAUTH_TOKEN ?? "").replace(/\s+/g, "") } });
   if (r.error) throw new ClaudeCodeError(r.error.code === "ENOENT" ? "claude CLI not installed" : r.error.message);
   let out;
   try { out = JSON.parse(r.stdout); } catch { throw new ClaudeCodeError(`exit ${r.status}: ${(r.stderr || r.stdout).trim().slice(0, 300)}`); }

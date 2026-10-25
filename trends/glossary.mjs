@@ -4,6 +4,8 @@
 //
 // `match`: the spellings that count as a mention in card text, longest first where one contains another.
 export const GLOSSARY = [
+  { id: "ax", term: "AX (AI 전환)", match: ["AX"], def: "AI Transformation. 회사가 일하는 방식과 서비스에 AI를 들여 바꾸는 일이에요. 디지털 전환(DX)의 AI판이라고 보면 돼요." },
+  { id: "ramp", term: "Ramp AI Index", match: ["Ramp"], def: "미국 기업 7만여 곳의 법인카드·송금 기록으로, AI 도구에 돈을 낸 회사가 몇 %인지 매달 세는 지표예요. 무료 도구나 개인 결제는 안 잡혀요. 미국 연준(FRED)에도 올라와요." },
   { id: "download", term: "다운로드", match: [], def: "개발자가 코드 부품(패키지)을 내려받은 횟수예요. 사람 수가 아니라 횟수라서, 자동으로 도는 빌드 서버가 하루에 수천 번 받기도 해요. 그래서 크기보다 평소와 견준 변화를 봐요." },
   { id: "package", term: "패키지 · SDK", match: ["SDK"], def: "다른 사람이 만들어 둔 코드 묶음이에요. 개발자는 처음부터 다 짜지 않고 이걸 내려받아 써요. SDK는 회사가 자기 서비스를 쓰라고 내놓은 패키지예요(예: OpenAI SDK)." },
   { id: "npm", term: "npm", match: ["npm"], def: "자바스크립트(웹·앱) 개발자들이 패키지를 내려받는 곳이에요. 하루 다운로드 수를 누구나 볼 수 있어요." },
