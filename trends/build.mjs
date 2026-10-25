@@ -651,7 +651,8 @@ writePages(fills, updated);
 {
   const file = path.join(ROOT, "index.html"), h = fs.readFileSync(file, "utf8");
   let next = h;
-  for (const [name, body] of [["t-data", `const D=${JSON.stringify(D)};`], ["t-vizcss", VIZ_CSS]]) {
+  // "<" as <: the data sits inside a <script>, where a "</script>" in any name would end it
+  for (const [name, body] of [["t-data", `const D=${JSON.stringify(D).replace(/</g, "\\u003c")};`], ["t-vizcss", VIZ_CSS]]) {
     if (!next.includes(`/*@${name}*/`)) throw new Error(`index.html: region @${name} not found`);
     next = next.replace(new RegExp(`(\\/\\*@${name}\\*\\/)[\\s\\S]*?(\\/\\*\\/@${name}\\*\\/)`), (_, a, b) => a + body + b);
   }
