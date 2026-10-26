@@ -164,18 +164,23 @@ const ARTICLE_PAGER = `<script type="module">
 import { pager } from "/pager.js";
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
 const div = () => Object.assign(document.createElement("div"), { className: "flow" });
+// the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
+// 흐름과 관점; a briefing that reads as one text lists its section headings
 const text = parts.length && parts.every((s) => s.dataset.name)
   // (the source line goes with the paragraph before it, so it never makes a page of its own)
   ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
-      return { id: h.id || \`s\${i + 1}\`, name: s.dataset.name, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
-  : [{ id: "text", name: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div }];
+      const name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || \`s\${i + 1}\`, name, title: heading.startsWith(name) ? heading : \`\${name} · \${heading}\`, group: name.startsWith("사례") ? "사례" : "흐름과 관점",
+        count: 0, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
+  : [{ id: "text", name: "본문", group: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div, count: 0,
+      sub: (n) => (n.matches("h2") ? { label: n.textContent } : null) }];
 const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
 pager([
-  { id: "top", name: "브리핑", pages: [[$(".art-head"), hint]] },
+  { id: "top", name: "브리핑", title: "처음", pages: [[$(".art-head"), hint]] },
   ...text,
-  { id: "sum", name: "정리", pages: [[$(".sum")]] },
-  { id: "basis", name: "근거", pages: [[$(".basis")]] },
-  { id: "next", name: "더 읽기", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+  { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
 ], { tab: () => "briefs" });
 </script>`;
 
@@ -303,8 +308,9 @@ const m = document.querySelector("main"), items = [...m.querySelectorAll(".list>
 const lead = [...m.children].filter((x) => !x.matches("h2.month, ul.list, #install, script"));
 if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
 pager([
-  items.length ? { id: "list", name: "브리핑", lead, items, list: () => Object.assign(document.createElement("ul"), { className: "list" }) } : { id: "list", name: "브리핑", pages: [lead] },
-  { id: "alerts", name: "알림 받기", pages: [[install]] },
+  items.length ? { id: "list", name: "브리핑", title: "브리핑 목록", lead, items, list: () => Object.assign(document.createElement("ul"), { className: "list" }),
+    sub: (li) => ({ label: li.querySelector(".t")?.textContent, note: li.querySelector(".k")?.textContent }) } : { id: "list", name: "브리핑", title: "브리핑 목록", pages: [lead] },
+  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 브리핑 알림", pages: [[install]] },
 ], { tab: () => "briefs" });
 </script>`;
 const listPage = ({ p, title, desc, kicker, h, intro, list, cur }) => shell({ path: p, title, desc, css: CSS, paged: true, body: `<div class="kicker"><b>AX 브리핑</b>${kicker}</div>

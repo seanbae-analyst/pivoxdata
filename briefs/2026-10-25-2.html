@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=5" />
+<link rel="stylesheet" href="/ui.css?v=6" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 
 <script>(() => { const r = document.documentElement;
@@ -138,18 +138,23 @@
 import { pager } from "/pager.js";
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
 const div = () => Object.assign(document.createElement("div"), { className: "flow" });
+// the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
+// 흐름과 관점; a briefing that reads as one text lists its section headings
 const text = parts.length && parts.every((s) => s.dataset.name)
   // (the source line goes with the paragraph before it, so it never makes a page of its own)
   ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
-      return { id: h.id || `s${i + 1}`, name: s.dataset.name, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
-  : [{ id: "text", name: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div }];
+      const name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || `s${i + 1}`, name, title: heading.startsWith(name) ? heading : `${name} · ${heading}`, group: name.startsWith("사례") ? "사례" : "흐름과 관점",
+        count: 0, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
+  : [{ id: "text", name: "본문", group: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div, count: 0,
+      sub: (n) => (n.matches("h2") ? { label: n.textContent } : null) }];
 const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
 pager([
-  { id: "top", name: "브리핑", pages: [[$(".art-head"), hint]] },
+  { id: "top", name: "브리핑", title: "처음", pages: [[$(".art-head"), hint]] },
   ...text,
-  { id: "sum", name: "정리", pages: [[$(".sum")]] },
-  { id: "basis", name: "근거", pages: [[$(".basis")]] },
-  { id: "next", name: "더 읽기", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+  { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
 ], { tab: () => "briefs" });
 </script>
 </main>
@@ -164,6 +169,7 @@ pager([
   <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
   <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
+  <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
 </nav>
 <script>
 (() => { const t = document.querySelector(".tabbar"); if (!t) return;

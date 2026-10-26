@@ -13,7 +13,8 @@ IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 
 | [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 카드(요약본)의 본편. 사례마다 표(누가·무엇을·어디에·어떻게·확인할 점)와 풀이, 공통 흐름, "IT 컨설팅 관점". 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 데이터마다 잇는 키와 공개 조건 |
 | 인스타그램 | AX·IT 컨설팅 내용만, 이야기(사건 → 의미 → 실무 체크)로 짧은 에디토리얼 카드 — 공식 발표는 사례 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
-| 폰 | 위아래 스크롤 대신 페이지를 옆으로 넘김(`pager.js`) · 아래 탭 바 · 홈 화면에 설치(PWA) |
+| 폰 | 페이지를 옆으로 넘김(`pager.js`) + **목차 사이드바**(아래 탭 바 "목차" 또는 위의 지금 위치 → 이 페이지의 차례, 한 번에 이동) · 용어는 누르면 풀이 창 · 홈 화면에 설치(PWA) |
+| 데스크톱 | 1200px 이상은 왼쪽에 목차가 붙어 읽는 곳을 따라감, 그보다 좁으면 위 메뉴의 "목차" |
 
 ## 돌리는 법
 
@@ -43,7 +44,7 @@ trends/viz.mjs      인사이트를 그리는 방법 12가지 (선·면적·막�
 trends/site.mjs     모든 페이지 공통 head·상단·하단(esc 한 곳), sitemap.xml(noindex 페이지 제외) · robots.txt
 social/             오늘 올릴지(plan), 이야기·사례(story, 원문 읽기 original), 카드(build·render), 캡션, 게시(publish), 웹 브리핑(briefs·roundup), 푸시(notify),
                     검사 한 벌(claude.mjs), 커밋·푸시(commit), 폴더 이름(slot), 공용(util)
-pager.js · terms.js 폰의 옆으로 넘기는 페이지 · 누르면 뜨는 용어 풀이
+pager.js · terms.js 폰의 옆으로 넘기는 페이지와 목차 사이드바(모든 화면) · 누르면 뜨는 용어 풀이(폰은 아래에서 올라오는 창)
 charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 ```
 
