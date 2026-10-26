@@ -1,0 +1,31 @@
+{
+ "date": "2026-10-26",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-26/",
+ "caption": "SK텔레콤, 사내 AI 에이전트 관리 체계까지 ISO/IEC 42001 인증을 받고 첫 AI 거버넌스 리포트 발간\nMicrosoft, 업무 시스템마다 통제 수준을 고르는 Sovereign Cloud의 다음 단계 공개\nDatabricks, NVIDIA의 단백질 설계 모델 RFD4-Proteina를 연구 데이터 플랫폼에 연결 예정\nSalesforce, 5년간 스페인에 $1 billion 투자하고 마드리드에 AI 도입 전담팀 설치\n확인할 점: 우리 AI 에이전트는 개발부터 종료까지 관리 기준이 있나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-10-26\n출처(공식 발표): SK텔레콤 · Databricks · Microsoft · Salesforce — 원문 링크는 브리핑에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newstheme",
+  "format_name": "AX 사건 묶어 보기",
+  "source": "claude",
+  "slides": 8
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 101,
+  "problems": []
+ }
+}
