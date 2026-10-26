@@ -126,11 +126,11 @@ const covers = story ? {} : { // a story brings its own cover
 function storySlides(st) {
   // the text as the checks read it (claude.mjs → plain: no stray invisible characters), then the cards' own breaks:
   // a number, a closing bracket or % stays on the same line as the particle after it ("36.2%로", "(1년 전 3.5%)로")
-  const N = st.slides.length, e = (t) => esc(plain(t).replace(/([\d%)])(?=[가-힣])/g, "$1\u2060").replace(/·(?=\S)/g, "·\u200b")); // a list joined by · may break after it
+  const e = (t) => esc(plain(t).replace(/([\d%)])(?=[가-힣])/g, "$1\u2060").replace(/·(?=\S)/g, "·\u200b")); // a list joined by · may break after it
   // each line the writer broke on is its own block: when the text grows enough that one has to wrap, it splits evenly
   const lines = (t) => String(t ?? "").split("\n").map((l) => `<span class="ln">${e(l)}</span>`).join("");
   return st.slides.map((s, i) => {
-    const kick = `<div class="kick"><span>${e(s.kicker || (i ? "" : `AX 트렌드 레이더 · ${when}`))}</span><span class="pg">${i + 1} / ${N}</span></div>`;
+    const kick = `<div class="kick"><span>${e(s.kicker || (i ? "" : `AX 트렌드 레이더 · ${when}`))}</span></div>`;
     const num = s.number ? `<div class="num"><b>${e(s.number)}</b>${s.label ? `<span>${e(s.label)}</span>` : ""}</div>` : "";
     const items = (s.items ?? []).length ? `<ol${s.items.length >= 5 ? ' class="many"' : ""}>${s.items.map((x) => `<li>${e(x)}</li>`).join("")}</ol>` : "";
     const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
@@ -214,7 +214,7 @@ const html = `<!doctype html>
   /* story slides: words first — a headline, a few sentences, at most one number. Every size is scaled by --k, which
      fit() in the page sets per slide so the words fill the slide instead of leaving an empty bottom half. */
   .st{--k:1} .st.mid>:nth-child(2){margin-top:auto} .st .ln{display:block;text-wrap:balance} .st .txt .ln+.ln{margin-top:.28em}
-  .st .kick{display:flex;justify-content:space-between;gap:calc(var(--k)*20px)} .st .kick .pg{color:var(--dim);font-weight:500}
+  .st .kick{display:flex;justify-content:space-between;gap:calc(var(--k)*20px)}
   .st h2{font-size:calc(var(--k)*64px);line-height:1.28;letter-spacing:-.03em;margin:calc(var(--k)*52px) 0 0;font-weight:800;white-space:pre-line}
   .st .txt{font-size:calc(var(--k)*38px);line-height:1.7;color:var(--ink-2);margin:calc(var(--k)*36px) 0 0;white-space:pre-line}
   .st .num{display:flex;flex-wrap:wrap;align-items:baseline;gap:calc(var(--k)*24px);margin-top:calc(var(--k)*48px)} .st .num b{font-size:calc(var(--k)*150px);font-weight:800;letter-spacing:-.05em;line-height:1;color:var(--bronze-hi);font-variant-numeric:tabular-nums} .st .num span{flex:1 1 calc(var(--k)*300px);font-size:calc(var(--k)*30px);color:var(--mut);line-height:1.4}
