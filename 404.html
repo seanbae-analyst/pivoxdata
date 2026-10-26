@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=7" />
+<link rel="stylesheet" href="/ui.css?v=8" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <!--/@head-->
 <style>
@@ -31,7 +31,7 @@
 <!--@nav-->
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a></nav>
 </header>
 <!--/@nav-->
 <section class="nf">
@@ -43,7 +43,7 @@
 <!--@footer-->
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a></span>
+  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
@@ -83,7 +83,8 @@
   $("appsheet-ok").addEventListener("click", () => { $("appsheet").hidden = true; });
   $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
 })();
-</script><!--/@footer-->
+</script>
+<script type="module" src="/account.js"></script><!--/@footer-->
 </div>
 </body>
 </html>
