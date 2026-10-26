@@ -1,12 +1,12 @@
 {
- "checked_at": "2026-10-25",
+ "checked_at": "2026-10-26",
  "notes": {
   "npm": {
    "until": "2026-10-18",
-   "lastWeek": "2026-10-05",
-   "trimmed": 1,
+   "lastWeek": "2026-10-12",
+   "trimmed": 0,
    "breaks": [],
-   "weeks": 197
+   "weeks": 198
   },
   "pypi": {
    "until": "2026-10-18",
@@ -30,7 +30,7 @@
   {
    "id": "npm:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-24"
+   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-24 — 검산한 날(2026-10-26)에서 4일 안"
   },
   {
    "id": "npm:days",
@@ -45,12 +45,12 @@
   {
    "id": "npm:weeks",
    "ok": true,
-   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-05 주 (그 뒤 1주는 집계가 덜 끝나 뺌), 총 197주"
+   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-12 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 198주"
   },
   {
    "id": "npm:zero-days",
    "ok": true,
-   "fact": "2026년에 0으로 적힌 날: openai 16일, @anthropic-ai/sdk 16일, @google/genai 16일, @mistralai/mistralai 18일, @ai-sdk/openai 16일, @ai-sdk/anthropic 16일, @ai-sdk/google 16일, @ai-sdk/mistral 16일, @ai-sdk/xai 16일, @ai-sdk/deepseek 16일, ai 16일, @modelcontextprotocol/sdk 16일, langchain 16일, @langchain/langgraph 16일, @openai/agents 16일, @mastra/core 16일, ollama 17일, @openai/codex 16일, @anthropic-ai/claude-code 16일, opencode-ai 16일, @google/gemini-cli 16일, @qwen-code/qwen-code 16일, @voltagent/core 16일, @browserbasehq/stagehand 15일, puppeteer 16일, playwright 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음"
+   "fact": "2026년에 0으로 적힌 날: openai 16일, @anthropic-ai/sdk 16일, @google/genai 16일, @mistralai/mistralai 18일, @ai-sdk/openai 16일, @ai-sdk/anthropic 16일, @ai-sdk/google 16일, @ai-sdk/mistral 16일, @ai-sdk/xai 16일, @ai-sdk/deepseek 16일, ai 16일, @modelcontextprotocol/sdk 16일, langchain 16일, @langchain/langgraph 16일, @openai/agents 16일, @mastra/core 16일, ollama 17일, @openai/codex 16일, @anthropic-ai/claude-code 16일, opencode-ai 16일, @google/gemini-cli 16일, @qwen-code/qwen-code 16일, @voltagent/core 16일, @browserbasehq/stagehand 15일, puppeteer 16일, playwright 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음 — 그중 대부분의 패키지가 함께 0인 날(06-03, 07-12, 08-14, 09-03, 09-07~08, 09-15, 10-06, 10-13~15, 10-19~21, 10-23~24)은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄, 최근 8주 모두 주간 수준 있음"
   },
   {
    "id": "npm:breaks",
@@ -65,7 +65,7 @@
   {
    "id": "pypi:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-25"
+   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-25 — 검산한 날(2026-10-26)에서 4일 안"
   },
   {
    "id": "pypi:days",
@@ -85,12 +85,12 @@
   {
    "id": "pypi:zero-days",
    "ok": true,
-   "fact": "2026년에 0으로 적힌 날 없음"
+   "fact": "2026년에 0으로 적힌 날 없음, 최근 8주 모두 주간 수준 있음"
   },
   {
    "id": "pypi:breaks",
    "ok": true,
-   "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후만 비교"
+   "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후 8주만 비교"
   },
   {
    "id": "arxiv:ai:months",
@@ -105,7 +105,7 @@
   {
    "id": "hf:snapshot",
    "ok": true,
-   "fact": "2026-10-25 스냅숏: 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 2개)"
+   "fact": "2026-10-25 스냅숏(검산한 날에서 2일 안): 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 2개)"
   },
   {
    "id": "hf:sorted",
@@ -120,7 +120,7 @@
   {
    "id": "sec:msft:two-readings",
    "ok": true,
-   "fact": "Microsoft: 3개월 공시값과 누적에서 뺀 값이 36개 분기에서 1% 안 (가장 큰 차이 0.00%)"
+   "fact": "Microsoft: 3개월 공시값과 누적에서 뺀 값이 36개 분기에서 1% 안 (가장 큰 차이 0.00%) · 2019년 이후 회계연도 8개의 분기 4개 합이 10-K 연간값과 1% 안"
   },
   {
    "id": "sec:msft:quarters",
@@ -135,7 +135,7 @@
   {
    "id": "sec:googl:two-readings",
    "ok": true,
-   "fact": "Alphabet: 3개월 공시값과 누적에서 뺀 값이 12개 분기에서 1% 안 (가장 큰 차이 0.96%, 백만 달러 반올림·정정 공시)"
+   "fact": "Alphabet: 3개월 공시값과 누적에서 뺀 값이 12개 분기에서 1% 안 (가장 큰 차이 0.96%, 백만 달러 반올림·정정 공시) · 2019년 이후 회계연도 7개의 분기 4개 합이 10-K 연간값과 1% 안"
   },
   {
    "id": "sec:googl:quarters",
@@ -150,7 +150,7 @@
   {
    "id": "sec:amzn:two-readings",
    "ok": true,
-   "fact": "Amazon: 3개월 공시값과 누적에서 뺀 값이 34개 분기에서 1% 안 (가장 큰 차이 0.99%, 백만 달러 반올림·정정 공시)"
+   "fact": "Amazon: 3개월 공시값과 누적에서 뺀 값이 34개 분기에서 1% 안 (가장 큰 차이 0.99%, 백만 달러 반올림·정정 공시) · 2019년 이후 회계연도 7개의 분기 4개 합이 10-K 연간값과 1% 안"
   },
   {
    "id": "sec:amzn:quarters",
@@ -165,7 +165,7 @@
   {
    "id": "sec:meta:two-readings",
    "ok": true,
-   "fact": "Meta: 3개월 값을 따로 공시하지 않아 누적에서 뺀 값 하나뿐 — 두 번째 읽기 없음"
+   "fact": "Meta: 3개월 값을 따로 공시하지 않아 연간값으로 맞춤 · 2019년 이후 회계연도 7개의 분기 4개 합이 10-K 연간값과 1% 안"
   },
   {
    "id": "sec:meta:quarters",
@@ -180,7 +180,7 @@
   {
    "id": "sec:orcl:two-readings",
    "ok": true,
-   "fact": "Oracle: 3개월 값을 따로 공시하지 않아 누적에서 뺀 값 하나뿐 — 두 번째 읽기 없음"
+   "fact": "Oracle: 3개월 값을 따로 공시하지 않아 연간값으로 맞춤 · 2019년 이후 회계연도 8개의 분기 4개 합이 10-K 연간값과 1% 안"
   },
   {
    "id": "sec:orcl:quarters",
@@ -203,6 +203,11 @@
    "fact": "모든 시리즈의 마지막 달이 같음 (2026-09)"
   },
   {
+   "id": "ax:months",
+   "ok": true,
+   "fact": "모든 시리즈가 2023-01부터 빠진 달 없이 이어짐"
+  },
+  {
    "id": "ax:range",
    "ok": true,
    "fact": "모든 값이 0~100% 안"
@@ -215,7 +220,7 @@
   {
    "id": "news:sources",
    "ok": true,
-   "fact": "공식 출처 20곳 중 20곳 응답"
+   "fact": "공식 출처 20곳 중 19곳이 피드·기사 목록으로 응답 — 못 읽음: anthropic(항목 0)"
   },
   {
    "id": "news:official",

@@ -59,6 +59,14 @@ function interact(svg, { n, W, H, iw, m, X, show, hide, pick }) {
 // redraw on width changes only (a phone's toolbar collapsing changes the height and should not reset the chart)
 function onWidth(box, draw) { let w = box.clientWidth, t; addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => { if (box.clientWidth !== w) { w = box.clientWidth; draw(); } }, 120); }); }
 
+// the tooltip's rows as text: a series or a month name is never read as markup (tipExtra is the page's own HTML)
+const tipRows = (tip, head, rows, extra) => {
+  const t = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
+  tip.replaceChildren(t("b", "", head), ...rows.map(([nm, val, c]) => { const r = t("div", "r"), a = t("span"), sw = t("span", "sw");
+    if (c) { sw.style.background = c; a.append(sw); } a.append(nm); r.append(a, t("span", "", val)); return r; }));
+  if (extra) tip.insertAdjacentHTML("beforeend", extra);
+};
+
 function placeTip(tip, x, y, W, H) { tip.style.left = Math.min(Math.max(0, x + 12), W - tip.offsetWidth) + "px"; tip.style.top = Math.max(0, Math.min(y - 10, (H ?? Infinity) - tip.offsetHeight)) + "px"; }
 
 export function lines(box, o) {
@@ -68,6 +76,7 @@ export function lines(box, o) {
     const m = { t: 18, r: endW, b: 28, l: narrow ? 44 : 54 };
     const { W, svg, tip, iw, ih } = frame(box, { label: o.label, narrow, H, m });
     const n = o.months.length, all = o.series.flatMap((s) => s.values).filter((v) => v != null);
+    if (!n || !all.length) { box.replaceChildren(); return; } // no values: no chart (rather than an axis from Infinity)
     const lo = Math.min(o.min ?? Infinity, ...all), hi = Math.max(...all);
     // tightFloor: a series that dips just below zero (−0.9 on a 0–300 axis) ends the axis at its lowest value
     // instead of adding a whole tick step (−100) of empty space below it
@@ -102,7 +111,7 @@ export function lines(box, o) {
       ln.setAttribute("x1", X(i)); ln.setAttribute("x2", X(i)); ln.setAttribute("visibility", "visible");
       dots.forEach((d, k) => { const v = o.series[k].values[i]; d.setAttribute("visibility", v == null ? "hidden" : "visible"); if (v != null) { d.setAttribute("cx", X(i)); d.setAttribute("cy", Y(v)); } });
       const rows = o.series.map((s) => [s.name, s.values[i], s.color]);
-      tip.innerHTML = `<b>${(o.tlabel || lbl)(o.months[i])}</b>` + rows.map(([nm, v, c]) => `<div class="r"><span><span class="sw" style="background:${c}"></span>${nm}</span><span>${v == null ? "—" : o.fmt(v)}</span></div>`).join("") + (o.tipExtra ? o.tipExtra(i) : "");
+      tipRows(tip, (o.tlabel || lbl)(o.months[i]), rows.map(([nm, v, c]) => [nm, v == null ? "—" : o.fmt(v), c]), o.tipExtra?.(i));
       tip.hidden = false; placeTip(tip, px ?? X(i), py ?? m.t, W, H);
       if (live) live.textContent = `${(o.tlabel || lbl)(o.months[i])} · ` + rows.map(([nm, v]) => `${nm} ${v == null ? "값 없음" : o.fmt(v)}`).join(" · ");
     };
@@ -118,6 +127,7 @@ export function bars(box, o) {
     const m = { t: 24, r: 8, b: 28, l: narrow ? 44 : 54 };
     const { W, svg, tip, iw, ih } = frame(box, { label: o.label, narrow, H, m });
     const n = o.months.length, bw = iw / n, vals = o.values;
+    if (!n) { box.replaceChildren(); return; }
     const nums = vals.filter((v) => v != null), lo = Math.min(0, ...nums), hi = Math.max(0, ...nums);
     const ticks = niceTicks(lo, hi, narrow ? 4 : 5), y0 = Math.min(lo, ticks[0]), y1 = Math.max(hi, ticks[ticks.length - 1], y0 + 1e-9);
     const Y = (v) => m.t + ih - (v - y0) / (y1 - y0) * ih, X = (i) => m.l + i * bw;
@@ -131,7 +141,7 @@ export function bars(box, o) {
     const live = o.live && document.getElementById(o.live);
     const show = (i, px, py) => {
       hl.setAttribute("x", X(i)); hl.setAttribute("visibility", "visible"); rects.forEach((r, j) => r && r.setAttribute("fill-opacity", j === i ? 1 : 0.55));
-      tip.innerHTML = `<b>${(o.tlabel || lbl)(o.months[i])}</b><div class="r"><span>${o.name}</span><span>${vals[i] == null ? "—" : o.fmt(vals[i])}</span></div>` + (o.tipExtra ? o.tipExtra(i) : "");
+      tipRows(tip, (o.tlabel || lbl)(o.months[i]), [[o.name ?? "", vals[i] == null ? "—" : o.fmt(vals[i])]], o.tipExtra?.(i));
       tip.hidden = false; placeTip(tip, px ?? X(i), py ?? Y(Math.max(0, vals[i] ?? 0)), W, H);
       if (live) live.textContent = `${(o.tlabel || lbl)(o.months[i])} ${o.name} ${vals[i] == null ? "값 없음" : o.fmt(vals[i])}`;
     };

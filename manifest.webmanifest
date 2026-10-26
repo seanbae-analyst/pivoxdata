@@ -15,6 +15,7 @@
   ],
   "shortcuts": [
     { "name": "AX 브리핑", "url": "/briefs" },
-    { "name": "오늘의 신호", "url": "/" }
+    { "name": "공식 발표", "url": "/#news" },
+    { "name": "오늘의 AX 지표", "url": "/" }
   ]
 }

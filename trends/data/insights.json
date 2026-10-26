@@ -1,555 +1,6 @@
 {
  "built_at": "2026-10-25",
  "page": "https://data.pivoxquant.com/",
- "insights": [
-  {
-   "id": "npm",
-   "k": "개발자 · JavaScript",
-   "big": "+17.6%p",
-   "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-   "title": "npm에서 가장 빨리 크는 AI 패키지는 AI SDK용 DeepSeek",
-   "easy": "한 달 사이 다운로드가 +33.1% 늘었어요. 같은 기간 react 같은 인기 패키지는 +15.4% — 그보다 +17.6%p 더 빨라요.",
-   "body": "4주 다운로드 +33.1%, 같은 4주 react·lodash 같은 대조군은 +15.4%. 다음은 OpenAI Agents(+14.9%p), AI SDK용 OpenAI(+14.5%p).",
-   "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
-   "viz": [
-    {
-     "kind": "rank",
-     "items": [
-      {
-       "name": "DeepSeek",
-       "value": 0.1763,
-       "label": "+17.6%p"
-      },
-      {
-       "name": "OpenAI Agents",
-       "value": 0.1488,
-       "label": "+14.9%p"
-      },
-      {
-       "name": "OpenAI",
-       "value": 0.1446,
-       "label": "+14.5%p"
-      },
-      {
-       "name": "Vercel AI SDK",
-       "value": 0.1258,
-       "label": "+12.6%p"
-      },
-      {
-       "name": "Anthropic",
-       "value": 0.1227,
-       "label": "+12.3%p"
-      }
-     ]
-    },
-    {
-     "kind": "series",
-     "values": [
-      104921,
-      110092,
-      125946,
-      127537,
-      141505,
-      158384,
-      152389,
-      165189.5,
-      177867,
-      199136,
-      207352,
-      198554,
-      232650,
-      243095,
-      263793,
-      289105,
-      307136,
-      317386,
-      323083,
-      356393,
-      421377.5,
-      443213,
-      472319,
-      494193,
-      532102,
-      555910.5
-     ]
-    }
-   ]
-  },
-  {
-   "id": "accel",
-   "k": "가속",
-   "big": "+20.1%p",
-   "bl": "늘어나는 속도가 빨라진 폭",
-   "title": "성장이 가장 빨라지는 쪽은 OpenAI Agents",
-   "easy": "늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 +10.2%, 최근 4주엔 +30.3% 늘었어요.",
-   "body": "4주 성장률이 직전 4주 +10.2%에서 +30.3%로 올라갔습니다.",
-   "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
-   "viz": [
-    {
-     "kind": "versus",
-     "from": 0.1016,
-     "to": 0.3031,
-     "fromText": "+10.2%",
-     "toText": "+30.3%",
-     "fromLabel": "직전 4주",
-     "toLabel": "최근 4주"
-    },
-    {
-     "kind": "series",
-     "values": [
-      96182,
-      100729,
-      115892,
-      124351,
-      140803,
-      163174,
-      154508,
-      177377.5,
-      183602,
-      212074,
-      207077,
-      195612,
-      234770,
-      246553,
-      240248,
-      258123,
-      264454,
-      280049.5,
-      256522,
-      266452,
-      297391.5,
-      328444,
-      322543,
-      335222,
-      403080,
-      436116
-     ]
-    }
-   ]
-  },
-  {
-   "id": "provider",
-   "k": "앱에 붙이는 모델",
-   "big": "31.3%",
-   "bl": "Vercel AI SDK 공급자 중 Anthropic 비중",
-   "title": "1년 새 Anthropic 24.7% → 31.3%",
-   "easy": "AI 앱을 만들 때 연결하는 모델 회사를 100번 세면 31번이 Anthropic. 1년 전엔 25번이었어요.",
-   "body": "지금 1위는 OpenAI(32.2%), 가장 많이 내린 곳은 OpenAI(42.7% → 32.2%). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.",
-   "src": "@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주",
-   "viz": [
-    {
-     "kind": "versus",
-     "from": 0.2467,
-     "to": 0.3128,
-     "fromText": "24.7%",
-     "toText": "31.3%",
-     "fromLabel": "1년 전",
-     "toLabel": "지금"
-    },
-    {
-     "kind": "share",
-     "focus": 1,
-     "parts": [
-      {
-       "name": "OpenAI",
-       "value": 0.322
-      },
-      {
-       "name": "Anthropic",
-       "value": 0.3128
-      },
-      {
-       "name": "Google",
-       "value": 0.1986
-      },
-      {
-       "name": "Mistral",
-       "value": 0.0445
-      },
-      {
-       "name": "xAI",
-       "value": 0.0626
-      },
-      {
-       "name": "DeepSeek",
-       "value": 0.0594
-      }
-     ]
-    },
-    {
-     "kind": "series",
-     "values": [
-      0.2489,
-      0.2519,
-      0.2524,
-      0.252,
-      0.2537,
-      0.2517,
-      0.2595,
-      0.2615,
-      0.2608,
-      0.2613,
-      0.2563,
-      0.2554,
-      0.2533,
-      0.2506,
-      0.2504,
-      0.249,
-      0.2511,
-      0.2542,
-      0.2599,
-      0.2664,
-      0.2698,
-      0.2741,
-      0.278,
-      0.2825,
-      0.2882,
-      0.292,
-      0.2939,
-      0.2955,
-      0.295,
-      0.2969,
-      0.2974,
-      0.2971,
-      0.2999,
-      0.3004,
-      0.3006,
-      0.2981,
-      0.2979,
-      0.2994,
-      0.3018,
-      0.3074,
-      0.3098,
-      0.3109,
-      0.3118,
-      0.3128,
-      0.3135,
-      0.3141,
-      0.3133,
-      0.3126,
-      0.3102,
-      0.3091,
-      0.3113,
-      0.3128
-     ]
-    }
-   ]
-  },
-  {
-   "id": "pypi",
-   "k": "개발자 · Python",
-   "big": "+8.3%p",
-   "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-   "title": "파이썬에서 가장 빨리 크는 쪽은 Anthropic",
-   "easy": "파이썬 개발자들의 다운로드가 한 달 새 +22.7% 늘었어요. 인기 패키지(+14.3%)보다 +8.3%p 더 빨라요.",
-   "body": "4주 다운로드 +22.7%, 대조군(requests·numpy 등) +14.3%. 다음은 DSPy(+5.5%p), MCP SDK(+4.1%p).",
-   "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 12일 주 주",
-   "viz": [
-    {
-     "kind": "rank",
-     "items": [
-      {
-       "name": "Anthropic",
-       "value": 0.0835,
-       "label": "+8.3%p"
-      },
-      {
-       "name": "DSPy",
-       "value": 0.0551,
-       "label": "+5.5%p"
-      },
-      {
-       "name": "MCP SDK",
-       "value": 0.0413,
-       "label": "+4.1%p"
-      },
-      {
-       "name": "Transformers",
-       "value": 0.023,
-       "label": "+2.3%p"
-      },
-      {
-       "name": "LangGraph",
-       "value": 0.0177,
-       "label": "+1.8%p"
-      }
-     ]
-    },
-    {
-     "kind": "series",
-     "values": [
-      4951747,
-      5158821,
-      5470783,
-      5381255,
-      5748442,
-      6520791,
-      6638591,
-      6810853
-     ]
-    }
-   ]
-  },
-  {
-   "id": "arxiv",
-   "k": "연구",
-   "big": "3.2배",
-   "bl": "이 말을 쓰는 AI 논문 비율 · 1년 전과 비교",
-   "title": "연구자들이 가장 빠르게 더 쓰는 말은 월드 모델 (world model)",
-   "easy": "AI 논문 1,000편 중 16편이 이 말을 써요. 1년 전엔 5편이었어요.",
-   "body": "최근 3개월 AI 논문의 1.6%가 초록에 썼습니다(1년 전 0.5%). 가장 많이 쓰인 말은 에이전트 (agent)(21.1%).",
-   "src": "arXiv cs.AI·cs.CL·cs.LG · 2023년 1월–2026년 9월",
-   "viz": [
-    {
-     "kind": "versus",
-     "from": 0.0051,
-     "to": 0.0161,
-     "fromText": "0.5%",
-     "toText": "1.6%",
-     "fromLabel": "1년 전",
-     "toLabel": "최근 3개월"
-    },
-    {
-     "kind": "series",
-     "values": [
-      0.0015,
-      0.0025,
-      0.0023,
-      0.0037,
-      0.002,
-      0.0038,
-      0.0024,
-      0.0024,
-      0.0017,
-      0.0034,
-      0.0023,
-      0.0037,
-      0.0022,
-      0.0023,
-      0.0031,
-      0.0029,
-      0.0047,
-      0.005,
-      0.0027,
-      0.0013,
-      0.0027,
-      0.0047,
-      0.0049,
-      0.0032,
-      0.0042,
-      0.0036,
-      0.0065,
-      0.0041,
-      0.005,
-      0.0066,
-      0.0053,
-      0.0039,
-      0.0061,
-      0.0064,
-      0.0085,
-      0.0111,
-      0.0073,
-      0.0106,
-      0.0103,
-      0.009,
-      0.0118,
-      0.0164,
-      0.016,
-      0.0148,
-      0.0175
-     ]
-    },
-    {
-     "kind": "rank",
-     "items": [
-      {
-       "name": "월드 모델",
-       "value": 3.1518,
-       "label": "3.2배"
-      },
-      {
-       "name": "에이전트",
-       "value": 1.691,
-       "label": "1.7배"
-      },
-      {
-       "name": "체화",
-       "value": 1.4104,
-       "label": "1.4배"
-      },
-      {
-       "name": "MCP",
-       "value": 1.1789,
-       "label": "1.2배"
-      },
-      {
-       "name": "테스트 시점 연산",
-       "value": 1.1682,
-       "label": "1.2배"
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "hf",
-   "k": "오픈 모델",
-   "big": "45.7%",
-   "bl": "텍스트 생성 모델 다운로드 중 Qwen 계열",
-   "title": "오픈 텍스트 생성 모델 다운로드의 45.7%는 Qwen 계열",
-   "easy": "오픈 AI 모델을 10번 내려받으면 약 5번이 Qwen 모델이에요.",
-   "body": "다음은 openai-community(5.6%), google(4.7%). 지금 가장 뜨는 모델은 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017(image‑text‑to‑text, 2026-10-17 공개).",
-   "src": "Hugging Face 다운로드 상위 300 · 2026-10-25",
-   "viz": [
-    {
-     "kind": "share",
-     "focus": 0,
-     "parts": [
-      {
-       "name": "Qwen",
-       "value": 0.4569
-      },
-      {
-       "name": "openai-community",
-       "value": 0.0557
-      },
-      {
-       "name": "google",
-       "value": 0.0475
-      },
-      {
-       "name": "deepseek-ai",
-       "value": 0.0455
-      },
-      {
-       "name": "lmstudio-community",
-       "value": 0.0397
-      },
-      {
-       "name": "그 밖",
-       "value": 0.3546
-      }
-     ]
-    },
-    {
-     "kind": "rank",
-     "items": [
-      {
-       "name": "Qwen",
-       "value": 0.4569,
-       "label": "45.7%"
-      },
-      {
-       "name": "openai-community",
-       "value": 0.0557,
-       "label": "5.6%"
-      },
-      {
-       "name": "google",
-       "value": 0.0475,
-       "label": "4.7%"
-      },
-      {
-       "name": "deepseek-ai",
-       "value": 0.0455,
-       "label": "4.6%"
-      },
-      {
-       "name": "lmstudio-community",
-       "value": 0.0397,
-       "label": "4.0%"
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "capex",
-   "k": "자본",
-   "big": "$165.1B",
-   "bl": "빅테크 4사 설비투자 · 2026년 2분기",
-   "title": "AI 인프라에 들어가는 돈, 1년 전보다 +87%",
-   "easy": "마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요. 1년 전보다 +87% 많아요.",
-   "body": "Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 $510.7B(1년 전 $291.3B). 가장 빨리 늘린 곳은 Microsoft(+110%).",
-   "src": "SEC 공시 · 2019년 1분기–2026년 2분기",
-   "viz": [
-    {
-     "kind": "series",
-     "values": [
-      14330000000,
-      17372000000,
-      18346000000,
-      19009000000,
-      20125000000,
-      20849000000,
-      25065000000,
-      29137000000,
-      27416000000,
-      30877000000,
-      32723000000,
-      36583000000,
-      35518000000,
-      36995000000,
-      39312000000,
-      39259000000,
-      33926000000,
-      33420000000,
-      36947000000,
-      42934000000,
-      44289000000,
-      52852000000,
-      58862000000,
-      72339000000,
-      71902000000,
-      88246000000,
-      97271000000,
-      118632000000,
-      129750000000,
-      165050000000
-     ],
-     "formats": [
-      "columns",
-      "area",
-      "line"
-     ]
-    },
-    {
-     "kind": "versus",
-     "from": 291349000000,
-     "to": 510703000000,
-     "fromText": "$291.3B",
-     "toText": "$510.7B",
-     "fromLabel": "1년 전 4개 분기",
-     "toLabel": "최근 4개 분기"
-    },
-    {
-     "kind": "rank",
-     "items": [
-      {
-       "name": "Microsoft",
-       "value": 1.0963,
-       "label": "+110%"
-      },
-      {
-       "name": "Alphabet",
-       "value": 1.0014,
-       "label": "+100%"
-      },
-      {
-       "name": "Meta",
-       "value": 0.821,
-       "label": "+82%"
-      },
-      {
-       "name": "Amazon",
-       "value": 0.6844,
-       "label": "+68%"
-      }
-     ]
-    }
-   ]
-  }
- ],
  "topics": [
   {
    "id": "ax",
@@ -1160,7 +611,7 @@
  ],
  "events": [
   {
-   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-05",
+   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-12",
    "subject": "race:labs-js",
    "kind": "1위 교체",
    "tier": "big",
@@ -1170,44 +621,44 @@
    "card": {
     "id": "race-labs-js",
     "k": "빅 케이스 · AI 회사 SDK · 자바스크립트 1위 교체",
-    "big": "37.0%",
+    "big": "37.8%",
     "bl": "AI 회사 SDK · 자바스크립트 중 Anthropic의 몫",
     "title": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
-    "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.0%로 앞섰어요.",
-    "body": "Anthropic 37.0% · OpenAI 36.2% · Google 20.4% · Mistral 6.4%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +9.4%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
-    "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 5일 주까지",
+    "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.8%로 앞섰어요.",
+    "body": "Anthropic 37.8% · OpenAI 36.1% · Google 20.2% · Mistral 6.0%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +8.9%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "Anthropic",
-        "value": 0.3702,
-        "label": "37.0%"
+        "value": 0.3776,
+        "label": "37.8%"
        },
        {
         "name": "OpenAI",
-        "value": 0.3619,
-        "label": "36.2%"
+        "value": 0.3609,
+        "label": "36.1%"
        },
        {
         "name": "Google",
-        "value": 0.2038,
-        "label": "20.4%"
+        "value": 0.2017,
+        "label": "20.2%"
        },
        {
         "name": "Mistral",
-        "value": 0.064,
-        "label": "6.4%"
+        "value": 0.0598,
+        "label": "6.0%"
        }
       ]
      },
      {
       "kind": "versus",
-      "from": 0.3553,
-      "to": 0.3702,
-      "fromText": "35.5%",
-      "toText": "37.0%",
+      "from": 0.3559,
+      "to": 0.3776,
+      "fromText": "35.6%",
+      "toText": "37.8%",
       "fromLabel": "4주 전 Anthropic",
       "toLabel": "지금 Anthropic"
      },
@@ -1217,19 +668,19 @@
       "parts": [
        {
         "name": "Anthropic",
-        "value": 0.3702
+        "value": 0.3776
        },
        {
         "name": "OpenAI",
-        "value": 0.3619
+        "value": 0.3609
        },
        {
         "name": "Google",
-        "value": 0.2038
+        "value": 0.2017
        },
        {
         "name": "Mistral",
-        "value": 0.064
+        "value": 0.0598
        }
       ]
      }
@@ -1456,105 +907,26 @@
    }
   },
   {
-   "key": "ath:npm:@mastra/core:2026-10-05",
+   "key": "surge:npm:@mastra/core:2026-10-12",
    "subject": "pkg:@mastra/core",
-   "kind": "최고치",
-   "tier": "big",
-   "score": 55.1,
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.5,
    "topic": "ai",
-   "headline": "Mastra 주간 다운로드가 역대 최고",
+   "headline": "지난주 Mastra 다운로드가 평소의 1.6배",
    "card": {
-    "id": "ev-ath-@mastra/core",
-    "k": "npm 최고치",
-    "big": "43만",
-    "bl": "평일 하루 다운로드, 지난주",
-    "title": "Mastra 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +15% 많아요.",
-    "body": "이전 최고(9월 28일 주)보다 +15% 많습니다. 4주 성장 +26.0%, 대조군 +15.4%.",
-    "src": "npm 평일 다운로드 · 10월 14일 주–10월 5일 주",
+    "id": "ev-surge-@mastra/core",
+    "k": "npm 다운로드",
+    "big": "1.6배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Mastra 다운로드가 평소의 1.6배",
+    "easy": "평소 한 주보다 1.6배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 45만회, 직전 12주 평소는 29만회. 같은 주 대조군은 평소의 1.22배, AI 패키지 전반은 1.29배였습니다.",
+    "src": "npm 평일 다운로드 · 4월 20일 주–10월 12일 주",
     "viz": [
      {
       "kind": "series",
       "values": [
-       260,
-       134,
-       210,
-       128,
-       67,
-       149,
-       262,
-       125,
-       555,
-       402,
-       19,
-       169,
-       122,
-       349,
-       340,
-       418,
-       868,
-       812,
-       1085,
-       1757,
-       1556,
-       2381,
-       2469,
-       3088,
-       3440,
-       5038,
-       5810,
-       5535,
-       6775,
-       8908,
-       8962,
-       9700,
-       12109,
-       11594,
-       12572,
-       14024,
-       13640,
-       14073,
-       16399,
-       16524,
-       16093,
-       19928,
-       21032,
-       23461,
-       23087,
-       23956,
-       23707,
-       29310,
-       29954,
-       29226,
-       29502,
-       33860,
-       41121,
-       40315,
-       38152,
-       41630,
-       39963,
-       46912,
-       44039,
-       53526,
-       58942,
-       55106,
-       24307,
-       25290,
-       45607,
-       57978,
-       64685,
-       70450,
-       80210,
-       78066,
-       80460,
-       93621,
-       93514,
-       91904,
-       96362,
-       112535,
-       105999,
-       107468,
-       122849,
        130843,
        143908,
        156497,
@@ -1579,73 +951,8 @@
        317518,
        342676,
        374123,
-       430802.5
-      ],
-      "formats": [
-       "line",
-       "area",
-       "columns"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 374123,
-      "to": 430802.5,
-      "fromText": "37만",
-      "toText": "43만",
-      "fromLabel": "이전 최고",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "surge:npm:playwright:2026-10-05",
-   "subject": "pkg:playwright",
-   "kind": "증가",
-   "tier": "small",
-   "score": 60.6,
-   "topic": "ai",
-   "headline": "지난주 Playwright 다운로드가 평소의 1.5배",
-   "card": {
-    "id": "ev-surge-playwright",
-    "k": "npm 다운로드",
-    "big": "1.5배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 Playwright 다운로드가 평소의 1.5배",
-    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 2,194만회, 직전 12주 평소는 1,442만회. 같은 주 대조군은 평소의 1.25배였습니다.",
-    "src": "npm 평일 다운로드 · 4월 13일 주–10월 5일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       8072786,
-       7856978,
-       8057228,
-       8159135,
-       8967022,
-       9107951,
-       9121580,
-       9794577.5,
-       10197527,
-       10879435,
-       10321202,
-       10965426,
-       11559248,
-       11835586,
-       12373633,
-       12882422,
-       13225461,
-       14152175.5,
-       14176564,
-       14659070,
-       16063000,
-       17341990,
-       17232949,
-       17996101,
-       21627650,
-       21935429.5
+       430802.5,
+       448892.5
       ],
       "formats": [
        "columns",
@@ -1655,10 +962,10 @@
      },
      {
       "kind": "versus",
-      "from": 14417817,
-      "to": 21935429.5,
-      "fromText": "1,442만",
-      "toText": "2,194만",
+      "from": 288636.5,
+      "to": 448892.5,
+      "fromText": "29만",
+      "toText": "45만",
       "fromLabel": "직전 12주 평소",
       "toLabel": "지난주"
      }
@@ -1843,7 +1150,8 @@
    "domains": [
     "데이터·분석",
     "보안·규제"
-   ]
+   ],
+   "method": "정책·규제"
   },
   {
    "id": "f47072a36f",
@@ -1858,7 +1166,8 @@
    "domains": [
     "클라우드·인프라",
     "AI 에이전트"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "66bacdc777",
@@ -1874,7 +1183,8 @@
     "클라우드·인프라",
     "데이터·분석",
     "보안·규제"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "387ffd5d5b",
@@ -1886,7 +1196,8 @@
    "summary": "삼성전자가 현지시간 14일부터 15일까지 미국 실리콘밸리 마운틴뷰에서 글로벌 통신 업계 파트너들과 차세대 네트워크의 미래를 논의하는 자리를 마련한다. 삼성전자는 14일에 ‘파트너 데이(Partner Day)’를 진행했고, 15일에는 ‘실리콘밸리 미래 통신 서밋 2026(Silicon Valley Future Wireless Summit 2026)’을 개최한다. 이번 행사에는 주요 이동통신사∙제조사∙정부 기관∙학계 리더 등 100여 명의 통신 전문가들이 참석해 AI와 다가올 6G 시대 소프트웨어 기반의 네트워크 진화 […]",
    "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1%ec%a0%84%ec%9e%90-%ec%8b%a4%eb%a6%ac%ec%bd%98%eb%b0%b8%eb%a6%ac-%eb%af%b8%eb%9e%98-%ed%86%b5%ec%8b%a0-%ec%84%9c%eb%b0%8b-2026-%ea%b0%9c%ec%b5%9c",
    "score": 5,
-   "domains": []
+   "domains": [],
+   "method": "연구·보고서"
   },
   {
    "id": "88d3f2de2b",
@@ -1901,7 +1212,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": "정책·규제"
   },
   {
    "id": "aa57562f0e",
@@ -1913,7 +1225,8 @@
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스)를 중심으로 정부·산업계·연구계가 함께하는 종합 협력의 장- 범부처 사업설명회, 국제 기술강연, 협력체 교류(얼라이언스 네트워킹)로 실증·사업화 연계 - 물리적 인공지능(피지컬 AI) 기술전시, 이야기 공연(토크 콘서트) 등을 통해 국민이 체감하는 물리적 인공지능(피지컬 AI ) 소개",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187856",
    "score": 4,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "15c1f8ef7a",
@@ -1927,7 +1240,8 @@
    "score": 3,
    "domains": [
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "b21a97b1b2",
@@ -1941,7 +1255,8 @@
    "score": 3,
    "domains": [
     "클라우드·인프라"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "381130e24d",
@@ -1953,7 +1268,8 @@
    "summary": "To help developers rapidly build world models, which help physical AI systems understand and simulate the real world, NVIDIA has expanded the Cosmos platform with new training tools, simulation checkpoints and Cosmos Data Factory blueprints. Ranking top five on six different open models leaderboards, the NVIDIA Cosmos platform gives world model builders the frontier open […]",
    "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": null
   },
   {
    "id": "ba6fa07d67",
@@ -1967,7 +1283,8 @@
    "score": 3,
    "domains": [
     "업무 도구"
-   ]
+   ],
+   "method": "전사 배포"
   },
   {
    "id": "4b8a59f356",
@@ -1981,7 +1298,8 @@
    "score": 3,
    "domains": [
     "클라우드·인프라"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "13a18076dd",
@@ -1995,7 +1313,8 @@
    "score": 3,
    "domains": [
     "CRM·고객"
-   ]
+   ],
+   "method": "인수"
   },
   {
    "id": "d650f92872",
@@ -2010,7 +1329,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": null
   },
   {
    "id": "dbaa902542",
@@ -2022,7 +1342,8 @@
    "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
    "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "인수"
   },
   {
    "id": "72b1ea2089",
@@ -2037,7 +1358,8 @@
    "domains": [
     "CRM·고객",
     "업무 도구"
-   ]
+   ],
+   "method": "투자"
   },
   {
    "id": "65442e7082",
@@ -2052,7 +1374,8 @@
    "domains": [
     "업무 도구",
     "보안·규제"
-   ]
+   ],
+   "method": "자체 구축"
   },
   {
    "id": "9d653fbf35",
@@ -2064,7 +1387,8 @@
    "summary": "Forward-deployed engineers work inside another company’s own systems. Three McKinsey leaders explain how FDEs help companies derive impact from AI.",
    "link": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-a-forward-deployed-engineer",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "연구·보고서"
   },
   {
    "id": "415ce48789",
@@ -2079,7 +1403,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "dd00c04c9b",
@@ -2091,7 +1416,8 @@
    "summary": "In collaboration with OpenAI, Sullivan & Cromwell developed Agreement Analyzer, an AI tool for identifying issues in a draft agreement.",
    "link": "https://openai.com/index/sullivan-cromwell",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "87253efeda",
@@ -2105,7 +1431,8 @@
    "score": 3,
    "domains": [
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "f9d6830106",
@@ -2119,7 +1446,8 @@
    "score": 3,
    "domains": [
     "AI 에이전트"
-   ]
+   ],
+   "method": "연구·보고서"
   },
   {
    "id": "a99c1179f7",
@@ -2131,7 +1459,8 @@
    "summary": "The hardest industry problems to solve are deeply contextual.",
    "link": "https://news.sap.com/2026/10/industry-ai-deep-industry-knowledge-fde-measurable-value/",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": null
   },
   {
    "id": "b2b664a3da",
@@ -2145,22 +1474,8 @@
    "score": 3,
    "domains": [
     "ERP·백오피스"
-   ]
-  },
-  {
-   "id": "7b321951a1",
-   "src": "mckinsey",
-   "source": "McKinsey",
-   "kind": "research",
-   "date": "2026-10-11",
-   "title": "McKinsey research shows AI creating more jobs than automation displaces — but 11 million American workers will need help this decade",
-   "summary": "While debates about AI’s impact on the workforce dominate headlines, the biggest challenge ahead will be helping workers find the most direct pathway into growing jobs, write Eric Kutcher and Tanguy Catlin in Fortune.",
-   "link": "https://www.mckinsey.com/mgi/media-center/mckinsey-research-shows-ai-creating-more-jobs-than-automation-displaces-but-11-million-american-workers-will-need-help-this-decade",
-   "score": 2,
-   "domains": [
-    "업무 도구",
-    "AI 에이전트"
-   ]
+   ],
+   "method": null
   },
   {
    "id": "d5d7f3826a",
@@ -2172,7 +1487,8 @@
    "summary": "- 세계은행과 공동으로 「국제 인공지능‧디지털 정상회의(글로벌 AI‧디지털 서밋)」 개최(10월 19~22일, 서울) - 배경훈 부총리, 60여 개국 장‧차관급 대표들과 인공지능‧디지털 장관회의 개최(10.19.) - 포용적 인공지능‧디지털 전환을 위한 국제협력 등 의장 공동성명문 발표",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187874",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "9c805cb308",
@@ -2184,7 +1500,8 @@
    "summary": "- 국민 누구나 인공지능을 즐길 수 있는 「2026 클릭온 인공지능(AI) 시즌2」(10.15.~11.25.) 개최 - 지난 6월에 열린 「2026 클릭온 인공지능(AI) 시즌1」은 170만 명 참여",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187869",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "66d489d1ba",
@@ -2196,7 +1513,8 @@
    "summary": "- '행동하는 두뇌, Intelligence into Action' 주제로 해외 기술 동향과 발전 방향 공유 - \"우수한 기술이 현장 실증·사업화로 이어지도록 적극 지원\"",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187862",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "시범 도입"
   },
   {
    "id": "c7febe0b74",
@@ -2208,7 +1526,8 @@
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스) 간담회를 통해 산업 현장 애로 및 정책 수요 청취 - 한국형 물리적 인공지능 전 주기 개발(K-피지컬 AI 풀스택)·산업별 실증·데이터· 표준 등 추진성과 및 실행과제 점검 - 관계부처 사업·정책금융 연계해 현장 실증과 성공사례 창출 적극 지원",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187859",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "3bc0c5d6f4",
@@ -2220,7 +1539,8 @@
    "summary": "Speech delivered by the Minister for Artificial Intelligence …",
    "link": "https://www.gov.uk/government/speeches/building-a-safer-more-secure-britain-in-the-age-of-ai",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "bc970cfa64",
@@ -2232,7 +1552,21 @@
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187858",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "e1081fc5ae",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-12",
+   "title": "(관계 부처합동) 인공지능이 폐기물 종류 확인부터 배출 방법 안내까지 한번에! ‘인공지능 폐기물 처리 도우미’ 앱 실증 개시",
+   "summary": "- 과학기술정보통신부·기후에너지환경부, 공공 인공지능 전환 사업(AX 프로젝트) 「내 손안의 인공지능 폐기물 처리 도우미」 앱 시범 서비스 개시 - 서울 은평구 주민 대상 실증...인공지능 폐기물 식별 및 일괄(원스톱) 배출 신청 지원",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187857",
+   "score": 1,
+   "domains": [],
+   "method": "시범 도입"
   }
  ]
 }

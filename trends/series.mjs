@@ -3,7 +3,8 @@
 // Adding a package or keyword here is the whole change: fetch → verify → build pick it up.
 
 // npm (JavaScript) daily downloads, from 2023-01-01. `group` decides which chart and which share a package joins.
-export const NPM = [
+// NPM itself (below RACES) is this list and then the race-only packages.
+const NPM_AI = [
   // LLM vendor SDKs
   { pkg: "openai", group: "sdk", name: "OpenAI" },
   { pkg: "@anthropic-ai/sdk", group: "sdk", name: "Anthropic" },
@@ -32,8 +33,8 @@ export const NPM_CONTROL = ["react", "lodash", "express", "typescript", "axios"]
 export const PYPI_CONTROL = ["requests", "numpy", "pandas", "urllib3", "packaging"].map((pkg) => ({ pkg, group: "control", name: pkg }));
 
 // PyPI (Python) daily downloads without mirrors. pypistats serves the last ~180 days; older days are kept from
-// earlier runs, so the history grows by itself.
-export const PYPI = [
+// earlier runs, so the history grows by itself. PYPI itself (below RACES) is this list and then the race-only packages.
+const PYPI_AI = [
   { pkg: "openai", group: "sdk", name: "OpenAI" },
   { pkg: "anthropic", group: "sdk", name: "Anthropic" },
   { pkg: "google-genai", group: "sdk", name: "Google GenAI" },
@@ -54,18 +55,16 @@ export const PYPI = [
   { pkg: "torch", group: "infra", name: "PyTorch" },
 ];
 
-// Topic packages (PyPI) for the non-AI topic tabs. Same reading as above; they rank only against each other, with a
-// lower floor (TOPIC_MIN_LEVEL) because a quantum library has thousands of downloads a day, not millions.
-PYPI.push(
-);
-export const TOPIC_MIN_LEVEL = 1000;
+// a race member is called its corner's fastest grower from 1,000 downloads on a typical weekday (the AI rankings
+// need 20,000, signals.mjs MIN_LEVEL): some corners are small
+export const RACE_MIN_LEVEL = 1000;
 
 // ---------- races: who is winning in each corner of AI, by what developers actually install ----------
 // Each race is a handful of rival packages in one source; the page shows each one's share of the race's downloads,
 // how that share moved (4 weeks, 3 months, a year — PyPI only since its count changed in 2026-08), and who grows
 // fastest. A change of leader is a big case. `what` explains the corner in everyday words.
-// Packages not watched elsewhere are added to NPM / PYPI with group "race": fetched like the rest, never ranked
-// among the AI packages. (langsmith is left out of the quality race: langchain installs it, so its count is langchain's.)
+// Packages not watched elsewhere join NPM / PYPI with group "race": fetched like the rest, never ranked among the AI
+// packages. (langsmith is left out of the quality race: langchain installs it, so its count is langchain's.)
 const m = (pkg, name) => ({ pkg, name });
 export const RACES = [
   { id: "labs-js", name: "AI 회사 SDK · 자바스크립트", what: "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나", src: "npm",
@@ -93,15 +92,15 @@ export const RACES = [
   { id: "finetune", name: "모델 맞춤 학습", what: "공개 모델을 우리 데이터로 더 가르치는 도구 (파인튜닝)", src: "pypi",
     members: [m("peft", "PEFT"), m("trl", "TRL"), m("unsloth", "Unsloth")] },
 ];
-for (const r of RACES) for (const x of r.members) {
-  const list = r.src === "npm" ? NPM : PYPI;
-  if (!list.some((p) => p.pkg === x.pkg)) list.push({ pkg: x.pkg, group: "race", name: x.name });
-}
+// the watched lists: the AI packages, then each race member not already in them, in the order the races name them
+const withRaces = (src, list) => RACES.filter((r) => r.src === src).flatMap((r) => r.members)
+  .reduce((out, x) => (out.some((p) => p.pkg === x.pkg) ? out : [...out, { pkg: x.pkg, group: "race", name: x.name }]), list);
+export const NPM = withRaces("npm", NPM_AI), PYPI = withRaces("pypi", PYPI_AI);
 
 // arXiv: monthly count of AI papers (cs.AI, cs.CL or cs.LG listed) whose abstract contains the phrase.
-export const ARXIV_SCOPE = "(cat:cs.AI OR cat:cs.CL OR cat:cs.LG)";
-export const ARXIV_START = "202301";
-export const ARXIV = [
+const ARXIV_SCOPE = "(cat:cs.AI OR cat:cs.CL OR cat:cs.LG)";
+const ARXIV_START = "202301";
+const ARXIV = [
   { id: "agent", q: "agent", name: "에이전트 (agent)" },
   { id: "reasoning", q: "reasoning", name: "추론 (reasoning)" },
   { id: "rag", q: "\"retrieval-augmented\"", name: "검색 증강 (retrieval-augmented)" },
@@ -128,18 +127,15 @@ export const ARXIV_DOMAINS = [
   { id: "ai", name: "AI", scope: ARXIV_SCOPE, start: ARXIV_START, terms: ARXIV },
 ];
 
-// Hugging Face: one snapshot per run of the most-downloaded and the trending models, plus trending lists for the
-// tasks some topics map to.
-export const HF = { top: 300, trending: 50, tasks: [] };
+// Hugging Face: one snapshot per run of the most-downloaded and the trending models.
+export const HF = { top: 300, trending: 50 };
 
-// The developer-side tab: the radar above (SDK downloads, papers, open models, big-tech capex), shown as context for AX.
+// The developer side — the radar above (SDK downloads, papers, open models, big-tech capex), context for AX: its changes
+// are logged under this topic and labelled with its name.
 export const TOPICS = [
   { id: "ai", name: "개발 현장" },
 ];
 
-// SEC EDGAR XBRL (companyfacts): capital expenditure — cash paid for property and equipment (data centres, servers,
-// chips). Cash-flow facts are filed year-to-date, so fetch.mjs derives each quarter by difference; verify.mjs checks
-// that four derived quarters add up to the annual 10-K figure. US government data; SEC asks for a User-Agent with contact.
 // ---------- AX: how businesses take up AI ----------
 // Ramp AI Index (Ramp Economics Lab), as published on FRED: the share of US businesses on Ramp's card and bill-pay
 // platform (70,000+) that paid for an AI product that month — overall, by AI company, by company size and by
@@ -165,6 +161,9 @@ export const AX = {
   ],
 };
 
+// SEC EDGAR XBRL (companyfacts): capital expenditure — cash paid for property and equipment (data centres, servers,
+// chips). Cash-flow facts are filed year-to-date, so fetch.mjs derives each quarter by difference; verify.mjs checks
+// that four derived quarters add up to the annual 10-K figure. US government data; SEC asks for a User-Agent with contact.
 export const SEC = {
   // SEC refuses requests without an e-mail contact; this is the operator's published address (SEC_CONTACT overrides)
   ua: `pivoxdata-trends research ${process.env.SEC_CONTACT || "support@pivoxquant.com"}`,
@@ -200,7 +199,8 @@ export const NEWS = {
     { id: "databricks", name: "Databricks", kind: "company", url: "https://www.databricks.com/feed", domains: ["databricks.com"] },
     { id: "snowflake", name: "Snowflake", kind: "company", url: "https://www.snowflake.com/feed/", domains: ["snowflake.com"] },
     { id: "samsung", name: "삼성전자", kind: "company", url: "https://news.samsung.com/kr/feed", domains: ["samsung.com"] },
-    { id: "skt", name: "SK텔레콤", kind: "company", url: "https://news.sktelecom.com/feed", domains: ["sktelecom.com"] },
+    // its feed stamps true UTC ("Thu, 22 Oct 2026 23:38:30 +0000" for a release its page dates 10-23 08:38 KST): Korean days
+    { id: "skt", name: "SK텔레콤", kind: "company", url: "https://news.sktelecom.com/feed", domains: ["sktelecom.com"], tz: 9 },
     { id: "msit", name: "과학기술정보통신부", kind: "government", url: "https://www.msit.go.kr/user/rss/rss.do?bbsSeqNo=94", domains: ["msit.go.kr"] },
     { id: "eu", name: "EU 집행위원회", kind: "government", url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en", domains: ["ec.europa.eu"] },
     { id: "ukgov", name: "영국 정부", kind: "government", url: "https://www.gov.uk/search/news-and-communications.atom?keywords=artificial+intelligence", domains: ["gov.uk"] },
@@ -240,3 +240,29 @@ export const DOMAINS = [
   { id: "agents", name: "AI 에이전트", about: "스스로 일하는 AI·업무 자동화",
     re: /\b(agents?|agentic|autonomous|automat\w*|orchestrat\w*)\b|에이전트|자동화|자율/i },
 ];
+
+// ---------- how it was brought in: the second question an IT consultant asks about an announcement ----------
+// An AX announcement is read as a case: who, what, where (DOMAINS) — and how it went in. Code files each announcement
+// under the first of these its title and summary match (build.mjs: the site's list of announcements; social/briefs.mjs:
+// the home page's story when a briefing has no cases of its own); story.mjs asks Claude to pick one of the same names
+// for each case it writes, from the announcement's own page, and checks the name is on this list.
+// Order matters: an acquisition or a company-wide rollout says more than "partner" or "launch", which most
+// announcements also contain.
+export const METHODS = [
+  { id: "acquire", name: "인수", re: /\b(acquir\w*|acquisition|merger)\b|인수|합병/i },
+  { id: "rollout", name: "전사 배포", re: /\b(all (of )?(its |their )?(employees|staff|workers)|every employee|company-?wide|enterprise-?wide|roll(s|ed|ing)? out|brings? \S+( \S+)? to (all )?(its )?(employees|workers|staff))\b|전 직원|전사|임직원/i },
+  { id: "policy", name: "정책·규제", re: /\b(AI Act|regulations?|regulators?|legislation|laws?|guidance|executive order|polic(y|ies)|consultation|minister)\b|법\b|법」|법,|규제|기본법|가이드라인|국무회의|개정안|시행령|정책/i },
+  { id: "build", name: "자체 구축", re: /\b(is building|are building|built (its|their) own|in-house|homegrown|own (models?|platform|AI))\b|자체 (구축|개발)/i },
+  { id: "embed", name: "기존 시스템에 내장", re: /\b(built (in|into)|embedded|integrat\w* (with|into)|natively in|inside (SAP|Salesforce|Workday|ServiceNow|Microsoft 365|Teams|Excel|Outlook|Slack))\b|탑재|내장|연동/i },
+  { id: "infra", name: "인프라 확장", re: /\b(data ?cent(er|re)s?|compute capacity|expands? compute|capacity|GPUs?|AI factor(y|ies)|scal(e|es|ing) across|sovereign cloud|supercomput\w*)\b|데이터센터|증설|인프라 (구축|확장)|슈퍼컴퓨터/i },
+  { id: "partner", name: "파트너십", re: /\b(partner(s|ing|ed)? (with|to|on)|partnership|alliance|collaborat\w*|MOU|memorandum|teams? up|joins? forces)\b|협력|협약|파트너십|제휴|맞손|손잡/i },
+  { id: "research", name: "연구·보고서", re: /\b(research|study|survey|report|index|benchmark|framework)\b|연구|조사|보고서|실태/i },
+  { id: "invest", name: "투자", re: /\b(invest(s|ment|ing)?|funding)\b|투자|펀드/i },
+  { id: "pilot", name: "시범 도입", re: /\b(pilot\w*|trial|proof of concept|PoC)\b|시범|실증/i },
+  { id: "launch", name: "제품 출시", re: /\b(launch\w*|introduc\w*|unveil\w*|generally available|general availability|now available)\b|출시|선보/i },
+];
+// a government's announcement that names no other way is a policy; a research house's, a report
+// the one IT domain an announcement is named by (an announcement may count in several, build.mjs): the first that
+// matches — a policy goes under 보안·규제 when that matches too ("AI sovereignty" also reads as cloud)
+export const domainOf = (text, method) => { const ds = DOMAINS.filter((d) => d.re.test(text)); return (method === "정책·규제" && ds.find((d) => d.id === "security")) || ds[0] || null; };
+export const methodOf = (text, kind) => METHODS.find((m) => m.re.test(text))?.name ?? (kind === "government" ? "정책·규제" : kind === "research" ? "연구·보고서" : null);

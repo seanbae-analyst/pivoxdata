@@ -1,8 +1,10 @@
 # ig-token.yml — keeps the Instagram access token alive.
 #
 # The token in the IG_ACCESS_TOKEN secret (Instagram API with Instagram Login) expires about 60 days after it was
-# made. Every 10 days this asks Instagram for a fresh one (refresh_access_token — allowed once the token is a day old
-# and still valid) and writes it back into the IG_ACCESS_TOKEN secret, so automatic posting never stops.
+# made. On the 1st, 11th and 21st of each month this asks Instagram for a fresh one (refresh_access_token — allowed
+# once the token is a day old and still valid) and writes it back into the IG_ACCESS_TOKEN secret, so automatic
+# posting never stops. (Not "*/10": that is the 1st, 11th, 21st and 31st, so after the 31st the 1st refreshes a token
+# exactly 24 h old — the edge of Instagram's "at least a day old" rule, refused when the run starts a moment early.)
 #
 # Writing a secret needs more than the workflow's own token: a fine-grained personal access token with
 # "Secrets: read and write" on this repository, saved as the secret SECRETS_PAT (social/README.md). Without it, the
@@ -12,7 +14,7 @@ name: instagram token refresh
 
 on:
   schedule:
-    - cron: "41 3 */10 * *" # every 10 days, 03:41 UTC
+    - cron: "41 3 1,11,21 * *" # 03:41 UTC on the 1st, 11th and 21st — at most 11 days apart, never 24 h
   workflow_dispatch:
   # or on request without the button: change social/token-refresh.txt on main (any content, e.g. the date)
   push:
@@ -50,13 +52,19 @@ jobs:
           printf '%s' "$new" | gh secret set IG_ACCESS_TOKEN --repo "$REPO"
           echo "IG_ACCESS_TOKEN refreshed — valid for ${days} more days (until $(date -u -d "+${days} days" +%F))" | tee result.txt
 
+      # Instagram's answer is pasted into the issue: the tokens are taken out of it first
       - name: Open an issue when the refresh fails
         if: failure()
         uses: actions/github-script@v7
+        env:
+          REDACT_1: ${{ secrets.IG_ACCESS_TOKEN }}
+          REDACT_2: ${{ secrets.SECRETS_PAT }}
         with:
           script: |
             const fs = require("fs");
-            const why = fs.existsSync("result.txt") ? fs.readFileSync("result.txt", "utf8").trim() : "(see the run log)";
+            const secrets = Object.entries(process.env).filter(([k, v]) => k.startsWith("REDACT_") && v.trim()).map(([, v]) => v);
+            const redact = (t) => { for (const s of secrets) for (const v of new Set([s, s.trim(), s.replace(/\s+/g, "")])) if (v.length >= 8) t = t.split(v).join("[redacted]"); return t.replace(/\b(?:IG|EA)A[\w-]{20,}/g, "[redacted]"); };
+            const why = redact(fs.existsSync("result.txt") ? fs.readFileSync("result.txt", "utf8").trim() : "(see the run log)");
             const body = `The Instagram token could not be refreshed, so automatic posting will stop when the current token expires (about 60 days after it was made).\n\n> ${why}\n\nFix: social/README.md → "인스타그램 토큰 자동 갱신". Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("instagram: token refresh failed"));
             if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });

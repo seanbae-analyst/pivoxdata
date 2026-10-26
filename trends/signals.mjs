@@ -6,33 +6,40 @@
 //    MEDIAN of its non-zero weekday counts, not a sum — one missing or doubled day does not move a median.
 //  • A whole source can shift at once (PyPI halved across every package from 2026-08-25). When the median package
 //    moves by more than 30% in one week, that week is a break, and growth is only compared after the last break.
+//  • The counter itself can stop: npm reported every package as 0 on 2026-10-13~15 and 10-19~21 and never filled
+//    those days in. A day that is 0 for most of a source's packages is such an outage, not a quiet day; a week whose
+//    missing weekdays are all outage days takes its level from the weekdays it has, however few (a package's own zero
+//    days still need 3 weekdays, since a lump may follow them). Without this, two such weeks inside the 8 that growth
+//    reads would leave no growth to rank, and the daily update would stop.
 
-export const BREAK = 0.3;          // source-wide week-on-week move treated as a counting change, not a trend
+import { addDays } from "./dates.mjs";
+
+const BREAK = 0.3;                 // source-wide week-on-week move treated as a counting change, not a trend
 export const MIN_LEVEL = 20000;    // a package needs ≥ 20k downloads on a typical weekday to enter rankings
 
-const iso = (d) => d.toISOString().slice(0, 10);
-const addDays = (s, n) => { const t = new Date(s + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return iso(t); };
 export const median = (a) => { const s = a.filter((x) => x != null).sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : null; };
 const mean = (a) => (a.length ? a.reduce((s, x) => s + x, 0) / a.length : null);
 
-// days [[YYYY-MM-DD, n], ...] → complete Monday–Sunday weeks up to `until` (a Sunday) → [{week: Monday, level, zeros}]
-export function weekly(days, until) {
+// days [[YYYY-MM-DD, n], ...] → complete Monday–Sunday weeks from `start` up to `until` (a Sunday) →
+// [{week: Monday, level, zeros}]; a week before the package's first day has no level
+function weekly(days, until, start = days[0][0], outage = new Set()) {
   const by = new Map(days);
-  const first = days[0][0], wd = new Date(first + "T00:00:00Z").getUTCDay(), mon = addDays(first, (8 - wd) % 7); // first Monday on/after start
+  const wd = new Date(start + "T00:00:00Z").getUTCDay(), mon = addDays(start, (8 - wd) % 7); // first Monday on/after start
   const out = [];
   for (let m = mon; addDays(m, 6) <= until; m = addDays(m, 7)) {
-    const wk = [0, 1, 2, 3, 4].map((i) => by.get(addDays(m, i)));
+    const wd = [0, 1, 2, 3, 4].map((i) => addDays(m, i)), wk = wd.map((d) => by.get(d));
     const zeros = [0, 1, 2, 3, 4, 5, 6].filter((i) => by.get(addDays(m, i)) === 0).length;
-    const nz = wk.filter((v) => v > 0);
+    const nz = wk.filter((v) => v > 0), lost = wd.filter((d, i) => !(wk[i] > 0));
     // weeks touching 20 Dec – 10 Jan: every package dips and rebounds, so they are left out of break detection
     const md = (d) => d.slice(5), sun = addDays(m, 6), holiday = md(m) >= "12-14" || md(sun) <= "01-16";
-    out.push({ week: m, level: nz.length >= 3 ? median(nz) : null, zeros, holiday });
+    const ok = nz.length >= 3 || (nz.length >= 1 && lost.every((d) => outage.has(d)));
+    out.push({ week: m, level: ok ? median(nz) : null, zeros, holiday, ...(lost.some((d) => outage.has(d)) ? { outage: lost.filter((d) => outage.has(d)).length } : {}) });
   }
   return out;
 }
 
 // the last Sunday such that every series has data through it
-export function lastSunday(series) {
+function lastSunday(series) {
   const last = series.map((days) => days.at(-1)[0]).sort()[0];
   const wd = new Date(last + "T00:00:00Z").getUTCDay();
   return addDays(last, -wd); // getUTCDay: Sunday = 0
@@ -55,8 +62,20 @@ export function breaks(controlWeeks) {
   return out;
 }
 
+// every package of a source on one calendar of weeks, from the earliest first day of any of them to the last Sunday all
+// have, so week i is the same week for each: everything below indexes them together (a break's week, the last 4 or 8
+// weeks), and pypistats serves a package added later only ~180 days. Trailing weeks not finished counting are dropped.
+export function weekTable(daysByPkg) {
+  const D = Object.values(daysByPkg), until = lastSunday(D), start = D.map((d) => d[0][0]).sort()[0];
+  // the counter's outage days: 0 for more than half of the packages that have the day
+  const had = new Map(), zero = new Map();
+  for (const days of D) for (const [t, v] of days) { had.set(t, (had.get(t) ?? 0) + 1); if (v === 0) zero.set(t, (zero.get(t) ?? 0) + 1); }
+  const outage = new Set([...zero].filter(([t, z]) => z > had.get(t) / 2).map(([t]) => t));
+  return { until, outage: [...outage].sort(), W: trimEnd(Object.fromEntries(Object.entries(daysByPkg).map(([k, d]) => [k, weekly(d, until, start, outage)]))) };
+}
+
 // drop trailing weeks the source has not finished counting (most packages without a weekly level)
-export function trimEnd(weeksByPkg) {
+function trimEnd(weeksByPkg) {
   const W = Object.values(weeksByPkg); let n = W[0].length;
   while (n > 0 && W.filter((w) => w[n - 1].level == null).length > W.length / 2) n--;
   return Object.fromEntries(Object.entries(weeksByPkg).map(([k, w]) => [k, w.slice(0, n)]));
@@ -83,6 +102,3 @@ export function shares(weeksByPkg, back = 0) {
   const tot = Object.values(lv).reduce((s, v) => s + (v ?? 0), 0);
   return Object.fromEntries(Object.entries(lv).map(([k, v]) => [k, v == null || !tot ? null : v / tot]));
 }
-
-// calendar quarter label → next quarter
-export const nextQ = (q) => (q.endsWith("Q4") ? `${+q.slice(0, 4) + 1}Q1` : `${q.slice(0, 5)}${+q.slice(5) + 1}`);

@@ -5,34 +5,38 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
 export const NAME = "AX 트렌드 레이더";
+// text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
+export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export const PAGES = [
-  { file: "index.html", path: "/" },
-  { file: "map.html", path: "/map" },
+const PAGES = [
+  { file: "index.html", path: "/", paged: true },
+  { file: "map.html", path: "/map", paged: true },
   { file: "404.html", path: "/404", noindex: true },
 ];
 
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — ${NAME} 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
 </header>
 `;
-// on a phone, a tab bar at the bottom (like an app): 홈 · 브리핑 · 사건 · 용어 — the top bar keeps only the name.
+// on a phone, a tab bar at the bottom (like an app): 홈 · 브리핑 · 발표 · 용어 — the top bar keeps only the name.
 const TABBAR = `
 <nav class="tabbar" aria-label="바로가기">
   <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
   <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
-  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>사건</span></a>
+  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
 </nav>
 <script>
 (() => { const t = document.querySelector(".tabbar"); if (!t) return;
+  // the menus say where you are: the tab bar by section, the top bar's links by page (/briefs, /map)
   const mark = () => { const p = location.pathname, h = location.hash, on = p.startsWith("/briefs") ? "briefs" : p === "/" || p === "/index.html" ? (h === "#news" ? "news" : h === "#glossary" ? "glossary" : "home") : "";
-    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on)); };
+    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on));
+    document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
   mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
 </script>`;
 
@@ -44,7 +48,8 @@ const APPBAR = `
 <script>
 (() => {
   const $ = (id) => document.getElementById(id), bar = $("appbar");
-  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches) return;
+  // (not over the phone pages: their first page links to installing — /briefs#alerts)
+  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches || document.documentElement.classList.contains("paged")) return;
   try { if (+localStorage.getItem("appbar-x") > Date.now() - 7 * 864e5) return; } catch {}
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let ev = null;
@@ -64,10 +69,11 @@ const APPBAR = `
 const FOOTER = `
 <footer class="site">
   <span>${NAME} · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/">신호</a><a href="/briefs">브리핑</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">Source</a></span>
+  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a></span>
 </footer>
 ${TABBAR}${APPBAR}`;
 
+const NOINDEX = `<meta name="robots" content="noindex" />`;
 function head(page, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || NAME;
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
@@ -79,10 +85,10 @@ function head(page, html) {
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=4" />
+<link rel="stylesheet" href="/ui.css?v=5" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
-`;
-  if (page.noindex) return `\n<meta name="robots" content="noindex" />${common}`;
+${page.paged ? `${PAGED_HEAD}\n` : ""}`;
+  if (page.noindex) return `\n${NOINDEX}${common}`;
   return `
 <link rel="canonical" href="${url}" />
 <meta property="og:type" content="${page.path === "/" ? "website" : "article"}" />
@@ -116,22 +122,36 @@ export function writePages(fills = {}, lastmod) {
     for (const [name, content] of Object.entries(fills[page.file] ?? {})) h = region(h, name, content, page.file);
     if (h !== before) { fs.writeFileSync(file, h); console.log(`wrote ${page.file}`); } else console.log(`same  ${page.file}`);
   }
-  // the briefings (social/briefs.mjs writes briefs/*.html) are listed too
+  // the briefings (social/briefs.mjs writes briefs/*.html) are listed too — not a draft's page (noindex until its post
+  // is on Instagram), whichever of the two scripts writes the sitemap last
   const BR = path.join(ROOT, "briefs");
   const briefs = fs.existsSync(BR) ? fs.readdirSync(BR, { recursive: true }).map(String).filter((f) => f.endsWith(".html"))
+    .filter((f) => !fs.readFileSync(path.join(BR, f), "utf8").includes(NOINDEX))
     .map((f) => `/briefs/${f.slice(0, -5).replace(/\\/g, "/")}`.replace(/\/index$/, "")) : [];
-  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
-  fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
+  // both the trends build (the data's day) and social/briefs.mjs (the newest briefing's day) write the sitemap, one
+  // after the other: a page keeps the later of its lastmod already there and this one, so it never goes back
+  const SM = path.join(ROOT, "sitemap.xml"), had = fs.existsSync(SM) ? Object.fromEntries([...fs.readFileSync(SM, "utf8").matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]])) : {};
+  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${[had[SITE + u], lastmod].filter(Boolean).sort().at(-1)}</lastmod></url>`).join("\n");
+  fs.writeFileSync(SM, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
   fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 }
 
 // a whole page in the site's frame (head tags, top bar, footer) — for pages generated in full, like the briefings
-// phones: pages turned sideways instead of one long scroll (/pager.js) — set before the first paint so the long page never
-// flashes; "?scroll=1" keeps the long page, and a pager that has not started in 4 s gives it back. index.html has a copy.
-export const PAGED_HEAD = `<script>if (matchMedia("(max-width: 640px)").matches && !/[?&]scroll=/.test(location.search)) { const r = document.documentElement; r.classList.add("paged"); setTimeout(() => { if (!r.classList.contains("pgr-ready")) r.classList.remove("paged"); }, 4000); }</script>`;
+// phones: pages turned sideways instead of one long scroll (/pager.js), decided once, before the first paint, so the long
+// page never flashes. "?scroll=1" keeps the long page. A pager that has not started in 4 s (a slow network) gives the long
+// page back and fires "unpaged", so the scripts that set up the long page run after all. A window that grows past 900px
+// (a desktop browser widened) reloads as the long page; a phone turned sideways keeps its pages (and its tab bar, ui.css).
+const PAGED_HEAD = `<script>(() => { const r = document.documentElement;
+  if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
+  r.classList.add("paged");
+  setTimeout(() => { if (r.classList.contains("pgr-ready") || !r.classList.contains("paged")) return; r.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); }, 4000);
+  const wide = matchMedia("(min-width: 900px)"), grown = (e) => { if (e.matches && r.classList.contains("paged")) location.reload(); };
+  if (wide.addEventListener) wide.addEventListener("change", grown); else wide.addListener(grown);
+})();</script>`;
 
-export function shell({ path: p, title, desc, css = "", body, paged = false }) {
-  const page = { path: p }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
+// `noindex`: a page that must exist but not be found yet (a draft's briefing) — no canonical or share tags, not in the sitemap
+export function shell({ path: p, title, desc, css = "", body, paged = false, noindex = false }) {
+  const page = { path: p, noindex }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
   return `<!doctype html>
 <html lang="ko">
 <head>

@@ -1,17 +1,20 @@
-# Daily refresh of the dashboard (/, AX 트렌드 레이더) and, when something big happened, an Instagram draft.
+# Daily refresh of the dashboard (/, AX 트렌드 레이더) and, when something worth a post happened, an Instagram draft.
 #   1. fetch → verify → build. If any check fails, nothing is committed and an issue lists the failing checks —
-#      a wrong sentence is never published silently. build.mjs also looks for big cases (a leader change, a package
-#      far above its usual week, a new all-time high, a phrase crossing 2.5× in papers, a new #1 model, a capex filing).
-#      It also compares today's readings with yesterday's (trends/data/state.json) for small changes — a new #1, a new
-#      entrant, a share moving 1%p, a month of papers counted, one company's filing — logged in changes.json.
-#   2. social/plan.mjs decides whether today gets a draft: a big case not drafted before (its subject left alone for
-#      21 days); else, a week after the last draft, a digest of 3+ small changes; else a roundup after 14 quiet days.
-#      Otherwise only the site is refreshed.
-#   3. A draft becomes carousel cards (social/build.mjs, render.mjs — a different drawing and layout each time) and a
-#      caption (social/caption.mjs: Claude writes it, code checks every number against the cards and rejects
-#      advice/forecast words), and is posted to Instagram right away; a closed "[게시됨]" issue records it.
-#      With the repository variable AUTO_PUBLISH set to "false" (or on a forced test run, or when posting fails) an
-#      "[instagram]" issue asks for approval instead, and the owner's /approve posts it (social-publish.yml).
+#      a wrong sentence is never published silently. build.mjs also looks for big cases and compares today's readings
+#      with yesterday's (trends/data/state.json) for small changes, logged in changes.json.
+#   2. social/plan.mjs decides whether today gets a draft (AX only): a big case not drafted before (its subject left
+#      alone for 21 days); else this week's official AX announcements; else, a week after the last draft, a digest of
+#      3+ small changes; else a roundup after 14 quiet days. Otherwise only the site is refreshed.
+#   3. A draft becomes a story (social/story.mjs: Claude writes it, code checks every number, word and line — a
+#      fallback that fails the checks means no draft today), carousel cards (build.mjs, render.mjs) and a caption
+#      (caption.mjs, checked the same way). A draft that breaks on the way is undone (its folder and its posted.json
+#      entry) so the day's site update is still committed; an issue says what happened.
+#   4. The site, the briefings and the draft are committed (social/commit.mjs). Then, in the job "publish" (one post at
+#      a time with social-publish.yml: the shared group instagram-publish), the draft is posted to Instagram right away
+#      and its briefing listed; a closed "[게시됨]" issue records it. With the repository variable AUTO_PUBLISH set to
+#      "false" (or on a test draft, or when posting fails) an "[instagram]" issue asks for approval instead, and the
+#      owner's /approve posts it (social-publish.yml).
+#   5. Push alerts for briefings that just became public (job "notify").
 name: trends daily
 
 on:
@@ -24,7 +27,7 @@ on:
         type: choice
         default: "규칙대로"
         options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "테스트 초안 (승인 필요)"]
-  # the same choices without the button: push social/request.json ({"post": "news" | "race" | "test"}) to main.
+  # the same choices without the button: push social/request.json ({"post": "news" | "test"}) to main.
   # The run's own commit removes the file, so a request is used once (and the bot's push starts no new run).
   push:
     branches: [main]
@@ -42,60 +45,105 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    outputs:
+      ready: ${{ steps.draft.outputs.ready }}
+      slot: ${{ steps.draft.outputs.slot }}
+      test: ${{ steps.req.outputs.test }}
     steps:
+      # no token left in .git/config while npm packages and the Claude Code CLI run; the commit step gets it alone
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      # needed only for the cards (render.mjs): if it fails, the draft fails and is undone — the data still goes in
       - run: npx playwright install --with-deps chromium
+        continue-on-error: true
 
       - name: Fetch, verify, build
+        id: data
         shell: bash # -eo pipefail, so a failing step is not hidden by tee
         env:
           SEC_CONTACT: ${{ vars.SEC_CONTACT }}
+          EVENT: ${{ github.event_name }}
         # a posting request (push) on a day the data was already fetched reuses it: verify + build only, ~8 min faster
         run: |
-          if [ "${{ github.event_name }}" = "push" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
+          if [ "$EVENT" = "push" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
             echo "data already fetched today — verify and build only" | tee run.log
             npm run trends:build 2>&1 | tee -a run.log
           else
             npm run trends 2>&1 | tee run.log
           fi
 
+      # the kind of post asked for: the Run workflow choice, or social/request.json (letters only — it is pushed text)
       - name: Posting request
         id: req
+        env:
+          CHOICE: ${{ inputs.post }}
         run: |
-          if [ -f social/request.json ]; then echo "kind=$(node -p 'String(require("./social/request.json").post ?? "")')" >> "$GITHUB_OUTPUT"; fi
+          kind=""
+          if [ -f social/request.json ]; then kind=$(node -p 'String(require("./social/request.json").post ?? "").replace(/[^a-z]/g, "")'); fi
+          if [ "$CHOICE" = "이번 주 AX 사건 지금 올리기" ]; then kind=news; fi
+          if [ "$CHOICE" = "테스트 초안 (승인 필요)" ]; then kind=test; fi
+          echo "kind=$kind" >> "$GITHUB_OUTPUT"
+          if [ "$kind" = "test" ]; then echo "test=true" >> "$GITHUB_OUTPUT"; fi
 
-      - name: Big case today?
-        id: plan
-        shell: bash
-        env:
-          POST_KIND: ${{ inputs.post == '이번 주 AX 사건 지금 올리기' && 'news' || inputs.post == '누가 앞서나 지금 올리기' && 'race' || inputs.post == '테스트 초안 (승인 필요)' && 'test' || steps.req.outputs.kind || '' }}
-        run: node social/plan.mjs 2>&1 | tee -a run.log
-
-      # the caption is written by Claude through the Claude Code CLI on a subscription token (CLAUDE_CODE_OAUTH_TOKEN,
-      # from `claude setup-token`); an API key (ANTHROPIC_API_KEY) also works; with neither, a template caption is used
+      # the story and the caption are written by Claude through the Claude Code CLI on a subscription token
+      # (CLAUDE_CODE_OAUTH_TOKEN, from `claude setup-token`); an API key (ANTHROPIC_API_KEY) also works. The CLI is
+      # pinned: it runs with those secrets, so a new release is a deliberate update here, not a surprise.
       - name: Install Claude Code # every run: the cards on a posting day, the monthly roundup at the start of a month
-        run: npm install -g @anthropic-ai/claude-code
+        continue-on-error: true # without it the story falls back (and is checked like any other), the data still goes in
+        run: npm install -g @anthropic-ai/claude-code@2.1.310
 
-      - name: Instagram cards and caption
-        if: steps.plan.outputs.post == 'true'
+      - name: Instagram draft (plan, story, cards, caption)
+        id: social
+        continue-on-error: true
         shell: bash
         env:
+          POST_KIND: ${{ steps.req.outputs.kind }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
+          node social/plan.mjs 2>&1 | tee -a run.log
           node social/story.mjs 2>&1 | tee -a run.log
           node social/build.mjs 2>&1 | tee -a run.log
           node social/render.mjs 2>&1 | tee -a run.log
           node social/caption.mjs 2>&1 | tee -a run.log
 
+      # a draft that broke on the way is undone — its folder, its posted.json entry and the card page go back to what
+      # main has — so the day's site update below is committed without it (the next run may draft again)
+      - name: Draft status
+        id: draft
+        if: ${{ !cancelled() && steps.data.outcome == 'success' }}
+        shell: bash
+        env:
+          OUTCOME: ${{ steps.social.outcome }}
+        run: |
+          if [ "$OUTCOME" != "success" ]; then
+            git checkout -- social/posted.json social/cards.html
+            git clean -fdq -- social/out
+            rm -f social/plan.json
+            echo "problem=failed" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          node -e '
+            const fs = require("fs"); let p = {}; try { p = JSON.parse(fs.readFileSync("social/plan.json", "utf8")); } catch {}
+            const slot = p.post && /^\d{4}-\d{2}-\d{2}(?:-\d+)?$/.test(p.slot ?? "") ? p.slot : ""; // social/slot.mjs → SLOT
+            const ready = Boolean(slot) && fs.existsSync(`social/out/${slot}/post.json`);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT, `ready=${ready}\nslot=${ready ? slot : ""}\n${p.dropped ? "problem=dropped\n" : ""}`);
+          '
+          # no draft (none planned, or dropped after its cards were built): the card page stays as main has it
+          grep -q '^ready=true' "$GITHUB_OUTPUT" || git checkout -- social/cards.html
+
       # the web side, every run: last month's roundup once a month (roundup.mjs), then the briefing pages, series, tags,
-      # RSS and the home page's latest three (briefs.mjs)
+      # RSS and the home page's latest three (briefs.mjs). A failure is reported, and the data is still committed.
       - name: Briefings (web)
+        id: web
+        if: ${{ !cancelled() && steps.data.outcome == 'success' }}
+        continue-on-error: true
         shell: bash
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
@@ -106,91 +154,200 @@ jobs:
 
       - name: Commit refreshed data, page and cards
         id: commit
-        run: |
-          git config user.name "pivoxdata-bot"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs
-          if [ -f social/request.json ]; then git rm -q social/request.json; fi # a posting request is used once
-          if git diff --cached --quiet; then echo "changed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
-          git commit -m "data(trends): daily refresh $(date -u +%F)${{ steps.plan.outputs.post == 'true' && ' + instagram draft' || '' }}"
-          git pull --rebase origin "${GITHUB_REF_NAME}" && git push # the publish job may have pushed meanwhile
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      # automatic posting (the default): a draft that passed the caption checks is posted right away, after the commit
-      # above has put its images on the site. Set the repository variable AUTO_PUBLISH to "false" to go back to
-      # approving each post. A test draft (Run workflow → "테스트 초안") always waits for approval. If posting fails, the draft
-      # falls back to an approval issue, so nothing is lost.
-      - name: Post to Instagram automatically
-        id: auto
-        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true' && vars.AUTO_PUBLISH != 'false' && inputs.post != '테스트 초안 (승인 필요)' && steps.req.outputs.kind != 'test'
-        continue-on-error: true
+        if: ${{ !cancelled() && steps.data.outcome == 'success' }}
+        shell: bash # -eo pipefail: a failed push is not hidden by tee
         env:
-          IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
-          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
-          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DRAFT: ${{ steps.draft.outputs.ready == 'true' && ' + instagram draft' || '' }}
         run: |
-          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set"; exit 1; }
-          file="social/out/${{ steps.plan.outputs.date }}/post.json"
-          node social/publish.mjs "$file"
-          git add "$file" && git commit -m "social: published ${{ steps.plan.outputs.date }} (automatic)" && git pull --rebase origin "${GITHUB_REF_NAME}" && git push
+          rm -f social/request.json # a posting request is used once, whether or not it made a post
+          node social/commit.mjs -m "data(trends): daily refresh $(date -u +%F)$DRAFT" trends/data index.html map.html 404.html sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs social/request.json 2>&1 | tee -a run.log
 
-      # push alerts (OneSignal) for briefings that just became public: the post's briefing once it is on Instagram, a
-      # monthly roundup once written — to the readers who chose that topic on /briefs. Never fails the run.
-      - name: Push alerts for new briefings
-        continue-on-error: true
-        env:
-          ONESIGNAL_REST_KEY: ${{ secrets.ONESIGNAL_REST_KEY }}
-        run: |
-          git pull -q --rebase origin "${GITHUB_REF_NAME}" || true
-          node social/notify.mjs
-          git add social/notified.json
-          if ! git diff --cached --quiet; then git commit -m "social: push alerts sent" && git pull --rebase origin "${GITHUB_REF_NAME}" && git push; fi
-
-      - name: Report the post, or ask for approval
-        if: steps.plan.outputs.post == 'true' && steps.commit.outputs.changed == 'true'
+      # an Instagram draft that wasn't made (it broke, or its fallback failed the checks) or briefings that didn't
+      # build: one open issue, a comment each time it happens again. Secrets are taken out of the log before it is posted.
+      - name: Report a social problem
+        if: ${{ !cancelled() && (steps.draft.outputs.problem != '' || steps.web.outcome == 'failure') }}
         uses: actions/github-script@v7
         env:
-          POST_DATE: ${{ steps.plan.outputs.date }}
-          AUTO: ${{ steps.auto.outcome }}
+          PROBLEM: ${{ steps.draft.outputs.problem }}
+          WEB: ${{ steps.web.outcome }}
+          REDACT_1: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          REDACT_2: ${{ secrets.ANTHROPIC_API_KEY }}
+          REDACT_3: ${{ secrets.IG_ACCESS_TOKEN }}
+          REDACT_4: ${{ secrets.ONESIGNAL_REST_KEY }}
+          REDACT_5: ${{ secrets.SECRETS_PAT }}
         with:
           script: |
             const fs = require("fs");
-            const date = process.env.POST_DATE;
-            const post = JSON.parse(fs.readFileSync(`social/out/${date}/post.json`, "utf8"));
+            const secrets = Object.entries(process.env).filter(([k, v]) => k.startsWith("REDACT_") && v.trim()).map(([, v]) => v);
+            const redact = (t) => { for (const s of secrets) for (const v of new Set([s, s.trim(), s.replace(/\s+/g, ""), ...s.split(/\s+/)])) if (v.length >= 8) t = t.split(v).join("[redacted]"); return t.replace(/sk-ant-[\w-]{10,}/g, "[redacted]").replace(/\b(?:IG|EA)A[\w-]{20,}/g, "[redacted]"); };
+            const log = fs.existsSync("run.log") ? fs.readFileSync("run.log", "utf8") : "";
+            let plan = {}; try { plan = JSON.parse(fs.readFileSync("social/plan.json", "utf8")); } catch {}
+            const what = [
+              ...(process.env.PROBLEM === "dropped" ? [`**오늘은 인스타그램 초안을 만들지 않았어요** — 대신 쓸 글(Claude 없이 만든 카드)이 검사를 통과하지 못했어요. 사이트는 갱신했어요.\n\n> ${plan.why}`] : []),
+              ...(process.env.PROBLEM === "failed" ? ["**인스타그램 초안을 만들다 멈췄어요** — 만들던 초안은 지우고 사이트만 갱신했어요. 다음 실행이 다시 시도해요."] : []),
+              ...(process.env.WEB === "failure" ? ["**브리핑 페이지를 만들지 못했어요** (roundup.mjs / briefs.mjs) — 데이터와 사이트는 갱신했어요."] : []),
+            ];
+            const tail = log.split("\n").filter((l) => /Error|error|failed|rejected|no draft|✗/.test(l)).join("\n") || log.slice(-3000);
             const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const imgs = post.images.map((f) => `<img src="${post.image_base}${f}" width="270">`).join(" ");
-            const body = [
-              `<!-- instagram-post:${date} -->`,
-              post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}`
-                : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
-                : post.mode === "race" ? "**누가 앞서나** — AI 분야별 1위와 그 변화."
-                : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 숫자를 모았습니다.",
-              "",
-              `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
-              ...(post.published ? [] : [`이미지는 사이트 배포가 끝나면(1~2분) 보입니다.`]),
-              "", imgs, "", "**캡션**", "```", post.caption, "```", "",
-              ...(post.published ? [`**자동으로 게시했습니다:** ${post.published.permalink}`, "", "내리려면 인스타그램 앱에서 직접 삭제하세요. 자동 게시를 끄려면 저장소 변수 `AUTO_PUBLISH`를 `false`로."]
-                : [...(process.env.AUTO === "failure" ? [`⚠️ 자동 게시가 실패해 승인으로 돌렸습니다. 로그: ${run}`, ""] : []),
-                   "- `/approve` — 이대로 게시 (저장소 소유자만)",
-                   "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]),
-            ].join("\n");
-            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : post.mode === "race" ? "누가 앞서나" : "요즘 AI 기술 신호";
-            const title = post.published ? `[게시됨] ${date} ${what}` : `[instagram] ${date} ${what}`;
-            const issue = await github.rest.issues.create({ ...context.repo, title: title.slice(0, 200), body });
-            // a posted draft is a record, not a question: closed at once (it still notifies the owner)
-            if (post.published) await github.rest.issues.update({ ...context.repo, issue_number: issue.data.number, state: "closed", state_reason: "completed" });
+            const body = `${what.join("\n\n")}\n\n\`\`\`\n${redact(tail).slice(-6000)}\n\`\`\`\n\nRun: ${run}`;
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("social: draft or briefings not made"));
+            if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });
+            else await github.rest.issues.create({ ...context.repo, title: `social: draft or briefings not made (${new Date().toISOString().slice(0, 10)})`, body });
 
       - name: Open an issue when a check fails
         if: failure()
         uses: actions/github-script@v7
+        env:
+          REDACT_1: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          REDACT_2: ${{ secrets.ANTHROPIC_API_KEY }}
+          REDACT_3: ${{ secrets.IG_ACCESS_TOKEN }}
+          REDACT_4: ${{ secrets.ONESIGNAL_REST_KEY }}
+          REDACT_5: ${{ secrets.SECRETS_PAT }}
         with:
           script: |
             const fs = require("fs");
+            const secrets = Object.entries(process.env).filter(([k, v]) => k.startsWith("REDACT_") && v.trim()).map(([, v]) => v);
+            const redact = (t) => { for (const s of secrets) for (const v of new Set([s, s.trim(), s.replace(/\s+/g, ""), ...s.split(/\s+/)])) if (v.length >= 8) t = t.split(v).join("[redacted]"); return t.replace(/sk-ant-[\w-]{10,}/g, "[redacted]").replace(/\b(?:IG|EA)A[\w-]{20,}/g, "[redacted]"); };
             const log = fs.existsSync("run.log") ? fs.readFileSync("run.log", "utf8") : "(no log)";
             const failed = log.split("\n").filter((l) => l.startsWith("✗") || /Error|STOPPED|failed/.test(l)).join("\n") || log.slice(-3000);
-            const body = `The daily trends job did not publish because a step failed.\n\n\`\`\`\n${failed.slice(0, 6000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `The daily trends job did not publish because a step failed.\n\n\`\`\`\n${redact(failed).slice(0, 6000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             // one open issue at a time: a failure that repeats daily adds a comment instead of a new issue
             const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("trends: daily refresh stopped"));
             if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });
             else await github.rest.issues.create({ ...context.repo, title: `trends: daily refresh stopped (${new Date().toISOString().slice(0, 10)})`, body });
+
+  # automatic posting (the default): the draft, committed above with its images, is posted right away and its briefing
+  # listed. Set the repository variable AUTO_PUBLISH to "false" to go back to approving each post. A test draft always
+  # waits for approval. If posting fails, the draft falls back to an approval issue, so nothing is lost.
+  # One post at a time across workflows: the same group as social-publish.yml (an /approve and this can't both post
+  # the same draft — and publish.mjs reads the account's recent media first, so a second try never posts twice).
+  publish:
+    needs: refresh
+    if: needs.refresh.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30 # publish.mjs: at most ~18 min (10 for the images to appear, 5 + 2.5 for the containers)
+    concurrency:
+      group: instagram-publish
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }} # the branch as refresh pushed it, with the draft
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Post to Instagram automatically
+        id: auto
+        if: vars.AUTO_PUBLISH != 'false' && needs.refresh.outputs.test != 'true'
+        continue-on-error: true
+        env:
+          SLOT: ${{ needs.refresh.outputs.slot }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set"; exit 1; }
+          node social/publish.mjs "social/out/$SLOT/post.json"
+          node social/commit.mjs -m "social: published $SLOT (automatic)" "social/out/$SLOT/post.json"
+
+      # its briefing is public now: listed, in the RSS, the sitemap and the home page at once (the next daily run would
+      # do it too, so a failure here only delays that)
+      - name: List its briefing
+        if: steps.auto.outcome == 'success'
+        continue-on-error: true
+        env:
+          SLOT: ${{ needs.refresh.outputs.slot }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node social/commit.mjs --briefs -m "briefs: $SLOT is on Instagram — listed"
+
+      - name: Report the post, or ask for approval
+        if: ${{ !cancelled() }}
+        uses: actions/github-script@v7
+        env:
+          SLOT: ${{ needs.refresh.outputs.slot }}
+          AUTO: ${{ steps.auto.outcome }}
+        with:
+          script: |
+            const fs = require("fs");
+            const slot = process.env.SLOT;
+            const post = JSON.parse(fs.readFileSync(`social/out/${slot}/post.json`, "utf8"));
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const imgs = post.images.map((f) => `<img src="${post.image_base}${f}" width="270">`).join(" ");
+            // posted, but post.json could not be pushed: /approve records it (publish.mjs finds it among the recent
+            // media and does not post it again)
+            const unrecorded = post.published && process.env.AUTO !== "success";
+            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "news" ? "이번 주 AX 사건" : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AX 숫자";
+            const body = [
+              `<!-- instagram-post:${slot} -->`,
+              post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}`
+                : post.mode === "news" ? `**이번 주 AX 사건** — 회사·정부가 직접 낸 공식 발표로 쓴 게시물입니다.`
+                : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
+                : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 AX 숫자를 모았습니다.",
+              "",
+              `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude (${post.caption_via}) — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
+              ...(post.published ? [] : [`이미지는 사이트 배포가 끝나면(1~2분) 보입니다. 브리핑 페이지(https://data.pivoxquant.com/briefs/${slot})는 게시 전까지 목록·검색에 나오지 않습니다.`]),
+              "", imgs, "", "**캡션**", "```", post.caption, "```", "",
+              ...(unrecorded ? [`⚠️ 인스타그램에는 올라갔지만(${post.published.permalink ?? post.published.media_id}) 기록(post.json)을 저장하지 못했습니다. 로그: ${run}`, "", "- `/approve` — 다시 올리지 않고 기록만 남깁니다 (저장소 소유자만)"]
+                : post.published ? [`**자동으로 게시했습니다:** ${post.published.permalink}`, "", "내리려면 인스타그램 앱에서 직접 삭제하세요. 자동 게시를 끄려면 저장소 변수 `AUTO_PUBLISH`를 `false`로."]
+                : [...(process.env.AUTO === "failure" ? [`⚠️ 자동 게시가 실패해 승인으로 돌렸습니다. 로그: ${run}`, ""] : []),
+                   "- `/approve` — 이대로 게시 (저장소 소유자만)",
+                   "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]),
+            ].join("\n");
+            const title = post.published && !unrecorded ? `[게시됨] ${slot} ${what}` : `[instagram] ${slot} ${what}`;
+            const issue = await github.rest.issues.create({ ...context.repo, title: title.slice(0, 200), body });
+            // a posted draft is a record, not a question: closed at once (it still notifies the owner)
+            if (post.published && !unrecorded) await github.rest.issues.update({ ...context.repo, issue_number: issue.data.number, state: "closed", state_reason: "completed" });
+
+  # push alerts (OneSignal) for briefings that just became public: the post's briefing once it is on Instagram, a
+  # monthly roundup once written — to the readers who chose that topic on /briefs. Every run, after any posting.
+  # notified.json is committed even when an alert failed (each one sent is written down at once), so none goes twice.
+  notify:
+    needs: [refresh, publish]
+    if: ${{ !cancelled() && needs.refresh.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45 # notify.mjs waits up to 10 min per briefing for its page to go live
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Push alerts for new briefings
+        id: alerts
+        continue-on-error: true
+        shell: bash
+        env:
+          ONESIGNAL_REST_KEY: ${{ secrets.ONESIGNAL_REST_KEY }}
+        run: node social/notify.mjs 2>&1 | tee notify.log
+
+      - name: Record the alerts sent
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          node social/commit.mjs -m "social: push alerts sent" social/notified.json
+
+      - name: Report failed alerts
+        if: steps.alerts.outcome == 'failure'
+        uses: actions/github-script@v7
+        env:
+          REDACT_1: ${{ secrets.ONESIGNAL_REST_KEY }}
+        with:
+          script: |
+            const fs = require("fs");
+            const secrets = Object.entries(process.env).filter(([k, v]) => k.startsWith("REDACT_") && v.trim()).map(([, v]) => v);
+            const redact = (t) => { for (const s of secrets) for (const v of new Set([s, s.trim(), s.replace(/\s+/g, "")])) if (v.length >= 8) t = t.split(v).join("[redacted]"); return t; };
+            const log = fs.existsSync("notify.log") ? fs.readFileSync("notify.log", "utf8") : "(no log)";
+            const body = `Some push alerts were not sent (the ones that went out are recorded in social/notified.json; the next run tries the rest).\n\n\`\`\`\n${redact(log).slice(-4000)}\n\`\`\`\n\nRun: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 50 })).data.find((i) => i.title.startsWith("social: push alerts failed"));
+            if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body: `Again on ${new Date().toISOString().slice(0, 10)}.\n\n${body}` });
+            else await github.rest.issues.create({ ...context.repo, title: `social: push alerts failed (${new Date().toISOString().slice(0, 10)})`, body });
