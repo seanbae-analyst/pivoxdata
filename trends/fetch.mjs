@@ -75,7 +75,7 @@ await source("npm", async () => {
     console.log(`npm   ${p.pkg.padEnd(28)} ${days.length} days → ${days.at(-1)?.[0]}`);
     await sleep(1000); // npm rate-limits per IP; 44 requests a day spread over a minute is plenty
   }
-  write("npm.json", { source: { site: "npm registry download counts API", url: "https://api.npmjs.org/downloads/range/{start}:{end}/{package}", docs: "https://github.com/npm/registry/blob/main/docs/download-counts.md" }, fetched_at: today, ...doc, packages: doc.packages });
+  write("npm.json", { source: { site: "npm registry download counts API", url: "https://api.npmjs.org/downloads/range/{start}:{end}/{package}", docs: "https://github.com/npm/registry/blob/main/docs/download-counts.md" }, fetched_at: today, packages: doc.packages });
 });
 
 // ---------- PyPI via pypistats: daily downloads without mirrors (~180 days served) ----------
