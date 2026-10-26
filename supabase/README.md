@@ -1,14 +1,16 @@
 # 로그인 켜기 (Supabase, 2026-10-26)
 
-로그인 코드와 화면은 들어가 있고 **꺼져 있다**. `trends/site.mjs` → `AUTH` 의 `url` · `key` 가 비어 있으면 로그인은 어디에도 없다
-(메뉴 · 소개 다음의 로그인 단계 · 처리방침의 로그인 절). 아래를 하면 켜진다. 흐름과 이유는 `docs/decisions.md` 23번.
+로그인은 `trends/site.mjs` → `AUTH`의 `url` · `key`로 켜진다(비어 있으면 로그인은 어디에도 없다 — 메뉴 · 소개 다음의 로그인 단계 ·
+처리방침의 로그인 절). 흐름과 이유는 `docs/decisions.md` 23번.
 
-## 0. 프로젝트 자리 (소유자가 정한다)
+## 0. 프로젝트 — PivoxQuant 프로젝트를 같이 쓴다 (소유자 2026-10-26)
 
-Supabase 무료 프로젝트는 계정당 **2개**이고(일시정지한 것은 안 센다) 지금 PivoxMap · PivoxQuant 가 쓰고 있다(2026-10-26 `list_projects`).
-- 새 프로젝트: 조직을 Pro 로 올려야 한다(월 $25 + 프로젝트마다 컴퓨트 약 $10, 크레딧 $10 — 세 개면 약 $45/월, Supabase 요금 문서).
-- 이미 있는 프로젝트를 같이 쓰기: 이 파일의 스키마(`pivoxdata`)는 따로라 표가 섞이지 않지만, 로그인 사용자 목록(`auth.users`)과
-  메일 설정 · 사이트 주소는 그 프로젝트와 같이 쓴다. PivoxQuant 는 Supabase 로그인을 쓰지 않는다(그 저장소에 supabase-js · `/auth/v1` 없음).
+`pivoxquant`(ref `yjiztgummaxecriiuumt`, 서울 ap-northeast-2). Supabase 무료 프로젝트 2개가 PivoxMap · PivoxQuant로 차 있어서다.
+- 같이 쓰기 전에 잰 것(2026-10-26): public 표 53개(주인 `pivox_app`)에 anon · authenticated · PUBLIC 권한 0, public 함수 0,
+  저장소 버킷 0, `auth.users` 0명, 공개 키로 `GET /rest/v1/users` · `/investment_profiles` → 401 `42501`.
+  공개 키는 사이트 HTML에 실리므로, PivoxQuant 표에 anon · authenticated 권한을 주는 변경이 생기면 그 표가 열린다 — 그쪽에서 권한을 줄 땐 이걸 같이 본다.
+- 같이 쓰는 것: 로그인 사용자 목록(`auth.users`), 메일 설정(SMTP · 템플릿), 사이트 주소. PivoxQuant는 Supabase 로그인을 쓰지 않는다
+  (그 저장소에 supabase-js · `/auth/v1` 없음, `auth.users` 0명).
 
 ## 1. 스키마
 

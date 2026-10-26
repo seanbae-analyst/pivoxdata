@@ -48,8 +48,9 @@ PivoxQuant(투자 회고 앱)와는 다른 제품이다. 공유하는 건 디자
    로그인은 메일 링크 + 필수 동의 셋(약관 · 수집 이용 · 국외 이전), 얻는 것은 **저장한 브리핑을 어느 기기에서나**(`/saved`, 로그인 없이는 그 기기만).
    세션은 `/auth/callback`에서만 만든다(`auth.js`, `#access_token`은 받지 않는다). 탈퇴는 `/saved` 계정에서. 개인정보 처리방침 · 약관의
    사실은 `trends/legal.mjs` 한 곳 — 바꾸면 `POLICY_VERSION`을 올린다(로그인한 사람은 다시 동의).
-   **로그인 서버(Supabase) 자리는 소유자가 정하는 중**이다: 정해지기 전까지 `trends/site.mjs` → `AUTH`가 비어 로그인 UI가 어디에도 없다
-   (켜는 순서 `supabase/README.md`). 이메일 구독(RSS → 메일)은 여전히 보류("일단은 두자").
+   **로그인 서버는 PivoxQuant의 Supabase 프로젝트(서울)를 같이 쓴다**(2026-10-26 소유자): 표는 `pivoxdata` 스키마에 따로 있고
+   브라우저는 `public.pd_*` 함수로만 닿는다 — PivoxQuant 표는 이 키로 열리지 않는다. 그 프로젝트에서 바꾸는 것은 이 스키마와
+   Auth 설정(주소 · 메일)뿐이다(`supabase/README.md`). 이메일 구독(RSS → 메일)은 여전히 보류("일단은 두자").
 
 ## 글·카드 규칙 (코드가 검사한다 — 규칙을 바꾸면 검사도 같이)
 
@@ -107,4 +108,4 @@ npm run dev                           # http://localhost:8099
 | 인스타 토큰 | 2026-12-23까지 유효, 매달 1·11·21일 자동 갱신 | `ig-token.yml` cron · 실행 결과 |
 | 원문 읽기 | 18곳 중 14곳 읽힘. OpenAI 403 · McKinsey 503 · 삼성전자 15초 초과 · 과기정통부는 본문이 첨부파일 → 제목·요약만 | `social/original.mjs` 로 출처마다 1건씩, 이 세션에서 (Actions에서는 다를 수 있음) |
 | 사례 카드·이야기 형식 첫 게시 | 아직 없음 — 다음 AX 사건 게시물부터 | 이 저장소 `social/out/` |
-| 로그인 | 코드 · 화면 준비, **꺼짐** — Supabase 무료 프로젝트 2개(PivoxMap · PivoxQuant)가 차 있어 자리를 소유자가 정하는 중 | `trends/site.mjs` → `AUTH` · Supabase `list_projects` |
+| 로그인 | PivoxQuant Supabase 프로젝트(서울)를 같이 씀. 그 키로 PivoxQuant 표 요청 → 401(`users` · `investment_profiles`). 스키마 · Auth 설정(주소 · SMTP · 메일 템플릿)은 소유자 대기 | `trends/site.mjs` → `AUTH` · 공개 키로 `/rest/v1/<표>` 요청 |

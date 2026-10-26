@@ -11,12 +11,13 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
 export const NAME = "AX 트렌드 레이더";
 // signing in (2026-10-26, "랜딩 먼저 나오고 로그인 넘어가게 — pivoxmap처럼"): the Supabase project that keeps accounts
-// and saved briefings — its address and publishable key (public by design: the browser calls it, and what a browser may
-// do there is fixed by supabase/schema.sql). Empty = no signing in anywhere: no menu, no login step after the landing,
-// no login part in the privacy policy (trends/legal.mjs). `region`: where its servers are, for the policy; `mail`:
-// "brevo" once the sign-in e-mails go out through Brevo (supabase/README.md). PD_AUTH_URL / PD_AUTH_KEY override it for a
-// local try against a stand-in.
-export const AUTH = { url: process.env.PD_AUTH_URL ?? "", key: process.env.PD_AUTH_KEY ?? "", region: "", mail: "" };
+// and saved briefings — PivoxQuant's project, shared (owner, 2026-10-26; ours lives in the schema pivoxdata, and
+// PivoxQuant's tables answer this key with 401 — supabase/README.md). Its address and publishable key are public by
+// design: the browser calls it, and what a browser may do there is fixed by supabase/schema.sql. Empty = no signing in
+// anywhere: no menu, no login step after the landing, no login part in the privacy policy (trends/legal.mjs). `region`:
+// where the company and its servers are, for the policy; `mail`: "brevo" once the sign-in e-mails go out through Brevo
+// (supabase/README.md). PD_AUTH_URL / PD_AUTH_KEY override it for a local try against a stand-in.
+export const AUTH = { url: process.env.PD_AUTH_URL ?? "https://yjiztgummaxecriiuumt.supabase.co", key: process.env.PD_AUTH_KEY ?? "sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB", region: "미국 · 저장은 서울 리전", mail: "" };
 AUTH.on = Boolean(AUTH.url && AUTH.key);
 // text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
 export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

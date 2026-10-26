@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css?v=9" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-10-26" />
 
 <link rel="stylesheet" href="/research.css" />
 <style></style>
@@ -24,15 +26,15 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
 <div class="sv" id="saved-root">
 <header class="sv-head">
-  <div class="kicker"><b>내 브리핑</b>이 기기의 브라우저에 저장</div>
+  <div class="kicker"><b>내 브리핑</b>이 기기 · 로그인하면 어느 기기에서나</div>
   <h1 class="page">저장한 브리핑</h1>
-  <p class="lede" id="sv-note">브리핑에서 저장을 누르면 여기에 모여요. 이 기기의 브라우저에만 저장돼요.</p>
+  <p class="lede" id="sv-note">브리핑에서 저장을 누르면 여기에 모여요. 로그인하면 다른 기기에서도 같은 목록을 봐요.</p>
 </header>
 <ul class="list sv-list" id="sv-list"></ul>
 <div class="sv-empty" id="sv-empty" hidden>
@@ -41,7 +43,24 @@
   <p>브리핑 제목 아래 <b>저장</b>을 누르면 여기에 모여요.</p>
   <a class="btn ghost" href="/briefs">브리핑 보기</a>
 </div>
-
+<section class="sv-acct" id="account" aria-labelledby="h-acct">
+  <h2 id="h-acct">계정</h2>
+  <div data-in hidden>
+    <p class="sv-who"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span><b data-user></b><small>로그인한 계정 · 저장한 브리핑이 어느 기기에서나 이어져요</small></span></p>
+    <div class="acc-row"><button class="btn ghost" type="button" data-out>로그아웃</button></div>
+    <details class="sv-del"><summary>탈퇴</summary>
+      <p>탈퇴하면 계정과 저장한 목록, 동의 기록을 지체 없이 지워요. 되돌릴 수 없어요.</p>
+      <label class="acc-label" for="del-email">확인을 위해 메일 주소를 적어 주세요</label>
+      <div class="acc-in"><input id="del-email" type="email" autocomplete="off" inputmode="email" /></div>
+      <p class="acc-err" id="del-err" role="alert" hidden></p>
+      <button class="btn danger" type="button" id="del" disabled>탈퇴하기</button>
+    </details>
+  </div>
+  <div data-out-only hidden>
+    <p class="sv-who"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span><b>로그인하지 않았어요</b><small>로그인하면 이 목록을 다른 기기에서도 이어 봐요</small></span></p>
+    <a class="btn" href="/login?next=/saved">로그인</a>
+  </div>
+</section>
 </div>
 </main>
 

@@ -207,6 +207,10 @@
   - 개인정보 처리방침 · 이용약관을 새로 둔다(`/privacy` · `/terms`, 사실은 `trends/legal.mjs` 한 곳). 로그인 전에도 알림(OneSignal)과
     호스팅 기록이 있어 처방침은 그대로 필요했다. 법률 자문 전 초안이고, 운영자 연락처는 "게시 준비 중".
   - 디자인: 표지 · 소개 · 로그인은 PivoxMap 화면을 따른다 — 주 버튼만 브론즈, 나머지는 사이트 규칙 그대로.
-- **로그인 서버 자리는 소유자가 정한다**: Supabase 무료 프로젝트는 계정당 2개이고 PivoxMap · PivoxQuant가 쓰고 있다(2026-10-26
-  `list_projects`). 정해지기 전까지 `trends/site.mjs` → `AUTH`가 비어 있어 로그인은 어디에도 안 보이고, 소개의 "시작하기"는 바로 앱으로 간다.
+- **로그인 서버 자리**: Supabase 무료 프로젝트는 계정당 2개이고 PivoxMap · PivoxQuant가 쓰고 있다(2026-10-26 `list_projects`).
+  보기는 셋이었다 — PivoxQuant 프로젝트 같이 쓰기(무료) · Pro로 올리고 새 프로젝트(약 $45/월) · 당분간 꺼 두기.
+  → 소유자: **PivoxQuant 프로젝트 같이 쓰기**(2026-10-26). 고르기 전에 잰 것: 그 프로젝트의 public 표 53개에 anon · authenticated
+  권한 0(RLS는 꺼져 있지만 권한이 없어 API로 안 열린다), 저장소 버킷 0, Supabase 로그인 사용자 0명, 공개 키로 `users` ·
+  `investment_profiles` 요청 → 401. 그래서 공개 키를 사이트에 넣어도 PivoxQuant 자료는 열리지 않는다. 같이 쓰는 것은 로그인 사용자
+  목록 · 메일 설정 · 사이트 주소(PivoxQuant는 Supabase 로그인을 안 쓴다). 처리방침의 Supabase 행은 "미국 · 저장은 서울 리전".
 
