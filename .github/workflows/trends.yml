@@ -193,7 +193,7 @@ jobs:
           DRAFT: ${{ steps.draft.outputs.ready == 'true' && ' + instagram draft' || '' }}
         run: |
           rm -f social/request.json # a posting request is used once, whether or not it made a post
-          node social/commit.mjs -m "data(trends): daily refresh $(date -u +%F)$DRAFT" trends/data index.html map.html 404.html saved.html privacy.html terms.html sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs social/request.json 2>&1 | tee -a run.log
+          node social/commit.mjs -m "data(trends): daily refresh $(date -u +%F)$DRAFT" trends/data index.html map.html 404.html login.html saved.html privacy.html terms.html auth sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs social/request.json 2>&1 | tee -a run.log
 
       # an Instagram draft that wasn't made (it broke, or its fallback failed the checks) or briefings that didn't
       # build: one open issue, a comment each time it happens again. Secrets are taken out of the log before it is posted.
