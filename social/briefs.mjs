@@ -8,44 +8,58 @@
 //  • /briefs/tag/<kind>-<id> — one theme, industry or company across all series
 //  • /briefs/feed.xml       — RSS, for readers and (later) e-mail
 //  • the home page's "AX 브리핑" region — the latest three
-// Rebuilt from everything each run, so a page also picks up its Instagram link once posted. Sources are printed from
-// the data the post was written from (announcements with their links, the Ramp AI Index citation, download counts).
+// A post's briefing is public once the post is on Instagram (post.json → published): listed, in its series and tags,
+// the RSS, the sitemap and the home page. Before that (a draft waiting for /approve, a test draft) it has its page —
+// the caption links to it, so it must be there the moment the post goes up — but marked noindex and listed nowhere,
+// and no public page links to it. A rejected draft (post.json → rejected) has no page at all. Monthly roundups are
+// public once written. Rebuilt from everything each run, so a page also picks up its Instagram link once posted —
+// every publish path runs this again and commits the result with post.json. Sources are printed from the data the
+// post was written from (announcements with their links, the Ramp AI Index citation, download counts).
 //
-// Usage: node social/briefs.mjs   (after social/caption.mjs and social/roundup.mjs; harmless without new posts)
+// Usage: node social/briefs.mjs   (after social/caption.mjs and social/roundup.mjs, and after each publish)
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { shell, writePages, SITE, NAME } from "../trends/site.mjs";
 import { SERIES, THEMES, INDUSTRIES, seriesOf, companyId } from "./tags.mjs";
 import { APP_ID } from "./notify-config.mjs";
+import { ROOT, OUT, read, AX_FORMATS } from "./util.mjs";
+import { plain } from "./claude.mjs";
+import { compareSlots } from "./slot.mjs";
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const OUT = path.join(ROOT, "social", "out"), RU = path.join(ROOT, "social", "roundups"), DIR = path.join(ROOT, "briefs");
-const read = (f) => { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch { return null; } };
+const RU = path.join(ROOT, "social", "roundups"), DIR = path.join(ROOT, "briefs");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const plain = (t) => String(t ?? "").replace(/​/g, "").replace(/‑/g, "-").replace(/ /g, " ");
+// a link from an announcement's feed goes into an href only when it is a web address (no javascript:, data: …)
+const href = (u) => (/^https?:\/\//i.test(String(u ?? "").trim()) ? esc(String(u).trim()) : "#");
+// RSS is XML: the control characters XML 1.0 forbids (and lone surrogates) would make the whole feed unreadable
+const xml = (s) => esc(plain(s)).replace(/[^\t\n\r\u0020-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu, "");
 const day = (d) => `${+d.slice(0, 4)}년 ${+d.slice(5, 7)}월 ${+d.slice(8, 10)}일`;
 const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
 const KIND = { company: "공식 발표", government: "보도자료", research: "리서치" };
-const AX_FORMATS = new Set(["monthly", "deepdive", "timeline", "explainer", "checklist"]);
+// told from the AX numbers (Ramp AI Index): a monthly report (util.mjs → AX_FORMATS), an AX case, and — Instagram
+// being AX only since 2026-10-25 — the weekly digest and the quiet-day post; the downloads note is for older posts
+const fromAX = (st) => st.topic === "ax" || AX_FORMATS.has(st.format) || st.mode === "digest" || st.mode === "roundup";
 
 // ---------- every briefing, newest first ----------
-const posts = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : [])
+const drafts = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : [])
   .map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), post: read(path.join(OUT, slot, "post.json")) }))
-  .filter((b) => b.st?.article?.sections?.length);
+  .filter((b) => b.st?.article?.sections?.length && !b.post?.rejected);
 const roundups = (fs.existsSync(RU) ? fs.readdirSync(RU).filter((f) => f.endsWith(".json")) : [])
   .map((f) => ({ slot: `roundup-${f.slice(0, -5)}`, st: read(path.join(RU, f)), post: null })).filter((b) => b.st?.article);
 // a briefing written before tags existed still gets its companies (from its sources — code, not the model)
 const companiesOf = (st) => [...new Map((st.sources ?? []).map((x) => [companyId(x.source), { id: companyId(x.source), name: x.source }])).values()];
-const briefs = [...posts, ...roundups].map((b) => ({ ...b, series: b.st.series ?? seriesOf(b.st), tags: b.st.article.tags ?? { themes: [], industries: [], companies: companiesOf(b.st) } }))
-  .sort((a, b) => b.st.date.localeCompare(a.st.date) || b.slot.localeCompare(a.slot));
+const newest = (a, b) => b.st.date.localeCompare(a.st.date) || compareSlots(b.slot, a.slot);
+const withTags = (b) => ({ ...b, series: b.st.series ?? seriesOf(b.st), tags: b.st.article.tags ?? { themes: [], industries: [], companies: companiesOf(b.st) } });
+// public: the posted ones and the roundups; pending: a draft's page, noindex, linked from nowhere
+const briefs = [...drafts.filter((b) => b.post?.published), ...roundups].map(withTags).sort(newest);
+const pending = drafts.filter((b) => !b.post?.published).map((b) => ({ ...withTags(b), pending: true })).sort(newest);
 const bySlot = new Map(briefs.map((b) => [b.slot, b]));
 
-// tags: key "theme-adoption" / "industry-finance" / "company-openai" → { name, kind, briefs }
+// tags: key "theme-adoption" / "industry-finance" / "company-openai" → { name, kind, briefs } — from the public
+// briefings only (a draft's chips link only to tag pages that exist)
 const TAGS = new Map();
 const tagName = (kind, id, b) => kind === "theme" ? THEMES.find((t) => t.id === id)?.name : kind === "industry" ? INDUSTRIES.find((t) => t.id === id)?.name : b.tags.companies.find((c) => c.id === id)?.name;
+for (const b of [...briefs, ...pending]) b.keys = [...b.tags.themes.map((id) => `theme-${id}`), ...b.tags.industries.map((id) => `industry-${id}`), ...b.tags.companies.map((c) => `company-${c.id}`)];
 for (const b of briefs) {
-  b.keys = [...b.tags.themes.map((id) => `theme-${id}`), ...b.tags.industries.map((id) => `industry-${id}`), ...b.tags.companies.map((c) => `company-${c.id}`)];
   for (const k of b.keys) {
     const [kind, ...rest] = k.split("-"), id = rest.join("-"), name = tagName(kind, id, b);
     if (!name) continue;
@@ -56,12 +70,12 @@ for (const b of briefs) {
 const chips = (b) => b.keys.filter((k) => TAGS.has(k)).map((k) => `<a class="chip ${TAGS.get(k).kind}" href="/briefs/tag/${k}">${esc(TAGS.get(k).name)}</a>`).join("");
 
 // ---------- pieces ----------
-const srcItem = (x) => `<li><a href="${esc(x.link)}" target="_blank" rel="noopener">${esc(x.source)} ${KIND[x.kind] ?? "발표"} — ${esc(plain(x.title))}</a> <span class="d">${md(x.date)}</span></li>`;
+const srcItem = (x) => `<li><a href="${href(x.link)}" target="_blank" rel="noopener">${esc(x.source)} ${KIND[x.kind] ?? "발표"} — ${esc(plain(x.title))}</a> <span class="d">${md(x.date)}</span></li>`;
 function basis(b) {
   const st = b.st;
   if (b.series === "roundup") return `<p>${esc(st.month?.slice(5).replace(/^0/, ""))}월에 올린 브리핑 ${st.briefs?.length ?? 0}편만으로 썼어요. 각 섹션 아래 링크가 근거가 된 브리핑이에요.</p>`;
   if (st.mode === "news") return `<p>회사·기관이 직접 낸 발표만 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs">${(st.sources ?? []).map(srcItem).join("")}</ul>`;
-  if (st.topic === "ax" || AX_FORMATS.has(st.format)) return `<p><a href="https://fred.stlouisfed.org/series/RAMPAIALL" target="_blank" rel="noopener">Ramp AI Index</a> (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잽니다. 무료 도구와 개인 결제는 잡히지 않아요. 지금 숫자는 <a href="/#ax">AX 탭</a>에.</p>`;
+  if (fromAX(st)) return `<p><a href="https://fred.stlouisfed.org/series/RAMPAIALL" target="_blank" rel="noopener">Ramp AI Index</a> (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잽니다. 무료 도구와 개인 결제는 잡히지 않아요. 지금 숫자는 <a href="/#ax">AX 탭</a>에.</p>`;
   return `<p>npm · PyPI 다운로드(설치 횟수이지 사용자 수가 아니에요), arXiv, Hugging Face, SEC 공시를 매일 같은 방식으로 계산했어요. 방법과 검산은 <a href="/#more">근거 데이터</a>에.</p>`;
 }
 const paras = (t) => plain(t).split(/\n{2,}/).map((p) => `<p>${esc(p).replace(/\n/g, "<br />")}</p>`).join("");
@@ -212,10 +226,11 @@ const put = (rel, html) => {
   if (!fs.existsSync(f) || fs.readFileSync(f, "utf8") !== html) { fs.writeFileSync(f, html); console.log(`wrote briefs/${rel}`); }
 };
 
-for (const b of briefs) {
+for (const b of [...briefs, ...pending]) {
   const { st, post } = b, a = st.article;
-  const sections = a.sections.map((x, i) => `<section class="part"><h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
-  const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = same[i - 1], older = same[i + 1];
+  const sections = a.sections.map((x, i) => `<section class="part"><h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${href(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
+  // a pending draft is in no list, so it has no previous or next (its related briefings are public ones)
+  const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = i < 0 ? null : same[i - 1], older = i < 0 ? null : same[i + 1];
   const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
   // one article: on a wide screen the sections one after another; on a phone pages turned sideways (ARTICLE_PAGER)
   const body = `<article class="brief">
@@ -231,10 +246,10 @@ for (const b of briefs) {
   <section class="basis"><h2>근거</h2>${basis(b)}</section>
   ${newer || older ? `<nav class="pn" aria-label="같은 시리즈">${older ? `<a href="/briefs/${older.slot}"><small>← 이전 ${esc(SERIES[b.series].name)}</small>${esc(plain(older.st.article.title))}</a>` : "<span></span>"}${newer ? `<a class="next" href="/briefs/${newer.slot}"><small>다음 ${esc(SERIES[b.series].name)} →</small>${esc(plain(newer.st.article.title))}</a>` : ""}</nav>` : ""}
   ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list">${related.map(item).join("")}</ul></section>` : ""}
-  <div class="more-links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${esc(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
+  <div class="more-links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${href(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
 </article>
 ${ARTICLE_PAGER}`;
-  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true }));
+  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true, noindex: Boolean(b.pending) }));
 }
 
 // phone: a list page as pages turned sideways (/pager.js) — the heading and as many briefings as fit, then a screenful at a
@@ -264,7 +279,7 @@ const KINDNAME = { theme: "주제", industry: "업종", company: "회사·기관
 for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/tag/${t.key}`, title: `${t.name} · AX 브리핑`, desc: `${t.name}을 다룬 AX 브리핑 모음`, kicker: KINDNAME[t.kind], h: esc(t.name),
   intro: `${KINDNAME[t.kind]} '${esc(t.name)}'을 다룬 브리핑 ${t.briefs.length}편이에요. 시리즈를 가리지 않고 모았어요.`, list: t.briefs, cur: undefined }));
 
-// RSS: the latest 30
+// RSS: the latest 30 public ones (their text through xml(): nothing XML forbids)
 const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
@@ -273,7 +288,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <atom:link href="${SITE}/briefs/feed.xml" rel="self" type="application/rss+xml" />
 <description>기업의 AI 전환(AX)을 숫자와 공식 발표로 풀어 쓴 글</description>
 <language>ko</language>
-${briefs.slice(0, 30).map((b) => `<item><title>${esc(plain(b.st.article.title))}</title><link>${SITE}/briefs/${b.slot}</link><guid>${SITE}/briefs/${b.slot}</guid><pubDate>${new Date(`${b.st.date}T01:00:00Z`).toUTCString()}</pubDate><category>${esc(SERIES[b.series]?.name ?? "")}</category><description>${esc(plain(b.st.article.lede))}</description></item>`).join("\n")}
+${briefs.slice(0, 30).map((b) => `<item><title>${xml(b.st.article.title)}</title><link>${SITE}/briefs/${b.slot}</link><guid>${SITE}/briefs/${b.slot}</guid><pubDate>${new Date(`${b.st.date}T01:00:00Z`).toUTCString()}</pubDate><category>${xml(SERIES[b.series]?.name ?? "")}</category><description>${xml(b.st.article.lede)}</description></item>`).join("\n")}
 </channel>
 </rss>
 `;
@@ -295,23 +310,24 @@ const sentences = (t, n = 1, max = 180) => {
   const all = plain(t).replace(/\s+/g, " ").trim().match(/.+?[요다]\.(?=\s|$)|.+$/g) ?? [];
   return all.slice(0, n).reduce((out, x) => (!out || (out + " " + x).length <= max ? (out ? `${out} ${x.trim()}` : x.trim()) : out), "");
 };
+// public briefings only: a draft waiting for /approve is not the week's story yet
 const featured = briefs.find((b) => b.series === "news") ?? briefs.find((b) => b.series !== "roundup") ?? null;
 function storyHtml(b) {
   if (!b) return "";
   const a = b.st.article, secs = a.sections.map((x, i) => ({ ...x, i })), last = secs.at(-1);
   const view = secs.length > 1 && !last.sources?.length ? last : null, rest = secs.filter((x) => x !== view);
   const thread = rest.filter((x) => (x.sources?.length ?? 0) > 1), beats = rest.filter((x) => !thread.includes(x));
-  const href = (x) => `/briefs/${b.slot}${x ? `#s${x.i + 1}` : ""}`;
+  const to = (x) => `/briefs/${b.slot}${x ? `#s${x.i + 1}` : ""}`;
   const src = (x) => (x.sources?.length === 1 ? `${esc(x.sources[0].source)} ${KIND[x.sources[0].kind] ?? "발표"} · ${md(x.sources[0].date)}` : "");
   return `<div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="${b.st.date}">${+b.st.date.slice(5, 7)}월 ${+b.st.date.slice(8, 10)}일</time> · ${esc(SERIES[b.series]?.name ?? "")}</p>`
-    + `<h2 class="st-t" id="h-story"><a href="${href()}">${esc(plain(a.title))}</a></h2><p class="st-lede">${esc(plain(a.lede))}</p></div>`
-    + `<ol class="beats">${beats.map((x, k) => `<li><a href="${href(x)}"><span class="bn">${k + 1}</span><b>${esc(plain(x.heading))}</b><span class="bs">${esc(sentences(x.body))}</span>${src(x) ? `<small>${src(x)}</small>` : ""}</a></li>`).join("")}</ol>`
+    + `<h2 class="st-t" id="h-story"><a href="${to()}">${esc(plain(a.title))}</a></h2><p class="st-lede">${esc(plain(a.lede))}</p></div>`
+    + `<ol class="beats">${beats.map((x, k) => `<li><a href="${to(x)}"><span class="bn">${k + 1}</span><b>${esc(plain(x.heading))}</b><span class="bs">${esc(sentences(x.body))}</span>${src(x) ? `<small>${src(x)}</small>` : ""}</a></li>`).join("")}</ol>`
     + `<div class="st-view">${thread.map((x) => `<p class="sv-k">공통 흐름</p><p class="sv-h">${esc(plain(x.heading).replace(/^공통 흐름\s*[:：]\s*/, ""))}</p><p>${esc(sentences(x.body, 3, 200))}</p>`).join("")}`
     + (view ? `<p class="sv-k">IT 컨설팅 관점 · ${esc(plain(view.heading))}</p>${plain(view.body).split(/\n{2,}/).slice(0, 3).map((t) => `<p class="sv-q">${esc(sentences(t, 2, 170))}</p>`).join("")}` : "")
-    + `<a class="st-more" href="${href()}">이야기 전체 읽기 →</a></div>`;
+    + `<a class="st-more" href="${to()}">이야기 전체 읽기 →</a></div>`;
 }
 // the home page: the story above, then the earlier briefings (not the monthly roundups), and the shared frame (nav,
 // sitemap with the briefings)
 const home = briefs.filter((b) => b.series !== "roundup" && b !== featured).slice(0, 3).map((b) => `<li><a href="/briefs/${b.slot}"><time datetime="${b.st.date}">${md(b.st.date)}</time><span class="badge">${esc(SERIES[b.series]?.name ?? "브리핑")}</span><span class="et">${esc(plain(b.st.article.title))}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join("");
 writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": home } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
-console.log(`${briefs.length} briefing(s), ${present.length} series, ${TAGS.size} tags at ${SITE}/briefs`);
+console.log(`${briefs.length} briefing(s), ${present.length} series, ${TAGS.size} tags at ${SITE}/briefs${pending.length ? ` — and ${pending.length} draft page(s), noindex and unlisted until posted: ${pending.map((b) => b.slot).join(", ")}` : ""}`);

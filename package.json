@@ -7,7 +7,7 @@
     "dev": "node serve.mjs",
     "trends": "node trends/fetch.mjs && node trends/verify.mjs && node trends/build.mjs",
     "trends:build": "node trends/verify.mjs && node trends/build.mjs",
-    "social": "node social/plan.mjs && node social/build.mjs && node social/render.mjs && node social/caption.mjs"
+    "social": "node social/plan.mjs && node social/story.mjs && node social/build.mjs && node social/render.mjs && node social/caption.mjs && node social/briefs.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0"

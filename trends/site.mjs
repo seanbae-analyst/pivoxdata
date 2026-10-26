@@ -73,6 +73,7 @@ const FOOTER = `
 </footer>
 ${TABBAR}${APPBAR}`;
 
+const NOINDEX = `<meta name="robots" content="noindex" />`;
 function head(page, html) {
   const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1] || NAME;
   const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
@@ -87,7 +88,7 @@ function head(page, html) {
 <link rel="stylesheet" href="/ui.css?v=4" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 ${page.paged ? `${PAGED_HEAD}\n` : ""}`;
-  if (page.noindex) return `\n<meta name="robots" content="noindex" />${common}`;
+  if (page.noindex) return `\n${NOINDEX}${common}`;
   return `
 <link rel="canonical" href="${url}" />
 <meta property="og:type" content="${page.path === "/" ? "website" : "article"}" />
@@ -121,9 +122,11 @@ export function writePages(fills = {}, lastmod) {
     for (const [name, content] of Object.entries(fills[page.file] ?? {})) h = region(h, name, content, page.file);
     if (h !== before) { fs.writeFileSync(file, h); console.log(`wrote ${page.file}`); } else console.log(`same  ${page.file}`);
   }
-  // the briefings (social/briefs.mjs writes briefs/*.html) are listed too
+  // the briefings (social/briefs.mjs writes briefs/*.html) are listed too — not a draft's page (noindex until its post
+  // is on Instagram), whichever of the two scripts writes the sitemap last
   const BR = path.join(ROOT, "briefs");
   const briefs = fs.existsSync(BR) ? fs.readdirSync(BR, { recursive: true }).map(String).filter((f) => f.endsWith(".html"))
+    .filter((f) => !fs.readFileSync(path.join(BR, f), "utf8").includes(NOINDEX))
     .map((f) => `/briefs/${f.slice(0, -5).replace(/\\/g, "/")}`.replace(/\/index$/, "")) : [];
   // both the trends build (the data's day) and social/briefs.mjs (the newest briefing's day) write the sitemap, one
   // after the other: a page keeps the later of its lastmod already there and this one, so it never goes back
@@ -146,8 +149,9 @@ const PAGED_HEAD = `<script>(() => { const r = document.documentElement;
   if (wide.addEventListener) wide.addEventListener("change", grown); else wide.addListener(grown);
 })();</script>`;
 
-export function shell({ path: p, title, desc, css = "", body, paged = false }) {
-  const page = { path: p }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
+// `noindex`: a page that must exist but not be found yet (a draft's briefing) — no canonical or share tags, not in the sitemap
+export function shell({ path: p, title, desc, css = "", body, paged = false, noindex = false }) {
+  const page = { path: p, noindex }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
   return `<!doctype html>
 <html lang="ko">
 <head>
