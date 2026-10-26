@@ -28,5 +28,6 @@
     "numbers_allowed": 101,
     "problems": []
   },
-  "auto_publish": true
+  "auto_publish": true,
+  "publish_retry": "2026-10-26T12:20:23.667Z"
 }
