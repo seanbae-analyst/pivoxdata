@@ -107,5 +107,7 @@ npm run dev                           # http://localhost:8099
 | 푸시 알림 | 사이트 SDK 동작 확인, 구독자 0이라 실제 발송은 확인 불가 | 라이브 사이트 OneSignal sync 200 · `social/notified.json` |
 | 인스타 토큰 | 2026-12-23까지 유효, 매달 1·11·21일 자동 갱신 | `ig-token.yml` cron · 실행 결과 |
 | 원문 읽기 | 18곳 중 14곳 읽힘. OpenAI 403 · McKinsey 503 · 삼성전자 15초 초과 · 과기정통부는 본문이 첨부파일 → 제목·요약만 | `social/original.mjs` 로 출처마다 1건씩, 이 세션에서 (Actions에서는 다를 수 있음) |
-| 사례 카드·이야기 형식 첫 게시 | 아직 없음 — 다음 AX 사건 게시물부터 | 이 저장소 `social/out/` |
+| 사례 카드·이야기 형식 첫 게시 | instagram.com/p/De9Y6PalJOn · `/briefs/2026-10-26` (2026-10-26 13:28 UTC) | `social/out/2026-10-26/post.json` |
+| 게시 주기 | AX 사건은 안 쓴 공식 발표가 3건 이상인 날마다(매일, 2026-10-26 소유자 "당분간 업로드 많이") | `social/plan.mjs` → `NEWS_GAP` |
+| 인스타 차단 이력 | 2026-10-26 `API access blocked.` = Meta 개발자 계정 차단, 소유자 인증으로 해제 — 다시 나면 Meta 쪽부터(`docs/decisions.md` 24) | `social-publish.yml` 로그 |
 | 로그인 | 켜짐 — PivoxQuant Supabase 프로젝트(서울) `pivoxdata` 스키마 · pd_* 6개(anon 실행 0) · 메일은 Brevo SMTP. 공개 키로 PivoxQuant 표 · pd_* 요청 → 401 (2026-10-26) | `trends/site.mjs` → `AUTH` · 공개 키로 `/rest/v1/<표>` 요청 |
