@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=6" />
+<link rel="stylesheet" href="/ui.css?v=7" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 
 <script>(() => { const r = document.documentElement;
@@ -106,6 +106,20 @@
   .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
   .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
   .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
+  /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
+  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
+  .case-list li+li{border-top:1px solid var(--line)}
+  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
+  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
+  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
+  .pg .list{border-top:0;display:grid;gap:10px}
+  .pg .list li{padding:0;border:0;border-radius:18px;background:var(--surface-2)}
+  .pg .list .card{padding:16px 16px 6px}
+  .pg .list .chips{padding:0 16px 14px}
+  .pg .list .card:hover .t{text-decoration:none}
+  .pg h2.month{margin:6px 2px 8px}
+  html.paged{-webkit-tap-highlight-color:transparent}
 </style>
 </head>
 <body>

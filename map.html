@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=6" />
+<link rel="stylesheet" href="/ui.css?v=7" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
@@ -258,7 +258,7 @@ pager([
   { id: "later", name: "후보·보류", title: "후보 · 보류", group: "출처", head: $("#later"), items: all(".src.later"), list, sub: src },
   { id: "keys", name: "잇는 법", title: "데이터를 잇는 법", group: "읽는 법", pages: [[$("#keys")]] },
   { id: "limits", name: "한계", title: "이 지도로 말할 수 없는 것", group: "읽는 법", pages: [[$("#limits")]] },
-]);
+], { back: { href: "/", label: "데이터 지도" } });
 </script>
 <script>
 // a narrow window without the phone pages (?scroll=1, or a pager that never started): the details still fold
