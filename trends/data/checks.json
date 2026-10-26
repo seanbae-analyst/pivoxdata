@@ -2,15 +2,15 @@
  "checked_at": "2026-10-26",
  "notes": {
   "npm": {
-   "until": "2026-10-18",
-   "lastWeek": "2026-10-12",
+   "until": "2026-10-25",
+   "lastWeek": "2026-10-19",
    "trimmed": 0,
    "breaks": [],
-   "weeks": 198
+   "weeks": 199
   },
   "pypi": {
-   "until": "2026-10-18",
-   "lastWeek": "2026-10-12",
+   "until": "2026-10-25",
+   "lastWeek": "2026-10-19",
    "trimmed": 0,
    "breaks": [
     {
@@ -18,7 +18,7 @@
      "ratio": 0.6516234254526186
     }
    ],
-   "weeks": 27
+   "weeks": 28
   }
  },
  "checks": [
@@ -30,7 +30,7 @@
   {
    "id": "npm:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-24 — 검산한 날(2026-10-26)에서 4일 안"
+   "fact": "마지막 날 2026-10-25, 받은 날 2026-10-24 — 검산한 날(2026-10-26)에서 4일 안"
   },
   {
    "id": "npm:days",
@@ -45,12 +45,12 @@
   {
    "id": "npm:weeks",
    "ok": true,
-   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-12 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 198주"
+   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-19 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 199주"
   },
   {
    "id": "npm:zero-days",
    "ok": true,
-   "fact": "2026년에 0으로 적힌 날: openai 16일, @anthropic-ai/sdk 16일, @google/genai 16일, @mistralai/mistralai 18일, @ai-sdk/openai 16일, @ai-sdk/anthropic 16일, @ai-sdk/google 16일, @ai-sdk/mistral 16일, @ai-sdk/xai 16일, @ai-sdk/deepseek 16일, ai 16일, @modelcontextprotocol/sdk 16일, langchain 16일, @langchain/langgraph 16일, @openai/agents 16일, @mastra/core 16일, ollama 17일, @openai/codex 16일, @anthropic-ai/claude-code 16일, opencode-ai 16일, @google/gemini-cli 16일, @qwen-code/qwen-code 16일, @voltagent/core 16일, @browserbasehq/stagehand 15일, puppeteer 16일, playwright 16일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음 — 그중 대부분의 패키지가 함께 0인 날(06-03, 07-12, 08-14, 09-03, 09-07~08, 09-15, 10-06, 10-13~15, 10-19~21, 10-23~24)은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄, 최근 8주 모두 주간 수준 있음"
+   "fact": "2026년에 0으로 적힌 날: openai 17일, @anthropic-ai/sdk 17일, @google/genai 17일, @mistralai/mistralai 19일, @ai-sdk/openai 17일, @ai-sdk/anthropic 17일, @ai-sdk/google 17일, @ai-sdk/mistral 17일, @ai-sdk/xai 17일, @ai-sdk/deepseek 17일, ai 17일, @modelcontextprotocol/sdk 17일, langchain 17일, @langchain/langgraph 17일, @openai/agents 17일, @mastra/core 17일, ollama 18일, @openai/codex 17일, @anthropic-ai/claude-code 17일, opencode-ai 17일, @google/gemini-cli 17일, @qwen-code/qwen-code 17일, @voltagent/core 17일, @browserbasehq/stagehand 16일, puppeteer 17일, playwright 17일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음 — 그중 대부분의 패키지가 함께 0인 날(06-03, 07-12, 08-14, 09-03, 09-07~08, 09-15, 10-06, 10-13~15, 10-19~21, 10-23~25)은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄, 최근 8주 모두 주간 수준 있음"
   },
   {
    "id": "npm:breaks",
@@ -65,7 +65,7 @@
   {
    "id": "pypi:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-24, 받은 날 2026-10-25 — 검산한 날(2026-10-26)에서 4일 안"
+   "fact": "마지막 날 2026-10-25, 받은 날 2026-10-26 — 검산한 날(2026-10-26)에서 4일 안"
   },
   {
    "id": "pypi:days",
@@ -80,7 +80,7 @@
   {
    "id": "pypi:weeks",
    "ok": true,
-   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-12 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 27주"
+   "fact": "주간 수준을 낼 수 있는 마지막 주 2026-10-19 주 (그 뒤 0주는 집계가 덜 끝나 뺌), 총 28주"
   },
   {
    "id": "pypi:zero-days",
@@ -90,7 +90,12 @@
   {
    "id": "pypi:breaks",
    "ok": true,
-   "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후 8주만 비교"
+   "fact": "대조군(requests·numpy·pandas·urllib3·packaging)이 한꺼번에 움직인 주: 2026-08-24 주 ×0.65 — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후 9주만 비교"
+  },
+  {
+   "id": "arxiv:fresh",
+   "ok": true,
+   "fact": "2026-10-25에 받음 — 검산한 날(2026-10-26)에서 7일 안"
   },
   {
    "id": "arxiv:ai:months",
@@ -105,7 +110,7 @@
   {
    "id": "hf:snapshot",
    "ok": true,
-   "fact": "2026-10-25 스냅숏(검산한 날에서 2일 안): 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 2개)"
+   "fact": "2026-10-26 스냅숏(검산한 날에서 2일 안): 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 3개)"
   },
   {
    "id": "hf:sorted",
@@ -220,12 +225,12 @@
   {
    "id": "news:sources",
    "ok": true,
-   "fact": "공식 출처 20곳 중 19곳이 피드·기사 목록으로 응답 — 못 읽음: anthropic(항목 0)"
+   "fact": "공식 출처 20곳 중 19곳이 피드·기사 목록으로 응답 — 못 읽음: msit(HTTP 502)"
   },
   {
    "id": "news:official",
    "ok": true,
-   "fact": "기사 181건 모두 그 회사·기관 자기 도메인의 원문 링크"
+   "fact": "기사 185건 모두 그 회사·기관 자기 도메인의 원문 링크"
   },
   {
    "id": "news:dated",
