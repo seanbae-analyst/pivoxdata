@@ -1150,7 +1150,8 @@
    "domains": [
     "데이터·분석",
     "보안·규제"
-   ]
+   ],
+   "method": "정책·규제"
   },
   {
    "id": "f47072a36f",
@@ -1165,7 +1166,8 @@
    "domains": [
     "클라우드·인프라",
     "AI 에이전트"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "66bacdc777",
@@ -1181,7 +1183,8 @@
     "클라우드·인프라",
     "데이터·분석",
     "보안·규제"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "387ffd5d5b",
@@ -1193,7 +1196,8 @@
    "summary": "삼성전자가 현지시간 14일부터 15일까지 미국 실리콘밸리 마운틴뷰에서 글로벌 통신 업계 파트너들과 차세대 네트워크의 미래를 논의하는 자리를 마련한다. 삼성전자는 14일에 ‘파트너 데이(Partner Day)’를 진행했고, 15일에는 ‘실리콘밸리 미래 통신 서밋 2026(Silicon Valley Future Wireless Summit 2026)’을 개최한다. 이번 행사에는 주요 이동통신사∙제조사∙정부 기관∙학계 리더 등 100여 명의 통신 전문가들이 참석해 AI와 다가올 6G 시대 소프트웨어 기반의 네트워크 진화 […]",
    "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1%ec%a0%84%ec%9e%90-%ec%8b%a4%eb%a6%ac%ec%bd%98%eb%b0%b8%eb%a6%ac-%eb%af%b8%eb%9e%98-%ed%86%b5%ec%8b%a0-%ec%84%9c%eb%b0%8b-2026-%ea%b0%9c%ec%b5%9c",
    "score": 5,
-   "domains": []
+   "domains": [],
+   "method": "연구·보고서"
   },
   {
    "id": "88d3f2de2b",
@@ -1208,7 +1212,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": "정책·규제"
   },
   {
    "id": "aa57562f0e",
@@ -1220,7 +1225,8 @@
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스)를 중심으로 정부·산업계·연구계가 함께하는 종합 협력의 장- 범부처 사업설명회, 국제 기술강연, 협력체 교류(얼라이언스 네트워킹)로 실증·사업화 연계 - 물리적 인공지능(피지컬 AI) 기술전시, 이야기 공연(토크 콘서트) 등을 통해 국민이 체감하는 물리적 인공지능(피지컬 AI ) 소개",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187856",
    "score": 4,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "15c1f8ef7a",
@@ -1234,7 +1240,8 @@
    "score": 3,
    "domains": [
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "b21a97b1b2",
@@ -1248,7 +1255,8 @@
    "score": 3,
    "domains": [
     "클라우드·인프라"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "381130e24d",
@@ -1260,7 +1268,8 @@
    "summary": "To help developers rapidly build world models, which help physical AI systems understand and simulate the real world, NVIDIA has expanded the Cosmos platform with new training tools, simulation checkpoints and Cosmos Data Factory blueprints. Ranking top five on six different open models leaderboards, the NVIDIA Cosmos platform gives world model builders the frontier open […]",
    "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": null
   },
   {
    "id": "ba6fa07d67",
@@ -1274,7 +1283,8 @@
    "score": 3,
    "domains": [
     "업무 도구"
-   ]
+   ],
+   "method": "전사 배포"
   },
   {
    "id": "4b8a59f356",
@@ -1288,7 +1298,8 @@
    "score": 3,
    "domains": [
     "클라우드·인프라"
-   ]
+   ],
+   "method": "인프라 확장"
   },
   {
    "id": "13a18076dd",
@@ -1302,7 +1313,8 @@
    "score": 3,
    "domains": [
     "CRM·고객"
-   ]
+   ],
+   "method": "인수"
   },
   {
    "id": "d650f92872",
@@ -1317,7 +1329,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": null
   },
   {
    "id": "dbaa902542",
@@ -1329,7 +1342,8 @@
    "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
    "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "인수"
   },
   {
    "id": "72b1ea2089",
@@ -1344,7 +1358,8 @@
    "domains": [
     "CRM·고객",
     "업무 도구"
-   ]
+   ],
+   "method": "투자"
   },
   {
    "id": "65442e7082",
@@ -1359,7 +1374,8 @@
    "domains": [
     "업무 도구",
     "보안·규제"
-   ]
+   ],
+   "method": "자체 구축"
   },
   {
    "id": "9d653fbf35",
@@ -1371,7 +1387,8 @@
    "summary": "Forward-deployed engineers work inside another company’s own systems. Three McKinsey leaders explain how FDEs help companies derive impact from AI.",
    "link": "https://www.mckinsey.com/featured-insights/mckinsey-explainers/what-is-a-forward-deployed-engineer",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "연구·보고서"
   },
   {
    "id": "415ce48789",
@@ -1386,7 +1403,8 @@
    "domains": [
     "클라우드·인프라",
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "dd00c04c9b",
@@ -1398,7 +1416,8 @@
    "summary": "In collaboration with OpenAI, Sullivan & Cromwell developed Agreement Analyzer, an AI tool for identifying issues in a draft agreement.",
    "link": "https://openai.com/index/sullivan-cromwell",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "87253efeda",
@@ -1412,7 +1431,8 @@
    "score": 3,
    "domains": [
     "보안·규제"
-   ]
+   ],
+   "method": "파트너십"
   },
   {
    "id": "f9d6830106",
@@ -1426,7 +1446,8 @@
    "score": 3,
    "domains": [
     "AI 에이전트"
-   ]
+   ],
+   "method": "연구·보고서"
   },
   {
    "id": "a99c1179f7",
@@ -1438,7 +1459,8 @@
    "summary": "The hardest industry problems to solve are deeply contextual.",
    "link": "https://news.sap.com/2026/10/industry-ai-deep-industry-knowledge-fde-measurable-value/",
    "score": 3,
-   "domains": []
+   "domains": [],
+   "method": null
   },
   {
    "id": "b2b664a3da",
@@ -1452,7 +1474,8 @@
    "score": 3,
    "domains": [
     "ERP·백오피스"
-   ]
+   ],
+   "method": null
   },
   {
    "id": "d5d7f3826a",
@@ -1464,7 +1487,8 @@
    "summary": "- 세계은행과 공동으로 「국제 인공지능‧디지털 정상회의(글로벌 AI‧디지털 서밋)」 개최(10월 19~22일, 서울) - 배경훈 부총리, 60여 개국 장‧차관급 대표들과 인공지능‧디지털 장관회의 개최(10.19.) - 포용적 인공지능‧디지털 전환을 위한 국제협력 등 의장 공동성명문 발표",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187874",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "9c805cb308",
@@ -1476,7 +1500,8 @@
    "summary": "- 국민 누구나 인공지능을 즐길 수 있는 「2026 클릭온 인공지능(AI) 시즌2」(10.15.~11.25.) 개최 - 지난 6월에 열린 「2026 클릭온 인공지능(AI) 시즌1」은 170만 명 참여",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187869",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "66d489d1ba",
@@ -1488,7 +1513,8 @@
    "summary": "- '행동하는 두뇌, Intelligence into Action' 주제로 해외 기술 동향과 발전 방향 공유 - \"우수한 기술이 현장 실증·사업화로 이어지도록 적극 지원\"",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187862",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "시범 도입"
   },
   {
    "id": "c7febe0b74",
@@ -1500,7 +1526,8 @@
    "summary": "- 물리적 인공지능 협력체(피지컬 AI 얼라이언스) 간담회를 통해 산업 현장 애로 및 정책 수요 청취 - 한국형 물리적 인공지능 전 주기 개발(K-피지컬 AI 풀스택)·산업별 실증·데이터· 표준 등 추진성과 및 실행과제 점검 - 관계부처 사업·정책금융 연계해 현장 실증과 성공사례 창출 적극 지원",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187859",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "3bc0c5d6f4",
@@ -1512,7 +1539,8 @@
    "summary": "Speech delivered by the Minister for Artificial Intelligence …",
    "link": "https://www.gov.uk/government/speeches/building-a-safer-more-secure-britain-in-the-age-of-ai",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "bc970cfa64",
@@ -1524,7 +1552,8 @@
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187858",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "e1081fc5ae",
@@ -1536,7 +1565,8 @@
    "summary": "- 과학기술정보통신부·기후에너지환경부, 공공 인공지능 전환 사업(AX 프로젝트) 「내 손안의 인공지능 폐기물 처리 도우미」 앱 시범 서비스 개시 - 서울 은평구 주민 대상 실증...인공지능 폐기물 식별 및 일괄(원스톱) 배출 신청 지원",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187857",
    "score": 1,
-   "domains": []
+   "domains": [],
+   "method": "시범 도입"
   }
  ]
 }

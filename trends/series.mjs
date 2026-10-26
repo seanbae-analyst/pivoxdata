@@ -240,3 +240,29 @@ export const DOMAINS = [
   { id: "agents", name: "AI 에이전트", about: "스스로 일하는 AI·업무 자동화",
     re: /\b(agents?|agentic|autonomous|automat\w*|orchestrat\w*)\b|에이전트|자동화|자율/i },
 ];
+
+// ---------- how it was brought in: the second question an IT consultant asks about an announcement ----------
+// An AX announcement is read as a case: who, what, where (DOMAINS) — and how it went in. Code files each announcement
+// under the first of these its title and summary match (build.mjs: the site's list of announcements; social/briefs.mjs:
+// the home page's story when a briefing has no cases of its own); story.mjs asks Claude to pick one of the same names
+// for each case it writes, from the announcement's own page, and checks the name is on this list.
+// Order matters: an acquisition or a company-wide rollout says more than "partner" or "launch", which most
+// announcements also contain.
+export const METHODS = [
+  { id: "acquire", name: "인수", re: /\b(acquir\w*|acquisition|merger)\b|인수|합병/i },
+  { id: "rollout", name: "전사 배포", re: /\b(all (of )?(its |their )?(employees|staff|workers)|every employee|company-?wide|enterprise-?wide|roll(s|ed|ing)? out|brings? \S+( \S+)? to (all )?(its )?(employees|workers|staff))\b|전 직원|전사|임직원/i },
+  { id: "policy", name: "정책·규제", re: /\b(AI Act|regulations?|regulators?|legislation|laws?|guidance|executive order|polic(y|ies)|consultation|minister)\b|법\b|법」|법,|규제|기본법|가이드라인|국무회의|개정안|시행령|정책/i },
+  { id: "build", name: "자체 구축", re: /\b(is building|are building|built (its|their) own|in-house|homegrown|own (models?|platform|AI))\b|자체 (구축|개발)/i },
+  { id: "embed", name: "기존 시스템에 내장", re: /\b(built (in|into)|embedded|integrat\w* (with|into)|natively in|inside (SAP|Salesforce|Workday|ServiceNow|Microsoft 365|Teams|Excel|Outlook|Slack))\b|탑재|내장|연동/i },
+  { id: "infra", name: "인프라 확장", re: /\b(data ?cent(er|re)s?|compute capacity|expands? compute|capacity|GPUs?|AI factor(y|ies)|scal(e|es|ing) across|sovereign cloud|supercomput\w*)\b|데이터센터|증설|인프라 (구축|확장)|슈퍼컴퓨터/i },
+  { id: "partner", name: "파트너십", re: /\b(partner(s|ing|ed)? (with|to|on)|partnership|alliance|collaborat\w*|MOU|memorandum|teams? up|joins? forces)\b|협력|협약|파트너십|제휴|맞손|손잡/i },
+  { id: "research", name: "연구·보고서", re: /\b(research|study|survey|report|index|benchmark|framework)\b|연구|조사|보고서|실태/i },
+  { id: "invest", name: "투자", re: /\b(invest(s|ment|ing)?|funding)\b|투자|펀드/i },
+  { id: "pilot", name: "시범 도입", re: /\b(pilot\w*|trial|proof of concept|PoC)\b|시범|실증/i },
+  { id: "launch", name: "제품 출시", re: /\b(launch\w*|introduc\w*|unveil\w*|generally available|general availability|now available)\b|출시|선보/i },
+];
+// a government's announcement that names no other way is a policy; a research house's, a report
+// the one IT domain an announcement is named by (an announcement may count in several, build.mjs): the first that
+// matches — a policy goes under 보안·규제 when that matches too ("AI sovereignty" also reads as cloud)
+export const domainOf = (text, method) => { const ds = DOMAINS.filter((d) => d.re.test(text)); return (method === "정책·규제" && ds.find((d) => d.id === "security")) || ds[0] || null; };
+export const methodOf = (text, kind) => METHODS.find((m) => m.re.test(text))?.name ?? (kind === "government" ? "정책·규제" : kind === "research" ? "연구·보고서" : null);

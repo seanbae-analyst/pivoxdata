@@ -85,7 +85,7 @@ function head(page, html) {
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=4" />
+<link rel="stylesheet" href="/ui.css?v=5" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 ${page.paged ? `${PAGED_HEAD}\n` : ""}`;
   if (page.noindex) return `\n${NOINDEX}${common}`;

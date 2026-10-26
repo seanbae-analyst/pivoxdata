@@ -7,7 +7,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, RACE_MIN_LEVEL, RACES, AX, NEWS, DOMAINS } from "./series.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, RACE_MIN_LEVEL, RACES, AX, NEWS, DOMAINS, methodOf, domainOf } from "./series.mjs";
 import { weekTable, breaks, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
 import { writePages, esc } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
@@ -252,6 +252,7 @@ const axCards = [
 const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
 const newsAll = NEWSD.items.filter((x) => newsSrc[x.src]).filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
   .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, domains: DOMAINS.filter((d) => d.re.test(t)).map((d) => d.id),
+    method: methodOf(t, newsSrc[x.src].kind), // how it was brought in (series.mjs → METHODS), as code reads the title and summary
     // NEWS.rank: adoptions, deals and rules up; consumer launches and events down — those (below 0) are not counted
     score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
   .filter((x) => x.score >= 0);
@@ -520,7 +521,7 @@ const NEWS_DAYS = 14;
 const newsItems = newsAll.filter((x) => within(x.date, NEWS_DAYS) && x.score > 0) // the list and the posts: the ones that rank
   .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date));
 const KIND = { company: "기업 발표", government: "정부 발표", research: "리서치" };
-const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${KIND[x.kind]} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
+const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${[KIND[x.kind], domainOf(`${x.title} ${x.summary}`, x.method)?.name, x.method].filter(Boolean).map(esc).join(" · ")} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
   : `<li class="news empty">최근 ${NEWS_DAYS}일 동안 모은 공식 발표가 없어요.</li>`;
 
 // ---------- write ----------
@@ -577,7 +578,7 @@ const out = { built_at: updated, page: "https://data.pivoxquant.com/", topics: t
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
   facts: factList,
   // the official announcements the weekly AX news post may use — as published, with the source and its link
-  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score, domains }) => ({ id, src, source, kind, date, title, summary, link, score, domains: domains.map((d) => DOMAINS.find((x) => x.id === d).name) })) };
+  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score, domains, method }) => ({ id, src, source, kind, date, title, summary, link, score, domains: domains.map((d) => DOMAINS.find((x) => x.id === d).name), method })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

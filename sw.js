@@ -6,8 +6,8 @@
 // be one more full copy — only when the answer was a plain success, and at most PAGES of them (the oldest go first).
 // an ad blocker or an office network that blocks OneSignal must not take offline reading down with it
 try { importScripts("https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.sw.js"); } catch {}
-const CACHE = "ax-radar-v4", PAGES = 40;
-const SHELL = ["/", "/briefs", "/ui.css", "/research.css", "/pager.js", "/favicon.svg", "/icons/icon-192.png"];
+const CACHE = "ax-radar-v5", PAGES = 40;
+const SHELL = ["/", "/briefs", "/ui.css", "/research.css", "/pager.js", "/terms.js", "/favicon.svg", "/icons/icon-192.png"];
 // one file that fails to arrive must not stop the install (the rest still makes the app work offline)
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => Promise.allSettled(SHELL.map((u) => c.add(u)))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });

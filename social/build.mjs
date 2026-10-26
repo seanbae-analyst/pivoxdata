@@ -136,7 +136,10 @@ function storySlides(st) {
     const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
     const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${lines(s.title)}</h2>${body}${num}`
       : s.kind === "quiz" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
-      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="more">자세한 풀이는 웹에서 · data.pivoxquant.com/briefs</div>`
+      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="more">자세한 풀이는 브리핑에서 · data.pivoxquant.com/briefs/${e(slot)}</div>`
+      // a case (2026-10-26): who and what in the title, then where and how as a two-row table from the case story.mjs
+      // checked (never the model's free text on the card), then what it means
+      : s.kind === "case" && s.case ? `${kick}<h2>${lines(s.title)}</h2><dl class="case">${[["어디에", s.case.where], ["어떻게", s.case.how]].map(([l, v]) => `<div${v === "발표에 없음" ? ' class="none"' : ""}><dt>${l}</dt><dd>${e(v)}</dd></div>`).join("")}</dl>${body}`
       : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
       : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
     // a news slide's source and date come from the announcement (story.mjs prints them), never from the model
@@ -237,6 +240,13 @@ const html = `<!doctype html>
   .st.end ol li{background:none}
   .st .hint{color:var(--mut);font-weight:600}
   .st .more{color:var(--mut);font-weight:500}
+  /* a case card: where and how as two ruled rows under the title */
+  .st .case{margin:calc(var(--k)*40px) 0 0;border-top:1px solid var(--line-2)}
+  .st .case>div{display:grid;grid-template-columns:calc(var(--k)*120px) 1fr;gap:calc(var(--k)*20px);padding:calc(var(--k)*18px) 0;border-bottom:1px solid var(--line)}
+  .st .case dt{font-size:calc(var(--k)*28px);color:var(--mut);padding-top:calc(var(--k)*4px)}
+  .st .case dd{margin:0;font-size:calc(var(--k)*36px);line-height:1.45;color:var(--ink);text-wrap:balance}
+  .st .case .none dd{color:var(--dim)}
+  .st .case+.txt{margin-top:calc(var(--k)*32px)}
 </style>
 </head>
 <body data-date="${slot}">

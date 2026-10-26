@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=4" />
+<link rel="stylesheet" href="/ui.css?v=5" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 
 <script>(() => { const r = document.documentElement;
@@ -51,6 +51,14 @@
   article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
   .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
   .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
+  /* a case (2026-10-26): its IT domain and the way it went in, the heading, then a small table — no box, hairlines */
+  .case-h{margin:44px 0 0} .case-h h2{margin:6px 0 14px}
+  .case-k{font-size:13px;color:var(--mut);margin:0}
+  .case{margin:0 0 20px;border-top:1px solid var(--line-2)}
+  .case>div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .case dt{font-size:13px;color:var(--mut);padding-top:2px} .case dd{margin:0;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .case .none dd{color:var(--dim)} .case .q dd{font-weight:600}
+  ul.asks{margin:0 0 14px;padding-left:20px;list-style:disc} ul.asks li{font-size:16.5px;line-height:1.75;color:var(--ink-2);margin:2px 0} ul.asks li::marker{color:var(--dim)}
   .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
   .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
   .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
@@ -93,6 +101,8 @@
   .pg .art-head .kicker{margin-top:0}
   .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
   .pg .flow p{font-size:16px;line-height:1.8}
+  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
+  .pg .flow ul.asks li{font-size:15.5px}
   .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
   .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
   .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}

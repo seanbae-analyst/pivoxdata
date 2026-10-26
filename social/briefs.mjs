@@ -25,6 +25,8 @@ import { APP_ID } from "./notify-config.mjs";
 import { ROOT, OUT, read, AX_FORMATS } from "./util.mjs";
 import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
+import { domainOf, methodOf } from "../trends/series.mjs";
+import { glossaryHtml, termify, termsSource } from "../trends/glossary.mjs";
 
 const RU = path.join(ROOT, "social", "roundups"), DIR = path.join(ROOT, "briefs");
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -74,11 +76,27 @@ const srcItem = (x) => `<li><a href="${href(x.link)}" target="_blank" rel="noope
 function basis(b) {
   const st = b.st;
   if (b.series === "roundup") return `<p>${esc(st.month?.slice(5).replace(/^0/, ""))}월에 올린 브리핑 ${st.briefs?.length ?? 0}편만으로 썼어요. 각 섹션 아래 링크가 근거가 된 브리핑이에요.</p>`;
-  if (st.mode === "news") return `<p>회사·기관이 직접 낸 발표만 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs">${(st.sources ?? []).map(srcItem).join("")}</ul>`;
+  if (st.mode === "news") {
+    // a briefing written since 2026-10-26 says which announcements were read on their own page (story.mjs → original)
+    const read = (st.sources ?? []).filter((x) => x.original).length;
+    return `<p>회사·기관이 직접 낸 발표만 썼어요.${st.originals != null ? ` ${read ? `발표 ${read}건은 공식 페이지의 원문까지 읽고, 나머지는 제목과 요약으로 썼어요.` : "발표의 제목과 요약으로 썼어요."}` : ""} 제목을 누르면 원문으로 가요.</p><ul class="srcs">${(st.sources ?? []).map(srcItem).join("")}</ul>`;
+  }
   if (fromAX(st)) return `<p><a href="https://fred.stlouisfed.org/series/RAMPAIALL" target="_blank" rel="noopener">Ramp AI Index</a> (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잽니다. 무료 도구와 개인 결제는 잡히지 않아요. 지금 숫자는 <a href="/#ax">AX 탭</a>에.</p>`;
   return `<p>npm · PyPI 다운로드(설치 횟수이지 사용자 수가 아니에요), arXiv, Hugging Face, SEC 공시를 매일 같은 방식으로 계산했어요. 방법과 검산은 <a href="/#more">근거 데이터</a>에.</p>`;
 }
-const paras = (t) => plain(t).split(/\n{2,}/).map((p) => `<p>${esc(p).replace(/\n/g, "<br />")}</p>`).join("");
+// a briefing's text: paragraphs, and a paragraph whose every line starts with "· " is a list (the checks of the
+// IT-consulting view). `used`: the words already made tappable in this briefing (trends/glossary.mjs → termify — each
+// explained once, at its first mention)
+const paras = (t, used = null) => plain(t).split(/\n{2,}/).map((p) => {
+  const tip = (h) => (used ? termify(h, used) : h), lines = p.split("\n").map((l) => l.trim()).filter(Boolean);
+  return lines.length && lines.every((l) => /^[·•\-]\s/.test(l)) ? `<ul class="asks">${lines.map((l) => `<li>${tip(esc(l.replace(/^[·•\-]\s+/, "")))}</li>`).join("")}</ul>`
+    : `<p>${tip(esc(p).replace(/\n/g, "<br />"))}</p>`;
+}).join("");
+// a case's head (story.mjs → section.case, 2026-10-26): its IT domain and the way it went in, the heading, and the case
+// as a small table — who, what, where, how, and the question to ask of one's own project
+const CASE_ROWS = [["who", "누가"], ["what", "무엇을"], ["where", "어디에"], ["how", "어떻게"]];
+const caseHead = (x, i) => `<header class="case-h" id="s${i + 1}"><p class="case-k">${esc(x.case.domain)} · ${esc(x.case.method)}</p><h2>${esc(plain(x.heading))}</h2>`
+  + `<dl class="case">${CASE_ROWS.map(([k, l]) => `<div${x.case[k] === "발표에 없음" ? ' class="none"' : ""}><dt>${l}</dt><dd>${esc(x.case[k])}</dd></div>`).join("")}<div class="q"><dt>확인할 점</dt><dd>${esc(x.case.check)}</dd></div></dl></header>`;
 const item = (b) => `<li><a class="card" href="/briefs/${b.slot}"><span class="k">${esc(SERIES[b.series]?.name ?? "")} · ${day(b.st.date)}</span><span class="t">${esc(plain(b.st.article.title))}</span><span class="l">${esc(plain(b.st.article.lede))}</span></a>${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}</li>`;
 // newest first, a heading per month
 const byMonth = (list) => {
@@ -139,15 +157,22 @@ OneSignalDeferred.push(async (OneSignal) => {
 
 // phone: the briefing as pages turned sideways (/pager.js), like the cards it explains and like every page of the site —
 // the title page, then the text a screenful at a time (a section's heading stays with its first paragraph, so no page
-// starts with a heading alone and nothing is cut off under a button), the summary, the sources, what to read next
+// starts with a heading alone and nothing is cut off under a button), the summary, the sources, what to read next.
+// A briefing told as cases (its sections named, data-name) turns a chapter per section instead — 사례 1, 사례 2 …,
+// 공통 흐름, 관점 — each starting on a page of its own with its table, like a case card, and continuing under its heading
 const ARTICLE_PAGER = `<script type="module">
 import { pager } from "/pager.js";
-const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s);
-const flow = [...art.querySelectorAll(".part")].flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; });
-const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "본문" }), " →");
+const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
+const div = () => Object.assign(document.createElement("div"), { className: "flow" });
+const text = parts.length && parts.every((s) => s.dataset.name)
+  // (the source line goes with the paragraph before it, so it never makes a page of its own)
+  ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
+      return { id: h.id || \`s\${i + 1}\`, name: s.dataset.name, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
+  : [{ id: "text", name: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div }];
+const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
 pager([
   { id: "top", name: "브리핑", pages: [[$(".art-head"), hint]] },
-  { id: "text", name: "본문", items: flow, list: () => Object.assign(document.createElement("div"), { className: "flow" }) },
+  ...text,
   { id: "sum", name: "정리", pages: [[$(".sum")]] },
   { id: "basis", name: "근거", pages: [[$(".basis")]] },
   { id: "next", name: "더 읽기", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
@@ -169,6 +194,14 @@ const CSS = `
   article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
   .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
   .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
+  /* a case (2026-10-26): its IT domain and the way it went in, the heading, then a small table — no box, hairlines */
+  .case-h{margin:44px 0 0} .case-h h2{margin:6px 0 14px}
+  .case-k{font-size:13px;color:var(--mut);margin:0}
+  .case{margin:0 0 20px;border-top:1px solid var(--line-2)}
+  .case>div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .case dt{font-size:13px;color:var(--mut);padding-top:2px} .case dd{margin:0;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .case .none dd{color:var(--dim)} .case .q dd{font-weight:600}
+  ul.asks{margin:0 0 14px;padding-left:20px;list-style:disc} ul.asks li{font-size:16.5px;line-height:1.75;color:var(--ink-2);margin:2px 0} ul.asks li::marker{color:var(--dim)}
   .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
   .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
   .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
@@ -211,6 +244,8 @@ const CSS = `
   .pg .art-head .kicker{margin-top:0}
   .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
   .pg .flow p{font-size:16px;line-height:1.8}
+  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
+  .pg .flow ul.asks li{font-size:15.5px}
   .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
   .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
   .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
@@ -228,7 +263,13 @@ const put = (rel, html) => {
 
 for (const b of [...briefs, ...pending]) {
   const { st, post } = b, a = st.article;
-  const sections = a.sections.map((x, i) => `<section class="part"><h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>${paras(x.body)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${href(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
+  const used = new Set();
+  // a briefing of announcements names its sections for the phone's pages: a case (one source), the common thread
+  // (several), the view (none); any other briefing reads as one text
+  let n = 0;
+  const names = a.sections.every((x) => x.sources) && a.sections.some((x) => x.sources?.length === 1)
+    ? a.sections.map((x) => (x.sources.length === 1 ? `사례 ${++n}` : x.sources.length > 1 ? "공통 흐름" : "관점")) : null;
+  const sections = a.sections.map((x, i) => `<section class="part${x.case ? " case-part" : ""}"${names ? ` data-name="${names[i]}"` : ""}>${x.case ? caseHead(x, i) : `<h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>`}${paras(x.body, used)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${href(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
   // a pending draft is in no list, so it has no previous or next (its related briefings are public ones)
   const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = i < 0 ? null : same[i - 1], older = i < 0 ? null : same[i + 1];
   const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
@@ -248,6 +289,8 @@ for (const b of [...briefs, ...pending]) {
   ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list">${related.map(item).join("")}</ul></section>` : ""}
   <div class="more-links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${href(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
 </article>
+${termsSource(used)}
+<script src="/terms.js" defer></script>
 ${ARTICLE_PAGER}`;
   put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true, noindex: Boolean(b.pending) }));
 }
@@ -301,14 +344,23 @@ for (const f of fs.readdirSync(DIR, { recursive: true }).map(String)) {
 }
 
 // the home page leads with a story, not numbers (2026-10-26): the newest weekly briefing (이번 주 AX 사건; else the newest
-// that isn't a monthly roundup) in its beats — each announcement's heading, its first sentence and its source — then the
-// common thread and the IT-consulting view, and a link to the whole piece. Every sentence is the briefing's own (checked
-// when it was written). Which section is which comes from its sources: one source is an announcement, several are the
-// common thread, none (the last) is the view.
+// that isn't a monthly roundup) in its beats — each case's IT domain and the way it went in, its heading, its first
+// sentence, where and how, and its source — then the common thread and the IT-consulting view, and a link to the whole
+// piece. Every sentence is the briefing's own (checked when it was written). Which section is which comes from its
+// sources: one source is an announcement, several are the common thread, none (the last) is the view.
 // the first n sentences of a paragraph (as many as fit in max characters, at least one)
 const sentences = (t, n = 1, max = 180) => {
   const all = plain(t).replace(/\s+/g, " ").trim().match(/.+?[요다]\.(?=\s|$)|.+$/g) ?? [];
   return all.slice(0, n).reduce((out, x) => (!out || (out + " " + x).length <= max ? (out ? `${out} ${x.trim()}` : x.trim()) : out), "");
+};
+// a beat's IT domain and way in: the case's own (a briefing since 2026-10-26), else read by code from the announcement's
+// title and summary (trends/series.mjs → DOMAINS, methodOf — the same reading as the site's list of announcements)
+const NEWSDATA = read(path.join(ROOT, "trends", "data", "news.json"), { items: [] }).items ?? [];
+const caseTag = (x) => {
+  if (x.case) return `${x.case.domain} · ${x.case.method}`;
+  const s = x.sources?.[0], n = s && NEWSDATA.find((y) => y.link === s.link), t = `${s?.title ?? ""} ${n?.summary ?? ""}`;
+  const method = s && methodOf(t, s.kind);
+  return s ? [domainOf(t, method)?.name, method].filter(Boolean).join(" · ") : "";
 };
 // public briefings only: a draft waiting for /approve is not the week's story yet
 const featured = briefs.find((b) => b.series === "news") ?? briefs.find((b) => b.series !== "roundup") ?? null;
@@ -319,15 +371,24 @@ function storyHtml(b) {
   const thread = rest.filter((x) => (x.sources?.length ?? 0) > 1), beats = rest.filter((x) => !thread.includes(x));
   const to = (x) => `/briefs/${b.slot}${x ? `#s${x.i + 1}` : ""}`;
   const src = (x) => (x.sources?.length === 1 ? `${esc(x.sources[0].source)} ${KIND[x.sources[0].kind] ?? "발표"} · ${md(x.sources[0].date)}` : "");
+  const where = (x) => (x.case ? [["어디에", x.case.where], ["어떻게", x.case.how]].filter(([, v]) => v && v !== "발표에 없음").map(([l, v]) => `${l} ${esc(v)}`).join(" · ") : "");
+  // the view: its checks when it lists them (the first three), else its paragraphs' first sentences
+  const viewParts = (t) => plain(t).split(/\n{2,}/).map((p) => p.split("\n").map((l) => l.trim()).filter(Boolean));
+  const isList = (ls) => ls.length && ls.every((l) => /^[·•\-]\s/.test(l));
+  const viewLines = (t) => { const ps = viewParts(t), list = ps.filter(isList).flat().map((l) => l.replace(/^[·•\-]\s+/, ""));
+    return (list.length ? list : ps.map((ls) => sentences(ls.join(" "), 2, 170))).slice(0, 3); };
+  const viewName = (x) => { const h = plain(x.heading).trim(), asks = viewParts(x.body).some(isList);
+    return h === "IT 컨설팅 관점" ? `IT 컨설팅 관점${asks ? " · 확인할 점" : ""}` : `IT 컨설팅 관점 · ${h}`; };
   return `<div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="${b.st.date}">${+b.st.date.slice(5, 7)}월 ${+b.st.date.slice(8, 10)}일</time> · ${esc(SERIES[b.series]?.name ?? "")}</p>`
     + `<h2 class="st-t" id="h-story"><a href="${to()}">${esc(plain(a.title))}</a></h2><p class="st-lede">${esc(plain(a.lede))}</p></div>`
-    + `<ol class="beats">${beats.map((x, k) => `<li><a href="${to(x)}"><span class="bn">${k + 1}</span><b>${esc(plain(x.heading))}</b><span class="bs">${esc(sentences(x.body))}</span>${src(x) ? `<small>${src(x)}</small>` : ""}</a></li>`).join("")}</ol>`
+    + `<ol class="beats">${beats.map((x, k) => `<li><a href="${to(x)}"><span class="bn">${k + 1}</span>${caseTag(x) ? `<span class="bk">${esc(caseTag(x))}</span>` : ""}<b>${esc(plain(x.heading))}</b><span class="bs">${esc(sentences(x.body))}</span>${where(x) ? `<span class="bw">${where(x)}</span>` : ""}${src(x) ? `<small>${src(x)}</small>` : ""}</a></li>`).join("")}</ol>`
     + `<div class="st-view">${thread.map((x) => `<p class="sv-k">공통 흐름</p><p class="sv-h">${esc(plain(x.heading).replace(/^공통 흐름\s*[:：]\s*/, ""))}</p><p>${esc(sentences(x.body, 3, 200))}</p>`).join("")}`
-    + (view ? `<p class="sv-k">IT 컨설팅 관점 · ${esc(plain(view.heading))}</p>${plain(view.body).split(/\n{2,}/).slice(0, 3).map((t) => `<p class="sv-q">${esc(sentences(t, 2, 170))}</p>`).join("")}` : "")
+    + (view ? `<p class="sv-k">${esc(viewName(view))}</p>${viewLines(view.body).map((t) => `<p class="sv-q">${esc(t)}</p>`).join("")}` : "")
     + `<a class="st-more" href="${to()}">이야기 전체 읽기 →</a></div>`;
 }
 // the home page: the story above, then the earlier briefings (not the monthly roundups), and the shared frame (nav,
 // sitemap with the briefings)
 const home = briefs.filter((b) => b.series !== "roundup" && b !== featured).slice(0, 3).map((b) => `<li><a href="/briefs/${b.slot}"><time datetime="${b.st.date}">${md(b.st.date)}</time><span class="badge">${esc(SERIES[b.series]?.name ?? "브리핑")}</span><span class="et">${esc(plain(b.st.article.title))}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join("");
-writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": home } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
+// the glossary too: a posted briefing's new words join it (trends/glossary.mjs) as soon as the post is up
+writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": home, "t-glossary": glossaryHtml() } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
 console.log(`${briefs.length} briefing(s), ${present.length} series, ${TAGS.size} tags at ${SITE}/briefs${pending.length ? ` — and ${pending.length} draft page(s), noindex and unlisted until posted: ${pending.map((b) => b.slot).join(", ")}` : ""}`);

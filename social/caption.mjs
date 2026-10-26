@@ -42,7 +42,9 @@ async function main() {
   // what the caption may cite: what the carousel was made from — the cards, the facts the story was written from, the
   // announcements — as story.mjs allows it
   const ctx = {
-    allowed: allowNumbers([slides.flatMap((x) => [x.big, x.bl, x.title, x.easy, x.body, x.src]), story ? (I.facts ?? []).map((f) => f.text) : [], news.map((n) => `${n.title} ${n.summary}`)], { dates: [date, I.built_at, ...news.map((n) => n.date)] }),
+    // story.original_numbers: figures the story took from an announcement's own page (story.mjs read it; the page itself
+    // is never stored), already checked against it there
+    allowed: allowNumbers([slides.flatMap((x) => [x.big, x.bl, x.title, x.easy, x.body, x.src]), story ? (I.facts ?? []).map((f) => f.text) : [], news.map((n) => `${n.title} ${n.summary}`), story?.original_numbers ?? []], { dates: [date, I.built_at, ...news.map((n) => n.date)] }),
     copied: copyChecker(news.map((n) => `${n.title} ${n.summary}`)),
   };
   const check = (body) => checkCaption(body, ctx);
@@ -58,7 +60,7 @@ async function main() {
       const res = await ask(route, SYSTEM, messages);
       if (res.refusal) return { body: null, why: `refusal (${res.refusal})` };
       const problems = check(res.text);
-      if (!problems.length) return { body: res.text, model: res.model, attempts: attempt };
+      if (!problems.length) return { body: res.text, attempts: attempt };
       console.log(`caption attempt ${attempt} rejected: ${problems.join(" / ")}`);
       messages.push({ role: "assistant", content: res.text }, { role: "user", content: `다음 문제를 고쳐서 본문 전체를 다시 써 줘:\n- ${problems.join("\n- ")}` });
     }
@@ -76,7 +78,7 @@ async function main() {
     // the story's caption passed story.mjs's checks with the slides; checked again on its own here
     const body = plain(story.caption), problems = check(body);
     if (problems.length) return dropDraft(plan, `the story's caption failed the caption checks: ${problems.join(" / ")}`);
-    result = { body, model: story.model, why: story.note, via: story.via, from: story.source };
+    result = { body, why: story.note, via: story.via, from: story.source };
   } else {
     result = { body: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
     const route = pickRoute();
@@ -108,7 +110,7 @@ async function main() {
 
   const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
   if (images.length < 3) throw new Error(`social/out/${slot}: ${images.length} slides — run social/render.mjs first`);
-  const post = { date, ...(slot !== date ? { slot } : {}), images, image_base: `https://data.pivoxquant.com/social/out/${slot}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_model: result.model ?? null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: ctx.allowed.size, problems: [] } };
+  const post = { date, ...(slot !== date ? { slot } : {}), images, image_base: `https://data.pivoxquant.com/social/out/${slot}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: ctx.allowed.size, problems: [] } };
   write(postFile, post);
   console.log(`wrote social/out/${slot}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);
 }

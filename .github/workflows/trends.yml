@@ -290,7 +290,7 @@ jobs:
                 : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
                 : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 AX 숫자를 모았습니다.",
               "",
-              `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude ${post.caption_model} via ${post.caption_via} — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
+              `인스타그램 캐러셀${post.published ? "" : " 초안"}입니다 (${post.images.length}장, 캡션: ${post.caption_source === "claude" ? `Claude (${post.caption_via}) — 숫자·금지어 검사 통과` : `템플릿 — ${post.caption_note}`}).`,
               ...(post.published ? [] : [`이미지는 사이트 배포가 끝나면(1~2분) 보입니다. 브리핑 페이지(https://data.pivoxquant.com/briefs/${slot})는 게시 전까지 목록·검색에 나오지 않습니다.`]),
               "", imgs, "", "**캡션**", "```", post.caption, "```", "",
               ...(unrecorded ? [`⚠️ 인스타그램에는 올라갔지만(${post.published.permalink ?? post.published.media_id}) 기록(post.json)을 저장하지 못했습니다. 로그: ${run}`, "", "- `/approve` — 다시 올리지 않고 기록만 남깁니다 (저장소 소유자만)"]

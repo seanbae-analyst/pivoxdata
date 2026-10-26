@@ -11,7 +11,7 @@
 // the API route is used), so the checks can be run on their own.
 import os from "node:os";
 import { spawnSync } from "node:child_process";
-import { NEWS, AX } from "../trends/series.mjs";
+import { NEWS, AX, DOMAINS, METHODS } from "../trends/series.mjs";
 
 export const MODEL = "claude-opus-5-5";
 export class ClaudeUnavailable extends Error {}
@@ -164,17 +164,21 @@ export const checkCaption = (body, ctx = {}) => { const t = plain(body); return 
 // line beside the page number (~26 at 30 px)
 export const LINE = { title: 18, body: 28, item: 28, label: 34, kicker: 24 };
 export const slideText = (s) => [s.kicker, s.title, s.body, s.number, s.label, ...(s.items ?? [])].filter(Boolean).join("\n");
-const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end"]);
+const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end", "case"]);
 // at most three names in a row joined by "·" ("NVIDIA · OpenAI · SAP · Salesforce" → "NVIDIA 등 4곳"): a name is an
 // official source or AX vendor we know, or a capitalised Latin word (Uber, Braze); IT words in capitals (ERP·CRM·HR)
 // and places (유럽·북유럽·아프리카) are not names
 const ORGS = [...new Set([...NEWS.sources.map((x) => x.name), ...AX.series.filter((x) => x.group === "vendor").map((x) => x.name)])];
 const named = (seg) => ORGS.some((o) => seg.includes(o)) || /(?<![A-Za-z])[A-Z][a-z][A-Za-z0-9]*/.test(seg);
 const nameRun = (line) => plain(line).split("·").filter(named).length;
-export function checkSlides(slides, { refs = 0 } = {}) {
+// `numbers`: how many big-number slides a post may have — the story carries the post, a number backs it up (2026-10-26:
+// two at most, one in a post of announcements)
+export function checkSlides(slides, { refs = 0, numbers = refs ? 1 : 2 } = {}) {
   const p = [];
   if (!Array.isArray(slides) || slides.length < 4 || slides.length > 10) return [`장 수는 4~10장 (지금 ${Array.isArray(slides) ? slides.length : 0})`];
   if (slides[0]?.kind !== "cover") p.push("첫 장은 kind=cover");
+  const big = slides.filter((s) => s?.kind === "number").length;
+  if (big > numbers) p.push(`큰 숫자 장(kind=number)이 ${big}장 — ${numbers}장까지만, 나머지 숫자는 문장 속에 (이야기가 먼저, 숫자는 근거)`);
   slides.forEach((s, i) => {
     const at = `${i + 1}장`, lines = (t) => plain(t).split("\n"), long = (t, n) => lines(t).some((l) => l.length > n);
     if (!KINDS.has(s?.kind)) p.push(`${at}: kind는 ${[...KINDS].join("/")} 중 하나`);
@@ -192,11 +196,13 @@ export function checkSlides(slides, { refs = 0 } = {}) {
     const t = slideText(s ?? {});
     p.push(...typo(at, t));
     if (lines(t).some((l) => nameRun(l) > 3)) p.push(`${at}: 회사·기관 이름을 "·"로 세 곳 넘게 이음 — "OO 등 N곳"처럼 줄일 것`);
+    if (s?.kind === "case" && (!refs || !Array.isArray(s.refs) || s.refs.length !== 1)) p.push(`${at}: case 장은 AX 사례 게시물에서, refs에 발표 번호 하나`);
     // a news post: each slide says which announcements it tells (code prints their source and date)
     if (refs) {
       const r = s?.refs ?? [];
       if (!Array.isArray(r) || r.some((n) => !Number.isInteger(n) || n < 1 || n > refs)) p.push(`${at}: refs는 발표 번호(1~${refs}) 목록`);
-      else if (!["cover", "end"].includes(s.kind) && !r.length) p.push(`${at}: 어떤 발표를 말하는지 refs에 번호를 적을 것`);
+      // the cover, the summing-up and the checks to ask (a list) tell no one announcement
+      else if (!["cover", "end", "list"].includes(s.kind) && !r.length) p.push(`${at}: 어떤 발표를 말하는지 refs에 번호를 적을 것`);
     }
   });
   return p;
@@ -205,12 +211,77 @@ export function checkSlides(slides, { refs = 0 } = {}) {
 // our-words checks slide by slide
 export function checkStory(st, ctx = {}) {
   const slides = Array.isArray(st?.slides) ? st.slides : [], caption = plain(st?.caption);
+  const cases = ctx.refs ? (Array.isArray(st?.cases) ? st.cases : []) : [];
   return [
     ...checkSlides(st?.slides, ctx),
-    ...checkWords([...slides.map(slideText), caption].join("\n"), ctx),
+    ...(ctx.refs ? checkCases(cases, slides, ctx) : []),
+    ...checkWords([...slides.map(slideText), ...cases.map(caseText), caption].join("\n"), ctx),
     ...captionShape(caption),
-    ...copies([...slides.map((s, i) => [`${i + 1}장`, slideText(s)]), ["캡션", caption]], ctx),
+    // a case box by box: joined, "Microsoft" + "Microsoft Sovereign Cloud" would read as one run of 24 characters
+    ...copies([...slides.map((s, i) => [`${i + 1}장`, slideText(s)]), ...cases.flatMap((c, i) => ["who", "what", "where", "how", "check"].map((k) => [`사례 ${i + 1} ${k}`, plain(c?.[k])])), ["캡션", caption]], ctx),
   ];
+}
+
+// ---------- a case: an announcement read the way an IT consultant reads it (2026-10-26) ----------
+// who brought what in, where (which work, which system) and how — with the IT domain and the way it went in, each
+// from a fixed list (trends/series.mjs → DOMAINS, METHODS), and one question to ask of one's own project. The cards
+// print it as a small table (build.mjs), the briefing as the head of the case's section (briefs.mjs), so it is short
+// noun phrases, never invented: a box the announcement doesn't fill says so.
+export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [2, 5] };
+export const NOT_SAID = "발표에 없음";
+export const DOMAIN_NAMES = DOMAINS.map((d) => d.name), METHOD_NAMES = METHODS.map((m) => m.name);
+export const caseText = (c) => [c?.who, c?.what, c?.where, c?.how, c?.check].filter(Boolean).join("\n");
+const LABEL = { who: "누가", what: "무엇을", where: "어디에", how: "어떻게" };
+export function checkCases(cases, slides = [], { refs = 0 } = {}) {
+  const p = [];
+  if (cases.length < CASE.count[0] || cases.length > CASE.count[1]) p.push(`cases는 사례 ${CASE.count.join("~")}건 (지금 ${cases.length})`);
+  const seen = new Set();
+  cases.forEach((c, i) => {
+    const at = `사례 ${i + 1}`;
+    if (!Number.isInteger(c?.ref) || c.ref < 1 || c.ref > refs) p.push(`${at}: ref는 발표 번호(1~${refs})`);
+    else if (seen.has(c.ref)) p.push(`${at}: 발표 ${c.ref}의 사례가 두 번`);
+    else seen.add(c.ref);
+    for (const k of Object.keys(LABEL)) {
+      const v = plain(c?.[k]).trim();
+      if (!v || v.length > CASE[k]) p.push(`${at}: ${k}(${LABEL[k]})는 1~${CASE[k]}자 명사구 — 발표·원문에 없으면 "${NOT_SAID}"`);
+      else if (/\n/.test(v) || /[.!]$/.test(v) || /(?:어요|에요|습니다|했다|한다)$/.test(v)) p.push(`${at}: ${k}(${LABEL[k]})는 문장이 아닌 짧은 명사구로`);
+    }
+    if (!DOMAIN_NAMES.includes(plain(c?.domain).trim())) p.push(`${at}: domain은 ${DOMAIN_NAMES.join("/")} 중 하나`);
+    if (!METHOD_NAMES.includes(plain(c?.method).trim())) p.push(`${at}: method는 ${METHOD_NAMES.join("/")} 중 하나`);
+    const q = plain(c?.check).trim();
+    if (q.length < 8 || q.length > CASE.check || !/\?$/.test(q)) p.push(`${at}: check는 확인할 점 질문 하나(8~${CASE.check}자, ?로 끝남)`);
+    if ([c?.who, c?.what, c?.where, c?.how].every((v) => plain(v).trim() === NOT_SAID)) p.push(`${at}: 네 칸이 모두 "${NOT_SAID}" — 이 발표는 사례로 고르지 말 것`);
+  });
+  // a case is told on a card of its own, and a case card tells a case
+  const told = new Map(slides.filter((s) => s?.kind === "case" && s.refs?.length === 1).map((s) => [s.refs[0], s]));
+  for (const c of cases) if (Number.isInteger(c?.ref) && !told.has(c.ref)) p.push(`발표 ${c.ref}의 사례 장(kind=case)이 없음`);
+  for (const r of told.keys()) if (!cases.some((c) => c?.ref === r)) p.push(`case 장(발표 ${r})의 사례가 cases에 없음`);
+  return p;
+}
+
+// ---------- words a briefing explains (the glossary grows with the briefings, 2026-10-26) ----------
+// 0–3 terms a reader outside IT may not know, each used in the briefing, not explained already (trends/glossary.mjs:
+// the fixed list and the earlier briefings' terms), explained in a sentence or two of plain words — what the word
+// means, not what this week's announcement said (no figures)
+export const TERM = { max: 3, term: 30, def: [12, 140] };
+export const termKey = (t) => plain(t).toLowerCase().replace(/[\s·()\-]/g, "");
+export function checkTerms(terms, { text = "", known = [] } = {}, ctx = {}) {
+  const p = [], list = terms ?? [];
+  if (!Array.isArray(list) || list.length > TERM.max) return [`terms는 0~${TERM.max}개`];
+  const body = termKey(text), had = new Set(known.map(termKey)), seen = new Set();
+  list.forEach((x, i) => {
+    const at = `용어 ${i + 1}`, t = plain(x?.term).trim(), d = plain(x?.def).trim(), k = termKey(t);
+    if (!t || t.length > TERM.term) p.push(`${at}: term은 1~${TERM.term}자`);
+    else if (!body.includes(k)) p.push(`${at}: '${t}'는 글에 나오지 않음 — 글에 쓴 말 그대로 고를 것`);
+    else if (had.has(k)) p.push(`${at}: '${t}'는 이미 용어 풀이에 있음 — 다른 말을 고르거나 빼기`);
+    else if (seen.has(k)) p.push(`${at}: '${t}'가 두 번`);
+    seen.add(k);
+    if (d.length < TERM.def[0] || d.length > TERM.def[1]) p.push(`${at}: def는 ${TERM.def.join("~")}자`);
+    if (numbersIn(d).some((n) => !n.small)) p.push(`${at}: 풀이에 숫자를 넣지 말 것 — 말의 뜻만`);
+    if (!/(?:요|다)\.?$/.test(d)) p.push(`${at}: 풀이는 ~요로 끝나는 문장으로`);
+  });
+  p.push(...checkWords(list.map((x) => `${x?.term ?? ""}\n${x?.def ?? ""}`).join("\n"), ctx), ...copies(list.map((x, i) => [`용어 ${i + 1}`, plain(x?.def)]), ctx));
+  return p;
 }
 
 // the web briefing (story.json → article) and the monthly roundup: a title, a lede, 2–8 sections (the briefing aims at

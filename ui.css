@@ -139,3 +139,10 @@ body.has-tabbar .pgr{bottom:calc(61px + env(safe-area-inset-bottom))}
   display:flex;flex-direction:column;padding:18px 16px 20px}
 .pg>*{flex-shrink:0} .pg>:first-child{margin-top:0}
 .pg .appbar{position:static;margin:16px 0 0;box-shadow:none}
+
+/* tappable words (terms.js): a word the glossary explains, and its floating explanation — the home page and the briefings */
+.term{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:help;text-decoration:underline dotted;text-decoration-color:var(--bronze-line);text-decoration-thickness:1.5px;text-underline-offset:3px}
+.term:hover,.term[aria-expanded="true"]{color:var(--bronze-hi);text-decoration-color:var(--bronze-hi)}
+.termtip{position:absolute;z-index:30;width:min(300px,calc(100vw - 32px));background:var(--surface-3);border:1px solid var(--line-2);border-radius:12px;padding:13px 15px;font-size:13.5px;line-height:1.6;color:var(--ink-2);box-shadow:0 14px 36px rgba(0,0,0,.55)}
+.termtip b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:3px}
+.termtip a{display:inline-flex;align-items:center;min-height:32px;margin-top:4px;font-size:12.5px}
