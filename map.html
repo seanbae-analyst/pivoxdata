@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=5" />
+<link rel="stylesheet" href="/ui.css?v=6" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
@@ -207,6 +207,7 @@
   <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
   <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
+  <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
 </nav>
 <script>
 (() => { const t = document.querySelector(".tabbar"); if (!t) return;
@@ -248,13 +249,15 @@ import { pager } from "/pager.js";
 const $ = (s) => document.querySelector(s), all = (s) => [...document.querySelectorAll(s)];
 if (matchMedia("(max-width: 640px)").matches) for (const d of all("details.dd")) d.open = false;
 const list = () => Object.assign(document.createElement("div"), { className: "srcs" });
+// the sidebar (목차) lists each source under its group
+const src = (x) => ({ label: x.querySelector("h3")?.textContent });
 pager([
-  { id: "top", name: "데이터 지도", pages: [[$("main>header"), $("#overview")]] },
-  { id: "front", name: "첫 화면", pages: all(".src.front").map((x, i) => [i ? null : $("#g-front"), x]) },
-  { id: "basis", name: "근거 데이터", head: $("#g-basis"), items: all(".src.basis"), list },
-  { id: "later", name: "후보·보류", head: $("#later"), items: all(".src.later"), list },
-  { id: "keys", name: "잇는 법", pages: [[$("#keys")]] },
-  { id: "limits", name: "한계", pages: [[$("#limits")]] },
+  { id: "top", name: "데이터 지도", title: "한눈에", pages: [[$("main>header"), $("#overview")]] },
+  { id: "front", name: "첫 화면", title: "첫 화면의 숫자", group: "출처", pages: all(".src.front").map((x, i) => [i ? null : $("#g-front"), x]), sub: (n) => src(n.matches(".src") ? n : n.nextElementSibling ?? n) },
+  { id: "basis", name: "근거 데이터", title: "근거 데이터", group: "출처", head: $("#g-basis"), items: all(".src.basis"), list, sub: src },
+  { id: "later", name: "후보·보류", title: "후보 · 보류", group: "출처", head: $("#later"), items: all(".src.later"), list, sub: src },
+  { id: "keys", name: "잇는 법", title: "데이터를 잇는 법", group: "읽는 법", pages: [[$("#keys")]] },
+  { id: "limits", name: "한계", title: "이 지도로 말할 수 없는 것", group: "읽는 법", pages: [[$("#limits")]] },
 ]);
 </script>
 <script>

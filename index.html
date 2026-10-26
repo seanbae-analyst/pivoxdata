@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=5" />
+<link rel="stylesheet" href="/ui.css?v=6" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
@@ -284,7 +284,11 @@
   .pg.f1 [data-fold="1"],.pg.f2 [data-fold="2"],.pg.f3 [data-fold="3"]{display:none !important}
   .pg .events li:nth-child(n){display:block}
   .pg .gl-list{margin:0}
-  .pg .gl[data-g]::before{content:attr(data-g);display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin:0 0 6px}
+  /* the glossary's phone pages show the words only, a row each; a tap opens the explanation as a sheet (terms.js) */
+  .pg .gl{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;min-height:48px;padding:10px 0;cursor:pointer}
+  .pg .gl dt{font-size:15.5px;font-weight:600} .pg .gl dd{display:none}
+  .pg .gl::after{content:"›";font-size:20px;line-height:1;color:var(--dim)}
+  .pg .gl[data-g]::before{content:attr(data-g);grid-column:1/-1;display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin:0 0 8px}
   .pg-more p{font-size:15px;line-height:1.7;color:var(--ink-2);margin:0 0 12px}
   .pg-btn{display:flex;align-items:center;justify-content:center;min-height:48px;margin:8px 0 22px;border:1px solid var(--line-2);border-radius:var(--radius-cta);color:var(--ink);font-weight:600;text-decoration:none}
   .pg-links{display:flex;flex-wrap:wrap;gap:0 18px;font-size:14px;border-top:1px solid var(--line);padding-top:6px} .pg-links a{min-height:40px;display:inline-flex;align-items:center;color:var(--mut)}
@@ -433,6 +437,7 @@
   <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
   <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
+  <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
 </nav>
 <script>
 (() => { const t = document.querySelector(".tabbar"); if (!t) return;
@@ -578,16 +583,20 @@ const fit = (p) => {
   for (const f of ["f1", "f2", "f3"]) { if (!over()) break; p.classList.add(f); }
   if (card) { if (fig) { drawFig(fig, MIN + Math.max(0, inner - card.offsetHeight)); fig.style.flex = ""; } card.style.flex = ""; }
 };
+// the sidebar (목차) reads the same chapters: their long names, a group heading over them, and the entries under the
+// cases and the cards — a case's IT domain and way in, a card's subject and its finding
+const card = (c) => ({ label: c.querySelector(".k")?.textContent.replace(/^(AX|IT 영역) · /, ""), note: c.querySelector("h3")?.textContent });
+const beat = (li) => ({ label: li.querySelector("b")?.textContent, note: li.querySelector(".bk")?.textContent });
 pager([
-  { id: "start", name: "이야기", pages: [[$("main>header.hero"), $("#story .st-head"), app, make("p", "pg-hint", $("#story .beats") ? "옆으로 넘기면 <b>사례 · 관점 · 숫자</b> →" : "옆으로 넘기면 <b>숫자 · 발표</b> →")]] },
-  { id: "story", name: "사례", items: all("#story .beats>li"), list: () => make("ol", "beats") },
-  { id: "view", name: "관점", items: view, list: () => make("div", "st-view") },
-  { id: "numbers", name: "숫자", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] },
-  { id: "ax", name: "도입률", pages: all("#panel-ax>.ins").map((c) => [c]) },
-  { id: "domains", name: "IT 영역", pages: all("#panel-domains>.ins").map((c) => [c]) },
-  { id: "news", name: "발표", items: events, list: () => make("ul", "events feed") },
-  { id: "glossary", name: "용어", lead: [$("#glossary .sec-h")], items: all("#glossary .gl"), list: () => make("dl", "gl-list") },
-  { id: "more", name: "근거", pages: [[basis]] },
+  { id: "start", name: "이야기", title: "처음 화면", group: "이번 주 이야기", pages: [[$("main>header.hero"), $("#story .st-head"), app, make("p", "pg-hint", $("#story .beats") ? "옆으로 넘기면 <b>사례 · 관점 · 숫자</b> →<br>한 번에 가려면 <b>목차</b>" : "옆으로 넘기면 <b>숫자 · 발표</b> →<br>한 번에 가려면 <b>목차</b>")]] },
+  { id: "story", name: "사례", title: "사례", group: "이번 주 이야기", items: all("#story .beats>li"), list: () => make("ol", "beats"), sub: beat },
+  { id: "view", name: "관점", title: "공통 흐름 · IT 컨설팅 관점", group: "이번 주 이야기", count: 0, items: view, list: () => make("div", "st-view") },
+  { id: "numbers", name: "숫자", title: "핵심 숫자", group: "숫자로 보면", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] },
+  { id: "ax", name: "도입률", title: "기업 도입률", group: "숫자로 보면", pages: all("#panel-ax>.ins").map((c) => [c]), sub: card },
+  { id: "domains", name: "IT 영역", title: "IT 영역별 발표", group: "숫자로 보면", pages: all("#panel-domains>.ins").map((c) => [c]), sub: card },
+  { id: "news", name: "발표", title: "최근 변화 · 공식 발표", group: "자료", count: all("#news .events>li.news").length, items: events, list: () => make("ul", "events feed") },
+  { id: "glossary", name: "용어", title: "용어 풀이", group: "자료", lead: [$("#glossary .sec-h")], items: all("#glossary .gl"), list: () => make("dl", "gl-list") },
+  { id: "more", name: "근거", title: "근거 데이터 · 방법 · 검산", group: "자료", pages: [[basis]] },
 ], { tab: (id) => (id === "news" || id === "glossary" ? id : "home"), fit });
 </script>
 <script>
