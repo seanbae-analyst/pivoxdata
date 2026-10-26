@@ -5,11 +5,13 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
 export const NAME = "AX 트렌드 레이더";
+// text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
+export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-export const PAGES = [
+const PAGES = [
   { file: "index.html", path: "/", paged: true },
   { file: "map.html", path: "/map", paged: true },
   { file: "404.html", path: "/404", noindex: true },
@@ -123,8 +125,11 @@ export function writePages(fills = {}, lastmod) {
   const BR = path.join(ROOT, "briefs");
   const briefs = fs.existsSync(BR) ? fs.readdirSync(BR, { recursive: true }).map(String).filter((f) => f.endsWith(".html"))
     .map((f) => `/briefs/${f.slice(0, -5).replace(/\\/g, "/")}`.replace(/\/index$/, "")) : [];
-  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${lastmod}</lastmod></url>`).join("\n");
-  fs.writeFileSync(path.join(ROOT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
+  // both the trends build (the data's day) and social/briefs.mjs (the newest briefing's day) write the sitemap, one
+  // after the other: a page keeps the later of its lastmod already there and this one, so it never goes back
+  const SM = path.join(ROOT, "sitemap.xml"), had = fs.existsSync(SM) ? Object.fromEntries([...fs.readFileSync(SM, "utf8").matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)].map((m) => [m[1], m[2]])) : {};
+  const urls = [...PAGES.filter((p) => !p.noindex).map((p) => p.path), ...briefs.sort()].map((u) => `  <url><loc>${SITE}${u}</loc><lastmod>${[had[SITE + u], lastmod].filter(Boolean).sort().at(-1)}</lastmod></url>`).join("\n");
+  fs.writeFileSync(SM, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`);
   fs.writeFileSync(path.join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
 }
 
@@ -133,7 +138,7 @@ export function writePages(fills = {}, lastmod) {
 // page never flashes. "?scroll=1" keeps the long page. A pager that has not started in 4 s (a slow network) gives the long
 // page back and fires "unpaged", so the scripts that set up the long page run after all. A window that grows past 900px
 // (a desktop browser widened) reloads as the long page; a phone turned sideways keeps its pages (and its tab bar, ui.css).
-export const PAGED_HEAD = `<script>(() => { const r = document.documentElement;
+const PAGED_HEAD = `<script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
   r.classList.add("paged");
   setTimeout(() => { if (r.classList.contains("pgr-ready") || !r.classList.contains("paged")) return; r.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); }, 4000);

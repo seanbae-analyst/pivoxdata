@@ -9,12 +9,13 @@
 // FORMATS lists the drawings for each shape. The site draws every card with its first option; the Instagram cards
 // rotate through the rest, so the same insight looks different from one post to the next.
 
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
+import { esc } from "./site.mjs";
+
 const num = (v) => (Number.isFinite(v) ? v : 0);
 const cut = (s, n) => (String(s).length > n ? String(s).slice(0, Math.max(1, n - 1)) + "…" : String(s));
 const f1 = (v) => v.toFixed(1);
 
-export const FORMATS = {
+const FORMATS = {
   series: ["area", "line", "columns"],
   versus: ["slope", "bars2", "arrow"],
   share: ["donut", "waffle", "stack"],

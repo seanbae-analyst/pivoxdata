@@ -7,11 +7,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, TOPIC_MIN_LEVEL, RACES, AX as AXSERIES, NEWS, DOMAINS } from "./series.mjs";
-import { weekly, lastSunday, breaks, trimEnd, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
-import { writePages } from "./site.mjs";
+import { NPM, PYPI, NPM_CONTROL, PYPI_CONTROL, ARXIV_DOMAINS, SEC, TOPICS, RACE_MIN_LEVEL, RACES, AX, NEWS, DOMAINS } from "./series.mjs";
+import { weekTable, breaks, readings, shares, median, MIN_LEVEL } from "./signals.mjs";
+import { writePages, esc } from "./site.mjs";
 import { draw, options, VIZ_CSS } from "./viz.mjs";
 import { termify, glossaryHtml } from "./glossary.mjs";
+import { addMonths } from "./dates.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = path.join(ROOT, "trends", "data");
@@ -20,13 +21,16 @@ const CHECKS = load("checks.json");
 if (CHECKS.checks.some((c) => !c.ok)) { console.error("trends/data/checks.json has failed checks — run node trends/verify.mjs and fix first"); process.exit(1); }
 
 // ---------- formatting ----------
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 const man = (v) => (v >= 1e8 ? (v / 1e8).toFixed(1) + "억" : v >= 1e5 ? Math.round(v / 1e4).toLocaleString("ko-KR") + "만" : v >= 1e4 ? (v / 1e4).toFixed(1) + "만" : Math.round(v).toLocaleString("ko-KR"));
 const pc = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%");
 const pp = (v, d = 1) => (v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v * 100).toFixed(d) + "%p");
 const sh = (v, d = 1) => (v == null ? "—" : (v * 100).toFixed(d) + "%");
 const usd = (v) => "$" + (v / 1e9).toFixed(1) + "B";
 const wlbl = (w) => `${+w.slice(5, 7)}월 ${+w.slice(8)}일 주`;
+// a week with its year when that isn't `ref`'s, so a range that crosses a year says so ("2024년 10월 14일 주–2026년
+// 10월 5일 주" — without the years it read backwards)
+const wyr = (w, ref) => (w.slice(0, 4) === ref.slice(0, 4) ? wlbl(w) : `${w.slice(0, 4)}년 ${wlbl(w)}`);
+const wspan = (a, b) => `${wyr(a, b)}–${wyr(b, a)}`;
 const mlbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(4)}월`;
 const qlbl = (q) => `${q.slice(0, 4)}년 ${q.slice(5)}분기`;
 const cls = (v) => (v == null ? "" : v < 0 ? "neg" : "pos");
@@ -35,8 +39,7 @@ const r4 = (v) => (v == null ? null : Math.round(v * 1e4) / 1e4);
 // ---------- downloads (npm, PyPI) ----------
 function downloads(src, list, control) {
   const d = load(`${src}.json`), P = d.packages, all = [...list, ...control];
-  const until = lastSunday(all.map((p) => P[p.pkg].days));
-  const W = trimEnd(Object.fromEntries(all.map((p) => [p.pkg, weekly(P[p.pkg].days, until)])));
+  const { W } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
   const br = breaks(Object.fromEntries(control.map((p) => [p.pkg, W[p.pkg]])));
   const from = br.length ? br.at(-1).i : 0, weeks = W[all[0].pkg].map((x) => x.week);
   const R = Object.fromEntries(all.map((p) => [p.pkg, readings(W[p.pkg], from)]));
@@ -47,9 +50,8 @@ function downloads(src, list, control) {
 }
 const npm = downloads("npm", NPM, NPM_CONTROL), pypi = downloads("pypi", PYPI, PYPI_CONTROL);
 
-// topic packages (group "topic") belong to their own tabs and race-only packages (group "race", e.g. playwright) to
-// the races — neither joins the AI rankings or tables
-const isAI = (r) => r.group !== "topic" && r.group !== "race";
+// race-only packages (group "race", e.g. playwright) belong to the races: they don't join the AI rankings or tables
+const isAI = (r) => r.group !== "race";
 const ranked = (x) => x.rows.filter((r) => isAI(r) && r.level >= MIN_LEVEL && r.excess != null).sort((a, b) => b.excess - a.excess);
 const table = (x, yoy) => x.rows.filter((r) => isAI(r) && r.level != null).sort((a, b) => (b.excess ?? -9) - (a.excess ?? -9)).map((r) =>
   `<tr><td><b>${esc(r.group === "provider" ? `AI SDK용 ${r.name}` : r.name)}</b><span class="pkg">${esc(r.pkg)}</span></td><td>${man(r.level)}</td><td class="${cls(r.g4)}">${pc(r.g4)}</td><td class="${cls(r.excess)}">${pp(r.excess)}</td><td class="${cls(r.accel)}">${pp(r.accel)}</td>${yoy ? `<td class="${cls(r.yoy)}">${r.yoy == null ? "—" : pc(r.yoy, 0)}</td>` : ""}</tr>`).join("");
@@ -57,10 +59,8 @@ const table = (x, yoy) => x.rows.filter((r) => isAI(r) && r.level != null).sort(
 // Vercel AI SDK providers: which model app developers wire in, as a share of the provider packages
 const provPk = NPM.filter((p) => p.group === "provider");
 const provW = Object.fromEntries(provPk.map((p) => [p.pkg, npm.W[p.pkg]]));
-const provNow = shares(provW, 0), prov52 = shares(provW, 52);
-const provDelta = provPk.map((p) => ({ ...p, now: provNow[p.pkg], then: prov52[p.pkg], d: provNow[p.pkg] != null && prov52[p.pkg] != null ? provNow[p.pkg] - prov52[p.pkg] : null }));
-const provLead = provDelta.reduce((a, b) => (b.now > a.now ? b : a));
-const provUp = provDelta.filter((p) => p.d != null).reduce((a, b) => (b.d > a.d ? b : a)), provDown = provDelta.filter((p) => p.d != null).reduce((a, b) => (b.d < a.d ? b : a));
+const provNow = shares(provW, 0);
+const provLead = provPk.map((p) => ({ ...p, now: provNow[p.pkg] })).reduce((a, b) => (b.now > a.now ? b : a));
 const SHOW = 104; // two years of weeks on the share chart
 const provSeries = (() => {
   const n = npm.weeks.length, out = { weeks: npm.weeks.slice(Math.max(0, n - SHOW)), series: {} };
@@ -76,38 +76,34 @@ const pyBack = Math.max(0, Math.min(8, pypi.weeks.length - pypi.from - 4));
 const sdkNow = shares(sdkW, 0), sdkThen = shares(sdkW, pyBack);
 
 // ---------- arXiv ----------
-const AX = load("arxiv.json");
+const ARX = load("arxiv.json");
 const avg = (a) => a.reduce((s, x) => s + x, 0) / a.length;
-const mAdd = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(4) - 1 + n; return `${Math.floor(t / 12)}${String((t % 12) + 1).padStart(2, "0")}`; };
+// a ratio means something only for a phrase in ≥ 0.2% of the field a year ago and ≥ 10 papers in the last 3 months
+const meaningful = (then, papers3) => then >= 0.002 && papers3 >= 10;
 // one research field: its unbroken run of months ending at the latest (a cut-short backfill can leave older gaps),
 // each phrase's share of the field's papers, and how the last 3 months compare with the same 3 a year earlier
 function field(f) {
-  const X = AX.domains[f.id], am = (() => { const set = new Set(X.months), out = [X.months.at(-1)]; while (set.has(mAdd(out[0], -1))) out.unshift(mAdd(out[0], -1)); return out; })();
+  const X = ARX.domains[f.id], am = (() => { const set = new Set(X.months), out = [X.months.at(-1)]; while (set.has(addMonths(out[0], -1))) out.unshift(addMonths(out[0], -1)); return out; })();
   const share = (id, m) => X.terms[id][m] / X.total[m];
-  const last3 = am.slice(-3), prev3 = am.length >= 15 ? last3.map((m) => mAdd(m, -12)) : [];
+  const last3 = am.slice(-3), prev3 = am.length >= 15 ? last3.map((m) => addMonths(m, -12)) : [];
   const rows = f.terms.map((t) => {
     const now = avg(last3.map((m) => share(t.id, m))), then = prev3.length === 3 ? avg(prev3.map((m) => share(t.id, m))) : null;
     const papers3 = last3.reduce((s, m) => s + X.terms[t.id][m], 0);
     return { ...t, now, then, ratio: then ? now / then : null, papers: X.terms[t.id][am.at(-1)], papers3 };
   }).sort((a, b) => (b.ratio ?? 0) - (a.ratio ?? 0));
-  // a ratio means something only for a phrase in ≥ 0.2% of the field a year ago and ≥ 10 papers in the last 3 months
-  const top = rows.filter((r) => r.then >= 0.002 && r.papers3 >= 10)[0] ?? null;
-  const biggest = [...rows].sort((a, b) => b.now - a.now)[0];
-  const growth = prev3.length === 3 ? avg(last3.map((m) => X.total[m])) / avg(prev3.map((m) => X.total[m])) - 1 : null;
-  return { ...f, X, am, share, last3, prev3, rows, top, biggest, growth, monthly: avg(last3.map((m) => X.total[m])) };
+  const top = rows.filter((r) => meaningful(r.then, r.papers3))[0] ?? null;
+  return { ...f, X, am, share, rows, top };
 }
-const fields = ARXIV_DOMAINS.filter((f) => AX.domains?.[f.id]?.months?.length).map(field);
+const fields = ARXIV_DOMAINS.filter((f) => ARX.domains?.[f.id]?.months?.length).map(field);
 const ai = fields.find((f) => f.id === "ai");
-const { am, last3, rows: axRows, top: axTop, biggest: axBiggest } = ai, axShare = ai.share;
+const { am, rows: axRows } = ai, axShare = ai.share;
 const axChart = [...axRows].filter((r) => r.then != null).slice(0, 5).map((r) => r.id);
 
 // ---------- Hugging Face ----------
 const HFD = load("hf.json"), snap = HFD.snapshots.at(-1);
-const prevSnap = [...HFD.snapshots].reverse().find((s) => (new Date(snap.date) - new Date(s.date)) / 864e5 >= 6) ?? null;
 const gen = snap.top.filter((m) => m.task === "text-generation" || m.task === "image-text-to-text");
 const byAuthor = Object.entries(gen.reduce((o, m) => ((o[m.author] = (o[m.author] ?? 0) + m.downloads), o), {})).sort((a, b) => b[1] - a[1]);
 const genTotal = byAuthor.reduce((s, [, v]) => s + v, 0);
-const newIn = prevSnap ? snap.top.filter((m) => !prevSnap.top.some((p) => p.id === m.id)) : [];
 const trendRows = snap.trending.slice(0, 12).map((m, i) => `<tr><td>${i + 1}</td><td><a href="https://huggingface.co/${esc(m.id)}" target="_blank" rel="noopener">${esc(m.id)}</a></td><td>${esc(m.task ?? "—")}</td><td>${man(m.downloads)}</td><td>${m.created}</td></tr>`).join("");
 const authorRows = byAuthor.slice(0, 8).map(([a, v]) => `<li><span>${esc(a)}</span><span class="bar" style="--w:${(v / byAuthor[0][1] * 100).toFixed(1)}%"></span><span class="v">${sh(v / genTotal)}</span></li>`).join("");
 
@@ -122,10 +118,16 @@ const cq = common.at(-1), cqYear = `${+cq.slice(0, 4) - 1}${cq.slice(4)}`;
 const ttm = (q) => { const i = common.indexOf(q); return i >= 3 ? common.slice(i - 3, i + 1).reduce((s, x) => s + sum4(x), 0) : null; };
 const capex = { q: cq, sum: sum4(cq), yoy: common.includes(cqYear) ? sum4(cq) / sum4(cqYear) - 1 : null, ttm: ttm(cq), ttmPrev: ttm(cqYear) };
 const capexLead = big4.map((id) => ({ id, name: SEC.companies.find((c) => c.id === id).name, v: Qs[id][cq], yoy: Qs[id][cqYear] ? Qs[id][cq] / Qs[id][cqYear] - 1 : null })).sort((a, b) => b.yoy - a.yoy);
-const ahead = SEC.companies.filter((c) => Object.keys(Qs[c.id]).some((q) => q > cq)).map((c) => { const q = Object.keys(Qs[c.id]).filter((x) => x > cq).sort().at(-1); return `${c.name} ${qlbl(q)} ${usd(Qs[c.id][q])}`; });
 
-// the day this build describes: the latest fetch of any source
-const updated = [npm.fetched, pypi.fetched, AX.fetched_at, HFD.fetched_at, SECD.fetched_at].sort().at(-1);
+// the day this build describes: the latest fetch of any source — the Ramp AI Index and the announcements included, so
+// a refetch of the news alone moves the 30- and 14-day windows below to the day they were read
+const AXD = load("ax.json"), NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
+const updated = [npm.fetched, pypi.fetched, ARX.fetched_at, HFD.fetched_at, SECD.fetched_at, AXD.fetched_at, NEWSD.fetched_at].filter(Boolean).sort().at(-1);
+// "the last n days", for every window below: that day and the n − 1 days before it
+const ago = (d) => (new Date(updated) - new Date(d)) / 864e5, within = (d, n) => ago(d) < n;
+// a finished week named from that day: 지난주 only when it is last week (npm's newest weeks are often still being
+// counted and are left out, so its latest finished week can be two or three weeks back) — otherwise its date
+const wname = (w) => { const d = (new Date(updated) - new Date(w)) / 864e5; return d >= 7 && d < 14 ? "지난주" : wlbl(w); };
 
 // ---------- insights ----------
 // One object per insight: a big number, a one-line headline, a short body and a small trend line. The page and the
@@ -141,87 +143,17 @@ const keep = (t) => {
   return t.length <= 28 ? e.replace(/ /g, "&nbsp;") : e;                          // OpenAI Agents
 };
 const glue = (html) => html.replace(/ (<b>[+−\-]?[\d$])/g, "&nbsp;$1");
-const nRank = ranked(npm), pRank = ranked(pypi), nTop = nRank.slice(0, 3), pTop = pRank.slice(0, 3);
-const acc = npm.rows.filter((r) => isAI(r) && r.level >= MIN_LEVEL && r.accel != null).sort((a, b) => b.accel - a.accel)[0];
+const nRank = ranked(npm), pRank = ranked(pypi);
 const lastN = (a, n) => a.slice(Math.max(0, a.length - n));
-const lv = (x, pkg, n) => lastN(x.W[pkg].map((w) => w.level), n);
-const span = (x, n) => `${wlbl(lastN(x.weeks, n)[0])}–${wlbl(x.weeks.at(-1))}`;
 // data shapes for viz.mjs — each insight lists the ones it can be drawn from, best first
 const series = (values, formats) => ({ kind: "series", values: values.map(r4), ...(formats ? { formats } : {}) });
 const versus = (from, to, fmt, fromLabel, toLabel) => ({ kind: "versus", from: r4(from), to: r4(to), fromText: fmt(from), toText: fmt(to), fromLabel, toLabel });
 const rank = (rows, name, value, label) => ({ kind: "rank", items: rows.slice(0, 5).map((r) => ({ name: name(r), value: r4(value(r)), label: label(r) })) });
 const shareOf = (pairs, focus = 0) => ({ kind: "share", focus, parts: pairs.map(([name, value]) => ({ name, value: r4(value) })) });
 const short = (r) => r.name.replace(/\s*\([^)]*\)$/, ""); // rank labels: the name alone ("변분 알고리즘", not "… (variational)")
-const insights = [
-  { id: "npm", k: "개발자 · JavaScript", big: pp(nTop[0].excess), bl: "인기 패키지보다 더 늘어난 폭 · 4주",
-    title: `npm에서 가장 빨리 크는 AI 패키지는 <b>${keep(nm(nTop[0]))}</b>`,
-    body: `4주 다운로드 ${pc(nTop[0].g4)}, 같은 4주 react·lodash 같은 대조군은 ${pc(npm.base)}. 다음은 ${nTop.slice(1).map((r) => `${esc(nm(r))}(${pp(r.excess)})`).join(", ")}.`,
-    easy: `한 달 사이 다운로드가 ${pc(nTop[0].g4)} 늘었어요. 같은 기간 react 같은 인기 패키지는 ${pc(npm.base)} — 그보다 ${pp(nTop[0].excess)} 더 빨라요.`, viz: [rank(nRank, short, (r) => r.excess, (r) => pp(r.excess)), series(lv(npm, nTop[0].pkg, 26))], src: `npm 평일 다운로드 · ${span(npm, 26)}` },
-  { id: "accel", k: "가속", big: pp(acc.accel), bl: "늘어나는 속도가 빨라진 폭",
-    title: `성장이 가장 빨라지는 쪽은 <b>${keep(nm(acc))}</b>`,
-    body: `4주 성장률이 직전 4주 ${pc(acc.g4 - acc.accel)}에서 ${pc(acc.g4)}로 올라갔습니다.`,
-    easy: `늘어나는 속도 자체가 빨라지고 있어요. 직전 4주엔 ${pc(acc.g4 - acc.accel)}, 최근 4주엔 ${pc(acc.g4)} 늘었어요.`, viz: [versus(acc.g4 - acc.accel, acc.g4, pc, "직전 4주", "최근 4주"), series(lv(npm, acc.pkg, 26))], src: `npm 평일 다운로드 · ${span(npm, 26)}` },
-  { id: "provider", k: "앱에 붙이는 모델", big: sh(provUp.now), bl: `Vercel AI SDK 공급자 중 ${provUp.name} 비중`,
-    title: `1년 새 <b>${keep(provUp.name)}</b> ${sh(provUp.then)}&nbsp;→&nbsp;${sh(provUp.now)}`,
-    body: `지금 1위는 ${esc(provLead.name)}(${sh(provLead.now)}), 가장 많이 내린 곳은 ${esc(provDown.name)}(${sh(provDown.then)} → ${sh(provDown.now)}). 앱 개발자가 어떤 모델을 연결하는지 보여 주는 대리 지표입니다.`,
-    easy: `AI 앱을 만들 때 연결하는 모델 회사를 100번 세면 ${Math.round(provUp.now * 100)}번이 ${esc(provUp.name)}. 1년 전엔 ${Math.round(provUp.then * 100)}번이었어요.`, viz: [versus(provUp.then, provUp.now, sh, "1년 전", "지금"), shareOf(provPk.map((p) => [p.name, provNow[p.pkg]]), provPk.indexOf(provPk.find((p) => p.pkg === provUp.pkg))), series(lastN(provSeries.series[provUp.pkg], 52))], src: `@ai-sdk 공급자 패키지 다운로드 비중 · 최근 52주` },
-  { id: "pypi", k: "개발자 · Python", big: pp(pTop[0].excess), bl: "인기 패키지보다 더 늘어난 폭 · 4주",
-    title: `파이썬에서 가장 빨리 크는 쪽은 <b>${keep(pTop[0].name)}</b>`,
-    body: `4주 다운로드 ${pc(pTop[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}. 다음은 ${pTop.slice(1).map((r) => `${esc(r.name)}(${pp(r.excess)})`).join(", ")}.`,
-    easy: `파이썬 개발자들의 다운로드가 한 달 새 ${pc(pTop[0].g4)} 늘었어요. 인기 패키지(${pc(pypi.base)})보다 ${pp(pTop[0].excess)} 더 빨라요.`, viz: [rank(pRank, short, (r) => r.excess, (r) => pp(r.excess)), series(pypi.W[pTop[0].pkg].slice(pypi.from).map((w) => w.level))], src: `PyPI 평일 다운로드 · ${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주` },
-  ...(axTop ? [{ id: "arxiv", k: "연구", big: `${axTop.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 AI 논문 비율 · 1년 전과 비교",
-    title: `연구자들이 가장 빠르게 더 쓰는 말은 <b>${keep(axTop.name)}</b>`,
-    body: `최근 3개월 AI 논문의 ${sh(axTop.now)}가 초록에 썼습니다(1년 전 ${sh(axTop.then)}). 가장 많이 쓰인 말은 ${esc(axBiggest.name)}(${sh(axBiggest.now)}).`,
-    easy: `AI 논문 1,000편 중 ${Math.round(axTop.now * 1000)}편이 이 말을 써요. 1년 전엔 ${Math.round(axTop.then * 1000)}편이었어요.`, viz: [versus(axTop.then, axTop.now, sh, "1년 전", "최근 3개월"), series(am.map((m) => axShare(axTop.id, m))), rank(axRows.filter((r) => r.then >= 0.002 && r.papers3 >= 10), short, (r) => r.ratio, (r) => `${r.ratio.toFixed(1)}배`)], src: `arXiv cs.AI·cs.CL·cs.LG · ${mlbl(am[0])}–${mlbl(am.at(-1))}` }] : []),
-  { id: "hf", k: "오픈 모델", big: sh(byAuthor[0][1] / genTotal), bl: `텍스트 생성 모델 다운로드 중 ${byAuthor[0][0]} 계열`,
-    title: `오픈 텍스트 생성 모델 다운로드의 ${sh(byAuthor[0][1] / genTotal)}는 <b>${keep(byAuthor[0][0])}</b>&nbsp;계열`,
-    body: `다음은 ${byAuthor.slice(1, 3).map(([a, v]) => `${esc(a)}(${sh(v / genTotal)})`).join(", ")}. 지금 가장 뜨는 모델은 ${keep(snap.trending[0].id)}(${keep(snap.trending[0].task ?? "")}${snap.trending[0].task ? ", " : ""}${snap.trending[0].created} 공개).${prevSnap ? ` 지난주보다 다운로드 상위 ${snap.top.length}에 새로 든 모델 ${newIn.length}개.` : ""}`,
-    easy: `오픈 AI 모델을 10번 내려받으면 약 ${Math.round(byAuthor[0][1] / genTotal * 10)}번이 ${esc(byAuthor[0][0])} 모델이에요.`, viz: [shareOf([...byAuthor.slice(0, 5).map(([a, v]) => [a, v / genTotal]), ["그 밖", byAuthor.slice(5).reduce((s, [, v]) => s + v, 0) / genTotal]]), rank(byAuthor.map(([a, v]) => ({ name: a, v: v / genTotal })), (r) => r.name, (r) => r.v, (r) => sh(r.v))], src: `Hugging Face 다운로드 상위 ${snap.top.length} · ${snap.date}` },
-  { id: "capex", k: "자본", big: usd(capex.sum), bl: `빅테크 4사 설비투자 · ${qlbl(cq)}`,
-    title: `AI 인프라에 들어가는 돈, 1년 전보다 <b>${pc(capex.yoy, 0)}</b>`,
-    body: `Microsoft·Alphabet·Amazon·Meta 합계. 최근 4개 분기 ${usd(capex.ttm)}(1년 전 ${usd(capex.ttmPrev)}). 가장 빨리 늘린 곳은 ${capexLead[0].name}(${pc(capexLead[0].yoy, 0)}).`,
-    easy: `마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요. 1년 전보다 ${pc(capex.yoy, 0)} 많아요.`, viz: [series(common.map(sum4), ["columns", "area", "line"]), versus(capex.ttmPrev, capex.ttm, usd, "1년 전 4개 분기", "최근 4개 분기"), rank(capexLead, (r) => r.name, (r) => r.yoy, (r) => pc(r.yoy, 0))], src: `SEC 공시 · ${qlbl(common[0])}–${qlbl(cq)}` },
-];
 
 // the card's drawing, made on the server so it reads without JavaScript: the first format of its first shape
 const vizHtml = (x) => { const o = options(x.viz)[0]; return o ? draw(x.viz[o.i], o.format) : ""; };
-// ---------- topic tabs: AI is the radar above; every other topic is one arXiv field + its packages (+ HF tasks) ----------
-const pyRow = (pkg) => pypi.rows.find((r) => r.pkg === pkg);
-const pySpan = `${wlbl(pypi.weeks[pypi.from])}–${wlbl(pypi.last)} 주`;
-const topicPk = (t) => (t.pypi ?? []).map(pyRow).filter((r) => r && r.level >= TOPIC_MIN_LEVEL);
-const topicFast = (t) => topicPk(t).filter((r) => r.excess != null).sort((a, b) => b.excess - a.excess);
-function topicCards(t) {
-  const f = fields.find((x) => x.id === t.field), out = [];
-  const fsrc = f ? `arXiv ${f.scope.replace(/cat:/g, "").replace(/[()]/g, "").replace(/ OR /g, "·")} · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` : "";
-  const ok = (r) => r.then >= 0.002 && r.papers3 >= 10; // same floor as the AI radar
-  if (f && f.growth != null) out.push({ id: `${t.id}-papers`, k: "연구", big: pc(f.growth, 0), bl: "논문 수 · 1년 전과 비교",
-    title: `${esc(t.name)} 논문이 1년 새 <b>${pc(f.growth, 0)}</b>`, body: `최근 3개월 한 달 평균 ${Math.round(f.monthly).toLocaleString("ko-KR")}편.`,
-    easy: `${esc(t.name)} 분야 논문이 1년 전보다 ${pc(f.growth, 0)} 많이 나오고 있어요. 한 달에 ${Math.round(f.monthly).toLocaleString("ko-KR")}편꼴이에요.`, viz: [series(f.am.map((m) => f.X.total[m]), ["columns", "area", "line"]), versus(avg(f.prev3.map((m) => f.X.total[m])), f.monthly, (v) => `${Math.round(v).toLocaleString("ko-KR")}편`, "1년 전 같은 3개월", "최근 3개월")], src: fsrc });
-  if (f?.top) out.push({ id: `${t.id}-rising`, k: "연구 · 빨리 늘어난 말", big: `${f.top.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-    title: `가장 빨리 늘어난 말은 <b>${keep(f.top.name)}</b>`, body: `최근 3개월 ${esc(t.name)} 논문의 ${sh(f.top.now)}가 초록에 썼습니다(1년 전 ${sh(f.top.then)}).`,
-    easy: `${esc(t.name)} 논문 1,000편 중 ${Math.round(f.top.now * 1000)}편이 이 말을 써요. 1년 전엔 ${Math.round(f.top.then * 1000)}편이었어요.`, viz: [versus(f.top.then, f.top.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(f.top.id, m))), rank(f.rows.filter(ok), short, (r) => r.ratio, (r) => `${r.ratio.toFixed(1)}배`)], src: fsrc });
-  if (f?.biggest) out.push({ id: `${t.id}-biggest`, k: "연구 · 가장 많이 쓰는 말", big: sh(f.biggest.now), bl: "논문 중 이 말을 쓴 비율",
-    title: `가장 많이 쓰이는 말은 <b>${keep(f.biggest.name)}</b>`, body: f.biggest.then != null ? `1년 전 같은 3개월은 ${sh(f.biggest.then)}였습니다.` : "",
-    easy: `${esc(t.name)} 논문에서 가장 흔한 주제어예요. 1,000편 중 ${Math.round(f.biggest.now * 1000)}편이 써요.`, viz: [rank([...f.rows].sort((a, b) => b.now - a.now), short, (r) => r.now, (r) => sh(r.now)), series(f.am.map((m) => f.share(f.biggest.id, m))), ...(f.biggest.then != null ? [versus(f.biggest.then, f.biggest.now, sh, "1년 전", "최근 3개월")] : [])], src: fsrc });
-  const down = f ? f.rows.filter((r) => ok(r) && r.ratio < 0.9).sort((a, b) => a.ratio - b.ratio)[0] : null;
-  if (down) out.push({ id: `${t.id}-falling`, k: "연구 · 줄어든 말", big: pc(down.ratio - 1, 0), bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-    title: `가장 많이 줄어든 말은 <b>${keep(down.name)}</b>`, body: `최근 3개월 ${sh(down.now)}, 1년 전 ${sh(down.then)}.`,
-    easy: `1년 전보다 덜 쓰이는 말이에요. 1,000편 중 ${Math.round(down.then * 1000)}편에서 ${Math.round(down.now * 1000)}편으로 줄었어요.`, viz: [versus(down.then, down.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(down.id, m)))], src: fsrc });
-  const pk = topicPk(t), fast = topicFast(t);
-  if (fast.length) out.push({ id: `${t.id}-pkg-fast`, k: "개발자 · Python", big: pp(fast[0].excess), bl: "인기 패키지보다 더 늘어난 폭 · 4주",
-    title: `가장 빨리 더 내려받는 도구는 <b>${keep(fast[0].name)}</b>`,
-    body: `4주 다운로드 ${pc(fast[0].g4)}, 대조군(requests·numpy 등) ${pc(pypi.base)}.${fast.length > 1 ? ` 다음은 ${fast.slice(1, 3).map((r) => `${keep(r.name)}(${pp(r.excess)})`).join(", ")}.` : ""}`,
-    easy: `${esc(t.name)} 개발 도구 중 최근 한 달 다운로드가 가장 가파르게 늘었어요(${pc(fast[0].g4)}).`, viz: [...(fast.length > 2 ? [rank(fast, short, (r) => r.excess, (r) => pp(r.excess))] : []), series(pypi.W[fast[0].pkg].slice(pypi.from).map((w) => w.level))], src: `PyPI 평일 다운로드 · ${pySpan}` });
-  const big = [...pk].sort((a, b) => b.level - a.level)[0];
-  if (big && big.pkg !== fast[0]?.pkg) out.push({ id: `${t.id}-pkg-big`, k: "개발자 · 가장 많이", big: man(big.level), bl: "평일 하루 다운로드",
-    title: `가장 많이 내려받는 도구는 <b>${keep(big.name)}</b>`, body: `4주 다운로드 ${pc(big.g4)}.`,
-    easy: `${esc(t.name)} 분야에서 가장 많이 쓰이는 개발 도구예요. 평일에 하루 ${man(big.level)}번 내려받아요.`, viz: [...(pk.length > 2 ? [rank([...pk].sort((a, b) => b.level - a.level), short, (r) => r.level, (r) => man(r.level))] : []), series(pypi.W[big.pkg].slice(pypi.from).map((w) => w.level))], src: `PyPI 평일 다운로드 · ${pySpan}` });
-  const hfm = (t.hf ?? []).flatMap((task) => snap.tasks?.[task] ?? []);
-  if (hfm.length) { const m = [...hfm].sort((a, b) => (b.trending ?? 0) - (a.trending ?? 0)), fresh = m[0].downloads < 100; out.push({ id: `${t.id}-hf`, k: "모델", big: fresh ? `♥ ${m[0].likes.toLocaleString("ko-KR")}` : man(m[0].downloads), bl: fresh ? "좋아요 (공개 직후라 다운로드가 아직 적음)" : "30일 다운로드",
-    title: `지금 가장 뜨는 ${esc(t.name)} 모델은 <b>${keep(m[0].id)}</b>`, body: `${keep(m[0].task ?? "")} · ${m[0].created} 공개.${m.length > 1 ? ` 다음은 ${m.slice(1, 3).map((x) => keep(x.id)).join(", ")}.` : ""}`,
-    easy: `지금 Hugging Face(오픈 AI 모델 저장소)에서 가장 주목받는 ${esc(t.name)} 모델이에요.`, viz: [...(m.length > 2 ? [rank(m, (x) => x.id.split("/").pop(), (x) => (fresh ? x.likes : x.downloads), (x) => (fresh ? `♥ ${x.likes.toLocaleString("ko-KR")}` : man(x.downloads)))] : [])], src: `Hugging Face 트렌딩 · ${(t.hf ?? []).join("·")} · ${snap.date}` }); }
-  return out.slice(0, 7);
-}
 
 // ---------- races: who leads each corner of AI (series.mjs RACES), as shares of the race's downloads ----------
 const refLbl = (b) => (b === 52 ? "1년 전" : b === 13 ? "3개월 전" : "4주 전");
@@ -239,7 +171,7 @@ const races = RACES.map((r) => {
   const lead = rows[0], lead4 = S[4] ? [...rows].filter((y) => y.w4 != null).sort((a, b) => b.w4 - a.w4)[0] : null;
   // the member whose share moved most since the reference point (a newcomer counts from 0)
   const mover = ref ? [...rows].sort((a, b) => Math.abs(b.now - (b.then ?? 0)) - Math.abs(a.now - (a.then ?? 0)))[0] : null;
-  const fastest = [...rows].filter((y) => y.excess != null && y.level >= TOPIC_MIN_LEVEL).sort((a, b) => b.excess - a.excess)[0] ?? null;
+  const fastest = [...rows].filter((y) => y.excess != null && y.level >= RACE_MIN_LEVEL).sort((a, b) => b.excess - a.excess)[0] ?? null;
   return { ...r, x, src, rows, lead, lead4, ref, mover, fastest, week: x.last, move: mover ? Math.abs(mover.now - (mover.then ?? 0)) : 0 };
 }).filter(Boolean);
 const raceCard = (R, over = {}) => {
@@ -252,27 +184,16 @@ const raceCard = (R, over = {}) => {
     viz: [shareOf(rows.map((y) => [y.name, y.now]), 0), ...(mover && ref ? [versus(mover.then ?? 0, mover.now, sh, refLbl(ref), "지금")] : []), ...(rows.filter((y) => y.excess != null).length > 2 ? [rank([...rows].filter((y) => y.excess != null).sort((a, b) => b.excess - a.excess), (y) => y.name, (y) => y.excess, (y) => pp(y.excess))] : [])],
     src: `${R.src} 평일 다운로드 4주 평균 · 비중은 이 ${rows.length}개 안에서 · ${wlbl(R.week)}까지`, ...over };
 };
-// open models, by who made them: Hugging Face downloads of text-generation models (no history before the snapshots)
-const openRace = { id: "race-openmodels", k: "레이스 · 오픈 모델 제작사", big: sh(byAuthor[0][1] / genTotal), bl: `오픈 텍스트 생성 모델 다운로드 중 ${byAuthor[0][0]} 몫`,
-  title: `오픈 AI 모델 1위 제작사는 <b>${keep(byAuthor[0][0])}</b>`,
-  easy: `누구나 받아 쓰는 AI 모델(오픈 모델)을 10번 내려받으면 약 ${Math.round(byAuthor[0][1] / genTotal * 10)}번은 ${esc(byAuthor[0][0])}가 만든 모델이에요.`,
-  body: `${byAuthor.slice(0, 5).map(([a, v]) => `${esc(a)} ${sh(v / genTotal)}`).join(" · ")}. Hugging Face 다운로드 상위 ${snap.top.length}개 모델 기준.`,
-  viz: [shareOf([...byAuthor.slice(0, 5).map(([a, v]) => [a, v / genTotal]), ["그 밖", byAuthor.slice(5).reduce((t, [, v]) => t + v, 0) / genTotal]]), rank(byAuthor.map(([a, v]) => ({ name: a, v: v / genTotal })), (y) => y.name, (y) => y.v, (y) => sh(y.v))],
-  src: `Hugging Face 30일 다운로드 · ${snap.date}` };
-// the most-moved races first, the AI labs always near the top
-const raceCards = [...races].sort((a, b) => (b.id.startsWith("labs") - a.id.startsWith("labs")) || b.move - a.move).map((R) => raceCard(R));
-raceCards.splice(3, 0, openRace);
 
 // ---------- AX: how US businesses take up AI (Ramp AI Index via FRED, monthly) ----------
 // values are percent of businesses (55.86 = 55.86%), so they get their own formatters
-const AXD = load("ax.json"), axS = (id) => AXD.series[id].months;
+const axS = (id) => AXD.series[id].months;
 const axMonths = Object.keys(axS("RAMPAIALL")).sort(), axL = axMonths.at(-1);
-const mBack = (m, n) => { const t = +m.slice(0, 4) * 12 + +m.slice(5) - 1 - n; return `${Math.floor(t / 12)}-${String((t % 12) + 1).padStart(2, "0")}`; };
-const axY = mBack(axL, 12), axP = mBack(axL, 1), axLbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(5)}월`;
+const axY = addMonths(axL, -12), axP = addMonths(axL, -1), axLbl = (m) => `${m.slice(0, 4)}년 ${+m.slice(5)}월`;
 const pv = (v) => `${v.toFixed(1)}%`, ppv = (d) => `${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(1)}%p`, of100 = (v) => Math.round(v);
 const axRow = (x) => { const m = axS(x.id); return { ...x, now: m[axL], prev: m[axP] ?? null, then: m[axY] ?? null }; };
-const axG = (g) => AXSERIES.series.filter((x) => x.group === g).map(axRow).sort((a, b) => b.now - a.now);
-const axAll = axRow(AXSERIES.series[0]), axVendors = axG("vendor"), axSizes = axG("size"), axInds = axG("industry");
+const axG = (g) => AX.series.filter((x) => x.group === g).map(axRow).sort((a, b) => b.now - a.now);
+const axAll = axRow(AX.series[0]), axVendors = axG("vendor"), axSizes = axG("size"), axInds = axG("industry");
 const axSrc = `Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · ${axLbl(axMonths[0])}–${axLbl(axL)}`;
 const axCaveat = "Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.";
 const pctSeries = (id, n) => series(axMonths.slice(-n).map((m) => axS(id)[m] / 100));
@@ -293,7 +214,7 @@ const figDumb = (rows, caption) => ({ type: "dumbbell", unit: "%", caption, from
   items: rows.map((r) => ({ name: r.name, a: r1v(r.then), b: r1v(r.now), aText: pv(r.then), bText: pv(r.now) })),
   alt: rows.map((r) => `${r.name} 1년 전 ${pv(r.then)}, 지금 ${pv(r.now)}`).join(" · ") });
 // the sizes in their own order (대기업 → 중소기업); "the bigger, the more" only when the numbers say so
-const bySize = AXSERIES.series.filter((x) => x.group === "size").map((x) => x.name), sizeOrdered = axSizes.every((r, i) => r.name === bySize[i]);
+const bySize = AX.series.filter((x) => x.group === "size").map((x) => x.name), sizeOrdered = axSizes.every((r, i) => r.name === bySize[i]);
 const axCards = [
   { id: "ax-all", k: "AX · 기업 도입률", big: pv(axAll.now), bl: `AI 도구에 돈을 내는 미국 기업 · ${axLbl(axL)}`,
     title: `AI 도구에 돈을 내는 미국&nbsp;기업, 1년 새 <b>${ppv(axAll.now - axAll.then)}</b>`,
@@ -328,23 +249,21 @@ const axCards = [
 // ---------- IT domains: the official AX announcements counted per domain (ERP, CRM, cloud …), last 30 days ----------
 // An announcement can count in several domains. The comparison with the 30 days before is shown only once collection
 // has run for 60 days (news.json → since).
-const NEWSD = fs.existsSync(path.join(DIR, "news.json")) ? load("news.json") : { items: [] };
 const newsSrc = Object.fromEntries(NEWS.sources.map((x) => [x.id, x]));
-const dAgo = (d) => (new Date(updated) - new Date(d)) / 864e5;
 const newsAll = NEWSD.items.filter((x) => newsSrc[x.src]).filter((x, i, a) => a.findIndex((y) => y.src === x.src && y.title === x.title) === i)
   .map((x) => { const t = `${x.title} ${x.summary}`; return { ...x, source: newsSrc[x.src].name, kind: newsSrc[x.src].kind, domains: DOMAINS.filter((d) => d.re.test(t)).map((d) => d.id),
     // NEWS.rank: adoptions, deals and rules up; consumer launches and events down — those (below 0) are not counted
     score: NEWS.rank.reduce((n, [w, re]) => n + (re.test(t) ? w : 0), newsSrc[x.src].kind === "government" ? 1 : 0) }; })
   .filter((x) => x.score >= 0);
 // feeds list only their latest items, so "the 30 days before" is fully counted only 60 days after collection began
-const covered = NEWSD.since != null && dAgo(NEWSD.since) >= 60;
+const covered = NEWSD.since != null && !within(NEWSD.since, 60);
 const md = (d) => `${+d.slice(5, 7)}/${+d.slice(8)}`;
 const domainRows = DOMAINS.map((d) => {
-  const inD = newsAll.filter((x) => x.domains.includes(d.id)), now = inD.filter((x) => dAgo(x.date) < 30), before = inD.filter((x) => dAgo(x.date) >= 30 && dAgo(x.date) < 60);
+  const inD = newsAll.filter((x) => x.domains.includes(d.id)), now = inD.filter((x) => within(x.date, 30)), before = inD.filter((x) => !within(x.date, 30) && within(x.date, 60));
   const by = Object.entries(now.reduce((m, x) => ((m[x.source] = (m[x.source] ?? 0) + 1), m), {})).sort((a, b) => b[1] - a[1]);
   return { ...d, now, prev: covered ? before.length : null, by };
 }).filter((r) => r.now.length).sort((a, b) => b.now.length - a.now.length);
-const domTotal = newsAll.filter((x) => dAgo(x.date) < 30 && x.domains.length).length;
+const domTotal = newsAll.filter((x) => within(x.date, 30) && x.domains.length).length;
 const domainOverview = domainRows.length > 1 ? [{ id: "dom-all", k: "IT 영역 · 한눈에", big: `${domTotal}건`,
   bl: "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
   title: `발표가 가장 많은 IT 영역은 <b>${keep(domainRows[0].name)}</b>`,
@@ -378,7 +297,7 @@ const kpiHtml = kpis.map((k) => `<li><a href="${k.href}"><b>${esc(k.v)}</b><span
 // a filed quarter — so a lumpy day can't fire one. `key` names the change (logged and posted at most once), `subject`
 // what it is about (social/plan.mjs leaves a subject alone for a while after posting it), `score` which one leads,
 // `tier` whether it is a big case (drafted the day it appears) or a small change (collected into a weekly digest).
-const topicOfPkg = (pkg) => TOPICS.find((t) => t.pypi?.includes(pkg))?.id ?? "ai";
+const dev = TOPICS.find((t) => t.id === "ai").name; // the developer side's changes are labelled with its name
 const events = [];
 const SURGE = 1.4, ATH = 1.1, PAPER = 2.5;      // big
 const SURGE_SMALL = 1.2, ATH_SMALL_WEEKS = 13;  // small: a smaller jump, or any new high over a shorter record
@@ -387,32 +306,35 @@ for (const [x, src, list, control] of [[npm, "npm", NPM, NPM_CONTROL], [pypi, "P
   const n = x.weeks.length, wk = x.weeks.at(-1), prior = Math.min(12, n - 1 - x.from);
   if (prior < 6 || x.W[list[0].pkg].at(-1).holiday) continue;
   const usual = (pkg) => median(x.W[pkg].slice(n - 1 - prior, n - 1).map((w) => w.level).filter((v) => v != null));
-  const ctrl = median(control.map((p) => x.W[p.pkg].at(-1).level / usual(p.pkg)));
+  // the controls' last week against their usual one; a control with no reading that week is left out (null / usual read
+  // as 0 and dragged the median down, so an ordinary week looked like a surge), and under 3 readings nothing is compared
+  const cr = control.filter((p) => x.W[p.pkg].at(-1).level != null && usual(p.pkg)).map((p) => x.W[p.pkg].at(-1).level / usual(p.pkg));
+  const ctrl = cr.length >= 3 ? median(cr) : null;
   // when the AI packages rise together that is one change ("AI 패키지 전반"), and a single package stands out only
   // against both the controls and its AI peers
   const peers = list.filter((p) => isAI(p) && x.W[p.pkg].at(-1).level >= MIN_LEVEL && usual(p.pkg)).map((p) => ({ ...p, r: x.W[p.pkg].at(-1).level / usual(p.pkg) })).sort((a, b) => b.r - a.r);
   const pm = median(peers.map((p) => p.r));
-  if (pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
-    id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: "지난주 AI 패키지 다운로드 · 평소와 비교",
-    title: `지난주 ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
-    easy: `${src} AI 패키지들이 한꺼번에 평소보다 많이 내려받아졌어요. 시장 전체(대조군 ${ctrl.toFixed(2)}배)보다도 높아요.`, viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)} 주` } });
+  if (ctrl != null && pm != null && pm / ctrl >= SURGE_SMALL) events.push({ key: `group:${src}:${wk}`, subject: `group:${src}`, kind: "증가", tier: "small", score: 30 + (pm / ctrl - 1) * 30, topic: "ai", card: {
+    id: `ev-group-${src}`, k: tag("small", `${src} 다운로드`), big: `${pm.toFixed(1)}배`, bl: `${wname(wk)} AI 패키지 다운로드 · 평소와 비교`,
+    title: `${wname(wk)} ${src} AI 패키지가 전반적으로 평소의 ${pm.toFixed(1)}배`, body: `패키지 ${peers.length}개의 중앙값. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배였습니다.`,
+    easy: `${src} AI 패키지들이 한꺼번에 평소보다 많이 내려받아졌어요. 시장 전체(대조군 ${ctrl.toFixed(2)}배)보다도 높아요.`, viz: [rank(peers, (p) => p.name, (p) => p.r, (p) => `${p.r.toFixed(1)}배`)], src: `${src} 평일 다운로드 · ${wlbl(wk)}` } });
   for (const p of list) {
     const r = x.rows.find((q) => q.pkg === p.pkg), L = x.W[p.pkg].at(-1).level, u = usual(p.pkg), name = nm(p);
-    if (L == null || !u || L < (p.group === "topic" ? TOPIC_MIN_LEVEL : MIN_LEVEL)) continue;
-    const vs = L / u / (!isAI(p) || pm == null ? ctrl : Math.max(ctrl, pm)), topic = topicOfPkg(p.pkg), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
-    if (vs >= SURGE_SMALL) { const tier = vs >= SURGE ? "big" : "small"; events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: tier === "big" ? "급증" : "증가", tier, score: 50 + (vs - 1) * 50, topic, card: {
-      id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: "지난주 다운로드 · 평소와 비교",
-      title: `지난주 <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
+    if (L == null || !u || L < MIN_LEVEL) continue;
+    const vs = L / u / (!isAI(p) || pm == null ? ctrl : Math.max(ctrl, pm)), levels = lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 26);
+    if (ctrl != null && vs >= SURGE_SMALL) { const tier = vs >= SURGE ? "big" : "small"; events.push({ key: `surge:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: tier === "big" ? "급증" : "증가", tier, score: 50 + (vs - 1) * 50, topic: "ai", card: {
+      id: `ev-surge-${p.pkg}`, k: tag(tier, `${src} 다운로드`), big: `${(L / u).toFixed(1)}배`, bl: `${wname(wk)} 다운로드 · 평소와 비교`,
+      title: `${wname(wk)} <b>${keep(name)}</b> 다운로드가 평소의 ${(L / u).toFixed(1)}배`,
       body: `평일 하루 ${man(L)}회, 직전 ${prior}주 평소는 ${man(u)}회. 같은 주 대조군은 평소의 ${ctrl.toFixed(2)}배${isAI(p) && pm != null ? `, AI 패키지 전반은 ${pm.toFixed(2)}배` : ""}였습니다.`,
-      easy: `평소 한 주보다 ${(L / u).toFixed(1)}배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.`, viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[n - levels.length])}–${wlbl(wk)}` } }); }
+      easy: `평소 한 주보다 ${(L / u).toFixed(1)}배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.`, viz: [series(levels, ["columns", "area", "line"]), versus(u, L, man, `직전 ${prior}주 평소`, wname(wk))], src: `${src} 평일 다운로드 · ${wspan(x.weeks[n - levels.length], wk)}` } }); }
     const hist = x.W[p.pkg].slice(x.from, n - 1).filter((w) => w.level != null);
     if (hist.length >= ATH_SMALL_WEEKS) { const ti = hist.reduce((a, b, i) => (b.level > hist[a].level ? i : a), 0), top = hist[ti], tier = hist.length >= 26 && L > top.level * ATH ? "big" : "small";
       // a steady grower sets a high every week; a small one counts only when the old high is 8+ weeks old
-      if (L > top.level && (tier === "big" || ti <= hist.length - 8)) events.push({ key: `ath:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "최고치", tier, score: 40 + (L / top.level - 1) * 100, topic, card: {
-        id: `ev-ath-${p.pkg}`, k: tag(tier, `${src} 최고치`), big: man(L), bl: "평일 하루 다운로드, 지난주",
+      if (L > top.level && (tier === "big" || ti <= hist.length - 8)) events.push({ key: `ath:${src}:${p.pkg}:${wk}`, subject: `pkg:${p.pkg}`, kind: "최고치", tier, score: 40 + (L / top.level - 1) * 100, topic: "ai", card: {
+        id: `ev-ath-${p.pkg}`, k: tag(tier, `${src} 최고치`), big: man(L), bl: `평일 하루 다운로드, ${wname(wk)}`,
         title: `<b>${keep(name)}</b> 주간 다운로드가 역대 최고`,
-        body: `이전 최고(${wlbl(top.week)})보다 ${pc(L / top.level - 1, 0)} 많습니다.${r?.g4 != null ? ` 4주 성장 ${pc(r.g4)}, 대조군 ${pc(x.base)}.` : ""}`,
-        easy: `기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 ${pc(L / top.level - 1, 0)} 많아요.`, viz: [series(lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 104), ["line", "area", "columns"]), versus(top.level, L, man, "이전 최고", "지난주")], src: `${src} 평일 다운로드 · ${wlbl(x.weeks[Math.max(x.from, n - 104)])}–${wlbl(wk)}` } });
+        body: `이전 최고(${wyr(top.week, wk)})보다 ${pc(L / top.level - 1, 0)} 많습니다.${r?.g4 != null ? ` 4주 성장 ${pc(r.g4)}, 대조군 ${pc(x.base)}.` : ""}`,
+        easy: `기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 ${pc(L / top.level - 1, 0)} 많아요.`, viz: [series(lastN(x.W[p.pkg].slice(x.from).map((w) => w.level), 104), ["line", "area", "columns"]), versus(top.level, L, man, "이전 최고", wname(wk))], src: `${src} 평일 다운로드 · ${wspan(x.weeks[Math.max(x.from, n - 104)], wk)}` } });
     }
   }
 }
@@ -425,23 +347,22 @@ for (const R of races) { // a race whose leader changed in four weeks (the app-m
 }
 for (const f of fields) { // a phrase whose share of a field's papers has just crossed 2.5× its level a year earlier
   if (f.am.length < 16) continue;
-  const win = (back) => { const l3 = f.am.slice(f.am.length - 3 - back, f.am.length - back), p3 = l3.map((m) => mAdd(m, -12)); return (id) => { const now = avg(l3.map((m) => f.share(id, m))), then = avg(p3.map((m) => f.share(id, m))); return { now, then, ratio: then ? now / then : null }; }; };
-  const cur = win(0), prev = win(1), topic = TOPICS.find((t) => t.field === f.id)?.id ?? "ai", tname = TOPICS.find((t) => t.id === topic).name;
+  const win = (back) => { const l3 = f.am.slice(f.am.length - 3 - back, f.am.length - back), p3 = l3.map((m) => addMonths(m, -12)); return (id) => { const now = avg(l3.map((m) => f.share(id, m))), then = avg(p3.map((m) => f.share(id, m))); return { now, then, ratio: then ? now / then : null }; }; };
+  const cur = win(0), prev = win(1);
   for (const r of f.rows) {
     const c = cur(r.id), pv = prev(r.id);
-    if (!(c.then >= 0.002 && r.papers3 >= 10 && c.ratio >= PAPER && (pv.ratio ?? 0) < PAPER)) continue;
-    events.push({ key: `paper:${f.id}:${r.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${r.id}`, kind: "연구", tier: "big", score: 60 + c.ratio * 5, topic, card: {
-      id: `ev-paper-${f.id}-${r.id}`, k: `빅 케이스 · ${tname} 연구`, big: `${c.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-      title: `${esc(tname)} 논문 속 <b>${keep(r.name)}</b>, 1년 새 ${c.ratio.toFixed(1)}배`,
+    if (!(meaningful(c.then, r.papers3) && c.ratio >= PAPER && (pv.ratio ?? 0) < PAPER)) continue;
+    events.push({ key: `paper:${f.id}:${r.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${r.id}`, kind: "연구", tier: "big", score: 60 + c.ratio * 5, topic: "ai", card: {
+      id: `ev-paper-${f.id}-${r.id}`, k: `빅 케이스 · ${dev} 연구`, big: `${c.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
+      title: `${esc(dev)} 논문 속 <b>${keep(r.name)}</b>, 1년 새 ${c.ratio.toFixed(1)}배`,
       body: `최근 3개월 논문의 ${sh(c.now)}가 초록에 썼습니다(1년 전 ${sh(c.then)}). 한 달 전 같은 계산으로는 ${(pv.ratio ?? 0).toFixed(1)}배였습니다.`,
-      easy: `이 말을 쓰는 ${esc(tname)} 논문 비율이 1년 새 ${c.ratio.toFixed(1)}배가 됐어요.`, viz: [versus(c.then, c.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(r.id, m)))], src: `arXiv · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` } });
+      easy: `이 말을 쓰는 ${esc(dev)} 논문 비율이 1년 새 ${c.ratio.toFixed(1)}배가 됐어요.`, viz: [versus(c.then, c.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(r.id, m)))], src: `arXiv · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` } });
   }
 }
 { // a new #1 on Hugging Face trending that wasn't #1 on any day of the last two weeks
   const before = HFD.snapshots.filter((s) => s.date < snap.date && (new Date(snap.date) - new Date(s.date)) / 864e5 <= 14), m = snap.trending[0];
   if (before.length && m && !before.some((s) => s.trending[0]?.id === m.id) && (m.downloads >= 50000 || m.likes >= 1000)) {
-    const topic = TOPICS.find((t) => t.hf?.includes(m.task))?.id ?? "ai";
-    events.push({ key: `hf:${m.id}`, subject: `hf:${m.id}`, kind: "새 1위", tier: "big", score: 45, topic, card: {
+    events.push({ key: `hf:${m.id}`, subject: `hf:${m.id}`, kind: "새 1위", tier: "big", score: 45, topic: "ai", card: {
       id: "ev-hf-trending", k: "빅 케이스 · 오픈 모델", big: m.downloads >= 50000 ? man(m.downloads) : `♥ ${m.likes.toLocaleString("ko-KR")}`, bl: m.downloads >= 50000 ? "30일 다운로드" : "좋아요",
       title: `Hugging Face 트렌딩 1위가 바뀌었습니다: <b>${keep(m.id)}</b>`,
       body: `${keep(m.task ?? "")}${m.task ? " · " : ""}${m.created} 공개. 직전 1위는 ${keep(before.at(-1).trending[0]?.id ?? "—")}.`,
@@ -466,7 +387,6 @@ const state = {
   date: updated,
   npm: { week: npm.last, top: top5(nRank, nm) }, pypi: { week: pypi.last, top: top5(pRank, (r) => r.name) },
   provider: { week: npm.last, shares: Object.fromEntries(provPk.map((p) => [p.pkg, r4(provNow[p.pkg])])) },
-  topics: Object.fromEntries(TOPICS.filter((t) => t.pypi).map((t) => [t.id, { week: pypi.last, top: top5(topicFast(t), (r) => r.name) }])),
   hf: { date: snap.date, top: snap.top.slice(0, 20).map((m) => m.id), trending: snap.trending.slice(0, 5).map((m) => m.id) },
   arxiv: Object.fromEntries(fields.map((f) => [f.id, { last: f.am.at(-1), rising: f.top?.id ?? null }])),
   sec: Object.fromEntries(SEC.companies.map((c) => [c.id, Object.keys(Qs[c.id]).sort().at(-1)])),
@@ -479,13 +399,13 @@ if (prev?.ax && prev.ax.last !== axL) { // a new month of the Ramp AI Index: the
   events.push({ key: `ax:month:${axL}`, subject: `ax:month:${axL}`, kind: "AX 월간", tier: "big", score: 110, topic: "ax", // the lead story: ahead of any other big case that day
     // same id as the tab's card, so the post doesn't show it twice (pick.mjs drops the topic card with the case's id)
     card: { ...axCards[0], k: `빅 케이스 · AX 월간 · ${axLbl(axL)}` } });
-  const pl = prev.ax?.vendorLead && AXSERIES.series.find((x) => x.id === prev.ax.vendorLead);
+  const pl = prev.ax?.vendorLead && AX.series.find((x) => x.id === prev.ax.vendorLead);
   if (pl && pl.id !== axVendors[0].id) events.push({ key: `ax:flip:${axVendors[0].id}:${axL}`, subject: "ax:vendor", kind: "1위 교체", tier: "big", score: 100, topic: "ax",
     card: { ...axCards[1], k: "빅 케이스 · 기업이 고르는 AI 1위 교체", title: `기업이 가장 많이 돈을 내는 AI, 이제 <b>${keep(axVendors[0].name)}</b>`,
       easy: `지난달 1위는 ${esc(pl.name)}였는데, ${axLbl(axL)}엔 ${esc(axVendors[0].name)}가 ${pv(axVendors[0].now)}로 앞섰어요.` } });
 }
 if (prev) {
-  for (const [x, src, id] of [[npm, "npm", "npm"], [pypi, "PyPI", "pypi"]]) { // the ranking by growth over the controls
+  for (const [src, id] of [["npm", "npm"], ["PyPI", "pypi"]]) { // the ranking by growth over the controls
     const c = state[id], p = prev[id], rk = id === "npm" ? nRank : pRank;
     if (c.week === p.week || !c.top.length || !p.top.length) continue;
     const viz = [rank(rk, (r) => short(r), (r) => r.excess, (r) => pp(r.excess))], src2 = `${src} 평일 다운로드 · ${wlbl(c.week)}까지 4주`;
@@ -504,14 +424,6 @@ if (prev) {
       title: `<b>${keep(mv.name)}</b> 비중 ${sh(mv.then)}&nbsp;→&nbsp;${sh(mv.now)}`, body: `1위는 ${esc(provLead.name)}(${sh(provLead.now)}).`,
       easy: `AI 앱에 연결되는 모델 중 ${esc(mv.name)} 몫이 한 주 사이 ${pp(mv.now - mv.then)} 움직였어요.`, viz: [versus(mv.then, mv.now, sh, "지난번", "지금"), shareOf(provPk.map((p) => [p.name, provNow[p.pkg]]), provPk.indexOf(provPk.find((p) => p.pkg === mv.pkg)))], src: `@ai-sdk 공급자 패키지 다운로드 비중 · ${wlbl(npm.last)}` } });
   }
-  for (const t of TOPICS.filter((t) => t.pypi)) { // the fastest-growing tool inside each topic
-    const c = state.topics[t.id], p = prev.topics?.[t.id];
-    if (!p || c.week === p.week || !c.top.length || !p.top.length || c.top[0].pkg === p.top[0].pkg) continue;
-    small({ key: `topic1:${t.id}:${c.top[0].pkg}:${c.week}`, subject: `pkg:${c.top[0].pkg}`, kind: "순위", score: 25, topic: t.id, card: {
-      id: `ch-topic1-${t.id}`, k: tag("small", `${t.name} 도구`), big: pp(c.top[0].excess), bl: "인기 패키지보다 더 늘어난 폭 · 4주",
-      title: `${esc(t.name)} 도구 중 가장 빨리 크는 것이 바뀌었습니다: <b>${keep(c.top[0].name)}</b>`, body: `지난번 1위는 ${esc(p.top[0].name)}.`,
-      easy: `${esc(t.name)} 개발 도구 중 가장 빨리 크는 것이 바뀌었어요.`, viz: [rank(topicFast(t), short, (r) => r.excess, (r) => pp(r.excess))], src: `PyPI 평일 다운로드 · ${pySpan}` } });
-  }
   if (state.hf.date !== prev.hf.date) { // models entering the download top 20, and the trending top 5
     const inTop = snap.top.slice(0, 20).filter((m) => !prev.hf.top.includes(m.id));
     if (inTop.length) small({ key: `hftop:${inTop.map((m) => m.id).join("+")}:${snap.date}`, subject: `hf:${inTop[0].id}`, kind: "새로 진입", score: 15 + inTop.length * 3, topic: "ai", card: {
@@ -519,13 +431,13 @@ if (prev) {
       title: `다운로드 상위 20에 새로: <b>${keep(inTop[0].id)}</b>${inTop.length > 1 ? ` 외 ${inTop.length - 1}개` : ""}`, body: `${inTop.slice(0, 3).map((m) => `${keep(m.id)}(${man(m.downloads)})`).join(", ")}.`,
       easy: "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.", viz: inTop.length > 1 ? [rank(inTop, (m) => m.id.split("/").pop(), (m) => m.downloads, (m) => man(m.downloads))] : [], src: `Hugging Face 다운로드 상위 · ${snap.date}` } });
     const inTr = snap.trending.slice(1, 5).filter((m) => !prev.hf.trending.includes(m.id));
-    if (inTr.length) small({ key: `hftr:${inTr.map((m) => m.id).join("+")}:${snap.date}`, subject: `hf:${inTr[0].id}`, kind: "새로 진입", score: 10 + inTr.length * 2, topic: TOPICS.find((t) => t.hf?.includes(inTr[0].task))?.id ?? "ai", card: {
+    if (inTr.length) small({ key: `hftr:${inTr.map((m) => m.id).join("+")}:${snap.date}`, subject: `hf:${inTr[0].id}`, kind: "새로 진입", score: 10 + inTr.length * 2, topic: "ai", card: {
       id: "ch-hftr", k: tag("small", "오픈 모델"), big: `${snap.trending.findIndex((m) => m.id === inTr[0].id) + 1}위`, bl: "Hugging Face 트렌딩",
       title: `트렌딩 상위 5에 새로: <b>${keep(inTr[0].id)}</b>`, body: `${keep(inTr[0].task ?? "")}${inTr[0].task ? " · " : ""}${inTr[0].created} 공개.${inTr.length > 1 ? ` 함께 들어온 모델: ${inTr.slice(1).map((m) => keep(m.id)).join(", ")}.` : ""}`,
       easy: "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.", viz: [rank(snap.trending, (m) => m.id.split("/").pop(), (m) => m.trending ?? 0, (m) => man(m.downloads))], src: `Hugging Face 트렌딩 · ${snap.date}` } });
   }
   const newMonth = fields.filter((f) => prev.arxiv?.[f.id] && f.am.at(-1) > prev.arxiv[f.id].last); // a month of papers finished counting
-  if (newMonth.length) { const m = newMonth[0].am.at(-1), yoy = (f) => (f.X.total[mAdd(m, -12)] ? f.X.total[m] / f.X.total[mAdd(m, -12)] - 1 : null), byN = [...newMonth].sort((a, b) => b.X.total[m] - a.X.total[m]);
+  if (newMonth.length) { const m = newMonth[0].am.at(-1), yoy = (f) => (f.X.total[addMonths(m, -12)] ? f.X.total[m] / f.X.total[addMonths(m, -12)] - 1 : null), byN = [...newMonth].sort((a, b) => b.X.total[m] - a.X.total[m]);
     small({ key: `month:${m}`, subject: `month:${m}`, kind: "집계", score: 20, topic: "ai", card: {
       id: "ch-month", k: tag("small", "연구"), big: `${byN[0].X.total[m].toLocaleString("ko-KR")}편`, bl: `${mlbl(m)} ${byN[0].name} 논문`,
       title: `${mlbl(m)} 논문 집계가 끝났습니다`, body: `${byN.map((f) => `${esc(f.name)} ${f.X.total[m].toLocaleString("ko-KR")}편${yoy(f) != null ? `(1년 전 대비 ${pc(yoy(f), 0)})` : ""}`).join(", ")}.`,
@@ -533,11 +445,10 @@ if (prev) {
   for (const f of fields) { // the fastest-rising phrase of a field changed
     const p = prev.arxiv?.[f.id];
     if (!p || !f.top || p.rising === f.top.id || p.last === f.am.at(-1)) continue;
-    const topic = TOPICS.find((t) => t.field === f.id)?.id ?? "ai", tname = TOPICS.find((t) => t.id === topic).name;
-    small({ key: `rising:${f.id}:${f.top.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${f.top.id}`, kind: "연구", score: 25, topic, card: {
-      id: `ch-rising-${f.id}`, k: tag("small", `${tname} 연구`), big: `${f.top.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
-      title: `${esc(tname)} 논문에서 가장 빨리 늘어난 말이 바뀌었습니다: <b>${keep(f.top.name)}</b>`, body: `최근 3개월 ${sh(f.top.now)}(1년 전 ${sh(f.top.then)}).`,
-      easy: `${esc(tname)} 논문에서 가장 빠르게 많이 쓰이기 시작한 말이 바뀌었어요.`, viz: [versus(f.top.then, f.top.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(f.top.id, m)))], src: `arXiv · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` } });
+    small({ key: `rising:${f.id}:${f.top.id}:${f.am.at(-1)}`, subject: `paper:${f.id}:${f.top.id}`, kind: "연구", score: 25, topic: "ai", card: {
+      id: `ch-rising-${f.id}`, k: tag("small", `${dev} 연구`), big: `${f.top.ratio.toFixed(1)}배`, bl: "이 말을 쓰는 논문 비율 · 1년 전과 비교",
+      title: `${esc(dev)} 논문에서 가장 빨리 늘어난 말이 바뀌었습니다: <b>${keep(f.top.name)}</b>`, body: `최근 3개월 ${sh(f.top.now)}(1년 전 ${sh(f.top.then)}).`,
+      easy: `${esc(dev)} 논문에서 가장 빠르게 많이 쓰이기 시작한 말이 바뀌었어요.`, viz: [versus(f.top.then, f.top.now, sh, "1년 전", "최근 3개월"), series(f.am.map((m) => f.share(f.top.id, m)))], src: `arXiv · ${mlbl(f.am[0])}–${mlbl(f.am.at(-1))}` } });
   }
   for (const c of SEC.companies) { // one company filed a new quarter (the big case waits for all four)
     const q = state.sec[c.id], pq = prev.sec?.[c.id];
@@ -559,15 +470,15 @@ const plainCard = (x) => ({ id: x.id, k: x.k, big: x.big, bl: x.bl, title: text(
 
 // every change ever found, kept 60 days (trends/data/changes.json): the page lists the last week's, and
 // social/plan.mjs drafts from it — a big case the day it appears, small ones collected into a weekly digest
-const CHANGES = path.join(DIR, "changes.json"), KEEP_DAYS = 60, ago = (d) => (new Date(updated) - new Date(d)) / 864e5;
-const changeLog = (fs.existsSync(CHANGES) ? JSON.parse(fs.readFileSync(CHANGES, "utf8")).log : []).filter((c) => ago(c.date) <= KEEP_DAYS);
+const CHANGES = path.join(DIR, "changes.json"), KEEP_DAYS = 60;
+const changeLog = (fs.existsSync(CHANGES) ? JSON.parse(fs.readFileSync(CHANGES, "utf8")).log : []).filter((c) => within(c.date, KEEP_DAYS));
 // a change found again keeps the day it was first found but takes today's wording
 for (const e of events) {
   const entry = { key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) };
   const i = changeLog.findIndex((c) => c.key === e.key);
   if (i < 0) changeLog.push({ date: updated, ...entry }); else changeLog[i] = { date: changeLog[i].date, ...entry };
 }
-const recentChanges = changeLog.filter((c) => ago(c.date) <= 7).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
+const recentChanges = changeLog.filter((c) => within(c.date, 7)).sort((a, b) => b.date.localeCompare(a.date) || (a.tier === b.tier ? 0 : a.tier === "big" ? -1 : 1) || b.score - a.score);
 const tone = (x) => (/^[−-]/.test(text(x.big)) ? " down" : "");
 // a card reads top to bottom: what it is about, the finding, the number, the figure (what it shows in its caption),
 // the plain-words line, a note, the latest announcements (IT domains), the source. The figure's data rides along for
@@ -606,7 +517,7 @@ const sdkLine = sdkPy.map((p) => `${esc(p.name)} ${sh(sdkNow[p.pkg])}${pyBack ? 
 // The last NEWS_DAYS days, the same announcement once (a feed can list it twice), ranked by NEWS.rank: adoptions,
 // deals and rules first. The site lists them with their links; social/story.mjs writes the weekly post from them.
 const NEWS_DAYS = 14;
-const newsItems = newsAll.filter((x) => ago(x.date) <= NEWS_DAYS && x.score > 0) // the list and the posts: the ones that rank
+const newsItems = newsAll.filter((x) => within(x.date, NEWS_DAYS) && x.score > 0) // the list and the posts: the ones that rank
   .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date));
 const KIND = { company: "기업 발표", government: "정부 발표", research: "리서치" };
 const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b.date.localeCompare(a.date)).map((x) => `<li class="news"><a href="${esc(x.link)}" target="_blank" rel="noopener"><time datetime="${x.date}">${+x.date.slice(5, 7)}/${+x.date.slice(8)}</time><span class="badge">${esc(x.source)}</span><span class="et">${esc(x.title)}<small>${KIND[x.kind]} · 원문 보기</small></span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a></li>`).join("")
@@ -618,7 +529,7 @@ const newsHtml = newsItems.length ? [...newsItems].slice(0, 10).sort((a, b) => b
 const sourceStatus = [
   ["npm", `${npm.fetched} 받음 · ${wlbl(npm.last)}까지 · 패키지 ${NPM.length + NPM_CONTROL.length}개`],
   ["pypi", `${pypi.fetched} 받음 · ${wlbl(pypi.last)}까지 · 패키지 ${PYPI.length + PYPI_CONTROL.length}개`],
-  ["arxiv", `${AX.fetched_at} 받음 · ${mlbl(am.at(-1))}까지 · 분야 ${fields.length}개 · 말 ${fields.reduce((n, f) => n + f.terms.length, 0)}개`],
+  ["arxiv", `${ARX.fetched_at} 받음 · ${mlbl(am.at(-1))}까지 · 분야 ${fields.length}개 · 말 ${fields.reduce((n, f) => n + f.terms.length, 0)}개`],
   ["hf", `${HFD.fetched_at} 스냅숏 · 상위 ${snap.top.length} + 트렌딩 ${snap.trending.length}`],
   ["sec", `${SECD.fetched_at} 받음 · ${qlbl(cq)}까지 · 회사 ${SEC.companies.length}곳`],
 ];
@@ -626,7 +537,7 @@ const fills = {
   "index.html": {
     "t-tabs": tabsHtml, "t-panels": panelsHtml, "t-glossary": glossaryHtml(), "t-news": newsHtml,
     "t-kpi": kpiHtml,
-    "t-events": recentChanges.filter((c) => c.topic === "ax" || c.topic === "domains").slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><time datetime="${c.date}">${+c.date.slice(5, 7)}/${+c.date.slice(8)}</time><span class="badge">${c.tier === "big" ? "주요 변화" : "변화"}</span><span class="et">${esc(c.headline)}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join(""),
+    "t-events": recentChanges.filter((c) => c.topic === "ax").slice(0, 6).map((c) => `<li class="${c.tier}"><a href="#${c.topic}"><time datetime="${c.date}">${+c.date.slice(5, 7)}/${+c.date.slice(8)}</time><span class="badge">${c.tier === "big" ? "주요 변화" : "변화"}</span><span class="et">${esc(c.headline)}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join(""),
     "t-meta": meta, "t-meta-s": `${+updated.slice(5, 7)}월 ${+updated.slice(8)}일 갱신 · 매일 자동 · 검산 ${CHECKS.checks.length}개 통과`, "t-npm": table(npm, true),
     "t-npm-note": `평일 다운로드 중앙값의 4주 평균. 4주 성장은 ${wlbl(npm.weeks.at(-4))}부터 4주 대 그 전 4주, 초과 성장은 4주 성장에서 대조군 중앙값(${pc(npm.base)})을 뺀 값입니다. 하루 ${man(MIN_LEVEL)} 미만인 패키지는 위 신호 순위에서 뺍니다.`,
     "t-pypi": table(pypi, false),
@@ -640,7 +551,8 @@ writePages(fills, updated);
 {
   const file = path.join(ROOT, "index.html"), h = fs.readFileSync(file, "utf8");
   let next = h;
-  for (const [name, body] of [["t-data", `const D=${JSON.stringify(D)};`], ["t-vizcss", VIZ_CSS]]) {
+  // "<" as <: the data sits inside a <script>, where a "</script>" in any name would end it
+  for (const [name, body] of [["t-data", `const D=${JSON.stringify(D).replace(/</g, "\\u003c")};`], ["t-vizcss", VIZ_CSS]]) {
     if (!next.includes(`/*@${name}*/`)) throw new Error(`index.html: region @${name} not found`);
     next = next.replace(new RegExp(`(\\/\\*@${name}\\*\\/)[\\s\\S]*?(\\/\\*\\/@${name}\\*\\/)`), (_, a, b) => a + body + b);
   }
@@ -655,13 +567,13 @@ writeIf(CHANGES, JSON.stringify({ note: "every change build.mjs found, 60 days; 
 // facts for the storyline writer (social/story.mjs): plain sentences, each with its numbers already written out,
 // so a story can only say what is here. Grouped: ax (Ramp AI Index), race (who leads each corner), radar (the rest).
 const factList = [
-  ...AXSERIES.series.map((x) => { const r = axRow(x), first = axS(x.id)[axMonths[0]];
+  ...AX.series.map((x) => { const r = axRow(x), first = axS(x.id)[axMonths[0]];
     const who = x.group === "vendor" ? `미국 기업 중 ${x.name}에 돈을 내는 비율` : x.group === "all" ? "AI 도구에 돈을 내는 미국 기업 비율(전체)" : `${x.name} 기업 중 AI 도구에 돈을 내는 비율`;
     return { group: "ax", id: `ax-${x.id}`, text: `${who}: ${axLbl(axL)} ${pv(r.now)} · 지난달 ${pv(r.prev)} · 1년 전(${axLbl(axY)}) ${pv(r.then)} · 1년 새 ${ppv(r.now - r.then)} · 처음 잰 ${axLbl(axMonths[0])} ${pv(first)}` }; }),
   { group: "ax", id: "ax-note", text: `Ramp AI Index: 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 잼. 무료 도구·개인 결제는 안 잡힘. 미국 기준.` },
   ...domainRows.map((r) => ({ group: "domain", id: `dom-${r.id}`, text: `IT 영역 ${r.name}(${r.about}): 최근 30일 회사·정부 공식 AX 발표 ${r.now.length}건${r.prev != null ? `, 그 전 30일 ${r.prev}건` : ""} · 발표가 많은 곳: ${r.by.slice(0, 3).map(([n, k]) => `${n} ${k}건`).join(", ")}` })),
 ];
-const out = { built_at: updated, page: "https://data.pivoxquant.com/", insights: insights.map(plainCard), topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
+const out = { built_at: updated, page: "https://data.pivoxquant.com/", topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
   facts: factList,
   // the official announcements the weekly AX news post may use — as published, with the source and its link
