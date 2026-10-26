@@ -1,9 +1,10 @@
 // welcome.js — the landing on "/" (2026-10-26, "랜딩패이지 먼저 나오고 로그인 넘어가야 이쁠것같은데 pivoxmap처럼"):
-// PivoxMap's cover — one wordmark on black — then what this is, then 시작하기 into the app (signing in, which would come
-// in here, is its own piece of work). Shown on the first visit only (trends/site.mjs → WELCOME_HEAD decides before the
-// first paint); leaving it any way — 시작하기, 이번 주 사례부터 보기, a case, a policy link — remembers that
-// ("pd.entered"), so "/" opens on the app from then on. Behind it the app is already laid out (the phone's pages, the
-// long page), kept out of reach (inert) until it goes.
+// PivoxMap's cover — one wordmark on black — then what this is, then 시작하기: the sign-in when it is on (auth.js),
+// otherwise straight into the app. Shown on the first visit only (trends/site.mjs → WELCOME_HEAD decides before the
+// first paint); leaving it any way — 시작하기, 둘러보기, a case, a policy link — remembers that ("pd.entered"), so "/"
+// opens on the app from then on. Behind it the app is already laid out (the phone's pages, the long page), kept out of
+// reach (inert) until it goes.
+import * as auth from "/auth.js";
 
 const html = document.documentElement, w = document.getElementById("welcome");
 if (w && html.classList.contains("welcome")) {
@@ -61,12 +62,22 @@ if (w && html.classList.contains("welcome")) {
     };
     if (still()) done(); else { w.classList.add("out"); setTimeout(done, 260); }
   };
-  // 시작하기 is the way in; the second button opens on this week's story
-  w.querySelector("[data-w-start]")?.addEventListener("click", () => leave());
-  w.querySelector("[data-w-enter]")?.addEventListener("click", () => leave(() => {
-    if (html.classList.contains("paged")) location.hash = "#story";
-    else document.getElementById("story")?.scrollIntoView({ block: "start" });
-  }));
-  // any link out of it (a case, the policy) counts as through the door
+  const start = w.querySelector("[data-w-start]"), enter = w.querySelector("[data-w-enter]"), login = w.querySelector("[data-w-login]");
+  if (auth.enabled && !auth.user()) {
+    // 시작하기 → the sign-in (PivoxMap's /start → login); 로그인 없이 둘러보기 → the app
+    login.hidden = false;
+    enter.addEventListener("click", () => leave());
+  } else {
+    // no signing in (or already signed in): 시작하기 is the way in, and the second button opens on this week's story
+    const b = Object.assign(document.createElement("button"), { type: "button", className: start.className, textContent: start.textContent });
+    start.replaceWith(b);
+    b.addEventListener("click", () => leave());
+    enter.textContent = "이번 주 사례부터 보기";
+    enter.addEventListener("click", () => leave(() => {
+      if (html.classList.contains("paged")) location.hash = "#story";
+      else document.getElementById("story")?.scrollIntoView({ block: "start" });
+    }));
+  }
+  // any link out of it (시작하기 to the sign-in, a case, the policy) counts as through the door
   w.addEventListener("click", (e) => { if (e.target.closest("a[href]")) entered(); });
 }

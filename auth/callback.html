@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>로그인 확인 · AX 트렌드 레이더</title>
+<meta name="description" content="로그인 링크를 확인해요." />
+
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AX 레이더" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css?v=9" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-10-26" />
+
+<link rel="stylesheet" href="/research.css" />
+<style></style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+</header>
+
+<main>
+<div class="acc" id="cb">
+<section class="acc-step" data-s="wait" role="status">
+  <span class="acc-ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></span>
+  <h1>로그인하는 중이에요</h1>
+  <p class="acc-lede">링크를 확인하고 있어요. 잠깐만 기다려 주세요.</p>
+</section>
+<section class="acc-step" data-s="consent" hidden>
+  <p class="acc-guide"><b>지금 할 일</b><span>이 기기에서는 동의를 한 번 더 받아요. 필수 항목 세 가지에 동의하면 이어져요.</span></p>
+  <h1 data-t>시작하기 전에 확인해 주세요</h1>
+  <p class="acc-lede" data-d><b data-user></b> 계정으로 로그인했어요. 계속하려면 필수 항목에 동의해 주세요.</p>
+  <fieldset class="cs"><legend class="sr">필수 동의</legend>
+  <label class="cs-row all"><input type="checkbox" data-c="all" /><span><b>아래 필수 항목에 모두 동의합니다</b><small>세 가지에 한 번에 동의합니다</small></span></label>
+  <label class="cs-row"><input type="checkbox" data-c="terms" /><span><b>[필수] 이용약관에 동의합니다</b><small>AX 트렌드 레이더 이용 조건 · <a href="/terms" target="_blank">전문 보기</a></small></span></label>
+  <label class="cs-row"><input type="checkbox" data-c="privacy" /><span><b>[필수] 개인정보 수집 · 이용에 동의합니다</b><small>이메일 주소 · 사용자 식별자 · 저장 목록 — 회원 식별, 로그인 링크 발송, 저장 목록 이어 보기 · 탈퇴할 때까지 · <a href="/privacy" target="_blank">처리방침</a></small></span></label>
+  <label class="cs-row"><input type="checkbox" data-c="overseas" /><span><b>[필수] 개인정보 국외 이전에 동의합니다</b><small>받는 곳 · 나라 · 항목 · 목적 · 보유 기간은 아래 '국외 이전 내용 보기'에 있습니다</small></span></label>
+</fieldset>
+<details class="cs-more"><summary>국외 이전 내용 보기 (2곳)</summary><ul><li><b>Supabase, Inc.</b> · 미국 · 저장은 서울 리전 · 연락처 privacy@supabase.io<br />항목: 이메일 주소, 사용자 식별자, 로그인 기록, 약관 동의 기록, 저장한 브리핑 목록 · 목적: 회원 인증 · 로그인 메일 생성 · 저장 목록 보관 · 보유: 탈퇴할 때까지</li><li><b>Sendinblue SAS (Brevo)</b> · 프랑스 (EU) · 연락처 dpo@brevo.com<br />항목: 이메일 주소, 로그인 링크 메일 내용 · 목적: 로그인 메일 발송 · 보유: 발송 기록은 Brevo 보관 정책에 따름</li></ul>
+<p>서비스를 이용할 때마다 네트워크로 전송합니다. 동의하지 않으면 로그인할 수 없고, 로그인 없이도 모든 글을 볼 수 있습니다.</p></details>
+  <p class="acc-fine" data-need>필수 항목 세 가지에 모두 동의해야 이어 갈 수 있어요. 동의하지 않으면 로그아웃해요.</p>
+  <p class="acc-err" id="cs-err" role="alert" hidden></p>
+  <div class="acc-row"><button class="btn ghost lg" type="button" data-out>로그아웃</button><button class="btn lg grow" type="button" id="agree" disabled>동의하고 계속</button></div>
+</section>
+<section class="acc-step" data-s="done" role="status" hidden>
+  <span class="acc-ico ok"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+  <h1>로그인했어요</h1>
+  <p class="acc-lede"><b data-user></b> 계정이에요. 저장한 브리핑을 어느 기기에서나 이어 봐요.</p>
+  <a class="btn block lg" href="/" data-next>계속하기</a>
+  <p class="acc-fine">내 계정이 아니면 <button class="acc-link" type="button" data-out>로그아웃</button>하세요. 로그인을 요청했던 창은 닫아도 돼요.</p>
+</section>
+<section class="acc-step" data-s="failed" role="alert" hidden>
+  <h1 data-t>로그인하지 못했어요</h1>
+  <p class="acc-lede" data-d>링크가 맞지 않아요. 새 링크를 받아 주세요.</p>
+  <a class="btn block lg" href="/login">링크 다시 받기</a>
+  <a class="btn ghost block lg" href="/">둘러보기</a>
+</section>
+</div>
+<script type="module" src="/callback.js"></script>
+</main>
+
+<footer class="site bare"><span>AX 트렌드 레이더</span><span class="links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span></footer>
+</div>
+</body>
+</html>

@@ -4,11 +4,21 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { POLICY_VERSION } from "./legal.mjs";
 import { accountPages } from "./pages.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const SITE = (process.env.SITE_URL || "https://data.pivoxquant.com").replace(/\/$/, "");
 export const NAME = "AX 트렌드 레이더";
+// signing in (2026-10-26, "랜딩 먼저 나오고 로그인 넘어가게 — pivoxmap처럼"): the Supabase project that keeps accounts
+// and saved briefings — PivoxQuant's project, shared (owner, 2026-10-26; ours lives in the schema pivoxdata, and
+// PivoxQuant's tables answer this key with 401 — supabase/README.md). Its address and publishable key are public by
+// design: the browser calls it, and what a browser may do there is fixed by supabase/schema.sql. Empty = no signing in
+// anywhere: no menu, no login step after the landing, no login part in the privacy policy (trends/legal.mjs). `region`:
+// where the company and its servers are, for the policy; `mail`: "brevo" once the sign-in e-mails go out through Brevo
+// (supabase/README.md). PD_AUTH_URL / PD_AUTH_KEY override it for a local try against a stand-in.
+export const AUTH = { url: process.env.PD_AUTH_URL ?? "https://yjiztgummaxecriiuumt.supabase.co", key: process.env.PD_AUTH_KEY ?? "sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB", region: "미국 · 저장은 서울 리전", mail: "brevo" };
+AUTH.on = Boolean(AUTH.url && AUTH.key);
 // text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
 export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -21,7 +31,7 @@ const PAGES = [
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — ${NAME} 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a>${AUTH.on ? `<a href="/login" data-acct="login">로그인</a>` : ""}</nav>
 </header>
 `;
 // on a phone, a tab bar at the bottom (like an app): 홈 · 브리핑 · 발표 · 용어 · 목차 — the top bar keeps only the name.
@@ -69,7 +79,7 @@ const APPBAR = `
   $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
 })();
 </script>`;
-// the saved briefings on every page (account.js): the 저장 buttons and the counts
+// the saved briefings and the account on every page (account.js): the 저장 buttons, the counts and the sign-in links
 const ACCOUNT = `\n<script type="module" src="/account.js"></script>`;
 const FOOTER = `
 <footer class="site">
@@ -77,6 +87,9 @@ const FOOTER = `
   <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 ${TABBAR}${APPBAR}${ACCOUNT}`;
+
+const BARE_FOOTER = `
+<footer class="site bare"><span>${NAME}</span><span class="links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span></footer>`;
 
 const NOINDEX = `<meta name="robots" content="noindex" />`;
 function head(page, html) {
@@ -90,9 +103,9 @@ function head(page, html) {
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=8" />
+<link rel="stylesheet" href="/ui.css?v=9" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
-${page.path === "/" ? `${WELCOME_HEAD}\n` : ""}${page.paged ? `${PAGED_HEAD}\n` : ""}`;
+${AUTH.on ? `<meta name="pd-auth" content="${esc(AUTH.url)} ${esc(AUTH.key)}" />\n<meta name="pd-policy" content="${POLICY_VERSION}" />\n` : ""}${page.path === "/" ? `${WELCOME_HEAD}\n` : ""}${page.paged ? `${PAGED_HEAD}\n` : ""}`;
   if (page.noindex) return `\n${NOINDEX}${common}`;
   return `
 <link rel="canonical" href="${url}" />
@@ -127,10 +140,10 @@ export function writePages(fills = {}, lastmod) {
     for (const [name, content] of Object.entries(fills[page.file] ?? {})) h = region(h, name, content, page.file);
     if (h !== before) { fs.writeFileSync(file, h); console.log(`wrote ${page.file}`); } else console.log(`same  ${page.file}`);
   }
-  // the pages written whole (trends/pages.mjs): /saved (in this browser only, so not to be found), /privacy and /terms
-  const extra = accountPages();
+  // the pages around signing in, written whole (trends/pages.mjs); the policy and the terms are public, the rest not found
+  const extra = accountPages(AUTH);
   for (const pg of extra) {
-    const file = path.join(ROOT, pg.file), html = shell({ path: pg.path, title: `${pg.title} · ${NAME}`, desc: pg.desc, body: pg.body, noindex: pg.noindex });
+    const file = path.join(ROOT, pg.file), html = shell({ path: pg.path, title: `${pg.title} · ${NAME}`, desc: pg.desc, body: pg.body, noindex: pg.noindex, bare: pg.bare });
     fs.mkdirSync(path.dirname(file), { recursive: true });
     if (!fs.existsSync(file) || fs.readFileSync(file, "utf8") !== html) { fs.writeFileSync(file, html); console.log(`wrote ${pg.file}`); } else console.log(`same  ${pg.file}`);
   }
@@ -169,7 +182,8 @@ const WELCOME_HEAD = `<script>(() => { try { if (location.hash || /[?&]scroll=/.
   document.documentElement.classList.add("welcome"); })();</script>`;
 
 // `noindex`: a page that must exist but not be found yet (a draft's briefing) — no canonical or share tags, not in the sitemap
-export function shell({ path: p, title, desc, css = "", body, paged = false, noindex = false }) {
+// `bare`: a page about signing in — the top bar and the policy links, no tab bar or install bar to wander off by
+export function shell({ path: p, title, desc, css = "", body, paged = false, noindex = false, bare = false }) {
   const page = { path: p, noindex }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
   return `<!doctype html>
 <html lang="ko">
@@ -187,7 +201,7 @@ ${NAV}
 <main>
 ${body}
 </main>
-${FOOTER}
+${bare ? BARE_FOOTER : FOOTER}
 </div>
 </body>
 </html>
