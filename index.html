@@ -25,8 +25,10 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=7" />
+<link rel="stylesheet" href="/ui.css?v=8" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<script>(() => { try { if (location.hash || /[?&]scroll=/.test(location.search) || localStorage.getItem("pd.entered")) return; } catch { return; }
+  document.documentElement.classList.add("welcome"); })();</script>
 <script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
   r.classList.add("paged");
@@ -297,7 +299,13 @@
      Soft surfaces with round corners for what you tap (no borders, no glow, no pills); bronze only for the numbers and
      the one bar a figure is about. */
   .pg .hub{display:flex;flex-direction:column;gap:10px;padding-bottom:2px}
-  .hub-head{margin:0 2px 2px}
+  .hub-head{position:relative;margin:0 2px 2px}
+  /* the saved briefings and (when signing in is on) the account: round icons at the head's right (account.js fills them) */
+  .hub-acts{position:absolute;top:2px;right:0;display:flex;gap:8px}
+  .hub-ic{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--surface-2);color:var(--ink-2)}
+  .hub-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .hub-ic .n{position:absolute;top:-3px;right:-3px;font-size:11.5px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums}
+  .hub-ic .n:empty{display:none} .hub-ic.on{color:var(--bronze-hi)}
   .hub-head .ov{margin:0;font-size:13px;font-weight:600;color:var(--mut)}
   .hub-head h1{margin:2px 0 0;font-size:31px;line-height:1.15;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
   .hub-head .fresh{margin:6px 0 0;font-size:12.5px;color:var(--dim)}
@@ -382,11 +390,47 @@
 </style>
 </head>
 <body>
+<!-- the landing (2026-10-26, "랜딩패이지 먼저 나오고 로그인 넘어가야 이쁠것같은데 pivoxmap처럼"): the cover, then what
+     this is, then 시작하기. Shown on the first visit only — trends/site.mjs → WELCOME_HEAD sets html.welcome before the
+     first paint, welcome.js runs it and fills the week's cases from #story below. Without html.welcome it is never seen. -->
+<div class="wl" id="welcome" role="dialog" aria-modal="true" aria-label="AX 트렌드 레이더 처음 화면">
+  <section class="wl-cover" data-w="cover" aria-label="PivoxData">
+    <div class="spot" aria-hidden="true"></div>
+    <p class="cover-wordmark">Pivox<span class="b">Data</span></p>
+    <div class="wl-foot">
+      <button type="button" class="wl-next" data-w-about>시작하기 <span aria-hidden="true">→</span></button>
+      <p class="wl-legal"><a href="/terms">이용약관</a><span aria-hidden="true">·</span><a href="/privacy">개인정보 처리방침</a></p>
+    </div>
+  </section>
+  <section class="wl-about" data-w="about" hidden>
+    <header class="wl-bar"><span class="brand">Pivox<span class="b">Data</span></span><a class="wl-login" href="/login?next=/" data-w-login hidden>로그인</a></header>
+    <div class="wl-body">
+      <div class="wl-hero">
+        <p class="wl-k"><i aria-hidden="true"></i>IT 컨설팅 관점의 AX 리서치 · 매일 갱신 · 무료</p>
+        <h1 class="wl-h" tabindex="-1">기업이 AI를 <em>어디에, 어떻게</em> 들였는지 공식 발표로 읽어요</h1>
+        <p class="wl-lede">회사·정부·기관이 자기 사이트에 직접 낸 발표만 모아요. 사례마다 누가 무엇을 어디에 어떻게 들였는지, 우리 프로젝트에서 확인할 점까지 IT 컨설팅의 눈으로 풀어 써요.</p>
+        <div class="wl-cta">
+          <a class="btn lg" href="/login?next=/" data-w-start>시작하기</a>
+          <button type="button" class="btn ghost lg" data-w-enter>로그인 없이 둘러보기</button>
+        </div>
+        <p class="wl-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span>출처는 공식 발표뿐이에요. 언론 보도·루머·집계 사이트는 쓰지 않아요.</span></p>
+      </div>
+      <aside class="wl-sample" aria-label="이번 주 사례 미리 보기"></aside>
+    </div>
+    <ol class="wl-how" aria-label="이렇게 읽어요">
+      <li><b>사례 카드</b><span>이번 주 기업의 AI 도입 사례를 한 장에 하나씩. 인스타그램에도 올라가요.</span></li>
+      <li><b>브리핑</b><span>사례마다 누가·무엇을·어디에·어떻게, 그리고 확인할 점을 표와 문단으로 풀어요.</span></li>
+      <li><b>용어 풀이</b><span>낯선 말은 눌러서 바로 봐요. 브리핑이 나올 때마다 늘어나요.</span></li>
+      <li><b>숫자</b><span>업종·규모별 AI 도입률과 IT 영역별 발표 수. 어떻게 셌는지 검산까지 공개해요.</span></li>
+    </ol>
+    <p class="wl-legal"><a href="/terms">이용약관</a><span aria-hidden="true">·</span><a href="/privacy">개인정보 처리방침</a></p>
+  </section>
+</div>
 <div class="wrap">
 <!--@nav-->
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a></nav>
 </header>
 <!--/@nav-->
 <section class="cover" id="cover" aria-label="PivoxData">
@@ -516,7 +560,7 @@
 <!--@footer-->
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a></span>
+  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
@@ -556,7 +600,8 @@
   $("appsheet-ok").addEventListener("click", () => { $("appsheet").hidden = true; });
   $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
 })();
-</script><!--/@footer-->
+</script>
+<script type="module" src="/account.js"></script><!--/@footer-->
 </div>
 <script type="module">
 import { lines, csvButton } from "/charts.mjs";
@@ -688,6 +733,11 @@ function hub() {
   const now = new Date(Date.now() + 9 * 3600e3); // the day in Korea
   const head = node("header", "hub-head");
   head.append(node("p", "ov", `${now.getUTCMonth() + 1}월 ${now.getUTCDate()}일 ${"일월화수목금토"[now.getUTCDay()]}요일`), node("h1", null, "오늘의 AX"));
+  // the saved briefings and, when signing in is on, the account (account.js keeps their count and labels)
+  const acts = node("div", "hub-acts"), ic = (acct, href, d, label) => { const a = node("a", "hub-ic ic-only"); a.href = href; a.dataset.acct = acct; a.setAttribute("aria-label", label); a.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg><span class="n"></span>`; return a; };
+  acts.append(ic("saved", "/saved", "M7 4h10v16l-5-3.5L7 20z", "저장한 브리핑"));
+  if (document.querySelector('meta[name="pd-auth"]')) acts.append(ic("login", "/login?next=/", "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0", "로그인"));
+  head.append(acts);
   h.append(head);
   // this week's story: its title, who said what in it, and how many cases
   const st = $("#story .st-head");
@@ -795,5 +845,6 @@ pager([
 }; if (document.documentElement.classList.contains("paged")) document.addEventListener("unpaged", setup, { once: true }); else setup(); })();
 </script>
 <script src="/terms.js" defer></script>
+<script type="module" src="/welcome.js"></script>
 </body>
 </html>

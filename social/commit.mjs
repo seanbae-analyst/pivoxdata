@@ -59,7 +59,7 @@ for (let i = 1; i <= 5; i++) {
   must("reset", "-q", "--hard", `origin/${branch}`);
   const run = spawnSync(process.execPath, ["social/briefs.mjs"], { stdio: "inherit" });
   if (run.status) { console.error("social/briefs.mjs failed — nothing pushed"); process.exit(1); }
-  if (!commit(["briefs", "index.html", "map.html", "404.html", "sitemap.xml", "robots.txt"])) process.exit(0);
+  if (!commit(["briefs", "index.html", "map.html", "404.html", "login.html", "saved.html", "privacy.html", "terms.html", "auth", "sitemap.xml", "robots.txt"])) process.exit(0);
   if (git("push", "-q", "origin", `HEAD:${branch}`).status === 0) { console.log(`pushed to ${branch}: ${message}`); process.exit(0); }
   console.warn(`git push failed (${i}/5) — generating the pages again on the newest ${branch}`);
   wait(5 * i);
