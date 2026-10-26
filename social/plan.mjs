@@ -25,7 +25,9 @@ import { ROOT, OUT, read, write, isMain, kstToday } from "./util.mjs";
 import { nextSlot } from "./slot.mjs";
 
 export const BIG_DAYS = 3, SUBJECT_DAYS = 21, DIGEST_DAYS = 7, DIGEST_MIN = 3, DIGEST_MAX = 5, QUIET_DAYS = 14;
-export const NEWS_GAP = 6, NEWS_WINDOW = 7, NEWS_MIN = 3, NEWS_MAX = 8;
+// NEWS_GAP: days between news posts — 1 = every day there are NEWS_MIN unused announcements (owner, 2026-10-26:
+// "당분간은 업로드 많이할거임"; it was 6, once a week)
+export const NEWS_GAP = 1, NEWS_WINDOW = 7, NEWS_MIN = 3, NEWS_MAX = 8;
 // AX only (2026-10-25): Instagram carries the AX cases (Ramp AI Index) and the weekly official-announcement post;
 // tool races and developer-side changes (downloads, papers, models, capex) stay in the site's evidence section
 export const AX_TOPICS = new Set(["ax"]);

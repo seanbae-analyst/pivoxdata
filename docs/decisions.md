@@ -214,3 +214,18 @@
   `investment_profiles` 요청 → 401. 그래서 공개 키를 사이트에 넣어도 PivoxQuant 자료는 열리지 않는다. 같이 쓰는 것은 로그인 사용자
   목록 · 메일 설정 · 사이트 주소(PivoxQuant는 Supabase 로그인을 안 쓴다). 처리방침의 Supabase 행은 "미국 · 저장은 서울 리전".
 
+### 24. 2026-10-26 하루 기록 — 늦은 갱신, arXiv 429, 로그인 분리 · 켜기, Meta 차단, 매일 게시
+- **매일 갱신이 늦음**: GitHub 예약(01:17 UTC)이 제때 안 돌았다 → 03:47 · 06:17 UTC 예비 예약, 그날 데이터가 있으면 바로 멈춤(#53).
+- **arXiv 429로 하루 전체가 멈춤**: 근거 데이터 출처 하나가 안 되면 있던 것으로 계속, 오래되면 검산이 멈춤(`source`, `arxiv:fresh`, #56).
+  npm.json의 받은 날이 10-24에 멈춰 있던 것도 고침(#58).
+- **랜딩 먼저(#54), 로그인은 따로(#57)**: "로그인페이지만 따로해". 로그인 서버는 PivoxQuant의 Supabase 프로젝트를 같이 쓴다(23번).
+  스키마는 소유자가 SQL Editor로(MCP 적용은 확인 창이 소유자에게 안 떠서 세 번 시간 초과), Auth 주소 · Brevo SMTP · 메일 템플릿도
+  소유자가 대시보드에서. 실제 메일 로그인 성공(사용자 1 · 동의 1, 판 2026-10-26).
+- **인스타 "API access blocked."(OAuthException 200)**: 원인은 Meta 개발자 계정 차단이었다(소유자가 본인 인증으로 풀었다 —
+  "Meta for Developers 액세스 권한이 복원되었습니다"). 토큰은 그대로 유효했다. 앱 pivoxtech는 개발 모드, 권한
+  instagram_business_basic · instagram_business_content_publish "테스트 준비 완료", 개인정보처리방침 URL을 `/privacy`로 채움.
+  같은 오류가 다시 나면: 우리 코드 · 토큰이 아니라 Meta 계정 · 앱 상태부터 본다(developers.facebook.com 알림, Accounts Center).
+  - Claude가 단 `/approve` 댓글은 명령이 무력화된다(`·/·a·pprove`) — 승인은 소유자 댓글이거나, post.json의 `auto_publish: true` 커밋(publish-queued).
+- **첫 사례 카드 형식 게시**: instagram.com/p/De9Y6PalJOn · `/briefs/2026-10-26` (SK텔레콤 · Microsoft · Databricks · Salesforce).
+- **당분간 매일 게시**("당분간은 업로드 많이할거임 … 내일도 ㄱㄱ"): `NEWS_GAP` 6 → 1. 안 쓴 공식 발표(7일 안, 점수 3 이상)가 3건 이상이면
+  매일 "이번 주 AX 사건"을 올린다. 줄이려면 `social/plan.mjs` → `NEWS_GAP`.
