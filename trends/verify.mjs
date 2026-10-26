@@ -63,6 +63,9 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
 {
   const d = load("arxiv.json");
   const prev = (x) => addMonths(x, -1), lastFull = lastFullMonth(runDay);
+  // the last two months are counted again every day (late listings still land in them); a week without that is a source
+  // that stopped answering — fetch.mjs keeps going without it, so this is where it shows
+  check("arxiv:fresh", ageDays(d.fetched_at, runDay) <= 7, `${d.fetched_at}에 받음 — 검산한 날(${runDay})에서 7일 안`);
   for (const f of ARXIV_DOMAINS) {
     const x = d.domains?.[f.id];
     if (!x || !x.months.length) { check(`arxiv:${f.id}:months`, false, `${f.name}: 받은 달 없음`); continue; }

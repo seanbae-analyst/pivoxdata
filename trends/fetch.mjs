@@ -42,8 +42,19 @@ async function get(url, as = "json", tries = 8) {
   }
 }
 
+// a background source that cannot be reached today keeps what it had, and the day's story still goes out (2026-10-26:
+// arXiv answered GitHub's shared runners "too many requests" for 12 minutes, and that one source stopped the whole day —
+// the site, the post, the alerts). verify.mjs says when what it had is too old to show: npm and PyPI after 4 days,
+// Hugging Face 2, arXiv 7 or a missing last month, SEC and Ramp when their newest quarter or month is late. The news
+// does not go through here: each of its feeds already fails on its own (below), and too few answering stops the day.
+const skipped = [];
+async function source(name, run) {
+  if (!want(name)) return;
+  try { await run(); } catch (e) { skipped.push(name); console.log(`⚠ ${name} skipped today, keeping what was there — ${e.message.slice(0, 200)}`); }
+}
+
 // ---------- npm: daily downloads, read in ≤ 365-day windows (the API's limit) ----------
-if (want("npm")) {
+await source("npm", async () => {
   const doc = read("npm.json", { packages: {} });
   for (const p of [...NPM, ...NPM_CONTROL]) {
     const old = doc.packages[p.pkg]?.days ?? [];
@@ -65,10 +76,10 @@ if (want("npm")) {
     await sleep(1000); // npm rate-limits per IP; 44 requests a day spread over a minute is plenty
   }
   write("npm.json", { source: { site: "npm registry download counts API", url: "https://api.npmjs.org/downloads/range/{start}:{end}/{package}", docs: "https://github.com/npm/registry/blob/main/docs/download-counts.md" }, fetched_at: today, ...doc, packages: doc.packages });
-}
+});
 
 // ---------- PyPI via pypistats: daily downloads without mirrors (~180 days served) ----------
-if (want("pypi")) {
+await source("pypi", async () => {
   const doc = read("pypi.json", { packages: {} });
   for (const p of [...PYPI, ...PYPI_CONTROL]) {
     const j = await get(`https://pypistats.org/api/packages/${p.pkg}/overall?mirrors=false`);
@@ -82,10 +93,10 @@ if (want("pypi")) {
     await sleep(1200); // pypistats rate-limits by IP; the data changes once a day anyway
   }
   write("pypi.json", { source: { site: "pypistats.org (PyPI BigQuery public dataset, without known mirrors)", url: "https://pypistats.org/api/packages/{package}/overall?mirrors=false", licence: "PyPI BigQuery data: CC BY 4.0 (docs.pypi.org/api/bigquery)" }, fetched_at: today, packages: doc.packages });
-}
+});
 
 // ---------- arXiv: monthly counts per field, one query per month × phrase, ≥ 3 s apart (arXiv API terms) ----------
-if (want("arxiv")) {
+await source("arxiv", async () => {
   const old = read("arxiv.json", {});
   // the file used to hold the AI field only; it becomes domains.ai
   const doc = old.domains ? old : { domains: old.total ? { ai: { total: old.total, terms: old.terms } } : {} };
@@ -122,10 +133,10 @@ if (want("arxiv")) {
     save();
   }
   save();
-}
+});
 
 // ---------- Hugging Face: one snapshot a day of the top-downloaded and trending models ----------
-if (want("hf")) {
+await source("hf", async () => {
   const pick = (m) => ({ id: m.id, author: m.author ?? m.id.split("/")[0], downloads: m.downloads ?? 0, likes: m.likes ?? 0, task: m.pipeline_tag ?? null, created: (m.createdAt ?? "").slice(0, 10), trending: m.trendingScore ?? null });
   const top = await get(`https://huggingface.co/api/models?sort=downloads&direction=-1&limit=${HF.top}`);
   const trending = await get(`https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=${HF.trending}`);
@@ -134,10 +145,10 @@ if (want("hf")) {
   snaps.push({ date: today, top: top.map(pick), trending: trending.map(pick) });
   write("hf.json", { source: { site: "Hugging Face Hub API", url: "https://huggingface.co/api/models?sort={downloads|trendingScore}", note: "downloads = last 30 days, as the Hub reports it" }, fetched_at: today, snapshots: snaps.slice(-60) });
   console.log(`hf    snapshot ${today}: top ${top.length}, trending ${trending.length} (${snaps.length} snapshots kept)`);
-}
+});
 
 // ---------- SEC: capex per calendar quarter, derived from year-to-date filings ----------
-if (want("sec")) {
+await source("sec", async () => {
   const days = (a, b) => (new Date(b) - new Date(a)) / 864e5 + 1;
   // a fiscal quarter is named by the calendar quarter its last month falls in (Oracle's Jun–Aug quarter → Q3)
   const cq = (end) => `${end.slice(0, 4)}Q${Math.ceil(+end.slice(5, 7) / 3)}`;
@@ -172,10 +183,10 @@ if (want("sec")) {
     await sleep(250); // SEC fair access: ≤ 10 requests per second
   }
   write("sec.json", { source: { site: "SEC EDGAR XBRL companyfacts", url: "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json", concepts: SEC.concepts, note: "US government data. Quarters derived from year-to-date 10-Q/10-K figures." }, fetched_at: today, companies: out });
-}
+});
 
 // ---------- AX: Ramp AI Index from FRED, monthly, whole history each time (14 small CSVs) ----------
-if (want("ax")) {
+await source("ax", async () => {
   const out = {};
   for (const x of AX.series) {
     const csv = await get(`https://fred.stlouisfed.org/graph/fredgraph.csv?id=${x.id}`, "text");
@@ -190,7 +201,7 @@ if (want("ax")) {
     await sleep(500);
   }
   write("ax.json", { source: { site: "Ramp AI Index (Ramp Economics Lab) via FRED, Federal Reserve Bank of St. Louis", url: "https://fred.stlouisfed.org/graph/fredgraph.csv?id={series}", note: "Share of US businesses on Ramp paying for AI products, % per month. Copyrighted: citation required." }, fetched_at: today, series: out });
-}
+});
 
 // ---------- AX news: official newsrooms and government press releases (NEWS in series.mjs) ----------
 // One request per feed. A feed that fails is recorded, not fatal: the other sources still count, and verify.mjs
@@ -244,3 +255,5 @@ if (want("news")) {
   // since: the day collection began — feeds show only their latest items, so a period before it is not fully counted
   write("news.json", { since: prev.since ?? today, source: { note: "Official announcements only: each source's own newsroom, blog or press-release feed (trends/series.mjs NEWS). Titles and summaries as published; links to the original." }, fetched_at: today, feeds, visited, items });
 }
+
+if (skipped.length) console.log(`⚠ skipped today: ${skipped.join(", ")} — the checks (verify.mjs) decide whether what they had is still fresh enough`);
