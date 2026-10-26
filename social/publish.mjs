@@ -1,32 +1,55 @@
-// publish.mjs — posts one week's carousel to Instagram through the official Instagram Graph API
+// publish.mjs — posts one carousel to Instagram through the official Instagram Graph API
 // (Content Publishing: one container per image → a CAROUSEL container → media_publish).
-// Run only after a person approves (see .github/workflows/social-publish.yml); never on a schedule.
+// Run by trends.yml right after a draft passes its checks (automatic posting), or by social-publish.yml after the
+// owner's /approve, for a hand-made post (Run workflow, or "auto_publish": true) — never twice for one post:
+//  • a post.json with `published` is left alone, one with `rejected` is refused;
+//  • before anything is created, the account's recent media are read: a post already up with this caption (or this
+//    slot's /briefs/<slot> link) — say, published by a run whose push of post.json failed — is recorded as published
+//    instead of being posted again.
+// Worst case before the first container: 10 minutes for the images to appear on the site (one deadline for all of
+// them); then up to 5 minutes for the image containers (processed together) and 150 s for the carousel — about 18
+// minutes, under the 30-minute timeout of the jobs that run it.
 //
-// Usage: node social/publish.mjs social/out/<date>/post.json [--dry-run]
+// Usage: node social/publish.mjs social/out/<slot>/post.json [--dry-run]
+//        node social/publish.mjs social/out/<slot>/post.json --reject    (the owner's /reject: post.json → rejected)
+//        node social/publish.mjs --queued    (the "auto_publish": true posts not yet up or rejected, oldest slot first)
 // Env:   IG_USER_ID, IG_ACCESS_TOKEN               (GitHub secrets; see social/README.md)
 //        IG_GRAPH_HOST   default graph.instagram.com  (graph.facebook.com for a token from Facebook Login)
 //        IG_API_VERSION  default v23.0
 import fs from "node:fs";
+import path from "node:path";
+import { OUT, read, write } from "./util.mjs";
+import { isSlot, compareSlots } from "./slot.mjs";
 
-const [file, flag] = process.argv.slice(2);
-if (!file) { console.error("usage: node social/publish.mjs social/out/<date>/post.json [--dry-run]"); process.exit(2); }
-const post = JSON.parse(fs.readFileSync(file, "utf8"));
-if (post.published) { console.log(`already published: ${post.published.permalink}`); process.exit(0); }
+const args = process.argv.slice(2), flag = (f) => args.includes(f), file = args.find((a) => !a.startsWith("--"));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+if (flag("--queued")) {
+  const queued = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter(isSlot).sort(compareSlots)
+    .filter((slot) => { const p = read(path.join(OUT, slot, "post.json")); return p?.auto_publish === true && !p.published && !p.rejected; });
+  for (const slot of queued) console.log(`social/out/${slot}/post.json`);
+  process.exit(0);
+}
+if (!file) { console.error("usage: node social/publish.mjs social/out/<slot>/post.json [--dry-run | --reject]  ·  node social/publish.mjs --queued"); process.exit(2); }
+const post = read(file);
+if (!post) { console.error(`${file}: not found`); process.exit(2); }
+const slot = post.slot ?? post.date, save = () => write(file, post);
+
+// the owner's /reject: written down, so briefs.mjs drops the draft's page and nothing posts it later
+if (flag("--reject")) {
+  if (post.published) { console.log(`already published: ${post.published.permalink ?? post.published.media_id} — nothing to reject`); process.exit(0); }
+  post.rejected = post.rejected ?? { at: new Date().toISOString() };
+  save();
+  console.log(`rejected: ${slot}`);
+  process.exit(0);
+}
+if (post.published) { console.log(`already published: ${post.published.permalink ?? post.published.media_id}`); process.exit(0); }
+if (post.rejected) { console.error(`${slot} was rejected (${post.rejected.at}) — remove "rejected" from its post.json to post it`); process.exit(1); }
 
 const urls = post.images.map((f) => post.image_base + f);
 const { IG_USER_ID: user, IG_ACCESS_TOKEN: token } = process.env;
 const base = `https://${process.env.IG_GRAPH_HOST || "graph.instagram.com"}/${process.env.IG_API_VERSION || "v23.0"}`;
-const dry = flag === "--dry-run" || !user || !token;
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-// 1. the images must be live on the site first (Vercel deploys the commit that added them)
-for (const u of urls) {
-  let ok = false;
-  for (let i = 0; i < 40 && !ok; i++) { ok = (await fetch(u, { method: "HEAD" })).ok; if (!ok) await sleep(15000); }
-  if (!ok) throw new Error(`image not reachable after 10 minutes: ${u}`);
-}
-console.log(`${urls.length} images reachable`);
-if (dry) { console.log(`dry run${!user || !token ? " (IG_USER_ID / IG_ACCESS_TOKEN not set)" : ""} — would post:\n${urls.join("\n")}\n\n${post.caption}`); process.exit(0); }
+const dry = flag("--dry-run") || !user || !token;
 
 async function graph(pathname, params, method = "POST") {
   const body = new URLSearchParams({ ...params, access_token: token });
@@ -35,25 +58,53 @@ async function graph(pathname, params, method = "POST") {
   if (!res.ok || j.error) throw new Error(`${method} ${pathname}: ${res.status} ${JSON.stringify(j.error ?? j)}`);
   return j;
 }
-const ready = async (id) => {
-  for (let i = 0; i < 30; i++) {
-    const { status_code } = await graph(id, { fields: "status_code" }, "GET");
-    if (status_code === "FINISHED") return;
-    if (status_code === "ERROR" || status_code === "EXPIRED") throw new Error(`container ${id}: ${status_code}`);
+
+// 0. already up? (a run that posted it but could not push post.json, a second /approve, two jobs at once)
+if (user && token) {
+  const norm = (s) => String(s ?? "").replace(/\s+/g, " ").trim(), link = `/briefs/${slot}`;
+  const ours = (c) => norm(c) === norm(post.caption) || (post.caption.includes(link) && new RegExp(`${link.replace(/[-/]/g, "\\$&")}(?![\\w-])`).test(c ?? ""));
+  const { data = [] } = await graph(`${user}/media`, { fields: "id,caption,permalink,timestamp", limit: "25" }, "GET");
+  const up = data.find((m) => ours(m.caption));
+  if (up) {
+    console.log(`already on Instagram: ${up.permalink ?? up.id} (${up.timestamp}) — recorded, not posted again`);
+    if (!dry) { post.published = { at: up.timestamp ?? new Date().toISOString(), media_id: up.id, permalink: up.permalink ?? null, found: "recent media" }; save(); }
+    process.exit(0);
+  }
+}
+
+// 1. the images must be live on the site first (Vercel deploys the commit that added them) — one deadline for all
+let missing = urls;
+for (let i = 0; i < 40 && missing.length; i++) {
+  if (i) await sleep(15000);
+  missing = (await Promise.all(missing.map(async (u) => ((await fetch(u, { method: "HEAD" }).catch(() => ({}))).ok ? null : u)))).filter(Boolean);
+}
+if (missing.length) throw new Error(`image(s) not reachable after 10 minutes: ${missing.join(", ")}`);
+console.log(`${urls.length} images reachable`);
+if (dry) { console.log(`dry run${!user || !token ? " (IG_USER_ID / IG_ACCESS_TOKEN not set)" : ""} — would post:\n${urls.join("\n")}\n\n${post.caption}`); process.exit(0); }
+
+// containers are processed by Instagram; ERROR or EXPIRED is final
+const ready = async (ids, seconds) => {
+  let waiting = ids;
+  for (let t = 0; waiting.length; t += 5) {
+    const states = await Promise.all(waiting.map(async (id) => [id, (await graph(id, { fields: "status_code" }, "GET")).status_code]));
+    const bad = states.find(([, s]) => s === "ERROR" || s === "EXPIRED");
+    if (bad) throw new Error(`container ${bad[0]}: ${bad[1]}`);
+    waiting = states.filter(([, s]) => s !== "FINISHED").map(([id]) => id);
+    if (!waiting.length) return;
+    if (t >= seconds) throw new Error(`container(s) ${waiting.join(", ")} not ready after ${seconds} s`);
     await sleep(5000);
   }
-  throw new Error(`container ${id} not ready after 150 s`);
 };
 
-// 2. a container per image, then the carousel, then publish
+// 2. a container per image (processed together), then the carousel, then publish
 const children = [];
-for (const u of urls) { const { id } = await graph(`${user}/media`, { image_url: u, is_carousel_item: "true" }); await ready(id); children.push(id); }
+for (const u of urls) children.push((await graph(`${user}/media`, { image_url: u, is_carousel_item: "true" })).id);
+await ready(children, 300);
 const { id: carousel } = await graph(`${user}/media`, { media_type: "CAROUSEL", children: children.join(","), caption: post.caption });
-await ready(carousel);
+await ready([carousel], 150);
 const { id: media } = await graph(`${user}/media_publish`, { creation_id: carousel });
 // it is live now: write that down before anything else can fail, or a failed link lookup leaves no record and the
 // next /approve posts the same carousel a second time
-const save = () => fs.writeFileSync(file, JSON.stringify(post, null, 1) + "\n");
 post.published = { at: new Date().toISOString(), media_id: media, permalink: null };
 save();
 for (let i = 0; i < 3 && !post.published.permalink; i++) {
