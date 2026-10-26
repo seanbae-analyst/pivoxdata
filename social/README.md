@@ -12,7 +12,7 @@ Run workflow의 "테스트 초안 (승인 필요)"와, 자동 게시가 실패�
 또는 `post.json` 에 `"auto_publish": true` 를 넣어 main 에 머지하면 그대로 올라갑니다(아직 안 올린 것만, 폴더 이름 순서로 하나씩).
 
 ```
-매일 10:17 KST  trends.yml
+매일 10:17 KST  trends.yml   (GitHub 예약이 늦거나 빠지면 12:47 · 15:17 KST에 다시 — 그날 데이터가 이미 있으면 바로 멈춤)
   ├ 데이터 받기 → 검산 → 대시보드(/) 다시 만들기 + 변화 찾기 → trends/data/changes.json   (검산 실패 → 이슈, 아무것도 안 바꿈)
   ├ social/plan.mjs    오늘 초안을 만들까? (AX만)
   │                      · 3일 안에 잡힌, 처음 보는 AX 빅 케이스 → 점수가 가장 높은 것 하나

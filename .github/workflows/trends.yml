@@ -18,8 +18,13 @@
 name: trends daily
 
 on:
+  # GitHub starts a scheduled run when it can — late, hours late, or under load not at all (2026-10-26: the 01:17 run
+  # had not started by 02:35; 10-25's scheduled run started at 06:09). So three times a day: the first that starts does
+  # the day's work, and a later one ends at once in the job "today" (today's data is already on main).
   schedule:
-    - cron: "17 1 * * *" # every day 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
+    - cron: "17 1 * * *" # 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
+    - cron: "47 3 * * *" # 03:47 UTC (12:47 KST) — only if the first has not run
+    - cron: "17 6 * * *" # 06:17 UTC (15:17 KST) — only if neither has
   workflow_dispatch:
     inputs:
       post:
@@ -42,7 +47,34 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # a backup schedule on a day whose data is already on main stops here, before anything is installed (the button and a
+  # posting request always go on). A day whose run failed its checks committed nothing, so the next schedule tries again.
+  today:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      go: ${{ steps.check.outputs.go }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          sparse-checkout: trends/data/news.json
+          sparse-checkout-cone-mode: false
+      - name: Already done today?
+        id: check
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT" = "schedule" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
+            echo "today's data is already on main — this backup run stops here"
+            echo "go=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "go=true" >> "$GITHUB_OUTPUT"
+          fi
+
   refresh:
+    needs: today
+    if: needs.today.outputs.go == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     outputs:

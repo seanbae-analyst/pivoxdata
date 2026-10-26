@@ -26,7 +26,7 @@ npm run social        # 오늘 올릴지 판단 → 이야기 → 카드 → PNG
 npm run dev           # http://localhost:8099
 ```
 
-매일 10:17 KST에 GitHub Actions(`.github/workflows/trends.yml`)가 같은 일을 합니다. 검산이 하나라도 어긋나면
+매일 10:17 KST에 GitHub Actions(`.github/workflows/trends.yml`)가 같은 일을 합니다(GitHub 예약은 늦거나 빠질 수 있어 12:47 · 15:17 KST에 한 번씩 더 시도하고, 그날 데이터가 이미 있으면 바로 멈춥니다). 검산이 하나라도 어긋나면
 아무것도 바꾸지 않고 이슈를 엽니다(같은 실패가 이어지면 그 이슈에 댓글).
 
 ## 구조
