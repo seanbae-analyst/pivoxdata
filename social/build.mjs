@@ -7,32 +7,31 @@
 // The choice avoids whatever the last two drafts used for the same insight, and the cover alternates too. What was
 // chosen is written to social/out/<date>/design.json, which is how the next draft knows.
 //
-// Usage: node social/build.mjs   (after social/plan.mjs)
+// Usage: node social/build.mjs   (after social/story.mjs)
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { slidesFor } from "./pick.mjs";
 import { draw, options, FITTED, VIZ_CSS } from "../trends/viz.mjs";
+import { ROOT, OUT, read } from "./util.mjs";
+import { isSlot, parseSlot, compareSlots } from "./slot.mjs";
+import { plain } from "./claude.mjs";
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const I = JSON.parse(fs.readFileSync(path.join(ROOT, "trends", "data", "insights.json"), "utf8"));
-const planFile = path.join(ROOT, "social", "plan.json");
-const plan = fs.existsSync(planFile) ? JSON.parse(fs.readFileSync(planFile, "utf8")) : { mode: "roundup", date: I.built_at };
+const I = read(path.join(ROOT, "trends", "data", "insights.json"));
+const plan = read(path.join(ROOT, "social", "plan.json"), { mode: "roundup", date: I.built_at });
 if (plan.post === false) { console.log(`social/plan.json says no draft today (${plan.why}) — nothing to build`); process.exit(0); }
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); // safe in attributes too
 
 const slides = slidesFor(I, plan);
 // story.mjs's storyline, when there is one: text-first slides in the order the story goes (otherwise the card layouts)
 const slot = plan.slot ?? I.built_at; // the post's folder (plan.mjs: <date>, or <date>-2 for a second post that day)
-const storyFile = path.join(ROOT, "social", "out", slot, "story.json");
-const story = fs.existsSync(storyFile) ? JSON.parse(fs.readFileSync(storyFile, "utf8")) : null;
+const story = read(path.join(OUT, slot, "story.json"));
 if (!story && slides.length < 2) throw new Error(`only ${slides.length} insights — not enough for a carousel`);
-const date = I.built_at, [y, m, d] = date.split("-");
+// the post's date — its folder's (the date in Korea, plan.mjs), not the data's
+const date = parseSlot(slot)?.date ?? I.built_at, [y, m, d] = date.split("-");
 
 // ---------- what the last drafts looked like ----------
-const OUT = path.join(ROOT, "social", "out");
-const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => f < slot && fs.existsSync(path.join(OUT, f, "design.json"))).sort()
-  .map((f) => JSON.parse(fs.readFileSync(path.join(OUT, f, "design.json"), "utf8")));
+const history = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter((f) => isSlot(f) && compareSlots(f, slot) < 0 && fs.existsSync(path.join(OUT, f, "design.json"))).sort(compareSlots)
+  .map((f) => read(path.join(OUT, f, "design.json")));
 const recent = history.slice(-2), n = history.length;
 const LAYOUTS = ["number", "chart", "headline"];
 const COVERS = plan.mode === "event" ? ["hero", "alert"] : ["list", "grid"]; // digest and roundup share the list/grid covers
@@ -110,13 +109,13 @@ const covers = story ? {} : { // a story brings its own cover
 </section>`,
   list: `<section class="slide cover c-list">
   <div class="kick">AX 트렌드 레이더 · ${when}</div>
-  <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : plan.mode === "race" ? "AI 분야별<br>누가<br>앞서나" : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
+  <h1>${plan.mode === "digest" ? `지난 한 주<br>작게 바뀐 것<br>${slides.length}가지` : "요즘<br>기사보다 먼저<br>움직인 숫자"}</h1>
   <ol>${slides.slice(0, 3).map((x) => `<li><b>${esc(x.big)}</b><span>${esc(x.title)}</span></li>`).join("")}</ol>
   ${foot}
 </section>`,
   grid: `<section class="slide cover c-grid">
   <div class="kick">AX 트렌드 레이더 · ${when}</div>
-  <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : plan.mode === "race" ? "개발자가 실제로 받는 숫자로 본<br>분야별 1위" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
+  <h1>${plan.mode === "digest" ? "숫자로 보는<br>지난 한 주의 작은 변화" : "숫자 넷으로 보는<br>요즘 AI 기술"}</h1>
   <div class="tiles">${slides.slice(0, 4).map((x) => `<div class="tile"><div class="tk">${esc(x.k)}</div><div class="tb">${esc(x.big)}</div><div class="tl">${esc(x.bl)}</div></div>`).join("")}</div>
   ${foot}
 </section>`,
@@ -125,8 +124,9 @@ const covers = story ? {} : { // a story brings its own cover
 
 // ---------- story slides ----------
 function storySlides(st) {
+  // the text as the checks read it (claude.mjs → plain: no stray invisible characters), then the cards' own breaks:
   // a number, a closing bracket or % stays on the same line as the particle after it ("36.2%로", "(1년 전 3.5%)로")
-  const N = st.slides.length, e = (t) => esc(String(t ?? "").replace(/\u200b/g, "").replace(/([\d%)])(?=[가-힣])/g, "$1\u2060").replace(/·(?=\S)/g, "·\u200b")); // a list joined by · may break after it
+  const N = st.slides.length, e = (t) => esc(plain(t).replace(/([\d%)])(?=[가-힣])/g, "$1\u2060").replace(/·(?=\S)/g, "·\u200b")); // a list joined by · may break after it
   // each line the writer broke on is its own block: when the text grows enough that one has to wrap, it splits evenly
   const lines = (t) => String(t ?? "").split("\n").map((l) => `<span class="ln">${e(l)}</span>`).join("");
   return st.slides.map((s, i) => {
@@ -156,8 +156,9 @@ const html = `<!doctype html>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <style>
   /* PivoxQuant's look (frontend/CLAUDE.md, 2026-10-11): Vantablack + ivory + bronze, Pretendard only, 14px card
-     corners, no bronze glow, no wide letter-spacing. A big case is told apart by the bronze band on its cover. */
-  :root{--bg:#050505;--onyx:#111111;--surface:rgba(245,240,232,.04);--line:rgba(245,240,232,.08);--ink:#f5f0e8;--ink-2:rgba(245,240,232,.82);--mut:rgba(245,240,232,.65);--dim:rgba(245,240,232,.5);--bronze:#b8956a;--bronze-hi:#b8956a;--bronze-soft:rgba(184,149,106,.12);--bronze-line:rgba(184,149,106,.42);--r-card:14px;--r-cta:10px}
+     corners, no bronze glow, no wide letter-spacing. A big case is told apart by the bronze band on its cover.
+     Two ivory hairlines, as on the site (ui.css): --line, and --line-2 a step stronger (a list's top rule). */
+  :root{--bg:#050505;--onyx:#111111;--surface:rgba(245,240,232,.04);--line:rgba(245,240,232,.08);--line-2:rgba(245,240,232,.14);--ink:#f5f0e8;--ink-2:rgba(245,240,232,.82);--mut:rgba(245,240,232,.65);--dim:rgba(245,240,232,.5);--bronze:#b8956a;--bronze-hi:#b8956a;--bronze-soft:rgba(184,149,106,.12);--bronze-line:rgba(184,149,106,.42);--r-card:14px;--r-cta:10px}
   *{box-sizing:border-box} html,body{margin:0;background:#222}
   body{font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;color:var(--ink);word-break:keep-all}
   .slide{width:1080px;height:1350px;background:var(--bg);padding:96px 92px 0;position:relative;display:flex;flex-direction:column;margin:0 0 24px;overflow:hidden}

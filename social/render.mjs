@@ -1,4 +1,4 @@
-// render.mjs — screenshots each 1080×1350 slide of social/cards.html into social/out/<date>/NN.png.
+// render.mjs — screenshots each 1080×1350 slide of social/cards.html into social/out/<slot>/NN.png.
 // Those files are committed and served by the site, because the Instagram API takes images by public URL.
 //
 // Usage: node social/render.mjs   (after social/build.mjs)
@@ -6,15 +6,17 @@
 // CHROMIUM_PATH to an existing binary.
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
+import { ROOT, OUT, read } from "./util.mjs";
+import { isSlot } from "./slot.mjs";
 
-const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const plan = path.join(ROOT, "social", "plan.json");
-if (fs.existsSync(plan) && JSON.parse(fs.readFileSync(plan, "utf8")).post === false) { console.log("social/plan.json says no draft today — nothing to render"); process.exit(0); }
+if (read(path.join(ROOT, "social", "plan.json"))?.post === false) { console.log("social/plan.json says no draft today — nothing to render"); process.exit(0); }
 const page = path.join(ROOT, "social", "cards.html");
-const date = fs.readFileSync(page, "utf8").match(/data-date="(\d{4}-\d{2}-\d{2}(?:-\d+)?)"/)[1];
-const dir = path.join(ROOT, "social", "out", date);
+// the post's folder, as build.mjs wrote it into the page (slot.mjs: <date> or <date>-<n>)
+const date = fs.readFileSync(page, "utf8").match(/data-date="([^"]*)"/)?.[1];
+if (!isSlot(date)) throw new Error(`social/cards.html: data-date "${date}" is not a post folder (YYYY-MM-DD or YYYY-MM-DD-N)`);
+const dir = path.join(OUT, date);
 fs.mkdirSync(dir, { recursive: true });
 
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
