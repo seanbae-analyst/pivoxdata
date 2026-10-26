@@ -711,6 +711,151 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "flip:race:labs-js:@anthropic-ai/sdk:2026-10-12",
+   "subject": "race:labs-js",
+   "kind": "1위 교체",
+   "tier": "big",
+   "score": 100,
+   "topic": "race",
+   "headline": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+   "card": {
+    "id": "race-labs-js",
+    "k": "빅 케이스 · AI 회사 SDK · 자바스크립트 1위 교체",
+    "big": "37.8%",
+    "bl": "AI 회사 SDK · 자바스크립트 중 Anthropic의 몫",
+    "title": "AI 회사 SDK · 자바스크립트 1위, 이제 Anthropic",
+    "easy": "웹·앱 개발자가 어느 회사 AI를 코드에 붙이나. 4주 전 1위는 OpenAI(36.3%)였는데, 지금은 Anthropic가 37.8%로 앞섰어요.",
+    "body": "Anthropic 37.8% · OpenAI 36.1% · Google 20.2% · Mistral 6.0%. 최근 4주 가장 빨리 큰 곳은 Anthropic(인기 패키지보다 +8.9%p). 다운로드는 사용자 수가 아니라 설치 횟수예요.",
+    "src": "npm 평일 다운로드 4주 평균 · 비중은 이 4개 안에서 · 10월 12일 주까지",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Anthropic",
+        "value": 0.3776,
+        "label": "37.8%"
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3609,
+        "label": "36.1%"
+       },
+       {
+        "name": "Google",
+        "value": 0.2017,
+        "label": "20.2%"
+       },
+       {
+        "name": "Mistral",
+        "value": 0.0598,
+        "label": "6.0%"
+       }
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.3559,
+      "to": 0.3776,
+      "fromText": "35.6%",
+      "toText": "37.8%",
+      "fromLabel": "4주 전 Anthropic",
+      "toLabel": "지금 Anthropic"
+     },
+     {
+      "kind": "share",
+      "focus": 0,
+      "parts": [
+       {
+        "name": "Anthropic",
+        "value": 0.3776
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.3609
+       },
+       {
+        "name": "Google",
+        "value": 0.2017
+       },
+       {
+        "name": "Mistral",
+        "value": 0.0598
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-25",
+   "key": "surge:npm:@mastra/core:2026-10-12",
+   "subject": "pkg:@mastra/core",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.5,
+   "topic": "ai",
+   "headline": "지난주 Mastra 다운로드가 평소의 1.6배",
+   "card": {
+    "id": "ev-surge-@mastra/core",
+    "k": "npm 다운로드",
+    "big": "1.6배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Mastra 다운로드가 평소의 1.6배",
+    "easy": "평소 한 주보다 1.6배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 45만회, 직전 12주 평소는 29만회. 같은 주 대조군은 평소의 1.22배, AI 패키지 전반은 1.29배였습니다.",
+    "src": "npm 평일 다운로드 · 4월 20일 주–10월 12일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       130843,
+       143908,
+       156497,
+       157937,
+       172804,
+       156423,
+       171389,
+       196712,
+       194579,
+       196608,
+       186841,
+       203296,
+       211886,
+       216707,
+       235879,
+       229057,
+       259590.5,
+       256312,
+       282390,
+       294883,
+       329620,
+       317518,
+       342676,
+       374123,
+       430802.5,
+       448892.5
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 288636.5,
+      "to": 448892.5,
+      "fromText": "29만",
+      "toText": "45만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
   }
  ]
 }

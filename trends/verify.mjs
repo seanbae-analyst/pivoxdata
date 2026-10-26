@@ -14,6 +14,9 @@ const load = (f) => JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"));
 const checks = [];
 const check = (id, ok, fact) => { checks.push({ id, ok, fact }); console.log(`${ok ? "✓" : "✗"}  ${id.padEnd(30)} ${fact}`); };
 const ageDays = (d, ref) => Math.round((new Date(ref) - new Date(d)) / 864e5);
+// consecutive days as ranges: 2026-10-13, 10-14, 10-15 → "10-13~15"
+const outageSpans = (days) => days.reduce((out, t) => { const last = out.at(-1); if (last && ageDays(last.to, t) === 1) last.to = t; else out.push({ from: t, to: t }); return out; }, [])
+  .map((r) => (r.from === r.to ? r.from.slice(5) : `${r.from.slice(5)}~${r.to.slice(8)}`)).join(", ");
 const notes = {};
 // freshness is measured from the day of the check, not from a file's own fetched_at: a file that was not fetched again
 // is as old as it is, whatever date it carries
@@ -40,7 +43,7 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
     check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)`);
   }
   // 4. what the method had to work around — reported, not hidden
-  const { until, W } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
+  const { until, W, outage } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
   const wk = Object.values(W)[0], last = wk.at(-1).week;
   const zeros = list.map((p) => [p.pkg, P[p.pkg].days.filter(([t, v]) => v === 0 && t >= "2026-01-01").length]).filter(([, z]) => z);
   const br = breaks(Object.fromEntries(control.map((p) => [p.pkg, W[p.pkg]])));
@@ -50,7 +53,7 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   // non-zero weekdays; a week inside those 8 where most packages lost their level (trailing ones were dropped above)
   // leaves no growth to rank — the build would stop on it, so the check says which week
   const holes = wk.map((w, i) => (i >= wk.length - 8 && Object.values(W).filter((x) => x[i].level == null).length > Object.keys(W).length / 2 ? w.week : null)).filter(Boolean);
-  check(`${src}:zero-days`, holes.length === 0, `${zeros.length ? `2026년에 0으로 적힌 날: ${zeros.map(([k, z]) => `${k} ${z}일`).join(", ")} — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음` : `2026년에 0으로 적힌 날 없음`}${holes.length ? ` — 0이 아닌 평일이 3일이 안 돼 대부분의 패키지가 주간 수준을 잃은 주(최근 8주 안, 4주 성장을 못 잼): ${holes.join(", ")}` : ", 최근 8주 모두 주간 수준 있음"}`);
+  check(`${src}:zero-days`, holes.length === 0, `${zeros.length ? `2026년에 0으로 적힌 날: ${zeros.map(([k, z]) => `${k} ${z}일`).join(", ")} — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음` : `2026년에 0으로 적힌 날 없음`}${outage.filter((t) => t >= "2026-01-01").length ? ` — 그중 대부분의 패키지가 함께 0인 날(${outageSpans(outage.filter((t) => t >= "2026-01-01"))})은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄` : ""}${holes.length ? ` — 0이 아닌 평일이 3일이 안 돼 대부분의 패키지가 주간 수준을 잃은 주(최근 8주 안, 4주 성장을 못 잼): ${holes.join(", ")}` : ", 최근 8주 모두 주간 수준 있음"}`);
   // growth is compared only after the last break, and 4-week growth needs 8 weeks of it
   const after = wk.length - (br.length ? br.at(-1).i : 0);
   check(`${src}:breaks`, after >= 8, `${br.length ? `대조군(${control.map((c) => c.pkg).join("·")})이 한꺼번에 움직인 주: ${br.map((b) => `${b.week} 주 ×${b.ratio.toFixed(2)}`).join(", ")} — 집계 방식 변화로 보고, 성장률은 마지막 끊김 이후 ${after}주만 비교` : `대조군(${control.map((c) => c.pkg).join("·")})이 한꺼번에 30% 넘게 움직인 주 없음 (연말연시 제외)`}${after < 8 ? " — 4주 성장에 필요한 8주가 안 됨" : ""}`);
