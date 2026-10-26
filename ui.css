@@ -258,8 +258,6 @@ html.welcome .wl{display:block;position:fixed;inset:0;z-index:100;background:var
   min-height:60px;padding:env(safe-area-inset-top) 20px 0;background:rgba(5,5,5,.92);border-bottom:1px solid var(--line);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .wl-bar .brand{cursor:default}
-.wl-login{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);color:var(--ink);font-size:14px;font-weight:600}
-.wl-login:hover{text-decoration:none;background:var(--surface-2)} .wl-login[hidden]{display:none}
 .wl-body{max-width:1120px;margin:0 auto;padding:32px 20px 0;display:grid;gap:26px}
 @media(min-width:960px){.wl-body{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:60px;align-items:center;padding-top:72px}}
 .wl-k{display:flex;align-items:center;gap:8px;margin:0 0 16px;font-size:13px;font-weight:600;color:var(--mut)}
@@ -291,64 +289,11 @@ html.welcome .wl{display:block;position:fixed;inset:0;z-index:100;background:var
 .wl-about>.wl-legal{padding:30px 20px calc(30px + env(safe-area-inset-bottom))}
 @media(prefers-reduced-motion:reduce){.wl-about.in{animation:none}.wl.out{transition:none}}
 
-/* ---------- buttons the sign-in pages and the landing share ---------- */
+/* ---------- buttons the landing and /saved share ---------- */
 .btn.lg{min-height:52px;padding:0 22px;font-size:16px}
-.btn.danger{background:none;color:var(--bad);border-color:rgba(216,138,138,.4)}
-.btn.danger:hover{background:var(--bad-soft)}
 a.btn:hover{text-decoration:none}
 
-/* ---------- /login and /auth/callback (trends/pages.mjs, login.js, callback.js): one step at a time, PivoxMap's look ---------- */
-.acc{max-width:460px;margin:0 auto;padding:20px 0 8px;width:100%}
-.acc-step.in{animation:pgr-in .34s cubic-bezier(.2,.75,.25,1)} .acc-step.out{animation:pgr-out .34s cubic-bezier(.2,.75,.25,1)}
-.acc h1{margin:0;font-size:clamp(26px,3vw,32px);line-height:1.3;font-weight:750;letter-spacing:-.035em;color:#f5f0e8}
-.acc h1:focus{outline:none}
-.acc-guide{display:flex;align-items:baseline;gap:12px;margin:0 0 26px;padding:12px 16px;border-radius:12px;background:var(--surface);font-size:14px;line-height:1.6;color:var(--ink-2)}
-.acc-guide b{flex:none;color:var(--bronze);font-weight:650}
-.acc-lede{margin:10px 0 0;font-size:16px;line-height:1.7;color:var(--ink-2)}
-.acc-lede b{color:var(--ink);word-break:break-all}
-.acc-label{display:block;margin:26px 0 8px;font-size:14px;font-weight:600;color:var(--ink-2)}
-.acc-in{display:flex;align-items:center;gap:10px;min-height:52px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface)}
-.acc-in:focus-within{border-color:var(--bronze-line)}
-.acc-in .ic{flex:none;width:18px;height:18px;fill:none;stroke:var(--mut);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.acc-in input{flex:1;min-width:0;height:50px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;outline:none}
-.acc-in input::placeholder{color:var(--dim)}
-.acc-err{margin:8px 0 0;font-size:13.5px;line-height:1.6;color:var(--bad)}
-.acc form .btn,.acc .btn.block+.btn.block{margin-top:14px}
-.acc-or{display:flex;align-items:center;gap:12px;margin:24px 0;font-size:12.5px;color:var(--dim)}
-.acc-or::before,.acc-or::after{content:"";flex:1;height:1px;background:var(--line)}
-.acc-fine{margin:10px 0 0;font-size:13.5px;line-height:1.65;color:var(--mut)} .acc-fine.center{text-align:center}
-.acc details.acc-faq{border:0;border-top:1px solid var(--line);border-radius:0;background:none}
-.acc .acc-faq:first-of-type{margin-top:30px} .acc .acc-faq:last-of-type{border-bottom:1px solid var(--line)}
-.acc-faq summary{list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:54px;padding:0;font-size:15px;font-weight:600;color:var(--ink)}
-.acc-faq summary::-webkit-details-marker{display:none}
-.acc-faq summary::after{content:"+";font-size:19px;font-weight:400;color:var(--mut)} .acc-faq[open] summary::after{content:"−"}
-.acc-faq ul{margin:0 0 18px;padding-left:18px;display:grid;gap:8px;font-size:14px;line-height:1.65;color:var(--ink-2)}
-.acc-cmp{margin:0 0 18px;font-size:14px}
-.acc-cmp th,.acc-cmp td{padding:10px 6px;text-align:center;white-space:normal;border-bottom:1px solid var(--line)}
-.acc-cmp th:first-child,.acc-cmp td:first-child{text-align:left} .acc-cmp td:first-child{color:var(--ink)} .acc-cmp td{color:var(--ink-2)}
-.acc-cmp .ic.yes{width:18px;height:18px;vertical-align:-4px;fill:none;stroke:var(--bronze);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.cs{margin:24px 0 0;padding:0;min-width:0;border:1px solid var(--line-2);border-radius:var(--radius-card);background:var(--surface);overflow:hidden}
-.cs-row{display:flex;align-items:flex-start;gap:14px;padding:15px 16px;border-top:1px solid var(--line);cursor:pointer}
-.cs-row.all{border-top:0;background:var(--surface-2)}
-.cs-row input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--bronze);cursor:pointer}
-.cs-row b{display:block;font-size:15px;font-weight:600;color:var(--ink)}
-.cs-row small{display:block;margin-top:3px;font-size:13px;line-height:1.6;color:var(--mut)}
-.cs-row small a{color:var(--bronze-hi);text-decoration:underline;text-underline-offset:2px}
-.acc details.cs-more{margin-top:12px;border:0;border-radius:0;background:none;font-size:13px;color:var(--mut)}
-.cs-more summary{display:flex;align-items:center;min-height:40px;padding:0;font-weight:500;color:var(--ink-2)}
-.cs-more ul{margin:4px 0 8px;padding-left:18px;display:grid;gap:8px;line-height:1.6} .cs-more b{color:var(--ink-2);font-weight:600}
-.acc-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px} .acc-row .grow{flex:1 1 200px}
-.acc-ico{display:flex;align-items:center;justify-content:center;width:72px;height:72px;margin:0 0 24px;border-radius:20px;background:var(--bronze-soft);box-shadow:inset 0 0 0 1px var(--bronze-line)}
-.acc-ico .ic{width:32px;height:32px;fill:none;stroke:var(--bronze);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.acc-card{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:22px 0 0;padding:14px 16px;border-radius:var(--radius-card);background:var(--surface);font-size:14px;color:var(--mut)}
-.acc-card b{display:block;margin-top:2px;color:var(--ink);font-weight:600;word-break:break-all}
-.acc-link{padding:0;border:0;background:none;font:inherit;color:var(--bronze-hi);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.acc-link:disabled{color:var(--dim);text-decoration:none;cursor:default}
-.acc .acc-step>.btn{margin-top:22px}
-footer.site.bare{margin-top:48px}
-body:has(.acc) main{padding-top:8px}
-
-/* ---------- /saved (account.js): the saved briefings, then the account ---------- */
+/* ---------- /saved (account.js): the briefings saved in this browser ---------- */
 .sv{max-width:760px;width:100%}
 .sv-head .kicker b,.legal .kicker b{margin-right:8px}
 .sv-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
@@ -359,16 +304,9 @@ body:has(.acc) main{padding-top:8px}
 .sv-item .t{font-size:16px;font-weight:600;line-height:1.45} .sv-item .d{font-size:13px;color:var(--mut)}
 .sv-x{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:0;border-radius:50%;background:none;cursor:pointer}
 .sv-x svg{width:18px;height:18px;fill:none;stroke:var(--dim);stroke-width:2;stroke-linecap:round} .sv-x:hover svg{stroke:var(--ink)}
+.sv-ico{display:flex;align-items:center;justify-content:center;width:72px;height:72px;margin:0 0 24px;border-radius:20px;background:var(--bronze-soft);box-shadow:inset 0 0 0 1px var(--bronze-line)}
+.sv-ico .ic{width:32px;height:32px;fill:none;stroke:var(--bronze);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .sv-empty{padding:8px 0 0} .sv-empty[hidden]{display:none} .sv-empty p{margin:0 0 6px;color:var(--ink-2)} .sv-empty .btn{margin-top:14px}
-.sv-acct{margin-top:48px;padding-top:24px;border-top:1px solid var(--line-2)}
-.sv-acct h2{margin:0 0 16px;font-size:18px}
-.sv-who{display:flex;align-items:center;gap:12px;margin:0 0 16px}
-.sv-who .ic{flex:none;width:40px;height:40px;padding:9px;border-radius:50%;background:var(--surface-2);fill:none;stroke:var(--ink-2);stroke-width:1.8;stroke-linecap:round}
-.sv-who b{display:block;color:var(--ink);word-break:break-all} .sv-who small{display:block;font-size:13px;color:var(--mut)}
-.sv-acct [hidden]{display:none}
-.sv details.sv-del{margin-top:26px;border:0;border-top:1px solid var(--line);border-radius:0;background:none}
-.sv-del summary{display:flex;align-items:center;min-height:48px;padding:0;font-weight:500;color:var(--mut)}
-.sv-del p{font-size:14px;color:var(--ink-2)} .sv-del .acc-label{margin-top:14px} .sv-del .btn{margin-top:14px}
 
 /* ---------- /privacy and /terms (trends/legal.mjs) ---------- */
 .legal{max-width:820px}
@@ -400,14 +338,8 @@ body:has(.acc) main{padding-top:8px}
 .pd-toast.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
 .pd-toast a{color:var(--bronze-hi);font-weight:600;white-space:nowrap}
 body.has-tabbar .pd-toast,html.paged .pd-toast{bottom:calc(80px + env(safe-area-inset-bottom))}
-.acct-notice{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:80;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  padding:12px 14px;border-radius:12px;background:var(--surface-3);box-shadow:0 8px 28px rgba(0,0,0,.5);font-size:13.5px;line-height:1.5;color:var(--ink-2)}
-.acct-notice a{flex:none;font-weight:600}
-body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe-area-inset-bottom))}
-@media(min-width:641px){.acct-notice{left:auto;right:24px;max-width:440px}}
 
-/* ---------- the menus' 저장 and 로그인 (trends/site.mjs → NAV; the phone's sidebar copies them, account.js fills them) ---------- */
+/* ---------- the menus' 저장 (trends/site.mjs → NAV; the phone's sidebar copies it, account.js fills in the count) ---------- */
 .nav .x{display:none}
 .nav .n,.toc-site .n{margin-left:5px;font-size:12px;font-weight:600;color:var(--bronze-hi)} .nav .n:empty,.toc-site .n:empty{display:none}
-.nav [data-acct="login"]{margin-left:6px;box-shadow:inset 0 0 0 1px var(--line-2)}
 .toc-site .x{display:inline}

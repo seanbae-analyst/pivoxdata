@@ -47,14 +47,9 @@ social/             오늘 올릴지(plan), 이야기·사례(story, 원문 읽�
 pager.js · terms.js 폰의 옆으로 넘기는 페이지와 목차 사이드바(모든 화면) · 누르면 뜨는 용어 풀이(폰은 아래에서 올라오는 창)
 charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 welcome.js          `/`에 처음 온 사람의 표지 → 소개 (index.html #welcome — 그리기 전에 site.mjs가 정함)
-auth.js · login.js · callback.js · acc-ui.js   로그인 — Supabase Auth 메일 링크(라이브러리 없이), /login 단계, /auth/callback, 동의 세 개
-account.js          모든 페이지: 저장 버튼 · 메뉴의 저장/로그인 · /saved(저장한 브리핑 · 계정 · 탈퇴) · 바뀐 약관 알림
-trends/pages.mjs · trends/legal.mjs   /login · /auth/callback · /saved · /privacy · /terms 를 만들고, 처리방침 · 약관 · 동의 문구의 사실은 legal.mjs 한 곳
-supabase/           로그인 켜는 순서(README) · 스키마(pd_* 함수만 열림) · 메일 템플릿 둘
+account.js          모든 페이지: 브리핑 저장 버튼 · 메뉴의 저장 개수 · /saved (이 기기의 브라우저에 저장)
+trends/pages.mjs · trends/legal.mjs   /saved · /privacy · /terms 를 만들고, 처리방침 · 약관 문구의 사실은 legal.mjs 한 곳
 ```
-
-**로그인**(2026-10-26)은 `trends/site.mjs` → `AUTH`가 비어 있으면 어디에도 없다 — 소개의 "시작하기"가 바로 앱으로 가고, 저장은 그 기기에만 남는다.
-켜는 순서는 `supabase/README.md`.
 
 ## 읽는 법 — 왜 이렇게 재나
 
