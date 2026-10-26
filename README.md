@@ -9,10 +9,10 @@ IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 
 
 | 화면 | 내용 |
 |---|---|
-| [`/`](https://data.pivoxquant.com) | 보고서 형식 — 핵심 숫자(KPI) · 최근 변화 · AX 브리핑 · 공식 발표(원문 링크) · 지표 탭(기업 도입률 / IT 영역별 발표) · 용어 풀이 · 근거 데이터(npm·PyPI·arXiv·Hugging Face·SEC, 접힘) |
-| [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 게시물마다 같은 이야기를 풀어 쓴 글(마지막 섹션 "IT 컨설팅 관점"), 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
+| [`/`](https://data.pivoxquant.com) | 이야기 먼저 — 이번 주 AX 이야기(사례마다 IT 영역 · 도입 방식, 어디에 · 어떻게) · 지난 이야기 · 숫자로 보면(KPI · 최근 변화 · 지표 탭: 기업 도입률 / IT 영역별 발표) · 공식 발표(원문 링크) · 용어 풀이(브리핑과 함께 자람) · 근거 데이터(npm·PyPI·arXiv·Hugging Face·SEC, 접힘) |
+| [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 카드(요약본)의 본편. 사례마다 표(누가·무엇을·어디에·어떻게·확인할 점)와 풀이, 공통 흐름, "IT 컨설팅 관점". 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 데이터마다 잇는 키와 공개 조건 |
-| 인스타그램 | AX·IT 컨설팅 내용만, 짧은 에디토리얼 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
+| 인스타그램 | AX·IT 컨설팅 내용만, 이야기(사건 → 의미 → 실무 체크)로 짧은 에디토리얼 카드 — 공식 발표는 사례 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
 | 폰 | 위아래 스크롤 대신 페이지를 옆으로 넘김(`pager.js`) · 아래 탭 바 · 홈 화면에 설치(PWA) |
 
 ## 돌리는 법
@@ -21,7 +21,7 @@ IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 
 npm ci
 npm run trends        # 받기(fetch) → 검산(verify) → 페이지 만들기(build)
 npm run trends:build  # 받은 데이터로 검산·빌드만 (네트워크 없음)
-npm run social        # 오늘 올릴지 판단 → 카드 → PNG → 캡션 (social/out/<날짜>/)
+npm run social        # 오늘 올릴지 판단 → 이야기 → 카드 → PNG → 캡션 → 브리핑 (social/out/<한국 날짜>/)
 npm run dev           # http://localhost:8099
 ```
 
@@ -31,16 +31,19 @@ npm run dev           # http://localhost:8099
 ## 구조
 
 ```
-trends/series.mjs   지켜보는 것 한 곳 — AX(Ramp), 공식 발표 출처(NEWS)·IT 영역(DOMAINS), npm·PyPI 패키지(+대조군), arXiv, Hugging Face, SEC 회사
+trends/series.mjs   지켜보는 것 한 곳 — AX(Ramp), 공식 발표 출처(NEWS)·IT 영역(DOMAINS)·도입 방식(METHODS), npm·PyPI 패키지(+대조군), arXiv, Hugging Face, SEC 회사
 trends/feeds.mjs    공식 발표 RSS·Atom 읽기 (자기 도메인 링크만)
 trends/fetch.mjs    소스별 받기, 출처·받은 날과 함께 trends/data/*.json 으로
-trends/signals.mjs  읽는 법 — 주간 수준(0이 아닌 평일의 중앙값), 끊김 감지(대조군만), 대조군 대비 초과 성장
-trends/verify.mjs   검산 → trends/data/checks.json (같은 숫자를 다른 경로로 한 번 더 읽기)
+trends/signals.mjs  읽는 법 — 주간 수준(0이 아닌 평일의 중앙값, 집계가 멈춘 날 제외), 끊김 감지(대조군만), 대조군 대비 초과 성장
+trends/dates.mjs    날짜 계산 한 곳 (UTC 날짜 문자열끼리)
+trends/verify.mjs   검산 42개 → trends/data/checks.json (같은 숫자를 다른 경로로 한 번 더 읽기)
 trends/build.mjs    index.html · map.html 채우기, 변화 찾기(changes.json · state.json), insights.json (카드·캡션의 원천)
-trends/glossary.mjs 용어 풀이 15개 — 페이지의 "용어 풀이"와 카드 속 밑줄 친 말이 같은 문장을 씀
+trends/glossary.mjs 용어 풀이 — 고정 23개 + 게시된 브리핑이 더한 말. 페이지의 "용어 풀이", 카드·브리핑 속 밑줄 친 말(terms.js)이 같은 문장을 씀
 trends/viz.mjs      인사이트를 그리는 방법 12가지 (선·면적·막대 / 기울기·두 막대·화살표 / 도넛·와플·띠 / 순위 막대·점·시상대)
-trends/site.mjs     모든 페이지 공통 head·상단·하단, sitemap.xml · robots.txt
-social/             오늘 올릴지(plan), 스토리·카드(story·build·render), 캡션, 게시(publish), 웹 브리핑(briefs·roundup), 푸시(notify)
+trends/site.mjs     모든 페이지 공통 head·상단·하단(esc 한 곳), sitemap.xml(noindex 페이지 제외) · robots.txt
+social/             오늘 올릴지(plan), 이야기·사례(story, 원문 읽기 original), 카드(build·render), 캡션, 게시(publish), 웹 브리핑(briefs·roundup), 푸시(notify),
+                    검사 한 벌(claude.mjs), 커밋·푸시(commit), 폴더 이름(slot), 공용(util)
+pager.js · terms.js 폰의 옆으로 넘기는 페이지 · 누르면 뜨는 용어 풀이
 charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 ```
 
@@ -52,6 +55,7 @@ charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 - **대조군.** react·lodash·express·typescript·axios(npm), requests·numpy·pandas·urllib3·packaging(PyPI). 순위는
   4주 성장에서 대조군 중앙값을 뺀 **초과 성장**으로 매깁니다 — 소스 전체가 오르는 계절 몫을 빼기 위해서입니다.
 - **집계 오류를 피합니다.** npm은 0으로 적힌 날과 몰아서 들어온 날이 있어 주간 수준을 평일 중앙값으로 잡고,
+  절반 넘는 패키지가 함께 0인 날(2026-10-13~15, 10-19~21)은 npm 집계가 멈춘 날로 보고 그 주는 남은 평일로 수준을 냅니다.
   PyPI가 2026-08-24 주에 한꺼번에 반으로 준 것처럼 대조군이 함께 30% 넘게 움직이면 집계 변화로 보고 그 뒤만 비교합니다.
   둘 다 페이지 검산 목록에 그대로 적습니다.
 - **누가 앞서나(레이스).** 분야마다 경쟁하는 도구 몇 개를 묶어, 그 안에서 각자 다운로드 몫이 얼마고 4주·3개월·1년 사이
@@ -77,4 +81,5 @@ charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 npm 다운로드 수 API · pypistats(PyPI BigQuery 공개 데이터, CC BY 4.0) · arXiv API(메타데이터 CC0) · Hugging Face Hub
 API · SEC EDGAR XBRL(미국 정부 공개 자료). npm·Hugging Face는 다운로드 수를 다른 곳에 싣는 조건을 약관에 따로 적지
 않았습니다 — 집계만 싣고 출처를 밝힙니다. AX 지표는 Ramp AI Index(Ramp Economics Lab, FRED 제공 — 인용 표시 조건)이고, "AX 사건"은 각 회사·기관이
-직접 낸 발표(뉴스룸·공식 블로그·보도자료 RSS)의 제목·요약과 원문 링크만 싣습니다 — 본문을 옮겨 싣지 않습니다. 자세한 문구는 [데이터 지도](https://data.pivoxquant.com/map). 법률 자문이 아닙니다.
+직접 낸 발표(뉴스룸·공식 블로그·보도자료 RSS)의 제목·요약과 원문 링크만 싣습니다 — 본문을 옮겨 싣지 않습니다.
+게시물을 쓸 때 사례를 채우려고 발표의 공식 페이지를 읽지만, 그 글은 저장하지도 싣지도 않고 24자 넘게 같은 문장은 거절합니다. 자세한 문구는 [데이터 지도](https://data.pivoxquant.com/map). 법률 자문이 아닙니다.
