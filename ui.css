@@ -129,8 +129,16 @@ html.paged body{overflow:hidden}
 html.paged .wrap>main,html.paged .wrap>.cover,html.paged footer.site,html.paged .topbar{display:none}
 .pgr{position:fixed;left:0;right:0;top:0;bottom:0;z-index:10;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);background:var(--bg)}
 body.has-tabbar .pgr{bottom:calc(61px + env(safe-area-inset-bottom))}
-.pgr-top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;padding:0 16px;border-bottom:1px solid var(--line)}
+.pgr-top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:0 12px 0 16px;border-bottom:1px solid var(--line)}
 .pgr-top .brand{font-size:17px;min-height:44px}
+.pgr-lead{min-width:0;display:flex;align-items:center}
+/* ‹ and where it goes back to (a screen's name, or the page's `back`) */
+.pgr-back{display:inline-flex;align-items:center;gap:2px;min-height:44px;min-width:0;margin-left:-8px;padding:0 10px 0 2px;border:0;border-radius:10px;background:none;
+  font:inherit;font-size:16.5px;font-weight:700;letter-spacing:-.02em;color:var(--ink);cursor:pointer}
+.pgr-back span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pgr-back svg{flex:none;width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pgr-back[hidden],.pgr-lead .brand[hidden]{display:none}
+.pgr-back:active,.pgr-where:active{background:var(--surface-2)}
 .pgr-where{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-right:-8px;padding:0 8px 0 12px;border:0;border-radius:10px;background:none;
   font:inherit;font-size:13.5px;font-weight:600;color:var(--mut);white-space:nowrap;cursor:pointer} .pgr-where b{color:var(--ink);font-weight:700}
 .pgr-where svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
@@ -141,6 +149,15 @@ body.has-tabbar .pgr{bottom:calc(61px + env(safe-area-inset-bottom))}
 .pgr-track::-webkit-scrollbar{display:none}
 .pg{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overscroll-behavior:auto contain;
   display:flex;flex-direction:column;padding:18px 16px 20px}
+.pg[hidden]{display:none}
+/* a screen comes in from the side (pager.js → show): over the one before it, or back to it */
+.pgr-track.in{animation:pgr-in .28s cubic-bezier(.2,.75,.25,1)} .pgr-track.out{animation:pgr-out .28s cubic-bezier(.2,.75,.25,1)}
+@keyframes pgr-in{from{opacity:.2;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes pgr-out{from{opacity:.2;transform:translateX(-36px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.pgr-track.in,.pgr-track.out{animation:none}}
+/* app feel on a phone: no grey flash on a tap, a press that gives a little */
+html.paged{-webkit-tap-highlight-color:transparent}
+html.paged .tap{transition:transform .12s ease} html.paged .tap:active{transform:scale(.982)}
 .pg>*{flex-shrink:0} .pg>:first-child{margin-top:0}
 .pg .appbar{position:static;margin:16px 0 0;box-shadow:none}
 

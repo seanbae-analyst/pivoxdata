@@ -19,32 +19,70 @@
 // in history.state, so a shared link or the back button lands on the same page.
 const el = (tag, cls) => Object.assign(document.createElement(tag), cls ? { className: cls } : {});
 
-export function pager(chapters, { tab, fit } = {}) {
+export function pager(chapters, { tab, fit, back = null } = {}) {
   const root = document.documentElement, has = (nodes) => nodes?.some(Boolean);
   chapters = chapters.filter((c) => c.pages?.some(has) || c.items?.length);
   if (!root.classList.contains("paged")) { if (chapters.length) sidebar(chapters); return; } // the long page: the sidebar only
   if (!chapters.length) { root.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); return; }
-  const shell = el("div", "pgr"), top = el("div", "pgr-top"), where = el("button", "pgr-where"), bars = el("div", "pgr-bars"), track = el("div", "pgr-track");
-  const brand = document.querySelector(".topbar .brand"); if (brand) top.append(brand.cloneNode(true));
+  // screens (2026-10-26, "이쁜 앱처럼"): chapters that name a screen are shown a screen at a time, like an app — the first
+  // screen is home; a link, a tile or the sidebar opens another one over it (it comes in from the side, the address and
+  // the browser's back follow), and ‹ in the top bar goes back. A swipe stays inside the screen.
+  const screenOf = (c) => c.screen ?? "";
+  const screened = chapters.some((c) => c.screen), HOME = screenOf(chapters[0]);
+  const titleOf = (s) => { const c = chapters.find((x) => screenOf(x) === s); return c?.screenTitle ?? c?.title ?? c?.name ?? ""; };
+  let screen = HOME, depth = history.state?.pgr?.d ?? 0;
+
+  const shell = el("div", "pgr"), top = el("div", "pgr-top"), lead = el("div", "pgr-lead"), where = el("button", "pgr-where"), bars = el("div", "pgr-bars"), track = el("div", "pgr-track");
+  // the top bar's left: the site's name on a first screen; ‹ and where it goes back to everywhere else
+  const brand = document.querySelector(".topbar .brand")?.cloneNode(true) ?? null;
+  const backBtn = el("button", "pgr-back"), backName = el("span");
+  backBtn.type = "button"; backBtn.setAttribute("aria-label", "뒤로");
+  backBtn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>'; backBtn.append(backName);
+  lead.append(...[brand, backBtn].filter(Boolean));
+  const setLead = () => {
+    const inner = screened ? screen !== HOME : Boolean(back);
+    if (brand) brand.hidden = inner; backBtn.hidden = !inner;
+    backName.textContent = screened ? titleOf(screen) : back?.label ?? "";
+  };
   // where you are is also the way to the sidebar (its contents, one tap to anywhere)
   const here = el("span"); where.type = "button"; where.title = "목차"; where.setAttribute("aria-controls", "toc"); where.setAttribute("aria-haspopup", "dialog"); where.append(here);
   where.insertAdjacentHTML("beforeend", '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"/></svg>');
-  top.append(where); bars.setAttribute("aria-hidden", "true"); here.setAttribute("aria-live", "polite");
+  top.append(lead, where); bars.setAttribute("aria-hidden", "true"); here.setAttribute("aria-live", "polite");
   shell.append(top, bars, track);
   // before the tab bar, so the keyboard reaches the page first and the menu after it
   const tabbar = document.querySelector(".tabbar"); if (tabbar) tabbar.before(shell); else document.body.append(shell);
 
-  let pages = [], cur = -1, curCh = null, want = null; // want: the page a turn is heading to (a re-measure keeps it)
-  const add = (c, nodes) => { const p = el("section", "pg"); p.append(...nodes.filter(Boolean)); track.append(p); pages.push({ c, p }); return p; };
+  let pages = [], curPage = null, curCh = null, want = null; // want: the page a turn is heading to (a re-measure keeps it)
+  const add = (c, nodes) => { const p = el("section", "pg"); p.dataset.screen = screenOf(c); p.append(...nodes.filter(Boolean)); track.append(p); pages.push({ c, p }); return p; };
   const copy = (n) => { if (!n) return null; const h = n.cloneNode(true); h.removeAttribute("id"); h.querySelectorAll("[id]").forEach((x) => x.removeAttribute("id")); return h; };
   const mine = (c) => pages.filter((x) => x.c === c);
-  const at = () => Math.max(0, Math.min(pages.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))));
+  const vis = () => (screened ? pages.filter((x) => screenOf(x.c) === screen) : pages); // the pages a swipe moves between
+  const at = () => { const v = vis(); return v[Math.max(0, Math.min(v.length - 1, Math.round(track.scrollLeft / (track.clientWidth || 1))))]; };
+  const reduce = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   // a turn to the next page or two slides; a jump further (a chapter name, a link) lands at once instead of flicking past pages
-  const go = (i, smooth) => (want = pages[i]) && track.scrollTo({ left: i * track.clientWidth, behavior: smooth && Math.abs(i - at()) <= 2 && !matchMedia("(prefers-reduced-motion: reduce)").matches ? "smooth" : "instant" });
+  const go = (x, smooth) => {
+    const v = vis(), i = v.indexOf(x); if (i < 0) return;
+    want = x;
+    const instant = !smooth || Math.abs(i - v.indexOf(at())) > 2 || reduce();
+    track.scrollTo({ left: i * track.clientWidth, behavior: instant ? "instant" : "smooth" });
+    if (instant) paint();
+  };
+  // another screen: its pages only, and it comes in from the side — over the one before it (push: the browser's back
+  // returns), in place of it (replace: the tab bar, a link that arrived with the address), or back to it (back)
+  const show = (s, how) => {
+    if (!screened || s === screen) return;
+    screen = s; curPage = null;
+    for (const y of pages) y.p.hidden = screenOf(y.c) !== screen;
+    if (how === "push") { depth += 1; history.pushState({ ...(history.state ?? {}), pgr: { s, d: depth } }, "", location.href); }
+    if (s === HOME) depth = 0; // home is a root: ‹ is not shown there, and a later screen's ‹ counts from it
+    track.classList.remove("in", "out"); void track.offsetWidth;
+    if (how !== "replace") track.classList.add(how === "push" ? "in" : "out");
+    setLead();
+  };
 
   function render() {
-    const was = want ?? pages[cur], keep = was && { c: was.c, k: mine(was.c).indexOf(was) };
-    track.replaceChildren(); pages = []; cur = -1;
+    const was = want ?? curPage, keep = was && { c: was.c, k: mine(was.c).indexOf(was) };
+    track.replaceChildren(); pages = []; curPage = null;
     for (const c of chapters) {
       for (const nodes of c.pages ?? []) if (has(nodes)) { const p = add(c, nodes); fit?.(p); } // (fit?.(add(…)) would skip add without fit)
       if (!c.items?.length) continue;
@@ -55,52 +93,79 @@ export function pager(chapters, { tab, fit } = {}) {
       // a few nodes that stay together (a group's heading and its first entry)
       for (const it of c.items) { const unit = [it].flat(); list.append(...unit); if (list.children.length > unit.length && p.scrollHeight > p.clientHeight + 1) { open(); list.append(...unit); } }
     }
-    for (const c of chapters) mine(c).forEach((x, k, all) => { x.p.setAttribute("role", "group"); x.p.setAttribute("aria-roledescription", "페이지"); x.p.setAttribute("aria-label", `${c.name} ${k + 1}/${all.length}`); });
-    const i = keep ? pages.indexOf(mine(keep.c)[Math.min(keep.k, mine(keep.c).length - 1)]) : 0;
-    go(Math.max(0, i), false); paint();
+    // measured with every page laid out; then only this screen's pages stay
+    if (screened) for (const y of pages) y.p.hidden = screenOf(y.c) !== screen;
+    for (const c of chapters) mine(c).forEach((x, k, all) => { x.p.setAttribute("role", "group"); x.p.setAttribute("aria-roledescription", "페이지"); x.p.setAttribute("aria-label", `${c.title ?? c.name} ${k + 1}/${all.length}`); });
+    const target = keep ? mine(keep.c)[Math.min(keep.k, mine(keep.c).length - 1)] : vis()[0];
+    go(target ?? vis()[0], false);
   }
 
   function paint() {
-    const i = at(); if (pages[i] === want) want = null;
-    if (i === cur || !pages[i]) return; cur = i;
-    const { c, p } = pages[i], list = mine(c), k = list.indexOf(pages[i]);
+    const v = vis(), x = at(); if (!x) return;
+    if (x === want) want = null;
+    if (x === curPage) return; curPage = x;
+    const { c, p } = x, ch = mine(c), kc = ch.indexOf(x);
     // only the page in view is there for the keyboard and screen readers; the others wait off to the side
-    pages.forEach((x, j) => { x.p.inert = j !== i; });
-    bars.innerHTML = list.map((_, j) => `<i${j === k ? ' class="on"' : j < k ? ' class="done"' : ""}></i>`).join("");
-    here.replaceChildren(c.name, ...(list.length > 1 ? [" ", Object.assign(el("b"), { textContent: k + 1 }), `/${list.length}`] : []));
+    pages.forEach((y) => { y.p.inert = y !== x; });
+    // the bars and the count: a screen's pages (screens), else the chapter's
+    const list = screened ? v : ch, k = list.indexOf(x);
+    bars.innerHTML = list.length > 1 ? list.map((_, j) => `<i${j === k ? ' class="on"' : j < k ? ' class="done"' : ""}></i>`).join("") : "";
+    // (the chapter's name, unless the top bar already says it: a screen's title, or the page's ‹ label)
+    const named = !screened && c.name !== back?.label;
+    here.replaceChildren(...(named ? [c.name, " "] : []), ...(list.length > 1 ? [Object.assign(el("b"), { textContent: k + 1 }), `/${list.length}`] : []));
     side.mark(c.id, p);
     // the address follows the page (shareable, and the back button returns here), without a jump: the first page has
     // the plain address, a card its own id, any other page its chapter
-    const own = k > 0 && p.querySelector(":scope>[id]")?.id, hash = i === 0 ? "" : `#${own || c.id}`;
-    history.replaceState({ ...(history.state ?? {}), pgr: { c: c.id, k } }, "", (hash || location.pathname + location.search));
+    const own = kc > 0 && p.querySelector(":scope>[id]")?.id, first = (screened ? screen === HOME : true) && x === pages[0];
+    const hash = first ? "" : `#${own || c.id}`;
+    history.replaceState({ ...(history.state ?? {}), pgr: { s: screen, c: c.id, k: kc, d: depth } }, "", (hash || location.pathname + location.search));
     if (c === curCh) return;
     curCh = c;
-    if (tab) { const t = tab(c.id); document.querySelectorAll(".tabbar a").forEach((x) => x.toggleAttribute("aria-current", x.dataset.tab === t)); }
+    if (tab) { const t = tab(c.id); document.querySelectorAll(".tabbar a").forEach((y) => y.toggleAttribute("aria-current", y.dataset.tab === t)); }
   }
 
-  // #chapter → its first page; #anything-on-a-page → that page, scrolled to it
-  const turn = (hash, smooth) => {
+  // #chapter → its first page; #anything-on-a-page → that page, scrolled to it (on another screen: that screen first)
+  const turn = (hash, smooth, how = "push") => {
     const id = decodeURIComponent((hash ?? "").slice(1)); if (!id) return false;
     const c = chapters.find((x) => x.id === id), t = c ? null : document.getElementById(id), p = t?.closest(".pg");
-    const i = c ? pages.findIndex((x) => x.c === c) : pages.findIndex((x) => x.p === p);
-    if (i < 0) return false;
-    go(i, smooth);
+    const x = c ? pages.find((y) => y.c === c) : pages.find((y) => y.p === p);
+    if (!x) return false;
+    if (screened && screenOf(x.c) !== screen) { show(screenOf(x.c), how); go(x, false); } else go(x, smooth);
     if (t && t !== p) p.scrollTop += t.getBoundingClientRect().top - p.getBoundingClientRect().top - 12;
     return true;
   };
+  const home = (how) => { if (screened) show(HOME, how); go(vis()[0], !screened); };
   document.addEventListener("click", (e) => {
     const a = e.target.closest?.("a[href]"); if (!a || a.target === "_blank" || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const u = new URL(a.href, location.href);
     if (u.origin !== location.origin || u.pathname !== location.pathname || u.search !== location.search) return;
-    if (!u.hash) { e.preventDefault(); go(0, true); return; } // this page's own address (the tab bar): back to the first page
-    if (turn(u.hash, true)) e.preventDefault();
+    // the tab bar switches screens in place; anything else opens one over this one
+    const how = a.closest(".tabbar") ? "replace" : "push";
+    if (!u.hash) { e.preventDefault(); home(how === "replace" ? "replace" : "back"); return; } // this page's own address: back to its first page
+    if (turn(u.hash, true, how)) e.preventDefault();
   }, true);
-  addEventListener("hashchange", () => turn(location.hash, true));
+  // ‹ — a screen goes back to the one it was opened from (the browser's back, so both agree), or home; a page with
+  // `back` returns where the reader came from on this site, else to back.href
+  backBtn.addEventListener("click", () => {
+    if (screened) { if (depth > 0) history.back(); else home("back"); return; }
+    let same = false; try { same = new URL(document.referrer).origin === location.origin; } catch {}
+    if (same && history.length > 1) history.back(); else location.href = back.href;
+  });
+  addEventListener("popstate", (e) => {
+    // an entry this page wrote carries pgr; one without it is a new #fragment (typed, or a link nobody turned) — the
+    // hashchange that follows turns to it
+    if (!screened || !e.state?.pgr) return;
+    const st = e.state.pgr; depth = st.d ?? 0;
+    const s = st?.s ?? HOME, c = st?.c && chapters.find((x) => x.id === st.c), ch = c ? mine(c) : null;
+    if (s !== screen) show(s, "back");
+    go(ch?.[Math.min(st.k ?? 0, ch.length - 1)] ?? vis()[0], false);
+  });
+  addEventListener("hashchange", () => turn(location.hash, true, "replace"));
   addEventListener("keydown", (e) => {
     // Alt+← is the browser's back, Shift+← selects text; a chart or a tab list that handles the arrows keeps them
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || root.classList.contains("toc-open") || e.target.closest?.("input,textarea,select,[contenteditable]")) return;
     // counted from the page a turn is already heading to, so two quick presses move two pages
-    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(0, Math.min(pages.length - 1, (want ? pages.indexOf(want) : at()) + (e.key === "ArrowRight" ? 1 : -1))), true); }
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); const v = vis(), i = v.indexOf(want ?? at()) + (e.key === "ArrowRight" ? 1 : -1); go(v[Math.max(0, Math.min(v.length - 1, i))], true); }
   });
   track.addEventListener("pointerdown", () => { want = null; }, { passive: true }); // the reader took over
   track.addEventListener("scroll", () => {
@@ -108,9 +173,11 @@ export function pager(chapters, { tab, fit } = {}) {
     // a floating explanation (index.html's term tips) would stay behind on the old page
     const tip = document.getElementById("termtip"); if (tip && !tip.hidden) document.body.click();
   }, { passive: true, capture: true });
+  track.addEventListener("animationend", () => track.classList.remove("in", "out"));
 
   // the sidebar: its entries are links to #chapter or #node, which turn() above already follows
   const side = sidebar(chapters, { shell, where });
+  setLead();
 
   // pages are measured on this screen: measure again when it changes size or the web font arrives
   const arrived = location.hash, was = history.state?.pgr; // read before the first paint rewrites the address
@@ -119,9 +186,11 @@ export function pager(chapters, { tab, fit } = {}) {
   addEventListener("resize", resized);
   render(); size = `${track.clientWidth}x${track.clientHeight}`;
   // back (or a reload) on a list's later page: that page again — its address names only the chapter; otherwise the address
-  const back = was && chapters.find((x) => x.id === was.c), mineBack = back && mine(back);
-  if (mineBack?.length && (!arrived || arrived === `#${back.id}`)) go(pages.indexOf(mineBack[Math.min(was.k, mineBack.length - 1)]), false);
-  else turn(arrived, false);
+  const backTo = was && chapters.find((x) => x.id === was.c), mineBack = backTo && mine(backTo);
+  if (mineBack?.length && (!arrived || arrived === `#${backTo.id}`)) {
+    if (screened && was.s && was.s !== screen) show(was.s, "replace");
+    go(mineBack[Math.min(was.k, mineBack.length - 1)], false);
+  } else turn(arrived, false, "replace");
   document.fonts?.ready.then(() => { render(); });
   root.classList.add("pgr-ready");
 }

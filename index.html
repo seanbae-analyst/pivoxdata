@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=6" />
+<link rel="stylesheet" href="/ui.css?v=7" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <script>(() => { const r = document.documentElement;
   if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
@@ -74,7 +74,7 @@
   .beats .bk{font-size:12.5px;color:var(--mut);line-height:1.5}
   .beats .bw{font-size:13px;line-height:1.6;color:var(--mut)}
   .beats b{font-size:16px;font-weight:650;line-height:1.5;color:var(--ink);word-break:keep-all}
-  .beats .bs{font-size:14px;line-height:1.65;color:var(--ink-2)}
+  .beats .bs{font-size:14px;line-height:1.65;color:var(--ink-2)} .beats .bs2{display:none}
   .beats small{font-size:12px;color:var(--mut)}
   .beats a:hover b{text-decoration:underline;text-underline-offset:3px}
   .st-view{margin-top:26px;padding-top:4px;border-top:1px solid var(--line-2)}
@@ -292,6 +292,93 @@
   .pg-more p{font-size:15px;line-height:1.7;color:var(--ink-2);margin:0 0 12px}
   .pg-btn{display:flex;align-items:center;justify-content:center;min-height:48px;margin:8px 0 22px;border:1px solid var(--line-2);border-radius:var(--radius-cta);color:var(--ink);font-weight:600;text-decoration:none}
   .pg-links{display:flex;flex-wrap:wrap;gap:0 18px;font-size:14px;border-top:1px solid var(--line);padding-top:6px} .pg-links a{min-height:40px;display:inline-flex;align-items:center;color:var(--mut)}
+
+  /* ---------- the app on a phone (pager.js screens, 2026-10-26 "이쁜 앱처럼"): 오늘, and the screens it opens ----------
+     Soft surfaces with round corners for what you tap (no borders, no glow, no pills); bronze only for the numbers and
+     the one bar a figure is about. */
+  .pg .hub{display:flex;flex-direction:column;gap:10px;padding-bottom:2px}
+  .hub-head{margin:0 2px 2px}
+  .hub-head .ov{margin:0;font-size:13px;font-weight:600;color:var(--mut)}
+  .hub-head h1{margin:2px 0 0;font-size:31px;line-height:1.15;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
+  .hub-head .fresh{margin:6px 0 0;font-size:12.5px;color:var(--dim)}
+  .hub-story{display:flex;flex-direction:column;padding:16px 18px 14px;border-radius:20px;background:var(--surface-2);color:var(--ink);text-decoration:none}
+  .hub-story:hover{text-decoration:none}
+  .hub-story .k{font-size:12.5px;font-weight:600;color:var(--mut)}
+  .hub-story .t{margin-top:8px;font-size:21px;line-height:1.38;font-weight:750;letter-spacing:-.025em;color:var(--ink);
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .hub-story .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
+  .avs{display:flex;align-items:center;min-width:0}
+  .av{flex:none;display:grid;place-items:center;width:28px;height:28px;margin-left:-7px;border-radius:50%;background:var(--surface-3);
+    box-shadow:0 0 0 2px var(--surface-2);font-size:11.5px;font-weight:700;color:var(--ink-2)}
+  .av:first-child{margin-left:0}
+  .avs small{margin-left:9px;font-size:12.5px;color:var(--mut);white-space:nowrap}
+  .hub-story .go{flex:none;font-size:13.5px;font-weight:650;color:var(--bronze-hi)}
+  .hub-sec{margin:6px 4px -2px;font-size:13px;font-weight:650;color:var(--mut)}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tile{display:flex;flex-direction:column;min-height:96px;padding:12px 14px 11px;border-radius:18px;background:var(--surface-2);color:var(--ink);text-decoration:none}
+  .tile:hover{text-decoration:none}
+  .tile .l{font-size:12.5px;line-height:1.4;color:var(--mut)}
+  .tile b{margin-top:auto;padding-top:6px;font-size:25px;font-weight:800;letter-spacing:-.03em;color:var(--bronze-hi);font-variant-numeric:tabular-nums}
+  .tile small{margin-top:2px;font-size:11.5px;line-height:1.35;color:var(--dim)}
+  .mini{display:grid;gap:4px;margin-top:10px}
+  .mini i{display:block;height:4px;border-radius:2px;background:var(--surface-3)} .mini i span{display:block;height:100%;border-radius:2px;background:var(--dim)}
+  .mini i:first-child span{background:var(--bronze)}
+  .rows{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .rows a{display:grid;grid-template-columns:30px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center;min-height:54px;padding:9px 12px;
+    border-radius:16px;background:var(--surface-2);color:var(--ink);text-decoration:none}
+  .rows a:hover{text-decoration:none}
+  .rows .ic{grid-row:span 2;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--surface-3);color:var(--ink-2)}
+  .rows svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .rows .t{font-size:14px;font-weight:650;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rows .n{font-size:12px;color:var(--dim);line-height:1.3}
+  .rows .solo .t{grid-row:span 2}
+  .hub>.fresh{margin:2px 4px 0;font-size:12px;color:var(--dim)}
+  /* a short phone (SE, 640–720px tall): 오늘 still on one screen — the story title in two lines, smaller tiles, the four
+     shortcuts in one row of icons */
+  @media(max-height:720px){
+    .hub-head h1{font-size:26px} .hub-sec,.hub>.fresh,.tile small,.rows .n{display:none}
+    .hub-story .t{font-size:18.5px;-webkit-line-clamp:2}
+    .tile{min-height:80px;padding:10px 12px} .tile b{font-size:22px}
+    .rows{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .rows a{grid-template-columns:1fr;grid-template-rows:auto auto;justify-items:center;row-gap:6px;min-height:0;padding:10px 4px;text-align:center}
+    .rows .ic,.rows .solo .t{grid-row:auto} .rows .t{font-size:12px;white-space:normal;overflow:visible}
+    .pg>.st-head.intro .st-t{font-size:22px}
+    .pg>.st-head.intro .st-lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+    .case-list small{display:none} .case-list a{padding:8px 0}
+  }
+  @media(max-height:660px){ .hub-head h1{font-size:24px} .tile .l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .tile{min-height:74px} .hub-story{padding:14px 16px 12px} }
+  /* the story: its opening, then a case a page, as a card you can open */
+  .pg>.st-head.intro{margin:0;padding:0;border:0}
+  .pg>.st-head.intro .st-k{font-size:13px} .pg>.st-head.intro .st-t{margin-top:8px;font-size:25px;line-height:1.34} .pg>.st-head.intro .st-lede{margin-top:12px;font-size:15.5px;line-height:1.75}
+  .pg .swipe{margin:18px 0 0;font-size:13px;font-weight:600;color:var(--dim)}
+  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
+  .case-list li+li{border-top:1px solid var(--line)}
+  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
+  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
+  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
+  .pg>.beats.one{flex:1;display:flex;margin:0;padding:0;border:0}
+  .pg>.beats.one li{flex:1;display:flex;border:0}
+  .pg>.beats.one a{flex:1;display:flex;flex-direction:column;padding:20px 18px 18px;border-radius:22px;background:var(--surface-2);text-decoration:none}
+  .pg>.beats.one .bn{font-size:12.5px;font-weight:650;color:var(--mut);line-height:1.4}
+  .pg>.beats.one .bk{margin-top:18px;font-size:13px;font-weight:600;color:var(--ink-2)}
+  .pg>.beats.one b{margin-top:6px;font-size:24px;line-height:1.36;font-weight:750;letter-spacing:-.025em}
+  .pg>.beats.one .bs{margin-top:14px;font-size:16px;line-height:1.75;color:var(--ink-2)}
+  .pg>.beats.one .bs2{display:block;margin-top:8px;font-size:15px;line-height:1.75;color:var(--mut)}
+  .pg>.beats.one a:hover b,.pg .hub a:hover *{text-decoration:none}
+  .pg>.beats.one .bw{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.65;color:var(--mut)}
+  .pg>.beats.one small{margin-top:auto;padding-top:18px;font-size:12.5px;color:var(--dim)}
+  .pg>.beats.one .cta{display:flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;border-radius:14px;background:var(--surface-3);
+    font-size:14.5px;font-weight:650;color:var(--ink)}
+  /* the announcements: who said it as a small round mark, then what, then when */
+  .pg .feed li.news a{display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-areas:"av meta" "av et";column-gap:12px;row-gap:2px;align-items:start;padding:14px 0}
+  .pg .feed li.news .av{grid-area:av;margin:2px 0 0;width:34px;height:34px;font-size:13px;box-shadow:none}
+  .pg .feed li.news time{grid-area:meta;justify-self:end;font-size:12px;color:var(--dim)}
+  .pg .feed li.news .badge{grid-area:meta;justify-self:start;font-size:12.5px;font-weight:650;color:var(--ink-2)}
+  .pg .feed li.news .et{grid-area:et;font-size:15px;line-height:1.5} .pg .feed li.news .go{display:none}
+  /* the glossary: one rounded group of rows */
+  .pg .gl-list{padding:2px 14px;border-radius:18px;background:var(--surface-2)}
+  .pg .gl-list .gl+.gl{border-top:1px solid var(--line)}
+  .pg .gl-list .gl[data-g]::before{margin-top:10px}
 </style>
 </head>
 <body>
@@ -316,7 +403,7 @@
     <p class="meta m-full"><!--@t-meta-->2026-10-25 갱신 · 매일 자동 · npm 10월 12일 주까지 · PyPI 10월 12일 주까지 · arXiv 2026년 9월까지 · Hugging Face 2026-10-25 · SEC 2026년 2분기까지 · 검산 42개 통과<!--/@t-meta--></p>
   </header>
 
-  <section class="story" id="story" aria-labelledby="h-story"><!--@t-story--><div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="2026-10-25">10월 25일</time> · 이번 주 AX 사건</p><h2 class="st-t" id="h-story"><a href="/briefs/2026-10-25-2">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</a></h2><p class="st-lede">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</p></div><ol class="beats"><li><a href="/briefs/2026-10-25-2#s1"><span class="bn">1</span><span class="bk">CRM·고객 · 인수</span><b>Salesforce, 고객 소통 플랫폼 Braze 인수 계약</b><span class="bs">Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요.</span><small>Salesforce 공식 발표 · 10/20</small></a></li><li><a href="/briefs/2026-10-25-2#s2"><span class="bn">2</span><span class="bk">업무 도구 · 전사 배포</span><b>Uber, 30,000명 넘는 직원에게 ChatGPT Work</b><span class="bs">OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.</span><small>OpenAI 공식 발표 · 10/22</small></a></li><li><a href="/briefs/2026-10-25-2#s3"><span class="bn">3</span><span class="bk">보안·규제 · 정책·규제</span><b>영국 정부, 'AI 주권' 자문 서한 공개</b><span class="bs">영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요.</span><small>영국 정부 보도자료 · 10/19</small></a></li><li><a href="/briefs/2026-10-25-2#s4"><span class="bn">4</span><span class="bk">클라우드·인프라 · 인프라 확장</span><b>NVIDIA, 유럽 등지에서 클라우드 파트너 확장</b><span class="bs">NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요.</span><small>NVIDIA 공식 발표 · 10/21</small></a></li><li><a href="/briefs/2026-10-25-2#s5"><span class="bn">5</span><span class="bk">보안·규제 · 파트너십</span><b>OpenAI, 폴란드 NASK와 AI 안전 협력</b><span class="bs">OpenAI는 폴란드의 NASK와 협력한다고 발표했어요.</span><small>OpenAI 공식 발표 · 10/23</small></a></li></ol><div class="st-view"><p class="sv-k">공통 흐름</p><p class="sv-h">도입 다음 질문은 '누구의 AI를, 어디서'</p><p>다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요.</p><p class="sv-k">IT 컨설팅 관점 · 실무자가 짚어 볼 점</p><p class="sv-q">이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요.</p><p class="sv-q">다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요.</p><p class="sv-q">다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요.</p><a class="st-more" href="/briefs/2026-10-25-2">이야기 전체 읽기 →</a></div><!--/@t-story--></section>
+  <section class="story" id="story" aria-labelledby="h-story"><!--@t-story--><div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="2026-10-25">10월 25일</time> · 이번 주 AX 사건</p><h2 class="st-t" id="h-story"><a href="/briefs/2026-10-25-2">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</a></h2><p class="st-lede">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</p></div><ol class="beats"><li id="case-1"><a href="/briefs/2026-10-25-2#s1"><span class="bn">1</span><span class="bk">CRM·고객 · 인수</span><b>Salesforce, 고객 소통 플랫폼 Braze 인수 계약</b><span class="bs">Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요.</span><span class="bs2">인수 규모는 기업가치 기준 약 $5.66 billion이에요. 발표문에서 Salesforce는 자신을 '세계 1위 AI CRM'이라고 소개했고, Braze를 '선도적인 고객 소통 플랫폼'이라고 표현했어요.</span><small>Salesforce 공식 발표 · 10/20</small></a></li><li id="case-2"><a href="/briefs/2026-10-25-2#s2"><span class="bn">2</span><span class="bk">업무 도구 · 전사 배포</span><b>Uber, 30,000명 넘는 직원에게 ChatGPT Work</b><span class="bs">OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.</span><span class="bs2">발표에 따르면 직원들은 이 도구를 자료 조사, 데이터 분석, 발표 자료 만들기, 복잡한 업무 흐름 처리에 쓰게 돼요. 눈여겨볼 점은 대상이 전 직원이라는 거예요.</span><small>OpenAI 공식 발표 · 10/22</small></a></li><li id="case-3"><a href="/briefs/2026-10-25-2#s3"><span class="bn">3</span><span class="bk">보안·규제 · 정책·규제</span><b>영국 정부, 'AI 주권' 자문 서한 공개</b><span class="bs">영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요.</span><span class="bs2">AI 담당 장관에게 보내는 자문 서한이에요. 영국이 지금과 앞으로의 AI 기술을 두고 전략적인 선택을 할 역량을 어떻게 키울 수 있는지를 다뤄요.</span><small>영국 정부 보도자료 · 10/19</small></a></li><li id="case-4"><a href="/briefs/2026-10-25-2#s4"><span class="bn">4</span><span class="bk">클라우드·인프라 · 인프라 확장</span><b>NVIDIA, 유럽 등지에서 클라우드 파트너 확장</b><span class="bs">NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요.</span><span class="bs2">대상 지역은 유럽·북유럽·아프리카·중앙아시아예요. 발표 제목에는 '주권', '개방', '안전한 AI 에이전트'라는 말이 함께 들어 있어요.</span><small>NVIDIA 공식 발표 · 10/21</small></a></li><li id="case-5"><a href="/briefs/2026-10-25-2#s5"><span class="bn">5</span><span class="bk">보안·규제 · 파트너십</span><b>OpenAI, 폴란드 NASK와 AI 안전 협력</b><span class="bs">OpenAI는 폴란드의 NASK와 협력한다고 발표했어요.</span><span class="bs2">협력 분야는 AI 안전·보안과 기술 연구예요. 발표에 따르면 목표는 안전장치를 강화하고 더 회복력 있는 디지털 생태계를 뒷받침하는 거예요.</span><small>OpenAI 공식 발표 · 10/23</small></a></li></ol><div class="st-view"><p class="sv-k">공통 흐름</p><p class="sv-h">도입 다음 질문은 '누구의 AI를, 어디서'</p><p>다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요.</p><p class="sv-k">IT 컨설팅 관점 · 실무자가 짚어 볼 점</p><p class="sv-q">이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요.</p><p class="sv-q">다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요.</p><p class="sv-q">다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요.</p><a class="st-more" href="/briefs/2026-10-25-2">이야기 전체 읽기 →</a></div><!--/@t-story--></section>
 
   <section class="changes" id="briefs" aria-labelledby="h-briefs">
     <div class="sec-h"><h2 id="h-briefs">지난 이야기</h2><span><a href="/briefs">브리핑 전체</a></span></div>
@@ -545,17 +632,17 @@ const figures = () => {
 if (document.documentElement.classList.contains("paged")) document.addEventListener("unpaged", figures, { once: true }); else figures();
 </script>
 <script type="module">
-// phone: the page as pages turned sideways (pager.js), story first — a cover (what this is, this week's story), the
-// story's announcements a screenful at a time, the common thread and the IT-consulting view, then the numbers behind
-// it (the four that matter, one card per page for each indicator), the week's changes and the official announcements,
-// the glossary, and a last page that opens the data. A card's figure is drawn to fill the room its page has left.
+// phone: the page as an app (pager.js, screens — 2026-10-26 "이쁜 앱처럼 리얼"). 오늘 is the home screen: this week's
+// story as a card, the numbers as tiles (the IT domains as small bars), rows to the rest. Each opens its own screen,
+// turned sideways a page at a time: the story (its opening, a case a page, the common thread and the IT-consulting
+// view), the adoption cards, the IT-domain cards, the announcements, the glossary, the data. ‹ goes back, so does the
+// browser's back. A card's figure is drawn to fill the room its page has left.
 import { pager } from "/pager.js";
 import { drawFig } from "/cardfig.js";
 const $ = (s) => document.querySelector(s), all = (s) => [...document.querySelectorAll(s)];
 const make = (tag, cls, html = "") => Object.assign(document.createElement(tag), { className: cls, innerHTML: html });
 const paged = document.documentElement.classList.contains("paged");
 if (paged) document.getElementById("appbar")?.remove(); // installing and alerts live on 브리핑 → 알림 받기 (linked from the cover)
-const app = make("a", "pg-app", "앱으로 설치하고 새 브리핑 알림 받기 →"); app.href = "/briefs#alerts";
 // the week's changes and the announcements as one feed; a group's heading stays with its first item
 const grp = (title, sub) => make("li", "grp", `<h3>${title}</h3><span>${sub}</span>`);
 const feed = (title, sub, items) => (items.length ? [[grp(title, sub), items[0]], ...items.slice(1)] : []);
@@ -571,7 +658,7 @@ const links = $("footer.site .links")?.cloneNode(true); if (links) { links.class
 // a page short of room folds what matters least, in three steps (data-fold="1", "2", "3"); a card's figure then gets all
 // the room that is left (at least MIN)
 const fold = (sel, n) => all(sel).forEach((x) => { x.dataset.fold = n; });
-fold(".pg-app, .hero .meta", 1); fold(".hero .kicker, .hero .lede", 2); fold(".pg-hint, .st-head .st-k", 3);
+fold(".hero .meta", 1); fold(".hero .kicker, .hero .lede", 2); fold(".st-head .st-k", 3);
 fold(".ins .fine, .ins .recent li:nth-child(3)", 1); fold(".ins .easy, .ins .recent li:nth-child(2)", 2); fold(".ins .src", 3);
 const MIN = 130;
 const fit = (p) => {
@@ -587,16 +674,100 @@ const fit = (p) => {
 // cases and the cards — a case's IT domain and way in, a card's subject and its finding
 const card = (c) => ({ label: c.querySelector(".k")?.textContent.replace(/^(AX|IT 영역) · /, ""), note: c.querySelector("h3")?.textContent });
 const beat = (li) => ({ label: li.querySelector("b")?.textContent, note: li.querySelector(".bk")?.textContent });
+const text = (n) => (n?.textContent ?? "").replace(/\s+/g, " ").trim();
+const node = (tag, cls, t) => { const x = document.createElement(tag); if (cls) x.className = cls; if (t != null) x.textContent = t; return x; };
+const icon = (d) => { const x = node("span", "ic"); x.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`; return x; };
+// who said it, as a round mark: a name's first letter (S, U), or its first syllable (영 · 과)
+const mark = (name) => { const t = String(name ?? "").trim(); return node("span", "av", /^[A-Za-z0-9]/.test(t) ? t[0].toUpperCase() : t.slice(0, 1)); };
+const sourceOf = (li) => text(li.querySelector("small")).split(/ (?:공식 발표|보도자료|리서치|발표) ·/)[0];
+const beats = all("#story .beats>li");
+
+// ---------- 오늘: the home screen (phones only — built from what the page already says) ----------
+function hub() {
+  const h = node("div", "hub");
+  const now = new Date(Date.now() + 9 * 3600e3); // the day in Korea
+  const head = node("header", "hub-head");
+  head.append(node("p", "ov", `${now.getUTCMonth() + 1}월 ${now.getUTCDate()}일 ${"일월화수목금토"[now.getUTCDay()]}요일`), node("h1", null, "오늘의 AX"));
+  h.append(head);
+  // this week's story: its title, who said what in it, and how many cases
+  const st = $("#story .st-head");
+  if (st) {
+    const a = node("a", "hub-story tap"); a.href = "#story";
+    const names = [...new Set(beats.map(sourceOf).filter(Boolean))];
+    const avs = node("span", "avs"); avs.append(...names.slice(0, 5).map(mark), node("small", null, beats.length ? `사례 ${beats.length}건` : ""));
+    const foot = node("span", "foot"); foot.append(avs, node("span", "go", "읽기 →"));
+    const when = text(st.querySelector(".st-k time"));
+    a.append(node("span", "k", `이번 주 이야기${when ? ` · ${when}` : ""}`), node("span", "t", text(st.querySelector(".st-t"))), foot);
+    h.append(a);
+  }
+  // the numbers behind it: four tiles, the last one the IT domains as small bars
+  const kpis = all("#numbers .kpi li a");
+  if (kpis.length) {
+    h.append(node("p", "hub-sec", "숫자로 보면"));
+    const tiles = node("div", "tiles");
+    for (const k of kpis.slice(0, 3)) {
+      const t = node("a", "tile tap"); t.href = k.getAttribute("href");
+      t.append(node("span", "l", text(k.querySelector("span"))), node("b", null, text(k.querySelector("b"))), node("small", null, text(k.querySelector("small"))));
+      tiles.append(t);
+    }
+    // the IT domains: the leader's count, with the top three as small bars
+    let fig = null; try { fig = JSON.parse($("#c-dom-all figure[data-fig]")?.dataset.fig ?? "null"); } catch {}
+    const items = (fig?.items ?? []).slice(0, 3), top = Math.max(1, ...items.map((x) => x.v)), d = kpis[3];
+    const w = node("a", "tile tap"); w.href = "#domains";
+    w.append(node("span", "l", d ? text(d.querySelector("span")).replace(/^공식 발표 최다 IT 영역 · /, "발표 최다 영역 · ") : "IT 영역별 발표"));
+    if (items.length) {
+      const mini = node("span", "mini"); mini.setAttribute("aria-hidden", "true");
+      for (const x of items) { const bar = node("i"), fill = node("span"); fill.style.width = `${Math.round((x.v / top) * 100)}%`; bar.append(fill); mini.append(bar); }
+      w.append(mini);
+    }
+    w.append(node("b", null, d ? text(d.querySelector("b")) : String(items[0]?.v ?? "")), node("small", null, "최근 30일 · 공식 발표"));
+    tiles.append(w);
+    h.append(tiles);
+  }
+  // the rest of the app: four shortcuts, two by two
+  const rows = node("nav", "rows"); rows.setAttribute("aria-label", "더 보기");
+  const row = (href, d, t, n) => { const a = node("a", n ? "tap" : "tap solo"); a.href = href; a.append(icon(d), node("span", "t", t), ...(n ? [node("span", "n", n)] : [])); rows.append(a); };
+  row("#news", "M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4", "공식 발표", `${all("#news .events>li.news").length}건`);
+  row("#glossary", "M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5", "용어 풀이", `${all("#glossary .gl").length}개`);
+  row("/briefs", "M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4", "지난 브리핑", "");
+  row("#more", "M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6", "근거 데이터", "");
+  h.append(rows, node("p", "fresh", text($(".hero .m-short"))));
+  return h;
+}
+
+// ---------- the story screen: its opening, then a case a page, as a card you can open ----------
+const intro = $("#story .st-head");
+if (paged && intro) {
+  intro.classList.add("intro");
+  // the cases in it, each a tap away (its card on the next pages)
+  if (beats.length) {
+    const list = node("ol", "case-list");
+    beats.forEach((li, k) => { const a = node("a", "tap"); a.href = `#${li.id || ""}`; a.append(node("span", "n", String(k + 1)), node("span", "t", text(li.querySelector("b"))), ...(li.querySelector(".bk") ? [node("small", null, text(li.querySelector(".bk")))] : [])); const r = node("li"); r.append(a); list.append(r); });
+    intro.append(list, node("p", "swipe", "옆으로 넘기면 사례가 한 장씩 →"));
+  }
+}
+const caseCard = (li, k) => {
+  if (!paged) return [li];
+  const ol = node("ol", "beats one"); ol.start = k + 1;
+  if (li.id) { ol.id = li.id; li.removeAttribute("id"); } // the card's own address (#case-2), the page it is on
+  const bn = li.querySelector(".bn"); if (bn) bn.textContent = `사례 ${k + 1} / ${beats.length}`;
+  li.querySelector("a")?.append(node("span", "cta", "브리핑에서 이 사례 읽기 →"));
+  ol.append(li); return [ol];
+};
+// the announcements: who said it as a round mark
+if (paged) for (const a of all("#news .events>li.news a")) a.prepend(mark(text(a.querySelector(".badge"))));
+
 pager([
-  { id: "start", name: "이야기", title: "처음 화면", group: "이번 주 이야기", pages: [[$("main>header.hero"), $("#story .st-head"), app, make("p", "pg-hint", $("#story .beats") ? "옆으로 넘기면 <b>사례 · 관점 · 숫자</b> →<br>한 번에 가려면 <b>목차</b>" : "옆으로 넘기면 <b>숫자 · 발표</b> →<br>한 번에 가려면 <b>목차</b>")]] },
-  { id: "story", name: "사례", title: "사례", group: "이번 주 이야기", items: all("#story .beats>li"), list: () => make("ol", "beats"), sub: beat },
-  { id: "view", name: "관점", title: "공통 흐름 · IT 컨설팅 관점", group: "이번 주 이야기", count: 0, items: view, list: () => make("div", "st-view") },
-  { id: "numbers", name: "숫자", title: "핵심 숫자", group: "숫자로 보면", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] },
-  { id: "ax", name: "도입률", title: "기업 도입률", group: "숫자로 보면", pages: all("#panel-ax>.ins").map((c) => [c]), sub: card },
-  { id: "domains", name: "IT 영역", title: "IT 영역별 발표", group: "숫자로 보면", pages: all("#panel-domains>.ins").map((c) => [c]), sub: card },
-  { id: "news", name: "발표", title: "최근 변화 · 공식 발표", group: "자료", count: all("#news .events>li.news").length, items: events, list: () => make("ul", "events feed") },
-  { id: "glossary", name: "용어", title: "용어 풀이", group: "자료", lead: [$("#glossary .sec-h")], items: all("#glossary .gl"), list: () => make("dl", "gl-list") },
-  { id: "more", name: "근거", title: "근거 데이터 · 방법 · 검산", group: "자료", pages: [[basis]] },
+  { id: "start", screen: "home", name: "오늘", title: "오늘의 AX", group: "이번 주 이야기", pages: [[paged ? hub() : $("main>header.hero")]] },
+  { id: "story", screen: "story", name: "이야기", title: "이번 주 이야기", group: "이번 주 이야기", pages: [[intro]] },
+  { id: "cases", screen: "story", name: "사례", title: "사례", group: "이번 주 이야기", pages: beats.map(caseCard), sub: beat },
+  { id: "view", screen: "story", name: "관점", title: "공통 흐름 · IT 컨설팅 관점", group: "이번 주 이야기", count: 0, items: view, list: () => make("div", "st-view") },
+  ...(paged ? [] : [{ id: "numbers", name: "숫자", title: "핵심 숫자", group: "숫자로 보면", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] }]),
+  { id: "ax", screen: "ax", name: "도입률", title: "기업 도입률", group: "숫자로 보면", pages: all("#panel-ax>.ins").map((c) => [c]), sub: card },
+  { id: "domains", screen: "domains", name: "IT 영역", title: "IT 영역별 발표", group: "숫자로 보면", pages: all("#panel-domains>.ins").map((c) => [c]), sub: card },
+  { id: "news", screen: "news", name: "발표", title: "최근 변화 · 공식 발표", screenTitle: "공식 발표", group: "자료", count: all("#news .events>li.news").length, items: events, list: () => make("ul", "events feed") },
+  { id: "glossary", screen: "glossary", name: "용어", title: "용어 풀이", group: "자료", lead: [$("#glossary .sec-h")], items: all("#glossary .gl"), list: () => make("dl", "gl-list") },
+  { id: "more", screen: "more", name: "근거", title: "근거 데이터 · 방법 · 검산", screenTitle: "근거 데이터", group: "자료", pages: [[basis]] },
 ], { tab: (id) => (id === "news" || id === "glossary" ? id : "home"), fit });
 </script>
 <script>
