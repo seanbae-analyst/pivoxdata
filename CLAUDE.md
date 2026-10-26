@@ -67,6 +67,8 @@ PivoxQuant(투자 회고 앱)와는 다른 제품이다. 공유하는 건 디자
   - `social/request.json` `{"post":"news"}`(이번 주 AX 사건) 또는 `{"post":"test"}`(승인 필요 초안) → `trends.yml`.
     그날 이미 받은 데이터가 있으면 다시 받지 않는다. 한 번 쓰면 지워진다. (`"race"` 는 방향 밖이라 거절된다.)
   - `social/token-refresh.txt` 내용 변경 → `ig-token.yml`(인스타 토큰 갱신).
+- 근거 데이터(npm · PyPI · arXiv · Hugging Face · SEC · Ramp) 출처가 그날 안 되면 있던 것으로 계속한다 — 너무 오래되면 검산이 멈춘다
+  (`trends/fetch.mjs` → `source`; 2026-10-26 arXiv 429가 하루를 통째로 멈춘 뒤).
 - 게시물 폴더 이름은 한국 날짜(`social/util.mjs` → `kstToday`). 같은 날 두 번째 게시물은 `social/out/<날짜>-2`(그날 폴더가 이미 있으면).
 - 브리핑은 인스타 게시가 끝나야 공개된다(목록·RSS·사이트맵·홈·용어 풀이). 그전엔 noindex 페이지만 있다.
 - **토큰·키 값은 절대 출력하지 않는다.** `ONESIGNAL_REST_KEY` · `SECRETS_PAT` · `IG_ACCESS_TOKEN` · `IG_USER_ID` ·
@@ -90,7 +92,7 @@ npm run dev                           # http://localhost:8099
 | 항목 | 값 | 잰 방법 |
 |---|---|---|
 | 자동 실행 | 매일 01:17 UTC (10:17 KST). GitHub 예약은 늦거나 빠지므로 03:47 · 06:17 UTC에 한 번씩 더 — 그날 데이터가 이미 main에 있으면 바로 멈춘다 | `.github/workflows/trends.yml` cron · job `today` |
-| 검산 | 42개 모두 통과 (npm이 모든 패키지를 0으로 낸 날은 집계 멈춤으로 봄) | `npm run trends:build` → `trends/data/checks.json` |
+| 검산 | 43개 모두 통과 (npm이 모든 패키지를 0으로 낸 날은 집계 멈춤으로 봄) | `npm run trends:build` → `trends/data/checks.json` |
 | 공식 발표 출처 | 20개 피드, 120일 보관 | `trends/series.mjs` → `NEWS` |
 | 첫 AX 사건 게시 | instagram.com/p/De6FGlbHLJo · `/briefs/2026-10-25-2` | `social/out/2026-10-25-2/post.json` |
 | 푸시 알림 | 사이트 SDK 동작 확인, 구독자 0이라 실제 발송은 확인 불가 | 라이브 사이트 OneSignal sync 200 · `social/notified.json` |
