@@ -17,7 +17,7 @@ export const NAME = "AX 트렌드 레이더";
 // anywhere: no menu, no login step after the landing, no login part in the privacy policy (trends/legal.mjs). `region`:
 // where the company and its servers are, for the policy; `mail`: "brevo" once the sign-in e-mails go out through Brevo
 // (supabase/README.md). PD_AUTH_URL / PD_AUTH_KEY override it for a local try against a stand-in.
-export const AUTH = { url: process.env.PD_AUTH_URL ?? "https://yjiztgummaxecriiuumt.supabase.co", key: process.env.PD_AUTH_KEY ?? "sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB", region: "미국 · 저장은 서울 리전", mail: "" };
+export const AUTH = { url: process.env.PD_AUTH_URL ?? "https://yjiztgummaxecriiuumt.supabase.co", key: process.env.PD_AUTH_KEY ?? "sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB", region: "미국 · 저장은 서울 리전", mail: "brevo" };
 AUTH.on = Boolean(AUTH.url && AUTH.key);
 // text into HTML — attributes too, so it escapes " as well; the one escaper of build.mjs, viz.mjs and glossary.mjs
 export const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

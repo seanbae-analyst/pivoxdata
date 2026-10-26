@@ -108,4 +108,4 @@ npm run dev                           # http://localhost:8099
 | 인스타 토큰 | 2026-12-23까지 유효, 매달 1·11·21일 자동 갱신 | `ig-token.yml` cron · 실행 결과 |
 | 원문 읽기 | 18곳 중 14곳 읽힘. OpenAI 403 · McKinsey 503 · 삼성전자 15초 초과 · 과기정통부는 본문이 첨부파일 → 제목·요약만 | `social/original.mjs` 로 출처마다 1건씩, 이 세션에서 (Actions에서는 다를 수 있음) |
 | 사례 카드·이야기 형식 첫 게시 | 아직 없음 — 다음 AX 사건 게시물부터 | 이 저장소 `social/out/` |
-| 로그인 | PivoxQuant Supabase 프로젝트(서울)를 같이 씀. 그 키로 PivoxQuant 표 요청 → 401(`users` · `investment_profiles`). 스키마 · Auth 설정(주소 · SMTP · 메일 템플릿)은 소유자 대기 | `trends/site.mjs` → `AUTH` · 공개 키로 `/rest/v1/<표>` 요청 |
+| 로그인 | 켜짐 — PivoxQuant Supabase 프로젝트(서울) `pivoxdata` 스키마 · pd_* 6개(anon 실행 0) · 메일은 Brevo SMTP. 공개 키로 PivoxQuant 표 · pd_* 요청 → 401 (2026-10-26) | `trends/site.mjs` → `AUTH` · 공개 키로 `/rest/v1/<표>` 요청 |
