@@ -238,7 +238,7 @@ ${body}
 </article>`;
 
 // the pages, for writePages: file, address, title and description, the page body, and how much of the frame it gets
-// (`bare`: the top bar and the policy links only — no tab bar, no install bar)
+// (`bare`: the top bar and the policy links only)
 export function accountPages(auth) {
   return [
     { file: "login.html", path: "/login", title: "로그인", desc: "AX 트렌드 레이더 로그인 — 메일로 받은 링크로 들어와요.", body: login(auth), bare: true, noindex: true },

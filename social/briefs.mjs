@@ -253,56 +253,26 @@ OneSignalDeferred.push(async (OneSignal) => {
 });
 </script>`;
 
-// phone: the briefing as pages turned sideways (/pager.js), like the cards it explains and like every page of the site —
-// the title page, then the text a screenful at a time (a section's heading stays with its first paragraph, so no page
-// starts with a heading alone and nothing is cut off under a button), the summary, the sources, what to read next.
-// A briefing told as cases (its sections named, data-name) turns a chapter per section instead — 사례 1, 사례 2 …,
-// 공통 흐름, 관점 — each starting on a page of its own with its table, like a case card, and continuing under its heading
-const ARTICLE_PAGER = () => `<script type="module">
-import { pager } from "/pager.js";
+// a piece's contents beside it on a wide screen (/toc.js — on a phone the piece reads top to bottom): a case's section by its
+// heading under 사례, the thread and the view under 흐름과 관점; a piece that reads as one text lists its section headings.
+// Then today's numbers in 관련 지표 (briefs/indicators.json), so a published page does not change every day.
+const ARTICLE_TOC = `<script type="module">
+import { toc } from "/toc.js";
 ${FILL_INDICATORS}
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
-const div = () => Object.assign(document.createElement("div"), { className: "flow" });
-// the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
-// 흐름과 관점; a briefing that reads as one text lists its section headings
 const text = parts.length && parts.every((s) => s.dataset.name)
-  // (the source line goes with the paragraph before it, so it never makes a page of its own)
-  ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
-      const name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
-      return { id: h.id || \`s\${i + 1}\`, name, title: heading.startsWith(name) ? heading : \`\${name} · \${heading}\`, group: name.startsWith("사례") ? "사례" : "흐름과 관점",
-        count: 0, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
-  : [{ id: "text", name: "본문", group: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div, count: 0,
-      sub: (n) => (n.matches("h2") ? { label: n.textContent } : null) }];
-const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
-// the title page lists the briefing's cases, each a tap away (like the home page's story)
-const cases = parts.filter((s) => s.dataset.name?.startsWith("사례"));
-let caseList = null;
-if (document.documentElement.classList.contains("paged") && cases.length) {
-  const ol = caseList = Object.assign(document.createElement("ol"), { className: "case-list" });
-  cases.forEach((s, k) => {
-    const h = s.firstElementChild, a = Object.assign(document.createElement("a"), { className: "tap", href: \`#\${h.id}\` });
-    a.append(Object.assign(document.createElement("span"), { className: "n", textContent: k + 1 }), Object.assign(document.createElement("span"), { className: "t", textContent: (h.querySelector("h2") ?? h).textContent.trim() }));
-    const tag = h.querySelector(".case-k"); if (tag) a.append(Object.assign(document.createElement("small"), { textContent: tag.textContent }));
-    const li = document.createElement("li"); li.append(a); ol.append(li);
-  });
-}
-// 더 읽기: the previous/next links, then the related pieces and the links a screenful at a time (it grows with the archive)
-const moreLi = $(".more-links") && Object.assign(document.createElement("li"), { className: "more-li" }); if (moreLi) moreLi.append($(".more-links"));
-const p = pager([
-  { id: "top", name: "리서치", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
+  ? parts.map((s, i) => { const h = s.firstElementChild, name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || \`s\${i + 1}\`, title: heading.startsWith(name) ? heading : \`\${name} · \${heading}\`, group: name.startsWith("사례") ? "사례" : "흐름과 관점", pages: [[h]] }; })
+  : [{ id: "text", title: "본문", group: "본문", items: [...art.querySelectorAll(".part h2")], count: 0, sub: (n) => ({ label: n.textContent }) }];
+toc([
+  { id: "top", title: "처음", pages: [[$(".art-head")]] },
   ...text,
-  { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
-  { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
-  { id: "data", name: "지표", title: "관련 지표", group: "마무리", lead: [$(".inds>h2"), $(".inds-intro")], items: [...art.querySelectorAll(".inds .ind")], list: () => Object.assign(document.createElement("div"), { className: "inds-pg" }), count: 0 },
-  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", lead: [$(".pn"), $(".rel>h2")].filter(Boolean), items: [...art.querySelectorAll(".rel .r-item"), moreLi].filter(Boolean),
-    list: () => Object.assign(document.createElement("ul"), { className: "list r-list rel-list" }), count: 0 },
-], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
-// 링크 복사 goes up into the top bar as an icon, beside 저장 (account.js), so the title page keeps its room; on a phone it
-// opens the share sheet (SHARE below)
-const share = document.querySelector(".act-row [data-share]"), where = document.querySelector(".pgr-top .pgr-where"); // (the title page is out of the article by now)
-if (share && where) { share.className = "share-ic"; share.setAttribute("aria-label", "링크 공유"); where.before(share); }
-// today's numbers in 관련 지표, then the pages measured again
-fillIndicators().then((did) => { if (did) p.refresh(); });
+  { id: "sum", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "data", title: "관련 지표", group: "마무리", pages: [[$(".inds")]] },
+  { id: "next", title: "더 읽기", group: "마무리", pages: [[$(".pn") ?? $(".rel")]] },
+]);
+fillIndicators();
 </script>`;
 // 링크 복사 (Toss Tech's 공유하기): a phone's share sheet where there is one, else the address on the clipboard, else
 // the address to copy by hand
@@ -372,34 +342,6 @@ const CSS = `
     h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
   }
-  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
-  .pg .art-head{margin:auto 0}
-  .pg .art-head .kicker{margin-top:0}
-  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
-  .pg .flow p{font-size:16px;line-height:1.8}
-  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
-  .pg .flow ul.asks li{font-size:15.5px}
-  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
-  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
-  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
-  /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
-  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
-  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
-  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
-  /* (a short screen: the topics are on the 지표 pages, each with its link) */
-  @media(max-height:700px){ .pg .art-head .topics{display:none} }
-  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
-  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
-  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
-  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
-  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
-  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
-  .case-list li+li{border-top:1px solid var(--line)}
-  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
-  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
-  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  html.paged{-webkit-tap-highlight-color:transparent}
 `;
 
 // ---------- write ----------
@@ -452,56 +394,11 @@ for (const b of [...briefs, ...pending]) {
 ${termsSource(used)}
 <script src="/terms.js" defer></script>
 ${SHARE}
-${ARTICLE_PAGER()}`;
-  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true, noindex: Boolean(b.pending) }));
+${ARTICLE_TOC}`;
+  put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, noindex: Boolean(b.pending) }));
 }
 
 // ---------- the research list, its formats, topics and tags ----------
-// phone: a list page as pages turned sideways (/pager.js) — the heading (and on /briefs the search and the filters) and
-// as many pieces as fit, then a screenful at a time; a last page for installing and alerts (so the floating install
-// bar goes). When the finder (FINDER below) narrows the list, the pages are laid out again with what is shown.
-const LIST_PAGER = `<script type="module">
-import { pager } from "/pager.js";
-const m = document.querySelector("main"), list = m.querySelector("ul.r-list"), install = document.getElementById("install"), more = m.querySelector(".r-more");
-const finder = m.querySelector("form.finder"), q = finder?.querySelector("input[name=q]");
-const rows = list ? [...list.children] : [], byId = new Map(rows.map((li) => [li.id, li])), shown = () => rows.filter((li) => !li.hidden);
-const lead = [...m.children].filter((x) => !x.matches("ul.r-list, .r-more, #install, script"));
-if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
-const ul = () => Object.assign(document.createElement("ul"), { className: "list r-list" });
-const sub = (li) => (li.matches(".r-item") ? { label: li.querySelector(".r-t")?.textContent, note: li.querySelector(".r-k b")?.textContent } : null);
-// /briefs: the search and the filters have the first page to themselves — nothing of a piece is cut off under the tab bar,
-// and laying the pages out again never moves the search box while someone types in it; the pieces follow, a screenful
-// at a time, under a heading. The other lists open on their heading and as many pieces as fit.
-const hint = finder ? Object.assign(document.createElement("p"), { className: "pg-hint" }) : null;
-const count = () => { if (hint) hint.replaceChildren("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "리서치 " + shown().filter((li) => li.matches(".r-item")).length + "편" }), " →"); };
-count();
-// every row goes to the pager (so the contents list every piece); the ones shown are laid out right after
-const ch = !rows.length ? { id: "list", name: "리서치", title: "리서치 목록", pages: [lead] }
-  : finder ? { id: "list", name: "목록", title: "리서치 목록", head: Object.assign(document.createElement("h2"), { className: "pg-h", textContent: "리서치 목록" }), items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length }
-  : { id: "list", name: "리서치", title: "리서치 목록", lead, items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length };
-const p = pager([
-  ...(finder && rows.length ? [{ id: "find", name: "리서치", title: "검색 · 주제 · 형식", pages: [[...lead, hint]] }] : []), ch,
-  ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []),
-  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
-], { tab: () => "briefs", toc: false });
-// the contents (sidebar) lists what is shown (a row laid out on no page is still found here, by its id)
-const toc = () => document.querySelectorAll(".toc a[data-node]").forEach((a) => { const n = byId.get(a.dataset.node); if (n) a.parentElement.hidden = n.hidden; });
-const relay = () => {
-  later = false;
-  if (!ch.items) return;
-  ch.items.splice(0, ch.items.length, ...shown());
-  const was = document.activeElement; p.refresh();
-  if (was && was !== document.body && was !== document.activeElement) was.focus({ preventScroll: true }); // a filter button keeps its focus
-};
-let later = false;
-if (ch.items && shown().length !== rows.length) relay();
-toc();
-// the finder narrowed the list: the pages again — but not while the search box has the focus (a phone's keyboard is
-// composing Korean there, and laying the pages out would take the box away mid-syllable): when it lets go
-addEventListener("pd:filtered", () => { count(); toc(); if (document.activeElement === q && q) { later = true; return; } relay(); });
-q?.addEventListener("blur", () => { if (later) relay(); });
-</script>`;
-
 // /briefs: a search box and two filters kept apart — 주제 (IT domain) and 형식 (series), a16z's way. What is chosen is
 // in the address (?q= &topic= &format=, history.replaceState), so a shared link and the back button bring the same list
 // back; each option says how many pieces it would show with the rest as chosen. Without JavaScript every piece is listed.
@@ -536,8 +433,6 @@ const FINDER = `<script>
       for (const k of ["q", "topic", "format"]) { if (st[k]) u.set(k, st[k]); else u.delete(k); }
       history.replaceState(history.state, "", location.pathname + (u.toString() ? "?" + u : ""));
     }
-    // the phone's pages are laid out again (LIST_PAGER) — once the search box lets go of the focus
-    dispatchEvent(new Event("pd:filtered"));
   }
   // (what was typed counts even when a button is pressed before the pause that applies it)
   const typed = () => { clearTimeout(timer); st.q = q.value.trim(); };
@@ -549,7 +444,7 @@ const FINDER = `<script>
   form.addEventListener("submit", (e) => { e.preventDefault(); typed(); apply(true); q.blur(); });
   // 조건 지우기 goes away once pressed: the focus goes to the first filter, not to the top of the page
   for (const b of resets) b.addEventListener("click", () => { clearTimeout(timer); st = { q: "", topic: "", format: "" }; q.value = ""; apply(true);
-    const to = opts[0]?.closest("[inert]") ? document.querySelector(".pg:not([inert]) .r-card") : opts[0]; to?.focus({ preventScroll: true }); });
+    opts[0]?.focus({ preventScroll: true }); });
   // back to this page from a piece: the address holds the search, and a page kept in memory shows it again as it was
   addEventListener("pageshow", (e) => { if (e.persisted) { st = read(); q.value = st.q; apply(false); } });
   apply(false);
@@ -558,7 +453,7 @@ const FINDER = `<script>
 const SEARCH_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zM21 21l-5.2-5.2"/></svg>`;
 const option = (f, v, label, n) => `<button type="button" class="f-o" data-f="${f}" data-v="${v}" aria-pressed="${v ? "false" : "true"}">${esc(label)} <span class="n">${n}</span></button>`;
 const listed = (list) => `<ul class="list r-list">${list.map(item).join("")}</ul>`;
-const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false, more = "" }) => shell({ path: p, title, desc, css: CSS, paged: true, body: `<div class="kicker"><b>리서치</b>${kicker}</div>
+const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false }) => shell({ path: p, title, desc, css: CSS, body: `<div class="kicker"><b>리서치</b>${kicker}</div>
   <h1 class="page">${h}</h1>
   <p class="intro">${intro}</p>
   ${finder && list.length ? `<form class="finder" role="search" action="/briefs" method="get" aria-label="리서치 찾기">
@@ -568,10 +463,9 @@ const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false, more
   </form>
   <p class="f-count"><span class="c" aria-live="polite">리서치 ${list.length}편</span><button type="button" class="f-reset" hidden>조건 지우기</button></p>` : ""}
   ${list.length ? `<ul class="list r-list">${list.map(item).join("")}${finder ? `<li class="r-empty" hidden><p>조건에 맞는 리서치가 없어요.</p><button type="button" class="f-reset">조건 지우기</button></li>` : ""}</ul>` : `<p class="intro">첫 리서치를 준비하고 있어요.</p>`}
-  ${more}
   ${INSTALL}
   ${finder ? FINDER : ""}
-  ${LIST_PAGER}` });
+` });
 // every topic page, for readers without the filters and for search engines (also linked from the home page and each piece)
 const topicLinks = (cur) => `<nav class="r-more" aria-label="주제 페이지"><h2>주제 페이지</h2><p>${DOMAINS.map((d) => `<a href="/briefs/topic/${d.id}"${d.id === cur ? ' aria-current="page"' : ""}>${esc(d.name)} <span>${inTopic(d.id).length}</span></a>`).join("")}</p></nav>`;
 
@@ -585,37 +479,19 @@ for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/t
 
 // /briefs/topic/<id> — one IT domain, the way Our World in Data lays out a topic: the indicator, the writing on it, and
 // the latest announcements in it (their own pages, never copied). Every domain has one, with or without pieces yet.
-const TOPIC_PAGER = `<script type="module">
-import { pager } from "/pager.js";
-const m = document.querySelector("main"), $ = (s) => m.querySelector(s), install = document.getElementById("install");
-const lead = [...m.children].filter((x) => x.matches(".kicker, h1, .intro, .t-others"));
-if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
-const ul = (cls) => () => Object.assign(document.createElement("ul"), { className: cls });
-pager([
-  { id: "data", name: "지표", title: "지표", pages: [[...lead, $("#data")]] },
-  { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
-    sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
-  { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news"), count: m.querySelectorAll("#news .t-news>li").length },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
-  { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
-  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
-], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" }, toc: false });
-</script>`;
 const NEWS_TOPIC = (INS.news ?? []);
 for (const d of DOMAINS) {
   // the announcements are the ranked ones the site lists (insights.json → news: the last 14 days, adoptions, deals and
   // rules first — trends/build.mjs), so the heading says 주요; the indicator above counts every one in 30 days
   const list = inTopic(d.id), news = NEWS_TOPIC.filter((n) => (n.domains ?? []).includes(d.name)).sort((a, b) => b.date.localeCompare(a.date));
-  put(`topic/${d.id}.html`, shell({ path: `/briefs/topic/${d.id}`, title: `${d.name} · 리서치`, desc: `${d.name}(${d.about}) — 지표, 리서치, 최근 공식 발표`, css: CSS, paged: true, body: `<div class="kicker"><b>주제</b>IT 영역</div>
+  put(`topic/${d.id}.html`, shell({ path: `/briefs/topic/${d.id}`, title: `${d.name} · 리서치`, desc: `${d.name}(${d.about}) — 지표, 리서치, 최근 공식 발표`, css: CSS, body: `<div class="kicker"><b>주제</b>IT 영역</div>
   <h1 class="page">${esc(d.name)}</h1>
   <p class="intro">${esc(d.about)}. 이 영역의 AX를 지표 → 리서치 → 공식 발표 순으로 모았어요. 지표와 발표 목록은 매일 다시 계산돼요.</p>
   <section class="t-sec" id="data" aria-labelledby="h-t-data"><h2 id="h-t-data">지표</h2>${topicIndicator(d.id)}</section>
   <section class="t-sec" id="research" aria-labelledby="h-t-res"><h2 id="h-t-res">이 주제의 리서치 <span>${list.length}편</span></h2>${list.length ? listed(list) : `<p class="none">아직 이 주제를 주로 다룬 리서치가 없어요. 아래 공식 발표가 쌓이면 리서치로 이어져요. <a href="/briefs">리서치 전체 보기</a></p>`}</section>
   <section class="t-sec" id="news" aria-labelledby="h-t-news"><h2 id="h-t-news">최근 주요 공식 발표 <span>${news.length}건</span></h2>${news.length ? `<ul class="t-news">${news.map((n) => `<li><a href="${href(n.link)}" target="_blank" rel="noopener"><span class="d">${md(n.date)} · ${esc(n.source)}${n.method ? ` · ${esc(n.method)}` : ""}</span><span class="t">${esc(n.title)}</span></a></li>`).join("")}</ul><p class="src">회사·정부가 자기 도메인에 직접 낸 발표 가운데 도입 · 협력 · 정책 이야기만 고른 목록 · 최근 14일 · 제목을 누르면 원문으로 가요. 위 지표는 30일 동안의 발표를 모두 셌어요.</p>` : `<p class="none">최근 14일 동안 이 영역에서 주요 목록에 든 공식 발표는 없어요. 위 지표는 30일 동안의 발표를 모두 센 숫자예요.</p>`}</section>
   ${topicLinks(d.id)}
-  ${INSTALL}
-  ${TOPIC_PAGER}` }));
+  ${INSTALL}` }));
 }
 
 // RSS: the latest 30 public ones (their text through xml(): nothing XML forbids)

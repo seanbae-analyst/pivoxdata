@@ -67,12 +67,6 @@
     .dd>summary::-webkit-details-marker{display:none}
     .src dl{grid-template-columns:5.5rem 1fr;margin:0 0 10px}
   }
-  /* phone pages (pager.js): one screenful per page */
-  .pg>header h1{font-size:28px}
-  .pg .ov{margin-top:18px}
-  .pg>.src{border-bottom:0;padding-top:4px}
-  .pg .srcs>.src:first-child{padding-top:10px}
-  .pg>.grp:first-child{margin-top:0}
 </style>
 </head>
 <body>
@@ -204,27 +198,19 @@
 <script type="module" src="/account.js"></script><!--/@footer-->
 </div>
 <script type="module">
-// phone pages (pager.js): the map as pages turned sideways — the overview, the two sources the first screen uses, the
-// evidence and the candidates a screenful at a time, how they connect, and what the map does not say. Each source's
-// details fold first, so a source fits a page; opened, its page scrolls.
-import { pager } from "/pager.js";
+// the map's contents beside it on a wide screen (/toc.js); a phone reads it top to bottom, each source's details folded
+import { toc } from "/toc.js";
 const $ = (s) => document.querySelector(s), all = (s) => [...document.querySelectorAll(s)];
 if (matchMedia("(max-width: 640px)").matches) for (const d of all("details.dd")) d.open = false;
-const list = () => Object.assign(document.createElement("div"), { className: "srcs" });
-// the sidebar (목차) lists each source under its group
 const src = (x) => ({ label: x.querySelector("h3")?.textContent });
-pager([
-  { id: "top", name: "데이터 지도", title: "한눈에", pages: [[$("main>header"), $("#overview")]] },
-  { id: "front", name: "첫 화면", title: "첫 화면의 숫자", group: "출처", pages: all(".src.front").map((x, i) => [i ? null : $("#g-front"), x]), sub: (n) => src(n.matches(".src") ? n : n.nextElementSibling ?? n) },
-  { id: "basis", name: "근거 데이터", title: "근거 데이터", group: "출처", head: $("#g-basis"), items: all(".src.basis"), list, sub: src },
-  { id: "later", name: "후보·보류", title: "후보 · 보류", group: "출처", head: $("#later"), items: all(".src.later"), list, sub: src },
-  { id: "keys", name: "잇는 법", title: "데이터를 잇는 법", group: "읽는 법", pages: [[$("#keys")]] },
-  { id: "limits", name: "한계", title: "이 지도로 말할 수 없는 것", group: "읽는 법", pages: [[$("#limits")]] },
-], { back: { href: "/", label: "데이터 지도" } });
-</script>
-<script>
-// a narrow window without the phone pages (?scroll=1, or a pager that never started): the details still fold
-if (!document.documentElement.classList.contains("paged") && matchMedia("(max-width: 640px)").matches) for (const d of document.querySelectorAll("details.dd")) d.open = false;
+toc([
+  { id: "top", title: "한눈에", pages: [[$("main>header"), $("#overview")]] },
+  { id: "g-front", title: "첫 화면의 숫자", group: "출처", items: all(".src.front"), sub: src },
+  { id: "g-basis", title: "근거 데이터", group: "출처", items: all(".src.basis"), sub: src },
+  { id: "later", title: "후보 · 보류", group: "출처", items: all(".src.later"), sub: src },
+  { id: "keys", title: "데이터를 잇는 법", group: "읽는 법", pages: [[$("#keys")]] },
+  { id: "limits", title: "이 지도로 말할 수 없는 것", group: "읽는 법", pages: [[$("#limits")]] },
+]);
 </script>
 </body>
 </html>

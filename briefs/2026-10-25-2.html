@@ -80,34 +80,6 @@
     h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
   }
-  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
-  .pg .art-head{margin:auto 0}
-  .pg .art-head .kicker{margin-top:0}
-  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
-  .pg .flow p{font-size:16px;line-height:1.8}
-  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
-  .pg .flow ul.asks li{font-size:15.5px}
-  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
-  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
-  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
-  /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
-  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
-  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
-  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
-  /* (a short screen: the topics are on the 지표 pages, each with its link) */
-  @media(max-height:700px){ .pg .art-head .topics{display:none} }
-  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
-  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
-  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
-  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
-  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
-  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
-  .case-list li+li{border-top:1px solid var(--line)}
-  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
-  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
-  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  html.paged{-webkit-tap-highlight-color:transparent}
 </style>
 </head>
 <body>
@@ -155,7 +127,7 @@
 }); })();
 </script>
 <script type="module">
-import { pager } from "/pager.js";
+import { toc } from "/toc.js";
 
 const fillIndicators = async () => {
   const boxes = [...document.querySelectorAll(".ind[data-ind]")]; if (!boxes.length) return false;
@@ -178,47 +150,19 @@ const fillIndicators = async () => {
 };
 
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
-const div = () => Object.assign(document.createElement("div"), { className: "flow" });
-// the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
-// 흐름과 관점; a briefing that reads as one text lists its section headings
 const text = parts.length && parts.every((s) => s.dataset.name)
-  // (the source line goes with the paragraph before it, so it never makes a page of its own)
-  ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
-      const name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
-      return { id: h.id || `s${i + 1}`, name, title: heading.startsWith(name) ? heading : `${name} · ${heading}`, group: name.startsWith("사례") ? "사례" : "흐름과 관점",
-        count: 0, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
-  : [{ id: "text", name: "본문", group: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div, count: 0,
-      sub: (n) => (n.matches("h2") ? { label: n.textContent } : null) }];
-const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
-// the title page lists the briefing's cases, each a tap away (like the home page's story)
-const cases = parts.filter((s) => s.dataset.name?.startsWith("사례"));
-let caseList = null;
-if (document.documentElement.classList.contains("paged") && cases.length) {
-  const ol = caseList = Object.assign(document.createElement("ol"), { className: "case-list" });
-  cases.forEach((s, k) => {
-    const h = s.firstElementChild, a = Object.assign(document.createElement("a"), { className: "tap", href: `#${h.id}` });
-    a.append(Object.assign(document.createElement("span"), { className: "n", textContent: k + 1 }), Object.assign(document.createElement("span"), { className: "t", textContent: (h.querySelector("h2") ?? h).textContent.trim() }));
-    const tag = h.querySelector(".case-k"); if (tag) a.append(Object.assign(document.createElement("small"), { textContent: tag.textContent }));
-    const li = document.createElement("li"); li.append(a); ol.append(li);
-  });
-}
-// 더 읽기: the previous/next links, then the related pieces and the links a screenful at a time (it grows with the archive)
-const moreLi = $(".more-links") && Object.assign(document.createElement("li"), { className: "more-li" }); if (moreLi) moreLi.append($(".more-links"));
-const p = pager([
-  { id: "top", name: "리서치", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
+  ? parts.map((s, i) => { const h = s.firstElementChild, name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || `s${i + 1}`, title: heading.startsWith(name) ? heading : `${name} · ${heading}`, group: name.startsWith("사례") ? "사례" : "흐름과 관점", pages: [[h]] }; })
+  : [{ id: "text", title: "본문", group: "본문", items: [...art.querySelectorAll(".part h2")], count: 0, sub: (n) => ({ label: n.textContent }) }];
+toc([
+  { id: "top", title: "처음", pages: [[$(".art-head")]] },
   ...text,
-  { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
-  { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
-  { id: "data", name: "지표", title: "관련 지표", group: "마무리", lead: [$(".inds>h2"), $(".inds-intro")], items: [...art.querySelectorAll(".inds .ind")], list: () => Object.assign(document.createElement("div"), { className: "inds-pg" }), count: 0 },
-  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", lead: [$(".pn"), $(".rel>h2")].filter(Boolean), items: [...art.querySelectorAll(".rel .r-item"), moreLi].filter(Boolean),
-    list: () => Object.assign(document.createElement("ul"), { className: "list r-list rel-list" }), count: 0 },
-], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
-// 링크 복사 goes up into the top bar as an icon, beside 저장 (account.js), so the title page keeps its room; on a phone it
-// opens the share sheet (SHARE below)
-const share = document.querySelector(".act-row [data-share]"), where = document.querySelector(".pgr-top .pgr-where"); // (the title page is out of the article by now)
-if (share && where) { share.className = "share-ic"; share.setAttribute("aria-label", "링크 공유"); where.before(share); }
-// today's numbers in 관련 지표, then the pages measured again
-fillIndicators().then((did) => { if (did) p.refresh(); });
+  { id: "sum", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "data", title: "관련 지표", group: "마무리", pages: [[$(".inds")]] },
+  { id: "next", title: "더 읽기", group: "마무리", pages: [[$(".pn") ?? $(".rel")]] },
+]);
+fillIndicators();
 </script>
 </main>
 
