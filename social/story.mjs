@@ -45,8 +45,10 @@ export const FORMATS = {
   explainer: { name: "개념 풀이", how: "AX가 뭔지 쉬운 말로 → DX와 다른 점 → 지금 어디까지 왔나(숫자 한 장) → 업종·규모별로 다른 속도(의미) → 기업이 먼저 확인할 것(실무 체크, kind=list) → 정리" },
   checklist: { name: "체크리스트", how: "업종 평균 숫자로 우리 회사를 점검하는 질문 4~6개, 한 장에 하나씩, 질문마다 근거 숫자는 문장 속에 → 정리" },
   weekly: { name: "이번 주 정리", how: "이번 주 이야기 한 문장 → 작은 변화 하나씩(무엇이 바뀌었나 → 무슨 뜻인가) → 실무에서 확인할 점(kind=list) → 정리" },
-  newsweek: { name: "이번 주 AX 사건", how: "표지: 이번 주 사례들을 꿰는 질문이나 반전 한 문장 → 사례 3~5건을 중요한 순서로 한 장에 하나씩(kind=case: 누가 무엇을 들였나 → 그 IT 영역의 프로젝트에 무슨 뜻인가) → 사례들에 공통으로 보이는 흐름(kind=text) → 도입 프로젝트에서 확인할 점(kind=list, 질문 2~4개) → 정리(kind=end)" },
-  newstheme: { name: "AX 사건 묶어 보기", how: "표지 → 사례를 IT 영역(ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트) 2~3개로 묶어, 영역마다 사례 장(kind=case, 한 장에 사례 하나) → 영역을 가로질러 보이는 흐름(kind=text) → 그 영역 실무자·IT 컨설턴트가 확인할 점(kind=list, 질문 2~4개) → 정리(kind=end)" },
+  // a case over two cards (2026-10-27 owner: "스토리라인 좀더 길게 … 너무 짧아"): what happened, then what it means —
+  // 8 to 10 cards, the ten Instagram's API allows
+  newsweek: { name: "이번 주 AX 사건", how: "표지: 이번 주 사례들을 꿰는 질문이나 반전 한 문장 → (사례가 2건이면) 이번 주에 무슨 일이 있었나, 이야기의 배경(kind=text) → 사례 2~3건을 중요한 순서로, 사례마다 두 장: 사례 장(kind=case — 사건: 누가 무엇을 들였나, 발표에 적힌 일) → 바로 다음 의미 장(kind=meaning — 그래서 무엇이 달라지나: 그 IT 영역의 도입 프로젝트에 무슨 뜻인가) → 사례들에 공통으로 보이는 흐름(kind=text) → 도입 프로젝트에서 확인할 점(kind=list, 질문 3~4개) → 정리(kind=end). 모두 8~10장" },
+  newstheme: { name: "AX 사건 묶어 보기", how: "표지 → (사례가 2건이면) 이번 주 발표들이 어느 IT 영역에서 나왔나, 이야기의 배경(kind=text) → 사례 2~3건을 IT 영역(ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트)별로 놓고, 사례마다 두 장: 사례 장(kind=case — 사건) → 바로 다음 의미 장(kind=meaning — 그 영역 프로젝트에 무슨 뜻인가) → 영역을 가로질러 보이는 흐름(kind=text) → 그 영역 실무자·IT 컨설턴트가 확인할 점(kind=list, 질문 3~4개) → 정리(kind=end). 모두 8~10장" },
 };
 const candidatesFor = (plan) => plan.mode === "event"
   ? (/^ax:month/.test(plan.event.key) ? ["monthly", "deepdive", "timeline"] : plan.event.kind === "1위 교체" ? ["breaking", "versus"] : ["breaking"])
@@ -85,7 +87,7 @@ const SYSTEM = `너는 IT 컨설팅 리서치 팀의 AX(기업의 AI 전환) 에
 규칙:
 ${STYLE}
 - 이야기의 흐름은 사건 → 의미 → 실무 체크다. 표지에서 질문이나 반전으로 시작해, 무슨 일이 있었는지 보여 주고(사건), 그것이 어느 IT 영역(ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트)의 어떤 일인지 짚고(의미), 도입 프로젝트에서 무엇을 확인할지(데이터 준비, 기존 시스템 연동, 보안·거버넌스, 비용, 조직의 변화 관리 중 해당하는 것)로 맺는다(실무 체크). 확인할 점은 질문이나 점검 항목으로 쓰고, 팩트에 없는 사례·수치·효과는 지어내지 않는다.
-- 게시물 하나에 이야기 하나. 장마다 한 걸음씩 나아가고, 마지막 장에서 정리한다. 장 수는 이야기에 맞게 정한다(4~10장).
+- 게시물 하나에 이야기 하나. 장마다 한 걸음씩 나아가고, 마지막 장에서 정리한다. 장 수는 이야기에 맞게 정한다(4~10장, 공식 발표로 쓰는 AX 사건 게시물은 8~10장 — 인스타그램이 받는 것은 10장까지).
 - 숫자는 이야기를 받치는 근거다. 큰 숫자 장(kind=number)은 게시물 전체에서 두 장까지(공식 발표로 쓰는 AX 사건 게시물은 한 장까지)이고, 나머지 숫자는 문장 속에 넣는다. 숫자를 늘어놓는 장을 만들지 않는다.
 - 카드는 짧고 간단하게: 장마다 제목(한 문장)과 본문 1~2문장(140자 이하). 핵심만 남기고, 배경·자세한 해설은 웹 브리핑에 맡긴다.
 - 숫자는 주어진 팩트·발표에 적힌 그대로만 쓴다(+·− 부호까지). 반올림·환산·새 계산(차이, 배수 등) 금지. 거기 없는 숫자는 쓰지 않는다.
@@ -98,7 +100,7 @@ ${STYLE}
 - 캡션은 게시물 내용을 4~8줄로 짧게 요약한 본문만. 해시태그·링크·출처 줄은 쓰지 않는다(코드가 붙인다).
 
 출력은 JSON 하나만, 다른 글 없이:
-{"slides":[{"kind":"cover|text|number|list|quiz|answer|case|end","refs":[발표 번호(AX 사건 게시물만)],"kicker":"짧은 머리말(선택)","title":"제목","body":"본문(선택)","number":"강조할 숫자(number·answer 장, 팩트 숫자 그대로)","label":"숫자 설명(선택)","items":["목록 항목(list·quiz·end 장, 선택)"]}],"cases":[사례(AX 사건 게시물만)],"caption":"캡션 본문"}`;
+{"slides":[{"kind":"cover|text|number|list|quiz|answer|case|meaning|end","refs":[발표 번호(AX 사건 게시물만)],"kicker":"짧은 머리말(선택)","title":"제목","body":"본문(선택)","number":"강조할 숫자(number·answer 장, 팩트 숫자 그대로)","label":"숫자 설명(선택)","items":["목록 항목(list·quiz·end 장, 선택)"]}],"cases":[사례(AX 사건 게시물만)],"caption":"캡션 본문"}`;
 
 const NEWS_RULES = `
 이번 게시물은 공식 발표(회사 뉴스룸·정부 보도자료·리서치)로 쓰는 'AX 사건'이다. 발표 하나하나를 IT 컨설팅의 도입 사례처럼 읽는다:
@@ -108,14 +110,18 @@ const NEWS_RULES = `
 - 누가 말했는지 밝힌다: "OO는 ~했다고 발표했어요", "과학기술정보통신부는 ~라고 밝혔어요". 회사의 자평(최고, 혁신적, 업계 최초 등)은 그 회사의 말로만 옮긴다. 발표한 회사를 평가하거나 응원하지 않는다.
 - 발표문 문장을 그대로 옮기지 않고 우리 말로 짧게 바꿔 쓴다(제목·요약·원문 어디서든 24자 넘게 같으면 거절된다). 영어도 번역해 풀어 쓴다. 회사·제품 이름은 원래 표기 그대로.
 - 금액·수치는 발표에 적힌 숫자 그대로 쓴다(예: $1 billion은 "$1 billion"으로, 원화·다른 단위로 바꾸지 않는다).
-- 사례 3~5건을 고른다: 기업이 AI를 실제 업무·시스템에 들인 일, 기업 간 인수·제휴, 정부 정책·규제를 소비자 제품 소식이나 행사보다 앞에 둔다.
+- 사례 3건을 고른다(쓸 만한 발표가 2건뿐이면 2건 — 사례마다 카드 두 장이라 10장 안에 셋까지): 기업이 AI를 실제 업무·시스템에 들인 일, 기업 간 인수·제휴, 정부 정책·규제를 소비자 제품 소식이나 행사보다 앞에 둔다.
 - 고른 발표마다 "cases"에 사례 하나를 쓴다:
   {"ref":발표 번호,"who":"누가 — 도입한 곳(발표한 곳과 다르면 'Uber (OpenAI 발표)'처럼)","what":"무엇을 — AI·솔루션의 이름이나 종류","where":"어디에 — 어느 업무·시스템·조직","how":"어떻게 — 도입 범위와 방식(전 직원 배포, 기존 CRM에 연결, 지분 인수 등)","domain":"IT 영역 하나: ${DOMAIN_NAMES.join("/")}","method":"도입 방식 하나: ${METHOD_NAMES.join("/")}","check":"이 사례를 우리 회사 프로젝트에 비춰 볼 때 확인할 점, 질문 하나(?로 끝남, 60자 이하)"}
   who·what·where·how는 30자 이하의 짧은 명사구다(문장 아님). 발표·원문에 없는 칸은 "${NOT_SAID}"이라고 쓴다 — 짐작으로 채우지 않는다. 네 칸이 다 비는 발표는 사례로 고르지 않는다.
-- 사례 장은 kind=case, 한 장에 사례 하나(refs에 그 발표 번호 하나). 제목은 '누가 무엇을' 한 문장(한 줄 14자 안쪽), 본문은 그 사례가 그 IT 영역에서 뜻하는 것 1~2문장. 어디에·어떻게·IT 영역·도입 방식은 코드가 cases에서 꺼내 카드에 표로 찍으니 본문에서 되풀이하지 않는다. 머리말(kicker)은 코드가 붙이니 비워 둔다.
-- 사례 장 다음에: 사례들에 공통으로 보이는 흐름(kind=text, refs에 해당 발표들) → 도입 프로젝트에서 확인할 점(kind=list, items에 질문 2~4개) → 정리(kind=end). 큰 숫자 장은 한 장까지.
+- 사례 하나는 카드 두 장으로 이어서 말한다(사건 → 의미):
+  · 사례 장 kind=case(refs에 그 발표 번호 하나): 제목은 '누가 무엇을' 한 문장(한 줄 14자 안쪽), 본문은 발표에 적힌 일 — 누가 무엇을 했다고 밝혔나 1~2문장. 어디에·어떻게·IT 영역·도입 방식은 코드가 cases에서 꺼내 카드에 표로 찍으니 본문에서 되풀이하지 않는다.
+  · 바로 다음 의미 장 kind=meaning(refs에 같은 발표 번호 하나): 제목은 그래서 무엇이 달라지나 한 문장, 본문은 그 일이 그 IT 영역의 도입 프로젝트에서 뜻하는 것 2문장(해석임이 드러나게). 그 사례의 확인할 점(cases의 check)은 코드가 카드 아래에 찍으니 본문에서 되풀이하지 않는다.
+  두 장의 머리말(kicker)은 코드가 붙이니 비워 둔다.
+- 사례가 2건이면 표지 다음에 이번 주 이야기의 배경 장 하나(kind=text, refs에 사례 발표들): 이번 주 발표들이 어디서 나왔고 왜 함께 읽는지.
+- 사례 장들 다음에: 사례들에 공통으로 보이는 흐름(kind=text, refs에 해당 발표들) → 도입 프로젝트에서 확인할 점(kind=list, items에 질문 3~4개) → 정리(kind=end). 큰 숫자 장은 한 장까지. 모두 8~10장.
 - 사건을 말하는 장마다 "refs"에 그 발표 번호를 적는다(예: [2]). 표지, 확인할 점(kind=list), 마지막 장은 비워도 된다. 출처 줄은 코드가 붙인다.
-- 캡션은 이번 주 사례를 회사·기관 이름과 함께 4~8줄로: 한 줄에 사례 하나(누가 무엇을 어디에), 마지막 줄은 확인할 점 하나.`;
+- 캡션은 카드의 이야기 순서대로 6~10줄: 첫 줄은 이번 주 이야기 한 문장, 사례마다 두 줄(누가 무엇을 어디에 → 그래서 무엇이 달라지나), 공통 흐름 한 줄, 마지막 줄은 확인할 점 하나.`;
 
 // ---------- proofreading: a second read that may fix only grammar, spacing and line breaks ----------
 const PROOF = `너는 한국어 교정자다. 인스타그램 카드뉴스 JSON을 받아 같은 구조의 JSON으로 돌려준다.
@@ -129,7 +135,7 @@ const articleRules = (news, known) => `
 이번에는 같은 이야기를 웹사이트 'AX 브리핑' 글로 풀어서 쓴다. 인스타그램 카드는 요약본이고 브리핑이 본편이다 — 카드에서 한두 줄로 지나간 것을 여기서 충분히 설명한다: 배경, ${news ? "무엇을 어디에 어떻게 들였는지, " : ""}숫자가 뜻하는 것, 기업·실무자가 확인할 점. 휴대폰에서 한 화면씩 넘겨 읽는 글이니 문단은 짧게.
 - 구성: 제목, 리드(2~3문장 — 이번 이야기를 한 번에), 섹션 3~8개(소제목 + 본문 2~4문단, 문단 사이는 빈 줄), 정리(핵심 3~5줄).
 - 흐름은 카드와 같다: 사건 → 의미 → 실무 체크. 카드의 같은 문장을 반복하지 말고 더 설명한다.
-${news ? `- 사례마다 섹션 하나(refs에 그 발표 번호 하나, 카드의 사례 순서대로). 첫 문단은 무엇을 발표했나(원문에 근거한 배경), 둘째 문단은 어디에·어떻게 — 도입 범위와 방식, 어떤 업무·시스템과 이어지는지(원문에 있는 만큼), 셋째 문단은 그 IT 영역의 도입 프로젝트에서 뜻하는 것과 확인할 점. 사례 표(누가·무엇을·어디에·어떻게)는 코드가 cases로 섹션 머리에 붙이니, 본문은 표를 되풀이하지 말고 문장으로 풀어 쓴다. 원문에 없는 칸은 "발표에 없다"고 밝혀도 된다.
+${news ? `- 사례마다 섹션 하나(refs에 그 발표 번호 하나, 카드의 사례 순서대로). 첫 문단은 무엇을 발표했나(원문에 근거한 배경), 둘째 문단은 어디에·어떻게 — 도입 범위와 방식, 어떤 업무·시스템과 이어지는지(원문에 있는 만큼), 셋째 문단은 그 IT 영역의 도입 프로젝트에서 뜻하는 것(카드의 의미 장을 더 풀어서), 넷째 문단은 우리 프로젝트에 비춰 확인할 점과 그 이유. 사례 표(누가·무엇을·어디에·어떻게)는 코드가 cases로 섹션 머리에 붙이니, 본문은 표를 되풀이하지 말고 문장으로 풀어 쓴다. 원문에 없는 칸은 "발표에 없다"고 밝혀도 된다.
 - 사례 섹션들 다음에 공통 흐름 섹션 하나(refs에 해당 발표들).
 ` : ""}- 마지막 섹션은 소제목 "IT 컨설팅 관점": 이 흐름이 ERP·CRM·클라우드·데이터·보안 같은 IT 영역의 도입 프로젝트에서 뜻하는 것을 한 문단으로 쓰고, 이어서 확인할 점 3~5개를 한 줄에 하나씩 "· "로 시작하는 목록 문단으로 쓴다(데이터 준비, 기존 시스템 연동, 거버넌스·보안, 비용, 변화 관리 중 해당하는 것 — 팩트와 발표에 근거해서, 질문 형태로).
 - 사실·숫자·말투 규칙은 카드와 같다. 해석은 해석임이 드러나게. 한 문단은 2~4문장, 줄바꿈은 문단 사이와 목록 줄에만.
@@ -283,7 +289,9 @@ async function main() {
   // a case card carries its case (build.mjs draws where and how as a small table) and its kicker is code's: the IT
   // domain and the way it went in
   const caseOf = new Map((story.cases ?? []).map((c) => [c.ref, { ...Object.fromEntries(["who", "what", "where", "how", "domain", "method", "check"].map((k) => [k, plain(c[k]).trim()])), ref: c.ref }]));
+  // the card after it, what the case means, carries the same case (build.mjs prints its question to ask under it)
   for (const sl of story.slides) if (sl.kind === "case" && caseOf.has(sl.refs?.[0])) { const c = caseOf.get(sl.refs[0]); sl.case = c; sl.kicker = `${c.domain} · ${c.method}`; }
+  for (const sl of story.slides) if (sl.kind === "meaning" && caseOf.has(sl.refs?.[0])) { const c = caseOf.get(sl.refs[0]); sl.case = c; sl.kicker = `${c.domain} · 무슨 뜻인가`; }
   const used = [...new Set(story.slides.flatMap((sl) => sl.refs ?? []))].sort((a, b) => a - b);
   if (NEWS.length) story.sources = used.map((r) => ({ source: NEWS[r - 1].source, kind: NEWS[r - 1].kind, date: NEWS[r - 1].date, title: NEWS[r - 1].title, link: NEWS[r - 1].link, id: NEWS[r - 1].id, original: Boolean(ORIG[r - 1]?.ok) }));
   if (caseOf.size) story.cases = [...caseOf.values()].map((c) => ({ ...c, source: NEWS[c.ref - 1].source, date: NEWS[c.ref - 1].date, link: NEWS[c.ref - 1].link }));
@@ -310,7 +318,13 @@ async function main() {
   const flat = (t) => plain(t).replace(/\n/g, " ");
   const articleFromSlides = (st) => {
     const [cover, ...rest] = st.slides, end = rest.at(-1)?.kind === "end" ? rest.pop() : null;
-    const sections = rest.map((x) => ({ heading: flat(x.title), body: [x.number ? `${x.number} — ${x.label ?? ""}` : "", flat(x.body ?? ""), ...(x.items ?? []).map((i) => `· ${flat(i)}`)].filter(Boolean).join("\n\n"), refs: x.refs ?? [] }));
+    const sections = [];
+    for (const x of rest) {
+      const body = [x.number ? `${x.number} — ${x.label ?? ""}` : "", flat(x.body ?? ""), ...(x.items ?? []).map((i) => `· ${flat(i)}`)].filter(Boolean).join("\n\n");
+      // what a case means goes on in its case's section (one section per case)
+      if (x.kind === "meaning" && sections.at(-1)?.refs?.[0] === x.refs?.[0]) sections.at(-1).body += `\n\n${body}`;
+      else sections.push({ heading: flat(x.title), body, refs: x.refs ?? [] });
+    }
     const takeaways = end?.items?.length ? end.items.map(flat) : end?.body ? plain(end.body).split("\n").filter(Boolean) : sections.map((x) => x.heading).slice(0, 6);
     return { title: flat(cover.title), lede: flat(cover.body || rest.find((x) => x.body)?.body || cover.title), sections, takeaways };
   };

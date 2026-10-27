@@ -140,6 +140,8 @@ function storySlides(st) {
       // a case (2026-10-26): who and what in the title, then where and how as a two-row table from the case story.mjs
       // checked (never the model's free text on the card), then what it means
       : s.kind === "case" && s.case ? `${kick}<h2>${lines(s.title)}</h2><dl class="case">${[["어디에", s.case.where], ["어떻게", s.case.how]].map(([l, v]) => `<div${v === "발표에 없음" ? ' class="none"' : ""}><dt>${l}</dt><dd>${e(v)}</dd></div>`).join("")}</dl>${body}`
+      // what the case means (2026-10-27): the step after the case card, with the case's question to ask under it
+      : s.kind === "meaning" && s.case ? `${kick}<h2>${lines(s.title)}</h2>${body}<dl class="case ask"><div><dt>확인할 점</dt><dd>${e(s.case.check)}</dd></div></dl>`
       : s.kind === "number" || s.kind === "answer" ? `${kick}${num}<h2>${lines(s.title)}</h2>${body}${items}`
       : `${kick}<h2>${lines(s.title)}</h2>${body}${items}`;
     // a news slide's source and date come from the announcement (story.mjs prints them), never from the model
@@ -247,6 +249,7 @@ const html = `<!doctype html>
   .st .case dd{margin:0;font-size:calc(var(--k)*36px);line-height:1.45;color:var(--ink);text-wrap:balance}
   .st .case .none dd{color:var(--dim)}
   .st .case+.txt{margin-top:calc(var(--k)*32px)}
+  .st .ask{margin-top:calc(var(--k)*48px)} .st .ask>div{grid-template-columns:1fr;gap:calc(var(--k)*8px)}
 </style>
 </head>
 <body data-date="${slot}">
