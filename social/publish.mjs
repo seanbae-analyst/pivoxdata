@@ -6,6 +6,9 @@
 //  • before anything is created, the account's recent media are read: a post already up with this caption (or this
 //    slot's /briefs/<slot> link) — say, published by a run whose push of post.json failed — is recorded as published
 //    instead of being posted again.
+//  • a carousel of more than API_MAX cards (a long story, 2026-10-27) can't go through the API: the owner posts it from
+//    the app (data.pivoxquant.com/upload?slot=<slot>), and /approve then records it — found among the recent media by
+//    its caption — or says it isn't up yet (exit 3).
 // Worst case before the first container: 10 minutes for the images to appear on the site (one deadline for all of
 // them); then up to 5 minutes for the image containers (processed together) and 150 s for the carousel — about 18
 // minutes, under the 30-minute timeout of the jobs that run it.
@@ -23,10 +26,14 @@ import { isSlot, compareSlots } from "./slot.mjs";
 
 const args = process.argv.slice(2), flag = (f) => args.includes(f), file = args.find((a) => !a.startsWith("--"));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// the most cards a carousel posted through the API may have (Content Publishing: "limited to 10 images, videos, or a
+// mix"); the Instagram app takes 20
+const API_MAX = 10;
+const manual = (post) => (post?.images?.length ?? 0) > API_MAX;
 
 if (flag("--queued")) {
   const queued = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter(isSlot).sort(compareSlots)
-    .filter((slot) => { const p = read(path.join(OUT, slot, "post.json")); return p?.auto_publish === true && !p.published && !p.rejected; });
+    .filter((slot) => { const p = read(path.join(OUT, slot, "post.json")); return p?.auto_publish === true && !p.published && !p.rejected && !manual(p); });
   for (const slot of queued) console.log(`social/out/${slot}/post.json`);
   process.exit(0);
 }
@@ -70,6 +77,12 @@ if (user && token) {
     if (!dry) { post.published = { at: up.timestamp ?? new Date().toISOString(), media_id: up.id, permalink: up.permalink ?? null, found: "recent media" }; save(); }
     process.exit(0);
   }
+}
+
+// a long story: the owner posts it from the app; nothing to do here until it is up
+if (manual(post)) {
+  console.log(`manual: ${post.images.length} cards — more than the ${API_MAX} the API takes. Post it from the Instagram app (https://data.pivoxquant.com/upload?slot=${slot}), then /approve records it.${user && token ? " Not among the account's recent media yet." : ""}`);
+  process.exit(3);
 }
 
 // 1. the images must be live on the site first (Vercel deploys the commit that added them) — one deadline for all

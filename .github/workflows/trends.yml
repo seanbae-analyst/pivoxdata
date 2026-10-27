@@ -333,6 +333,8 @@ jobs:
             // posted, but post.json could not be pushed: /approve records it (publish.mjs finds it among the recent
             // media and does not post it again)
             const unrecorded = post.published && process.env.AUTO !== "success";
+            // a long story (more than the 10 cards the API takes, 2026-10-27): the owner posts it from the app
+            const manual = !post.published && post.images.length > 10;
             const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "news" ? "이번 주 AX 사건" : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AX 숫자";
             const body = [
               `<!-- instagram-post:${slot} -->`,
@@ -346,11 +348,16 @@ jobs:
               "", imgs, "", "**캡션**", "```", post.caption, "```", "",
               ...(unrecorded ? [`⚠️ 인스타그램에는 올라갔지만(${post.published.permalink ?? post.published.media_id}) 기록(post.json)을 저장하지 못했습니다. 로그: ${run}`, "", "- `/approve` — 다시 올리지 않고 기록만 남깁니다 (저장소 소유자만)"]
                 : post.published ? [`**자동으로 게시했습니다:** ${post.published.permalink}`, "", "내리려면 인스타그램 앱에서 직접 삭제하세요. 자동 게시를 끄려면 저장소 변수 `AUTO_PUBLISH`를 `false`로."]
+                : manual ? [`**직접 올려 주세요** — 카드가 ${post.images.length}장이라 자동 게시가 안 됩니다(인스타그램 API는 10장까지, 앱은 20장까지).`, "",
+                   `1. 폰에서 https://data.pivoxquant.com/upload?slot=${slot} 을 열어 **카드 ${post.images.length}장 저장** → **캡션 복사**`,
+                   "2. 인스타그램 앱 → 새 게시물 → 사진을 1장부터 순서대로 고르기 → 캡션 붙여넣기 → 공유",
+                   "3. 올린 뒤 여기에 `/approve` — 최근 게시물에서 찾아 기록하고 리서치 글을 공개합니다(캡션을 그대로 붙여야 찾습니다)", "",
+                   "- `/reject` — 올리지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]
                 : [...(process.env.AUTO === "failure" ? [`⚠️ 자동 게시가 실패해 승인으로 돌렸습니다. 로그: ${run}`, ""] : []),
                    "- `/approve` — 이대로 게시 (저장소 소유자만)",
                    "- `/reject` — 게시하지 않음 (같은 대상은 21일 동안 다시 초안을 만들지 않습니다)"]),
             ].join("\n");
-            const title = post.published && !unrecorded ? `[게시됨] ${slot} ${what}` : `[instagram] ${slot} ${what}`;
+            const title = post.published && !unrecorded ? `[게시됨] ${slot} ${what}` : `[instagram] ${slot} ${what}${manual ? ` — 직접 게시 ${post.images.length}장` : ""}`;
             const issue = await github.rest.issues.create({ ...context.repo, title: title.slice(0, 200), body });
             // a posted draft is a record, not a question: closed at once (it still notifies the owner)
             if (post.published && !unrecorded) await github.rest.issues.update({ ...context.repo, issue_number: issue.data.number, state: "closed", state_reason: "completed" });

@@ -172,13 +172,14 @@ const ORGS = [...new Set([...NEWS.sources.map((x) => x.name), ...AX.series.filte
 const named = (seg) => ORGS.some((o) => seg.includes(o)) || /(?<![A-Za-z])[A-Z][a-z][A-Za-z0-9]*/.test(seg);
 const nameRun = (line) => plain(line).split("·").filter(named).length;
 // `numbers`: how many big-number slides a post may have — the story carries the post, a number backs it up (2026-10-26:
-// two at most, one in a post of announcements). How many slides: 10 at most, Instagram's own limit for a carousel
-// published through the API; a post of announcements tells each case over two cards (2026-10-27 owner: "스토리라인
-// 좀더 길게 … 너무 짧아"), so it has at least 8
-export const SLIDES = { min: 4, news: 8, max: 10 };
+// two at most, one in a post of announcements). How many slides: 4 to 10 — the ten a carousel posted through the API
+// may have. A post of announcements is longer (2026-10-27 owner: "10장 이상으로 앞으로 스토리라인으로 구성해줘 … 내가
+// 직접 올리던지"): 11 to 20 cards, the twenty the Instagram app takes, each case over two cards — the owner posts it
+// from the app (publish.mjs → API_MAX)
+export const SLIDES = { min: 4, max: 10, news: [11, 20] };
 export function checkSlides(slides, { refs = 0, numbers = refs ? 1 : 2 } = {}) {
-  const p = [], min = refs ? SLIDES.news : SLIDES.min;
-  if (!Array.isArray(slides) || slides.length < min || slides.length > SLIDES.max) return [`장 수는 ${min}~${SLIDES.max}장 (지금 ${Array.isArray(slides) ? slides.length : 0})${refs ? " — 사례마다 사례 장과 의미 장, 두 장씩" : ""}`];
+  const p = [], [min, max] = refs ? SLIDES.news : [SLIDES.min, SLIDES.max];
+  if (!Array.isArray(slides) || slides.length < min || slides.length > max) return [`장 수는 ${min}~${max}장 (지금 ${Array.isArray(slides) ? slides.length : 0})${refs ? " — 표지 → 배경 → 사례마다 사례 장과 의미 장 → 공통 흐름 → 확인할 점 → 정리" : ""}`];
   if (slides[0]?.kind !== "cover") p.push("첫 장은 kind=cover");
   const big = slides.filter((s) => s?.kind === "number").length;
   if (big > numbers) p.push(`큰 숫자 장(kind=number)이 ${big}장 — ${numbers}장까지만, 나머지 숫자는 문장 속에 (이야기가 먼저, 숫자는 근거)`);
@@ -230,8 +231,9 @@ export function checkStory(st, ctx = {}) {
 // from a fixed list (trends/series.mjs → DOMAINS, METHODS), and one question to ask of one's own project. The cards
 // print it as a small table (build.mjs), the briefing as the head of the case's section (briefs.mjs), so it is short
 // noun phrases, never invented: a box the announcement doesn't fill says so.
-// at most three cases: each is told over two cards (a case card, then what it means) inside the ten a carousel may have
-export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [2, 3] };
+// three to five cases, each told over two cards (a case card, then what it means): 11 to 15 cards with the cover, the
+// background, the common thread, the checks and the summing-up
+export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [3, 5] };
 export const NOT_SAID = "발표에 없음";
 export const DOMAIN_NAMES = DOMAINS.map((d) => d.name), METHOD_NAMES = METHODS.map((m) => m.name);
 export const caseText = (c) => [c?.who, c?.what, c?.where, c?.how, c?.check].filter(Boolean).join("\n");
