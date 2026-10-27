@@ -4,17 +4,35 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>직접 올리기 · AX 트렌드 레이더</title>
-<!-- the owner's page for a long story (more than the 10 cards the Instagram API takes, 2026-10-27): save the cards to
-     the phone in order, copy the caption, post from the app, then /approve on the issue. Reads the committed
-     social/out/<slot>/post.json; not linked from anywhere else. -->
+<meta name="description" content="운영자 전용 — 긴 이야기 카드를 인스타그램 앱으로 올려요." />
+
 <meta name="robots" content="noindex" />
 <meta name="theme-color" content="#050505" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 <link rel="stylesheet" href="/ui.css?v=11" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-10-27" />
+
+<link rel="stylesheet" href="/research.css" />
+<style></style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+</header>
+
+<main>
 <style>
-  .up{max-width:720px;margin:0 auto;padding:32px 16px 72px}
-  .up .k{font-size:13.5px;font-weight:600;color:var(--bronze-hi)}
+  .up{max-width:720px;margin:0 auto;padding:24px 0 56px}
+  .up .k{font-size:13.5px;font-weight:600;color:var(--bronze-hi);margin:0}
   .up h1{font-size:clamp(24px,5vw,32px);letter-spacing:-.03em;line-height:1.2;margin:8px 0 10px}
   .up .lead{color:var(--ink-2);margin:0 0 20px}
   .up ol.steps{margin:0 0 24px;padding-left:20px;color:var(--ink-2);line-height:1.7}
@@ -28,15 +46,31 @@
   .up .grid a{position:relative;display:block}
   .up .grid img{width:100%;aspect-ratio:1080/1350;object-fit:cover;display:block;border-radius:6px;background:var(--surface)}
   .up .grid span{position:absolute;left:6px;top:6px;font-size:12px;font-weight:700;color:var(--ink);background:rgba(5,5,5,.7);padding:1px 6px;border-radius:4px}
-  .up pre{white-space:pre-wrap;word-break:keep-all;font:inherit;font-size:14.5px;line-height:1.7;color:var(--ink-2);background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:0}
+  .up pre{white-space:pre-wrap;word-break:keep-all;font:inherit;font-size:14.5px;line-height:1.7;color:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:0}
   .up h2{font-size:16px;margin:0 0 10px}
+  .up .who{color:var(--mut);font-size:14px;margin:0 0 20px}
   @media(min-width:641px){.up .grid{grid-template-columns:repeat(5,minmax(0,1fr))}.up .acts{grid-template-columns:1fr 1fr}}
 </style>
-</head>
-<body>
-<main class="up">
+<div class="up" id="upload">
+<section data-u="wait" role="status"><p class="k">인스타그램 직접 올리기</p><h1>확인하는 중…</h1></section>
+<section data-u="off" hidden><p class="k">인스타그램 직접 올리기</p><h1>운영자 전용 화면이에요</h1><p class="lead">로그인이 꺼져 있어 열 수 없어요.</p></section>
+<section data-u="out" hidden>
+  <p class="k">인스타그램 직접 올리기</p>
+  <h1>운영자 전용 화면이에요</h1>
+  <p class="lead">운영자 계정으로 로그인하면 카드를 저장하고 캡션을 복사할 수 있어요.</p>
+  <div class="acts"><a class="btn lg" href="/login" data-login>로그인</a></div>
+</section>
+<section data-u="no" hidden>
+  <p class="k">인스타그램 직접 올리기</p>
+  <h1>운영자 계정이 아니에요</h1>
+  <p class="lead">지금 로그인한 계정 <b data-who></b>은 이 화면을 쓸 수 없어요. 운영자 계정으로 다시 로그인해 주세요.</p>
+  <p class="msg" data-why role="alert"></p>
+  <div class="acts"><button class="copy" type="button" data-out>로그아웃하고 다시 로그인</button></div>
+</section>
+<section data-u="tool" hidden>
   <p class="k">인스타그램 직접 올리기</p>
   <h1 id="title">카드를 불러오는 중…</h1>
+  <p class="who">운영자 <b data-who></b></p>
   <p class="lead" id="lead"></p>
   <ol class="steps">
     <li><b>카드 저장</b> — 사진 앱에 1장부터 순서대로 저장돼요.</li>
@@ -45,65 +79,19 @@
     <li>올린 뒤 GitHub 이슈에 <code>/approve</code> — 기록하고 리서치 글을 공개해요.</li>
   </ol>
   <div class="acts">
-    <button class="save" id="save" disabled>카드 저장</button>
-    <button class="copy" id="copy" disabled>캡션 복사</button>
+    <button class="save" id="save" type="button" disabled>카드 저장</button>
+    <button class="copy" id="copy" type="button" disabled>캡션 복사</button>
   </div>
   <p class="msg" id="msg" role="status" aria-live="polite"></p>
   <div class="grid" id="grid"></div>
   <h2>캡션</h2>
   <pre id="cap"></pre>
+</section>
+</div>
+<script type="module" src="/upload.js"></script>
 </main>
-<script>
-(async () => {
-  const $ = (id) => document.getElementById(id), say = (t) => { $("msg").textContent = t; };
-  const slot = new URLSearchParams(location.search).get("slot") ?? "";
-  if (!/^\d{4}-\d{2}-\d{2}(?:-\d+)?$/.test(slot)) { $("title").textContent = "주소에 게시물 폴더가 없어요"; $("lead").textContent = "예: /upload?slot=2026-10-28"; return; }
-  const base = `/social/out/${slot}/`;
-  let post;
-  try { const r = await fetch(`${base}post.json`, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); post = await r.json(); }
-  catch { $("title").textContent = `${slot} 게시물을 찾지 못했어요`; $("lead").textContent = "사이트 배포가 끝나면(1~2분) 다시 열어 주세요."; return; }
-  const n = post.images.length;
-  $("title").textContent = `${slot} · 카드 ${n}장`;
-  $("lead").textContent = post.published ? `이미 올라갔어요: ${post.published.permalink ?? post.published.media_id}` : n > 10 ? "인스타그램 API는 10장까지라 앱에서 직접 올려요(앱은 20장까지)." : "10장 이하라 자동으로 올라가는 게시물이에요.";
-  $("save").textContent = `카드 ${n}장 저장`;
-  $("cap").textContent = post.caption;
-  $("grid").append(...post.images.map((f, i) => {
-    const a = Object.assign(document.createElement("a"), { href: base + f, target: "_blank", rel: "noopener" });
-    a.append(Object.assign(document.createElement("img"), { src: base + f, alt: `${i + 1}장`, loading: "lazy" }), Object.assign(document.createElement("span"), { textContent: i + 1 }));
-    return a;
-  }));
 
-  // the caption
-  $("copy").disabled = false;
-  $("copy").onclick = async () => {
-    try { await navigator.clipboard.writeText(post.caption); say("캡션을 복사했어요."); }
-    catch { const r = document.createRange(); r.selectNodeContents($("cap")); getSelection().removeAllRanges(); getSelection().addRange(r); say("복사가 막혀 캡션을 선택해 뒀어요 — 길게 눌러 복사해 주세요."); }
-  };
-
-  // the cards: fetched now, so the tap that shares them keeps its user activation (a share after a slow fetch is refused)
-  say("카드를 받는 중…");
-  let files = null;
-  try {
-    files = await Promise.all(post.images.map(async (f, i) => new File([await (await fetch(base + f)).blob()], `${slot}-${String(i + 1).padStart(2, "0")}.png`, { type: "image/png" })));
-  } catch { files = null; }
-  const share = files && navigator.canShare?.({ files });
-  $("save").disabled = false;
-  say(share ? "준비됐어요." : "이 브라우저는 한 번에 저장을 못 해요 — 버튼을 누르면 한 장씩 내려받아요.");
-  $("save").onclick = async () => {
-    if (share) {
-      // iPhone: the share sheet's "이미지 n개 저장" puts them in Photos in this order
-      try { await navigator.share({ files }); say("저장했으면 인스타그램 앱에서 1장부터 순서대로 골라 주세요."); return; }
-      catch (e) { if (e.name === "AbortError") return say(""); }
-    }
-    // no file sharing (desktop, some Android browsers): one download per card, in order
-    for (const [i, f] of post.images.entries()) {
-      const a = Object.assign(document.createElement("a"), { href: base + f, download: `${slot}-${String(i + 1).padStart(2, "0")}.png` });
-      document.body.append(a); a.click(); a.remove();
-      await new Promise((r) => setTimeout(r, 300));
-    }
-    say(`${n}장을 내려받았어요.`);
-  };
-})();
-</script>
+<footer class="site bare"><span>AX 트렌드 레이더</span><span class="links"><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span></footer>
+</div>
 </body>
 </html>

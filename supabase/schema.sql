@@ -76,3 +76,21 @@ revoke all on function public.pd_saved_list(), public.pd_saved_put(text, text, d
   public.pd_consent(text), public.pd_consented(text), public.pd_delete_me() from public, anon;
 grant execute on function public.pd_saved_list(), public.pd_saved_put(text, text, date), public.pd_saved_del(text),
   public.pd_consent(text), public.pd_consented(text), public.pd_delete_me() to authenticated;
+
+-- the operators (2026-10-27, owner: "운영자니깐 … 로그인했을 때만 폰으로 업로드 가능하게"): who may use /upload, the page that
+-- hands a long story's cards and caption to the phone. The addresses are added by hand in the SQL editor — never in this
+-- file, which is public: insert into pivoxdata.operators (email) values ('<address>');
+-- The cards and the caption themselves stay public files (Instagram fetches images by URL; the post is public once up):
+-- this decides who gets the tool, not who can see a card.
+create table if not exists pivoxdata.operators (
+  email text primary key check (email = lower(email) and char_length(email) between 3 and 254),
+  added_at timestamptz not null default now()
+);
+alter table pivoxdata.operators enable row level security;
+
+-- is the signed-in person an operator? Read from the token's own address (a magic-link sign-in: the address is verified)
+create or replace function public.pd_is_operator()
+returns boolean language sql stable security definer set search_path = ''
+as $$ select coalesce((select true from pivoxdata.operators o where o.email = lower(auth.jwt() ->> 'email')), false) $$;
+revoke all on function public.pd_is_operator() from public, anon;
+grant execute on function public.pd_is_operator() to authenticated;
