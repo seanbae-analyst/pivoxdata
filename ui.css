@@ -106,24 +106,15 @@ footer.site .links{display:flex;flex-wrap:wrap;gap:4px 16px}
 body.has-appbar{padding-bottom:84px}
 @media(min-width:641px){.appbar,.appsheet{display:none !important} body.has-appbar{padding-bottom:0}}
 
-/* ---------- phone: bottom tab bar (site.mjs) — the app-style way around; the top bar keeps only the name ----------
-   Shown on a narrow screen, and always under the phone pages (html.paged): a phone turned sideways is wider than 640px
-   but keeps its pages, so it keeps its menu too. */
-.tabbar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:45;grid-auto-flow:column;grid-auto-columns:1fr;
-  padding:6px 6px calc(6px + env(safe-area-inset-bottom));background:rgba(8,8,8,.94);border-top:1px solid var(--line);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.tabbar a,.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:48px;justify-content:center;border-radius:10px;
-  font:inherit;font-size:11.5px;font-weight:600;color:var(--dim);text-decoration:none;background:none;border:0;padding:0;cursor:pointer}
-.tabbar a[aria-current],.tabbar button[aria-expanded="true"]{color:var(--bronze-hi)}
-.tabbar [data-tab="toc"]{display:none} body.has-toc .tabbar [data-tab="toc"]{display:flex}
-.tabbar svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-html.paged .tabbar{display:grid}
+/* ---------- phone: a news site's top bar (2026-10-27, "뉴스처럼 다 바꿔줘") — the name, then the sections in one row
+   that scrolls sideways if it must; no tab bar at the bottom, no install bar ---------- */
 @media(max-width:640px){
-  .tabbar{display:grid}
-  body.has-tabbar{padding-bottom:calc(68px + env(safe-area-inset-bottom))}
-  body.has-tabbar.has-appbar{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
-  body.has-tabbar .appbar{bottom:calc(76px + env(safe-area-inset-bottom))}
-  .topbar .nav{display:none}
+  .topbar{flex-wrap:wrap;height:auto;padding:10px 0 0;row-gap:2px;border-bottom:1px solid var(--line)}
+  .topbar .nav{order:2;flex:1 0 100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -4px;gap:0}
+  .topbar .nav::-webkit-scrollbar{display:none}
+  .topbar .nav a{font-size:14.5px;padding:0 10px;min-height:44px}
+  .topbar .nav a[aria-current]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--bronze)}
+  .tabbar,.appbar,.appsheet{display:none !important}
   footer.site{margin-top:40px}
 }
 
@@ -237,61 +228,6 @@ html.toc-open body{overflow:hidden}
 .sheet-a{display:inline-flex;align-items:center;min-height:40px;margin-top:6px;font-size:14px}
 .sheet-x{display:block;width:100%;min-height:48px;margin-top:14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:none;
   color:var(--ink-2);font:inherit;font-weight:600;cursor:pointer}
-
-/* ---------- the landing on "/" (index.html #welcome, welcome.js — 2026-10-26, "랜딩패이지 먼저 나오고 로그인 넘어가야
-   이쁠것같은데 pivoxmap처럼"): PivoxMap's cover, then what this is. html.welcome is set in <head> on the first visit
-   only (trends/site.mjs → WELCOME_HEAD), so the app never shows first. The main button is bronze, as on PivoxMap. ---------- */
-.wl{display:none}
-html.welcome body{overflow:hidden}
-html.welcome .wl{display:block;position:fixed;inset:0;z-index:100;background:var(--bg)}
-.wl>section{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
-.wl>section[hidden]{display:none}
-.wl.out{opacity:0;transition:opacity .26s ease}
-.wl-cover{display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;overflow:hidden}
-.wl-cover .spot{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(245,240,232,.03) 0%,rgba(245,240,232,.012) 40%,transparent 75%)}
-.wl-foot{position:absolute;left:0;right:0;bottom:calc(clamp(24px,5vh,56px) + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:14px}
-.wl-next{min-height:44px;padding:0 16px;border:0;background:none;font:inherit;font-size:15px;font-weight:600;color:var(--bronze);cursor:pointer}
-.wl-next:hover{color:#f5f0e8}
-.wl-legal{display:flex;justify-content:center;gap:10px;margin:0;font-size:13px;color:var(--dim)}
-.wl-legal a{color:var(--dim)} .wl-legal a:hover{color:var(--ink)}
-.wl-about.in{animation:pgr-in .38s cubic-bezier(.2,.75,.25,1)}
-.wl-bar{position:sticky;top:0;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:12px;
-  min-height:60px;padding:env(safe-area-inset-top) 20px 0;background:rgba(5,5,5,.92);border-bottom:1px solid var(--line);
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
-.wl-bar .brand{cursor:default}
-.wl-login{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);color:var(--ink);font-size:14px;font-weight:600}
-.wl-login:hover{text-decoration:none;background:var(--surface-2)} .wl-login[hidden]{display:none}
-.wl-body{max-width:1120px;margin:0 auto;padding:32px 20px 0;display:grid;gap:26px}
-@media(min-width:960px){.wl-body{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:60px;align-items:center;padding-top:72px}}
-.wl-k{display:flex;align-items:center;gap:8px;margin:0 0 16px;font-size:13px;font-weight:600;color:var(--mut)}
-.wl-k i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--bronze)}
-.wl-h{margin:0;font-size:clamp(29px,4.3vw,48px);line-height:1.24;letter-spacing:-.035em;font-weight:750;color:#f5f0e8;text-wrap:balance}
-.wl-h em{font-style:normal;color:var(--bronze)}
-.wl-h:focus{outline:none} /* focused for screen readers when the screen comes in, not for the eye */
-.wl-lede{margin:16px 0 0;max-width:36em;font-size:16.5px;line-height:1.75;color:var(--ink-2);text-wrap:pretty}
-.wl-cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-@media(max-width:560px){.wl-cta .btn{flex:1 1 100%}}
-.wl-note{display:flex;align-items:flex-start;gap:8px;margin:18px 0 0;font-size:13.5px;line-height:1.6;color:var(--mut)}
-.wl-note svg{flex:none;width:16px;height:16px;margin-top:3px;fill:none;stroke:var(--mut);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.wl-sample{min-width:0;padding:18px 18px 4px;border-radius:var(--radius-card);background:var(--surface)}
-.wl-sample:empty{display:none}
-.wl-sk{display:flex;justify-content:space-between;gap:12px;margin:0 0 4px;font-size:13px;color:var(--mut)}
-.wl-sk b{color:var(--ink-2);font-weight:600}
-.wl-sample ol{list-style:none;margin:0;padding:0}
-.wl-sample li+li{border-top:1px solid var(--line)}
-.wl-sample a{display:grid;gap:3px;padding:13px 0;color:var(--ink);text-decoration:none}
-.wl-sample a:hover b{text-decoration:underline;text-underline-offset:3px}
-.wl-sample small{font-size:12.5px;color:var(--mut)}
-.wl-sample b{font-size:15.5px;line-height:1.45;font-weight:650}
-.wl-sample .src{font-size:12.5px;color:var(--dim)}
-.wl-more{margin:0;padding:12px 0 14px;border-top:1px solid var(--line);font-size:13px;color:var(--mut)}
-.wl-how{list-style:none;max-width:1120px;margin:30px auto 0;padding:0 20px;display:grid}
-@media(min-width:760px){.wl-how{grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:56px}}
-.wl-how li{display:grid;align-content:start;gap:4px;padding:16px 0;border-top:1px solid var(--line)}
-.wl-how b{font-size:15.5px;color:var(--ink)} .wl-how span{font-size:14px;line-height:1.6;color:var(--mut)}
-.wl-about>.wl-legal{padding:30px 20px calc(30px + env(safe-area-inset-bottom))}
-@media(prefers-reduced-motion:reduce){.wl-about.in{animation:none}.wl.out{transition:none}}
 
 /* ---------- buttons the sign-in pages and the landing share ---------- */
 .btn.lg{min-height:52px;padding:0 22px;font-size:16px}

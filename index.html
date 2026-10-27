@@ -25,19 +25,10 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=11" />
+<link rel="stylesheet" href="/ui.css?v=12" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
 <meta name="pd-policy" content="2026-10-27" />
-<script>(() => { try { if (location.hash || /[?&]scroll=/.test(location.search) || localStorage.getItem("pd.entered")) return; } catch { return; }
-  document.documentElement.classList.add("welcome"); })();</script>
-<script>(() => { const r = document.documentElement;
-  if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
-  r.classList.add("paged");
-  setTimeout(() => { if (r.classList.contains("pgr-ready") || !r.classList.contains("paged")) return; r.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); }, 4000);
-  const wide = matchMedia("(min-width: 900px)"), grown = (e) => { if (e.matches && r.classList.contains("paged")) location.reload(); };
-  if (wide.addEventListener) wide.addEventListener("change", grown); else wide.addListener(grown);
-})();</script>
 <!--/@head-->
 <link rel="stylesheet" href="/research.css" />
 <style>
@@ -243,22 +234,13 @@
     .events a{grid-template-columns:auto minmax(0,1fr);padding:13px 0}
     .events .et{grid-column:1/-1} .events .badge{justify-self:start} .events .go{display:none}
     .events li:nth-child(n+4){display:none}
-    #news .events{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;border:0;
+    /* a news list, top to bottom (2026-10-27, "뉴스처럼 다 바꿔줘"): every announcement, no sideways swiping */
+    #news .events li:nth-child(n+4){display:list-item} #news .events .et{font-size:15px;line-height:1.5}
       margin:0 -16px;padding:0 16px 4px;scroll-padding:0 16px;scrollbar-width:none;overscroll-behavior-x:contain}
-    #news .events::-webkit-scrollbar{display:none}
-    #news .events li{flex:0 0 84%;scroll-snap-align:start;border:0;border-top:2px solid var(--line-2)}
-    #news .events li+li{border-top:1px solid var(--line)}
-    #news .events li:nth-child(n+4){display:list-item}
-    #news .events a{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 2px 6px}
-    #news .events .et{font-size:15px;line-height:1.5} #news .events .et small{margin-top:6px}
-    #news .events li:only-child{flex-basis:100%}
     .glossary dl{grid-template-columns:1fr}
     .glossary.folds:not(.open) .gl-g:first-child .gl:nth-child(n+5),.glossary.folds:not(.open) .gl-g+.gl-g{display:none}
     .gl-more{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface);color:var(--ink-2);font:inherit;font-weight:600}
     /* a tab's cards side by side, swiped like the Instagram carousel (the counter is added below) */
-    .insights{display:flex;align-items:flex-start;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:0 16px 4px;scroll-padding:0 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-    .insights::-webkit-scrollbar{display:none} .insights[hidden]{display:none}
-    .insights>.ins{flex:0 0 86%;scroll-snap-align:start}
     .swipe-n[hidden]{display:none !important}
     .swipe-n{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:12.5px;color:var(--mut)} .swipe-n .dots{display:flex;gap:4px} .swipe-n i{width:6px;height:6px;border-radius:50%;background:var(--line-2)} .swipe-n i.on{background:var(--bronze);width:16px;border-radius:3px}
     .ins .big{font-size:36px} .ins.lead .big{font-size:44px}
@@ -394,44 +376,8 @@
 </style>
 </head>
 <body>
-<!-- the landing (2026-10-26, "랜딩패이지 먼저 나오고 로그인 넘어가야 이쁠것같은데 pivoxmap처럼"): the cover, then what
-     this is, then 시작하기. Shown on the first visit only — trends/site.mjs → WELCOME_HEAD sets html.welcome before the
-     first paint, welcome.js runs it and fills the week's cases from #story below. Without html.welcome it is never seen. -->
 <!-- the home's old research list and 찾아보기 (removed 2026-10-27, "겹치는 거 다 없애줘") live on /briefs -->
 <script>(() => { const go = () => { if (/^#(briefs|explore|topics|formats)$/.test(location.hash)) location.replace("/briefs"); }; go(); addEventListener("hashchange", go); })();</script>
-<div class="wl" id="welcome" role="dialog" aria-modal="true" aria-label="AX 트렌드 레이더 처음 화면">
-  <section class="wl-cover" data-w="cover" aria-label="PivoxData">
-    <div class="spot" aria-hidden="true"></div>
-    <p class="cover-wordmark">Pivox<span class="b">Data</span></p>
-    <div class="wl-foot">
-      <button type="button" class="wl-next" data-w-about>시작하기 <span aria-hidden="true">→</span></button>
-      <p class="wl-legal"><a href="/terms">이용약관</a><span aria-hidden="true">·</span><a href="/privacy">개인정보 처리방침</a></p>
-    </div>
-  </section>
-  <section class="wl-about" data-w="about" hidden>
-    <header class="wl-bar"><span class="brand">Pivox<span class="b">Data</span></span><a class="wl-login" href="/login?next=/" data-w-login hidden>로그인</a></header>
-    <div class="wl-body">
-      <div class="wl-hero">
-        <p class="wl-k"><i aria-hidden="true"></i>IT 컨설팅 관점의 AX 리서치 · 매일 갱신 · 무료</p>
-        <h1 class="wl-h" tabindex="-1">기업이 AI를 <em>어디에, 어떻게</em> 들였는지 공식 발표로 읽어요</h1>
-        <p class="wl-lede">회사·정부·기관이 자기 사이트에 직접 낸 발표만 모아요. 사례마다 누가 무엇을 어디에 어떻게 들였는지, 우리 프로젝트에서 확인할 점까지 IT 컨설팅의 눈으로 풀어 써요.</p>
-        <div class="wl-cta">
-          <a class="btn lg" href="/login?next=/" data-w-start>시작하기</a>
-          <button type="button" class="btn ghost lg" data-w-enter>로그인 없이 둘러보기</button>
-        </div>
-        <p class="wl-note"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.2-7 10-4-1.8-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span>출처는 공식 발표뿐이에요. 언론 보도·루머·집계 사이트는 쓰지 않아요.</span></p>
-      </div>
-      <aside class="wl-sample" aria-label="이번 주 사례 미리 보기"></aside>
-    </div>
-    <ol class="wl-how" aria-label="이렇게 읽어요">
-      <li><b>사례 카드</b><span>이번 주 기업의 AI 도입 사례를 한 장에 하나씩. 인스타그램에도 올라가요.</span></li>
-      <li><b>리서치</b><span>사례마다 누가·무엇을·어디에·어떻게, 그리고 확인할 점을 표와 문단으로 풀어요.</span></li>
-      <li><b>용어 풀이</b><span>낯선 말은 눌러서 바로 봐요. 리서치가 나올 때마다 늘어나요.</span></li>
-      <li><b>숫자</b><span>업종·규모별 AI 도입률과 IT 영역별 발표 수. 어떻게 셌는지 검산까지 공개해요.</span></li>
-    </ol>
-    <p class="wl-legal"><a href="/terms">이용약관</a><span aria-hidden="true">·</span><a href="/privacy">개인정보 처리방침</a></p>
-  </section>
-</div>
 <div class="wrap">
 <!--@nav-->
 <header class="topbar">
@@ -559,43 +505,9 @@
   <span class="links"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
-<nav class="tabbar" aria-label="바로가기">
-  <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
-  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>리서치</span></a>
-  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
-  <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
-  <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
-</nav>
 <script>
-(() => { const t = document.querySelector(".tabbar"); if (!t) return;
-  // the menus say where you are: the tab bar by section, the top bar's links by page (/briefs, /map)
-  const mark = () => { const p = location.pathname, h = location.hash, on = p.startsWith("/briefs") ? "briefs" : p === "/" || p === "/index.html" ? (h === "#news" ? "news" : h === "#glossary" ? "glossary" : "home") : "";
-    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on));
-    document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
-  mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
-</script>
-<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 리서치 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
-<div class="appsheet" id="appsheet" hidden><div class="in"><b>홈 화면에 추가하기</b><ol id="appsheet-steps"></ol><button type="button" id="appsheet-ok">확인</button></div></div>
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id), bar = $("appbar");
-  // (not over the phone pages: their first page links to installing — /briefs#alerts)
-  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches || document.documentElement.classList.contains("paged")) return;
-  try { if (+localStorage.getItem("appbar-x") > Date.now() - 7 * 864e5) return; } catch {}
-  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  let ev = null;
-  const steps = ios
-    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"]
-    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"];
-  $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
-  const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
-  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });
-  addEventListener("appinstalled", () => show(false));
-  setTimeout(() => show(true), 1200);
-  $("appbar-go").addEventListener("click", async () => { if (ev) { ev.prompt(); await ev.userChoice; ev = null; show(false); } else $("appsheet").hidden = false; });
-  $("appsheet-ok").addEventListener("click", () => { $("appsheet").hidden = true; });
-  $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
-})();
+(() => { const p = location.pathname;
+  document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); })();
 </script>
 <script type="module" src="/account.js"></script><!--/@footer-->
 </div>
@@ -842,6 +754,5 @@ pager([
 }; if (document.documentElement.classList.contains("paged")) document.addEventListener("unpaged", setup, { once: true }); else setup(); })();
 </script>
 <script src="/terms.js" defer></script>
-<script type="module" src="/welcome.js"></script>
 </body>
 </html>
