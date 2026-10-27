@@ -130,7 +130,8 @@ function placeButtons() {
   const slot = slotOf(location.pathname);
   if (art && slot && !document.querySelector('meta[name="robots"][content*="noindex"]')) {
     const item = { slot, title: text(art.querySelector("h1")), day: slot.slice(0, 10) };
-    const under = () => { const row = document.createElement("div"); row.className = "save-row"; row.append(saveButton(item)); art.append(row); };
+    // (next to 링크 복사 when the piece has it — social/briefs.mjs → .act-row)
+    const under = () => { const row = art.querySelector(".act-row") ?? Object.assign(document.createElement("div"), { className: "save-row" }); row.prepend(saveButton(item)); if (!row.isConnected) art.append(row); };
     const where = paged() && document.querySelector(".pgr-top .pgr-where");
     if (where) {
       const b = saveButton(item, true);

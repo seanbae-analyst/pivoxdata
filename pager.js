@@ -1,6 +1,6 @@
 // pager.js — phones: a long page becomes pages turned sideways, like the Instagram carousel, instead of one long scroll.
 // The page lists its chapters:
-//   pager([{ id, name, pages: [[node, …], …] }, { id, name, lead, head, items, list }, …], { tab, fit })
+//   pager([{ id, name, pages: [[node, …], …] }, { id, name, lead, head, items, list }, …], { tab, fit }) → { refresh }
 //   • pages — fixed pages, each the nodes moved onto it
 //   • items — a list split over as many pages as it needs: each page takes what fits on this screen (measured), in a
 //     fresh list() element under a copy of head; lead (nodes) opens the chapter's first page instead of the head
@@ -17,13 +17,16 @@
 // gives up, document gets an "unpaged" event so the page's long-layout scripts can still run; "?scroll=1" keeps the long
 // page. The address follows the page: a card's own id (#c-ax-industry), else the chapter (#news) with the page in it kept
 // in history.state, so a shared link or the back button lands on the same page.
+// refresh() lays the pages out again after a chapter's items changed (the research list's search and filters change
+// which pieces are shown); on the long page it does nothing.
 const el = (tag, cls) => Object.assign(document.createElement(tag), cls ? { className: cls } : {});
 
 export function pager(chapters, { tab, fit, back = null } = {}) {
   const root = document.documentElement, has = (nodes) => nodes?.some(Boolean);
   chapters = chapters.filter((c) => c.pages?.some(has) || c.items?.length);
-  if (!root.classList.contains("paged")) { if (chapters.length) sidebar(chapters); return; } // the long page: the sidebar only
-  if (!chapters.length) { root.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); return; }
+  const none = { refresh() {} };
+  if (!root.classList.contains("paged")) { if (chapters.length) sidebar(chapters); return none; } // the long page: the sidebar only
+  if (!chapters.length) { root.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); return none; }
   // screens (2026-10-26, "이쁜 앱처럼"): chapters that name a screen are shown a screen at a time, like an app — the first
   // screen is home; a link, a tile or the sidebar opens another one over it (it comes in from the side, the address and
   // the browser's back follow), and ‹ in the top bar goes back. A swipe stays inside the screen.
@@ -193,6 +196,7 @@ export function pager(chapters, { tab, fit, back = null } = {}) {
   } else turn(arrived, false, "replace");
   document.fonts?.ready.then(() => { render(); });
   root.classList.add("pgr-ready");
+  return { refresh: () => render() };
 }
 
 // ---------- the sidebar: the page's contents as a side panel ----------
@@ -250,7 +254,7 @@ function sidebar(chapters, { shell = null, where = null } = {}) {
   const site = el("nav", "toc-site"); site.setAttribute("aria-label", "사이트");
   site.append(Object.assign(el("p", "toc-g"), { textContent: "사이트" }));
   for (const l of document.querySelectorAll(".topbar .nav a")) site.append(Object.assign(el("a"), { href: l.getAttribute("href"), textContent: l.textContent }));
-  site.append(Object.assign(el("a"), { href: "/#more", textContent: "방법·검산" }), Object.assign(el("a"), { href: "/briefs#alerts", textContent: "앱 설치 · 새 브리핑 알림" }));
+  site.append(Object.assign(el("a"), { href: "/#more", textContent: "방법·검산" }), Object.assign(el("a"), { href: "/briefs#alerts", textContent: "앱 설치 · 새 리서치 알림" }));
   body.append(page, nav, site);
   aside.append(head, body);
   document.body.classList.add("has-toc");

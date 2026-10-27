@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=9" />
+<link rel="stylesheet" href="/ui.css?v=10" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
 <meta name="pd-policy" content="2026-10-26" />
@@ -38,7 +38,7 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
@@ -63,12 +63,12 @@
 
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
   <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
-  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
+  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>리서치</span></a>
   <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
   <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
@@ -81,7 +81,7 @@
     document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
   mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
 </script>
-<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 브리핑 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
+<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 리서치 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
 <div class="appsheet" id="appsheet" hidden><div class="in"><b>홈 화면에 추가하기</b><ol id="appsheet-steps"></ol><button type="button" id="appsheet-ok">확인</button></div></div>
 <script>
 (() => {

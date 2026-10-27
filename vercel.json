@@ -63,7 +63,7 @@
     },
     {
       "source": "/research/:path*",
-      "destination": "/",
+      "destination": "/briefs",
       "permanent": true
     },
     {

@@ -493,7 +493,11 @@ const cardHtml = (list) => list.map((x, i) => { const used = new Set();
     + (x.easy ? `<p class="easy"><span class="el">쉽게 말하면</span>${termify(x.easy, used)}</p>` : "")
     + (x.note ? `<p class="fine">${termify(x.note, used)}</p>` : "")
     + (x.recent?.length ? recentHtml(x.recent) : "")
-    + `<p class="src">${esc(x.src)}</p></article>`; }).join("");
+    + `<p class="src">${esc(x.src)}</p>`
+    // an IT domain's card leads to its topic page — the research on it and its announcements (social/briefs.mjs writes
+    // one for every domain), the way Our World in Data links a chart to the writing on it
+    + (/^dom-(?!all$)/.test(x.id) ? `<a class="c-res" href="/briefs/topic/${x.id.slice(4)}">이 영역의 리서치 · 발표 모아 보기 →</a>` : "")
+    + `</article>`; }).join("");
 const tabsHtml = topics.map((t, i) => `<button type="button" role="tab" id="tab-${t.id}" aria-controls="panel-${t.id}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" data-topic="${t.id}">${esc(t.name)}<span class="n">${t.cards.length}</span></button>`).join("");
 const panelsHtml = topics.map((t, i) => `<div class="insights" role="tabpanel" id="panel-${t.id}" aria-labelledby="tab-${t.id}"${i === 0 ? "" : " hidden"}>${cardHtml(t.cards)}</div>`).join("");
 

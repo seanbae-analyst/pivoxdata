@@ -25,7 +25,7 @@
 <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-title" content="AX 레이더" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
-<link rel="stylesheet" href="/ui.css?v=9" />
+<link rel="stylesheet" href="/ui.css?v=10" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
 <meta name="pd-policy" content="2026-10-26" />
@@ -72,17 +72,6 @@
   .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
   .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
   .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
-  .tabs{display:flex;flex-wrap:wrap;gap:2px;margin:4px 0 8px;border-bottom:1px solid var(--line)}
-  .tabs a{font-size:14px;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
-  .tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--bronze)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
-  h2.month{font-size:15px;color:var(--mut);font-weight:600;margin:32px 0 10px}
-  .list{list-style:none;margin:0;padding:0;display:grid;max-width:760px;border-top:1px solid var(--line-2)}
-  .list li{padding:0 0 12px;border-bottom:1px solid var(--line)}
-  .list .card{display:block;padding:16px 0 4px;color:var(--ink-2);text-decoration:none}
-  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
-  .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
-  .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .list .chips{margin:6px 0 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
   .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
   .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
@@ -94,7 +83,7 @@
   /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
   @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
   @media(max-width:640px){
-    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px}
     h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
   }
@@ -109,18 +98,14 @@
   .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
   .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
   /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
-  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
+  .pg .art-head:has(+.case-list) .chips{display:none} .pg .art-head .act-row{margin-top:10px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
   .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
   .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  .pg .list{border-top:0;display:grid;gap:10px}
-  .pg .list li{padding:0;border:0;border-radius:18px;background:var(--surface-2)}
-  .pg .list .card{padding:16px 16px 6px}
-  .pg .list .chips{padding:0 16px 14px}
-  .pg .list .card:hover .t{text-decoration:none}
-  .pg h2.month{margin:6px 2px 8px}
   html.paged{-webkit-tap-highlight-color:transparent}
 </style>
 </head>
@@ -129,27 +114,40 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
 <article class="brief">
   <header class="art-head">
-  <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/news">이번 주 AX 사건</a></div>
+  <div class="kicker"><b>리서치</b><a href="/briefs/series/news">이번 주 AX 사건</a></div>
   <h1 class="page">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</h1>
   <p class="lede">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</p>
-  <p class="meta">2026년 10월 25일 · AX 트렌드 레이더</p>
+  <p class="meta">2026년 10월 25일 · 사례 5건 · 공식 발표 5건 · AX 트렌드 레이더</p>
+  <p class="topics"><span>주제</span><a href="/briefs/topic/security">보안·규제</a><a href="/briefs/topic/crm">CRM·고객</a><a href="/briefs/topic/cloud">클라우드·인프라</a></p>
   <div class="chips"><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-ukgov">영국 정부</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div>
+  <div class="act-row"><button type="button" class="share-btn" data-share><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg><span>링크 복사</span></button></div>
   </header>
   <section class="part" data-name="사례 1"><h2 id="s1">Salesforce, 고객 소통 플랫폼 Braze 인수 계약</h2><p>Salesforce는 고객 소통 플랫폼 Braze를 인수하는 최종 계약을 맺었다고 발표했어요. 인수 규모는 기업가치 기준 약 $5.66 billion이에요. 발표문에서 Salesforce는 자신을 '세계 1위 AI <button type="button" class="term" data-term="crm">CRM</button>'이라고 소개했고, Braze를 '선도적인 고객 소통 플랫폼'이라고 표현했어요. 두 표현 모두 Salesforce의 말이에요.</p><p>CRM은 고객 정보와 영업·상담 이력을 관리하는 시스템이에요. 고객 소통 플랫폼은 고객에게 메시지를 보내고 그 반응을 이어 가는 도구예요. 둘이 한 회사 제품군 안에 들어오면 고객 데이터와 고객 접점을 한곳에서 다루게 된다고 볼 수 있어요.</p><p>기업 <button type="button" class="term" data-term="ax">AX</button> 관점에서는 AI가 결국 고객 데이터 위에서 돌아간다는 점을 눈여겨볼 만해요. 지금 쓰는 CRM과 마케팅 도구가 어느 회사 제품군에 속하는지가 AI를 어디까지 활용할 수 있는지와 연결될 수 있다는 뜻으로 읽을 수 있어요.</p><p class="src">출처 · <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="part" data-name="사례 2"><h2 id="s2">Uber, 30,000명 넘는 직원에게 ChatGPT Work</h2><p>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요. 발표에 따르면 직원들은 이 도구를 자료 조사, 데이터 분석, 발표 자료 만들기, 복잡한 업무 흐름 처리에 쓰게 돼요.</p><p>눈여겨볼 점은 대상이 전 직원이라는 거예요. AI를 일부 개발팀이나 시범 부서에만 주는 단계를 넘어선 사례예요. 문서·메일처럼 누구나 쓰는 기본 업무 도구로 다루는 방식으로 볼 수 있어요.</p><p>발표에 적힌 쓰임새가 조사·분석·문서 작업이라는 점은 사무직 전반의 일상 업무와 맞닿아 있다고 볼 수 있어요. 실무자에게는 질문이 바뀐다는 뜻으로 읽을 수 있어요. 'AI를 누가 쓸 수 있나'에서 '어떤 업무에 어떻게 쓰나'로요.</p><p class="src">출처 · <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a></p></section><section class="part" data-name="사례 3"><h2 id="s3">영국 정부, 'AI 주권' 자문 서한 공개</h2><p>영국 정부는 'AI 주권: AI 시대에 영국의 주체성 지키기'라는 제목의 서한을 공개했어요. AI 담당 장관에게 보내는 자문 서한이에요. 영국이 지금과 앞으로의 AI 기술을 두고 전략적인 선택을 할 역량을 어떻게 키울 수 있는지를 다뤄요.</p><p>발표 요약의 초점은 '전략적 선택을 할 역량'에 있어요. 그래서 여기서 말하는 주권은 모든 것을 직접 만든다는 뜻보다 가까운 의미가 따로 있다고 읽을 수 있어요. 어떤 AI를 쓰고 무엇에 기댈지를 스스로 고를 수 있는 힘이에요.</p><p>기업에도 비슷한 질문이 생긴다고 볼 수 있어요. 특정 AI에 업무가 깊이 묶이면 나중에 고를 수 있는 선택지가 좁아질 수 있어요. 그런 점에서 어떤 모델과 클라우드를 쓸지는 단순한 IT 구매를 넘어선 전략 문제로 볼 수 있어요.</p><p class="src">출처 · <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a></p></section><section class="part" data-name="사례 4"><h2 id="s4">NVIDIA, 유럽 등지에서 클라우드 파트너 확장</h2><p>NVIDIA는 클라우드 파트너들이 지역 컴퓨팅 용량을 늘리고 있다고 발표했어요. 대상 지역은 유럽·북유럽·아프리카·중앙아시아예요. 발표 제목에는 '주권', '개방', '안전한 <button type="button" class="term" data-term="agent">AI 에이전트</button>'라는 말이 함께 들어 있어요. AI 에이전트는 여러 단계의 일을 스스로 이어서 처리하는 AI를 말해요.</p><p>NVIDIA는 확장의 배경으로 AI 네이티브 기업들의 수요를 들었어요. NVIDIA의 설명에 따르면 개발자에게 필요한 것은 세 가지예요. 데이터 가까이에 있는 컴퓨팅, 직접 고쳐서 대규모로 서비스할 수 있는 공개 모델, 처음부터 보안을 고려해 설계한 인프라예요.</p><p>기업 AX 관점에서는 '데이터가 있는 곳에서 AI를 돌린다'는 요구를 눈여겨볼 만해요. 데이터를 어디에 두고 어디서 처리하는지가 AI 도입 설계의 중요한 조건이 되고 있다고 볼 수 있어요. 영국 정부가 말한 주권과도 맞닿는 대목이에요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a></p></section><section class="part" data-name="사례 5"><h2 id="s5">OpenAI, 폴란드 NASK와 AI 안전 협력</h2><p>OpenAI는 폴란드의 NASK와 협력한다고 발표했어요. 협력 분야는 AI 안전·보안과 기술 연구예요. 발표에 따르면 목표는 안전장치를 강화하고 더 회복력 있는 디지털 생태계를 뒷받침하는 거예요.</p><p>AI 회사가 한 나라의 기관과 안전·보안 연구를 함께 한다는 점에서 읽을 수 있는 게 있어요. AI 안전이 회사 혼자의 과제를 넘어 공공 영역과 함께 다루는 주제가 되고 있다는 뜻으로 볼 수 있어요.</p><p>기업 실무자에게는 AI 도입 검토 항목에 보안과 안전장치가 함께 올라가는 흐름으로 읽을 수 있어요. 어떤 AI를 쓰느냐만큼 확인할 거리가 하나 더 있다고 볼 수 있어요. 그 AI가 어떤 안전 기준 아래에서 운영되는지예요.</p><p class="src">출처 · <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a></p></section><section class="part" data-name="공통 흐름"><h2 id="s6">공통 흐름: 도입 다음 질문은 '누구의 AI를, 어디서'</h2><p>다섯 발표를 나란히 놓으면 두 갈래가 보여요. 한쪽은 도입을 넓히는 움직임이에요. Uber는 AI를 전사로 넓혔고, Salesforce는 고객 데이터와 접점을 묶으려 했어요. 다른 쪽은 선택과 통제를 이야기하는 움직임이에요. 영국 정부는 주권을, NVIDIA는 지역 인프라를, OpenAI와 NASK는 안전을 다뤘어요.</p><p>도입이 넓어지는 흐름은 데이터에서도 보여요. <button type="button" class="term" data-term="ramp">Ramp</button> AI Index는 미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구에 돈을 낸 회사 비율을 매달 재는 지표예요. 이 지표에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%였어요. 1년 전 43.8%에서 12.1%p(퍼센트포인트) 오른 수치예요. 다만 미국 기업의 유료 결제 기준이라 무료 도구나 개인 결제는 잡히지 않아요.</p><p>인프라에 들어가는 돈도 커지고 있어요. 마이크로소프트·구글·아마존·메타가 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈은 1년 전보다 +87% 많았어요. 최근 4개 분기를 합치면 $510.7B이고, 1년 전에는 $291.3B였어요. 도입이 넓어지고 인프라가 커지면서 '누구의 AI를, 어디서 돌리느냐'가 더 중요한 질문이 되고 있다고 볼 수 있어요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/21</a> / <a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 · 10/19</a> / <a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/23</a> / <a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/22</a> / <a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 · 10/20</a></p></section><section class="part" data-name="관점"><h2 id="s7">실무자가 짚어 볼 점</h2><p>이번 주 발표들은 실무자에게 몇 가지 질문을 남긴다고 볼 수 있어요. 먼저 우리 회사에서 AI가 어떤 자리에 있는지 짚어 볼 수 있어요. 일부 팀의 실험인지, 전사 업무 도구인지예요.</p><p>다음은 선택권과 통제예요. 쓰는 모델·클라우드·업무 도구가 어느 회사에 묶여 있는지 살펴볼 수 있어요. 데이터를 어디에 두고 어디서 처리하는지, 안전·보안 기준이 무엇인지도 질문거리예요. 이런 질문이 도입 속도만큼 중요해지고 있다고 읽을 수 있어요.</p><p>다만 이번 발표들은 각 회사와 기관이 밝힌 계약·계획·협력 소식이에요. 실제 효과나 결과는 발표만으로 알 수 없어요. 이후 공개되는 내용을 함께 살펴볼 필요가 있어요.</p></section>
   <section class="sum"><h2>정리</h2><ul><li>Salesforce는 Braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요.</li><li>OpenAI는 Uber가 30,000명 넘는 직원에게 ChatGPT Work를 도입한다고 발표했어요.</li><li>영국 정부는 AI 주권 자문 서한을, NVIDIA는 유럽 등지의 클라우드 파트너 확장을 발표했어요.</li><li>OpenAI는 폴란드 NASK와 AI 안전·보안 협력을 발표했어요.</li><li>AI를 얼마나 쓰느냐에 더해 누구의 AI를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요.</li></ul></section>
   <section class="basis"><h2>근거</h2><p>회사·기관이 직접 낸 발표만 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs"><li><a href="https://blogs.nvidia.com/blog/cloud-partners-europe-sovereign-safety-open-agents/" target="_blank" rel="noopener">NVIDIA 공식 발표 — NVIDIA Cloud Partners Scale Across Europe — Sovereign, Open and Built for Safe AI Agents</a> <span class="d">10/21</span></li><li><a href="https://www.gov.uk/government/publications/ai-sovereignty-preserving-uk-agency-in-an-ai-enabled-world" target="_blank" rel="noopener">영국 정부 보도자료 — AI sovereignty: preserving UK agency in an AI-enabled world</a> <span class="d">10/19</span></li><li><a href="https://openai.com/index/openai-nask-ai-safety-security-partnership" target="_blank" rel="noopener">OpenAI 공식 발표 — OpenAI and Poland’s NASK partner to advance AI safety and security</a> <span class="d">10/23</span></li><li><a href="https://openai.com/index/uber-chatgpt-work-rollout" target="_blank" rel="noopener">OpenAI 공식 발표 — Uber brings ChatGPT Work to all employees with OpenAI</a> <span class="d">10/22</span></li><li><a href="https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/" target="_blank" rel="noopener">Salesforce 공식 발표 — Salesforce Signs Definitive Agreement to Acquire Braze</a> <span class="d">10/20</span></li></ul></section>
-  <nav class="pn" aria-label="같은 시리즈"><span></span><a class="next" href="/briefs/2026-10-26"><small>다음 이번 주 AX 사건 →</small>AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</a></nav>
-  <section class="rel"><h2>같이 읽기</h2><ul class="list"><li><a class="card" href="/briefs/2026-10-26"><span class="k">이번 주 AX 사건 · 2026년 10월 26일</span><span class="t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-security">보안·안전</a><a class="chip theme" href="/briefs/tag/theme-infra">인프라·클라우드</a><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul></section>
-  <div class="more-links"><a href="/briefs">← 브리핑 전체</a><a href="https://www.instagram.com/p/De6FGlbHLJo/" target="_blank" rel="noopener">인스타그램 카드로 보기</a><a href="/">오늘의 AX 지표</a></div>
+  <section class="inds" id="data" aria-labelledby="h-data"><h2 id="h-data">관련 지표</h2><p class="inds-intro">이 글이 다룬 주제를 매일 같은 방식으로 다시 센 숫자예요. 숫자를 누르면 지표 화면으로, 주제를 누르면 그 주제의 리서치와 발표로 가요.</p><div class="ind" id="ind-dom-security"><p class="ind-k">IT 영역 · 보안·규제</p><p class="ind-n"><b>14건</b><span>최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기</span></p><p class="ind-t">보안·규제, SK텔레콤 발표가 가장 많아요</p><ol class="ind-bars"><li><span class="n">SK텔레콤</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">3건</span></li><li><span class="n">Anthropic</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">3건</span></li><li><span class="n">OpenAI</span><i aria-hidden="true"><span style="width:67%"></span></i><span class="v">2건</span></li></ol><p class="ind-src">회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 2026년 10월 26일 기준 · <a href="/#c-dom-security">지표에서 보기</a> · <a href="/briefs/topic/security">주제 페이지</a></p></div><div class="ind" id="ind-dom-crm"><p class="ind-k">IT 영역 · CRM·고객</p><p class="ind-n"><b>5건</b><span>최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기</span></p><p class="ind-t">CRM·고객, Salesforce 발표가 가장 많아요</p><ol class="ind-bars"><li><span class="n">Salesforce</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">3건</span></li><li><span class="n">SAP</span><i aria-hidden="true"><span style="width:67%"></span></i><span class="v">2건</span></li></ol><p class="ind-src">회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 2026년 10월 26일 기준 · <a href="/#c-dom-crm">지표에서 보기</a> · <a href="/briefs/topic/crm">주제 페이지</a></p></div><div class="ind" id="ind-dom-cloud"><p class="ind-k">IT 영역 · 클라우드·인프라</p><p class="ind-n"><b>19건</b><span>최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기</span></p><p class="ind-t">클라우드·인프라, NVIDIA 발표가 가장 많아요</p><ol class="ind-bars"><li><span class="n">NVIDIA</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">4건</span></li><li><span class="n">과학기술정보통신부</span><i aria-hidden="true"><span style="width:75%"></span></i><span class="v">3건</span></li><li><span class="n">Databricks</span><i aria-hidden="true"><span style="width:50%"></span></i><span class="v">2건</span></li></ol><p class="ind-src">회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 2026년 10월 26일 기준 · <a href="/#c-dom-cloud">지표에서 보기</a> · <a href="/briefs/topic/cloud">주제 페이지</a></p></div></section>
+  <nav class="pn" aria-label="같은 형식"><span></span><a class="next" href="/briefs/2026-10-26"><small>다음 이번 주 AX 사건 →</small>AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</a></nav>
+  <section class="rel"><h2>같이 읽기</h2><ul class="list r-list"><li class="r-item" id="r-2026-10-26" data-format="news" data-topics="cloud crm security" data-q="ai 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요 이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 ai를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. sk텔레콤은 거버넌스 체계를, microsoft와 databricks는 데이터와 실행 환경의 통제를, salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요. 이번 주 ax 사건 클라우드·인프라 crm·고객 보안·규제 보안·안전 인프라·클라우드 인수·투자·제휴 통신 의료·바이오 sk텔레콤 databricks microsoft salesforce sk텔레콤: 사내 ai 에이전트까지 관리 기준을 묶었어요 sk텔레콤 ai 거버넌스 리포트·관리체계 사내 ai 에이전트·대고객 ai 서비스 cpo 총괄, iso/iec 42001 인증 sk텔레콤 microsoft: 업무 시스템마다 통제 수준을 고르게 했어요 microsoft microsoft sovereign cloud 정부·핵심 인프라·규제 산업 시스템 워크로드별로 통제 수준 선택 microsoft databricks: 연구 데이터 곁에서 외부 모델을 돌려요 databricks·nvidia rfd4-proteina 단백질 설계 모델 생명과학 연구 데이터·실험 관리 ai runtime 서버리스 gpu에 통합 예정 databricks salesforce: 투자의 중심에 사람을 뒀어요 salesforce $1 billion 투자·ai 도입 전담팀 스페인 마드리드 본사·emea south 현장 엔지니어 배치, 졸업생 1년 교육 salesforce 네 발표가 앞에 둔 것: 어디서, 누가 sk텔레콤 microsoft databricks salesforce it 컨설팅 관점 sk텔레콤은 사내 ai 에이전트를 만들 때부터 종료까지 한 기준으로 관리한다고 밝혔어요. microsoft는 업무 시스템마다 통제 수준을 고르는 주권 클라우드 방식을 내놨어요. databricks는 연구 데이터와 같은 플랫폼에서 외부 모델을 돌리는 통합을 계획하고 있어요. salesforce는 스페인 $1 billion 투자에서 도입을 맡을 엔지니어와 교육에 무게를 뒀어요. 도입 전에 관리 기준, 데이터 위치, 운영 인력부터 정했는지 확인해야 해요."><a class="r-card" href="/briefs/2026-10-26"><span class="r-k"><b>이번 주 AX 사건</b><span>클라우드·인프라</span><span>CRM·고객</span><span>보안·규제</span></span><span class="r-t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="r-l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span><span class="r-m"><time datetime="2026-10-26">2026년 10월 26일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-26/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-security">보안·안전</a><a class="chip theme" href="/briefs/tag/theme-infra">인프라·클라우드</a><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul></section>
+  <div class="more-links"><a href="/briefs">← 리서치 전체</a><a href="https://www.instagram.com/p/De6FGlbHLJo/" target="_blank" rel="noopener">인스타그램 카드로 보기</a><a href="/">오늘의 AX 지표</a></div>
 </article>
 <dl class="terms-src" hidden><div class="gl" id="g-ax"><dt>AX (AI 전환)</dt><dd>AI Transformation. 회사가 일하는 방식과 서비스에 AI를 들여 바꾸는 일이에요. 디지털 전환(DX)의 AI판이라고 보면 돼요.</dd></div><div class="gl" id="g-agent"><dt>AI 에이전트</dt><dd>사람이 단계마다 시키지 않아도 여러 단계의 일을 이어서 처리하는 AI예요. 문의를 읽고, 시스템에서 정보를 찾고, 답장 초안까지 쓰는 식이에요.</dd></div><div class="gl" id="g-crm"><dt>CRM</dt><dd>Customer Relationship Management. 고객 정보·영업·마케팅·상담 이력을 관리하는 소프트웨어예요(예: Salesforce).</dd></div><div class="gl" id="g-ramp"><dt>Ramp AI Index</dt><dd>미국 기업 7만여 곳의 법인카드·송금 기록으로, AI 도구에 돈을 낸 회사가 몇 %인지 매달 세는 지표예요. 무료 도구나 개인 결제는 안 잡혀요. 미국 연준(FRED)에도 올라와요.</dd></div></dl>
 <script src="/terms.js" defer></script>
+<script>
+(() => { for (const b of document.querySelectorAll("[data-share]")) b.addEventListener("click", async () => {
+  const url = location.origin + location.pathname, label = b.querySelector("span"), was = label.textContent;
+  try {
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({ title: document.title, url }); return; }
+    await navigator.clipboard.writeText(url); label.textContent = "복사했어요";
+  } catch (e) { if (e && e.name === "AbortError") return; prompt("이 주소를 복사하세요", url); }
+  setTimeout(() => { label.textContent = was; }, 2400);
+}); })();
+</script>
 <script type="module">
 import { pager } from "/pager.js";
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
@@ -178,23 +176,24 @@ if (document.documentElement.classList.contains("paged") && cases.length) {
   });
 }
 pager([
-  { id: "top", name: "브리핑", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
+  { id: "top", name: "리서치", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
   ...text,
   { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
   { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "data", name: "지표", title: "관련 지표", group: "마무리", lead: [$(".inds>h2"), $(".inds-intro")], items: [...art.querySelectorAll(".inds .ind")], list: div, count: 0 },
   { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
-], { tab: () => "briefs", back: { href: "/briefs", label: "브리핑" } });
+], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
 </script>
 </main>
 
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
   <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
-  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
+  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>리서치</span></a>
   <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
   <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
   <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
@@ -207,7 +206,7 @@ pager([
     document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
   mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
 </script>
-<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 브리핑 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
+<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 리서치 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
 <div class="appsheet" id="appsheet" hidden><div class="in"><b>홈 화면에 추가하기</b><ol id="appsheet-steps"></ol><button type="button" id="appsheet-ok">확인</button></div></div>
 <script>
 (() => {
