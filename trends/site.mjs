@@ -31,7 +31,7 @@ const PAGES = [
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — ${NAME} 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a>${AUTH.on ? `<a href="/login" data-acct="login">로그인</a>` : ""}</nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a>${AUTH.on ? `<a href="/login" data-acct="login">로그인</a>` : ""}</nav>
 </header>
 `;
 // on a phone, a tab bar at the bottom (like an app): 홈 · 리서치 · 발표 · 용어 · 목차 — the top bar keeps only the name.
@@ -84,7 +84,7 @@ const ACCOUNT = `\n<script type="module" src="/account.js"></script>`;
 const FOOTER = `
 <footer class="site">
   <span>${NAME} · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 ${TABBAR}${APPBAR}${ACCOUNT}`;
 

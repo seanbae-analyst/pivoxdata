@@ -98,18 +98,6 @@
   .sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
   .sec-h h2{margin:0;font-size:20px} .sec-h span{font-size:13px;color:var(--dim)}
   /* ---------- the latest research (the list's own rows, ui.css → .r-item) and 찾아보기: topics apart from formats ---------- */
-  .latest:not(:has(.r-item)){display:none}
-  .latest .r-list{max-width:none}
-  .explore:not(:has(.ex-list li)){display:none} .ex-col:not(:has(.ex-list>li)){display:none}
-  .ex-cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px}
-  .ex-col h3{margin:0 0 10px;font-size:15px;font-weight:650;color:var(--ink)} .ex-col h3 small{margin-left:6px;font-size:12.5px;font-weight:500;color:var(--dim)}
-  .ex-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-2)}
-  .ex-list li{border-bottom:1px solid var(--line)}
-  .ex-list a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:baseline;padding:12px 0;color:var(--ink-2);text-decoration:none}
-  .ex-list a:hover b{text-decoration:underline;text-underline-offset:3px}
-  .ex-list b{font-size:15.5px;font-weight:650;color:var(--ink)} .ex-list .ab{grid-column:1;font-size:13px;color:var(--mut)}
-  .ex-list .nums{grid-column:2;grid-row:1/span 2;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:12.5px;color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
-  .ex-list .nums span:first-child{color:var(--ink-2)}
   .ex-search{margin:12px 0 0;font-size:14px} .ex-search a{color:var(--ink-2)} .ex-search a:hover{color:var(--ink)}
   /* ---------- lists: recent changes, official announcements ---------- */
   .changes:has(.events:empty){display:none}
@@ -264,7 +252,6 @@
     #news .events a{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 2px 6px}
     #news .events .et{font-size:15px;line-height:1.5} #news .events .et small{margin-top:6px}
     #news .events li:only-child{flex-basis:100%}
-    .ex-cols{grid-template-columns:1fr;gap:26px}
     .glossary dl{grid-template-columns:1fr}
     .glossary.folds:not(.open) .gl-g:first-child .gl:nth-child(n+5),.glossary.folds:not(.open) .gl-g+.gl-g{display:none}
     .gl-more{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface);color:var(--ink-2);font:inherit;font-weight:600}
@@ -364,7 +351,7 @@
     .hub-head h1{font-size:26px} .hub-sec,.hub>.fresh,.tile small,.rows .n{display:none}
     .hub-story .t{font-size:18.5px;-webkit-line-clamp:2}
     .tile{min-height:80px;padding:10px 12px} .tile b{font-size:22px}
-    .rows{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .rows{grid-template-columns:1fr;gap:8px}
     .rows a{grid-template-columns:1fr;grid-template-rows:auto auto;justify-items:center;row-gap:6px;min-height:0;padding:10px 4px;text-align:center}
     .rows .ic,.rows .solo .t{grid-row:auto} .rows .t{font-size:12px;white-space:normal;overflow:visible}
     .pg>.st-head.intro .st-t{font-size:22px}
@@ -410,6 +397,8 @@
 <!-- the landing (2026-10-26, "랜딩패이지 먼저 나오고 로그인 넘어가야 이쁠것같은데 pivoxmap처럼"): the cover, then what
      this is, then 시작하기. Shown on the first visit only — trends/site.mjs → WELCOME_HEAD sets html.welcome before the
      first paint, welcome.js runs it and fills the week's cases from #story below. Without html.welcome it is never seen. -->
+<!-- the home's old research list and 찾아보기 (removed 2026-10-27, "겹치는 거 다 없애줘") live on /briefs -->
+<script>(() => { const go = () => { if (/^#(briefs|explore|topics|formats)$/.test(location.hash)) location.replace("/briefs"); }; go(); addEventListener("hashchange", go); })();</script>
 <div class="wl" id="welcome" role="dialog" aria-modal="true" aria-label="AX 트렌드 레이더 처음 화면">
   <section class="wl-cover" data-w="cover" aria-label="PivoxData">
     <div class="spot" aria-hidden="true"></div>
@@ -447,7 +436,7 @@
 <!--@nav-->
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 <!--/@nav-->
 <section class="cover" id="cover" aria-label="PivoxData">
@@ -464,20 +453,7 @@
     <p class="meta m-full"><!--@t-meta-->2026-10-27 갱신 · 매일 자동 · npm 10월 19일 주까지 · PyPI 10월 19일 주까지 · arXiv 2026년 9월까지 · Hugging Face 2026-10-27 · SEC 2026년 2분기까지 · 검산 43개 통과<!--/@t-meta--></p>
   </header>
 
-  <section class="story" id="story" aria-labelledby="h-story"><!--@t-story--><div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="2026-10-27">10월 27일</time> · 이번 주 AX 사건</p><h2 class="st-t" id="h-story"><a href="/briefs/2026-10-27">AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요</a></h2><p class="st-lede">이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 IT 프로젝트에서 확인할 점을 정리했어요.</p></div><ol class="beats"><li id="case-1"><a href="/briefs/2026-10-27#s1"><span class="bn">1</span><span class="bk">데이터·분석 · 파트너십</span><b>Porsche, 그룹 브랜드와 자율주행 데이터를 함께 써요</b><span class="bs">NVIDIA는 10월 22일 Cosmos 플랫폼에 학습 도구, 시뮬레이션 체크포인트, Cosmos Data Factory 블루프린트를 더했다고 발표했어요.</span><span class="bs2">월드 모델은 피지컬 AI가 현실 세계를 이해하고 흉내 내도록 돕는 모델이에요. NVIDIA는 Cosmos가 공개 모델 순위표 여섯 곳에서 상위 5위 안에 든다고 자평했어요.</span><span class="bw">어디에 자율주행 학습 데이터 · 어떻게 Voxel51 통해 Azure에서 사용</span><small>NVIDIA 공식 발표 · 10/22</small></a></li><li id="case-2"><a href="/briefs/2026-10-27#s2"><span class="bn">2</span><span class="bk">업무 도구 · 인수</span><b>OpenAI, 신약 연구개발 운영을 위해 Orchestra Bio를 인수해요</b><span class="bs">OpenAI는 10월 20일 Orchestra Bio를 인수한다고 발표했어요.</span><span class="bs2">생명과학 연구개발에 AI 기반 운영을 들이고, 제약·바이오 팀이 신약 개발을 앞당겨 새 치료법을 내놓도록 돕는 것이 목적이라고 밝혔어요. 이 글은 공식 페이지 원문을 읽지 못해 제목과 요약만 근거로 썼어요.</span><span class="bw">어디에 제약·바이오 연구개발 운영 · 어떻게 회사 인수</span><small>OpenAI 공식 발표 · 10/20</small></a></li><li id="case-3"><a href="/briefs/2026-10-27#s3"><span class="bn">3</span><span class="bk">AI 에이전트 · 연구·보고서</span><b>McKinsey, 은행 CIO에게 AI 에이전트 운영 원칙을 제시해요</b><span class="bs">McKinsey는 10월 26일 은행 CIO를 위한 AI 에이전트 안내서를 냈어요.</span><span class="bs2">제목은 '에이전트형 동료의 등장'이에요. 요약에 따르면 AI 에이전트가 스스로 판단하고 실행하며 여러 업무 흐름에 걸쳐 협업하는 일이 늘고 있어요.</span><span class="bw">어디에 여러 업무 흐름 · 어떻게 거버넌스·아키텍처·책임 체계 재정비</span><small>McKinsey 리서치 · 10/26</small></a></li></ol><div class="st-view"><p class="sv-k">공통 흐름</p><p class="sv-h">세 발표가 함께 가리키는 것: 일하는 구조</p><p>세 발표는 다루는 영역이 달라요. Porsche 사례는 학습 데이터를, OpenAI 인수는 연구개발 운영을, McKinsey 안내서는 에이전트의 책임 체계를 다뤘어요. 그래도 모두 모델 성능보다 AI가 돌아가는 공정과 통제를 앞에 뒀다는 점이 같아요.</p><p class="sv-k">IT 컨설팅 관점 · 확인할 점</p><p class="sv-q">학습·분석에 쓸 데이터를 고르고 라벨을 붙이고 품질을 평가하는 체계가 있나요?</p><p class="sv-q">합성 데이터를 섞을 때 실제 데이터와 견줘 검증할 기준과 담당이 있나요?</p><p class="sv-q">산업 전용 AI가 기존 연구·업무 시스템과 연동되는지 확인했나요?</p><a class="st-more" href="/briefs/2026-10-27">이야기 전체 읽기 →</a></div><!--/@t-story--></section>
-
-  <section class="latest" id="briefs" aria-labelledby="h-briefs">
-    <div class="sec-h"><h2 id="h-briefs">최신 리서치</h2><span><a href="/briefs"><!--@t-research-n-->리서치 전체 3편<!--/@t-research-n--> →</a></span></div>
-    <ul class="list r-list"><!--@t-briefs--><li class="r-item" id="r-2026-10-26" data-format="news" data-topics="cloud crm security" data-q="ai 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요 이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 ai를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. sk텔레콤은 거버넌스 체계를, microsoft와 databricks는 데이터와 실행 환경의 통제를, salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요. 이번 주 ax 사건 클라우드·인프라 crm·고객 보안·규제 보안·안전 인프라·클라우드 인수·투자·제휴 통신 의료·바이오 sk텔레콤 databricks microsoft salesforce sk텔레콤: 사내 ai 에이전트까지 관리 기준을 묶었어요 sk텔레콤 ai 거버넌스 리포트·관리체계 사내 ai 에이전트·대고객 ai 서비스 cpo 총괄, iso/iec 42001 인증 sk텔레콤 microsoft: 업무 시스템마다 통제 수준을 고르게 했어요 microsoft microsoft sovereign cloud 정부·핵심 인프라·규제 산업 시스템 워크로드별로 통제 수준 선택 microsoft databricks: 연구 데이터 곁에서 외부 모델을 돌려요 databricks·nvidia rfd4-proteina 단백질 설계 모델 생명과학 연구 데이터·실험 관리 ai runtime 서버리스 gpu에 통합 예정 databricks salesforce: 투자의 중심에 사람을 뒀어요 salesforce $1 billion 투자·ai 도입 전담팀 스페인 마드리드 본사·emea south 현장 엔지니어 배치, 졸업생 1년 교육 salesforce 네 발표가 앞에 둔 것: 어디서, 누가 sk텔레콤 microsoft databricks salesforce it 컨설팅 관점 sk텔레콤은 사내 ai 에이전트를 만들 때부터 종료까지 한 기준으로 관리한다고 밝혔어요. microsoft는 업무 시스템마다 통제 수준을 고르는 주권 클라우드 방식을 내놨어요. databricks는 연구 데이터와 같은 플랫폼에서 외부 모델을 돌리는 통합을 계획하고 있어요. salesforce는 스페인 $1 billion 투자에서 도입을 맡을 엔지니어와 교육에 무게를 뒀어요. 도입 전에 관리 기준, 데이터 위치, 운영 인력부터 정했는지 확인해야 해요."><a class="r-card" href="/briefs/2026-10-26"><span class="r-k"><b>이번 주 AX 사건</b><span>클라우드·인프라</span><span>CRM·고객</span><span>보안·규제</span></span><span class="r-t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="r-l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span><span class="r-m"><time datetime="2026-10-26">2026년 10월 26일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-26/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li><li class="r-item" id="r-2026-10-25-2" data-format="news" data-topics="security crm cloud work" data-q="ai를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 ax 사건 5건 이번 주 공식 발표 8건 가운데 기업 ax와 가까운 5건을 골랐어요. 회사들은 ai를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 ai 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요. 이번 주 ax 사건 보안·규제 crm·고객 클라우드·인프라 업무 도구 nvidia 영국 정부 openai salesforce salesforce, 고객 소통 플랫폼 braze 인수 계약 salesforce uber, 30,000명 넘는 직원에게 chatgpt work openai 영국 정부, 'ai 주권' 자문 서한 공개 영국 정부 nvidia, 유럽 등지에서 클라우드 파트너 확장 nvidia openai, 폴란드 nask와 ai 안전 협력 openai 공통 흐름: 도입 다음 질문은 '누구의 ai를, 어디서' nvidia 영국 정부 openai openai salesforce 실무자가 짚어 볼 점 salesforce는 braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요. openai는 uber가 30,000명 넘는 직원에게 chatgpt work를 도입한다고 발표했어요. 영국 정부는 ai 주권 자문 서한을, nvidia는 유럽 등지의 클라우드 파트너 확장을 발표했어요. openai는 폴란드 nask와 ai 안전·보안 협력을 발표했어요. ai를 얼마나 쓰느냐에 더해 누구의 ai를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요."><a class="r-card" href="/briefs/2026-10-25-2"><span class="r-k"><b>이번 주 AX 사건</b><span>보안·규제</span><span>CRM·고객</span><span>클라우드·인프라</span><span>업무 도구</span></span><span class="r-t">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</span><span class="r-l">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</span><span class="r-m"><time datetime="2026-10-25">2026년 10월 25일</time><span>사례 5건 · 공식 발표 5건</span></span><img class="r-th" src="/social/out/2026-10-25-2/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-ukgov">영국 정부</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li><!--/@t-briefs--></ul>
-  </section>
-
-  <section class="explore" id="explore" aria-labelledby="h-explore">
-    <div class="sec-h"><h2 id="h-explore">찾아보기</h2><span>주제와 형식을 따로 골라요</span></div>
-    <div class="ex-cols">
-      <div class="ex-col" id="topics"><h3>주제 <small>IT 영역 · 리서치와 지표가 함께</small></h3><ul class="ex-list"><!--@t-topics--><li><a href="/briefs/topic/erp"><b>ERP·백오피스</b><span class="ab">재무·회계·구매·공급망·인사</span><span class="nums"><span>리서치 0편</span><span>공식 발표 10건 · 30일</span></span></a></li><li><a href="/briefs/topic/crm"><b>CRM·고객</b><span class="ab">영업·마케팅·고객 상담</span><span class="nums"><span>리서치 2편</span><span>공식 발표 5건 · 30일</span></span></a></li><li><a href="/briefs/topic/cloud"><b>클라우드·인프라</b><span class="ab">클라우드·데이터센터·칩·주권 AI</span><span class="nums"><span>리서치 2편</span><span>공식 발표 19건 · 30일</span></span></a></li><li><a href="/briefs/topic/data"><b>데이터·분석</b><span class="ab">데이터 플랫폼·분석·거버넌스</span><span class="nums"><span>리서치 1편</span><span>공식 발표 5건 · 30일</span></span></a></li><li><a href="/briefs/topic/work"><b>업무 도구</b><span class="ab">전 직원이 쓰는 AI 도구·협업</span><span class="nums"><span>리서치 2편</span><span>공식 발표 9건 · 30일</span></span></a></li><li><a href="/briefs/topic/security"><b>보안·규제</b><span class="ab">AI 보안·안전·법·규제</span><span class="nums"><span>리서치 2편</span><span>공식 발표 17건 · 30일</span></span></a></li><li><a href="/briefs/topic/agents"><b>AI 에이전트</b><span class="ab">스스로 일하는 AI·업무 자동화</span><span class="nums"><span>리서치 1편</span><span>공식 발표 32건 · 30일</span></span></a></li><!--/@t-topics--></ul></div>
-      <div class="ex-col" id="formats"><h3>형식 <small>글의 꼴</small></h3><ul class="ex-list"><!--@t-formats--><li><a href="/briefs/series/news"><b>이번 주 AX 사건</b><span class="ab">회사·정부가 직접 낸 공식 발표로 보는 한 주의 AX</span><span class="nums"><span>3편</span><span>최근 10/27</span></span></a></li><!--/@t-formats--></ul><p class="ex-search"><a href="/briefs">검색과 필터로 찾기 →</a></p></div>
-    </div>
-  </section>
+  <section class="story" id="story" aria-labelledby="h-story"><!--@t-story--><div class="st-head"><p class="st-k">이번 주 AX 이야기 · <time datetime="2026-10-27">10월 27일</time> · 이번 주 AX 사건</p><h2 class="st-t" id="h-story"><a href="/briefs/2026-10-27">AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요</a></h2><p class="st-lede">이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 IT 프로젝트에서 확인할 점을 정리했어요.</p></div><ol class="beats"><li id="case-1"><a href="/briefs/2026-10-27#s1"><span class="bn">1</span><span class="bk">데이터·분석 · 파트너십</span><b>Porsche, 그룹 브랜드와 자율주행 데이터를 함께 써요</b><span class="bs">NVIDIA는 10월 22일 Cosmos 플랫폼에 학습 도구, 시뮬레이션 체크포인트, Cosmos Data Factory 블루프린트를 더했다고 발표했어요.</span><span class="bs2">월드 모델은 피지컬 AI가 현실 세계를 이해하고 흉내 내도록 돕는 모델이에요. NVIDIA는 Cosmos가 공개 모델 순위표 여섯 곳에서 상위 5위 안에 든다고 자평했어요.</span><span class="bw">어디에 자율주행 학습 데이터 · 어떻게 Voxel51 통해 Azure에서 사용</span><small>NVIDIA 공식 발표 · 10/22</small></a></li><li id="case-2"><a href="/briefs/2026-10-27#s2"><span class="bn">2</span><span class="bk">업무 도구 · 인수</span><b>OpenAI, 신약 연구개발 운영을 위해 Orchestra Bio를 인수해요</b><span class="bs">OpenAI는 10월 20일 Orchestra Bio를 인수한다고 발표했어요.</span><span class="bs2">생명과학 연구개발에 AI 기반 운영을 들이고, 제약·바이오 팀이 신약 개발을 앞당겨 새 치료법을 내놓도록 돕는 것이 목적이라고 밝혔어요. 이 글은 공식 페이지 원문을 읽지 못해 제목과 요약만 근거로 썼어요.</span><span class="bw">어디에 제약·바이오 연구개발 운영 · 어떻게 회사 인수</span><small>OpenAI 공식 발표 · 10/20</small></a></li><li id="case-3"><a href="/briefs/2026-10-27#s3"><span class="bn">3</span><span class="bk">AI 에이전트 · 연구·보고서</span><b>McKinsey, 은행 CIO에게 AI 에이전트 운영 원칙을 제시해요</b><span class="bs">McKinsey는 10월 26일 은행 CIO를 위한 AI 에이전트 안내서를 냈어요.</span><span class="bs2">제목은 '에이전트형 동료의 등장'이에요. 요약에 따르면 AI 에이전트가 스스로 판단하고 실행하며 여러 업무 흐름에 걸쳐 협업하는 일이 늘고 있어요.</span><span class="bw">어디에 여러 업무 흐름 · 어떻게 거버넌스·아키텍처·책임 체계 재정비</span><small>McKinsey 리서치 · 10/26</small></a></li></ol><div class="st-view"><p class="sv-k">공통 흐름</p><p class="sv-h">세 발표가 함께 가리키는 것: 일하는 구조</p><p>세 발표는 다루는 영역이 달라요. Porsche 사례는 학습 데이터를, OpenAI 인수는 연구개발 운영을, McKinsey 안내서는 에이전트의 책임 체계를 다뤘어요. 그래도 모두 모델 성능보다 AI가 돌아가는 공정과 통제를 앞에 뒀다는 점이 같아요.</p><p class="sv-k">IT 컨설팅 관점 · 확인할 점</p><p class="sv-q">학습·분석에 쓸 데이터를 고르고 라벨을 붙이고 품질을 평가하는 체계가 있나요?</p><p class="sv-q">합성 데이터를 섞을 때 실제 데이터와 견줘 검증할 기준과 담당이 있나요?</p><p class="sv-q">산업 전용 AI가 기존 연구·업무 시스템과 연동되는지 확인했나요?</p><a class="st-more" href="/briefs/2026-10-27">이야기 전체 읽기 →</a></div><!--/@t-story--><p class="st-all"><a href="/briefs">지난 리서치 모두 보기 →</a></p></section>
 
   <section class="numbers" id="numbers" aria-labelledby="h-ins">
     <div class="sec-h"><h2 id="h-ins">숫자로 보면</h2><span>Ramp AI Index · 회사·정부 공식 발표</span></div>
@@ -585,7 +561,7 @@
 <!--@footer-->
 <footer class="site">
   <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
-  <span class="links"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
 </footer>
 
 <nav class="tabbar" aria-label="바로가기">
@@ -806,13 +782,9 @@ function hub() {
   // the rest of the app: four shortcuts, two by two
   const rows = node("nav", "rows"); rows.setAttribute("aria-label", "더 보기");
   const row = (href, d, t, n) => { const a = node("a", n ? "tap" : "tap solo"); a.href = href; a.append(icon(d), node("span", "t", t), ...(n ? [node("span", "n", n)] : [])); rows.append(a); };
-  // research first (2026-10-27): the list with its search, the topics and formats, then the rest
-  // research first (2026-10-27); the list with its search is the tab bar's 리서치, the glossary its 용어
-  // (the latest pieces besides this week's story; with none yet, the whole list)
-  const latestN = all("#briefs .r-item").length;
-  row(latestN ? "#briefs" : "/briefs", "M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4", "최신 리서치", latestN ? `${latestN}편` : "");
-  row("#explore", "M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z", "주제 · 형식", `${all("#topics .ex-list>li").length}개 주제`);
-  row("#news", "M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4", "공식 발표", `${all("#news .events>li.news").length}건`);
+  // the research list, its topics and formats are the tab bar's 리서치 (/briefs) — not here again (2026-10-27 owner:
+  // "겹치는 거 다 없애줘")
+  // the announcements are the tab bar's 발표 — not a second button here
   row("#more", "M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6", "근거 데이터", "");
   h.append(rows, node("p", "fresh", text($(".hero .m-short"))));
   return h;
@@ -845,10 +817,6 @@ pager([
   { id: "story", screen: "story", name: "이야기", title: "이번 주 이야기", group: "이번 주 이야기", pages: [[intro]] },
   { id: "cases", screen: "story", name: "사례", title: "사례", group: "이번 주 이야기", pages: beats.map(caseCard), sub: beat },
   { id: "view", screen: "story", name: "관점", title: "공통 흐름 · IT 컨설팅 관점", group: "이번 주 이야기", count: 0, items: view, list: () => make("div", "st-view") },
-  { id: "briefs", screen: "briefs", name: "최신 리서치", title: "최신 리서치", group: "리서치", lead: [$("#briefs .sec-h")], items: all("#briefs .r-item"), list: () => make("ul", "list r-list"),
-    sub: (li) => ({ label: text(li.querySelector(".r-t")), note: text(li.querySelector(".r-k b")) }) },
-  { id: "explore", screen: "explore", name: "찾아보기", title: "주제 · 형식으로 찾기", screenTitle: "찾아보기", group: "리서치", count: 0,
-    items: [...feed("주제", "IT 영역 · 리서치와 지표", all("#topics .ex-list>li")), ...feed("형식", "글의 꼴", all("#formats .ex-list>li"))], list: () => make("ul", "ex-list feed") },
   ...(paged ? [] : [{ id: "numbers", name: "숫자", title: "핵심 숫자", group: "숫자로 보면", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] }]),
   { id: "ax", screen: "ax", name: "도입률", title: "기업 도입률", group: "숫자로 보면", pages: all("#panel-ax>.ins").map((c) => [c]), sub: card },
   { id: "domains", screen: "domains", name: "IT 영역", title: "IT 영역별 발표", group: "숫자로 보면", pages: all("#panel-domains>.ins").map((c) => [c]), sub: card },
