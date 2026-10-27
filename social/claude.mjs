@@ -231,9 +231,10 @@ export function checkStory(st, ctx = {}) {
 // from a fixed list (trends/series.mjs → DOMAINS, METHODS), and one question to ask of one's own project. The cards
 // print it as a small table (build.mjs), the briefing as the head of the case's section (briefs.mjs), so it is short
 // noun phrases, never invented: a box the announcement doesn't fill says so.
-// three to five cases, each told over two cards (a case card, then what it means): 11 to 15 cards with the cover, the
-// background, the common thread, the checks and the summing-up
-export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [3, 5] };
+// three to seven cases, each told over two cards (a case card, then what it means): with the cover, the background,
+// the common thread, the checks and the summing-up, 11 cards on a quiet day and up to 19 on a busy one — within the 20
+// the app takes (2026-10-27 owner: "최소 10장 이상 … 최대 20장까지 사건 많은 날은")
+export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [3, 7] };
 export const NOT_SAID = "발표에 없음";
 export const DOMAIN_NAMES = DOMAINS.map((d) => d.name), METHOD_NAMES = METHODS.map((m) => m.name);
 export const caseText = (c) => [c?.who, c?.what, c?.where, c?.how, c?.check].filter(Boolean).join("\n");
@@ -299,7 +300,8 @@ export function checkTerms(terms, { text = "", known = [] } = {}, ctx = {}) {
 // the web briefing (story.json → article) and the monthly roundup: a title, a lede, 2–8 sections (the briefing aims at
 // 3–8, a roundup at 2–4 flows — and the fallbacks made from slides or from a month's briefings have at least 2), a
 // summary of 2–6 lines. `refs`: { max, each, what } — which numbers a section may cite, and whether every section must
-export const ARTICLE = { title: 80, lede: 400, heading: 60, body: 1400, sections: [2, 8], takeaways: [2, 6] };
+// sections: a briefing of announcements has one per case (up to seven), the common thread and the IT consulting view
+export const ARTICLE = { title: 80, lede: 400, heading: 60, body: 1400, sections: [2, 10], takeaways: [2, 6] };
 export function checkArticle(a, { refs = { max: 0 }, ...ctx } = {}) {
   const p = [], sections = Array.isArray(a?.sections) ? a.sections : [], takeaways = Array.isArray(a?.takeaways) ? a.takeaways : [];
   if (!a?.title || plain(a.title).length > ARTICLE.title) p.push(`제목은 1~${ARTICLE.title}자`);
