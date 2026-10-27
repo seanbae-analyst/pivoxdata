@@ -1,0 +1,35 @@
+{
+ "date": "2026-10-27",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-27/",
+ "caption": "이번 주 공식 발표 3건을 도입 사례로 읽었어요.\nPorsche: NVIDIA Cosmos Data Factory로 자율주행 학습 데이터 정비\nOpenAI: Orchestra Bio 인수, 신약 연구개발 운영에 AI 도입\nMcKinsey: 은행 CIO 대상 AI 에이전트 운영 안내서\n확인할 점: 에이전트 판단의 책임자와 승인 절차를 정했나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-10-27\n출처(공식 발표): McKinsey · NVIDIA · OpenAI — 원문 링크는 브리핑에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newstheme",
+  "format_name": "AX 사건 묶어 보기",
+  "source": "claude",
+  "slides": 7
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 100,
+  "problems": []
+ },
+ "published": {
+  "at": "2026-10-27T09:32:45.117Z",
+  "media_id": "18468249934140492",
+  "permalink": "https://www.instagram.com/p/De_ixkQlX9J/"
+ }
+}
