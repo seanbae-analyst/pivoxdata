@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요 · AX 트렌드 레이더</title>
+<meta name="description" content="이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처" />
+
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AX 레이더" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css?v=9" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-10-26" />
+
+<script>(() => { const r = document.documentElement;
+  if (!matchMedia("(max-width: 640px)").matches || /[?&]scroll=/.test(location.search)) return;
+  r.classList.add("paged");
+  setTimeout(() => { if (r.classList.contains("pgr-ready") || !r.classList.contains("paged")) return; r.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); }, 4000);
+  const wide = matchMedia("(min-width: 900px)"), grown = (e) => { if (e.matches && r.classList.contains("paged")) location.reload(); };
+  if (wide.addEventListener) wide.addEventListener("change", grown); else wide.addListener(grown);
+})();</script>
+<link rel="stylesheet" href="/research.css" />
+<style>
+  /* the briefings read like the rest of the site (2026-10-25): plain labels, hairline rules, bronze only where it means
+     something — no pills, no boxed cards. main's children sit on their own margins (no grid gap between every line). */
+  main{gap:0}
+  main>*,article{min-width:0}
+  .kicker{width:fit-content;font-size:13px;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);font-weight:600;margin-right:8px} .kicker a{color:var(--ink-2)}
+  article{max-width:720px}
+  h1.page{font-size:clamp(28px,4.4vw,40px);line-height:1.25;letter-spacing:-.03em;margin:0 0 12px;word-break:keep-all}
+  .lede{font-size:18px;line-height:1.75;color:var(--ink-2);margin:0 0 8px}
+  .meta{font-size:13px;color:var(--dim);margin:0 0 14px}
+  article h2{font-size:21px;line-height:1.4;letter-spacing:-.02em;margin:44px 0 12px}
+  article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
+  .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
+  .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
+  /* a case (2026-10-26): its IT domain and the way it went in, the heading, then a small table — no box, hairlines */
+  .case-h{margin:44px 0 0} .case-h h2{margin:6px 0 14px}
+  .case-k{font-size:13px;color:var(--mut);margin:0}
+  .case{margin:0 0 20px;border-top:1px solid var(--line-2)}
+  .case>div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .case dt{font-size:13px;color:var(--mut);padding-top:2px} .case dd{margin:0;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .case .none dd{color:var(--dim)} .case .q dd{font-weight:600}
+  ul.asks{margin:0 0 14px;padding-left:20px;list-style:disc} ul.asks li{font-size:16.5px;line-height:1.75;color:var(--ink-2);margin:2px 0} ul.asks li::marker{color:var(--dim)}
+  .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
+  .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
+  .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
+  .srcs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14px} .srcs .d{color:var(--dim);font-size:12.5px}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0}
+  .chip{font-size:13px;color:var(--mut)} .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
+  .pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
+  .pn a{display:block;padding:14px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px;line-height:1.5}
+  .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
+  .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
+  .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
+  .tabs{display:flex;flex-wrap:wrap;gap:2px;margin:4px 0 8px;border-bottom:1px solid var(--line)}
+  .tabs a{font-size:14px;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
+  .tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--bronze)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
+  h2.month{font-size:15px;color:var(--mut);font-weight:600;margin:32px 0 10px}
+  .list{list-style:none;margin:0;padding:0;display:grid;max-width:760px;border-top:1px solid var(--line-2)}
+  .list li{padding:0 0 12px;border-bottom:1px solid var(--line)}
+  .list .card{display:block;padding:16px 0 4px;color:var(--ink-2);text-decoration:none}
+  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
+  .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
+  .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .list .chips{margin:6px 0 0}
+  .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
+  .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install input{accent-color:var(--bronze);width:16px;height:16px}
+  .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
+  .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
+  .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
+  /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
+  @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
+  @media(max-width:640px){
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
+    h1.page{font-size:28px}
+    .pn{grid-template-columns:1fr}.pn .next{text-align:left}
+  }
+  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
+  .pg .art-head{margin:auto 0}
+  .pg .art-head .kicker{margin-top:0}
+  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
+  .pg .flow p{font-size:16px;line-height:1.8}
+  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
+  .pg .flow ul.asks li{font-size:15.5px}
+  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
+  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
+  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
+  /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
+  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
+  .case-list li+li{border-top:1px solid var(--line)}
+  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
+  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
+  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
+  .pg .list{border-top:0;display:grid;gap:10px}
+  .pg .list li{padding:0;border:0;border-radius:18px;background:var(--surface-2)}
+  .pg .list .card{padding:16px 16px 6px}
+  .pg .list .chips{padding:0 16px 14px}
+  .pg .list .card:hover .t{text-decoration:none}
+  .pg h2.month{margin:6px 2px 8px}
+  html.paged{-webkit-tap-highlight-color:transparent}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+</header>
+
+<main>
+<article class="brief">
+  <header class="art-head">
+  <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/news">이번 주 AX 사건</a></div>
+  <h1 class="page">AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요</h1>
+  <p class="lede">이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 IT 프로젝트에서 확인할 점을 정리했어요.</p>
+  <p class="meta">2026년 10월 27일 · AX 트렌드 레이더</p>
+  <div class="chips"><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a></div>
+  </header>
+  <section class="part case-part" data-name="사례 1"><header class="case-h" id="s1"><p class="case-k">데이터·분석 · 파트너십</p><h2>Porsche, 그룹 브랜드와 자율주행 데이터를 함께 써요</h2><dl class="case"><div><dt>누가</dt><dd>Porsche (NVIDIA 발표)</dd></div><div><dt>무엇을</dt><dd>Cosmos Data Factory</dd></div><div><dt>어디에</dt><dd>자율주행 학습 데이터</dd></div><div><dt>어떻게</dt><dd>Voxel51 통해 Azure에서 사용</dd></div><div class="q"><dt>확인할 점</dt><dd>합성 데이터를 학습에 섞을 때 검증 기준이 있나요?</dd></div></dl></header><p>NVIDIA는 10월 22일 Cosmos 플랫폼에 학습 도구, 시뮬레이션 체크포인트, Cosmos Data Factory 블루프린트를 더했다고 발표했어요. 월드 모델은 피지컬 AI가 현실 세계를 이해하고 흉내 내도록 돕는 모델이에요. NVIDIA는 Cosmos가 공개 모델 순위표 여섯 곳에서 상위 5위 안에 든다고 자평했어요.</p><p>Cosmos Data Factory는 학습 데이터에 라벨을 붙이고, 고르고, 늘리고, 평가하는 도구 묶음이에요. NVIDIA는 클라우드용 블루프린트 다섯 가지를 Microsoft Azure 등 네 곳에서 내려받아 쓸 수 있다고 밝혔어요. 주행 데이터 정리와 합성, 사물 외형 바꾸기, 정지 이미지로 드물거나 위험한 사건 영상 만들기, 회로기판·금속·유리 결함 이미지 생성, 기존 영상의 날씨·조명 바꾸기가 들어 있어요.</p><p>NVIDIA에 따르면 Porsche는 Volkswagen Group 브랜드들이 함께 쓰는 자율주행 데이터 순환 구조를 이끌고, Voxel51을 거쳐 Microsoft Azure 위에서 이 도구를 써요. NVIDIA는 이 방식으로 반복되는 실제 시험 주행을 최대 90%, 개발 주기를 최대 85%까지 줄이기를 기대한다고 밝혔어요. 산업 점검 로봇을 만드는 ANYbotics는 합성 영상을 1,500개 넘게 만들고 Encord 플랫폼으로 결과를 검증했다고 해요.</p><p>데이터·분석 영역에서 이 사례는 모델을 고르기 전에 학습 데이터를 모으고 다듬는 공정이 프로젝트의 큰 몫이라는 뜻이에요. 합성 데이터를 섞는다면 검증 단계를 따로 두는지, 여러 법인과 브랜드가 데이터를 함께 쓸 때 권한과 품질 기준은 누가 정하는지 확인해야 해요.</p><p class="src">출처 · <a href="https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/22</a></p></section><section class="part case-part" data-name="사례 2"><header class="case-h" id="s2"><p class="case-k">업무 도구 · 인수</p><h2>OpenAI, 신약 연구개발 운영을 위해 Orchestra Bio를 인수해요</h2><dl class="case"><div><dt>누가</dt><dd>OpenAI</dd></div><div><dt>무엇을</dt><dd>Orchestra Bio</dd></div><div><dt>어디에</dt><dd>제약·바이오 연구개발 운영</dd></div><div><dt>어떻게</dt><dd>회사 인수</dd></div><div class="q"><dt>확인할 점</dt><dd>산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되나요?</dd></div></dl></header><p>OpenAI는 10월 20일 Orchestra Bio를 인수한다고 발표했어요. 생명과학 연구개발에 AI 기반 운영을 들이고, 제약·바이오 팀이 신약 개발을 앞당겨 새 치료법을 내놓도록 돕는 것이 목적이라고 밝혔어요.</p><p>이 글은 공식 페이지 원문을 읽지 못해 제목과 요약만 근거로 썼어요. 인수 금액, Orchestra Bio의 제품, OpenAI 서비스와 합치는 방식은 요약에 없어요. 어느 연구 시스템과 이어지는지도 발표에 없어요.</p><p>범용 AI를 만드는 회사가 특정 산업의 운영 업무로 들어가는 길로 인수를 택했다고 읽혀요. 기업 쪽에서는 산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되는지 물어야 해요. 공급사가 인수로 바뀌면 계약 조건과 데이터 이전이 어떻게 되는지도 점검 항목이에요.</p><p class="src">출처 · <a href="https://openai.com/index/openai-to-acquire-orchestra-bio" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/20</a></p></section><section class="part case-part" data-name="사례 3"><header class="case-h" id="s3"><p class="case-k">AI 에이전트 · 연구·보고서</p><h2>McKinsey, 은행 CIO에게 AI 에이전트 운영 원칙을 제시해요</h2><dl class="case"><div><dt>누가</dt><dd>은행 CIO 대상 (McKinsey 리서치)</dd></div><div><dt>무엇을</dt><dd>AI 에이전트</dd></div><div><dt>어디에</dt><dd>여러 업무 흐름</dd></div><div><dt>어떻게</dt><dd>거버넌스·아키텍처·책임 체계 재정비</dd></div><div class="q"><dt>확인할 점</dt><dd>에이전트 판단의 책임자와 승인 절차를 정했나요?</dd></div></dl></header><p>McKinsey는 10월 26일 은행 CIO를 위한 <button type="button" class="term" data-term="agent">AI 에이전트</button> 안내서를 냈어요. 제목은 '에이전트형 동료의 등장'이에요. 요약에 따르면 AI 에이전트가 스스로 판단하고 실행하며 여러 업무 흐름에 걸쳐 협업하는 일이 늘고 있어요.</p><p>McKinsey는 에이전트를 대규모로 배치하려면 거버넌스, 아키텍처, 책임 체계에 새로운 접근이 필요하다고 짚었어요. 원문을 읽지 못해, 어떤 업무부터 들이라고 했는지나 구체적인 설계 원칙은 이 글에서 다루지 않았어요.</p><p><button type="button" class="term" data-term="ramp">Ramp</button> AI Index(미국 기업의 유료 결제 기준)에서 금융·보험 기업 중 AI 도구에 돈을 내는 비율은 2026년 9월 73.7%였고, 1년 새 +15.5%p 늘었어요. 도구를 쓰는 곳이 이미 많은 업종에서는 에이전트의 판단을 누가 승인하고 기록하는지가 다음 과제로 읽혀요. 에이전트가 거래나 고객 정보 시스템에 접근한다면 권한 범위와 감사 기록을 먼저 정했는지 확인해야 해요.</p><p class="src">출처 · <a href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai" target="_blank" rel="noopener">McKinsey 리서치 · 10/26</a></p></section><section class="part" data-name="공통 흐름"><h2 id="s4">세 발표가 함께 가리키는 것: 일하는 구조</h2><p>세 발표는 다루는 영역이 달라요. Porsche 사례는 학습 데이터를, OpenAI 인수는 연구개발 운영을, McKinsey 안내서는 에이전트의 책임 체계를 다뤘어요. 그래도 모두 모델 성능보다 AI가 돌아가는 공정과 통제를 앞에 뒀다는 점이 같아요.</p><p>최근 30일 회사·정부의 공식 <button type="button" class="term" data-term="ax">AX</button> 발표를 <button type="button" class="term" data-term="domain">IT 영역</button>별로 보면 AI 에이전트가 32건으로 가장 많았어요. 발표가 많은 곳은 SAP 11건, McKinsey 9건이었어요. 클라우드·인프라 19건, 보안·규제 17건이 뒤를 이었어요.</p><p>에이전트 발표가 가장 많다는 것은 그 옆의 데이터 준비와 보안 통제가 함께 점검 대상이 된다는 뜻이에요. 도입 프로젝트에서도 에이전트 기능 목록보다 데이터 흐름과 책임 구조를 먼저 그려 두는 편이 범위를 정하기 쉬워요.</p><p class="src">출처 · <a href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai" target="_blank" rel="noopener">McKinsey 리서치 · 10/26</a> / <a href="https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/" target="_blank" rel="noopener">NVIDIA 공식 발표 · 10/22</a> / <a href="https://openai.com/index/openai-to-acquire-orchestra-bio" target="_blank" rel="noopener">OpenAI 공식 발표 · 10/20</a></p></section><section class="part" data-name="관점"><h2 id="s5">IT 컨설팅 관점</h2><p>이번 주 사례들은 AI 도입 프로젝트의 무게가 모델 선택에서 데이터 공정, 업무 운영, 책임 체계로 옮겨 가는 장면으로 읽혀요. 데이터·분석 영역에서는 학습 데이터를 고르고 늘리고 검증하는 파이프라인이, 업무 도구 영역에서는 산업별 업무 시스템과의 연동이, AI 에이전트 영역에서는 승인과 감사 구조가 설계 대상이에요. 클라우드 위에서 외부 파트너 도구를 조합하는 방식이라면 보안과 계약 범위도 함께 봐야 해요.</p><ul class="asks"><li>학습·분석에 쓸 데이터를 고르고 라벨을 붙이고 품질을 평가하는 체계가 있나요?</li><li>합성 데이터를 섞을 때 실제 데이터와 견줘 검증할 기준과 담당이 있나요?</li><li>산업 전용 AI가 기존 연구·업무 시스템과 연동되는지 확인했나요?</li><li>에이전트가 내린 판단의 책임자와 승인 절차, 감사 기록을 정했나요?</li><li>여러 법인·파트너가 데이터를 함께 쓸 때 접근 권한과 클라우드 보안 기준을 맞췄나요?</li></ul></section>
+  <section class="sum"><h2>정리</h2><ul><li>NVIDIA는 Porsche가 Cosmos Data Factory로 그룹 브랜드와 자율주행 데이터를 함께 쓴다고 밝혔어요.</li><li>OpenAI는 생명과학 연구개발 운영에 AI를 들이려고 Orchestra Bio를 인수한다고 발표했어요.</li><li>McKinsey는 은행이 AI 에이전트를 크게 쓰려면 거버넌스와 책임 체계를 새로 짜야 한다고 짚었어요.</li><li>세 발표 모두 모델보다 데이터 흐름, 운영, 책임 구조를 과제로 다뤘어요.</li><li>도입 전 데이터 검증 기준, 시스템 연동, 에이전트 승인 절차를 점검 항목으로 남겨요.</li></ul></section>
+  <section class="basis"><h2>근거</h2><p>회사·기관이 직접 낸 발표만 썼어요. 발표 1건은 공식 페이지의 원문까지 읽고, 나머지는 제목과 요약으로 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs"><li><a href="https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai" target="_blank" rel="noopener">McKinsey 리서치 — The rise of the agentic coworker: A banking CIO’s guide to the next wave of AI</a> <span class="d">10/26</span></li><li><a href="https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/" target="_blank" rel="noopener">NVIDIA 공식 발표 — NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models</a> <span class="d">10/22</span></li><li><a href="https://openai.com/index/openai-to-acquire-orchestra-bio" target="_blank" rel="noopener">OpenAI 공식 발표 — OpenAI acquires Orchestra Bio</a> <span class="d">10/20</span></li></ul></section>
+  
+  <section class="rel"><h2>같이 읽기</h2><ul class="list"><li><a class="card" href="/briefs/2026-10-26"><span class="k">이번 주 AX 사건 · 2026년 10월 26일</span><span class="t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-security">보안·안전</a><a class="chip theme" href="/briefs/tag/theme-infra">인프라·클라우드</a><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li><li><a class="card" href="/briefs/2026-10-25-2"><span class="k">이번 주 AX 사건 · 2026년 10월 25일</span><span class="t">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</span><span class="l">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</span></a><div class="chips"><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-ukgov">영국 정부</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul></section>
+  <div class="more-links"><a href="/briefs">← 브리핑 전체</a><a href="/">오늘의 AX 지표</a></div>
+</article>
+<dl class="terms-src" hidden><div class="gl" id="g-ax"><dt>AX (AI 전환)</dt><dd>AI Transformation. 회사가 일하는 방식과 서비스에 AI를 들여 바꾸는 일이에요. 디지털 전환(DX)의 AI판이라고 보면 돼요.</dd></div><div class="gl" id="g-domain"><dt>IT 영역</dt><dd>IT 컨설팅에서 일을 나누는 큰 칸이에요. 이 사이트는 ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트 일곱 가지로 나눠요.</dd></div><div class="gl" id="g-agent"><dt>AI 에이전트</dt><dd>사람이 단계마다 시키지 않아도 여러 단계의 일을 이어서 처리하는 AI예요. 문의를 읽고, 시스템에서 정보를 찾고, 답장 초안까지 쓰는 식이에요.</dd></div><div class="gl" id="g-ramp"><dt>Ramp AI Index</dt><dd>미국 기업 7만여 곳의 법인카드·송금 기록으로, AI 도구에 돈을 낸 회사가 몇 %인지 매달 세는 지표예요. 무료 도구나 개인 결제는 안 잡혀요. 미국 연준(FRED)에도 올라와요.</dd></div></dl>
+<script src="/terms.js" defer></script>
+<script type="module">
+import { pager } from "/pager.js";
+const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
+const div = () => Object.assign(document.createElement("div"), { className: "flow" });
+// the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
+// 흐름과 관점; a briefing that reads as one text lists its section headings
+const text = parts.length && parts.every((s) => s.dataset.name)
+  // (the source line goes with the paragraph before it, so it never makes a page of its own)
+  ? parts.map((s, i) => { const [h, ...rest] = [...s.children], items = rest.length > 1 && rest.at(-1).matches(".src") ? [...rest.slice(0, -2), rest.slice(-2)] : rest;
+      const name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || `s${i + 1}`, name, title: heading.startsWith(name) ? heading : `${name} · ${heading}`, group: name.startsWith("사례") ? "사례" : "흐름과 관점",
+        count: 0, lead: [h], head: h.querySelector("h2") ?? h, items, list: div }; })
+  : [{ id: "text", name: "본문", group: "본문", items: parts.flatMap((s) => { const k = [...s.children]; return k.length > 1 ? [[k[0], k[1]], ...k.slice(2)] : k; }), list: div, count: 0,
+      sub: (n) => (n.matches("h2") ? { label: n.textContent } : null) }];
+const hint = Object.assign(document.createElement("p"), { className: "pg-hint" }); hint.append("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: text[0].name }), " →");
+// the title page lists the briefing's cases, each a tap away (like the home page's story)
+const cases = parts.filter((s) => s.dataset.name?.startsWith("사례"));
+let caseList = null;
+if (document.documentElement.classList.contains("paged") && cases.length) {
+  const ol = caseList = Object.assign(document.createElement("ol"), { className: "case-list" });
+  cases.forEach((s, k) => {
+    const h = s.firstElementChild, a = Object.assign(document.createElement("a"), { className: "tap", href: `#${h.id}` });
+    a.append(Object.assign(document.createElement("span"), { className: "n", textContent: k + 1 }), Object.assign(document.createElement("span"), { className: "t", textContent: (h.querySelector("h2") ?? h).textContent.trim() }));
+    const tag = h.querySelector(".case-k"); if (tag) a.append(Object.assign(document.createElement("small"), { textContent: tag.textContent }));
+    const li = document.createElement("li"); li.append(a); ol.append(li);
+  });
+}
+pager([
+  { id: "top", name: "브리핑", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
+  ...text,
+  { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+], { tab: () => "briefs", back: { href: "/briefs", label: "브리핑" } });
+</script>
+</main>
+
+<footer class="site">
+  <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
+  <span class="links"><a href="/briefs">브리핑</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+</footer>
+
+<nav class="tabbar" aria-label="바로가기">
+  <a href="/" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-5h-6v5H5a1 1 0 0 1-1-1z"/></svg><span>홈</span></a>
+  <a href="/briefs" data-tab="briefs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6M9 18h4"/></svg><span>브리핑</span></a>
+  <a href="/#news" data-tab="news"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h12v12a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2zM16 9h3v9a2 2 0 0 1-2 2M7 9h6M7 13h6M7 17h4"/></svg><span>발표</span></a>
+  <a href="/#glossary" data-tab="glossary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H5zM19 5h-3a3 3 0 0 0-2 1M19 5v13h-5"/></svg><span>용어</span></a>
+  <button type="button" data-tab="toc" aria-controls="toc" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
+</nav>
+<script>
+(() => { const t = document.querySelector(".tabbar"); if (!t) return;
+  // the menus say where you are: the tab bar by section, the top bar's links by page (/briefs, /map)
+  const mark = () => { const p = location.pathname, h = location.hash, on = p.startsWith("/briefs") ? "briefs" : p === "/" || p === "/index.html" ? (h === "#news" ? "news" : h === "#glossary" ? "glossary" : "home") : "";
+    t.querySelectorAll("a").forEach((a) => a.toggleAttribute("aria-current", a.dataset.tab === on));
+    document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); };
+  mark(); addEventListener("hashchange", mark); document.body.classList.add("has-tabbar"); })();
+</script>
+<div class="appbar" id="appbar" hidden><span class="t"><b>AX 레이더 앱</b>홈 화면에 두고 새 브리핑 알림 받기</span><button type="button" id="appbar-go">설치</button><button type="button" class="x" id="appbar-x" aria-label="닫기">×</button></div>
+<div class="appsheet" id="appsheet" hidden><div class="in"><b>홈 화면에 추가하기</b><ol id="appsheet-steps"></ol><button type="button" id="appsheet-ok">확인</button></div></div>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id), bar = $("appbar");
+  // (not over the phone pages: their first page links to installing — /briefs#alerts)
+  if (!bar || matchMedia("(display-mode: standalone)").matches || navigator.standalone || !matchMedia("(max-width: 640px)").matches || document.documentElement.classList.contains("paged")) return;
+  try { if (+localStorage.getItem("appbar-x") > Date.now() - 7 * 864e5) return; } catch {}
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let ev = null;
+  const steps = ios
+    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"]
+    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"];
+  $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
+  const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });
+  addEventListener("appinstalled", () => show(false));
+  setTimeout(() => show(true), 1200);
+  $("appbar-go").addEventListener("click", async () => { if (ev) { ev.prompt(); await ev.userChoice; ev = null; show(false); } else $("appsheet").hidden = false; });
+  $("appsheet-ok").addEventListener("click", () => { $("appsheet").hidden = true; });
+  $("appbar-x").addEventListener("click", () => { show(false); try { localStorage.setItem("appbar-x", String(Date.now())); } catch {} });
+})();
+</script>
+<script type="module" src="/account.js"></script>
+</div>
+</body>
+</html>

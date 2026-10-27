@@ -1,0 +1,363 @@
+{
+ "date": "2026-10-27",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 1,
+ "original_numbers": [
+  "51",
+  "90",
+  "85",
+  "1500"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI가 동료가 되려면\n무엇이 먼저일까요?",
+   "body": "이번 주 공식 발표 3건을\n도입 사례처럼 읽었어요."
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "Porsche가\nNVIDIA 도구를 써요",
+   "body": "NVIDIA는 Porsche가\nVolkswagen Group 브랜드와\n자율주행 데이터를 함께 쓰는\n흐름을 주도한다고 밝혔어요.\n데이터 정비가\n학습의 출발점이라는 뜻이에요.",
+   "src": "출처 · NVIDIA 공식 발표 · 10/22",
+   "case": {
+    "who": "Porsche (NVIDIA 발표)",
+    "what": "Cosmos Data Factory",
+    "where": "자율주행 학습 데이터",
+    "how": "Voxel51 통해 Azure에서 사용",
+    "domain": "데이터·분석",
+    "method": "파트너십",
+    "check": "합성 데이터를 학습에 섞을 때 검증 기준이 있나요?",
+    "ref": 2
+   },
+   "kicker": "데이터·분석 · 파트너십"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "Orchestra Bio를\nOpenAI가 인수해요",
+   "body": "OpenAI는 신약 연구개발 운영에\nAI를 들이려고 인수한다고 밝혔어요.\n산업 업무로 들어가는 길로\n인수를 택했다고 읽혀요.",
+   "src": "출처 · OpenAI 공식 발표 · 10/20",
+   "case": {
+    "who": "OpenAI",
+    "what": "Orchestra Bio",
+    "where": "제약·바이오 연구개발 운영",
+    "how": "회사 인수",
+    "domain": "업무 도구",
+    "method": "인수",
+    "check": "산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되나요?",
+    "ref": 3
+   },
+   "kicker": "업무 도구 · 인수"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "McKinsey의\n은행 CIO용 안내서",
+   "body": "McKinsey는 AI 에이전트가\n판단하고 실행하고 협업하는\n범위가 넓어진다고 봤어요.\n크게 쓰려면 거버넌스와 설계,\n책임 체계를 새로 짜야 한대요.",
+   "src": "출처 · McKinsey 리서치 · 10/26",
+   "case": {
+    "who": "은행 CIO 대상 (McKinsey 리서치)",
+    "what": "AI 에이전트",
+    "where": "여러 업무 흐름",
+    "how": "거버넌스·아키텍처·책임 체계 재정비",
+    "domain": "AI 에이전트",
+    "method": "연구·보고서",
+    "check": "에이전트 판단의 책임자와 승인 절차를 정했나요?",
+    "ref": 1
+   },
+   "kicker": "AI 에이전트 · 연구·보고서"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "title": "세 발표 모두\n운영을 말해요",
+   "body": "Porsche는 데이터 흐름을,\nOpenAI는 연구개발 운영을,\nMcKinsey는 책임 체계를 짚었어요.\n모델보다 일하는 구조가\n과제로 읽혀요.",
+   "src": "출처 · McKinsey · NVIDIA · OpenAI 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "데이터를 고르고 늘릴 체계가 있나요?",
+    "합성 데이터를 검증할 기준이 있나요?",
+    "여러 업무를 잇는 구조를 그렸나요?",
+    "AI 판단의 책임자는 누구인가요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "AI보다 먼저\n일하는 구조를 봐요",
+   "body": "데이터 흐름, 운영 방식,\n책임 체계를\n함께 점검 항목으로 남겨요.",
+   "items": [
+    "Porsche: 자율주행 데이터 흐름",
+    "OpenAI: Orchestra Bio 인수",
+    "McKinsey: 은행 에이전트 안내서"
+   ]
+  }
+ ],
+ "caption": "이번 주 공식 발표 3건을 도입 사례로 읽었어요.\nPorsche: NVIDIA Cosmos Data Factory로 자율주행 학습 데이터 정비\nOpenAI: Orchestra Bio 인수, 신약 연구개발 운영에 AI 도입\nMcKinsey: 은행 CIO 대상 AI 에이전트 운영 안내서\n확인할 점: 에이전트 판단의 책임자와 승인 절차를 정했나요?",
+ "cases": [
+  {
+   "who": "Porsche (NVIDIA 발표)",
+   "what": "Cosmos Data Factory",
+   "where": "자율주행 학습 데이터",
+   "how": "Voxel51 통해 Azure에서 사용",
+   "domain": "데이터·분석",
+   "method": "파트너십",
+   "check": "합성 데이터를 학습에 섞을 때 검증 기준이 있나요?",
+   "ref": 2,
+   "source": "NVIDIA",
+   "date": "2026-10-22",
+   "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/"
+  },
+  {
+   "who": "OpenAI",
+   "what": "Orchestra Bio",
+   "where": "제약·바이오 연구개발 운영",
+   "how": "회사 인수",
+   "domain": "업무 도구",
+   "method": "인수",
+   "check": "산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되나요?",
+   "ref": 3,
+   "source": "OpenAI",
+   "date": "2026-10-20",
+   "link": "https://openai.com/index/openai-to-acquire-orchestra-bio"
+  },
+  {
+   "who": "은행 CIO 대상 (McKinsey 리서치)",
+   "what": "AI 에이전트",
+   "where": "여러 업무 흐름",
+   "how": "거버넌스·아키텍처·책임 체계 재정비",
+   "domain": "AI 에이전트",
+   "method": "연구·보고서",
+   "check": "에이전트 판단의 책임자와 승인 절차를 정했나요?",
+   "ref": 1,
+   "source": "McKinsey",
+   "date": "2026-10-26",
+   "link": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai"
+  }
+ ],
+ "sources": [
+  {
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-26",
+   "title": "The rise of the agentic coworker: A banking CIO’s guide to the next wave of AI",
+   "link": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai",
+   "id": "27af1fa8b1",
+   "original": false
+  },
+  {
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-10-22",
+   "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
+   "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
+   "id": "381130e24d",
+   "original": true
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-10-20",
+   "title": "OpenAI acquires Orchestra Bio",
+   "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
+   "id": "dbaa902542",
+   "original": false
+  }
+ ],
+ "article": {
+  "title": "AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요",
+  "lede": "이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 IT 프로젝트에서 확인할 점을 정리했어요.",
+  "sections": [
+   {
+    "heading": "Porsche, 그룹 브랜드와 자율주행 데이터를 함께 써요",
+    "body": "NVIDIA는 10월 22일 Cosmos 플랫폼에 학습 도구, 시뮬레이션 체크포인트, Cosmos Data Factory 블루프린트를 더했다고 발표했어요. 월드 모델은 피지컬 AI가 현실 세계를 이해하고 흉내 내도록 돕는 모델이에요. NVIDIA는 Cosmos가 공개 모델 순위표 여섯 곳에서 상위 5위 안에 든다고 자평했어요.\n\nCosmos Data Factory는 학습 데이터에 라벨을 붙이고, 고르고, 늘리고, 평가하는 도구 묶음이에요. NVIDIA는 클라우드용 블루프린트 다섯 가지를 Microsoft Azure 등 네 곳에서 내려받아 쓸 수 있다고 밝혔어요. 주행 데이터 정리와 합성, 사물 외형 바꾸기, 정지 이미지로 드물거나 위험한 사건 영상 만들기, 회로기판·금속·유리 결함 이미지 생성, 기존 영상의 날씨·조명 바꾸기가 들어 있어요.\n\nNVIDIA에 따르면 Porsche는 Volkswagen Group 브랜드들이 함께 쓰는 자율주행 데이터 순환 구조를 이끌고, Voxel51을 거쳐 Microsoft Azure 위에서 이 도구를 써요. NVIDIA는 이 방식으로 반복되는 실제 시험 주행을 최대 90%, 개발 주기를 최대 85%까지 줄이기를 기대한다고 밝혔어요. 산업 점검 로봇을 만드는 ANYbotics는 합성 영상을 1,500개 넘게 만들고 Encord 플랫폼으로 결과를 검증했다고 해요.\n\n데이터·분석 영역에서 이 사례는 모델을 고르기 전에 학습 데이터를 모으고 다듬는 공정이 프로젝트의 큰 몫이라는 뜻이에요. 합성 데이터를 섞는다면 검증 단계를 따로 두는지, 여러 법인과 브랜드가 데이터를 함께 쓸 때 권한과 품질 기준은 누가 정하는지 확인해야 해요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "Porsche (NVIDIA 발표)",
+     "what": "Cosmos Data Factory",
+     "where": "자율주행 학습 데이터",
+     "how": "Voxel51 통해 Azure에서 사용",
+     "domain": "데이터·분석",
+     "method": "파트너십",
+     "check": "합성 데이터를 학습에 섞을 때 검증 기준이 있나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-10-22",
+      "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
+      "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI, 신약 연구개발 운영을 위해 Orchestra Bio를 인수해요",
+    "body": "OpenAI는 10월 20일 Orchestra Bio를 인수한다고 발표했어요. 생명과학 연구개발에 AI 기반 운영을 들이고, 제약·바이오 팀이 신약 개발을 앞당겨 새 치료법을 내놓도록 돕는 것이 목적이라고 밝혔어요.\n\n이 글은 공식 페이지 원문을 읽지 못해 제목과 요약만 근거로 썼어요. 인수 금액, Orchestra Bio의 제품, OpenAI 서비스와 합치는 방식은 요약에 없어요. 어느 연구 시스템과 이어지는지도 발표에 없어요.\n\n범용 AI를 만드는 회사가 특정 산업의 운영 업무로 들어가는 길로 인수를 택했다고 읽혀요. 기업 쪽에서는 산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되는지 물어야 해요. 공급사가 인수로 바뀌면 계약 조건과 데이터 이전이 어떻게 되는지도 점검 항목이에요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "OpenAI",
+     "what": "Orchestra Bio",
+     "where": "제약·바이오 연구개발 운영",
+     "how": "회사 인수",
+     "domain": "업무 도구",
+     "method": "인수",
+     "check": "산업 전용 AI를 들일 때 기존 연구·업무 시스템과 연동되나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-20",
+      "title": "OpenAI acquires Orchestra Bio",
+      "link": "https://openai.com/index/openai-to-acquire-orchestra-bio"
+     }
+    ]
+   },
+   {
+    "heading": "McKinsey, 은행 CIO에게 AI 에이전트 운영 원칙을 제시해요",
+    "body": "McKinsey는 10월 26일 은행 CIO를 위한 AI 에이전트 안내서를 냈어요. 제목은 '에이전트형 동료의 등장'이에요. 요약에 따르면 AI 에이전트가 스스로 판단하고 실행하며 여러 업무 흐름에 걸쳐 협업하는 일이 늘고 있어요.\n\nMcKinsey는 에이전트를 대규모로 배치하려면 거버넌스, 아키텍처, 책임 체계에 새로운 접근이 필요하다고 짚었어요. 원문을 읽지 못해, 어떤 업무부터 들이라고 했는지나 구체적인 설계 원칙은 이 글에서 다루지 않았어요.\n\nRamp AI Index(미국 기업의 유료 결제 기준)에서 금융·보험 기업 중 AI 도구에 돈을 내는 비율은 2026년 9월 73.7%였고, 1년 새 +15.5%p 늘었어요. 도구를 쓰는 곳이 이미 많은 업종에서는 에이전트의 판단을 누가 승인하고 기록하는지가 다음 과제로 읽혀요. 에이전트가 거래나 고객 정보 시스템에 접근한다면 권한 범위와 감사 기록을 먼저 정했는지 확인해야 해요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "은행 CIO 대상 (McKinsey 리서치)",
+     "what": "AI 에이전트",
+     "where": "여러 업무 흐름",
+     "how": "거버넌스·아키텍처·책임 체계 재정비",
+     "domain": "AI 에이전트",
+     "method": "연구·보고서",
+     "check": "에이전트 판단의 책임자와 승인 절차를 정했나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-10-26",
+      "title": "The rise of the agentic coworker: A banking CIO’s guide to the next wave of AI",
+      "link": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai"
+     }
+    ]
+   },
+   {
+    "heading": "세 발표가 함께 가리키는 것: 일하는 구조",
+    "body": "세 발표는 다루는 영역이 달라요. Porsche 사례는 학습 데이터를, OpenAI 인수는 연구개발 운영을, McKinsey 안내서는 에이전트의 책임 체계를 다뤘어요. 그래도 모두 모델 성능보다 AI가 돌아가는 공정과 통제를 앞에 뒀다는 점이 같아요.\n\n최근 30일 회사·정부의 공식 AX 발표를 IT 영역별로 보면 AI 에이전트가 32건으로 가장 많았어요. 발표가 많은 곳은 SAP 11건, McKinsey 9건이었어요. 클라우드·인프라 19건, 보안·규제 17건이 뒤를 이었어요.\n\n에이전트 발표가 가장 많다는 것은 그 옆의 데이터 준비와 보안 통제가 함께 점검 대상이 된다는 뜻이에요. 도입 프로젝트에서도 에이전트 기능 목록보다 데이터 흐름과 책임 구조를 먼저 그려 두는 편이 범위를 정하기 쉬워요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-10-26",
+      "title": "The rise of the agentic coworker: A banking CIO’s guide to the next wave of AI",
+      "link": "https://www.mckinsey.com/capabilities/tech-and-ai/our-insights/the-rise-of-the-agentic-coworker-a-banking-cios-guide-to-the-next-wave-of-ai"
+     },
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-10-22",
+      "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
+      "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-10-20",
+      "title": "OpenAI acquires Orchestra Bio",
+      "link": "https://openai.com/index/openai-to-acquire-orchestra-bio"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 주 사례들은 AI 도입 프로젝트의 무게가 모델 선택에서 데이터 공정, 업무 운영, 책임 체계로 옮겨 가는 장면으로 읽혀요. 데이터·분석 영역에서는 학습 데이터를 고르고 늘리고 검증하는 파이프라인이, 업무 도구 영역에서는 산업별 업무 시스템과의 연동이, AI 에이전트 영역에서는 승인과 감사 구조가 설계 대상이에요. 클라우드 위에서 외부 파트너 도구를 조합하는 방식이라면 보안과 계약 범위도 함께 봐야 해요.\n\n· 학습·분석에 쓸 데이터를 고르고 라벨을 붙이고 품질을 평가하는 체계가 있나요?\n· 합성 데이터를 섞을 때 실제 데이터와 견줘 검증할 기준과 담당이 있나요?\n· 산업 전용 AI가 기존 연구·업무 시스템과 연동되는지 확인했나요?\n· 에이전트가 내린 판단의 책임자와 승인 절차, 감사 기록을 정했나요?\n· 여러 법인·파트너가 데이터를 함께 쓸 때 접근 권한과 클라우드 보안 기준을 맞췄나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "NVIDIA는 Porsche가 Cosmos Data Factory로 그룹 브랜드와 자율주행 데이터를 함께 쓴다고 밝혔어요.",
+   "OpenAI는 생명과학 연구개발 운영에 AI를 들이려고 Orchestra Bio를 인수한다고 발표했어요.",
+   "McKinsey는 은행이 AI 에이전트를 크게 쓰려면 거버넌스와 책임 체계를 새로 짜야 한다고 짚었어요.",
+   "세 발표 모두 모델보다 데이터 흐름, 운영, 책임 구조를 과제로 다뤘어요.",
+   "도입 전 데이터 검증 기준, 시스템 연동, 에이전트 승인 절차를 점검 항목으로 남겨요."
+  ],
+  "terms": [
+   {
+    "term": "월드 모델",
+    "def": "AI가 현실 세계의 모습과 물체의 움직임을 이해하고, 앞으로 벌어질 장면을 흉내 내 볼 수 있도록 만든 모델이에요."
+   },
+   {
+    "term": "피지컬 AI",
+    "def": "로봇이나 자율주행차처럼 현실 공간에서 보고 판단하고 몸을 움직여 일하는 AI를 말해요."
+   },
+   {
+    "term": "합성 데이터",
+    "def": "실제로 수집하지 않고 컴퓨터로 만들어 낸 학습용 데이터예요. 구하기 어렵거나 위험한 상황을 보충할 때 써요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "adoption",
+    "deal",
+    "data"
+   ],
+   "industries": [
+    "finance",
+    "healthcare",
+    "manufacturing"
+   ],
+   "companies": [
+    {
+     "id": "mckinsey",
+     "name": "McKinsey"
+    },
+    {
+     "id": "nvidia",
+     "name": "NVIDIA"
+    },
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}
