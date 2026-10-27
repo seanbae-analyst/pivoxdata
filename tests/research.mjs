@@ -136,40 +136,35 @@ try {
     await ctx.close();
   }
 
-  // ---------- 4. the research list on a phone (pages turned sideways) ----------
+  // ---------- 4. the research list on a phone (a news site: one list, top to bottom — 2026-10-27 "뉴스처럼 다 바꿔줘") ----------
   section("리서치 목록 (폰) — 검색 · 필터 · 뒤로가기");
   {
     const ctx = await context(true), pg = await ctx.newPage();
     await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
-    await pg.waitForSelector("html.pgr-ready");
-    const inTrack = () => pg.$$eval(".pgr-track .r-item", (l) => l.map((li) => li.id));
-    ok("폰은 페이지로 넘기는 화면, 첫 장에 검색창", await pg.isVisible(".pgr-track .pg:first-child input[name=q]"));
-    ok(`${listed}편이 모두 페이지에 놓인다`, (await inTrack()).length === listed);
+    const shown = () => pg.$$eval(".r-item", (l) => l.filter((li) => !li.hidden && li.offsetParent).map((li) => li.id));
+    ok("폰도 위아래로 읽는 목록, 맨 위에 검색창", await pg.isVisible("input[name=q]") && !(await pg.evaluate(() => document.documentElement.classList.contains("paged"))));
+    ok(`${listed}편이 모두 목록에`, (await shown()).length === listed);
     await shot(pg, "list-phone");
     const word = pieces[0].st.sources?.[0]?.source ?? "AI";
     await pg.tap('input[name="q"]'); await pg.keyboard.type(word, { delay: 30 }); await pause(500);
     const focused = await pg.evaluate(() => document.activeElement?.name === "q" && document.activeElement.value);
-    ok("검색하는 동안 입력창이 포커스를 잃지 않는다 (페이지를 다시 놓아도)", focused === word, String(focused));
-    const after = await inTrack();
-    ok(`검색 '${word}' → 페이지에 맞는 것만 (${after.length}편)`, after.length > 0 && after.length <= listed);
+    ok("검색하는 동안 입력창이 포커스를 잃지 않는다", focused === word, String(focused));
+    const after = await shown();
+    ok(`검색 '${word}' → 맞는 것만 (${after.length}편)`, after.length > 0 && after.length <= listed);
     await shot(pg, "list-phone-search");
     await pg.fill('input[name="q"]', ""); await pause(400);
-    const topic = await pg.$eval('.pgr-track .f-o[data-f="topic"]:not([data-v=""])', (b) => ({ v: b.dataset.v, n: +b.querySelector(".n").textContent }));
-    await pg.tap(`.pgr-track .f-o[data-v="${topic.v}"]`); await pause(300);
-    ok(`주제 '${topic.v}' → 페이지에 ${topic.n}편`, (await inTrack()).length === topic.n);
+    const topic = await pg.$eval('.f-o[data-f="topic"]:not([data-v=""])', (b) => ({ v: b.dataset.v, n: +b.querySelector(".n").textContent }));
+    await pg.tap(`.f-o[data-v="${topic.v}"]`); await pause(300);
+    ok(`주제 '${topic.v}' → ${topic.n}편`, (await shown()).length === topic.n);
     const before = pg.url();
-    // the list starts on the second page (the first is the search and the filters): turn to it, then open a piece
-    await pg.evaluate(() => { const t = document.querySelector(".pgr-track"); t.scrollTo({ left: t.clientWidth, behavior: "instant" }); }); await pause(400);
-    ok("폰: 옆으로 넘기면 목록", await pg.isVisible(".pgr-track .r-item .r-card"));
-    await shot(pg, "list-phone-page2");
-    await Promise.all([pg.waitForNavigation(), pg.tap(".pgr-track .r-item:not([hidden]) .r-card")]);
-    ok("폰: 글로 들어간다", await pg.isVisible("article.brief h1, .pgr-track h1"));
+    await Promise.all([pg.waitForNavigation(), pg.tap(".r-item:not([hidden]) .r-card")]);
+    ok("폰: 글로 들어간다", await pg.isVisible("article.brief h1"));
     await shot(pg, "detail-phone");
-    await pg.goBack({ waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready"); await pause(300);
+    await pg.goBack({ waitUntil: "networkidle" }); await pause(300);
     const back = new URL(pg.url());
-    ok("폰: 뒤로가기 → 같은 주소(필터)와 같은 목록", back.pathname + back.search === new URL(before).pathname + new URL(before).search && (await inTrack()).length === topic.n, `${pg.url()} vs ${before}`);
+    ok("폰: 뒤로가기 → 같은 주소(필터)와 같은 목록", back.pathname + back.search === new URL(before).pathname + new URL(before).search && (await shown()).length === topic.n, `${pg.url()} vs ${before}`);
     // Korean typed on a phone keyboard: each syllable is composed (IME) — the box keeps it whole, and keeps the focus
-    await pg.goto(B + "/briefs", { waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready");
+    await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
     const cdp = await ctx.newCDPSession(pg);
     await pg.tap('input[name="q"]');
     for (const [jamo, syl] of [["ㄱ", "거"], ["ㅂ", "버"]]) {
@@ -180,26 +175,23 @@ try {
     const ime = await pg.evaluate(() => ({ v: document.querySelector('input[name="q"]').value, focus: document.activeElement?.name }));
     ok("폰: 한글을 조합해 쳐도 글자가 깨지지 않고 포커스가 남는다 ('거버')", ime.v === "거버" && ime.focus === "q", JSON.stringify(ime));
     await pg.evaluate(() => document.activeElement.blur()); await pause(300);
-    const kept = await inTrack(), expect = await pg.$$eval(".r-item", (l) => l.filter((li) => li.dataset.q.includes("거버")).map((li) => li.id));
-    ok(`폰: 입력이 끝나면 '거버'를 담은 ${expect.length}편만 페이지에`, expect.length > 0 && JSON.stringify(kept.sort()) === JSON.stringify(expect.sort()));
-    // a facet pressed from the keyboard keeps the focus when the pages are laid out again
-    await pg.focus('.pgr-track .f-o[data-f="format"]:not([data-v=""])'); await pg.keyboard.press("Enter"); await pause(300);
+    const kept = await shown(), expect = await pg.$$eval(".r-item", (l) => l.filter((li) => li.dataset.q.includes("거버")).map((li) => li.id));
+    ok(`폰: 입력이 끝나면 '거버'를 담은 ${expect.length}편만`, expect.length > 0 && JSON.stringify(kept.sort()) === JSON.stringify(expect.sort()));
+    await pg.focus('.f-o[data-f="format"]:not([data-v=""])'); await pg.keyboard.press("Enter"); await pause(300);
     ok("폰: 키보드로 누른 필터 버튼이 포커스를 잃지 않는다", await pg.evaluate(() => document.activeElement?.matches?.(".f-o")));
     await ctx.close();
   }
-  // nothing on a phone page is cut off under the tab bar: no page needs scrolling up and down (the owner's rule)
-  section("폰 페이지가 화면 안에 들어간다 (위아래로 넘치지 않음)");
-  for (const [w, h] of [[390, 844], [375, 667], [360, 640]]) {
-    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true }), pg = await ctx.newPage();
-    await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
-    const over = [];
-    // (a piece's case pages and title page were already taller than a 375×667 screen before 2026-10-27 — main measured
-    // +60…+234px — so there the pieces are left out; the list, the topic and the format pages are new and must fit)
-    for (const u of ["/briefs", "/briefs/topic/cloud", "/briefs/topic/erp", "/briefs/series/news", ...(h >= 800 ? pieces.map((b) => `/briefs/${b.slot}`) : [])]) {
-      await pg.goto(B + u, { waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready"); await pause(300);
-      over.push(...(await pg.$$eval(".pgr-track .pg", (l) => l.map((p) => ({ n: p.getAttribute("aria-label"), d: p.scrollHeight - p.clientHeight, s: p.scrollWidth - p.clientWidth })).filter((x) => x.d > 1 || x.s > 1))).map((x) => `${u} ${x.n} ${x.d > 1 ? `+${x.d}px` : ""}${x.s > 1 ? ` 옆으로 +${x.s}px` : ""}`));
+  // a news site on a phone (2026-10-27 "뉴스처럼 다 바꿔줘"): no tab bar, no pages turned sideways, no cover, the menu on top
+  section("폰: 뉴스 사이트처럼 — 탭 바 · 옆으로 넘기기 · 표지 없음");
+  {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true }), pg = await ctx.newPage();
+    const odd = [];
+    for (const u of ["/", "/briefs", `/briefs/${pieces[0].slot}`, "/briefs/topic/cloud", "/map"]) {
+      await pg.goto(B + u, { waitUntil: "networkidle" }); await pause(300);
+      const r = await pg.evaluate(() => ({ paged: document.documentElement.classList.contains("paged"), tab: Boolean(document.querySelector(".tabbar")), cover: Boolean(document.getElementById("welcome") || document.getElementById("cover")), app: Boolean(document.getElementById("appbar")), menu: [...document.querySelectorAll(".topbar .nav a")].filter((a) => a.offsetParent).length, tall: document.documentElement.scrollHeight > innerHeight }));
+      if (r.paged || r.tab || r.cover || r.app || r.menu < 4) odd.push(`${u} ${JSON.stringify(r)}`);
     }
-    ok(`${w}×${h}: 리서치 목록 · 주제 · 형식${h >= 800 ? " · 글" : ""} 페이지에 위아래 · 옆으로 넘치는 장이 없다`, !over.length, over.join(", "));
+    ok("홈 · 목록 · 글 · 주제 · 지도: 위 메뉴만, 아래 탭 바 · 설치 바 · 표지 · 옆으로 넘기기 없음", !odd.length, odd.join(" / "));
     await ctx.close();
   }
 
@@ -224,24 +216,20 @@ try {
   for (const phone of [false, true]) {
     const tag = phone ? "폰" : "데스크톱", ctx = await context(phone), pg = await ctx.newPage();
     await pg.goto(B + "/", { waitUntil: "networkidle" });
-    ok(`${tag}: 처음 온 사람은 표지부터`, await pg.isVisible("#welcome"));
-    await pg.click("[data-w-about]"); await pg.click("[data-w-enter]"); await pause(500);
-    ok(`${tag}: '로그인 없이 둘러보기' → 앱, 로그인으로 넘어가지 않는다`, !(await pg.isVisible("#welcome")) && new URL(pg.url()).pathname === "/");
+    ok(`${tag}: 처음 와도 표지 없이 바로 이번 주 이야기`, await pg.isVisible("#story") && !(await pg.$("#welcome")));
     await shot(pg, `home-${phone ? "phone" : "desktop"}`, !phone);
-    // home → the research list → a piece
-    if (phone) await Promise.all([pg.waitForNavigation(), pg.tap('.tabbar [data-tab="briefs"]')]);
-    else await Promise.all([pg.waitForNavigation(), pg.click('.topbar .nav a[href="/briefs"]')]);
+    // home → the research list → a piece, by the menu on top (the same on a phone)
+    await Promise.all([pg.waitForNavigation(), pg.click('.topbar .nav a[href="/briefs"]')]);
     ok(`${tag}: 홈 → 리서치 목록`, new URL(pg.url()).pathname === "/briefs");
-    if (phone) { await pg.waitForSelector("html.pgr-ready"); await pg.evaluate(() => { const t = document.querySelector(".pgr-track"); t.scrollTo({ left: t.clientWidth, behavior: "instant" }); }); await pause(400); }
-    await Promise.all([pg.waitForNavigation({ waitUntil: "networkidle" }), phone ? pg.tap(".pgr-track .r-item .r-card") : pg.click(".r-item .r-card")]);
-    const text = await pg.evaluate(() => [...document.querySelectorAll("article.brief .part p, .pgr-track .part p, .pgr-track .flow p")].map((p) => p.textContent).join(" ").length);
+    await Promise.all([pg.waitForNavigation({ waitUntil: "networkidle" }), pg.click(".r-item .r-card")]);
+    const text = await pg.evaluate(() => [...document.querySelectorAll("article.brief .part p")].map((p) => p.textContent).join(" ").length);
     ok(`${tag}: 목록 → 글, 본문이 로그인 없이 다 보인다 (${text}자)`, text > 500 && !/\/login/.test(pg.url()));
     await ctx.close();
   }
   {
     const ctx = await context(false), pg = await ctx.newPage();
     await pg.goto(`${B}/briefs/${pieces[0].slot}`, { waitUntil: "networkidle" });
-    ok("공유된 글 주소로 바로 와도 표지 없이 글이 열린다", await pg.isVisible("article.brief h1") && !(await pg.isVisible("#welcome")));
+    ok("공유된 글 주소로 바로 오면 그 글이 열린다", await pg.isVisible("article.brief h1"));
     await pg.goto(`${B}/saved`, { waitUntil: "networkidle" });
     ok("로그인 안 해도 /saved 가 열린다 (이 기기에 저장)", (await pg.title()).length > 0 && !/\/login/.test(pg.url()));
     await ctx.close();
