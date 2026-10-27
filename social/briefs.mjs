@@ -562,7 +562,7 @@ const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false, more
   <h1 class="page">${h}</h1>
   <p class="intro">${intro}</p>
   ${finder && list.length ? `<form class="finder" role="search" action="/briefs" method="get" aria-label="리서치 찾기">
-    <div class="f-q">${SEARCH_ICON}<input type="search" name="q" placeholder="회사·사례·주제로 찾기 (예: Databricks, 거버넌스)" aria-label="리서치 검색" autocomplete="off" enterkeyhint="search" /></div>
+    <div class="f-q">${SEARCH_ICON}<input type="search" name="q" placeholder="회사 · 사례 · 주제로 찾기" aria-label="리서치 검색" autocomplete="off" enterkeyhint="search" /></div>
     <div class="facet" role="group" aria-labelledby="f-topic"><span class="f-l" id="f-topic">주제</span><div class="f-os">${option("topic", "", "전체", list.length)}${DOMAINS.filter((d) => inTopic(d.id).length).map((d) => option("topic", d.id, d.name, inTopic(d.id).length)).join("")}</div></div>
     <div class="facet" role="group" aria-labelledby="f-format"><span class="f-l" id="f-format">형식</span><div class="f-os">${option("format", "", "전체", list.length)}${present.map((id) => option("format", id, SERIES[id].name, briefs.filter((b) => b.series === id).length)).join("")}</div></div>
   </form>
