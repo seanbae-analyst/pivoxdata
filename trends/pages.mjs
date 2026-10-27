@@ -153,6 +153,74 @@ ${auth.on ? `<section class="sv-acct" id="account" aria-labelledby="h-acct">
 </section>` : ""}
 </div>`;
 
+// /upload (2026-10-27): the operator's page for a long story — more cards than the 10 the Instagram API takes, so the
+// owner posts it from the app. Only for an operator (owner: "운영자니깐 … 로그인했을 때만 폰으로 업로드 가능하게"): signed in,
+// and public.pd_is_operator() says yes (supabase/schema.sql → pivoxdata.operators — the address is never in this public
+// code). upload.js checks first and only then reads the post. The cards and the caption are public files all the same
+// (Instagram fetches the images by URL): this keeps the tool to the operator, not the cards secret.
+const UPLOAD_CSS = `<style>
+  .up{max-width:720px;margin:0 auto;padding:24px 0 56px}
+  .up .k{font-size:13.5px;font-weight:600;color:var(--bronze-hi);margin:0}
+  .up h1{font-size:clamp(24px,5vw,32px);letter-spacing:-.03em;line-height:1.2;margin:8px 0 10px}
+  .up .lead{color:var(--ink-2);margin:0 0 20px}
+  .up ol.steps{margin:0 0 24px;padding-left:20px;color:var(--ink-2);line-height:1.7}
+  .up .acts{display:grid;gap:10px;margin:0 0 12px}
+  .up .acts button{font:inherit;font-weight:700;font-size:16px;padding:15px 18px;border-radius:12px;border:0;cursor:pointer}
+  .up .save{background:var(--bronze);color:#050505}
+  .up .copy{background:var(--surface-2);color:var(--ink)}
+  .up .acts button:disabled{opacity:.5;cursor:default}
+  .up .msg{min-height:1.5em;font-size:14px;color:var(--mut);margin:0 0 24px}
+  .up .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 28px}
+  .up .grid a{position:relative;display:block}
+  .up .grid img{width:100%;aspect-ratio:1080/1350;object-fit:cover;display:block;border-radius:6px;background:var(--surface)}
+  .up .grid span{position:absolute;left:6px;top:6px;font-size:12px;font-weight:700;color:var(--ink);background:rgba(5,5,5,.7);padding:1px 6px;border-radius:4px}
+  .up pre{white-space:pre-wrap;word-break:keep-all;font:inherit;font-size:14.5px;line-height:1.7;color:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:0}
+  .up h2{font-size:16px;margin:0 0 10px}
+  .up .who{color:var(--mut);font-size:14px;margin:0 0 20px}
+  @media(min-width:641px){.up .grid{grid-template-columns:repeat(5,minmax(0,1fr))}.up .acts{grid-template-columns:1fr 1fr}}
+</style>`;
+function upload(auth) {
+  return `${UPLOAD_CSS}
+<div class="up" id="upload">
+<section data-u="wait" role="status"><p class="k">인스타그램 직접 올리기</p><h1>확인하는 중…</h1></section>
+<section data-u="off" hidden><p class="k">인스타그램 직접 올리기</p><h1>운영자 전용 화면이에요</h1><p class="lead">로그인이 꺼져 있어 열 수 없어요.</p></section>
+<section data-u="out" hidden>
+  <p class="k">인스타그램 직접 올리기</p>
+  <h1>운영자 전용 화면이에요</h1>
+  <p class="lead">운영자 계정으로 로그인하면 카드를 저장하고 캡션을 복사할 수 있어요.</p>
+  <div class="acts"><a class="btn lg" href="/login" data-login>로그인</a></div>
+</section>
+<section data-u="no" hidden>
+  <p class="k">인스타그램 직접 올리기</p>
+  <h1>운영자 계정이 아니에요</h1>
+  <p class="lead">지금 로그인한 계정 <b data-who></b>은 이 화면을 쓸 수 없어요. 운영자 계정으로 다시 로그인해 주세요.</p>
+  <p class="msg" data-why role="alert"></p>
+  <div class="acts"><button class="copy" type="button" data-out>로그아웃하고 다시 로그인</button></div>
+</section>
+<section data-u="tool" hidden>
+  <p class="k">인스타그램 직접 올리기</p>
+  <h1 id="title">카드를 불러오는 중…</h1>
+  <p class="who">운영자 <b data-who></b></p>
+  <p class="lead" id="lead"></p>
+  <ol class="steps">
+    <li><b>카드 저장</b> — 사진 앱에 1장부터 순서대로 저장돼요.</li>
+    <li><b>캡션 복사</b></li>
+    <li>인스타그램 앱 → 새 게시물 → 여러 장 선택에서 <b>1장부터 순서대로</b> 고르고, 캡션을 붙여 넣어 공유해요.</li>
+    <li>올린 뒤 GitHub 이슈에 <code>/approve</code> — 기록하고 리서치 글을 공개해요.</li>
+  </ol>
+  <div class="acts">
+    <button class="save" id="save" type="button" disabled>카드 저장</button>
+    <button class="copy" id="copy" type="button" disabled>캡션 복사</button>
+  </div>
+  <p class="msg" id="msg" role="status" aria-live="polite"></p>
+  <div class="grid" id="grid"></div>
+  <h2>캡션</h2>
+  <pre id="cap"></pre>
+</section>
+</div>
+<script type="module" src="/upload.js"></script>`;
+}
+
 const legal = (title, lede, other, body) => `<article class="legal">
 <header>
   <div class="kicker"><b>AX 트렌드 레이더</b>시행일 ${POLICY_VERSION}</div>
@@ -169,6 +237,7 @@ export function accountPages(auth) {
   return [
     { file: "login.html", path: "/login", title: "로그인", desc: "AX 트렌드 레이더 로그인 — 메일로 받은 링크로 들어와요.", body: login(auth), bare: true, noindex: true },
     { file: "auth/callback.html", path: "/auth/callback", title: "로그인 확인", desc: "로그인 링크를 확인해요.", body: callback(auth), bare: true, noindex: true },
+    { file: "upload.html", path: "/upload", title: "직접 올리기", desc: "운영자 전용 — 긴 이야기 카드를 인스타그램 앱으로 올려요.", body: upload(auth), bare: true, noindex: true },
     { file: "saved.html", path: "/saved", title: "저장한 리서치", desc: "저장한 리서치 목록이에요.", body: saved(auth), noindex: true },
     { file: "privacy.html", path: "/privacy", title: "개인정보 처리방침", desc: "AX 트렌드 레이더가 처리하는 개인정보와 그 목적, 보유 기간, 국외 이전을 적었어요.",
       body: legal("개인정보 처리방침", "무엇을 받고, 왜 받고, 언제 지우는지 적었어요. 로그인하지 않고 읽기만 하면 개인정보를 받지 않아요.", { href: "/terms", label: "이용약관" }, privacyBody(auth)) },

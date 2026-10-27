@@ -18,6 +18,14 @@
 - 표는 `pivoxdata` 스키마에 있고 REST 에 열지 않는다. 브라우저는 `public.pd_*` 함수로만 닿고, 함수마다 **부른 사람 자기 행만** 읽고 쓴다.
 - 확인: publishable 키로 `POST /rest/v1/rpc/pd_saved_list` 를 로그인 없이 부르면 401 이어야 한다.
 
+### 운영자 (2026-10-27)
+
+`/upload`(긴 이야기 카드를 폰으로 받아 인스타 앱에 직접 올리는 화면)는 로그인한 **운영자**만 쓴다. 운영자 확인은
+`public.pd_is_operator()`(로그인한 사람의 토큰 메일이 `pivoxdata.operators`에 있나)가 한다. 메일 주소는 이 공개 저장소에 적지 않고
+SQL editor(또는 Supabase MCP `execute_sql`)로 넣는다: `insert into pivoxdata.operators (email) values ('<소문자 메일>');`
+빼기는 `delete from pivoxdata.operators where email = '<메일>';`. 카드 이미지와 캡션 파일 자체는 공개다(인스타가 주소로 가져간다) —
+막는 건 도구이지 카드가 아니다.
+
 ## 2. Authentication 설정 (대시보드)
 
 1. **URL Configuration**
