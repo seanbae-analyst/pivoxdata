@@ -34,8 +34,19 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
   check(`${src}:days`, gaps.length === 0, gaps.length ? `빠진 날 있음: ${gaps.map(([k, g]) => `${k} ${g}`).join(", ")}` : `모든 패키지의 날짜가 하루도 빠짐없이 이어짐`);
   // 3. a second reading of the last week, from a different endpoint of the same source
   if (src === "npm") {
-    const off = all.filter((p) => { const x = P[p.pkg]; if (!x?.last_week) return true; const sum = x.days.filter(([t]) => t >= x.last_week.start && t <= x.last_week.end).reduce((s, [, v]) => s + v, 0); return sum !== x.last_week.downloads; });
-    check("npm:point=range", off.length === 0, `기간 API(일별 합)와 지난주 합계 API가 ${all.length - off.length}/${all.length}개 패키지에서 같은 숫자 (${P.openai.last_week.start}~${P.openai.last_week.end})`);
+    // npm's "last week" endpoint has to be answering for the last week. On 2026-10-27 it answered 2026-06-25~07-01 for
+    // every package (still so that day) and the comparison of that old week stopped the whole day, Instagram post too.
+    // A last week that ended more than LAST_WEEK_DAYS before this run is npm's endpoint gone stale, not a wrong number
+    // of ours: the second reading is left out that day — said so in the check — and the daily series (npm:fresh,
+    // npm:days above) is what the numbers stand on, as on any day. When the endpoint answers for a recent week again,
+    // the comparison is made again.
+    const LAST_WEEK_DAYS = 9, weeks = [...new Set(all.map((p) => P[p.pkg]?.last_week).filter(Boolean).map((w) => `${w.start}~${w.end}`))];
+    const stalePoint = all.every((p) => !P[p.pkg]?.last_week || ageDays(P[p.pkg].last_week.end, runDay) > LAST_WEEK_DAYS);
+    if (stalePoint) check("npm:point=range", true, `지난주 합계 API가 오래된 주(${weeks.join(", ") || "없음"})를 돌려줘 오늘은 두 번째 읽기를 건너뜀 — 숫자는 기간 API의 일별 값(위 검산)으로`);
+    else {
+      const off = all.filter((p) => { const x = P[p.pkg]; if (!x?.last_week) return true; const sum = x.days.filter(([t]) => t >= x.last_week.start && t <= x.last_week.end).reduce((s, [, v]) => s + v, 0); return sum !== x.last_week.downloads; });
+      check("npm:point=range", off.length === 0, `기간 API(일별 합)와 지난주 합계 API가 ${all.length - off.length}/${all.length}개 패키지에서 같은 숫자 (${P.openai.last_week.start}~${P.openai.last_week.end})`);
+    }
   } else {
     // pypistats "recent" counts the last 7 days it has; compare with the daily series (±2%: its window may differ by a day)
     const rel = all.map((p) => { const x = P[p.pkg]; const s = x.days.slice(-7).reduce((t, [, v]) => t + v, 0); return [p.pkg, Math.abs(s / x.recent.last_week - 1)]; });
