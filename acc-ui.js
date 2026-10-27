@@ -28,5 +28,3 @@ export function consent(scope, changed) {
 /** set a message line (hidden when there is none) */
 export const say = (el, text) => { if (!el) return; el.textContent = text ?? ""; el.hidden = !text; };
 
-/** the person has been through the front door: "/" opens straight on the app from now on (index.html → #welcome) */
-export const entered = () => { try { localStorage.setItem("pd.entered", "1"); } catch { /* storage blocked */ } };

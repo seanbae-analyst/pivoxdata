@@ -47,7 +47,7 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
 .nav a[aria-current]{color:var(--ink)}
 .nav a,.nav button{white-space:nowrap}
 /* (between a phone and a wide screen the menu keeps to one line: 주제 is on the home page, a link away) */
-@media(max-width:780px){ .nav a[href="/#explore"]{display:none} .nav a,.nav button{padding-left:8px;padding-right:8px} }
+@media(max-width:780px){ .nav a,.nav button{padding-left:8px;padding-right:8px} }
 @media(max-width:560px){.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
   footer.site .links{gap:0 4px} footer.site .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}}
 
@@ -67,45 +67,6 @@ footer.site{margin-top:72px;padding:22px 0 8px;border-top:1px solid var(--line);
 footer.site a{color:var(--mut)} footer.site a:hover{color:var(--ink)}
 footer.site .links{display:flex;flex-wrap:wrap;gap:4px 16px}
 
-/* ---------- cover (index only) ----------
-   The first screen of PivoxQuant and PivoxMap: one wordmark on black. Same face, tracking and breath as
-   PivoxMap's .pq-cover-wordmark (frontend/src/app/globals.css). Playfair is self-hosted and used only here. */
-@font-face{font-family:"Playfair Display";src:url(/fonts/playfair-display-latin-var.woff2) format("woff2");
-  font-weight:400 900;font-style:normal;font-display:swap}
-.cover{position:relative;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;
-  min-height:calc(100vh - 64px);min-height:calc(100dvh - 64px)}
-.cover .spot{position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(245,240,232,.03) 0%,rgba(245,240,232,.012) 40%,transparent 75%)}
-.cover-wordmark{position:relative;margin:0 -.22em 0 0;text-align:center;color:#f5f0e8;
-  font-family:"Playfair Display",Georgia,serif;font-weight:500;font-style:normal;text-transform:uppercase;letter-spacing:.22em;line-height:1;
-  font-size:min(clamp(3rem,7vw,6rem),10vw);text-shadow:0 0 24px rgba(245,240,232,.06);animation:cover-breath 4s ease-in-out infinite}
-.cover-wordmark .b{color:var(--bronze)}
-@keyframes cover-breath{0%,100%{transform:scale(1)}50%{transform:scale(1.006)}}
-.cover .cover-next{position:absolute;left:0;right:0;bottom:clamp(28px,5vh,56px);display:flex;justify-content:center}
-.cover .cover-next a{font-size:14px;font-weight:500;color:var(--bronze)}
-.cover .cover-next a:hover{color:#f5f0e8;text-decoration:none}
-@media(prefers-reduced-motion:reduce){.cover-wordmark{animation:none}}
-
-.hidden{display:none!important}
-.cover[hidden]{display:none} /* the long page's cover, once the landing (#welcome) has just shown it */
-.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
-
-/* ---------- phone: install bar + steps sheet (site.mjs) ---------- */
-.appbar{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:50;display:flex;align-items:center;gap:10px;
-  padding:10px 10px 10px 14px;border:1px solid var(--bronze-line);border-radius:var(--radius-card);background:rgba(20,17,13,.96);
-  box-shadow:0 8px 30px rgba(0,0,0,.5);font-size:13.5px;color:var(--ink-2)}
-.appbar[hidden],.appsheet[hidden]{display:none}
-.appbar .t{flex:1;display:grid;line-height:1.35} .appbar b{color:var(--ink);font-size:14.5px}
-.appbar button{font:inherit;font-weight:600;border:0;cursor:pointer}
-#appbar-go{padding:9px 16px;border-radius:var(--radius-cta);background:var(--bronze);color:#120e09}
-.appbar .x{width:36px;height:36px;border-radius:50%;background:none;color:var(--mut);font-size:20px}
-.appsheet{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.6);display:flex;align-items:flex-end}
-.appsheet .in{width:100%;padding:22px 20px calc(22px + env(safe-area-inset-bottom));border-radius:18px 18px 0 0;background:var(--surface-2);border-top:1px solid var(--line-2)}
-.appsheet b{font-size:17px;color:var(--ink)} .appsheet ol{margin:12px 0 16px;padding-left:20px;display:grid;gap:10px;font-size:15px;line-height:1.55;color:var(--ink-2)}
-.appsheet button{width:100%;min-height:48px;border:0;border-radius:var(--radius-cta);background:var(--bronze);color:#120e09;font:inherit;font-weight:700}
-body.has-appbar{padding-bottom:84px}
-@media(min-width:641px){.appbar,.appsheet{display:none !important} body.has-appbar{padding-bottom:0}}
-
 /* ---------- phone: a news site's top bar (2026-10-27, "뉴스처럼 다 바꿔줘") — the name, then the sections in one row
    that scrolls sideways if it must; no tab bar at the bottom, no install bar ---------- */
 @media(max-width:640px){
@@ -114,55 +75,10 @@ body.has-appbar{padding-bottom:84px}
   .topbar .nav::-webkit-scrollbar{display:none}
   .topbar .nav a{font-size:14.5px;padding:0 10px;min-height:44px}
   .topbar .nav a[aria-current]{color:var(--ink);box-shadow:inset 0 -2px 0 var(--bronze)}
-  .tabbar,.appbar,.appsheet{display:none !important}
   footer.site{margin-top:40px}
 }
 
-/* ---------- phone: pages turned sideways instead of one long scroll (pager.js; html.paged is set in <head>) ---------- */
-html.paged body{overflow:hidden}
-html.paged .wrap>main,html.paged .wrap>.cover,html.paged footer.site,html.paged .topbar{display:none}
-.pgr{position:fixed;left:0;right:0;top:0;bottom:0;z-index:10;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top);background:var(--bg)}
-body.has-tabbar .pgr{bottom:calc(61px + env(safe-area-inset-bottom))}
-.pgr-top{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:0 12px 0 16px;border-bottom:1px solid var(--line)}
-.pgr-top .brand{font-size:17px;min-height:44px}
-.pgr-lead{min-width:0;display:flex;align-items:center}
-/* ‹ and where it goes back to (a screen's name, or the page's `back`) */
-.pgr-back{display:inline-flex;align-items:center;gap:2px;min-height:44px;min-width:0;margin-left:-8px;padding:0 10px 0 2px;border:0;border-radius:10px;background:none;
-  font:inherit;font-size:16.5px;font-weight:700;letter-spacing:-.02em;color:var(--ink);cursor:pointer}
-.pgr-back span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pgr-back svg{flex:none;width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-.pgr-back[hidden],.pgr-lead .brand[hidden]{display:none}
-.pgr-back:active,.pgr-where:active{background:var(--surface-2)}
-.pgr-where{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-right:-8px;padding:0 8px 0 12px;border:0;border-radius:10px;background:none;
-  font:inherit;font-size:13.5px;font-weight:600;color:var(--mut);white-space:nowrap;cursor:pointer} .pgr-where b{color:var(--ink);font-weight:700}
-.pgr-where svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round}
-.pgr-where[aria-expanded="true"]{color:var(--ink)}
-.pgr-bars{flex:none;display:flex;gap:4px;height:2px;padding:10px 16px 0}
-.pgr-bars i{flex:1;border-radius:1px;background:var(--line-2)} .pgr-bars i.done{background:var(--dim)} .pgr-bars i.on{background:var(--bronze)}
-.pgr-track{flex:1;min-height:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
-.pgr-track::-webkit-scrollbar{display:none}
-.pg{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;overscroll-behavior:auto contain;
-  display:flex;flex-direction:column;padding:18px 16px 20px}
-.pg[hidden]{display:none}
-/* a screen comes in from the side (pager.js → show): over the one before it, or back to it */
-.pgr-track.in{animation:pgr-in .28s cubic-bezier(.2,.75,.25,1)} .pgr-track.out{animation:pgr-out .28s cubic-bezier(.2,.75,.25,1)}
-@keyframes pgr-in{from{opacity:.2;transform:translateX(36px)}to{opacity:1;transform:none}}
-@keyframes pgr-out{from{opacity:.2;transform:translateX(-36px)}to{opacity:1;transform:none}}
-@media(prefers-reduced-motion:reduce){.pgr-track.in,.pgr-track.out{animation:none}}
-/* app feel on a phone: no grey flash on a tap, a press that gives a little */
-html.paged{-webkit-tap-highlight-color:transparent}
-html.paged .tap{transition:transform .12s ease} html.paged .tap:active{transform:scale(.982)}
-.pg>*{flex-shrink:0} .pg>:first-child{margin-top:0}
-.pg .appbar{position:static;margin:16px 0 0;box-shadow:none}
-
-/* tappable words (terms.js): a word the glossary explains, and its floating explanation — the home page and the briefings */
-.term{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:help;text-decoration:underline dotted;text-decoration-color:var(--bronze-line);text-decoration-thickness:1.5px;text-underline-offset:3px}
-.term:hover,.term[aria-expanded="true"]{color:var(--bronze-hi);text-decoration-color:var(--bronze-hi)}
-.termtip{position:absolute;z-index:30;width:min(300px,calc(100vw - 32px));background:var(--surface-3);border:1px solid var(--line-2);border-radius:12px;padding:13px 15px;font-size:13.5px;line-height:1.6;color:var(--ink-2);box-shadow:0 14px 36px rgba(0,0,0,.55)}
-.termtip b{display:block;color:var(--ink);font-size:14.5px;margin-bottom:3px}
-.termtip a{display:inline-flex;align-items:center;min-height:32px;margin-top:4px;font-size:12.5px}
-
-/* ---------- the sidebar (pager.js): the page's contents, one tap to a chapter, a case or a card ----------
+/* ---------- the sidebar (toc.js): the page's contents, one tap to a chapter, a case or a card ----------
    A drawer from the left on a phone and up to 1199px (a scrim behind it); docked beside the long page wider than that.
    Hairlines and type, no boxes; bronze only for where you are (a selected state). */
 .toc{position:fixed;top:0;bottom:0;left:0;z-index:60;width:min(340px,86vw);display:flex;flex-direction:column;background:var(--surface);
@@ -202,7 +118,7 @@ html.toc-open body{overflow:hidden}
 @media(min-width:1200px){
   html.toc-docked .wrap{max-width:1360px;display:grid;grid-template-columns:212px minmax(0,1fr);column-gap:48px}
   html.toc-docked .wrap>*{grid-column:2}
-  html.toc-docked .wrap>.topbar,html.toc-docked .wrap>.cover,html.toc-docked .wrap>footer.site{grid-column:1/-1}
+  html.toc-docked .wrap>.topbar,html.toc-docked .wrap>footer.site{grid-column:1/-1}
   html.toc-docked .toc{grid-column:1;position:sticky;top:24px;align-self:start;z-index:auto;width:auto;max-height:calc(100vh - 48px);
     transform:none;visibility:visible;transition:none;background:none;border:0;padding:0}
   html.toc-docked .toc-head{display:none}
@@ -229,7 +145,7 @@ html.toc-open body{overflow:hidden}
 .sheet-x{display:block;width:100%;min-height:48px;margin-top:14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:none;
   color:var(--ink-2);font:inherit;font-weight:600;cursor:pointer}
 
-/* ---------- buttons the sign-in pages and the landing share ---------- */
+/* ---------- buttons the sign-in pages share ---------- */
 .btn.lg{min-height:52px;padding:0 22px;font-size:16px}
 .btn.danger{background:none;color:var(--bad);border-color:rgba(216,138,138,.4)}
 .btn.danger:hover{background:var(--bad-soft)}
@@ -328,23 +244,17 @@ body:has(.acc) main{padding-top:8px}
 .save-btn:hover{background:var(--surface-2)}
 .save-btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
 .save-btn[aria-pressed="true"]{color:var(--bronze-hi);border-color:var(--bronze-line)} .save-btn[aria-pressed="true"] svg{fill:currentColor}
-.save-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:10px;background:none;color:var(--mut);cursor:pointer}
-.save-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
-.save-ic:active{background:var(--surface-2)} .save-ic[aria-pressed="true"]{color:var(--bronze-hi)} .save-ic[aria-pressed="true"] svg{fill:currentColor}
-.pgr-top .save-ic+.pgr-where{margin-left:0}
 .pd-toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));z-index:90;display:flex;align-items:center;gap:14px;
   width:max-content;max-width:calc(100vw - 32px);padding:12px 16px;border-radius:12px;background:var(--surface-3);box-shadow:0 8px 28px rgba(0,0,0,.5);
   color:var(--ink);font-size:14px;opacity:0;pointer-events:none;transform:translate(-50%,12px);transition:opacity .2s,transform .2s}
 .pd-toast.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
 .pd-toast a{color:var(--bronze-hi);font-weight:600;white-space:nowrap}
-body.has-tabbar .pd-toast,html.paged .pd-toast{bottom:calc(80px + env(safe-area-inset-bottom))}
 .acct-notice{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:80;display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:12px 14px;border-radius:12px;background:var(--surface-3);box-shadow:0 8px 28px rgba(0,0,0,.5);font-size:13.5px;line-height:1.5;color:var(--ink-2)}
 .acct-notice a{flex:none;font-weight:600}
-body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe-area-inset-bottom))}
 @media(min-width:641px){.acct-notice{left:auto;right:24px;max-width:440px}}
 
-/* ---------- the menus' 저장 and 로그인 (trends/site.mjs → NAV; the phone's sidebar copies them, account.js fills them) ---------- */
+/* ---------- the menus' 저장 and 로그인 (trends/site.mjs → NAV; account.js fills them) ---------- */
 .nav .x{display:none}
 .nav .n,.toc-site .n{margin-left:5px;font-size:12px;font-weight:600;color:var(--bronze-hi)} .nav .n:empty,.toc-site .n:empty{display:none}
 .nav [data-acct="login"]{margin-left:6px;box-shadow:inset 0 0 0 1px var(--line-2)}
@@ -423,19 +333,6 @@ body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe
 .r-more p{display:flex;flex-wrap:wrap;gap:4px 18px;margin:0;font-size:14px} .r-more a{color:var(--ink-2)} .r-more a span{margin-left:3px;font-size:12px;color:var(--dim)}
 .r-more a[aria-current]{color:var(--ink);font-weight:600}
 .r-more+.install{margin-top:28px}
-/* phone pages: a list's rows as soft cards, like the rest of the app */
-.pg .r-list{border-top:0;gap:10px}
-.pg .r-item{border:0;border-radius:18px;background:var(--surface-2)}
-.pg .r-card{padding:14px 14px 6px}
-.pg .r-item .chips{padding:0 14px;margin:0 0 12px}
-.pg .r-empty{padding:18px 16px}
-.pg .finder{margin-top:2px} .pg>.f-count{margin:4px 0 2px}
-.pg .pg-h{margin:0 2px 12px;font-size:17px;font-weight:700}
-/* 링크 공유 on a phone: an icon in the top bar, beside 저장 (social/briefs.mjs moves it there) */
-.share-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:10px;background:none;color:var(--mut);cursor:pointer}
-.share-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round} .share-ic span{display:none} .share-ic:active{background:var(--surface-2)}
-.pgr-top .share-ic+.save-ic,.pgr-top .share-ic+.pgr-where{margin-left:0}
-@media(max-height:700px){ .pg #data .ind-bars li:nth-child(3){display:none} .pg .t-sec>h2{margin-bottom:6px} .pg>#data{margin-top:18px} .pg #data .ind-src{margin-top:6px} }
 /* phone list rows (2026-10-27 mobile review): one quiet line above the title — the format and its main topic, never
    wrapping with a stray separator at a line's end; the date alone under the lede; no tag chips (Toss Tech's rows have
    none — the tags stay on the piece's page and the tag pages) */
@@ -444,5 +341,5 @@ body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe
   .r-k>span:nth-of-type(n+2){display:none} .r-k>span:nth-of-type(1):not(:last-child)::after{display:none}
   .r-m>span{display:none} .r-m>time:not(:last-child)::after{display:none}
   .r-item .chips{display:none}
-  .r-card{padding-bottom:14px} .pg .r-card{padding-bottom:14px}
+  .r-card{padding-bottom:14px}
 }

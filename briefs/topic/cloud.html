@@ -80,34 +80,6 @@
     h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
   }
-  /* phone pages (pager.js): the title page, the text a screenful at a time, the summary, the sources, what to read next */
-  .pg .art-head{margin:auto 0}
-  .pg .art-head .kicker{margin-top:0}
-  .pg .flow h2{margin:0 0 12px;font-size:21px} .pg .flow h2:not(:first-child){margin-top:26px}
-  .pg .flow p{font-size:16px;line-height:1.8}
-  .pg .flow .case-h{margin:0} .pg .flow .case-h:not(:first-child){margin-top:26px} .pg .flow .case-h h2{margin:6px 0 12px}
-  .pg .flow ul.asks li{font-size:15.5px}
-  .pg>.sum,.pg>.basis,.pg>.pn,.pg>.rel{margin:0}
-  .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
-  .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
-  /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
-  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
-  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
-  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
-  /* (a short screen: the topics are on the 지표 pages, each with its link) */
-  @media(max-height:700px){ .pg .art-head .topics{display:none} }
-  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
-  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
-  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
-  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
-  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
-  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
-  .case-list li+li{border-top:1px solid var(--line)}
-  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
-  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
-  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  html.paged{-webkit-tap-highlight-color:transparent}
 </style>
 </head>
 <body>
@@ -172,23 +144,6 @@ OneSignalDeferred.push(async (OneSignal) => {
   OneSignal.User.PushSubscription.addEventListener("change", show);
   await show();
 });
-</script>
-  <script type="module">
-import { pager } from "/pager.js";
-const m = document.querySelector("main"), $ = (s) => m.querySelector(s), install = document.getElementById("install");
-const lead = [...m.children].filter((x) => x.matches(".kicker, h1, .intro, .t-others"));
-if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
-const ul = (cls) => () => Object.assign(document.createElement("ul"), { className: cls });
-pager([
-  { id: "data", name: "지표", title: "지표", pages: [[...lead, $("#data")]] },
-  { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
-    sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
-  { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news"), count: m.querySelectorAll("#news .t-news>li").length },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
-  { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
-  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
-], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" }, toc: false });
 </script>
 </main>
 

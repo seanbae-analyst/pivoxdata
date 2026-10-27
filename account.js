@@ -2,7 +2,7 @@
 // account (2026-10-26). Saved briefings live in this browser (localStorage "pd.saved"); signed in, they live in the
 // account too and follow it to any device (public.pd_saved_* — supabase/schema.sql). What it draws: the 저장 button
 // under a briefing's title and under the home page's story, the count and the sign-in link in the menus
-// ([data-acct] — the top bar, the phone's sidebar, the home screen), the /saved page with the account (로그아웃 · 탈퇴),
+// ([data-acct] — the top bar), the /saved page with the account (로그아웃 · 탈퇴),
 // and, for a signed-in person, a line when the terms have changed since they agreed.
 import * as auth from "/auth.js";
 
@@ -101,15 +101,13 @@ function toast(text, link) {
   if (link) t.append(Object.assign(document.createElement("a"), { href: "/saved", textContent: "저장한 리서치 보기" }));
   t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 3200);
 }
-// `icon`: the round icon of a phone's top bar (its words go to the screen reader)
-function saveButton(item, icon = false) {
+function saveButton(item) {
   const b = document.createElement("button");
-  b.type = "button"; b.className = icon ? "save-ic" : "save-btn";
+  b.type = "button"; b.className = "save-btn";
   const paint = () => {
     const on = has(item.slot);
     b.setAttribute("aria-pressed", String(on)); b.title = on ? "저장 취소" : "나중에 다시 읽게 저장";
-    b.innerHTML = icon ? BOOK : `${BOOK}<span>${on ? "저장됨" : "저장"}</span>`;
-    if (icon) b.setAttribute("aria-label", on ? "저장됨 — 누르면 저장 취소" : "저장");
+    b.innerHTML = `${BOOK}<span>${on ? "저장됨" : "저장"}</span>`;
   };
   b.addEventListener("click", async (e) => {
     e.preventDefault(); e.stopPropagation();
@@ -122,28 +120,19 @@ function saveButton(item, icon = false) {
 const slotOf = (href) => (String(href).match(/^\/briefs\/([0-9A-Za-z][0-9A-Za-z-]{0,40})$/) ?? [])[1] ?? null;
 const text = (el) => (el?.textContent ?? "").replace(/\s+/g, " ").trim();
 function placeButtons() {
-  const paged = () => document.documentElement.classList.contains("paged");
-  // a briefing's own page (not a draft waiting to be posted: it may yet go). On a phone its pages are already laid out
-  // (the page's pager runs first) and the button is a round icon in the top bar, there on every page of the piece and
-  // costing the title page no room; a phone whose pages never started (unpaged) gets it under the title instead.
+  // a briefing's own page (not a draft waiting to be posted: it may yet go): under the title
   const art = document.querySelector(".art-head");
   const slot = slotOf(location.pathname);
   if (art && slot && !document.querySelector('meta[name="robots"][content*="noindex"]')) {
     const item = { slot, title: text(art.querySelector("h1")), day: slot.slice(0, 10) };
     // (next to 링크 복사 when the piece has it — social/briefs.mjs → .act-row)
     const under = () => { const row = art.querySelector(".act-row") ?? Object.assign(document.createElement("div"), { className: "save-row" }); row.prepend(saveButton(item)); if (!row.isConnected) art.append(row); };
-    const where = paged() && document.querySelector(".pgr-top .pgr-where");
-    if (where) {
-      const b = saveButton(item, true);
-      where.before(b);
-      document.addEventListener("unpaged", () => { b.remove(); under(); }, { once: true });
-    } else under();
+    under();
   }
-  // the home page's story: the briefing it comes from — on the long page only (a phone's story page has no room to
-  // spare, and its cases lead to the briefing, which has the button)
+  // the home page's story: the briefing it comes from
   const st = document.querySelector("#story .st-head"), link = st?.querySelector('.st-t a[href^="/briefs/"]');
   const s2 = link && slotOf(link.getAttribute("href"));
-  if (st && s2 && !paged()) {
+  if (st && s2) {
     const row = document.createElement("div"); row.className = "save-row";
     row.append(saveButton({ slot: s2, title: text(link), day: st.querySelector(".st-k time")?.getAttribute("datetime") ?? s2.slice(0, 10) }));
     const lede = st.querySelector(".st-lede");
@@ -197,7 +186,7 @@ function savedPage() {
 // ---------- start ----------
 placeButtons(); savedPage(); paintMenus();
 addEventListener(EVENT, paintMenus);
-addEventListener("DOMContentLoaded", paintMenus);   // what the page's own scripts drew after this one (the home screen, the sidebar)
+addEventListener("DOMContentLoaded", paintMenus);   // what the page's own scripts drew after this one (the sidebar)
 addEventListener("storage", (e) => { if (e.key === KEY) changed(); });
 if (auth.enabled) {
   let was = auth.user()?.id ?? null;

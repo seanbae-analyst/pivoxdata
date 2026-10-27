@@ -35,7 +35,7 @@
   /* The home page reads like a report (2026-10-25): plain labels, hairline rules and type doing the work — no pills, no
      boxed-everything, no icon tiles or tinted gradients — and bronze only for the numbers and what is selected, like
      PivoxQuant's black-and-gold refresh. Lists keep one column for the date, one for who, one for what, so titles line up
-     however long a name is. Phones: the long page below 640px, or pages turned sideways (pager.js, the last block). */
+     however long a name is. Phones: the same page, top to bottom (the 640px block). */
   /* main is a grid: without this a wide table widens the whole column instead of scrolling inside .tbl */
   main>*{min-width:0}
   /* ---------- header: what this is, the numbers that matter ---------- */
@@ -220,9 +220,7 @@
   .authors .bar{height:10px;border-radius:5px;background:linear-gradient(90deg,var(--bronze-hi) var(--w),transparent var(--w));border:1px solid var(--line)}
   .authors .v{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
   @media(max-width:560px){.authors li{grid-template-columns:110px 1fr 50px;font-size:13px}}
-  /* ---------- phones, the long page (?scroll=1, or pages that never started): a short cover, the briefings first, then
-     the signals, then the rest; lists of briefings and announcements and a tab's cards swiped sideways; the glossary
-     shows four terms until opened ---------- */
+  /* ---------- phones: the same page top to bottom, tighter; the glossary shows four terms until opened ---------- */
   @media(max-width:640px){
     main{gap:36px;padding-top:12px}
     .l-full,.m-full{display:none} .l-short{display:inline} .m-short{display:block}
@@ -236,143 +234,13 @@
     .events li:nth-child(n+4){display:none}
     /* a news list, top to bottom (2026-10-27, "뉴스처럼 다 바꿔줘"): every announcement, no sideways swiping */
     #news .events li:nth-child(n+4){display:list-item} #news .events .et{font-size:15px;line-height:1.5}
-      margin:0 -16px;padding:0 16px 4px;scroll-padding:0 16px;scrollbar-width:none;overscroll-behavior-x:contain}
     .glossary dl{grid-template-columns:1fr}
     .glossary.folds:not(.open) .gl-g:first-child .gl:nth-child(n+5),.glossary.folds:not(.open) .gl-g+.gl-g{display:none}
     .gl-more{width:100%;min-height:46px;margin-top:10px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface);color:var(--ink-2);font:inherit;font-weight:600}
-    /* a tab's cards side by side, swiped like the Instagram carousel (the counter is added below) */
-    .swipe-n[hidden]{display:none !important}
-    .swipe-n{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:12.5px;color:var(--mut)} .swipe-n .dots{display:flex;gap:4px} .swipe-n i{width:6px;height:6px;border-radius:50%;background:var(--line-2)} .swipe-n i.on{background:var(--bronze);width:16px;border-radius:3px}
     .ins .big{font-size:36px} .ins.lead .big{font-size:44px}
     .ins h3,.ins.lead h3{font-size:16.5px}
     .tbl td a{display:inline-block;padding:10px 0}
   }
-  /* ---------- phone pages (pager.js): the cover, then one card or one screenful of a list per page ---------- */
-  .pg>.hero h1{font-size:34px}
-  @media(max-height:700px){.pg>.hero h1{font-size:30px}}
-  .pg-hint{margin:auto 0 0;padding-top:20px;font-size:13.5px;color:var(--mut)} .pg-hint b{color:var(--ink-2);font-weight:600}
-  .pg>.st-head{margin-top:24px;padding-top:16px;border-top:1px solid var(--bronze-line)}
-  .pg .st-t{font-size:24px} .pg .st-lede{font-size:15.5px;line-height:1.7}
-  .pg .beats{border-top:0} .pg .beats a{padding:16px 0} .pg .beats b{font-size:17px} .pg .beats .bs{font-size:15px}
-  .pg .st-view{margin:0;padding:0;border-top:0} .pg .st-view>.sv-k:first-child{margin-top:4px}
-  .pg .st-view p{font-size:15.5px;line-height:1.75}
-  .pg>.num-intro{margin:8px 0 0;font-size:15px} .pg>.kpi{margin:18px 0 0}
-  .pg-app{display:inline-flex;align-items:center;min-height:40px;font-size:13.5px;color:var(--mut);text-decoration:none}
-  .pg .feed{border-top:0}
-  .pg .feed li.grp:nth-child(n){display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:24px 0 10px;border-bottom:1px solid var(--line-2)}
-  .pg .feed li.grp:first-child{padding-top:2px}
-  .pg .feed .grp h3{margin:0;font-size:17px;font-weight:700;color:var(--ink)} .pg .feed .grp span{font-size:12px;color:var(--mut)}
-  .pg>.ins{flex:1 0 auto;border-top:0;padding:0}
-  .pg .ins h3,.pg .ins.lead h3{margin-top:10px;font-size:22px;line-height:1.4}
-  .pg .ins .num{margin-top:16px} .pg .ins .big,.pg .ins.lead .big{font-size:48px}
-  .pg .ins .fig{flex:1 0 auto;display:flex;flex-direction:column;margin-top:22px}
-  .pg .ins .plot{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .pg .ins .easy{margin-top:18px;font-size:15.5px;line-height:1.7} .pg .ins .fine{font-size:13.5px}
-  /* a page short of room folds what matters least, step by step (the page script marks what folds when) */
-  .pg.f1 [data-fold="1"],.pg.f2 [data-fold="2"],.pg.f3 [data-fold="3"]{display:none !important}
-  .pg .events li:nth-child(n){display:block}
-  .pg .gl-list{margin:0}
-  /* the glossary's phone pages show the words only, a row each; a tap opens the explanation as a sheet (terms.js) */
-  .pg .gl{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;min-height:48px;padding:10px 0;cursor:pointer}
-  .pg .gl dt{font-size:15.5px;font-weight:600} .pg .gl dd{display:none}
-  .pg .gl::after{content:"›";font-size:20px;line-height:1;color:var(--dim)}
-  .pg .gl[data-g]::before{content:attr(data-g);grid-column:1/-1;display:block;font-size:12.5px;font-weight:600;color:var(--mut);margin:0 0 8px}
-  .pg-more p{font-size:15px;line-height:1.7;color:var(--ink-2);margin:0 0 12px}
-  .pg-btn{display:flex;align-items:center;justify-content:center;min-height:48px;margin:8px 0 22px;border:1px solid var(--line-2);border-radius:var(--radius-cta);color:var(--ink);font-weight:600;text-decoration:none}
-  .pg-links{display:flex;flex-wrap:wrap;gap:0 18px;font-size:14px;border-top:1px solid var(--line);padding-top:6px} .pg-links a{min-height:40px;display:inline-flex;align-items:center;color:var(--mut)}
-
-  /* ---------- the app on a phone (pager.js screens, 2026-10-26 "이쁜 앱처럼"): 오늘, and the screens it opens ----------
-     Soft surfaces with round corners for what you tap (no borders, no glow, no pills); bronze only for the numbers and
-     the one bar a figure is about. */
-  .pg .hub{display:flex;flex-direction:column;gap:10px;padding-bottom:2px}
-  .hub-head{position:relative;margin:0 2px 2px}
-  /* the saved briefings and (when signing in is on) the account: round icons at the head's right (account.js fills them) */
-  .hub-acts{position:absolute;top:2px;right:0;display:flex;gap:8px}
-  .hub-ic{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:var(--surface-2);color:var(--ink-2)}
-  .hub-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .hub-ic .n{position:absolute;top:-3px;right:-3px;font-size:11.5px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums}
-  .hub-ic .n:empty{display:none} .hub-ic.on{color:var(--bronze-hi)}
-  .hub-head .ov{margin:0;font-size:13px;font-weight:600;color:var(--mut)}
-  .hub-head h1{margin:2px 0 0;font-size:31px;line-height:1.15;font-weight:800;letter-spacing:-.035em;color:var(--ink)}
-  .hub-head .fresh{margin:6px 0 0;font-size:12.5px;color:var(--dim)}
-  .hub-story{display:flex;flex-direction:column;padding:16px 18px 14px;border-radius:20px;background:var(--surface-2);color:var(--ink);text-decoration:none}
-  .hub-story:hover{text-decoration:none}
-  .hub-story .k{font-size:12.5px;font-weight:600;color:var(--mut)}
-  .hub-story .t{margin-top:8px;font-size:21px;line-height:1.38;font-weight:750;letter-spacing:-.025em;color:var(--ink);
-    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .hub-story .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}
-  .avs{display:flex;align-items:center;min-width:0}
-  .av{flex:none;display:grid;place-items:center;width:28px;height:28px;margin-left:-7px;border-radius:50%;background:var(--surface-3);
-    box-shadow:0 0 0 2px var(--surface-2);font-size:11.5px;font-weight:700;color:var(--ink-2)}
-  .av:first-child{margin-left:0}
-  .avs small{margin-left:9px;font-size:12.5px;color:var(--mut);white-space:nowrap}
-  .hub-story .go{flex:none;font-size:13.5px;font-weight:650;color:var(--bronze-hi)}
-  .hub-sec{margin:6px 4px -2px;font-size:13px;font-weight:650;color:var(--mut)}
-  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .tile{display:flex;flex-direction:column;min-height:96px;padding:12px 14px 11px;border-radius:18px;background:var(--surface-2);color:var(--ink);text-decoration:none}
-  .tile:hover{text-decoration:none}
-  .tile .l{font-size:12.5px;line-height:1.4;color:var(--mut)}
-  .tile b{margin-top:auto;padding-top:6px;font-size:25px;font-weight:800;letter-spacing:-.03em;color:var(--bronze-hi);font-variant-numeric:tabular-nums}
-  .tile small{margin-top:2px;font-size:11.5px;line-height:1.35;color:var(--dim)}
-  .mini{display:grid;gap:4px;margin-top:10px}
-  .mini i{display:block;height:4px;border-radius:2px;background:var(--surface-3)} .mini i span{display:block;height:100%;border-radius:2px;background:var(--dim)}
-  .mini i:first-child span{background:var(--bronze)}
-  .rows{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .rows a{display:grid;grid-template-columns:30px minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;align-items:center;min-height:54px;padding:9px 12px;
-    border-radius:16px;background:var(--surface-2);color:var(--ink);text-decoration:none}
-  .rows a:hover{text-decoration:none}
-  .rows .ic{grid-row:span 2;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--surface-3);color:var(--ink-2)}
-  .rows svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .rows .t{font-size:14px;font-weight:650;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rows .n{font-size:12px;color:var(--dim);line-height:1.3}
-  .rows .solo .t{grid-row:span 2}
-  .hub>.fresh{margin:2px 4px 0;font-size:12px;color:var(--dim)}
-  /* a short phone (SE, 640–720px tall): 오늘 still on one screen — the story title in two lines, smaller tiles, the four
-     shortcuts in one row of icons */
-  @media(max-height:720px){
-    .hub-head h1{font-size:26px} .hub-sec,.hub>.fresh,.tile small,.rows .n{display:none}
-    .hub-story .t{font-size:18.5px;-webkit-line-clamp:2}
-    .tile{min-height:80px;padding:10px 12px} .tile b{font-size:22px}
-    .rows{grid-template-columns:1fr;gap:8px}
-    .rows a{grid-template-columns:1fr;grid-template-rows:auto auto;justify-items:center;row-gap:6px;min-height:0;padding:10px 4px;text-align:center}
-    .rows .ic,.rows .solo .t{grid-row:auto} .rows .t{font-size:12px;white-space:normal;overflow:visible}
-    .pg>.st-head.intro .st-t{font-size:22px}
-    .pg>.st-head.intro .st-lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-    .case-list small{display:none} .case-list a{padding:8px 0}
-  }
-  @media(max-height:660px){ .hub-head h1{font-size:24px} .tile .l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .tile{min-height:74px} .hub-story{padding:14px 16px 12px} }
-  /* the story: its opening, then a case a page, as a card you can open */
-  .pg>.st-head.intro{margin:0;padding:0;border:0}
-  .pg>.st-head.intro .st-k{font-size:13px} .pg>.st-head.intro .st-t{margin-top:8px;font-size:25px;line-height:1.34} .pg>.st-head.intro .st-lede{margin-top:12px;font-size:15.5px;line-height:1.75}
-  .pg .swipe{margin:18px 0 0;font-size:13px;font-weight:600;color:var(--dim)}
-  .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
-  .case-list li+li{border-top:1px solid var(--line)}
-  .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
-  .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
-  .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  .pg>.beats.one{flex:1;display:flex;margin:0;padding:0;border:0}
-  .pg>.beats.one li{flex:1;display:flex;border:0}
-  .pg>.beats.one a{flex:1;display:flex;flex-direction:column;padding:20px 18px 18px;border-radius:22px;background:var(--surface-2);text-decoration:none}
-  .pg>.beats.one .bn{font-size:12.5px;font-weight:650;color:var(--mut);line-height:1.4}
-  .pg>.beats.one .bk{margin-top:18px;font-size:13px;font-weight:600;color:var(--ink-2)}
-  .pg>.beats.one b{margin-top:6px;font-size:24px;line-height:1.36;font-weight:750;letter-spacing:-.025em}
-  .pg>.beats.one .bs{margin-top:14px;font-size:16px;line-height:1.75;color:var(--ink-2)}
-  .pg>.beats.one .bs2{display:block;margin-top:8px;font-size:15px;line-height:1.75;color:var(--mut)}
-  .pg>.beats.one a:hover b,.pg .hub a:hover *{text-decoration:none}
-  .pg>.beats.one .bw{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.65;color:var(--mut)}
-  .pg>.beats.one small{margin-top:auto;padding-top:18px;font-size:12.5px;color:var(--dim)}
-  .pg>.beats.one .cta{display:flex;align-items:center;justify-content:center;min-height:48px;margin-top:12px;border-radius:14px;background:var(--surface-3);
-    font-size:14.5px;font-weight:650;color:var(--ink)}
-  /* the announcements: who said it as a small round mark, then what, then when */
-  .pg .feed li.news a{display:grid;grid-template-columns:34px minmax(0,1fr);grid-template-areas:"av meta" "av et";column-gap:12px;row-gap:2px;align-items:start;padding:14px 0}
-  .pg .feed li.news .av{grid-area:av;margin:2px 0 0;width:34px;height:34px;font-size:13px;box-shadow:none}
-  .pg .feed li.news time{grid-area:meta;justify-self:end;font-size:12px;color:var(--dim)}
-  .pg .feed li.news .badge{grid-area:meta;justify-self:start;font-size:12.5px;font-weight:650;color:var(--ink-2)}
-  .pg .feed li.news .et{grid-area:et;font-size:15px;line-height:1.5} .pg .feed li.news .go{display:none}
-  /* the glossary: one rounded group of rows */
-  .pg .gl-list{padding:2px 14px;border-radius:18px;background:var(--surface-2)}
-  .pg .gl-list .gl+.gl{border-top:1px solid var(--line)}
-  .pg .gl-list .gl[data-g]::before{margin-top:10px}
 </style>
 </head>
 <body>
@@ -548,7 +416,7 @@ function show(id, focus) {
   for (const b of tabs) { const on = b === t; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; document.getElementById(b.getAttribute("aria-controls")).hidden = !on; }
   if (focus) t.focus();
   t.scrollIntoView({ block: "nearest", inline: "nearest" });
-  if (!document.documentElement.classList.contains("paged")) drawAll(document.getElementById(t.getAttribute("aria-controls")));
+  drawAll(document.getElementById(t.getAttribute("aria-controls")));
 }
 for (const b of tabs) {
   b.addEventListener("click", () => { show(b.dataset.topic); history.replaceState(null, "", b.dataset.topic === tabs[0].dataset.topic ? location.pathname : `#${b.dataset.topic}`); });
@@ -558,12 +426,12 @@ for (const b of tabs) {
 const fromHash = (e) => {
   const card = /^#c-/.test(location.hash) ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
   const panel = card?.closest('[role="tabpanel"]');
-  if (panel?.hidden) { show(tabs.find((b) => b.getAttribute("aria-controls") === panel.id)?.dataset.topic); if (e && !document.documentElement.classList.contains("paged")) card.scrollIntoView({ block: "start" }); }
+  if (panel?.hidden) { show(tabs.find((b) => b.getAttribute("aria-controls") === panel.id)?.dataset.topic); if (e) card.scrollIntoView({ block: "start" }); }
   if (!tabs.some((b) => `#${b.dataset.topic}` === location.hash)) return; show(location.hash.slice(1));
-  if (e && !document.documentElement.classList.contains("paged")) document.querySelector('[role="tablist"]').closest("section").scrollIntoView({ behavior: "smooth" }); };
+  if (e) document.querySelector('[role="tablist"]').closest("section").scrollIntoView({ behavior: "smooth" }); };
 fromHash(); addEventListener("hashchange", fromHash);
 // a shared address with a hash (/#ax, /#glossary) lands on its section
-if (location.hash && location.hash !== "#cover" && !document.documentElement.classList.contains("paged")) { // (phone pages: pager.js turns to it)
+if (location.hash && location.hash !== "#cover") {
   const topic = tabs.some((b) => `#${b.dataset.topic}` === location.hash);
   const target = topic ? document.querySelector('[role="tablist"]').closest("section") : document.getElementById(decodeURIComponent(location.hash.slice(1)));
   if (target) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
@@ -583,155 +451,10 @@ const figures = () => {
   redraw(); document.fonts?.ready.then(redraw);
   let w = innerWidth; addEventListener("resize", () => { if (innerWidth !== w) { w = innerWidth; redraw(); } });
 };
-if (document.documentElement.classList.contains("paged")) document.addEventListener("unpaged", figures, { once: true }); else figures();
-</script>
-<script type="module">
-// phone: the page as an app (pager.js, screens — 2026-10-26 "이쁜 앱처럼 리얼"). 오늘 is the home screen: this week's
-// story as a card, the numbers as tiles (the IT domains as small bars), rows to the rest. Each opens its own screen,
-// turned sideways a page at a time: the story (its opening, a case a page, the common thread and the IT-consulting
-// view), the adoption cards, the IT-domain cards, the announcements, the glossary, the data. ‹ goes back, so does the
-// browser's back. A card's figure is drawn to fill the room its page has left.
-import { pager } from "/pager.js";
-import { drawFig } from "/cardfig.js";
-const $ = (s) => document.querySelector(s), all = (s) => [...document.querySelectorAll(s)];
-const make = (tag, cls, html = "") => Object.assign(document.createElement(tag), { className: cls, innerHTML: html });
-const paged = document.documentElement.classList.contains("paged");
-if (paged) document.getElementById("appbar")?.remove(); // installing and alerts live on 브리핑 → 알림 받기 (linked from the cover)
-// the week's changes and the announcements as one feed; a group's heading stays with its first item
-const grp = (title, sub) => make("li", "grp", `<h3>${title}</h3><span>${sub}</span>`);
-const feed = (title, sub, items) => (items.length ? [[grp(title, sub), items[0]], ...items.slice(1)] : []);
-// the story's common thread and IT-consulting view, a screenful at a time; a label stays with the line after it
-const view = [], vk = all("#story .st-view>*");
-for (let i = 0; i < vk.length; i++) view.push(vk[i].matches(".sv-k") && vk[i + 1] ? [vk[i], vk[++i], ...(vk[i].matches(".sv-h") && vk[i + 1] ? [vk[++i]] : [])] : vk[i]);
-if (view.length > 1 && view.at(-1).matches?.(".st-more")) { const more = view.pop(); view.push([view.pop(), more].flat()); } // the link never on a page alone
-const events = [...feed("지표 변화", "최근 7일", all("#changes .events>li")), ...feed("공식 발표", "회사·정부 뉴스룸·보도자료", all("#news .events>li"))];
-const basis = make("div", "pg-more", `<div class="sec-h"><h2>근거 데이터</h2></div>
-  <p>화면의 숫자가 어디서 왔고 어떻게 계산·검산했는지예요. 개발자가 내려받는 패키지(npm·PyPI), 논문(arXiv), 오픈 모델(Hugging Face), 빅테크 설비투자(SEC)의 표와 차트도 여기에 있어요.</p>
-  <p>표가 길어서 위아래로 읽는 화면으로 열려요.</p><a class="pg-btn" href="/?scroll=1#more">근거 데이터 열기</a>`);
-const links = $("footer.site .links")?.cloneNode(true); if (links) { links.className = "pg-links"; basis.append(links); }
-// a page short of room folds what matters least, in three steps (data-fold="1", "2", "3"); a card's figure then gets all
-// the room that is left (at least MIN)
-const fold = (sel, n) => all(sel).forEach((x) => { x.dataset.fold = n; });
-fold(".hero .meta", 1); fold(".hero .kicker, .hero .lede", 2); fold(".st-head .st-k", 3);
-fold(".ins .fine, .ins .recent li:nth-child(3)", 1); fold(".ins .easy, .ins .recent li:nth-child(2)", 2); fold(".ins .src", 3);
-const MIN = 130;
-const fit = (p) => {
-  p.classList.remove("f1", "f2", "f3");
-  const card = p.querySelector(":scope>.ins"), fig = card?.querySelector("figure[data-fig]"), cs = getComputedStyle(p);
-  const inner = p.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
-  if (card) { card.style.flex = "none"; if (fig) { fig.style.flex = "none"; drawFig(fig, MIN); } }
-  const over = card ? () => card.offsetHeight > inner : () => p.scrollHeight > p.clientHeight;
-  for (const f of ["f1", "f2", "f3"]) { if (!over()) break; p.classList.add(f); }
-  if (card) { if (fig) { drawFig(fig, MIN + Math.max(0, inner - card.offsetHeight)); fig.style.flex = ""; } card.style.flex = ""; }
-};
-// the sidebar (목차) reads the same chapters: their long names, a group heading over them, and the entries under the
-// cases and the cards — a case's IT domain and way in, a card's subject and its finding
-const card = (c) => ({ label: c.querySelector(".k")?.firstChild?.textContent.replace(/^(AX|IT 영역) · /, ""), note: c.querySelector("h3")?.textContent }); // (not the card's 리서치 → link)
-const beat = (li) => ({ label: li.querySelector("b")?.textContent, note: li.querySelector(".bk")?.textContent });
-const text = (n) => (n?.textContent ?? "").replace(/\s+/g, " ").trim();
-const node = (tag, cls, t) => { const x = document.createElement(tag); if (cls) x.className = cls; if (t != null) x.textContent = t; return x; };
-const icon = (d) => { const x = node("span", "ic"); x.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg>`; return x; };
-// who said it, as a round mark: a name's first letter (S, U), or its first syllable (영 · 과)
-const mark = (name) => { const t = String(name ?? "").trim(); return node("span", "av", /^[A-Za-z0-9]/.test(t) ? t[0].toUpperCase() : t.slice(0, 1)); };
-const sourceOf = (li) => text(li.querySelector("small")).split(/ (?:공식 발표|보도자료|리서치|발표) ·/)[0];
-const beats = all("#story .beats>li");
-
-// ---------- 오늘: the home screen (phones only — built from what the page already says) ----------
-function hub() {
-  const h = node("div", "hub");
-  const now = new Date(Date.now() + 9 * 3600e3); // the day in Korea
-  const head = node("header", "hub-head");
-  head.append(node("p", "ov", `${now.getUTCMonth() + 1}월 ${now.getUTCDate()}일 ${"일월화수목금토"[now.getUTCDay()]}요일`), node("h1", null, "오늘의 AX"));
-  // the saved briefings and, when signing in is on, the account (account.js keeps their count and labels)
-  const acts = node("div", "hub-acts"), ic = (acct, href, d, label) => { const a = node("a", "hub-ic ic-only"); a.href = href; a.dataset.acct = acct; a.setAttribute("aria-label", label); a.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${d}"/></svg><span class="n"></span>`; return a; };
-  acts.append(ic("saved", "/saved", "M7 4h10v16l-5-3.5L7 20z", "저장한 리서치"));
-  if (document.querySelector('meta[name="pd-auth"]')) acts.append(ic("login", "/login?next=/", "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0", "로그인"));
-  head.append(acts);
-  h.append(head);
-  // this week's story: its title, who said what in it, and how many cases
-  const st = $("#story .st-head");
-  if (st) {
-    const a = node("a", "hub-story tap"); a.href = "#story";
-    const names = [...new Set(beats.map(sourceOf).filter(Boolean))];
-    const avs = node("span", "avs"); avs.append(...names.slice(0, 5).map(mark), node("small", null, beats.length ? `사례 ${beats.length}건` : ""));
-    const foot = node("span", "foot"); foot.append(avs, node("span", "go", "읽기 →"));
-    const when = text(st.querySelector(".st-k time"));
-    a.append(node("span", "k", `이번 주 이야기${when ? ` · ${when}` : ""}`), node("span", "t", text(st.querySelector(".st-t"))), foot);
-    h.append(a);
-  }
-  // the numbers behind it: four tiles, the last one the IT domains as small bars
-  const kpis = all("#numbers .kpi li a");
-  if (kpis.length) {
-    h.append(node("p", "hub-sec", "숫자로 보면"));
-    const tiles = node("div", "tiles");
-    for (const k of kpis.slice(0, 3)) {
-      const t = node("a", "tile tap"); t.href = k.getAttribute("href");
-      t.append(node("span", "l", text(k.querySelector("span"))), node("b", null, text(k.querySelector("b"))), node("small", null, text(k.querySelector("small"))));
-      tiles.append(t);
-    }
-    // the IT domains: the leader's count, with the top three as small bars
-    let fig = null; try { fig = JSON.parse($("#c-dom-all figure[data-fig]")?.dataset.fig ?? "null"); } catch {}
-    const items = (fig?.items ?? []).slice(0, 3), top = Math.max(1, ...items.map((x) => x.v)), d = kpis[3];
-    const w = node("a", "tile tap"); w.href = "#domains";
-    w.append(node("span", "l", d ? text(d.querySelector("span")).replace(/^공식 발표 최다 IT 영역 · /, "발표 최다 영역 · ") : "IT 영역별 발표"));
-    if (items.length) {
-      const mini = node("span", "mini"); mini.setAttribute("aria-hidden", "true");
-      for (const x of items) { const bar = node("i"), fill = node("span"); fill.style.width = `${Math.round((x.v / top) * 100)}%`; bar.append(fill); mini.append(bar); }
-      w.append(mini);
-    }
-    w.append(node("b", null, d ? text(d.querySelector("b")) : String(items[0]?.v ?? "")), node("small", null, "최근 30일 · 공식 발표"));
-    tiles.append(w);
-    h.append(tiles);
-  }
-  // the rest of the app: four shortcuts, two by two
-  const rows = node("nav", "rows"); rows.setAttribute("aria-label", "더 보기");
-  const row = (href, d, t, n) => { const a = node("a", n ? "tap" : "tap solo"); a.href = href; a.append(icon(d), node("span", "t", t), ...(n ? [node("span", "n", n)] : [])); rows.append(a); };
-  // the research list, its topics and formats are the tab bar's 리서치 (/briefs) — not here again (2026-10-27 owner:
-  // "겹치는 거 다 없애줘")
-  // the announcements are the tab bar's 발표 — not a second button here
-  row("#more", "M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6", "근거 데이터", "");
-  h.append(rows, node("p", "fresh", text($(".hero .m-short"))));
-  return h;
-}
-
-// ---------- the story screen: its opening, then a case a page, as a card you can open ----------
-const intro = $("#story .st-head");
-if (paged && intro) {
-  intro.classList.add("intro");
-  // the cases in it, each a tap away (its card on the next pages)
-  if (beats.length) {
-    const list = node("ol", "case-list");
-    beats.forEach((li, k) => { const a = node("a", "tap"); a.href = `#${li.id || ""}`; a.append(node("span", "n", String(k + 1)), node("span", "t", text(li.querySelector("b"))), ...(li.querySelector(".bk") ? [node("small", null, text(li.querySelector(".bk")))] : [])); const r = node("li"); r.append(a); list.append(r); });
-    intro.append(list, node("p", "swipe", "옆으로 넘기면 사례가 한 장씩 →"));
-  }
-}
-const caseCard = (li, k) => {
-  if (!paged) return [li];
-  const ol = node("ol", "beats one"); ol.start = k + 1;
-  if (li.id) { ol.id = li.id; li.removeAttribute("id"); } // the card's own address (#case-2), the page it is on
-  const bn = li.querySelector(".bn"); if (bn) bn.textContent = `사례 ${k + 1} / ${beats.length}`;
-  li.querySelector("a")?.append(node("span", "cta", "리서치에서 이 사례 읽기 →"));
-  ol.append(li); return [ol];
-};
-// the announcements: who said it as a round mark
-if (paged) for (const a of all("#news .events>li.news a")) a.prepend(mark(text(a.querySelector(".badge"))));
-
-pager([
-  { id: "start", screen: "home", name: "오늘", title: "오늘의 AX", group: "이번 주 이야기", pages: [[paged ? hub() : $("main>header.hero")]] },
-  { id: "story", screen: "story", name: "이야기", title: "이번 주 이야기", group: "이번 주 이야기", pages: [[intro]] },
-  { id: "cases", screen: "story", name: "사례", title: "사례", group: "이번 주 이야기", pages: beats.map(caseCard), sub: beat },
-  { id: "view", screen: "story", name: "관점", title: "공통 흐름 · IT 컨설팅 관점", group: "이번 주 이야기", count: 0, items: view, list: () => make("div", "st-view") },
-  ...(paged ? [] : [{ id: "numbers", name: "숫자", title: "핵심 숫자", group: "숫자로 보면", pages: [[$("#numbers>.sec-h"), $("#numbers .num-intro"), $("#numbers .kpi")]] }]),
-  { id: "ax", screen: "ax", name: "도입률", title: "기업 도입률", group: "숫자로 보면", pages: all("#panel-ax>.ins").map((c) => [c]), sub: card },
-  { id: "domains", screen: "domains", name: "IT 영역", title: "IT 영역별 발표", group: "숫자로 보면", pages: all("#panel-domains>.ins").map((c) => [c]), sub: card },
-  { id: "news", screen: "news", name: "발표", title: "최근 변화 · 공식 발표", screenTitle: "공식 발표", group: "자료", count: all("#news .events>li.news").length, items: events, list: () => make("ul", "events feed") },
-  { id: "glossary", screen: "glossary", name: "용어", title: "용어 풀이", group: "자료", lead: [$("#glossary .sec-h")], items: all("#glossary .gl"), list: () => make("dl", "gl-list") },
-  { id: "more", screen: "more", name: "근거", title: "근거 데이터 · 방법 · 검산", screenTitle: "근거 데이터", group: "자료", pages: [[basis]] },
-], { tab: (id) => (id === "news" || id === "glossary" ? id : "home"), fit, toc: false });
+figures();
 </script>
 <script>
-// phone, long page (?scroll=1, or pages that never started): under each tab's carousel, which card this is ("2 / 5") and
-// dots that follow the swipe; the glossary shows four terms until opened (the fold only once there is a button to open it)
+// phone: the glossary shows four terms until opened (the fold only once there is a button to open it)
 (() => { const setup = () => {
   if (!matchMedia("(max-width: 640px)").matches) return;
   const gl = document.getElementById("glossary"), n = gl?.querySelectorAll(".gl").length ?? 0;
@@ -742,16 +465,7 @@ pager([
     gl.querySelector(".gl-groups").after(b);
     if (location.hash === "#glossary" || location.hash.startsWith("#g-")) { gl.classList.add("open"); b.textContent = "접기"; }
   }
-  for (const panel of document.querySelectorAll(".insights")) {
-    const cards = panel.querySelectorAll(":scope > .ins"); if (cards.length < 2) continue;
-    const n = document.createElement("div"); n.className = "swipe-n"; n.innerHTML = `<span class="c"></span><span class="dots">${"<i></i>".repeat(cards.length)}</span>`;
-    panel.after(n);
-    const paint = () => { const w = cards[0].getBoundingClientRect().width + 10, i = Math.min(cards.length - 1, Math.round(panel.scrollLeft / w));
-      n.querySelector(".c").textContent = `${i + 1} / ${cards.length}`; n.querySelectorAll("i").forEach((d, k) => d.classList.toggle("on", k === i)); };
-    panel.addEventListener("scroll", () => requestAnimationFrame(paint), { passive: true }); paint();
-    new MutationObserver(() => { n.hidden = panel.hidden; }).observe(panel, { attributes: true, attributeFilter: ["hidden"] }); n.hidden = panel.hidden;
-  }
-}; if (document.documentElement.classList.contains("paged")) document.addEventListener("unpaged", setup, { once: true }); else setup(); })();
+}; setup(); })();
 </script>
 <script src="/terms.js" defer></script>
 </body>

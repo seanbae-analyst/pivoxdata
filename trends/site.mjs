@@ -125,8 +125,8 @@ export function writePages(fills = {}, lastmod) {
 
 // a whole page in the site's frame (head tags, top bar, footer) — for pages generated in full, like the briefings
 // `noindex`: a page that must exist but not be found yet (a draft's briefing) — no canonical or share tags, not in the sitemap
-// `bare`: a page about signing in — the top bar and the policy links, no tab bar or install bar to wander off by
-export function shell({ path: p, title, desc, css = "", body, paged = false, noindex = false, bare = false }) {
+// `bare`: a page about signing in — the top bar and the policy links only
+export function shell({ path: p, title, desc, css = "", body, noindex = false, bare = false }) {
   const page = { path: p, noindex }, top = `<title>${title}</title>\n<meta name="description" content="${desc}" />`;
   return `<!doctype html>
 <html lang="ko">

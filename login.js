@@ -5,14 +5,14 @@
 // A person already signed in: on to where they were going — or, when the terms changed since they agreed, the
 // consents again (?consent=1 from account.js) with 로그아웃 instead of 이전.
 import * as auth from "/auth.js";
-import { steps, consent, say, entered } from "/acc-ui.js";
+import { steps, consent, say } from "/acc-ui.js";
 
 const root = document.getElementById("login");
 if (root && auth.enabled) {
   const $ = (s) => root.querySelector(s), go = steps(root);
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const params = new URLSearchParams(location.search), next = auth.safeNext(params.get("next"), "/");
-  for (const a of root.querySelectorAll("[data-browse], [data-next]")) { a.href = next; a.addEventListener("click", entered); }
+  for (const a of root.querySelectorAll("[data-browse], [data-next]")) a.href = next;
   const cs = root.querySelector('[data-s="consent"]'), sendBtn = $("#send"), resendBtn = $("#resend");
   let email = "", until = 0, timer = 0, policyMode = false;
 
@@ -83,7 +83,7 @@ if (root && auth.enabled) {
     // the consents were given a moment ago on this screen, by this address: written now, as the callback does
     const c = auth.pendingConsent(r.user.email) ? await auth.rpc("pd_consent", { p_version: auth.policy }) : { ok: false };
     if (c.ok) { auth.setPendingConsent(null); try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} }
-    entered(); location.replace(next);
+    location.replace(next);
   });
 
   // ---------- 4. waiting: signed in in another window of this browser ----------
@@ -94,7 +94,7 @@ if (root && auth.enabled) {
   const agree = async () => {
     sendBtn.disabled = true;
     const r = await auth.rpc("pd_consent", { p_version: auth.policy });
-    if (r.ok) { try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} entered(); location.replace(next); return; }
+    if (r.ok) { try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} location.replace(next); return; }
     sendBtn.disabled = false;
     say($("#send-err"), r.status === 0 ? WHY.network : "동의를 기록하지 못했어요. 잠시 뒤 다시 시도해 주세요.");
   };

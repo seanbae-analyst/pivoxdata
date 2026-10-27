@@ -201,7 +201,7 @@ try {
     for (const [w, h, mobile] of [[360, 640, true], [390, 844, true], [641, 900, false], [667, 375, true], [700, 900, false], [1024, 800, false]]) {
       const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: mobile, hasTouch: mobile }), pg = await ctx.newPage();
       await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
-      for (const u of ["/briefs?scroll=1", `/briefs/${pieces.at(-1).slot}?scroll=1`, "/briefs/topic/cloud?scroll=1", "/?scroll=1"]) {
+      for (const u of ["/briefs", `/briefs/${pieces.at(-1).slot}`, "/briefs/topic/cloud", "/", "/map"]) {
         await pg.goto(B + u, { waitUntil: "networkidle" }); await pause(200);
         const d = await pg.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
         if (d > 1) wide.push(`${w}×${h} ${u} +${d}px`);

@@ -3,7 +3,7 @@
 // written now; a link opened on another device (or a later version of the terms) asks for it here. Whose account it
 // is stays on screen with a way out (로그아웃) — a link someone else forwarded signs in to their account.
 import * as auth from "/auth.js";
-import { steps, consent, say, entered } from "/acc-ui.js";
+import { steps, consent, say } from "/acc-ui.js";
 
 const root = document.getElementById("cb");
 if (root && auth.enabled) {
@@ -23,9 +23,9 @@ if (root && auth.enabled) {
   } else {
     const email = r.user.email, next = auth.takeNext();
     root.querySelectorAll("[data-user]").forEach((b) => { b.textContent = email; });
-    for (const a of root.querySelectorAll("[data-next]")) { a.href = next; a.addEventListener("click", entered); }
+    for (const a of root.querySelectorAll("[data-next]")) a.href = next;
     const record = () => auth.rpc("pd_consent", { p_version: auth.policy });
-    const done = () => { try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} entered(); go("done"); };
+    const done = () => { try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} go("done"); };
     let ok = false;
     if (auth.pendingConsent(email)) { ok = (await record()).ok; if (ok) auth.setPendingConsent(null); }
     if (!ok) { const c = await auth.rpc("pd_consented", { p_version: auth.policy }); ok = c.ok && c.data === true; }

@@ -6,7 +6,7 @@
 // only — a tap opens one. On a briefing, "용어 풀이에서 보기" goes to the home page's glossary.
 (() => {
   const home = Boolean(document.getElementById("glossary"));
-  const phone = () => matchMedia("(max-width: 640px)").matches || document.documentElement.classList.contains("paged");
+  const phone = () => matchMedia("(max-width: 640px)").matches;
   const make = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
   // what a glossary entry (#g-<id>) says: its word, its explanation, and the briefing it came from (if one added it)
   const entry = (g) => ({ term: g.querySelector("dt")?.textContent ?? "", def: g.querySelector("dd:not(.gl-from)")?.textContent ?? "", from: g.querySelector(".gl-from a"), id: g.id.replace(/^g-/, "") });
