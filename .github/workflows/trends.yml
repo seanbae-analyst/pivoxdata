@@ -20,7 +20,8 @@ name: trends daily
 on:
   # GitHub starts a scheduled run when it can — late, hours late, or under load not at all (2026-10-26: the 01:17 run
   # had not started by 02:35; 10-25's scheduled run started at 06:09). So three times a day: the first that starts does
-  # the day's work, and a later one ends at once in the job "today" (today's data is already on main).
+  # the day's work, and a later one ends at once in the job "today" (today's data is already on main) — unless that
+  # day's draft broke (social/retry.json): then it makes the draft again from the day's data, without fetching it again.
   schedule:
     - cron: "17 1 * * *" # 01:17 UTC (10:17 KST), after npm/PyPI have counted the day before
     - cron: "47 3 * * *" # 03:47 UTC (12:47 KST) — only if the first has not run
@@ -49,6 +50,9 @@ concurrency:
 jobs:
   # a backup schedule on a day whose data is already on main stops here, before anything is installed (the button and a
   # posting request always go on). A day whose run failed its checks committed nothing, so the next schedule tries again.
+  # A day whose data went in but whose draft broke on the way (failed, or dropped: its fallback failed the checks) left
+  # social/retry.json with that date: the next schedule goes on and drafts again (2026-10-27 — with a post every day,
+  # one broken draft used to cost the whole day).
   today:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -58,16 +62,24 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
-          sparse-checkout: trends/data/news.json
+          sparse-checkout: |
+            trends/data/news.json
+            social/retry.json
           sparse-checkout-cone-mode: false
       - name: Already done today?
         id: check
         env:
           EVENT: ${{ github.event_name }}
         run: |
-          if [ "$EVENT" = "schedule" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
-            echo "today's data is already on main — this backup run stops here"
-            echo "go=false" >> "$GITHUB_OUTPUT"
+          today=$(date -u +%F)
+          if [ "$EVENT" = "schedule" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === process.argv[1] ? 0 : 1)' "$today"; then
+            if [ -f social/retry.json ] && node -e 'process.exit(require("./social/retry.json").date === process.argv[1] ? 0 : 1)' "$today"; then
+              echo "today's data is on main but its draft broke — this backup run drafts again (no new fetch)"
+              echo "go=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "today's data is already on main — this backup run stops here"
+              echo "go=false" >> "$GITHUB_OUTPUT"
+            fi
           else
             echo "go=true" >> "$GITHUB_OUTPUT"
           fi
@@ -101,9 +113,10 @@ jobs:
         env:
           SEC_CONTACT: ${{ vars.SEC_CONTACT }}
           EVENT: ${{ github.event_name }}
-        # a posting request (push) on a day the data was already fetched reuses it: verify + build only, ~8 min faster
+        # a posting request (push), or a backup run drafting again after a broken draft (social/retry.json), on a day the
+        # data was already fetched reuses it: verify + build only, ~8 min faster
         run: |
-          if [ "$EVENT" = "push" ] && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
+          if { [ "$EVENT" = "push" ] || [ -f social/retry.json ]; } && node -e 'process.exit(require("./trends/data/news.json").fetched_at === new Date().toISOString().slice(0, 10) ? 0 : 1)'; then
             echo "data already fetched today — verify and build only" | tee run.log
             npm run trends:build 2>&1 | tee -a run.log
           else
@@ -146,7 +159,8 @@ jobs:
           node social/caption.mjs 2>&1 | tee -a run.log
 
       # a draft that broke on the way is undone — its folder, its posted.json entry and the card page go back to what
-      # main has — so the day's site update below is committed without it (the next run may draft again)
+      # main has — so the day's site update below is committed without it, with social/retry.json: the day's next
+      # backup schedule drafts again (job "today"). A run that drafted, or had nothing to draft, removes it.
       - name: Draft status
         id: draft
         if: ${{ !cancelled() && steps.data.outcome == 'success' }}
@@ -154,13 +168,16 @@ jobs:
         env:
           OUTCOME: ${{ steps.social.outcome }}
         run: |
+          retry() { printf '{"date": "%s", "why": "%s"}\n' "$(date -u +%F)" "$1" > social/retry.json; }
           if [ "$OUTCOME" != "success" ]; then
             git checkout -- social/posted.json social/cards.html
             git clean -fdq -- social/out
             rm -f social/plan.json
             echo "problem=failed" >> "$GITHUB_OUTPUT"
+            retry failed
             exit 0
           fi
+          rm -f social/retry.json
           node -e '
             const fs = require("fs"); let p = {}; try { p = JSON.parse(fs.readFileSync("social/plan.json", "utf8")); } catch {}
             const slot = p.post && /^\d{4}-\d{2}-\d{2}(?:-\d+)?$/.test(p.slot ?? "") ? p.slot : ""; // social/slot.mjs → SLOT
@@ -169,6 +186,7 @@ jobs:
           '
           # no draft (none planned, or dropped after its cards were built): the card page stays as main has it
           grep -q '^ready=true' "$GITHUB_OUTPUT" || git checkout -- social/cards.html
+          if grep -q '^problem=dropped' "$GITHUB_OUTPUT"; then retry dropped; fi
 
       # the web side, every run: last month's roundup once a month (roundup.mjs), then the briefing pages, series, tags,
       # RSS and the home page's latest three (briefs.mjs). A failure is reported, and the data is still committed.
@@ -193,7 +211,7 @@ jobs:
           DRAFT: ${{ steps.draft.outputs.ready == 'true' && ' + instagram draft' || '' }}
         run: |
           rm -f social/request.json # a posting request is used once, whether or not it made a post
-          node social/commit.mjs -m "data(trends): daily refresh $(date -u +%F)$DRAFT" trends/data index.html map.html 404.html login.html saved.html privacy.html terms.html auth sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs social/request.json 2>&1 | tee -a run.log
+          node social/commit.mjs -m "data(trends): daily refresh $(date -u +%F)$DRAFT" trends/data index.html map.html 404.html login.html saved.html privacy.html terms.html auth sitemap.xml robots.txt social/cards.html social/out social/posted.json social/roundups briefs social/request.json social/retry.json 2>&1 | tee -a run.log
 
       # an Instagram draft that wasn't made (it broke, or its fallback failed the checks) or briefings that didn't
       # build: one open issue, a comment each time it happens again. Secrets are taken out of the log before it is posted.
@@ -216,8 +234,9 @@ jobs:
             const log = fs.existsSync("run.log") ? fs.readFileSync("run.log", "utf8") : "";
             let plan = {}; try { plan = JSON.parse(fs.readFileSync("social/plan.json", "utf8")); } catch {}
             const what = [
-              ...(process.env.PROBLEM === "dropped" ? [`**오늘은 인스타그램 초안을 만들지 않았어요** — 대신 쓸 글(Claude 없이 만든 카드)이 검사를 통과하지 못했어요. 사이트는 갱신했어요.\n\n> ${plan.why}`] : []),
-              ...(process.env.PROBLEM === "failed" ? ["**인스타그램 초안을 만들다 멈췄어요** — 만들던 초안은 지우고 사이트만 갱신했어요. 다음 실행이 다시 시도해요."] : []),
+              // the backup schedules: 03:47 and 06:17 UTC (12:47 · 15:17 KST); after the last one, tomorrow's run
+              ...(process.env.PROBLEM === "dropped" ? [`**이번 실행에서는 인스타그램 초안을 만들지 않았어요** — 대신 쓸 글(Claude 없이 만든 카드)이 검사를 통과하지 못했어요. 사이트는 갱신했어요. 오늘 남은 예비 실행(12:47 · 15:17 KST)이 데이터를 다시 받지 않고 초안만 다시 만들어요.\n\n> ${plan.why}`] : []),
+              ...(process.env.PROBLEM === "failed" ? ["**인스타그램 초안을 만들다 멈췄어요** — 만들던 초안은 지우고 사이트만 갱신했어요. 오늘 남은 예비 실행(12:47 · 15:17 KST)이 데이터를 다시 받지 않고 초안만 다시 만들어요 (마지막 실행이었다면 내일)."] : []),
               ...(process.env.WEB === "failure" ? ["**브리핑 페이지를 만들지 못했어요** (roundup.mjs / briefs.mjs) — 데이터와 사이트는 갱신했어요."] : []),
             ];
             const tail = log.split("\n").filter((l) => /Error|error|failed|rejected|no draft|✗/.test(l)).join("\n") || log.slice(-3000);

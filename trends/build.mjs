@@ -577,8 +577,9 @@ const factList = [
 const out = { built_at: updated, page: "https://data.pivoxquant.com/", topics: topics.map((t) => ({ id: t.id, name: t.name, insights: t.cards.map(plainCard) })),
   events: events.map((e) => ({ key: e.key, subject: e.subject, kind: e.kind, tier: e.tier, score: Math.round(e.score * 10) / 10, topic: e.topic, headline: text(e.card.title), card: plainCard(e.card) })),
   facts: factList,
-  // the official announcements the weekly AX news post may use — as published, with the source and its link
-  news: newsItems.slice(0, 30).map(({ id, src, source, kind, date, title, summary, link, score, domains, method }) => ({ id, src, source, kind, date, title, summary, link, score, domains: domains.map((d) => DOMAINS.find((x) => x.id === d).name), method })) };
+  // the official announcements the AX news post may use — as published, with the source and its link. All of the
+  // last NEWS_DAYS days (no top-30 cut: plan.mjs picks from the last 7 days and checks the posts of the last 7 against them)
+  news: newsItems.map(({ id, src, source, kind, date, title, summary, link, score, domains, method }) => ({ id, src, source, kind, date, title, summary, link, score, domains: domains.map((d) => DOMAINS.find((x) => x.id === d).name), method })) };
 const ifile = path.join(DIR, "insights.json"), iprev = fs.existsSync(ifile) ? fs.readFileSync(ifile, "utf8") : "";
 const inext = JSON.stringify(out, null, 1) + "\n";
 if (inext !== iprev) { fs.writeFileSync(ifile, inext); console.log("wrote trends/data/insights.json"); }

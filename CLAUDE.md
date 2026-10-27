@@ -101,7 +101,7 @@ npm run dev                           # http://localhost:8099
 
 | 항목 | 값 | 잰 방법 |
 |---|---|---|
-| 자동 실행 | 매일 01:17 UTC (10:17 KST). GitHub 예약은 늦거나 빠지므로 03:47 · 06:17 UTC에 한 번씩 더 — 그날 데이터가 이미 main에 있으면 바로 멈춘다 | `.github/workflows/trends.yml` cron · job `today` |
+| 자동 실행 | 매일 01:17 UTC (10:17 KST). GitHub 예약은 늦거나 빠지므로 03:47 · 06:17 UTC에 한 번씩 더 — 그날 데이터가 이미 main에 있으면 바로 멈춘다. 단 그날 초안이 깨졌으면(`social/retry.json`) 데이터를 다시 받지 않고 초안만 다시 만든다(2026-10-27) | `.github/workflows/trends.yml` cron · job `today` |
 | 검산 | 43개 모두 통과 (npm이 모든 패키지를 0으로 낸 날은 집계 멈춤으로 봄) | `npm run trends:build` → `trends/data/checks.json` |
 | 공식 발표 출처 | 20개 피드, 120일 보관 | `trends/series.mjs` → `NEWS` |
 | 첫 AX 사건 게시 | instagram.com/p/De6FGlbHLJo · `/briefs/2026-10-25-2` | `social/out/2026-10-25-2/post.json` |
@@ -109,6 +109,6 @@ npm run dev                           # http://localhost:8099
 | 인스타 토큰 | 2026-12-23까지 유효, 매달 1·11·21일 자동 갱신 | `ig-token.yml` cron · 실행 결과 |
 | 원문 읽기 | 18곳 중 14곳 읽힘. OpenAI 403 · McKinsey 503 · 삼성전자 15초 초과 · 과기정통부는 본문이 첨부파일 → 제목·요약만 | `social/original.mjs` 로 출처마다 1건씩, 이 세션에서 (Actions에서는 다를 수 있음) |
 | 사례 카드·이야기 형식 첫 게시 | instagram.com/p/De9Y6PalJOn · `/briefs/2026-10-26` (2026-10-26 13:28 UTC) | `social/out/2026-10-26/post.json` |
-| 게시 주기 | AX 사건은 안 쓴 공식 발표가 3건 이상인 날마다(매일, 2026-10-26 소유자 "당분간 업로드 많이") | `social/plan.mjs` → `NEWS_GAP` |
+| 게시 주기 | AX 사건은 안 쓴 공식 발표가 3건 이상인 날마다(매일, 2026-10-26 소유자 "당분간 업로드 많이"). 최근 7일 게시물과 **같은 이야기**(같은 출처 · 같은 도입 방식 · 겹치는 IT 영역)는 빼고 센다(2026-10-27 "같은내용을 왜올려") | `social/plan.mjs` → `NEWS_GAP` · `sameStory` |
 | 인스타 차단 이력 | 2026-10-26 `API access blocked.` = Meta 개발자 계정 차단, 소유자 인증으로 해제 — 다시 나면 Meta 쪽부터(`docs/decisions.md` 24) | `social-publish.yml` 로그 |
 | 로그인 | 켜짐 — PivoxQuant Supabase 프로젝트(서울) `pivoxdata` 스키마 · pd_* 6개(anon 실행 0) · 메일은 Brevo SMTP. 공개 키로 PivoxQuant 표 · pd_* 요청 → 401 (2026-10-26) | `trends/site.mjs` → `AUTH` · 공개 키로 `/rest/v1/<표>` 요청 |

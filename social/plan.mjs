@@ -5,7 +5,8 @@
 //  • event   — a big case found in the last BIG_DAYS days that was never drafted, whose subject (a package, a phrase,
 //              a leader) wasn't drafted in the last SUBJECT_DAYS days. The highest score wins.
 //  • news    — no big case, NEWS_GAP days since the last news post, and at least NEWS_MIN official announcements
-//              (trends/data/insights.json → news) from the last NEWS_WINDOW days that no post used: "이번 주 AX 사건".
+//              (trends/data/insights.json → news) from the last NEWS_WINDOW days that no post used and that don't tell
+//              a story a recent post told (sameStory): "이번 주 AX 사건".
 //  • digest  — no big case, DIGEST_DAYS since the last draft, and at least DIGEST_MIN small changes since then:
 //              the best DIGEST_MAX of them (one per subject) in one carousel.
 //  • roundup — nothing at all for QUIET_DAYS: the radar's strongest cards, so the account doesn't go silent.
@@ -28,6 +29,13 @@ export const BIG_DAYS = 3, SUBJECT_DAYS = 21, DIGEST_DAYS = 7, DIGEST_MIN = 3, D
 // NEWS_GAP: days between news posts — 1 = every day there are NEWS_MIN unused announcements (owner, 2026-10-26:
 // "당분간은 업로드 많이할거임"; it was 6, once a week)
 export const NEWS_GAP = 1, NEWS_WINDOW = 7, NEWS_MIN = 3, NEWS_MAX = 8;
+// the same story twice (owner, 2026-10-27: "같은내용을 왜올려"): an announcement from the same source, brought in the
+// same way (method) and in an IT domain shared with one a post used in the last REPEAT_DAYS days — or with one ranked
+// above it today — is the same story told again (SK텔레콤's AI governance column the day after its AI governance report;
+// NVIDIA's Kazakhstan compute after its Europe compute). It is left out, and it does not count towards NEWS_MIN.
+export const REPEAT_DAYS = 7;
+export const sameStory = (a, b) => a.src === b.src && Boolean(a.method) && a.method === b.method
+  && (a.domains ?? []).some((d) => (b.domains ?? []).includes(d));
 // AX only (2026-10-25): Instagram carries the AX cases (Ramp AI Index) and the weekly official-announcement post;
 // tool races and developer-side changes (downloads, papers, models, capex) stay in the site's evidence section
 export const AX_TOPICS = new Set(["ax"]);
@@ -52,7 +60,17 @@ function main() {
   // official announcements no post used yet, best first (trends/build.mjs ranks them); the story picks from these
   const usedNews = new Set(log.flatMap((p) => p.news ?? []));
   const lastNews = log.filter((p) => p.mode === "news").at(-1);
-  const news = (I.news ?? []).filter((n) => !usedNews.has(n.id) && days(today, n.date) <= NEWS_WINDOW && n.score >= 3).slice(0, NEWS_MAX);
+  // what recent posts told (insights.json keeps 14 days of announcements: every one a post of the last 7 days used)
+  const recentNews = new Set(log.filter((p) => days(today, p.date) < REPEAT_DAYS).flatMap((p) => p.news ?? []));
+  const told = (I.news ?? []).filter((n) => recentNews.has(n.id));
+  const repeats = [];
+  const news = (I.news ?? []).filter((n) => !usedNews.has(n.id) && days(today, n.date) <= NEWS_WINDOW && n.score >= 3)
+    .reduce((kept, n) => {
+      const like = told.find((t) => sameStory(n, t)) ?? kept.find((k) => sameStory(n, k));
+      if (like) repeats.push(`${n.source} "${n.title.slice(0, 40)}" (like "${like.title.slice(0, 40)}")`); else kept.push(n);
+      return kept;
+    }, []).slice(0, NEWS_MAX);
+  if (repeats.length) console.log(`left out as the same story: ${repeats.join(" · ")}`);
   const newsDue = news.length >= NEWS_MIN && (!lastNews || days(today, lastNews.date) >= NEWS_GAP);
 
   const kind = process.env.POST_KIND ?? "";
@@ -70,7 +88,7 @@ function main() {
   else if (newsDue) plan = { post: true, mode: "news", date: today, news, why: `${news.length} official announcement(s) this week` };
   else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: true, mode: "digest", date: today, items: smalls, why: `${smalls.length} small changes since ${last?.date ?? "the start"}` };
   else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
-  else plan = { post: false, why: `no new big case; ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
+  else plan = { post: false, why: `no new big case; ${news.length} unused announcement(s) for the news post (${NEWS_MIN}+ needed${repeats.length ? `, ${repeats.length} left out as the same story` : ""}); ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
 
   // the post's folder: social/out/<date in Korea>, or <date>-2, -3 … when that day already has a folder (a manual run
   // after the daily one), so a second post never overwrites the first one's images or caption — published or not: a
