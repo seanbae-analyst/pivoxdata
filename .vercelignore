@@ -13,6 +13,7 @@ docs
 # and off the site. social/out/ stays — Instagram fetches each post's images from there.
 .github
 serve.mjs
+tests
 trends
 social/*.mjs
 social/*.json

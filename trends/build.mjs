@@ -487,7 +487,11 @@ const tone = (x) => (/^[−-]/.test(text(x.big)) ? " down" : "");
 const attr = esc;
 const recentHtml = (list) => `<p class="rl">최근 발표</p><ol class="recent">${list.map((r) => `<li><a href="${attr(r.link)}" target="_blank" rel="noopener"><span class="rd">${r.date} · ${esc(r.source)}</span><span class="rt">${esc(r.title)}</span></a></li>`).join("")}</ol>`;
 const cardHtml = (list) => list.map((x, i) => { const used = new Set();
-  return `<article class="ins${i === 0 ? " lead" : ""}${tone(x)}" id="c-${x.id}"><p class="k">${x.k}</p><h3>${glue(x.title)}</h3>`
+  // an IT domain's card leads to its topic page — the research on it and its announcements (social/briefs.mjs writes
+  // one for every domain), the way Our World in Data links a chart to the writing on it; in the card's first line, so
+  // it costs the card no room
+  const res = /^dom-(?!all$)/.test(x.id) ? `<a class="c-res" href="/briefs/topic/${x.id.slice(4)}">주제 페이지 →</a>` : "";
+  return `<article class="ins${i === 0 ? " lead" : ""}${tone(x)}" id="c-${x.id}"><p class="k">${x.k}${res}</p><h3>${glue(x.title)}</h3>`
     + `<div class="num"><span class="big">${x.big}</span><span class="bl">${termify(esc(x.bl), used)}</span></div>`
     + `<figure class="fig"${x.fig ? ` data-fig="${attr(JSON.stringify(x.fig))}"` : ""}>${x.fig?.caption ? `<figcaption>${esc(x.fig.caption)}</figcaption>` : ""}<div class="plot">${vizHtml(x)}</div></figure>`
     + (x.easy ? `<p class="easy"><span class="el">쉽게 말하면</span>${termify(x.easy, used)}</p>` : "")

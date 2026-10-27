@@ -9,8 +9,9 @@ IT 컨설팅 관점으로 기업의 AI 전환(AX)을 매일 같은 방식으로 
 
 | 화면 | 내용 |
 |---|---|
-| [`/`](https://data.pivoxquant.com) | 이야기 먼저 — 이번 주 AX 이야기(사례마다 IT 영역 · 도입 방식, 어디에 · 어떻게) · 지난 이야기 · 숫자로 보면(KPI · 최근 변화 · 지표 탭: 기업 도입률 / IT 영역별 발표) · 공식 발표(원문 링크) · 용어 풀이(브리핑과 함께 자람) · 근거 데이터(npm·PyPI·arXiv·Hugging Face·SEC, 접힘) |
-| [`/briefs`](https://data.pivoxquant.com/briefs) | 웹 브리핑 — 인스타 카드(요약본)의 본편. 사례마다 표(누가·무엇을·어디에·어떻게·확인할 점)와 풀이, 공통 흐름, "IT 컨설팅 관점". 시리즈·태그·월간 정리·RSS, 새 브리핑 푸시 알림 |
+| [`/`](https://data.pivoxquant.com) | 리서치 먼저 — 이번 주 AX 이야기(사례마다 IT 영역 · 도입 방식, 어디에 · 어떻게) · 최신 리서치 · 찾아보기(주제 7개 — 리서치 수와 30일 발표 지표 · 형식) · 숫자로 보면(KPI · 최근 변화 · 지표 탭: 기업 도입률 / IT 영역별 발표) · 공식 발표(원문 링크) · 용어 풀이(브리핑과 함께 자람) · 근거 데이터(npm·PyPI·arXiv·Hugging Face·SEC, 접힘) |
+| [`/briefs`](https://data.pivoxquant.com/briefs) | 리서치 — 인스타 카드(요약본)의 본편. 목록은 검색 + **주제**(IT 영역)와 **형식**(시리즈)을 따로 고르는 필터, 고른 것은 주소(`?q=&topic=&format=`)에 남아 뒤로가기 · 공유가 같은 목록을 엶. 글은 사례마다 표(누가·무엇을·어디에·어떻게·확인할 점)와 풀이, 공통 흐름, "IT 컨설팅 관점", 관련 지표, 같이 읽기. 형식·태그·월간 정리·RSS, 새 리서치 푸시 알림 |
+| [`/briefs/topic/<id>`](https://data.pivoxquant.com/briefs/topic/cloud) | 주제 페이지 7개(IT 영역) — 지표(최근 30일 공식 발표, 발표가 많은 곳) → 이 주제의 리서치 → 최근 공식 발표(원문 링크). 홈의 IT 영역 지표 카드가 여기로 이어짐 |
 | [`/map`](https://data.pivoxquant.com/map) | 데이터 지도 — 데이터마다 잇는 키와 공개 조건 |
 | 인스타그램 | AX·IT 컨설팅 내용만, 이야기(사건 → 의미 → 실무 체크)로 짧은 에디토리얼 카드 — 공식 발표는 사례 카드 + 출처·날짜 ([social/README.md](social/README.md)) |
 | 폰 | 앱처럼 — **오늘** 화면(이야기 카드 · 숫자 타일 · 바로가기)에서 누르면 화면이 옆에서 열리고 ‹·뒤로가기로 돌아옴, 화면 안은 옆으로 넘김(`pager.js`) · **목차 사이드바**(아래 탭 바 "목차" 또는 위의 지금 위치) · 용어는 누르면 풀이 창 · 홈 화면에 설치(PWA) |
@@ -44,13 +45,14 @@ trends/viz.mjs      인사이트를 그리는 방법 12가지 (선·면적·막�
 trends/site.mjs     모든 페이지 공통 head·상단·하단(esc 한 곳), sitemap.xml(noindex 페이지 제외) · robots.txt
 social/             오늘 올릴지(plan), 이야기·사례(story, 원문 읽기 original), 카드(build·render), 캡션, 게시(publish), 웹 브리핑(briefs·roundup), 푸시(notify),
                     검사 한 벌(claude.mjs), 커밋·푸시(commit), 폴더 이름(slot), 공용(util)
-pager.js · terms.js 폰의 옆으로 넘기는 페이지와 목차 사이드바(모든 화면) · 누르면 뜨는 용어 풀이(폰은 아래에서 올라오는 창)
+pager.js · terms.js 폰의 옆으로 넘기는 페이지와 목차 사이드바(모든 화면, 목록이 바뀌면 refresh()) · 누르면 뜨는 용어 풀이(폰은 아래에서 올라오는 창)
 charts.mjs          선·막대 차트 (인라인 SVG, 키보드, CSV)
 welcome.js          `/`에 처음 온 사람의 표지 → 소개 (index.html #welcome — 그리기 전에 site.mjs가 정함)
 auth.js · login.js · callback.js · acc-ui.js   로그인 — Supabase Auth 메일 링크(라이브러리 없이), /login 단계, /auth/callback, 동의 세 개
 account.js          모든 페이지: 저장 버튼 · 메뉴의 저장/로그인 · /saved(저장한 브리핑 · 계정 · 탈퇴) · 바뀐 약관 알림
 trends/pages.mjs · trends/legal.mjs   /login · /auth/callback · /saved · /privacy · /terms 를 만들고, 처리방침 · 약관 · 동의 문구의 사실은 legal.mjs 한 곳
 supabase/           로그인 켜는 순서(README) · 스키마(pd_* 함수만 열림) · 메일 템플릿 둘
+tests/research.mjs  리서치 페이지를 브라우저로 — 검색 · 필터 · 뒤로가기 · 기존 링크 · 비로그인 읽기 · 지표 연결 · 새 글 자동 반영(복사본에서), 데스크톱과 폰
 ```
 
 **로그인**(2026-10-26)은 `trends/site.mjs` → `AUTH`가 비어 있으면 어디에도 없다 — 소개의 "시작하기"가 바로 앱으로 가고, 저장은 그 기기에만 남는다.

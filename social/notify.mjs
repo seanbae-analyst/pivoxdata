@@ -50,7 +50,7 @@ async function main() {
   const failed = [];
   for (const b of due) {
     const series = b.st.series ?? seriesOf(b.st), topic = TOPIC[series] ?? "other", url = `${SITE}/briefs/${b.slot}?source=push`;
-    const heading = `새 AX 브리핑 · ${SERIES[series]?.name ?? "브리핑"}`, content = plain(b.st.article.title).slice(0, 120);
+    const heading = `새 AX 리서치 · ${SERIES[series]?.name ?? "리서치"}`, content = plain(b.st.article.title).slice(0, 120);
     if (dry) { console.log(`notify (dry run${process.env.ONESIGNAL_REST_KEY ? "" : ", no ONESIGNAL_REST_KEY"}): [${topic}] ${heading} — ${content} → ${url}`); continue; }
     try {
       // the page must be live before anyone taps the alert (the site deploys the commit that added it)

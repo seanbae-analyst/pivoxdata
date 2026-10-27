@@ -1,13 +1,20 @@
-// briefs.mjs — the site's "AX 브리핑": every post's story explained at more length (story.json → article, written and
-// checked by story.mjs) plus the monthly roundups (social/roundups/*.json, roundup.mjs), organized so they keep
-// reading well as they pile up:
-//  • /briefs                — newest first, grouped by month, series tabs, the tags of each
-//  • /briefs/<folder>       — one briefing: series, tags, sections with their sources, 근거, previous/next in the
-//                             series, related briefings (shared tags)
-//  • /briefs/series/<id>    — one series (이번 주 AX 사건, 월간 AX 리포트, …)
-//  • /briefs/tag/<kind>-<id> — one theme, industry or company across all series
+// briefs.mjs — the site's research ("리서치", 2026-10-27: PivoxData is an IT-consulting research publication): every
+// post's story explained at more length (story.json → article, written and checked by story.mjs) plus the monthly
+// roundups (social/roundups/*.json, roundup.mjs), organized so they keep reading well as they pile up. One list of
+// pieces (below: `briefs`, each with its format, topics and tags) makes every page, so a new piece shows up in all of
+// them at once — the home page, the list, its format, its topics, its tags, related pieces, the RSS and the sitemap:
+//  • /briefs                — the research list: newest first, a search box and two filters kept apart, 주제 (the
+//                             IT domain) and 형식 (the series) — a16z's way of exploring — in the address (?q= &topic=
+//                             &format=), so the back button and a shared link bring the same list back
+//  • /briefs/<folder>       — one piece: format, topics, tags, sections with their sources, 근거, the indicators of
+//                             its topics (Our World in Data's link from writing to data), previous/next in the format,
+//                             related pieces (shared topics and tags)
+//  • /briefs/topic/<id>     — one IT domain: its indicator (official announcements, 30 days), the pieces on it and the
+//                             latest announcements in it — the page an indicator card links to
+//  • /briefs/series/<id>    — one format (이번 주 AX 사건, 월간 AX 리포트, …)
+//  • /briefs/tag/<kind>-<id> — one theme, industry or company across all formats
 //  • /briefs/feed.xml       — RSS, for readers and (later) e-mail
-//  • the home page's "AX 브리핑" region — the latest three
+//  • the home page's regions — this week's story, the latest pieces, the topics and the formats
 // A post's briefing is public once the post is on Instagram (post.json → published): listed, in its series and tags,
 // the RSS, the sitemap and the home page. Before that (a draft waiting for /approve, a test draft) it has its page —
 // the caption links to it, so it must be there the moment the post goes up — but marked noindex and listed nowhere,
@@ -25,7 +32,7 @@ import { APP_ID } from "./notify-config.mjs";
 import { ROOT, OUT, read, AX_FORMATS } from "./util.mjs";
 import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
-import { domainOf, methodOf } from "../trends/series.mjs";
+import { DOMAINS, domainOf, methodOf } from "../trends/series.mjs";
 import { glossaryHtml, termify, termsSource } from "../trends/glossary.mjs";
 
 const RU = path.join(ROOT, "social", "roundups"), DIR = path.join(ROOT, "briefs");
@@ -56,6 +63,28 @@ const briefs = [...drafts.filter((b) => b.post?.published), ...roundups].map(wit
 const pending = drafts.filter((b) => !b.post?.published).map((b) => ({ ...withTags(b), pending: true })).sort(newest);
 const bySlot = new Map(briefs.map((b) => [b.slot, b]));
 
+// ---------- 주제 · 형식: what a piece is about, apart from the form it takes ----------
+// The topic is the IT domain (trends/series.mjs → DOMAINS — the same seven the indicators count announcements by). A
+// piece's topics come from its cases (story.mjs → case.domain), else from code reading the one announcement a section
+// tells (domainOf / methodOf — the same reading as the site's list of announcements), most-told first; a monthly roundup
+// takes the topics of the pieces it gathers. The format is the series (tags.mjs → SERIES).
+const NEWSDATA = read(path.join(ROOT, "trends", "data", "news.json"), { items: [] }).items ?? [];
+const readCase = (x) => {
+  if (x.case) return { domain: x.case.domain, method: x.case.method };
+  const s = x.sources?.length === 1 ? x.sources[0] : null; if (!s) return null;
+  const n = NEWSDATA.find((y) => y.link === s.link), t = `${s.title ?? ""} ${n?.summary ?? ""}`, method = methodOf(t, s.kind);
+  return { domain: domainOf(t, method)?.name ?? null, method };
+};
+const domainId = (name) => DOMAINS.find((d) => d.name === name)?.id ?? null;
+const rankIds = (ids) => [...ids.reduce((m, id) => m.set(id, (m.get(id) ?? 0) + 1), new Map())]
+  .sort((a, b) => b[1] - a[1] || DOMAINS.findIndex((d) => d.id === a[0]) - DOMAINS.findIndex((d) => d.id === b[0])).map(([id]) => id);
+for (const b of [...briefs, ...pending]) if (b.series !== "roundup") b.topics = rankIds(b.st.article.sections.map((x) => domainId(readCase(x)?.domain)).filter(Boolean));
+for (const b of briefs) if (b.series === "roundup") b.topics = rankIds(b.st.article.sections.flatMap((x) => x.briefs ?? []).flatMap((s) => bySlot.get(s)?.topics ?? []));
+const TOPIC = Object.fromEntries(DOMAINS.map((d) => [d.id, d]));
+// the cover card of the piece's Instagram post (social/out/<slot>/01.png, on the site for Instagram already) as its
+// picture in the lists, like a thumbnail; a roundup has none
+for (const b of [...briefs, ...pending]) { const f = b.post?.images?.[0]; b.thumb = f && fs.existsSync(path.join(OUT, b.slot, f)) ? `/social/out/${b.slot}/${f}` : null; }
+
 // tags: key "theme-adoption" / "industry-finance" / "company-openai" → { name, kind, briefs } — from the public
 // briefings only (a draft's chips link only to tag pages that exist)
 const TAGS = new Map();
@@ -69,13 +98,16 @@ for (const b of briefs) {
     TAGS.get(k).briefs.push(b);
   }
 }
-const chips = (b) => b.keys.filter((k) => TAGS.has(k)).map((k) => `<a class="chip ${TAGS.get(k).kind}" href="/briefs/tag/${k}">${esc(TAGS.get(k).name)}</a>`).join("");
+// (a theme that says what one of the piece's topics already says is left out of its chips — 보안·안전 next to 보안·규제,
+// 인프라·클라우드 next to 클라우드·인프라; its tag page stays)
+const SAME_AS_TOPIC = { infra: "cloud", security: "security", policy: "security", data: "data", work: "work" };
+const chips = (b) => b.keys.filter((k) => TAGS.has(k) && !(k.startsWith("theme-") && (b.topics ?? []).includes(SAME_AS_TOPIC[k.slice(6)]))).map((k) => `<a class="chip ${TAGS.get(k).kind}" href="/briefs/tag/${k}">${esc(TAGS.get(k).name)}</a>`).join("");
 
 // ---------- pieces ----------
 const srcItem = (x) => `<li><a href="${href(x.link)}" target="_blank" rel="noopener">${esc(x.source)} ${KIND[x.kind] ?? "발표"} — ${esc(plain(x.title))}</a> <span class="d">${md(x.date)}</span></li>`;
 function basis(b) {
   const st = b.st;
-  if (b.series === "roundup") return `<p>${esc(st.month?.slice(5).replace(/^0/, ""))}월에 올린 브리핑 ${st.briefs?.length ?? 0}편만으로 썼어요. 각 섹션 아래 링크가 근거가 된 브리핑이에요.</p>`;
+  if (b.series === "roundup") return `<p>${esc(st.month?.slice(5).replace(/^0/, ""))}월에 올린 리서치 ${st.briefs?.length ?? 0}편만으로 썼어요. 각 섹션 아래 링크가 근거가 된 리서치예요.</p>`;
   if (st.mode === "news") {
     // a briefing written since 2026-10-26 says which announcements were read on their own page (story.mjs → original)
     const read = (st.sources ?? []).filter((x) => x.original).length;
@@ -97,23 +129,89 @@ const paras = (t, used = null) => plain(t).split(/\n{2,}/).map((p) => {
 const CASE_ROWS = [["who", "누가"], ["what", "무엇을"], ["where", "어디에"], ["how", "어떻게"]];
 const caseHead = (x, i) => `<header class="case-h" id="s${i + 1}"><p class="case-k">${esc(x.case.domain)} · ${esc(x.case.method)}</p><h2>${esc(plain(x.heading))}</h2>`
   + `<dl class="case">${CASE_ROWS.map(([k, l]) => `<div${x.case[k] === "발표에 없음" ? ' class="none"' : ""}><dt>${l}</dt><dd>${esc(x.case[k])}</dd></div>`).join("")}<div class="q"><dt>확인할 점</dt><dd>${esc(x.case.check)}</dd></div></dl></header>`;
-const item = (b) => `<li><a class="card" href="/briefs/${b.slot}"><span class="k">${esc(SERIES[b.series]?.name ?? "")} · ${day(b.st.date)}</span><span class="t">${esc(plain(b.st.article.title))}</span><span class="l">${esc(plain(b.st.article.lede))}</span></a>${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}</li>`;
-// newest first, a heading per month
-const byMonth = (list) => {
-  const groups = new Map();
-  for (const b of list) { const m = b.st.date.slice(0, 7); if (!groups.has(m)) groups.set(m, []); groups.get(m).push(b); }
-  return [...groups].map(([m, l]) => `<h2 class="month">${+m.slice(0, 4)}년 ${+m.slice(5)}월</h2><ul class="list">${l.map(item).join("")}</ul>`).join("");
+// a piece in a list (Toss Tech's article row): its format and topics, the title, the lede in two lines, the date and
+// what it rests on, and the cover card as its picture; then its tags. data-* is what the research list's search and
+// filters read (the words of the title, the lede, the cases and the tags — not the whole text).
+const topicNames = (b) => (b.topics ?? []).map((id) => TOPIC[id].name);
+const rests = (b) => {
+  if (b.series === "roundup") return `리서치 ${b.st.briefs?.length ?? 0}편을 묶음`;
+  const cases = b.st.article.sections.filter((x) => x.sources?.length === 1).length, srcs = (b.st.sources ?? []).length;
+  return [cases ? `사례 ${cases}건` : "", srcs ? `공식 발표 ${srcs}건` : ""].filter(Boolean).join(" · ");
 };
+const searchText = (b) => plain([b.st.article.title, b.st.article.lede, SERIES[b.series]?.name, ...topicNames(b),
+  ...b.tags.themes.map((id) => THEMES.find((t) => t.id === id)?.name), ...b.tags.industries.map((id) => INDUSTRIES.find((t) => t.id === id)?.name), ...b.tags.companies.map((c) => c.name),
+  ...b.st.article.sections.flatMap((x) => [x.heading, ...(x.case ? CASE_ROWS.map(([k]) => x.case[k]) : []), ...(x.sources ?? []).map((s) => s.source)]), ...(b.st.article.takeaways ?? [])]
+  .filter(Boolean).join(" ")).replace(/\s+/g, " ").trim().toLowerCase();
+const item = (b) => `<li class="r-item" id="r-${b.slot}" data-format="${b.series}" data-topics="${(b.topics ?? []).join(" ")}" data-q="${esc(searchText(b))}">`
+  + `<a class="r-card" href="/briefs/${b.slot}"><span class="r-k"><b>${esc(SERIES[b.series]?.name ?? "")}</b>${topicNames(b).map((n) => `<span>${esc(n)}</span>`).join("")}</span>`
+  + `<span class="r-t">${esc(plain(b.st.article.title))}</span><span class="r-l">${esc(plain(b.st.article.lede))}</span>`
+  + `<span class="r-m"><time datetime="${b.st.date}">${day(b.st.date)}</time>${rests(b) ? `<span>${rests(b)}</span>` : ""}</span>`
+  + `${b.thumb ? `<img class="r-th" src="${b.thumb}" alt="" width="1080" height="1350" loading="lazy" decoding="async" />` : ""}</a>`
+  + `${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}</li>`;
 const present = Object.keys(SERIES).filter((id) => briefs.some((b) => b.series === id));
-const tabs = (cur) => present.length > 1 ? `<nav class="tabs" aria-label="시리즈"><a href="/briefs"${cur ? "" : ' aria-current="page"'}>전체 <span>${briefs.length}</span></a>${present.map((id) => `<a href="/briefs/series/${id}"${cur === id ? ' aria-current="page"' : ""}>${esc(SERIES[id].name)} <span>${briefs.filter((b) => b.series === id).length}</span></a>`).join("")}</nav>` : "";
+const inTopic = (id) => briefs.filter((b) => b.topics?.includes(id));
+
+// ---------- indicators (Our World in Data: the writing and the data it rests on, a link apart) ----------
+// The numbers the home page's cards show (trends/build.mjs → insights.json, computed there — read here, not again):
+// a topic's indicator is its IT domain's card, official announcements in the last 30 days, with who made the most;
+// a piece told from the Ramp AI Index has the adoption card. Each links to its card on the home page.
+const INS = read(path.join(ROOT, "trends", "data", "insights.json"), { topics: [] });
+const CARDS = new Map((INS.topics ?? []).flatMap((t) => t.insights ?? []).map((c) => [c.id, c]));
+const asOf = INS.built_at ? `${day(INS.built_at)} 기준` : "";
+function indicator(cardId, { name = null, about = null, topic = null } = {}) {
+  const c = CARDS.get(cardId), rank = c?.viz?.find((v) => v.kind === "rank")?.items?.slice(0, 3) ?? [], top = Math.max(1, ...rank.map((x) => x.value));
+  if (!c && !name) return "";
+  const label = esc(c?.k ?? `IT 영역 · ${name}`);
+  return `<div class="ind" id="ind-${cardId}"><p class="ind-k">${topic ? `<a href="/briefs/topic/${topic}">${label}</a>` : label}</p>`
+    + `<p class="ind-n"><b>${esc(c?.big ?? "0건")}</b><span>${esc(c?.bl ?? `최근 30일 공식 발표 · ${about ?? ""} 이야기`)}</span></p>`
+    + (c?.title ? `<p class="ind-t">${esc(c.title)}</p>` : "")
+    + (rank.length ? `<ol class="ind-bars">${rank.map((x) => `<li${x.value === top ? ' class="top"' : ""}><span class="n">${esc(x.name)}</span><i aria-hidden="true"><span style="width:${Math.round((x.value / top) * 100)}%"></span></i><span class="v">${esc(x.label)}</span></li>`).join("")}</ol>` : "")
+    + `<p class="ind-src">${esc(c?.src ?? "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일")}${asOf ? ` · ${asOf}` : ""}${c ? ` · <a href="/#c-${cardId}">지표에서 보기</a>` : ""}${topic ? ` · <a href="/briefs/topic/${topic}">주제 페이지</a>` : ""}</p></div>`;
+}
+const topicIndicator = (id) => indicator(`dom-${id}`, { name: TOPIC[id].name, about: TOPIC[id].about });
+// a piece's 관련 지표 is the same block, but its numbers come in when the page opens (/briefs/indicators.json, written here
+// every day): a published piece's page stays as it was written — it changes only when the piece does — and its
+// indicators are today's. Without the file (offline, no JavaScript) the block keeps its links.
+const indicatorShell = (cardId, topic = null) => {
+  const c = CARDS.get(cardId), label = esc(c?.k ?? `IT 영역 · ${TOPIC[topic]?.name ?? ""}`);
+  return `<div class="ind" id="ind-${cardId}" data-ind="${cardId}"><p class="ind-k">${topic ? `<a href="/briefs/topic/${topic}">${label}</a>` : label}</p>`
+    + `<p class="ind-src"><a class="to-card" href="/#c-${cardId}">지표에서 보기</a>${topic ? ` · <a href="/briefs/topic/${topic}">주제 페이지</a>` : ""}</p></div>`;
+};
+const INDICATORS = { as_of: INS.built_at ?? null, cards: Object.fromEntries([
+  ...[...CARDS].filter(([id]) => /^dom-|^ax-all$/.test(id)).map(([id, c]) => [id, { k: c.k, big: c.big, bl: c.bl, title: c.title, src: c.src, rank: c.viz?.find((v) => v.kind === "rank")?.items?.slice(0, 3) ?? [] }]),
+  // (a domain with no announcement in 30 days has no card on the home page that day: 0건, and no link to a card)
+  ...DOMAINS.filter((d) => !CARDS.has(`dom-${d.id}`)).map((d) => [`dom-${d.id}`, { k: `IT 영역 · ${d.name}`, big: "0건", bl: `최근 30일 공식 발표 · ${d.about} 이야기`, title: null, src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일", rank: [], home: false }]),
+]) };
+// (filled in by the piece's page script — text only, never markup)
+const FILL_INDICATORS = `
+const fillIndicators = async () => {
+  const boxes = [...document.querySelectorAll(".ind[data-ind]")]; if (!boxes.length) return false;
+  try {
+  const stop = new AbortController(), t = setTimeout(() => stop.abort(), 4000);
+  const data = await (await fetch("/briefs/indicators.json", { signal: stop.signal })).json(); clearTimeout(t);
+  const day = (d) => d ? +d.slice(0, 4) + "년 " + +d.slice(5, 7) + "월 " + +d.slice(8, 10) + "일 기준" : "";
+  const mk = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
+  for (const box of boxes) {
+    const c = data.cards?.[box.dataset.ind], src = box.querySelector(".ind-src"); if (!c) continue;
+    if (c.home === false) { const a = src.querySelector(".to-card"); if (a) { a.nextSibling?.textContent?.startsWith(" · ") && a.nextSibling.remove(); a.remove(); } }
+    const n = mk("p", "ind-n"); n.append(mk("b", null, c.big), mk("span", null, c.bl));
+    const top = Math.max(1, ...c.rank.map((x) => x.value)), bars = mk("ol", "ind-bars");
+    for (const x of c.rank) { const li = mk("li", x.value === top ? "top" : ""), i = mk("i"), fill = mk("span"); fill.style.width = Math.round((x.value / top) * 100) + "%"; i.append(fill); i.setAttribute("aria-hidden", "true"); li.append(mk("span", "n", x.name), i, mk("span", "v", x.label)); bars.append(li); }
+    box.insertBefore(n, src); if (c.title) box.insertBefore(mk("p", "ind-t", c.title), src); if (c.rank.length) box.insertBefore(bars, src);
+    src.prepend(c.src + (data.as_of ? " · " + day(data.as_of) : "") + (src.childElementCount ? " · " : ""));
+  }
+  return true;
+  } catch { return false; }
+};
+`;
 // the phone install box (PWA) and the push alerts (OneSignal: the topics are tags, social/notify.mjs sends to them)
 const INSTALL = `<aside class="install" id="install">
-  <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 브리핑을 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
+  <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
-  <div class="row alerts"><b>새 브리핑 알림</b>
+  <div class="row alerts" id="alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
-    <label><input type="checkbox" value="monthly" checked /> 월간 리포트</label>
-    <label><input type="checkbox" value="other" /> 그 밖의 브리핑</label>
+    <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
+    <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
     <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>
   </div>
   <small id="push-state" aria-live="polite"></small>
@@ -136,18 +234,18 @@ OneSignalDeferred.push(async (OneSignal) => {
     const on = OneSignal.Notifications.permission && OneSignal.User.PushSubscription.optedIn;
     const tags = on ? await OneSignal.User.getTags() : {};
     if (on) boxes.forEach((b) => (b.checked = tags[b.value] === "1"));
-    $("push-on").textContent = on ? "주제 저장" : "알림 받기"; $("push-off").hidden = !on;
-    $("push-state").textContent = on ? "알림이 켜져 있어요. 주제를 바꾸고 저장할 수 있어요." : "";
+    $("push-on").textContent = on ? "알림 저장" : "알림 받기"; $("push-off").hidden = !on;
+    $("push-state").textContent = on ? "알림이 켜져 있어요. 받을 형식을 바꾸고 저장할 수 있어요." : "";
   };
   $("push-on").addEventListener("click", async () => {
     const picked = boxes.filter((b) => b.checked).map((b) => b.value);
-    if (!picked.length) { $("push-state").textContent = "받을 주제를 하나 이상 골라 주세요."; return; }
+    if (!picked.length) { $("push-state").textContent = "받을 형식을 하나 이상 골라 주세요."; return; }
     if (!OneSignal.Notifications.isPushSupported()) { $("push-state").textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? "아이폰은 먼저 홈 화면에 추가한 뒤, 그 앱에서 알림을 켤 수 있어요." : "이 브라우저는 알림을 지원하지 않아요."; return; }
     await OneSignal.Notifications.requestPermission();
     if (!OneSignal.Notifications.permission) { $("push-state").textContent = "브라우저에서 알림이 허용되지 않았어요."; return; }
     await OneSignal.User.PushSubscription.optIn();
     await OneSignal.User.addTags(Object.fromEntries(boxes.map((b) => [b.value, b.checked ? "1" : "0"])));
-    await show(); $("push-state").textContent = "알림을 켰어요. 새 브리핑이 올라오면 알려 드릴게요.";
+    await show(); $("push-state").textContent = "알림을 켰어요. 새 리서치가 올라오면 알려 드릴게요.";
   });
   $("push-off").addEventListener("click", async () => { await OneSignal.User.PushSubscription.optOut(); await show(); $("push-state").textContent = "알림을 껐어요."; });
   OneSignal.User.PushSubscription.addEventListener("change", show);
@@ -160,8 +258,9 @@ OneSignalDeferred.push(async (OneSignal) => {
 // starts with a heading alone and nothing is cut off under a button), the summary, the sources, what to read next.
 // A briefing told as cases (its sections named, data-name) turns a chapter per section instead — 사례 1, 사례 2 …,
 // 공통 흐름, 관점 — each starting on a page of its own with its table, like a case card, and continuing under its heading
-const ARTICLE_PAGER = `<script type="module">
+const ARTICLE_PAGER = () => `<script type="module">
 import { pager } from "/pager.js";
+${FILL_INDICATORS}
 const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
 const div = () => Object.assign(document.createElement("div"), { className: "flow" });
 // the sidebar (목차) reads the same chapters: a case's chapter by its heading, under 사례; the thread and the view under
@@ -187,13 +286,41 @@ if (document.documentElement.classList.contains("paged") && cases.length) {
     const li = document.createElement("li"); li.append(a); ol.append(li);
   });
 }
-pager([
-  { id: "top", name: "브리핑", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
+// 더 읽기: the previous/next links, then the related pieces and the links a screenful at a time (it grows with the archive)
+const moreLi = $(".more-links") && Object.assign(document.createElement("li"), { className: "more-li" }); if (moreLi) moreLi.append($(".more-links"));
+const p = pager([
+  { id: "top", name: "리서치", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
   ...text,
   { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
   { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
-  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
-], { tab: () => "briefs", back: { href: "/briefs", label: "브리핑" } });
+  { id: "data", name: "지표", title: "관련 지표", group: "마무리", lead: [$(".inds>h2"), $(".inds-intro")], items: [...art.querySelectorAll(".inds .ind")], list: () => Object.assign(document.createElement("div"), { className: "inds-pg" }), count: 0 },
+  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", lead: [$(".pn"), $(".rel>h2")].filter(Boolean), items: [...art.querySelectorAll(".rel .r-item"), moreLi].filter(Boolean),
+    list: () => Object.assign(document.createElement("ul"), { className: "list r-list rel-list" }), count: 0 },
+], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
+// 링크 복사 goes up into the top bar as an icon, beside 저장 (account.js), so the title page keeps its room; on a phone it
+// opens the share sheet (SHARE below)
+const share = document.querySelector(".act-row [data-share]"), where = document.querySelector(".pgr-top .pgr-where"); // (the title page is out of the article by now)
+if (share && where) { share.className = "share-ic"; share.setAttribute("aria-label", "링크 공유"); where.before(share); }
+// today's numbers in 관련 지표, then the pages measured again
+fillIndicators().then((did) => { if (did) p.refresh(); });
+</script>`;
+// 링크 복사 (Toss Tech's 공유하기): a phone's share sheet where there is one, else the address on the clipboard, else
+// the address to copy by hand
+const SHARE_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>`;
+const SHARE = `<script>
+(() => { for (const b of document.querySelectorAll("[data-share]")) b.addEventListener("click", async () => {
+  const url = location.origin + location.pathname, label = b.querySelector("span"), was = (b.dataset.label ||= label.textContent);
+  clearTimeout(+b.dataset.t || 0);
+  try {
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({ title: document.title, url }); return; }
+    await navigator.clipboard.writeText(url); label.textContent = "링크를 복사했어요";
+    const say = document.querySelector("[data-share-status]"); if (say) say.textContent = "이 글의 링크를 복사했어요";
+    // (a phone without a share sheet — an app's own browser — has the icon only: a toast says it, like 저장's)
+    if (getComputedStyle(label).display === "none") { let t = document.querySelector(".pd-toast"); if (!t) { t = Object.assign(document.createElement("div"), { className: "pd-toast" }); t.setAttribute("role", "status"); document.body.append(t); }
+      t.textContent = "이 글의 링크를 복사했어요"; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2400); }
+  } catch (e) { if (e && e.name === "AbortError") return; prompt("이 주소를 복사하세요", url); }
+  b.dataset.t = setTimeout(() => { label.textContent = was; }, 2400);
+}); })();
 </script>`;
 
 const CSS = `
@@ -230,17 +357,6 @@ const CSS = `
   .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
   .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
   .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
-  .tabs{display:flex;flex-wrap:wrap;gap:2px;margin:4px 0 8px;border-bottom:1px solid var(--line)}
-  .tabs a{font-size:14px;padding:8px 10px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--mut)} .tabs a:hover{color:var(--ink);text-decoration:none}
-  .tabs a[aria-current]{color:var(--ink);border-bottom-color:var(--bronze)} .tabs span{color:var(--dim);font-size:12.5px;margin-left:2px}
-  h2.month{font-size:15px;color:var(--mut);font-weight:600;margin:32px 0 10px}
-  .list{list-style:none;margin:0;padding:0;display:grid;max-width:760px;border-top:1px solid var(--line-2)}
-  .list li{padding:0 0 12px;border-bottom:1px solid var(--line)}
-  .list .card{display:block;padding:16px 0 4px;color:var(--ink-2);text-decoration:none}
-  .list .card:hover .t{text-decoration:underline;text-underline-offset:3px}
-  .list .t{display:block;font-size:18px;font-weight:650;color:var(--ink);margin:6px 0 6px;line-height:1.4;letter-spacing:-.02em}
-  .list .k{font-size:12.5px;color:var(--bronze-hi)} .list .l{font-size:14.5px;line-height:1.65;color:var(--mut);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .list .chips{margin:6px 0 0}
   .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
   .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
   .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
@@ -252,7 +368,7 @@ const CSS = `
   /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
   @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
   @media(max-width:640px){
-    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px} h2.month{margin:18px 0 8px}
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px}
     h1.page{font-size:28px}
     .pn{grid-template-columns:1fr}.pn .next{text-align:left}
   }
@@ -267,18 +383,22 @@ const CSS = `
   .pg>.pn+.rel,.pg>.pn+.more-links,.pg>.rel+.more-links{margin-top:28px}
   .pg .pg-hint{margin:28px 0 0;font-size:13.5px;color:var(--mut)} .pg .pg-hint b{color:var(--ink-2);font-weight:600}
   /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
-  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
+  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
+  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
+  /* (a short screen: the topics are on the 지표 pages, each with its link) */
+  @media(max-height:700px){ .pg .art-head .topics{display:none} }
+  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
+  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
+  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
+  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
+  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
   .case-list .n{grid-row:span 2;font-size:13px;font-weight:700;color:var(--bronze-hi);font-variant-numeric:tabular-nums;line-height:1.5}
   .case-list .t{font-size:14.5px;font-weight:600;line-height:1.45} .case-list small{font-size:12px;color:var(--mut)}
-  .pg .list{border-top:0;display:grid;gap:10px}
-  .pg .list li{padding:0;border:0;border-radius:18px;background:var(--surface-2)}
-  .pg .list .card{padding:16px 16px 6px}
-  .pg .list .chips{padding:0 16px 14px}
-  .pg .list .card:hover .t{text-decoration:none}
-  .pg h2.month{margin:6px 2px 8px}
   html.paged{-webkit-tap-highlight-color:transparent}
 `;
 
@@ -300,65 +420,209 @@ for (const b of [...briefs, ...pending]) {
   let n = 0;
   const names = a.sections.every((x) => x.sources) && a.sections.some((x) => x.sources?.length === 1)
     ? a.sections.map((x) => (x.sources.length === 1 ? `사례 ${++n}` : x.sources.length > 1 ? "공통 흐름" : "관점")) : null;
-  const sections = a.sections.map((x, i) => `<section class="part${x.case ? " case-part" : ""}"${names ? ` data-name="${names[i]}"` : ""}>${x.case ? caseHead(x, i) : `<h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>`}${paras(x.body, used)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${href(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 브리핑 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
+  const sections = a.sections.map((x, i) => `<section class="part${x.case ? " case-part" : ""}"${names ? ` data-name="${names[i]}"` : ""}>${x.case ? caseHead(x, i) : `<h2 id="s${i + 1}">${esc(plain(x.heading))}</h2>`}${paras(x.body, used)}${x.sources?.length ? `<p class="src">출처 · ${x.sources.map((s) => `<a href="${href(s.link)}" target="_blank" rel="noopener">${esc(s.source)} ${KIND[s.kind] ?? "발표"} · ${md(s.date)}</a>`).join(" / ")}</p>` : ""}${x.briefs?.length ? `<p class="src">근거 리서치 · ${x.briefs.filter((s) => bySlot.has(s)).map((s) => `<a href="/briefs/${s}">${esc(plain(bySlot.get(s).st.article.title))}</a>`).join(" / ")}</p>` : ""}</section>`).join("");
   // a pending draft is in no list, so it has no previous or next (its related briefings are public ones)
   const same = briefs.filter((x) => x.series === b.series), i = same.indexOf(b), newer = i < 0 ? null : same[i - 1], older = i < 0 ? null : same[i + 1];
-  const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: x.keys.filter((k) => b.keys.includes(k)).length })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
+  // related: the pieces sharing its topics first (a shared topic counts twice a shared tag), then the newest
+  const shared = (x) => 2 * (x.topics ?? []).filter((t) => (b.topics ?? []).includes(t)).length + x.keys.filter((k) => b.keys.includes(k)).length;
+  const related = briefs.filter((x) => x !== b).map((x) => ({ x, n: shared(x) })).filter((r) => r.n).sort((p, q) => q.n - p.n || q.x.st.date.localeCompare(p.x.st.date)).slice(0, 3).map((r) => r.x);
+  // the data it rests on (Our World in Data): its topics' indicators, or the adoption rate for a piece told from it
+  // (every topic it is listed under: the topic pages, the filter and this page agree)
+  const tops = b.topics ?? [];
+  const inds = tops.length ? tops.map((id) => indicatorShell(`dom-${id}`, id)).join("") : fromAX(st) ? indicatorShell("ax-all") : "";
   // one article: on a wide screen the sections one after another; on a phone pages turned sideways (ARTICLE_PAGER)
   const body = `<article class="brief">
   <header class="art-head">
-  <div class="kicker"><b>AX 브리핑</b><a href="/briefs/series/${b.series}">${esc(SERIES[b.series]?.name ?? st.format_name ?? "")}</a></div>
+  <div class="kicker"><b>리서치</b><a href="${b.pending ? "/briefs" : `/briefs/series/${b.series}`}">${esc(SERIES[b.series]?.name ?? st.format_name ?? "")}</a></div>
   <h1 class="page">${esc(plain(a.title))}</h1>
   <p class="lede">${esc(plain(a.lede))}</p>
-  <p class="meta">${day(st.date)} · ${NAME}</p>
+  <p class="meta">${day(st.date)}${rests(b) ? ` · ${rests(b)}` : ""} · ${NAME}</p>
+  ${tops.length ? `<p class="topics"><span>주제</span>${tops.map((id) => `<a href="/briefs/topic/${id}">${esc(TOPIC[id].name)}</a>`).join("")}</p>` : ""}
   ${chips(b) ? `<div class="chips">${chips(b)}</div>` : ""}
+  <div class="act-row"><button type="button" class="share-btn" data-share>${SHARE_ICON}<span>공유하기</span></button><span class="sr" role="status" data-share-status></span></div>
   </header>
   ${sections}
   ${a.takeaways?.length ? `<section class="sum"><h2>정리</h2><ul>${a.takeaways.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul></section>` : ""}
   <section class="basis"><h2>근거</h2>${basis(b)}</section>
-  ${newer || older ? `<nav class="pn" aria-label="같은 시리즈">${older ? `<a href="/briefs/${older.slot}"><small>← 이전 ${esc(SERIES[b.series].name)}</small>${esc(plain(older.st.article.title))}</a>` : "<span></span>"}${newer ? `<a class="next" href="/briefs/${newer.slot}"><small>다음 ${esc(SERIES[b.series].name)} →</small>${esc(plain(newer.st.article.title))}</a>` : ""}</nav>` : ""}
-  ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list">${related.map(item).join("")}</ul></section>` : ""}
-  <div class="more-links"><a href="/briefs">← 브리핑 전체</a>${post?.published?.permalink ? `<a href="${href(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
+  ${inds ? `<section class="inds" id="data" aria-labelledby="h-data"><h2 id="h-data">관련 지표</h2><p class="inds-intro">이 글이 다룬 주제를 매일 같은 방식으로 다시 센 숫자예요. '지표에서 보기'는 홈의 그 카드로, 주제 이름과 '주제 페이지'는 그 주제의 리서치와 발표로 가요.</p>${inds}</section>` : ""}
+  ${newer || older ? `<nav class="pn" aria-label="같은 형식">${older ? `<a href="/briefs/${older.slot}"><small>← 이전 ${esc(SERIES[b.series].name)}</small>${esc(plain(older.st.article.title))}</a>` : "<span></span>"}${newer ? `<a class="next" href="/briefs/${newer.slot}"><small>다음 ${esc(SERIES[b.series].name)} →</small>${esc(plain(newer.st.article.title))}</a>` : ""}</nav>` : ""}
+  ${related.length ? `<section class="rel"><h2>같이 읽기</h2><ul class="list r-list">${related.map(item).join("")}</ul></section>` : ""}
+  <div class="more-links"><a href="/briefs">← 리서치 전체</a>${post?.published?.permalink ? `<a href="${href(post.published.permalink)}" target="_blank" rel="noopener">인스타그램 카드로 보기</a>` : ""}<a href="/">오늘의 AX 지표</a></div>
 </article>
 ${termsSource(used)}
 <script src="/terms.js" defer></script>
-${ARTICLE_PAGER}`;
+${SHARE}
+${ARTICLE_PAGER()}`;
   put(`${b.slot}.html`, shell({ path: `/briefs/${b.slot}`, title: `${esc(plain(a.title))} · ${NAME}`, desc: esc(plain(a.lede).slice(0, 150)), css: CSS, body, paged: true, noindex: Boolean(b.pending) }));
 }
 
-// phone: a list page as pages turned sideways (/pager.js) — the heading and as many briefings as fit, then a screenful at a
-// time, and a last page for installing and alerts (so the floating install bar goes)
+// ---------- the research list, its formats, topics and tags ----------
+// phone: a list page as pages turned sideways (/pager.js) — the heading (and on /briefs the search and the filters) and
+// as many pieces as fit, then a screenful at a time; a last page for installing and alerts (so the floating install
+// bar goes). When the finder (FINDER below) narrows the list, the pages are laid out again with what is shown.
 const LIST_PAGER = `<script type="module">
 import { pager } from "/pager.js";
-const m = document.querySelector("main"), items = [...m.querySelectorAll(".list>li")], install = document.getElementById("install");
-const lead = [...m.children].filter((x) => !x.matches("h2.month, ul.list, #install, script"));
+const m = document.querySelector("main"), list = m.querySelector("ul.r-list"), install = document.getElementById("install"), more = m.querySelector(".r-more");
+const finder = m.querySelector("form.finder"), q = finder?.querySelector("input[name=q]");
+const rows = list ? [...list.children] : [], byId = new Map(rows.map((li) => [li.id, li])), shown = () => rows.filter((li) => !li.hidden);
+const lead = [...m.children].filter((x) => !x.matches("ul.r-list, .r-more, #install, script"));
 if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
-pager([
-  items.length ? { id: "list", name: "브리핑", title: "브리핑 목록", lead, items, list: () => Object.assign(document.createElement("ul"), { className: "list" }),
-    sub: (li) => ({ label: li.querySelector(".t")?.textContent, note: li.querySelector(".k")?.textContent }) } : { id: "list", name: "브리핑", title: "브리핑 목록", pages: [lead] },
-  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 브리핑 알림", pages: [[install]] },
+const ul = () => Object.assign(document.createElement("ul"), { className: "list r-list" });
+const sub = (li) => (li.matches(".r-item") ? { label: li.querySelector(".r-t")?.textContent, note: li.querySelector(".r-k b")?.textContent } : null);
+// /briefs: the search and the filters have the first page to themselves — nothing of a piece is cut off under the tab bar,
+// and laying the pages out again never moves the search box while someone types in it; the pieces follow, a screenful
+// at a time, under a heading. The other lists open on their heading and as many pieces as fit.
+const hint = finder ? Object.assign(document.createElement("p"), { className: "pg-hint" }) : null;
+const count = () => { if (hint) hint.replaceChildren("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "리서치 " + shown().filter((li) => li.matches(".r-item")).length + "편" }), " →"); };
+count();
+// every row goes to the pager (so the contents list every piece); the ones shown are laid out right after
+const ch = !rows.length ? { id: "list", name: "리서치", title: "리서치 목록", pages: [lead] }
+  : finder ? { id: "list", name: "목록", title: "리서치 목록", head: Object.assign(document.createElement("h2"), { className: "pg-h", textContent: "리서치 목록" }), items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length }
+  : { id: "list", name: "리서치", title: "리서치 목록", lead, items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length };
+const p = pager([
+  ...(finder && rows.length ? [{ id: "find", name: "리서치", title: "검색 · 주제 · 형식", pages: [[...lead, hint]] }] : []), ch,
+  ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []),
+  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
 ], { tab: () => "briefs" });
+// the contents (sidebar) lists what is shown (a row laid out on no page is still found here, by its id)
+const toc = () => document.querySelectorAll(".toc a[data-node]").forEach((a) => { const n = byId.get(a.dataset.node); if (n) a.parentElement.hidden = n.hidden; });
+const relay = () => {
+  later = false;
+  if (!ch.items) return;
+  ch.items.splice(0, ch.items.length, ...shown());
+  const was = document.activeElement; p.refresh();
+  if (was && was !== document.body && was !== document.activeElement) was.focus({ preventScroll: true }); // a filter button keeps its focus
+};
+let later = false;
+if (ch.items && shown().length !== rows.length) relay();
+toc();
+// the finder narrowed the list: the pages again — but not while the search box has the focus (a phone's keyboard is
+// composing Korean there, and laying the pages out would take the box away mid-syllable): when it lets go
+addEventListener("pd:filtered", () => { count(); toc(); if (document.activeElement === q && q) { later = true; return; } relay(); });
+q?.addEventListener("blur", () => { if (later) relay(); });
 </script>`;
-const listPage = ({ p, title, desc, kicker, h, intro, list, cur }) => shell({ path: p, title, desc, css: CSS, paged: true, body: `<div class="kicker"><b>AX 브리핑</b>${kicker}</div>
+
+// /briefs: a search box and two filters kept apart — 주제 (IT domain) and 형식 (series), a16z's way. What is chosen is
+// in the address (?q= &topic= &format=, history.replaceState), so a shared link and the back button bring the same list
+// back; each option says how many pieces it would show with the rest as chosen. Without JavaScript every piece is listed.
+const FINDER = `<script>
+(() => {
+  const form = document.querySelector("form.finder"), list = document.querySelector("ul.r-list"); if (!form || !list) return;
+  const q = form.querySelector("input[name=q]"), items = [...list.querySelectorAll(".r-item")], empty = list.querySelector(".r-empty");
+  const count = document.querySelector(".f-count .c"), resets = [...document.querySelectorAll(".f-reset")], opts = [...form.querySelectorAll("button[data-f]")];
+  const norm = (t) => String(t ?? "").toLowerCase().replace(/\\s+/g, " ").trim();
+  const read = () => { const u = new URLSearchParams(location.search); return { q: u.get("q") ?? "", topic: u.get("topic") ?? "", format: u.get("format") ?? "" }; };
+  // an option the page doesn't have (a typo in an address, a topic with no pieces yet) shows everything, not nothing
+  const known = (f, v) => !v || opts.some((o) => o.dataset.f === f && o.dataset.v === v);
+  const match = (li, s) => (!s.topic || li.dataset.topics.split(" ").includes(s.topic)) && (!s.format || li.dataset.format === s.format)
+    && norm(s.q).split(" ").filter(Boolean).every((w) => li.dataset.q.includes(w));
+  let st = read(), timer = 0;
+  function apply(write) {
+    if (!known("topic", st.topic)) st.topic = "";
+    if (!known("format", st.format)) st.format = "";
+    let n = 0;
+    for (const li of items) { const on = match(li, st); li.hidden = !on; if (on) n++; }
+    if (empty) empty.hidden = n > 0;
+    for (const o of opts) {
+      const f = o.dataset.f, v = o.dataset.v, on = st[f] === v, c = items.filter((li) => match(li, { ...st, [f]: v })).length;
+      o.setAttribute("aria-pressed", String(on)); o.querySelector(".n").textContent = c;
+    }
+    const narrowed = Boolean(st.q || st.topic || st.format);
+    count.textContent = narrowed ? "리서치 " + n + "편 찾음" : "리서치 " + items.length + "편";
+    resets.forEach((b) => { if (!b.closest(".r-empty")) b.hidden = !narrowed; });
+    if (document.activeElement !== q && q.value !== st.q) q.value = st.q;
+    if (write) {
+      const u = new URLSearchParams(location.search);
+      for (const k of ["q", "topic", "format"]) { if (st[k]) u.set(k, st[k]); else u.delete(k); }
+      history.replaceState(history.state, "", location.pathname + (u.toString() ? "?" + u : ""));
+    }
+    // the phone's pages are laid out again (LIST_PAGER) — once the search box lets go of the focus
+    dispatchEvent(new Event("pd:filtered"));
+  }
+  // (what was typed counts even when a button is pressed before the pause that applies it)
+  const typed = () => { clearTimeout(timer); st.q = q.value.trim(); };
+  for (const o of opts) o.addEventListener("click", () => { typed(); const f = o.dataset.f; st[f] = st[f] === o.dataset.v ? "" : o.dataset.v; apply(true); });
+  // a syllable still being composed (Korean keyboards) is not searched until it is done
+  const later = () => { clearTimeout(timer); timer = setTimeout(() => { st.q = q.value.trim(); apply(true); }, 160); };
+  q.addEventListener("input", (e) => { if (!e.isComposing) later(); });
+  q.addEventListener("compositionend", later);
+  form.addEventListener("submit", (e) => { e.preventDefault(); typed(); apply(true); q.blur(); });
+  // 조건 지우기 goes away once pressed: the focus goes to the first filter, not to the top of the page
+  for (const b of resets) b.addEventListener("click", () => { clearTimeout(timer); st = { q: "", topic: "", format: "" }; q.value = ""; apply(true);
+    const to = opts[0]?.closest("[inert]") ? document.querySelector(".pg:not([inert]) .r-card") : opts[0]; to?.focus({ preventScroll: true }); });
+  // back to this page from a piece: the address holds the search, and a page kept in memory shows it again as it was
+  addEventListener("pageshow", (e) => { if (e.persisted) { st = read(); q.value = st.q; apply(false); } });
+  apply(false);
+})();
+</script>`;
+const SEARCH_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zM21 21l-5.2-5.2"/></svg>`;
+const option = (f, v, label, n) => `<button type="button" class="f-o" data-f="${f}" data-v="${v}" aria-pressed="${v ? "false" : "true"}">${esc(label)} <span class="n">${n}</span></button>`;
+const listed = (list) => `<ul class="list r-list">${list.map(item).join("")}</ul>`;
+const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false, more = "" }) => shell({ path: p, title, desc, css: CSS, paged: true, body: `<div class="kicker"><b>리서치</b>${kicker}</div>
   <h1 class="page">${h}</h1>
   <p class="intro">${intro}</p>
+  ${finder && list.length ? `<form class="finder" role="search" action="/briefs" method="get" aria-label="리서치 찾기">
+    <div class="f-q">${SEARCH_ICON}<input type="search" name="q" placeholder="회사·사례·주제로 찾기 (예: Databricks, 거버넌스)" aria-label="리서치 검색" autocomplete="off" enterkeyhint="search" /></div>
+    <div class="facet" role="group" aria-labelledby="f-topic"><span class="f-l" id="f-topic">주제</span><div class="f-os">${option("topic", "", "전체", list.length)}${DOMAINS.filter((d) => inTopic(d.id).length).map((d) => option("topic", d.id, d.name, inTopic(d.id).length)).join("")}</div></div>
+    <div class="facet" role="group" aria-labelledby="f-format"><span class="f-l" id="f-format">형식</span><div class="f-os">${option("format", "", "전체", list.length)}${present.map((id) => option("format", id, SERIES[id].name, briefs.filter((b) => b.series === id).length)).join("")}</div></div>
+  </form>
+  <p class="f-count"><span class="c" aria-live="polite">리서치 ${list.length}편</span><button type="button" class="f-reset" hidden>조건 지우기</button></p>` : ""}
+  ${list.length ? `<ul class="list r-list">${list.map(item).join("")}${finder ? `<li class="r-empty" hidden><p>조건에 맞는 리서치가 없어요.</p><button type="button" class="f-reset">조건 지우기</button></li>` : ""}</ul>` : `<p class="intro">첫 리서치를 준비하고 있어요.</p>`}
+  ${more}
   ${INSTALL}
-  ${tabs(cur)}
-  ${list.length ? byMonth(list) : `<p class="intro">첫 브리핑을 준비하고 있어요.</p>`}
+  ${finder ? FINDER : ""}
   ${LIST_PAGER}` });
+// every topic page, for readers without the filters and for search engines (also linked from the home page and each piece)
+const topicLinks = (cur) => `<nav class="r-more" aria-label="주제 페이지"><h2>주제 페이지</h2><p>${DOMAINS.map((d) => `<a href="/briefs/topic/${d.id}"${d.id === cur ? ' aria-current="page"' : ""}>${esc(d.name)} <span>${inTopic(d.id).length}</span></a>`).join("")}</p></nav>`;
 
-put("index.html", listPage({ p: "/briefs", title: `AX 브리핑 · ${NAME}`, desc: "기업의 AI 전환(AX)을 숫자와 공식 발표로 풀어 쓴 글. 인스타그램 카드의 긴 버전이에요.", kicker: "카드의 긴 버전", h: "AX 브리핑",
-  intro: `인스타그램에 올린 이야기를 더 자세히 풀어 쓴 글이에요. 숫자는 매일 재는 데이터에서, 사건은 회사·정부가 직접 낸 발표에서만 가져와요. <a href="/briefs/feed.xml">RSS</a>`, list: briefs, cur: null }));
-for (const id of present) put(`series/${id}.html`, listPage({ p: `/briefs/series/${id}`, title: `${SERIES[id].name} · AX 브리핑`, desc: SERIES[id].about, kicker: "시리즈", h: esc(SERIES[id].name), intro: esc(SERIES[id].about), list: briefs.filter((b) => b.series === id), cur: id }));
-const KINDNAME = { theme: "주제", industry: "업종", company: "회사·기관" };
-for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/tag/${t.key}`, title: `${t.name} · AX 브리핑`, desc: `${t.name}을 다룬 AX 브리핑 모음`, kicker: KINDNAME[t.kind], h: esc(t.name),
-  intro: `${KINDNAME[t.kind]} '${esc(t.name)}'을 다룬 브리핑 ${t.briefs.length}편이에요. 시리즈를 가리지 않고 모았어요.`, list: t.briefs, cur: undefined }));
+put("index.html", listPage({ p: "/briefs", title: `리서치 · ${NAME}`, desc: "IT 컨설팅 관점의 AX 리서치 — 회사·정부의 공식 발표를 사례로 읽고, 매일 재는 지표와 함께 봐요.", kicker: "IT 컨설팅 관점의 AX", h: "리서치",
+  intro: `회사·정부가 직접 낸 발표를 IT 컨설팅 사례(누가 · 무엇을 · 어디에 · 어떻게)로 읽고, 매일 재는 지표와 이어서 봐요. 주제는 IT 영역, 형식은 글의 꼴이에요. <a href="/briefs/feed.xml">RSS</a>`, list: briefs, finder: true, more: topicLinks(null) }));
+for (const id of present) put(`series/${id}.html`, listPage({ p: `/briefs/series/${id}`, title: `${SERIES[id].name} · 리서치`, desc: SERIES[id].about, kicker: "형식", h: esc(SERIES[id].name),
+  intro: `${esc(SERIES[id].about)}. <a href="/briefs?format=${id}">리서치 목록에서 주제와 함께 고르기</a>`, list: briefs.filter((b) => b.series === id) }));
+const KINDNAME = { theme: "테마", industry: "업종", company: "회사·기관" };
+for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/tag/${t.key}`, title: `${esc(t.name)} · 리서치`, desc: `${esc(t.name)} 관련 AX 리서치 모음`, kicker: KINDNAME[t.kind], h: esc(t.name),
+  intro: `${KINDNAME[t.kind]} '${esc(t.name)}' 관련 리서치 ${t.briefs.length}편이에요. 형식을 가리지 않고 모았어요.`, list: t.briefs }));
+
+// /briefs/topic/<id> — one IT domain, the way Our World in Data lays out a topic: the indicator, the writing on it, and
+// the latest announcements in it (their own pages, never copied). Every domain has one, with or without pieces yet.
+const TOPIC_PAGER = `<script type="module">
+import { pager } from "/pager.js";
+const m = document.querySelector("main"), $ = (s) => m.querySelector(s), install = document.getElementById("install");
+const lead = [...m.children].filter((x) => x.matches(".kicker, h1, .intro, .t-others"));
+if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
+const ul = (cls) => () => Object.assign(document.createElement("ul"), { className: cls });
+pager([
+  { id: "data", name: "지표", title: "지표", pages: [[...lead, $("#data")]] },
+  { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
+    sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
+  { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news"), count: m.querySelectorAll("#news .t-news>li").length },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
+  { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
+  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
+], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
+</script>`;
+const NEWS_TOPIC = (INS.news ?? []);
+for (const d of DOMAINS) {
+  // the announcements are the ranked ones the site lists (insights.json → news: the last 14 days, adoptions, deals and
+  // rules first — trends/build.mjs), so the heading says 주요; the indicator above counts every one in 30 days
+  const list = inTopic(d.id), news = NEWS_TOPIC.filter((n) => (n.domains ?? []).includes(d.name)).sort((a, b) => b.date.localeCompare(a.date));
+  put(`topic/${d.id}.html`, shell({ path: `/briefs/topic/${d.id}`, title: `${d.name} · 리서치`, desc: `${d.name}(${d.about}) — 지표, 리서치, 최근 공식 발표`, css: CSS, paged: true, body: `<div class="kicker"><b>주제</b>IT 영역</div>
+  <h1 class="page">${esc(d.name)}</h1>
+  <p class="intro">${esc(d.about)}. 이 영역의 AX를 지표 → 리서치 → 공식 발표 순으로 모았어요. 지표와 발표 목록은 매일 다시 계산돼요.</p>
+  <section class="t-sec" id="data" aria-labelledby="h-t-data"><h2 id="h-t-data">지표</h2>${topicIndicator(d.id)}</section>
+  <section class="t-sec" id="research" aria-labelledby="h-t-res"><h2 id="h-t-res">이 주제의 리서치 <span>${list.length}편</span></h2>${list.length ? listed(list) : `<p class="none">아직 이 주제를 주로 다룬 리서치가 없어요. 아래 공식 발표가 쌓이면 리서치로 이어져요. <a href="/briefs">리서치 전체 보기</a></p>`}</section>
+  <section class="t-sec" id="news" aria-labelledby="h-t-news"><h2 id="h-t-news">최근 주요 공식 발표 <span>${news.length}건</span></h2>${news.length ? `<ul class="t-news">${news.map((n) => `<li><a href="${href(n.link)}" target="_blank" rel="noopener"><span class="d">${md(n.date)} · ${esc(n.source)}${n.method ? ` · ${esc(n.method)}` : ""}</span><span class="t">${esc(n.title)}</span></a></li>`).join("")}</ul><p class="src">회사·정부가 자기 도메인에 직접 낸 발표 가운데 도입 · 협력 · 정책 이야기만 고른 목록 · 최근 14일 · 제목을 누르면 원문으로 가요. 위 지표는 30일 동안의 발표를 모두 셌어요.</p>` : `<p class="none">최근 14일 동안 이 영역에서 주요 목록에 든 공식 발표는 없어요. 위 지표는 30일 동안의 발표를 모두 센 숫자예요.</p>`}</section>
+  ${topicLinks(d.id)}
+  ${INSTALL}
+  ${TOPIC_PAGER}` }));
+}
 
 // RSS: the latest 30 public ones (their text through xml(): nothing XML forbids)
 const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
-<title>AX 브리핑 · ${NAME}</title>
+<title>AX 리서치 · ${NAME}</title>
 <link>${SITE}/briefs</link>
 <atom:link href="${SITE}/briefs/feed.xml" rel="self" type="application/rss+xml" />
 <description>기업의 AI 전환(AX)을 숫자와 공식 발표로 풀어 쓴 글</description>
@@ -368,6 +632,7 @@ ${briefs.slice(0, 30).map((b) => `<item><title>${xml(b.st.article.title)}</title
 </rss>
 `;
 put("feed.xml", rss);
+put("indicators.json", JSON.stringify(INDICATORS) + "\n");
 
 // a page whose briefing, series or tag went away goes too
 for (const f of fs.readdirSync(DIR, { recursive: true }).map(String)) {
@@ -386,14 +651,8 @@ const sentences = (t, n = 1, max = 180) => {
   return all.slice(0, n).reduce((out, x) => (!out || (out + " " + x).length <= max ? (out ? `${out} ${x.trim()}` : x.trim()) : out), "");
 };
 // a beat's IT domain and way in: the case's own (a briefing since 2026-10-26), else read by code from the announcement's
-// title and summary (trends/series.mjs → DOMAINS, methodOf — the same reading as the site's list of announcements)
-const NEWSDATA = read(path.join(ROOT, "trends", "data", "news.json"), { items: [] }).items ?? [];
-const caseTag = (x) => {
-  if (x.case) return `${x.case.domain} · ${x.case.method}`;
-  const s = x.sources?.[0], n = s && NEWSDATA.find((y) => y.link === s.link), t = `${s?.title ?? ""} ${n?.summary ?? ""}`;
-  const method = s && methodOf(t, s.kind);
-  return s ? [domainOf(t, method)?.name, method].filter(Boolean).join(" · ") : "";
-};
+// title and summary (readCase above)
+const caseTag = (x) => { const c = readCase(x); return c ? [c.domain, c.method].filter(Boolean).join(" · ") : ""; };
 // public briefings only: a draft waiting for /approve is not the week's story yet
 const featured = briefs.find((b) => b.series === "news") ?? briefs.find((b) => b.series !== "roundup") ?? null;
 function storyHtml(b) {
@@ -420,9 +679,12 @@ function storyHtml(b) {
     + (view ? `<p class="sv-k">${esc(viewName(view))}</p>${viewLines(view.body).map((t) => `<p class="sv-q">${esc(t)}</p>`).join("")}` : "")
     + `<a class="st-more" href="${to()}">이야기 전체 읽기 →</a></div>`;
 }
-// the home page: the story above, then the earlier briefings (not the monthly roundups), and the shared frame (nav,
-// sitemap with the briefings)
-const home = briefs.filter((b) => b.series !== "roundup" && b !== featured).slice(0, 3).map((b) => `<li><a href="/briefs/${b.slot}"><time datetime="${b.st.date}">${md(b.st.date)}</time><span class="badge">${esc(SERIES[b.series]?.name ?? "브리핑")}</span><span class="et">${esc(plain(b.st.article.title))}</span><svg class="go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li>`).join("");
-// the glossary too: a posted briefing's new words join it (trends/glossary.mjs) as soon as the post is up
-writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": home, "t-glossary": glossaryHtml() } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
-console.log(`${briefs.length} briefing(s), ${present.length} series, ${TAGS.size} tags at ${SITE}/briefs${pending.length ? ` — and ${pending.length} draft page(s), noindex and unlisted until posted: ${pending.map((b) => b.slot).join(", ")}` : ""}`);
+// the home page, research first (Toss Tech's front page): this week's story above, then the latest pieces (not the
+// story's own), then 찾아보기 — the topics, each with its pieces and its indicator (official announcements, 30 days),
+// apart from the formats (a16z) — and the shared frame (nav, sitemap with every page)
+const latest = briefs.filter((b) => b !== featured).slice(0, 4).map(item).join("");
+const topicsHtml = DOMAINS.map((d) => `<li><a href="/briefs/topic/${d.id}"><b>${esc(d.name)}</b><span class="ab">${esc(d.about)}</span><span class="nums"><span>리서치 ${inTopic(d.id).length}편</span><span>공식 발표 ${esc(CARDS.get(`dom-${d.id}`)?.big ?? "0건")} · 30일</span></span></a></li>`).join("");
+const formatsHtml = present.map((id) => { const l = briefs.filter((b) => b.series === id);
+  return `<li><a href="/briefs/series/${id}"><b>${esc(SERIES[id].name)}</b><span class="ab">${esc(SERIES[id].about)}</span><span class="nums"><span>${l.length}편</span><span>최근 ${md(l[0].st.date)}</span></span></a></li>`; }).join("");
+writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": latest, "t-topics": topicsHtml, "t-formats": formatsHtml, "t-research-n": `리서치 전체 ${briefs.length}편`, "t-glossary": glossaryHtml() } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
+console.log(`${briefs.length} piece(s), ${present.length} format(s), ${DOMAINS.length} topic pages, ${TAGS.size} tags at ${SITE}/briefs${pending.length ? ` — and ${pending.length} draft page(s), noindex and unlisted until posted: ${pending.map((b) => b.slot).join(", ")}` : ""}`);

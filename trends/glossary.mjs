@@ -105,7 +105,7 @@ export function termify(html, used = new Set(), list = null) {
 }
 
 // one entry; a briefing's word says where it came from
-const entry = (g, first) => `<div class="gl" id="g-${g.id}"${first ? ` data-g="${esc(GROUPS[g.group])}"` : ""}><dt>${esc(g.term)}</dt><dd>${esc(g.def)}</dd>${g.from ? `<dd class="gl-from"><a href="/briefs/${esc(g.from.slot)}">${+g.from.date.slice(5, 7)}/${+g.from.date.slice(8, 10)} 브리핑에서 처음 나온 말</a></dd>` : ""}</div>`;
+const entry = (g, first) => `<div class="gl" id="g-${g.id}"${first ? ` data-g="${esc(GROUPS[g.group])}"` : ""}><dt>${esc(g.term)}</dt><dd>${esc(g.def)}</dd>${g.from ? `<dd class="gl-from"><a href="/briefs/${esc(g.from.slot)}">${+g.from.date.slice(5, 7)}/${+g.from.date.slice(8, 10)} 리서치에서 처음 나온 말</a></dd>` : ""}</div>`;
 // the "용어 풀이" section: one list per group, under its name (on a phone's pages the first word of a group carries
 // the name instead, data-g)
 export const glossaryHtml = () => {
