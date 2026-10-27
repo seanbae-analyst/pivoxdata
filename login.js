@@ -65,7 +65,28 @@ if (root && auth.enabled) {
   resendBtn.addEventListener("click", () => send(true));
   root.querySelector("[data-change]").addEventListener("click", () => { $("#resent").hidden = true; go("email", true); input.focus(); });
 
-  // ---------- 3. waiting: signed in in another window of this browser ----------
+  // ---------- 3. the code from the e-mail, typed here: signed in on this screen (a phone's home-screen app too) ----------
+  const codeIn = $("#code"), codeGo = $("#code-go");
+  const CODE = {
+    format: "메일에 있는 숫자 코드를 그대로 넣어 주세요.",
+    expired: "코드가 맞지 않거나 시간이 지났어요. 가장 최근 메일의 코드를 넣거나, 다시 보내기를 눌러 주세요.",
+    network: WHY.network,
+    failed: "로그인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+  };
+  codeIn.addEventListener("input", () => { codeIn.value = codeIn.value.replace(/\D/g, ""); say($("#code-err")); });
+  $("#f-code").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    codeGo.disabled = true; codeGo.textContent = "확인하는 중…";
+    const r = await auth.verifyCode(email, codeIn.value);
+    codeGo.disabled = false; codeGo.textContent = "로그인";
+    if (r.failure) { say($("#code-err"), CODE[r.failure] ?? CODE.failed); codeIn.focus(); return; }
+    // the consents were given a moment ago on this screen, by this address: written now, as the callback does
+    const c = auth.pendingConsent(r.user.email) ? await auth.rpc("pd_consent", { p_version: auth.policy }) : { ok: false };
+    if (c.ok) { auth.setPendingConsent(null); try { sessionStorage.setItem("pd.cv", auth.policy); } catch {} }
+    entered(); location.replace(next);
+  });
+
+  // ---------- 4. waiting: signed in in another window of this browser ----------
   const signedIn = (u) => { root.querySelectorAll("[data-user]").forEach((b) => { b.textContent = u.email; }); go("done"); };
   auth.onChange((u) => { if (u && !root.querySelector('[data-s="mail"]').hidden) signedIn(u); });
 

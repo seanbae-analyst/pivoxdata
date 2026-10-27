@@ -40,6 +40,9 @@ SQL editor(또는 Supabase MCP `execute_sql`)로 넣는다: `insert into pivoxda
    - 링크는 `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email` 그대로 — 휴대폰 메일 앱(다른 브라우저)에서 열어도 된다.
      기본 템플릿이면 `?code=` 로 와서 요청한 브라우저에서만 열린다(`callback.js` 가 "로그인을 요청한 브라우저에서 열어 주세요" 라고 말한다).
    - 처음 쓰는 주소는 Magic Link 가 아니라 Confirm signup 메일을 받는다 — 둘 다 바꾼다.
+   - 두 템플릿에는 **로그인 코드 `{{ .Token }}`** 이 있다(2026-10-27): `/login` 의 코드 칸에 넣으면 그 화면에서 바로 로그인된다
+     (`auth.js` → `verifyCode`, `POST /auth/v1/verify {type:"email", email, token}`). 휴대폰 메일 앱의 링크는 브라우저로 열리고 홈 화면 앱으로는
+     못 가기 때문이다(아이폰은 홈 화면 앱이 링크를 받지 못한다). 템플릿에 코드가 없으면 메일에 코드가 안 보인다 — 대시보드에 붙였는지부터 본다.
 
 ## 3. 사이트에 넣기
 

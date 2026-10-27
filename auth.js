@@ -96,6 +96,17 @@ export async function complete() {
   return { failure: r.code === "otp_expired" ? "expired" : /flow_state|code_verifier/.test(r.code) ? "other_browser" : r.status === 0 ? "network" : "failed" };
 }
 
+/** the code in the e-mail (2026-10-27), typed on /login: a phone's mail app opens the link in a browser — never in the
+ *  home-screen app — so the code signs in right where it was asked for. Supabase's e-mail one-time password, the same
+ *  one the link carries. → {user} or {failure}: "expired" (used, run out or wrong), "network" or "failed". */
+export async function verifyCode(email, code) {
+  const token = String(code ?? "").replace(/\s+/g, "");
+  if (!/^\d{6,10}$/.test(token)) return { failure: "format" };
+  const r = await call("/auth/v1/verify", { body: { type: "email", email: email.trim().toLowerCase(), token } });
+  if (r.ok && keep(r.data)) { write(VERIFIER, null); return { user: user() }; }
+  return { failure: r.status === 0 ? "network" : /otp_expired|invalid|token/.test(r.code) || r.status === 403 || r.status === 400 ? "expired" : "failed" };
+}
+
 /** sign out in this browser (the server forgets this session too, when it can be reached) */
 export async function signOut() {
   const s = read(SESSION);
