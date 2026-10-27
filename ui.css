@@ -500,3 +500,13 @@ body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe
 .share-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round} .share-ic span{display:none} .share-ic:active{background:var(--surface-2)}
 .pgr-top .share-ic+.save-ic,.pgr-top .share-ic+.pgr-where{margin-left:0}
 @media(max-height:700px){ .pg #data .ind-bars li:nth-child(3){display:none} .pg .t-sec>h2{margin-bottom:6px} .pg>#data{margin-top:18px} .pg #data .ind-src{margin-top:6px} }
+/* phone list rows (2026-10-27 mobile review): one quiet line above the title — the format and its main topic, never
+   wrapping with a stray separator at a line's end; the date alone under the lede; no tag chips (Toss Tech's rows have
+   none — the tags stay on the piece's page and the tag pages) */
+@media(max-width:640px){
+  .r-k{flex-wrap:nowrap;overflow:hidden;white-space:nowrap}
+  .r-k>span:nth-of-type(n+2){display:none} .r-k>span:nth-of-type(1):not(:last-child)::after{display:none}
+  .r-m>span{display:none} .r-m>time:not(:last-child)::after{display:none}
+  .r-item .chips{display:none}
+  .r-card{padding-bottom:14px} .pg .r-card{padding-bottom:14px}
+}
