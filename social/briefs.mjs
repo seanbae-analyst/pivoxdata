@@ -483,7 +483,7 @@ const p = pager([
   ...(finder && rows.length ? [{ id: "find", name: "리서치", title: "검색 · 주제 · 형식", pages: [[...lead, hint]] }] : []), ch,
   ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []),
   { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
-], { tab: () => "briefs" });
+], { tab: () => "briefs", toc: false });
 // the contents (sidebar) lists what is shown (a row laid out on no page is still found here, by its id)
 const toc = () => document.querySelectorAll(".toc a[data-node]").forEach((a) => { const n = byId.get(a.dataset.node); if (n) a.parentElement.hidden = n.hidden; });
 const relay = () => {
@@ -600,7 +600,7 @@ pager([
   { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
   { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
   { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
-], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
+], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" }, toc: false });
 </script>`;
 const NEWS_TOPIC = (INS.news ?? []);
 for (const d of DOMAINS) {
