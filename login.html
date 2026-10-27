@@ -76,12 +76,18 @@
 </section>
 <section class="acc-step" data-s="mail" role="status" hidden>
   <span class="acc-ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></span>
-  <h1>메일함을 열어 주세요</h1>
-  <p class="acc-lede">로그인 링크를 보냈어요. 메일의 버튼을 누르면 로그인돼요. 링크는 한 번만 쓸 수 있고, 휴대폰 메일 앱에서 열어도 돼요.</p>
-  <p class="acc-fine">링크는 새 창으로 열리고 로그인은 그 창에서 이어져요. 그 창에서 로그인하면 이 화면도 바뀌어요.</p>
+  <h1>메일의 코드를 넣어 주세요</h1>
+  <p class="acc-lede">로그인 메일을 보냈어요. 메일에 있는 숫자 코드를 여기에 넣으면 이 화면에서 바로 로그인돼요 — 휴대폰 앱에서도요.</p>
+  <form class="acc-form" id="f-code" novalidate>
+    <label class="acc-label" for="code">로그인 코드</label>
+    <div class="acc-in"><input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="숫자 코드" required style="font-size:22px;letter-spacing:.18em" /></div>
+    <p class="acc-err" id="code-err" role="alert" hidden></p>
+    <button class="btn lg" type="submit" id="code-go" style="width:100%">로그인</button>
+  </form>
+  <p class="acc-fine">메일의 버튼을 눌러도 돼요. 그러면 그 메일 앱이 연 창에서 로그인돼요.</p>
   <div class="acc-card"><span>보낸 주소 <b data-email></b></span><button class="btn ghost sm" type="button" data-change>메일 바꾸기</button></div>
   <p class="acc-fine">메일이 안 보이면 스팸함을 확인하세요. <button class="acc-link" type="button" id="resend">다시 보내기</button></p>
-  <p class="acc-fine" id="resent" hidden>다시 보냈어요. 가장 최근 메일의 링크를 누르세요 — 앞 메일의 링크는 쓰지 못할 수 있어요.</p>
+  <p class="acc-fine" id="resent" hidden>다시 보냈어요. 가장 최근 메일의 코드를 넣어 주세요 — 앞 메일의 코드와 링크는 쓰지 못할 수 있어요.</p>
   <p class="acc-err" id="mail-err" role="alert" hidden></p>
 </section>
 <section class="acc-step" data-s="done" role="status" hidden>
