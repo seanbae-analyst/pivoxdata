@@ -154,6 +154,13 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            const fs = require("fs");
+            const said = fs.existsSync("result.txt") ? fs.readFileSync("result.txt", "utf8") : "";
+            // a long story the owner posts from the app: /approve came before it was up (or with another caption)
+            if (said.startsWith("manual:")) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: "인스타그램 최근 게시물에서 아직 찾지 못했습니다. 이 게시물은 카드가 10장을 넘어 앱에서 직접 올려야 합니다 — 올린 뒤(캡션은 복사한 그대로) `/approve`를 다시 남겨 주세요." });
+              return;
+            }
             await github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body: `처리하지 못했습니다. 로그: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}\n\n고친 뒤 \`/approve\`(또는 \`/reject\`)를 다시 남기면 다시 시도합니다. 이미 올라간 게시물은 다시 올리지 않습니다.` });
 
   # Hand-made posts committed with "auto_publish": true (e.g. the pinned brand posts) — published in slot order
