@@ -164,7 +164,7 @@ export const checkCaption = (body, ctx = {}) => { const t = plain(body); return 
 // line beside the page number (~26 at 30 px)
 export const LINE = { title: 18, body: 28, item: 28, label: 34, kicker: 24 };
 export const slideText = (s) => [s.kicker, s.title, s.body, s.number, s.label, ...(s.items ?? [])].filter(Boolean).join("\n");
-const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end", "case"]);
+const KINDS = new Set(["cover", "text", "number", "list", "quiz", "answer", "end", "case", "meaning"]);
 // at most three names in a row joined by "·" ("NVIDIA · OpenAI · SAP · Salesforce" → "NVIDIA 등 4곳"): a name is an
 // official source or AX vendor we know, or a capitalised Latin word (Uber, Braze); IT words in capitals (ERP·CRM·HR)
 // and places (유럽·북유럽·아프리카) are not names
@@ -172,10 +172,13 @@ const ORGS = [...new Set([...NEWS.sources.map((x) => x.name), ...AX.series.filte
 const named = (seg) => ORGS.some((o) => seg.includes(o)) || /(?<![A-Za-z])[A-Z][a-z][A-Za-z0-9]*/.test(seg);
 const nameRun = (line) => plain(line).split("·").filter(named).length;
 // `numbers`: how many big-number slides a post may have — the story carries the post, a number backs it up (2026-10-26:
-// two at most, one in a post of announcements)
+// two at most, one in a post of announcements). How many slides: 10 at most, Instagram's own limit for a carousel
+// published through the API; a post of announcements tells each case over two cards (2026-10-27 owner: "스토리라인
+// 좀더 길게 … 너무 짧아"), so it has at least 8
+export const SLIDES = { min: 4, news: 8, max: 10 };
 export function checkSlides(slides, { refs = 0, numbers = refs ? 1 : 2 } = {}) {
-  const p = [];
-  if (!Array.isArray(slides) || slides.length < 4 || slides.length > 10) return [`장 수는 4~10장 (지금 ${Array.isArray(slides) ? slides.length : 0})`];
+  const p = [], min = refs ? SLIDES.news : SLIDES.min;
+  if (!Array.isArray(slides) || slides.length < min || slides.length > SLIDES.max) return [`장 수는 ${min}~${SLIDES.max}장 (지금 ${Array.isArray(slides) ? slides.length : 0})${refs ? " — 사례마다 사례 장과 의미 장, 두 장씩" : ""}`];
   if (slides[0]?.kind !== "cover") p.push("첫 장은 kind=cover");
   const big = slides.filter((s) => s?.kind === "number").length;
   if (big > numbers) p.push(`큰 숫자 장(kind=number)이 ${big}장 — ${numbers}장까지만, 나머지 숫자는 문장 속에 (이야기가 먼저, 숫자는 근거)`);
@@ -196,7 +199,7 @@ export function checkSlides(slides, { refs = 0, numbers = refs ? 1 : 2 } = {}) {
     const t = slideText(s ?? {});
     p.push(...typo(at, t));
     if (lines(t).some((l) => nameRun(l) > 3)) p.push(`${at}: 회사·기관 이름을 "·"로 세 곳 넘게 이음 — "OO 등 N곳"처럼 줄일 것`);
-    if (s?.kind === "case" && (!refs || !Array.isArray(s.refs) || s.refs.length !== 1)) p.push(`${at}: case 장은 AX 사례 게시물에서, refs에 발표 번호 하나`);
+    if (["case", "meaning"].includes(s?.kind) && (!refs || !Array.isArray(s.refs) || s.refs.length !== 1)) p.push(`${at}: ${s.kind} 장은 AX 사례 게시물에서, refs에 발표 번호 하나`);
     // a news post: each slide says which announcements it tells (code prints their source and date)
     if (refs) {
       const r = s?.refs ?? [];
@@ -227,7 +230,8 @@ export function checkStory(st, ctx = {}) {
 // from a fixed list (trends/series.mjs → DOMAINS, METHODS), and one question to ask of one's own project. The cards
 // print it as a small table (build.mjs), the briefing as the head of the case's section (briefs.mjs), so it is short
 // noun phrases, never invented: a box the announcement doesn't fill says so.
-export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [2, 5] };
+// at most three cases: each is told over two cards (a case card, then what it means) inside the ten a carousel may have
+export const CASE = { who: 30, what: 30, where: 30, how: 30, check: 60, count: [2, 3] };
 export const NOT_SAID = "발표에 없음";
 export const DOMAIN_NAMES = DOMAINS.map((d) => d.name), METHOD_NAMES = METHODS.map((m) => m.name);
 export const caseText = (c) => [c?.who, c?.what, c?.where, c?.how, c?.check].filter(Boolean).join("\n");
@@ -252,10 +256,16 @@ export function checkCases(cases, slides = [], { refs = 0 } = {}) {
     if (q.length < 8 || q.length > CASE.check || !/\?$/.test(q)) p.push(`${at}: check는 확인할 점 질문 하나(8~${CASE.check}자, ?로 끝남)`);
     if ([c?.who, c?.what, c?.where, c?.how].every((v) => plain(v).trim() === NOT_SAID)) p.push(`${at}: 네 칸이 모두 "${NOT_SAID}" — 이 발표는 사례로 고르지 말 것`);
   });
-  // a case is told on a card of its own, and a case card tells a case
+  // a case is told on a card of its own, and a case card tells a case; right after it comes a card of what it means
+  // (kind=meaning, the same announcement) — the case is the event, the meaning card the step after it (2026-10-27)
   const told = new Map(slides.filter((s) => s?.kind === "case" && s.refs?.length === 1).map((s) => [s.refs[0], s]));
   for (const c of cases) if (Number.isInteger(c?.ref) && !told.has(c.ref)) p.push(`발표 ${c.ref}의 사례 장(kind=case)이 없음`);
   for (const r of told.keys()) if (!cases.some((c) => c?.ref === r)) p.push(`case 장(발표 ${r})의 사례가 cases에 없음`);
+  slides.forEach((s, i) => {
+    const r = s?.refs?.[0], next = slides[i + 1], prev = slides[i - 1];
+    if (s?.kind === "case" && told.get(r) === s && !(next?.kind === "meaning" && next.refs?.length === 1 && next.refs[0] === r)) p.push(`${i + 1}장: 사례 장(발표 ${r}) 바로 다음에 그 사례의 의미 장(kind=meaning, refs [${r}])`);
+    if (s?.kind === "meaning" && !(prev?.kind === "case" && prev.refs?.[0] === r)) p.push(`${i + 1}장: 의미 장(kind=meaning)은 같은 발표의 사례 장 바로 다음에만`);
+  });
   return p;
 }
 
