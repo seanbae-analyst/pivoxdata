@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>인프라·클라우드 · 리서치</title>
-<meta name="description" content="인프라·클라우드을 다룬 AX 리서치 모음" />
+<meta name="description" content="인프라·클라우드 관련 AX 리서치 모음" />
 
 <link rel="canonical" href="https://data.pivoxquant.com/briefs/tag/theme-infra" />
 <meta property="og:type" content="article" />
@@ -12,7 +12,7 @@
 <meta property="og:locale" content="ko_KR" />
 <meta property="og:url" content="https://data.pivoxquant.com/briefs/tag/theme-infra" />
 <meta property="og:title" content="인프라·클라우드 · 리서치" />
-<meta property="og:description" content="인프라·클라우드을 다룬 AX 리서치 모음" />
+<meta property="og:description" content="인프라·클라우드 관련 AX 리서치 모음" />
 <meta property="og:image" content="https://data.pivoxquant.com/og/home.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -100,7 +100,12 @@
   /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
   .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
-  .pg .art-head:has(+.case-list) .chips{display:none} .pg .art-head .act-row{margin-top:10px}
+  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
+  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
+  /* (a short screen: the topics are on the 지표 pages, each with its link) */
+  @media(max-height:700px){ .pg .art-head .topics{display:none} }
+  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
+  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips{display:none} .pg .rel .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
@@ -114,22 +119,22 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
 <div class="kicker"><b>리서치</b>테마</div>
   <h1 class="page">인프라·클라우드</h1>
-  <p class="intro">테마 '인프라·클라우드'을 다룬 리서치 1편이에요. 형식을 가리지 않고 모았어요.</p>
+  <p class="intro">테마 '인프라·클라우드' 관련 리서치 1편이에요. 형식을 가리지 않고 모았어요.</p>
   
-  <ul class="list r-list"><li class="r-item" id="r-2026-10-26" data-format="news" data-topics="cloud crm security" data-q="ai 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요 이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 ai를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. sk텔레콤은 거버넌스 체계를, microsoft와 databricks는 데이터와 실행 환경의 통제를, salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요. 이번 주 ax 사건 클라우드·인프라 crm·고객 보안·규제 보안·안전 인프라·클라우드 인수·투자·제휴 통신 의료·바이오 sk텔레콤 databricks microsoft salesforce sk텔레콤: 사내 ai 에이전트까지 관리 기준을 묶었어요 sk텔레콤 ai 거버넌스 리포트·관리체계 사내 ai 에이전트·대고객 ai 서비스 cpo 총괄, iso/iec 42001 인증 sk텔레콤 microsoft: 업무 시스템마다 통제 수준을 고르게 했어요 microsoft microsoft sovereign cloud 정부·핵심 인프라·규제 산업 시스템 워크로드별로 통제 수준 선택 microsoft databricks: 연구 데이터 곁에서 외부 모델을 돌려요 databricks·nvidia rfd4-proteina 단백질 설계 모델 생명과학 연구 데이터·실험 관리 ai runtime 서버리스 gpu에 통합 예정 databricks salesforce: 투자의 중심에 사람을 뒀어요 salesforce $1 billion 투자·ai 도입 전담팀 스페인 마드리드 본사·emea south 현장 엔지니어 배치, 졸업생 1년 교육 salesforce 네 발표가 앞에 둔 것: 어디서, 누가 sk텔레콤 microsoft databricks salesforce it 컨설팅 관점 sk텔레콤은 사내 ai 에이전트를 만들 때부터 종료까지 한 기준으로 관리한다고 밝혔어요. microsoft는 업무 시스템마다 통제 수준을 고르는 주권 클라우드 방식을 내놨어요. databricks는 연구 데이터와 같은 플랫폼에서 외부 모델을 돌리는 통합을 계획하고 있어요. salesforce는 스페인 $1 billion 투자에서 도입을 맡을 엔지니어와 교육에 무게를 뒀어요. 도입 전에 관리 기준, 데이터 위치, 운영 인력부터 정했는지 확인해야 해요."><a class="r-card" href="/briefs/2026-10-26"><span class="r-k"><b>이번 주 AX 사건</b><span>클라우드·인프라</span><span>CRM·고객</span><span>보안·규제</span></span><span class="r-t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="r-l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span><span class="r-m"><time datetime="2026-10-26">2026년 10월 26일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-26/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-security">보안·안전</a><a class="chip theme" href="/briefs/tag/theme-infra">인프라·클라우드</a><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul>
+  <ul class="list r-list"><li class="r-item" id="r-2026-10-26" data-format="news" data-topics="cloud crm security" data-q="ai 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요 이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 ai를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. sk텔레콤은 거버넌스 체계를, microsoft와 databricks는 데이터와 실행 환경의 통제를, salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요. 이번 주 ax 사건 클라우드·인프라 crm·고객 보안·규제 보안·안전 인프라·클라우드 인수·투자·제휴 통신 의료·바이오 sk텔레콤 databricks microsoft salesforce sk텔레콤: 사내 ai 에이전트까지 관리 기준을 묶었어요 sk텔레콤 ai 거버넌스 리포트·관리체계 사내 ai 에이전트·대고객 ai 서비스 cpo 총괄, iso/iec 42001 인증 sk텔레콤 microsoft: 업무 시스템마다 통제 수준을 고르게 했어요 microsoft microsoft sovereign cloud 정부·핵심 인프라·규제 산업 시스템 워크로드별로 통제 수준 선택 microsoft databricks: 연구 데이터 곁에서 외부 모델을 돌려요 databricks·nvidia rfd4-proteina 단백질 설계 모델 생명과학 연구 데이터·실험 관리 ai runtime 서버리스 gpu에 통합 예정 databricks salesforce: 투자의 중심에 사람을 뒀어요 salesforce $1 billion 투자·ai 도입 전담팀 스페인 마드리드 본사·emea south 현장 엔지니어 배치, 졸업생 1년 교육 salesforce 네 발표가 앞에 둔 것: 어디서, 누가 sk텔레콤 microsoft databricks salesforce it 컨설팅 관점 sk텔레콤은 사내 ai 에이전트를 만들 때부터 종료까지 한 기준으로 관리한다고 밝혔어요. microsoft는 업무 시스템마다 통제 수준을 고르는 주권 클라우드 방식을 내놨어요. databricks는 연구 데이터와 같은 플랫폼에서 외부 모델을 돌리는 통합을 계획하고 있어요. salesforce는 스페인 $1 billion 투자에서 도입을 맡을 엔지니어와 교육에 무게를 뒀어요. 도입 전에 관리 기준, 데이터 위치, 운영 인력부터 정했는지 확인해야 해요."><a class="r-card" href="/briefs/2026-10-26"><span class="r-k"><b>이번 주 AX 사건</b><span>클라우드·인프라</span><span>CRM·고객</span><span>보안·규제</span></span><span class="r-t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="r-l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span><span class="r-m"><time datetime="2026-10-26">2026년 10월 26일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-26/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul>
   
   <aside class="install" id="install">
   <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
   <div class="row alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
-    <label><input type="checkbox" value="monthly" checked /> 월간 리포트</label>
+    <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
     <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
     <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>
   </div>
@@ -153,12 +158,12 @@ OneSignalDeferred.push(async (OneSignal) => {
     const on = OneSignal.Notifications.permission && OneSignal.User.PushSubscription.optedIn;
     const tags = on ? await OneSignal.User.getTags() : {};
     if (on) boxes.forEach((b) => (b.checked = tags[b.value] === "1"));
-    $("push-on").textContent = on ? "주제 저장" : "알림 받기"; $("push-off").hidden = !on;
-    $("push-state").textContent = on ? "알림이 켜져 있어요. 주제를 바꾸고 저장할 수 있어요." : "";
+    $("push-on").textContent = on ? "알림 저장" : "알림 받기"; $("push-off").hidden = !on;
+    $("push-state").textContent = on ? "알림이 켜져 있어요. 받을 형식을 바꾸고 저장할 수 있어요." : "";
   };
   $("push-on").addEventListener("click", async () => {
     const picked = boxes.filter((b) => b.checked).map((b) => b.value);
-    if (!picked.length) { $("push-state").textContent = "받을 주제를 하나 이상 골라 주세요."; return; }
+    if (!picked.length) { $("push-state").textContent = "받을 형식을 하나 이상 골라 주세요."; return; }
     if (!OneSignal.Notifications.isPushSupported()) { $("push-state").textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? "아이폰은 먼저 홈 화면에 추가한 뒤, 그 앱에서 알림을 켤 수 있어요." : "이 브라우저는 알림을 지원하지 않아요."; return; }
     await OneSignal.Notifications.requestPermission();
     if (!OneSignal.Notifications.permission) { $("push-state").textContent = "브라우저에서 알림이 허용되지 않았어요."; return; }
@@ -175,16 +180,43 @@ OneSignalDeferred.push(async (OneSignal) => {
   <script type="module">
 import { pager } from "/pager.js";
 const m = document.querySelector("main"), list = m.querySelector("ul.r-list"), install = document.getElementById("install"), more = m.querySelector(".r-more");
-const all = list ? [...list.children] : [], shown = () => all.filter((li) => !li.hidden);
+const finder = m.querySelector("form.finder"), q = finder?.querySelector("input[name=q]");
+const rows = list ? [...list.children] : [], byId = new Map(rows.map((li) => [li.id, li])), shown = () => rows.filter((li) => !li.hidden);
 const lead = [...m.children].filter((x) => !x.matches("ul.r-list, .r-more, #install, script"));
 if (document.documentElement.classList.contains("paged")) document.getElementById("appbar")?.remove();
-const ch = all.length ? { id: "list", name: "리서치", title: "리서치 목록", lead, items: shown(), list: () => Object.assign(document.createElement("ul"), { className: "list r-list" }),
-    sub: (li) => (li.matches(".r-item") ? { label: li.querySelector(".r-t")?.textContent, note: li.querySelector(".r-k b")?.textContent } : null) } : { id: "list", name: "리서치", title: "리서치 목록", pages: [lead] };
-const p = pager([ch, ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []), { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] }], { tab: () => "briefs" });
-// the contents (sidebar) lists what is shown, too
-const toc = () => document.querySelectorAll(".toc a[data-node]").forEach((a) => { const n = document.getElementById(a.dataset.node); if (n) a.parentElement.hidden = n.hidden; });
+const ul = () => Object.assign(document.createElement("ul"), { className: "list r-list" });
+const sub = (li) => (li.matches(".r-item") ? { label: li.querySelector(".r-t")?.textContent, note: li.querySelector(".r-k b")?.textContent } : null);
+// /briefs: the search and the filters have the first page to themselves — nothing of a piece is cut off under the tab bar,
+// and laying the pages out again never moves the search box while someone types in it; the pieces follow, a screenful
+// at a time, under a heading. The other lists open on their heading and as many pieces as fit.
+const hint = finder ? Object.assign(document.createElement("p"), { className: "pg-hint" }) : null;
+const count = () => { if (hint) hint.replaceChildren("옆으로 넘기면 ", Object.assign(document.createElement("b"), { textContent: "리서치 " + shown().filter((li) => li.matches(".r-item")).length + "편" }), " →"); };
+count();
+// every row goes to the pager (so the contents list every piece); the ones shown are laid out right after
+const ch = !rows.length ? { id: "list", name: "리서치", title: "리서치 목록", pages: [lead] }
+  : finder ? { id: "list", name: "목록", title: "리서치 목록", head: Object.assign(document.createElement("h2"), { className: "pg-h", textContent: "리서치 목록" }), items: [...rows], list: ul, sub }
+  : { id: "list", name: "리서치", title: "리서치 목록", lead, items: [...rows], list: ul, sub };
+const p = pager([
+  ...(finder && rows.length ? [{ id: "find", name: "리서치", title: "검색 · 주제 · 형식", pages: [[...lead, hint]] }] : []), ch,
+  ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []),
+  { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
+], { tab: () => "briefs" });
+// the contents (sidebar) lists what is shown (a row laid out on no page is still found here, by its id)
+const toc = () => document.querySelectorAll(".toc a[data-node]").forEach((a) => { const n = byId.get(a.dataset.node); if (n) a.parentElement.hidden = n.hidden; });
+const relay = () => {
+  later = false;
+  if (!ch.items) return;
+  ch.items.splice(0, ch.items.length, ...shown());
+  const was = document.activeElement; p.refresh();
+  if (was && was !== document.body && was !== document.activeElement) was.focus({ preventScroll: true }); // a filter button keeps its focus
+};
+let later = false;
+if (ch.items && shown().length !== rows.length) relay();
 toc();
-addEventListener("pd:filtered", () => { if (p?.refresh && ch.items) { ch.items.splice(0, ch.items.length, ...shown()); p.refresh(); } toc(); });
+// the finder narrowed the list: the pages again — but not while the search box has the focus (a phone's keyboard is
+// composing Korean there, and laying the pages out would take the box away mid-syllable): when it lets go
+addEventListener("pd:filtered", () => { count(); toc(); if (document.activeElement === q && q) { later = true; return; } relay(); });
+q?.addEventListener("blur", () => { if (later) relay(); });
 </script>
 </main>
 
@@ -219,8 +251,8 @@ addEventListener("pd:filtered", () => { if (p?.refresh && ch.items) { ch.items.s
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let ev = null;
   const steps = ios
-    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"]
-    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"];
+    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"]
+    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"];
   $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
   const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
   addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });

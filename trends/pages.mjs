@@ -40,16 +40,16 @@ function login(auth) {
   <p class="acc-fine center">로그인하지 않아도 모든 글을 볼 수 있어요.</p>
   <details class="acc-faq"><summary>로그인하면 무엇이 달라지나요</summary>
     <table class="acc-cmp"><thead><tr><th></th><th>로그인 없이</th><th>로그인</th></tr></thead><tbody>
-      <tr><td>브리핑 · 사례 · 용어 풀이 읽기</td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td></tr>
-      <tr><td>새 브리핑 알림</td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td></tr>
-      <tr><td>브리핑 저장</td><td>이 기기만</td><td>어느 기기에서나</td></tr>
+      <tr><td>리서치 · 사례 · 용어 풀이 읽기</td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td></tr>
+      <tr><td>새 리서치 알림</td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td><td>${svg(ICON.check, "yes")}<span class="sr">됨</span></td></tr>
+      <tr><td>리서치 저장</td><td>이 기기만</td><td>어느 기기에서나</td></tr>
     </tbody></table>
   </details>
   <details class="acc-faq"><summary>로그인하면 저장되는 것</summary><ul>
     <li><b>메일 주소</b> — 로그인 서비스(Supabase, ${supabase.country})에 저장돼요.</li>
-    <li><b>저장한 브리핑</b> — 주소 · 제목 · 날짜만. 어느 기기에서 로그인해도 같은 목록을 봐요.</li>
+    <li><b>저장한 리서치</b> — 주소 · 제목 · 날짜만. 어느 기기에서 로그인해도 같은 목록을 봐요.</li>
     ${mail ? "<li><b>로그인 메일</b> — Brevo(프랑스)를 통해 보내요.</li>" : ""}
-    <li><b>탈퇴</b> — 로그인한 뒤 <a href="/saved#account">저장한 브리핑</a> 화면의 계정에서 바로 해요. 자세한 내용은 <a href="/privacy">개인정보 처리방침</a>.</li>
+    <li><b>탈퇴</b> — 로그인한 뒤 <a href="/saved#account">저장한 리서치</a> 화면의 계정에서 바로 해요. 자세한 내용은 <a href="/privacy">개인정보 처리방침</a>.</li>
   </ul></details>
 </section>
 <section class="acc-step" data-s="consent" hidden>
@@ -106,7 +106,7 @@ function callback(auth) {
 <section class="acc-step" data-s="done" role="status" hidden>
   <span class="acc-ico ok">${svg(ICON.check)}</span>
   <h1>로그인했어요</h1>
-  <p class="acc-lede"><b data-user></b> 계정이에요. 저장한 브리핑을 어느 기기에서나 이어 봐요.</p>
+  <p class="acc-lede"><b data-user></b> 계정이에요. 저장한 리서치를 어느 기기에서나 이어 봐요.</p>
   <a class="btn block lg" href="/" data-next>계속하기</a>
   <p class="acc-fine">내 계정이 아니면 <button class="acc-link" type="button" data-out>로그아웃</button>하세요. 로그인을 요청했던 창은 닫아도 돼요.</p>
 </section>
@@ -122,21 +122,21 @@ function callback(auth) {
 
 const saved = (auth) => `<div class="sv" id="saved-root">
 <header class="sv-head">
-  <div class="kicker"><b>내 브리핑</b>${auth.on ? "이 기기 · 로그인하면 어느 기기에서나" : "이 기기의 브라우저에 저장"}</div>
-  <h1 class="page">저장한 브리핑</h1>
-  <p class="lede" id="sv-note">${auth.on ? "브리핑에서 저장을 누르면 여기에 모여요. 로그인하면 다른 기기에서도 같은 목록을 봐요." : "브리핑에서 저장을 누르면 여기에 모여요. 이 기기의 브라우저에만 저장돼요."}</p>
+  <div class="kicker"><b>내 리서치</b>${auth.on ? "이 기기 · 로그인하면 어느 기기에서나" : "이 기기의 브라우저에 저장"}</div>
+  <h1 class="page">저장한 리서치</h1>
+  <p class="lede" id="sv-note">${auth.on ? "리서치 글에서 저장을 누르면 여기에 모여요. 로그인하면 다른 기기에서도 같은 목록을 봐요." : "리서치 글에서 저장을 누르면 여기에 모여요. 이 기기의 브라우저에만 저장돼요."}</p>
 </header>
 <ul class="list sv-list" id="sv-list"></ul>
 <div class="sv-empty" id="sv-empty" hidden>
   <span class="acc-ico">${svg(ICON.bookmark)}</span>
-  <p><b>아직 저장한 브리핑이 없어요.</b></p>
-  <p>브리핑 제목 아래 <b>저장</b>을 누르면 여기에 모여요.</p>
-  <a class="btn ghost" href="/briefs">브리핑 보기</a>
+  <p><b>아직 저장한 리서치가 없어요.</b></p>
+  <p>리서치 제목 아래 <b>저장</b>을 누르면 여기에 모여요.</p>
+  <a class="btn ghost" href="/briefs">리서치 보기</a>
 </div>
 ${auth.on ? `<section class="sv-acct" id="account" aria-labelledby="h-acct">
   <h2 id="h-acct">계정</h2>
   <div data-in hidden>
-    <p class="sv-who">${svg(ICON.user)}<span><b data-user></b><small>로그인한 계정 · 저장한 브리핑이 어느 기기에서나 이어져요</small></span></p>
+    <p class="sv-who">${svg(ICON.user)}<span><b data-user></b><small>로그인한 계정 · 저장한 리서치가 어느 기기에서나 이어져요</small></span></p>
     <div class="acc-row"><button class="btn ghost" type="button" data-out>로그아웃</button></div>
     <details class="sv-del"><summary>탈퇴</summary>
       <p>탈퇴하면 계정과 저장한 목록, 동의 기록을 지체 없이 지워요. 되돌릴 수 없어요.</p>
@@ -169,7 +169,7 @@ export function accountPages(auth) {
   return [
     { file: "login.html", path: "/login", title: "로그인", desc: "AX 트렌드 레이더 로그인 — 메일로 받은 링크로 들어와요.", body: login(auth), bare: true, noindex: true },
     { file: "auth/callback.html", path: "/auth/callback", title: "로그인 확인", desc: "로그인 링크를 확인해요.", body: callback(auth), bare: true, noindex: true },
-    { file: "saved.html", path: "/saved", title: "저장한 브리핑", desc: "저장한 브리핑 목록이에요.", body: saved(auth), noindex: true },
+    { file: "saved.html", path: "/saved", title: "저장한 리서치", desc: "저장한 리서치 목록이에요.", body: saved(auth), noindex: true },
     { file: "privacy.html", path: "/privacy", title: "개인정보 처리방침", desc: "AX 트렌드 레이더가 처리하는 개인정보와 그 목적, 보유 기간, 국외 이전을 적었어요.",
       body: legal("개인정보 처리방침", "무엇을 받고, 왜 받고, 언제 지우는지 적었어요. 로그인하지 않고 읽기만 하면 개인정보를 받지 않아요.", { href: "/terms", label: "이용약관" }, privacyBody(auth)) },
     { file: "terms.html", path: "/terms", title: "이용약관", desc: "AX 트렌드 레이더 이용 조건이에요.",

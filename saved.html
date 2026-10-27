@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>저장한 브리핑 · AX 트렌드 레이더</title>
-<meta name="description" content="저장한 브리핑 목록이에요." />
+<title>저장한 리서치 · AX 트렌드 레이더</title>
+<meta name="description" content="저장한 리서치 목록이에요." />
 
 <meta name="robots" content="noindex" />
 <meta name="theme-color" content="#050505" />
@@ -26,27 +26,27 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
 <div class="sv" id="saved-root">
 <header class="sv-head">
-  <div class="kicker"><b>내 브리핑</b>이 기기 · 로그인하면 어느 기기에서나</div>
-  <h1 class="page">저장한 브리핑</h1>
-  <p class="lede" id="sv-note">브리핑에서 저장을 누르면 여기에 모여요. 로그인하면 다른 기기에서도 같은 목록을 봐요.</p>
+  <div class="kicker"><b>내 리서치</b>이 기기 · 로그인하면 어느 기기에서나</div>
+  <h1 class="page">저장한 리서치</h1>
+  <p class="lede" id="sv-note">리서치 글에서 저장을 누르면 여기에 모여요. 로그인하면 다른 기기에서도 같은 목록을 봐요.</p>
 </header>
 <ul class="list sv-list" id="sv-list"></ul>
 <div class="sv-empty" id="sv-empty" hidden>
   <span class="acc-ico"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10v16l-5-3.5L7 20z"/></svg></span>
-  <p><b>아직 저장한 브리핑이 없어요.</b></p>
-  <p>브리핑 제목 아래 <b>저장</b>을 누르면 여기에 모여요.</p>
-  <a class="btn ghost" href="/briefs">브리핑 보기</a>
+  <p><b>아직 저장한 리서치가 없어요.</b></p>
+  <p>리서치 제목 아래 <b>저장</b>을 누르면 여기에 모여요.</p>
+  <a class="btn ghost" href="/briefs">리서치 보기</a>
 </div>
 <section class="sv-acct" id="account" aria-labelledby="h-acct">
   <h2 id="h-acct">계정</h2>
   <div data-in hidden>
-    <p class="sv-who"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span><b data-user></b><small>로그인한 계정 · 저장한 브리핑이 어느 기기에서나 이어져요</small></span></p>
+    <p class="sv-who"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span><b data-user></b><small>로그인한 계정 · 저장한 리서치가 어느 기기에서나 이어져요</small></span></p>
     <div class="acc-row"><button class="btn ghost" type="button" data-out>로그아웃</button></div>
     <details class="sv-del"><summary>탈퇴</summary>
       <p>탈퇴하면 계정과 저장한 목록, 동의 기록을 지체 없이 지워요. 되돌릴 수 없어요.</p>
@@ -95,8 +95,8 @@
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let ev = null;
   const steps = ios
-    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"]
-    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"];
+    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"]
+    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"];
   $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
   const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
   addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });

@@ -100,7 +100,12 @@
   /* the app on a phone (2026-10-26): the title page's cases as one rounded group, the lists as cards */
   .pg .art-head:has(+.case-list){margin:0} .pg .art-head:has(+.case-list) .lede{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   /* (the title page keeps its topics and buttons; its tags are on the last page's related pieces and the tag pages) */
-  .pg .art-head:has(+.case-list) .chips{display:none} .pg .art-head .act-row{margin-top:10px}
+  .pg .art-head .chips,.pg .art-head .act-row:not(:has(button)){display:none} .pg .art-head .act-row{margin-top:10px}
+  .pg .art-head .topics{gap:2px 10px;font-size:13px;margin-bottom:0} .pg .art-head .meta{margin-bottom:8px}
+  /* (a short screen: the topics are on the 지표 pages, each with its link) */
+  @media(max-height:700px){ .pg .art-head .topics{display:none} }
+  /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
+  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips{display:none} .pg .rel .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
@@ -114,23 +119,23 @@
 
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
-  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 브리핑</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#explore">주제</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
 </header>
 
 <main>
 <div class="kicker"><b>주제</b>IT 영역</div>
   <h1 class="page">ERP·백오피스</h1>
   <p class="intro">재무·회계·구매·공급망·인사. 이 영역의 AX를 지표 → 리서치 → 공식 발표 순으로 모았어요. 지표와 발표 목록은 매일 다시 계산돼요.</p>
-  <section class="t-sec" id="data" aria-labelledby="h-t-data"><h2 id="h-t-data">지표</h2><div class="ind" id="ind-dom-erp"><p class="ind-k">IT 영역 · ERP·백오피스</p><p class="ind-n"><b>10건</b><span>최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기</span></p><p class="ind-t">ERP·백오피스, SAP 발표가 가장 많아요</p><ol class="ind-bars"><li><span class="n">SAP</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">7건</span></li><li><span class="n">McKinsey</span><i aria-hidden="true"><span style="width:29%"></span></i><span class="v">2건</span></li><li><span class="n">Capgemini</span><i aria-hidden="true"><span style="width:14%"></span></i><span class="v">1건</span></li></ol><p class="ind-src">회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 2026년 10월 26일 기준 · <a href="/#c-dom-erp">지표에서 보기</a></p></div></section>
+  <section class="t-sec" id="data" aria-labelledby="h-t-data"><h2 id="h-t-data">지표</h2><div class="ind" id="ind-dom-erp"><p class="ind-k">IT 영역 · ERP·백오피스</p><p class="ind-n"><b>10건</b><span>최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기</span></p><p class="ind-t">ERP·백오피스, SAP 발표가 가장 많아요</p><ol class="ind-bars"><li class="top"><span class="n">SAP</span><i aria-hidden="true"><span style="width:100%"></span></i><span class="v">7건</span></li><li><span class="n">McKinsey</span><i aria-hidden="true"><span style="width:29%"></span></i><span class="v">2건</span></li><li><span class="n">Capgemini</span><i aria-hidden="true"><span style="width:14%"></span></i><span class="v">1건</span></li></ol><p class="ind-src">회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일 · 2026년 10월 26일 기준 · <a href="/#c-dom-erp">지표에서 보기</a></p></div></section>
   <section class="t-sec" id="research" aria-labelledby="h-t-res"><h2 id="h-t-res">이 주제의 리서치 <span>0편</span></h2><p class="none">아직 이 주제를 주로 다룬 리서치가 없어요. 아래 공식 발표가 쌓이면 리서치로 이어져요. <a href="/briefs">리서치 전체 보기</a></p></section>
-  <section class="t-sec" id="news" aria-labelledby="h-t-news"><h2 id="h-t-news">최근 공식 발표 <span>0건</span></h2><p class="none">최근 14일 동안 이 영역의 공식 발표가 없어요.</p></section>
+  <section class="t-sec" id="news" aria-labelledby="h-t-news"><h2 id="h-t-news">최근 주요 공식 발표 <span>0건</span></h2><p class="none">최근 14일 동안 이 영역에서 주요 목록에 든 공식 발표는 없어요. 위 지표는 30일 동안의 발표를 모두 센 숫자예요.</p></section>
   <nav class="r-more" aria-label="주제 페이지"><h2>주제 페이지</h2><p><a href="/briefs/topic/erp" aria-current="page">ERP·백오피스 <span>0</span></a><a href="/briefs/topic/crm">CRM·고객 <span>2</span></a><a href="/briefs/topic/cloud">클라우드·인프라 <span>2</span></a><a href="/briefs/topic/data">데이터·분석 <span>0</span></a><a href="/briefs/topic/work">업무 도구 <span>1</span></a><a href="/briefs/topic/security">보안·규제 <span>2</span></a><a href="/briefs/topic/agents">AI 에이전트 <span>0</span></a></p></nav>
   <aside class="install" id="install">
   <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
   <div class="row alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
-    <label><input type="checkbox" value="monthly" checked /> 월간 리포트</label>
+    <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
     <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
     <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>
   </div>
@@ -154,12 +159,12 @@ OneSignalDeferred.push(async (OneSignal) => {
     const on = OneSignal.Notifications.permission && OneSignal.User.PushSubscription.optedIn;
     const tags = on ? await OneSignal.User.getTags() : {};
     if (on) boxes.forEach((b) => (b.checked = tags[b.value] === "1"));
-    $("push-on").textContent = on ? "주제 저장" : "알림 받기"; $("push-off").hidden = !on;
-    $("push-state").textContent = on ? "알림이 켜져 있어요. 주제를 바꾸고 저장할 수 있어요." : "";
+    $("push-on").textContent = on ? "알림 저장" : "알림 받기"; $("push-off").hidden = !on;
+    $("push-state").textContent = on ? "알림이 켜져 있어요. 받을 형식을 바꾸고 저장할 수 있어요." : "";
   };
   $("push-on").addEventListener("click", async () => {
     const picked = boxes.filter((b) => b.checked).map((b) => b.value);
-    if (!picked.length) { $("push-state").textContent = "받을 주제를 하나 이상 골라 주세요."; return; }
+    if (!picked.length) { $("push-state").textContent = "받을 형식을 하나 이상 골라 주세요."; return; }
     if (!OneSignal.Notifications.isPushSupported()) { $("push-state").textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? "아이폰은 먼저 홈 화면에 추가한 뒤, 그 앱에서 알림을 켤 수 있어요." : "이 브라우저는 알림을 지원하지 않아요."; return; }
     await OneSignal.Notifications.requestPermission();
     if (!OneSignal.Notifications.permission) { $("push-state").textContent = "브라우저에서 알림이 허용되지 않았어요."; return; }
@@ -182,8 +187,9 @@ pager([
   { id: "data", name: "지표", title: "지표", pages: [[...lead, $("#data")]] },
   { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
     sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
-  { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none")]] },
-  { id: "news", name: "공식 발표", title: "최근 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li")], list: ul("t-news") },
+  { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news") },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
   { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
   { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },
 ], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
@@ -221,8 +227,8 @@ pager([
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let ev = null;
   const steps = ios
-    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"]
-    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 브리핑에서 <b>알림 받기</b>를 켜요"];
+    ? ["화면 아래(또는 위) <b>공유 버튼</b>(네모에 위쪽 화살표)을 눌러요", "목록에서 <b>홈 화면에 추가</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"]
+    : ["브라우저 오른쪽 위 <b>메뉴(⋮)</b>를 눌러요", "<b>홈 화면에 추가</b> 또는 <b>앱 설치</b>를 눌러요", "홈 화면의 <b>AX 레이더</b>를 열고, 리서치에서 <b>알림 받기</b>를 켜요"];
   $("appsheet-steps").innerHTML = steps.map((t) => "<li>" + t + "</li>").join("");
   const show = (on) => { bar.hidden = !on; document.body.classList.toggle("has-appbar", on); };
   addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; show(true); });

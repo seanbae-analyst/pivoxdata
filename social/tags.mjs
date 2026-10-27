@@ -9,7 +9,7 @@ export const SERIES = {
   monthly: { name: "월간 AX 리포트", about: "Ramp AI Index로 보는 미국 기업의 AI 도입, 매달" },
   breaking: { name: "주요 변화", about: "평소와 크게 다른 일이 생긴 날" },
   weekly: { name: "이번 주 정리", about: "한 주 동안 잡힌 작은 변화" },
-  roundup: { name: "월간 정리", about: "한 달 동안의 브리핑을 한 편으로" },
+  roundup: { name: "월간 정리", about: "한 달 동안의 리서치를 한 편으로" },
   flow: { name: "AX 흐름", about: "특별한 사건 없는 날의 요즘 숫자" },
 };
 // which series a story belongs to (story.json: mode, format, topic). There is no "누가 앞서나" series: the race

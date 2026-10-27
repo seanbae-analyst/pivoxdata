@@ -156,11 +156,48 @@ try {
     await pg.tap(`.pgr-track .f-o[data-v="${topic.v}"]`); await pause(300);
     ok(`주제 '${topic.v}' → 페이지에 ${topic.n}편`, (await inTrack()).length === topic.n);
     const before = pg.url();
-    await Promise.all([pg.waitForNavigation(), pg.tap(".pgr-track .r-item .r-card")]);
+    // the list starts on the second page (the first is the search and the filters): turn to it, then open a piece
+    await pg.evaluate(() => { const t = document.querySelector(".pgr-track"); t.scrollTo({ left: t.clientWidth, behavior: "instant" }); }); await pause(400);
+    ok("폰: 옆으로 넘기면 목록", await pg.isVisible(".pgr-track .r-item .r-card"));
+    await shot(pg, "list-phone-page2");
+    await Promise.all([pg.waitForNavigation(), pg.tap(".pgr-track .r-item:not([hidden]) .r-card")]);
     ok("폰: 글로 들어간다", await pg.isVisible("article.brief h1, .pgr-track h1"));
     await shot(pg, "detail-phone");
     await pg.goBack({ waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready"); await pause(300);
-    ok("폰: 뒤로가기 → 같은 주소와 같은 목록", pg.url() === before && (await inTrack()).length === topic.n, `${pg.url()} vs ${before}`);
+    const back = new URL(pg.url());
+    ok("폰: 뒤로가기 → 같은 주소(필터)와 같은 목록", back.pathname + back.search === new URL(before).pathname + new URL(before).search && (await inTrack()).length === topic.n, `${pg.url()} vs ${before}`);
+    // Korean typed on a phone keyboard: each syllable is composed (IME) — the box keeps it whole, and keeps the focus
+    await pg.goto(B + "/briefs", { waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready");
+    const cdp = await ctx.newCDPSession(pg);
+    await pg.tap('input[name="q"]');
+    for (const [jamo, syl] of [["ㄱ", "거"], ["ㅂ", "버"]]) {
+      await cdp.send("Input.imeSetComposition", { text: jamo, selectionStart: 1, selectionEnd: 1 }); await pause(400);
+      await cdp.send("Input.imeSetComposition", { text: syl, selectionStart: 1, selectionEnd: 1 }); await pause(400);
+      await cdp.send("Input.insertText", { text: syl }); await pause(400);
+    }
+    const ime = await pg.evaluate(() => ({ v: document.querySelector('input[name="q"]').value, focus: document.activeElement?.name }));
+    ok("폰: 한글을 조합해 쳐도 글자가 깨지지 않고 포커스가 남는다 ('거버')", ime.v === "거버" && ime.focus === "q", JSON.stringify(ime));
+    await pg.evaluate(() => document.activeElement.blur()); await pause(300);
+    const kept = await inTrack(), expect = await pg.$$eval(".r-item", (l) => l.filter((li) => li.dataset.q.includes("거버")).map((li) => li.id));
+    ok(`폰: 입력이 끝나면 '거버'를 담은 ${expect.length}편만 페이지에`, expect.length > 0 && JSON.stringify(kept.sort()) === JSON.stringify(expect.sort()));
+    // a facet pressed from the keyboard keeps the focus when the pages are laid out again
+    await pg.focus('.pgr-track .f-o[data-f="format"]:not([data-v=""])'); await pg.keyboard.press("Enter"); await pause(300);
+    ok("폰: 키보드로 누른 필터 버튼이 포커스를 잃지 않는다", await pg.evaluate(() => document.activeElement?.matches?.(".f-o")));
+    await ctx.close();
+  }
+  // nothing on a phone page is cut off under the tab bar: no page needs scrolling up and down (the owner's rule)
+  section("폰 페이지가 화면 안에 들어간다 (위아래로 넘치지 않음)");
+  for (const [w, h] of [[390, 844], [375, 667]]) {
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true }), pg = await ctx.newPage();
+    await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
+    const over = [];
+    // (a piece's case pages and title page were already taller than a 375×667 screen before 2026-10-27 — main measured
+    // +60…+234px — so there the pieces are left out; the list, the topic and the format pages are new and must fit)
+    for (const u of ["/briefs", "/briefs/topic/cloud", "/briefs/topic/erp", "/briefs/series/news", ...(h >= 800 ? pieces.map((b) => `/briefs/${b.slot}`) : [])]) {
+      await pg.goto(B + u, { waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready"); await pause(300);
+      over.push(...(await pg.$$eval(".pgr-track .pg", (l) => l.map((p) => ({ n: p.getAttribute("aria-label"), d: p.scrollHeight - p.clientHeight })).filter((x) => x.d > 1))).map((x) => `${u} ${x.n} +${x.d}px`));
+    }
+    ok(`${w}×${h}: 리서치 목록 · 주제 · 형식${h >= 800 ? " · 글" : ""} 페이지에 넘치는 장이 없다`, !over.length, over.join(", "));
     await ctx.close();
   }
 
@@ -177,7 +214,8 @@ try {
     if (phone) await Promise.all([pg.waitForNavigation(), pg.tap('.tabbar [data-tab="briefs"]')]);
     else await Promise.all([pg.waitForNavigation(), pg.click('.topbar .nav a[href="/briefs"]')]);
     ok(`${tag}: 홈 → 리서치 목록`, new URL(pg.url()).pathname === "/briefs");
-    await Promise.all([pg.waitForNavigation(), phone ? pg.tap(".r-item .r-card") : pg.click(".r-item .r-card")]);
+    if (phone) { await pg.waitForSelector("html.pgr-ready"); await pg.evaluate(() => { const t = document.querySelector(".pgr-track"); t.scrollTo({ left: t.clientWidth, behavior: "instant" }); }); await pause(400); }
+    await Promise.all([pg.waitForNavigation({ waitUntil: "networkidle" }), phone ? pg.tap(".pgr-track .r-item .r-card") : pg.click(".r-item .r-card")]);
     const text = await pg.evaluate(() => [...document.querySelectorAll("article.brief .part p, .pgr-track .part p, .pgr-track .flow p")].map((p) => p.textContent).join(" ").length);
     ok(`${tag}: 목록 → 글, 본문이 로그인 없이 다 보인다 (${text}자)`, text > 500 && !/\/login/.test(pg.url()));
     await ctx.close();
@@ -212,6 +250,12 @@ try {
     // a piece shows its topics' indicators
     await pg.goto(`${B}/briefs/${pieces[0].slot}`, { waitUntil: "networkidle" });
     ok("글: 주제 링크와 관련 지표", (await pg.$$eval(".topics a", (l) => l.length)) > 0 && (await pg.$$eval(".inds .ind", (l) => l.length)) > 0);
+    // the numbers come in when the page opens (briefs/indicators.json), so a published page does not change every day
+    const nums = await pg.$$eval(".inds .ind", (l) => l.map((x) => x.querySelector(".ind-n b")?.textContent ?? ""));
+    const want = read("briefs/indicators.json").cards;
+    ok(`글: 관련 지표 ${nums.length}개에 오늘 숫자가 채워진다 (${nums.join(", ")})`, nums.length > 0 && nums.every((n, i) => n && Object.values(want).some((c) => c.big === n)));
+    const html = fs.readFileSync(path.join(ROOT, "briefs", `${pieces[0].slot}.html`), "utf8");
+    ok("글 페이지 파일에는 그날의 숫자가 박혀 있지 않다 (매일 다시 쓰이지 않음)", !/class="ind-n"/.test(html));
     await shot(pg, "detail-desktop", true);
     await ctx.close();
   }

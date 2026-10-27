@@ -72,7 +72,7 @@ function notice() {
   if (document.querySelector(".acct-notice") || location.pathname === "/login") return;
   const n = document.createElement("div");
   n.className = "acct-notice"; n.setAttribute("role", "status");
-  n.innerHTML = `<span>이용약관 · 개인정보 처리방침이 바뀌었어요. 다시 동의하면 저장한 브리핑이 계정과 이어져요.</span><a href="/login?consent=1&amp;next=${encodeURIComponent(location.pathname + location.search)}">확인하기</a>`;
+  n.innerHTML = `<span>이용약관 · 개인정보 처리방침이 바뀌었어요. 다시 동의하면 저장한 리서치가 계정과 이어져요.</span><a href="/login?consent=1&amp;next=${encodeURIComponent(location.pathname + location.search)}">확인하기</a>`;
   document.body.append(n);
 }
 
@@ -82,7 +82,7 @@ function paintMenus() {
   const n = list().length, me = auth.user();
   for (const a of document.querySelectorAll('[data-acct="saved"]')) {
     const c = a.querySelector(".n"); if (c) c.textContent = n ? String(n) : "";
-    if (a.classList.contains("ic-only")) a.setAttribute("aria-label", n ? `저장한 브리핑 ${n}개` : "저장한 브리핑");
+    if (a.classList.contains("ic-only")) a.setAttribute("aria-label", n ? `저장한 리서치 ${n}개` : "저장한 리서치");
   }
   for (const a of document.querySelectorAll('[data-acct="login"]')) {
     a.href = me ? "/saved#account" : `/login?next=${encodeURIComponent(location.pathname + location.hash)}`;
@@ -98,7 +98,7 @@ function toast(text, link) {
   let t = document.querySelector(".pd-toast");
   if (!t) { t = document.createElement("div"); t.className = "pd-toast"; t.setAttribute("role", "status"); document.body.append(t); }
   t.innerHTML = ""; t.append(Object.assign(document.createElement("span"), { textContent: text }));
-  if (link) t.append(Object.assign(document.createElement("a"), { href: "/saved", textContent: "저장한 브리핑 보기" }));
+  if (link) t.append(Object.assign(document.createElement("a"), { href: "/saved", textContent: "저장한 리서치 보기" }));
   t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 3200);
 }
 // `icon`: the round icon of a phone's top bar (its words go to the screen reader)

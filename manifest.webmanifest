@@ -1,7 +1,7 @@
 {
   "name": "AX 트렌드 레이더",
   "short_name": "AX 레이더",
-  "description": "기업의 AI 전환(AX)을 숫자와 공식 발표로 — 매일 갱신, AX 브리핑",
+  "description": "기업의 AI 전환(AX)을 숫자와 공식 발표로 — 매일 갱신, AX 리서치",
   "lang": "ko",
   "start_url": "/briefs?source=app",
   "scope": "/",
@@ -14,7 +14,7 @@
     { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "AX 브리핑", "url": "/briefs" },
+    { "name": "AX 리서치", "url": "/briefs" },
     { "name": "공식 발표", "url": "/#news" },
     { "name": "오늘의 AX 지표", "url": "/" }
   ]

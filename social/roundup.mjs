@@ -64,7 +64,7 @@ if (route) { try { article = await fromClaude(route); } catch (e) { if (!(e inst
 // 2–6 summary lines). Its words are the briefings' own, already public — checked here only to say so in the log
 const listed = briefs.slice(-ARTICLE.sections[1]), points = listed.flatMap((b) => b.st.article.takeaways ?? []);
 const fallback = {
-  title: `${label} AX 정리 — 브리핑 ${briefs.length}편`, lede: `${label}에 올린 브리핑을 한곳에 모았어요.`,
+  title: `${label} AX 정리 — 리서치 ${briefs.length}편`, lede: `${label}에 올린 리서치를 한곳에 모았어요.`,
   sections: listed.map((b) => ({ heading: plain(b.st.article.title), body: plain(b.st.article.lede), refs: [briefs.indexOf(b) + 1] })),
   takeaways: (points.length >= ARTICLE.takeaways[0] ? points : listed.map((b) => b.st.article.title)).slice(0, 5).map(plain),
 };

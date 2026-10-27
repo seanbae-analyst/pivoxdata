@@ -102,7 +102,7 @@ async function main() {
   // licence asks for the citation) for an AX post, and the official announcements behind the IT-domain cards
   const usesDomains = slides.some((x) => String(x.id).startsWith("dom-"));
   const sourcesLine = plan.mode === "news"
-    ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"} — 원문 링크는 브리핑에`
+    ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"} — 원문 링크는 리서치 글에`
     : `출처: Ramp AI Index (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 결제 데이터${usesDomains ? " · 회사·정부 공식 발표" : ""}`;
   const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능" : "#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드";
   // the long version of this post is its briefing page (social/briefs.mjs), at the post's folder name
