@@ -576,7 +576,7 @@ const listPage = ({ p, title, desc, kicker, h, intro, list, finder = false, more
 const topicLinks = (cur) => `<nav class="r-more" aria-label="주제 페이지"><h2>주제 페이지</h2><p>${DOMAINS.map((d) => `<a href="/briefs/topic/${d.id}"${d.id === cur ? ' aria-current="page"' : ""}>${esc(d.name)} <span>${inTopic(d.id).length}</span></a>`).join("")}</p></nav>`;
 
 put("index.html", listPage({ p: "/briefs", title: `리서치 · ${NAME}`, desc: "IT 컨설팅 관점의 AX 리서치 — 회사·정부의 공식 발표를 사례로 읽고, 매일 재는 지표와 함께 봐요.", kicker: "IT 컨설팅 관점의 AX", h: "리서치",
-  intro: `회사·정부가 직접 낸 발표를 IT 컨설팅 사례(누가 · 무엇을 · 어디에 · 어떻게)로 읽고, 매일 재는 지표와 이어서 봐요. 주제는 IT 영역, 형식은 글의 꼴이에요. <a href="/briefs/feed.xml">RSS</a>`, list: briefs, finder: true, more: topicLinks(null) }));
+  intro: `회사·정부가 직접 낸 발표를 IT 컨설팅 사례(누가 · 무엇을 · 어디에 · 어떻게)로 읽고, 매일 재는 지표와 이어서 봐요. 주제는 IT 영역, 형식은 글의 꼴이에요. <a href="/briefs/feed.xml">RSS</a>`, list: briefs, finder: true }));
 for (const id of present) put(`series/${id}.html`, listPage({ p: `/briefs/series/${id}`, title: `${SERIES[id].name} · 리서치`, desc: SERIES[id].about, kicker: "형식", h: esc(SERIES[id].name),
   intro: `${esc(SERIES[id].about)}. <a href="/briefs?format=${id}">리서치 목록에서 주제와 함께 고르기</a>`, list: briefs.filter((b) => b.series === id) }));
 const KINDNAME = { theme: "테마", industry: "업종", company: "회사·기관" };
@@ -679,12 +679,7 @@ function storyHtml(b) {
     + (view ? `<p class="sv-k">${esc(viewName(view))}</p>${viewLines(view.body).map((t) => `<p class="sv-q">${esc(t)}</p>`).join("")}` : "")
     + `<a class="st-more" href="${to()}">이야기 전체 읽기 →</a></div>`;
 }
-// the home page, research first (Toss Tech's front page): this week's story above, then the latest pieces (not the
-// story's own), then 찾아보기 — the topics, each with its pieces and its indicator (official announcements, 30 days),
-// apart from the formats (a16z) — and the shared frame (nav, sitemap with every page)
-const latest = briefs.filter((b) => b !== featured).slice(0, 4).map(item).join("");
-const topicsHtml = DOMAINS.map((d) => `<li><a href="/briefs/topic/${d.id}"><b>${esc(d.name)}</b><span class="ab">${esc(d.about)}</span><span class="nums"><span>리서치 ${inTopic(d.id).length}편</span><span>공식 발표 ${esc(CARDS.get(`dom-${d.id}`)?.big ?? "0건")} · 30일</span></span></a></li>`).join("");
-const formatsHtml = present.map((id) => { const l = briefs.filter((b) => b.series === id);
-  return `<li><a href="/briefs/series/${id}"><b>${esc(SERIES[id].name)}</b><span class="ab">${esc(SERIES[id].about)}</span><span class="nums"><span>${l.length}편</span><span>최근 ${md(l[0].st.date)}</span></span></a></li>`; }).join("");
-writePages({ "index.html": { "t-story": storyHtml(featured), "t-briefs": latest, "t-topics": topicsHtml, "t-formats": formatsHtml, "t-research-n": `리서치 전체 ${briefs.length}편`, "t-glossary": glossaryHtml() } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
+// the home page: this week's story only — the list of pieces, their topics and formats are /briefs's, not repeated
+// there (2026-10-27 owner: "겹치는 거 다 없애줘"); and the shared frame (nav, sitemap with every page)
+writePages({ "index.html": { "t-story": storyHtml(featured), "t-glossary": glossaryHtml() } }, briefs[0]?.st.date ?? new Date().toISOString().slice(0, 10));
 console.log(`${briefs.length} piece(s), ${present.length} format(s), ${DOMAINS.length} topic pages, ${TAGS.size} tags at ${SITE}/briefs${pending.length ? ` — and ${pending.length} draft page(s), noindex and unlisted until posted: ${pending.map((b) => b.slot).join(", ")}` : ""}`);

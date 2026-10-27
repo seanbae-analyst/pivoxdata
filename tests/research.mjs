@@ -253,9 +253,16 @@ try {
     const ctx = await context(false), pg = await ctx.newPage();
     await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
     await pg.goto(B + "/", { waitUntil: "networkidle" });
-    const latest = await pg.$$eval("#briefs .r-item", (l) => l.length), featured = await pg.$eval("#story .st-t a", (a) => a.getAttribute("href"));
-    ok(`홈: 이번 주 이야기 + 최신 리서치 ${latest}편 (이야기 글은 빼고)`, latest === Math.min(4, pieces.length - 1) && !(await pg.$(`#briefs a[href="${featured}"]`)));
-    ok("홈: 찾아보기 — 주제 7개와 형식", (await pg.$$eval("#topics .ex-list>li", (l) => l.length)) === 7 && (await pg.$$eval("#formats .ex-list>li", (l) => l.length)) >= 1);
+    // the home tells this week's story once; the list, its topics and formats are /briefs's only (2026-10-27 "겹치는 거 다 없애줘")
+    const featured = await pg.$eval("#story .st-t a", (a) => a.getAttribute("href"));
+    const repeats = await pg.$$eval("main .r-item, main .ex-list, #briefs, #explore", (l) => l.length);
+    ok(`홈: 이번 주 이야기(${featured}) 하나 + 리서치 전체로 가는 링크, 리서치 목록 · 찾아보기는 홈에 없다`, pieces.some((x) => featured === `/briefs/${x.slot}`) && repeats === 0 && Boolean(await pg.$('#story a[href="/briefs"]')));
+    const list = await (await fetch(B + "/briefs")).text();
+    ok("리서치 목록: 주제는 필터 한 곳에만 (주제 페이지 묶음을 따로 두지 않음)", !list.includes('class="r-more"') && list.includes('data-f="topic"'));
+    await pg.goto(B + "/#explore", { waitUntil: "networkidle" });
+    await pg.waitForURL(/\/briefs$/, { timeout: 5000 }).catch(() => {});
+    ok("옛 홈 주소(/#explore)는 리서치 목록으로", new URL(pg.url()).pathname === "/briefs", pg.url());
+    await pg.goto(B + "/", { waitUntil: "networkidle" });
     const cardLinks = await pg.$$eval(".ins .c-res", (l) => l.map((a) => a.getAttribute("href")));
     ok(`지표 카드 ${cardLinks.length}장이 주제 페이지로 이어진다`, cardLinks.length > 0 && cardLinks.every((h) => /^\/briefs\/topic\/[a-z]+$/.test(h)));
     await pg.goto(B + cardLinks[0], { waitUntil: "networkidle" });
