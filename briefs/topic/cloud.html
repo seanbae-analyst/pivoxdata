@@ -105,7 +105,10 @@
   /* (a short screen: the topics are on the 지표 pages, each with its link) */
   @media(max-height:700px){ .pg .art-head .topics{display:none} }
   /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
-  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips{display:none} .pg .rel .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
+  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
+  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
+  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
+  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
@@ -133,7 +136,7 @@
   <aside class="install" id="install">
   <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
-  <div class="row alerts"><b>새 리서치 알림</b>
+  <div class="row alerts" id="alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
     <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
     <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
@@ -188,7 +191,7 @@ pager([
   { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
     sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
   { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news") },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news"), count: m.querySelectorAll("#news .t-news>li").length },
   { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
   { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
   { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },

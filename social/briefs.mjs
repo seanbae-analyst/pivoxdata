@@ -175,33 +175,40 @@ const topicIndicator = (id) => indicator(`dom-${id}`, { name: TOPIC[id].name, ab
 const indicatorShell = (cardId, topic = null) => {
   const c = CARDS.get(cardId), label = esc(c?.k ?? `IT 영역 · ${TOPIC[topic]?.name ?? ""}`);
   return `<div class="ind" id="ind-${cardId}" data-ind="${cardId}"><p class="ind-k">${topic ? `<a href="/briefs/topic/${topic}">${label}</a>` : label}</p>`
-    + `<p class="ind-src"><a href="/#c-${cardId}">지표에서 보기</a>${topic ? ` · <a href="/briefs/topic/${topic}">주제 페이지</a>` : ""}</p></div>`;
+    + `<p class="ind-src"><a class="to-card" href="/#c-${cardId}">지표에서 보기</a>${topic ? ` · <a href="/briefs/topic/${topic}">주제 페이지</a>` : ""}</p></div>`;
 };
-const INDICATORS = { as_of: INS.built_at ?? null, cards: Object.fromEntries([...CARDS].filter(([id]) => /^dom-|^ax-all$/.test(id)).map(([id, c]) => [id,
-  { k: c.k, big: c.big, bl: c.bl, title: c.title, src: c.src, rank: c.viz?.find((v) => v.kind === "rank")?.items?.slice(0, 3) ?? [] }])) };
+const INDICATORS = { as_of: INS.built_at ?? null, cards: Object.fromEntries([
+  ...[...CARDS].filter(([id]) => /^dom-|^ax-all$/.test(id)).map(([id, c]) => [id, { k: c.k, big: c.big, bl: c.bl, title: c.title, src: c.src, rank: c.viz?.find((v) => v.kind === "rank")?.items?.slice(0, 3) ?? [] }]),
+  // (a domain with no announcement in 30 days has no card on the home page that day: 0건, and no link to a card)
+  ...DOMAINS.filter((d) => !CARDS.has(`dom-${d.id}`)).map((d) => [`dom-${d.id}`, { k: `IT 영역 · ${d.name}`, big: "0건", bl: `최근 30일 공식 발표 · ${d.about} 이야기`, title: null, src: "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일", rank: [], home: false }]),
+]) };
 // (filled in by the piece's page script — text only, never markup)
 const FILL_INDICATORS = `
-const boxes = [...document.querySelectorAll(".ind[data-ind]")];
-if (boxes.length) try {
-  const stop = new AbortController(), t = setTimeout(() => stop.abort(), 1500);
+const fillIndicators = async () => {
+  const boxes = [...document.querySelectorAll(".ind[data-ind]")]; if (!boxes.length) return false;
+  try {
+  const stop = new AbortController(), t = setTimeout(() => stop.abort(), 4000);
   const data = await (await fetch("/briefs/indicators.json", { signal: stop.signal })).json(); clearTimeout(t);
   const day = (d) => d ? +d.slice(0, 4) + "년 " + +d.slice(5, 7) + "월 " + +d.slice(8, 10) + "일 기준" : "";
   const mk = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
   for (const box of boxes) {
     const c = data.cards?.[box.dataset.ind], src = box.querySelector(".ind-src"); if (!c) continue;
+    if (c.home === false) { const a = src.querySelector(".to-card"); if (a) { a.nextSibling?.textContent?.startsWith(" · ") && a.nextSibling.remove(); a.remove(); } }
     const n = mk("p", "ind-n"); n.append(mk("b", null, c.big), mk("span", null, c.bl));
     const top = Math.max(1, ...c.rank.map((x) => x.value)), bars = mk("ol", "ind-bars");
     for (const x of c.rank) { const li = mk("li", x.value === top ? "top" : ""), i = mk("i"), fill = mk("span"); fill.style.width = Math.round((x.value / top) * 100) + "%"; i.append(fill); i.setAttribute("aria-hidden", "true"); li.append(mk("span", "n", x.name), i, mk("span", "v", x.label)); bars.append(li); }
     box.insertBefore(n, src); if (c.title) box.insertBefore(mk("p", "ind-t", c.title), src); if (c.rank.length) box.insertBefore(bars, src);
-    src.prepend(c.src + (data.as_of ? " · " + day(data.as_of) : "") + " · ");
+    src.prepend(c.src + (data.as_of ? " · " + day(data.as_of) : "") + (src.childElementCount ? " · " : ""));
   }
-} catch {}
+  return true;
+  } catch { return false; }
+};
 `;
 // the phone install box (PWA) and the push alerts (OneSignal: the topics are tags, social/notify.mjs sends to them)
 const INSTALL = `<aside class="install" id="install">
   <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
-  <div class="row alerts"><b>새 리서치 알림</b>
+  <div class="row alerts" id="alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
     <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
     <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
@@ -279,18 +286,23 @@ if (document.documentElement.classList.contains("paged") && cases.length) {
     const li = document.createElement("li"); li.append(a); ol.append(li);
   });
 }
-pager([
+// 더 읽기: the previous/next links, then the related pieces and the links a screenful at a time (it grows with the archive)
+const moreLi = $(".more-links") && Object.assign(document.createElement("li"), { className: "more-li" }); if (moreLi) moreLi.append($(".more-links"));
+const p = pager([
   { id: "top", name: "리서치", title: "처음", pages: [[$(".art-head"), caseList, hint]] },
   ...text,
   { id: "sum", name: "정리", title: "정리", group: "마무리", pages: [[$(".sum")]] },
   { id: "basis", name: "근거", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
   { id: "data", name: "지표", title: "관련 지표", group: "마무리", lead: [$(".inds>h2"), $(".inds-intro")], items: [...art.querySelectorAll(".inds .ind")], list: () => Object.assign(document.createElement("div"), { className: "inds-pg" }), count: 0 },
-  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", pages: [[$(".pn"), $(".rel"), $(".more-links")]] },
+  { id: "next", name: "더 읽기", title: "더 읽기", group: "마무리", lead: [$(".pn"), $(".rel>h2")].filter(Boolean), items: [...art.querySelectorAll(".rel .r-item"), moreLi].filter(Boolean),
+    list: () => Object.assign(document.createElement("ul"), { className: "list r-list rel-list" }), count: 0 },
 ], { tab: () => "briefs", back: { href: "/briefs", label: "리서치" } });
 // 링크 복사 goes up into the top bar as an icon, beside 저장 (account.js), so the title page keeps its room; on a phone it
 // opens the share sheet (SHARE below)
 const share = document.querySelector(".act-row [data-share]"), where = document.querySelector(".pgr-top .pgr-where"); // (the title page is out of the article by now)
 if (share && where) { share.className = "share-ic"; share.setAttribute("aria-label", "링크 공유"); where.before(share); }
+// today's numbers in 관련 지표, then the pages measured again
+fillIndicators().then((did) => { if (did) p.refresh(); });
 </script>`;
 // 링크 복사 (Toss Tech's 공유하기): a phone's share sheet where there is one, else the address on the clipboard, else
 // the address to copy by hand
@@ -303,6 +315,9 @@ const SHARE = `<script>
     if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({ title: document.title, url }); return; }
     await navigator.clipboard.writeText(url); label.textContent = "링크를 복사했어요";
     const say = document.querySelector("[data-share-status]"); if (say) say.textContent = "이 글의 링크를 복사했어요";
+    // (a phone without a share sheet — an app's own browser — has the icon only: a toast says it, like 저장's)
+    if (getComputedStyle(label).display === "none") { let t = document.querySelector(".pd-toast"); if (!t) { t = Object.assign(document.createElement("div"), { className: "pd-toast" }); t.setAttribute("role", "status"); document.body.append(t); }
+      t.textContent = "이 글의 링크를 복사했어요"; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2400); }
   } catch (e) { if (e && e.name === "AbortError") return; prompt("이 주소를 복사하세요", url); }
   b.dataset.t = setTimeout(() => { label.textContent = was; }, 2400);
 }); })();
@@ -375,7 +390,10 @@ const CSS = `
   /* (a short screen: the topics are on the 지표 pages, each with its link) */
   @media(max-height:700px){ .pg .art-head .topics{display:none} }
   /* 같이 읽기 on the phone's last page: the format, the title and the date of each, so it fits with the links */
-  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips{display:none} .pg .rel .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
+  .pg .rel .r-l,.pg .rel .r-th,.pg .rel .chips,.pg .rel-list .r-l,.pg .rel-list .r-th,.pg .rel-list .chips{display:none}
+  .pg .rel .r-card,.pg .rel-list .r-card{grid-template-columns:minmax(0,1fr);padding-bottom:12px}
+  .pg .rel-list .more-li{background:none;border-radius:0} .pg .rel-list .more-links{margin:8px 0 0}
+  .pg>.pn+h2{margin:28px 0 10px;font-size:15px}
   .case-list{list-style:none;margin:22px 0 0;padding:4px 14px;border-radius:18px;background:var(--surface-2)}
   .case-list li+li{border-top:1px solid var(--line)}
   .case-list a{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:10px;padding:11px 0;color:var(--ink);text-decoration:none}
@@ -459,8 +477,8 @@ const count = () => { if (hint) hint.replaceChildren("옆으로 넘기면 ", Obj
 count();
 // every row goes to the pager (so the contents list every piece); the ones shown are laid out right after
 const ch = !rows.length ? { id: "list", name: "리서치", title: "리서치 목록", pages: [lead] }
-  : finder ? { id: "list", name: "목록", title: "리서치 목록", head: Object.assign(document.createElement("h2"), { className: "pg-h", textContent: "리서치 목록" }), items: [...rows], list: ul, sub }
-  : { id: "list", name: "리서치", title: "리서치 목록", lead, items: [...rows], list: ul, sub };
+  : finder ? { id: "list", name: "목록", title: "리서치 목록", head: Object.assign(document.createElement("h2"), { className: "pg-h", textContent: "리서치 목록" }), items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length }
+  : { id: "list", name: "리서치", title: "리서치 목록", lead, items: [...rows], list: ul, sub, count: rows.filter((li) => li.matches(".r-item")).length };
 const p = pager([
   ...(finder && rows.length ? [{ id: "find", name: "리서치", title: "검색 · 주제 · 형식", pages: [[...lead, hint]] }] : []), ch,
   ...(more ? [{ id: "topics", name: "주제 페이지", title: "주제 페이지", pages: [[more]] }] : []),
@@ -530,7 +548,8 @@ const FINDER = `<script>
   q.addEventListener("compositionend", later);
   form.addEventListener("submit", (e) => { e.preventDefault(); typed(); apply(true); q.blur(); });
   // 조건 지우기 goes away once pressed: the focus goes to the first filter, not to the top of the page
-  for (const b of resets) b.addEventListener("click", () => { clearTimeout(timer); st = { q: "", topic: "", format: "" }; q.value = ""; apply(true); opts[0]?.focus({ preventScroll: true }); });
+  for (const b of resets) b.addEventListener("click", () => { clearTimeout(timer); st = { q: "", topic: "", format: "" }; q.value = ""; apply(true);
+    const to = opts[0]?.closest("[inert]") ? document.querySelector(".pg:not([inert]) .r-card") : opts[0]; to?.focus({ preventScroll: true }); });
   // back to this page from a piece: the address holds the search, and a page kept in memory shows it again as it was
   addEventListener("pageshow", (e) => { if (e.persisted) { st = read(); q.value = st.q; apply(false); } });
   apply(false);
@@ -561,7 +580,7 @@ put("index.html", listPage({ p: "/briefs", title: `리서치 · ${NAME}`, desc: 
 for (const id of present) put(`series/${id}.html`, listPage({ p: `/briefs/series/${id}`, title: `${SERIES[id].name} · 리서치`, desc: SERIES[id].about, kicker: "형식", h: esc(SERIES[id].name),
   intro: `${esc(SERIES[id].about)}. <a href="/briefs?format=${id}">리서치 목록에서 주제와 함께 고르기</a>`, list: briefs.filter((b) => b.series === id) }));
 const KINDNAME = { theme: "테마", industry: "업종", company: "회사·기관" };
-for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/tag/${t.key}`, title: `${t.name} · 리서치`, desc: `${t.name} 관련 AX 리서치 모음`, kicker: KINDNAME[t.kind], h: esc(t.name),
+for (const t of TAGS.values()) put(`tag/${t.key}.html`, listPage({ p: `/briefs/tag/${t.key}`, title: `${esc(t.name)} · 리서치`, desc: `${esc(t.name)} 관련 AX 리서치 모음`, kicker: KINDNAME[t.kind], h: esc(t.name),
   intro: `${KINDNAME[t.kind]} '${esc(t.name)}' 관련 리서치 ${t.briefs.length}편이에요. 형식을 가리지 않고 모았어요.`, list: t.briefs }));
 
 // /briefs/topic/<id> — one IT domain, the way Our World in Data lays out a topic: the indicator, the writing on it, and
@@ -577,7 +596,7 @@ pager([
   { id: "research", name: "리서치", title: "이 주제의 리서치", lead: [$("#research>h2")], items: [...m.querySelectorAll("#research .r-list>li")], list: ul("list r-list"),
     sub: (li) => ({ label: li.querySelector(".r-t")?.textContent }) },
   { id: "research", name: "리서치", title: "이 주제의 리서치", pages: [[$("#research .none") && $("#research>h2"), $("#research .none")]] },
-  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news") },
+  { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", lead: [$("#news>h2")], items: [...m.querySelectorAll("#news .t-news>li"), ...($("#news .t-news") ? [$("#news .src")] : [])], list: ul("t-news"), count: m.querySelectorAll("#news .t-news>li").length },
   { id: "news", name: "공식 발표", title: "최근 주요 공식 발표", pages: [[$("#news .none") && $("#news>h2"), $("#news .none")]] },
   { id: "topics", name: "다른 주제", title: "주제 페이지", pages: [[$(".r-more")]] },
   { id: "alerts", name: "알림 받기", title: "앱 설치 · 새 리서치 알림", pages: [[install]] },

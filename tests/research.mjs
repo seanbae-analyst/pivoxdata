@@ -32,6 +32,8 @@ async function serve(root) {
 // the public pieces as the site lists them (post.json → published), newest first
 const pieces = fs.readdirSync(path.join(ROOT, "social", "out")).filter((s) => fs.existsSync(path.join(ROOT, "social", "out", s, "story.json")))
   .map((slot) => ({ slot, st: read(`social/out/${slot}/story.json`), post: read(`social/out/${slot}/post.json`) })).filter((b) => b.post?.published && b.st.article?.sections?.length);
+// the list also carries the monthly roundups (social/roundups/*.json), as social/briefs.mjs does
+const RU = path.join(ROOT, "social", "roundups"), listed = pieces.length + (fs.existsSync(RU) ? fs.readdirSync(RU).filter((f) => f.endsWith(".json") && read(`social/roundups/${f}`)?.article).length : 0);
 
 const srv = await serve(ROOT), B = srv.base;
 const browser = await chromium.launch();
@@ -81,7 +83,7 @@ try {
     const ctx = await context(false), pg = await ctx.newPage();
     await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
     const all = await visible(pg);
-    ok(`목록에 공개된 리서치 ${pieces.length}편이 모두 있다`, all.length === pieces.length, `${all.length}`);
+    ok(`목록에 공개된 리서치 ${listed}편이 모두 있다`, all.length === listed, `${all.length}`);
     ok("처음엔 '전체'가 눌려 있다", (await pg.$$eval('.f-o[data-v=""][aria-pressed="true"]', (l) => l.length)) === 2);
     await shot(pg, "list-desktop", true);
     // search
@@ -98,7 +100,7 @@ try {
     ok("없는 말 → 빈 목록 안내가 보인다", (await visible(pg)).length === 0 && await pg.isVisible(".r-empty"));
     await shot(pg, "list-desktop-empty");
     await pg.click(".r-empty .f-reset"); await pause(100);
-    ok("조건 지우기 → 전체 목록, 주소도 깨끗", (await visible(pg)).length === pieces.length && !new URL(pg.url()).search);
+    ok("조건 지우기 → 전체 목록, 주소도 깨끗", (await visible(pg)).length === listed && !new URL(pg.url()).search);
     // topic filter
     const topic = await pg.$eval('.f-o[data-f="topic"]:not([data-v=""])', (b) => ({ v: b.dataset.v, n: +b.querySelector(".n").textContent }));
     await pg.click(`.f-o[data-f="topic"][data-v="${topic.v}"]`); await pause(100);
@@ -124,7 +126,7 @@ try {
     await pg.goto(`${B}/briefs?topic=${topic.v}`, { waitUntil: "networkidle" });
     ok("?topic= 로 연 주소는 걸러진 목록", (await visible(pg)).length === topic.n);
     await pg.goto(`${B}/briefs?topic=nope&format=nope`, { waitUntil: "networkidle" });
-    ok("모르는 값(?topic=nope)은 전체를 보인다", (await visible(pg)).length === pieces.length);
+    ok("모르는 값(?topic=nope)은 전체를 보인다", (await visible(pg)).length === listed);
     // the pictures load once scrolled to
     await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
     for (const img of await pg.$$("img.r-th")) await img.scrollIntoViewIfNeeded();
@@ -142,14 +144,14 @@ try {
     await pg.waitForSelector("html.pgr-ready");
     const inTrack = () => pg.$$eval(".pgr-track .r-item", (l) => l.map((li) => li.id));
     ok("폰은 페이지로 넘기는 화면, 첫 장에 검색창", await pg.isVisible(".pgr-track .pg:first-child input[name=q]"));
-    ok(`첫 장부터 ${pieces.length}편이 페이지에 놓인다`, (await inTrack()).length === pieces.length);
+    ok(`${listed}편이 모두 페이지에 놓인다`, (await inTrack()).length === listed);
     await shot(pg, "list-phone");
     const word = pieces[0].st.sources?.[0]?.source ?? "AI";
     await pg.tap('input[name="q"]'); await pg.keyboard.type(word, { delay: 30 }); await pause(500);
     const focused = await pg.evaluate(() => document.activeElement?.name === "q" && document.activeElement.value);
     ok("검색하는 동안 입력창이 포커스를 잃지 않는다 (페이지를 다시 놓아도)", focused === word, String(focused));
     const after = await inTrack();
-    ok(`검색 '${word}' → 페이지에 맞는 것만 (${after.length}편)`, after.length > 0 && after.length <= pieces.length);
+    ok(`검색 '${word}' → 페이지에 맞는 것만 (${after.length}편)`, after.length > 0 && after.length <= listed);
     await shot(pg, "list-phone-search");
     await pg.fill('input[name="q"]', ""); await pause(400);
     const topic = await pg.$eval('.pgr-track .f-o[data-f="topic"]:not([data-v=""])', (b) => ({ v: b.dataset.v, n: +b.querySelector(".n").textContent }));
@@ -187,7 +189,7 @@ try {
   }
   // nothing on a phone page is cut off under the tab bar: no page needs scrolling up and down (the owner's rule)
   section("폰 페이지가 화면 안에 들어간다 (위아래로 넘치지 않음)");
-  for (const [w, h] of [[390, 844], [375, 667]]) {
+  for (const [w, h] of [[390, 844], [375, 667], [360, 640]]) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true }), pg = await ctx.newPage();
     await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
     const over = [];
@@ -195,10 +197,26 @@ try {
     // +60…+234px — so there the pieces are left out; the list, the topic and the format pages are new and must fit)
     for (const u of ["/briefs", "/briefs/topic/cloud", "/briefs/topic/erp", "/briefs/series/news", ...(h >= 800 ? pieces.map((b) => `/briefs/${b.slot}`) : [])]) {
       await pg.goto(B + u, { waitUntil: "networkidle" }); await pg.waitForSelector("html.pgr-ready"); await pause(300);
-      over.push(...(await pg.$$eval(".pgr-track .pg", (l) => l.map((p) => ({ n: p.getAttribute("aria-label"), d: p.scrollHeight - p.clientHeight })).filter((x) => x.d > 1))).map((x) => `${u} ${x.n} +${x.d}px`));
+      over.push(...(await pg.$$eval(".pgr-track .pg", (l) => l.map((p) => ({ n: p.getAttribute("aria-label"), d: p.scrollHeight - p.clientHeight, s: p.scrollWidth - p.clientWidth })).filter((x) => x.d > 1 || x.s > 1))).map((x) => `${u} ${x.n} ${x.d > 1 ? `+${x.d}px` : ""}${x.s > 1 ? ` 옆으로 +${x.s}px` : ""}`));
     }
-    ok(`${w}×${h}: 리서치 목록 · 주제 · 형식${h >= 800 ? " · 글" : ""} 페이지에 넘치는 장이 없다`, !over.length, over.join(", "));
+    ok(`${w}×${h}: 리서치 목록 · 주제 · 형식${h >= 800 ? " · 글" : ""} 페이지에 위아래 · 옆으로 넘치는 장이 없다`, !over.length, over.join(", "));
     await ctx.close();
+  }
+
+  section("옆으로 넘치지 않는다 (긴 페이지 · 폰과 데스크톱 사이)");
+  {
+    const wide = [];
+    for (const [w, h, mobile] of [[360, 640, true], [390, 844, true], [641, 900, false], [667, 375, true], [700, 900, false], [1024, 800, false]]) {
+      const ctx = await browser.newContext({ viewport: { width: w, height: h }, isMobile: mobile, hasTouch: mobile }), pg = await ctx.newPage();
+      await ctx.addInitScript(() => { try { localStorage.setItem("pd.entered", "1"); } catch {} });
+      for (const u of ["/briefs?scroll=1", `/briefs/${pieces.at(-1).slot}?scroll=1`, "/briefs/topic/cloud?scroll=1", "/?scroll=1"]) {
+        await pg.goto(B + u, { waitUntil: "networkidle" }); await pause(200);
+        const d = await pg.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+        if (d > 1) wide.push(`${w}×${h} ${u} +${d}px`);
+      }
+      await ctx.close();
+    }
+    ok("어느 폭에서도 페이지가 옆으로 넘치지 않는다", !wide.length, wide.join(", "));
   }
 
   // ---------- 5. reading without signing in ----------

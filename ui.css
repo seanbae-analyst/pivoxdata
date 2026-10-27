@@ -46,6 +46,8 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
 .nav a:hover,.nav button:hover{color:var(--ink);background:var(--surface-2);text-decoration:none}
 .nav a[aria-current]{color:var(--ink)}
 .nav a,.nav button{white-space:nowrap}
+/* (between a phone and a wide screen the menu keeps to one line: 주제 is on the home page, a link away) */
+@media(max-width:780px){ .nav a[href="/#explore"]{display:none} .nav a,.nav button{padding-left:8px;padding-right:8px} }
 @media(max-width:560px){.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
   footer.site .links{gap:0 4px} footer.site .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}}
 
@@ -438,11 +440,11 @@ body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe
   .r-th{width:76px} .r-t{font-size:17px} .r-l{-webkit-line-clamp:3}
 }
 /* the finder: a search box, then 주제 and 형식 as two rows of options; each says how many it would show */
-.finder{display:grid;gap:12px;max-width:820px;margin:6px 0 4px}
+.finder{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;max-width:820px;margin:6px 0 4px}
 .f-q{display:flex;align-items:center;gap:10px;min-height:48px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface)}
 .f-q:focus-within{border-color:var(--bronze);box-shadow:0 0 0 1px var(--bronze)}
 .f-q svg{flex:none;width:18px;height:18px;fill:none;stroke:var(--mut);stroke-width:1.8;stroke-linecap:round}
-.f-q input{flex:1;min-width:0;height:46px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;outline:none}
+.f-q{min-width:0} .f-q input{flex:1;width:100%;min-width:0;height:46px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;outline:none}
 .f-q input::placeholder{color:var(--dim)}
 .facet{display:grid;grid-template-columns:44px minmax(0,1fr);align-items:baseline;gap:8px}
 .f-l{font-size:13px;font-weight:600;color:var(--mut)}
@@ -497,4 +499,4 @@ body.has-tabbar .acct-notice,html.paged .acct-notice{bottom:calc(76px + env(safe
 .share-ic{flex:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;margin-left:auto;border:0;border-radius:10px;background:none;color:var(--mut);cursor:pointer}
 .share-ic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round} .share-ic span{display:none} .share-ic:active{background:var(--surface-2)}
 .pgr-top .share-ic+.save-ic,.pgr-top .share-ic+.pgr-where{margin-left:0}
-@media(max-height:700px){ .pg #data .ind-bars li:nth-child(3){display:none} .pg .t-sec>h2{margin-bottom:6px} }
+@media(max-height:700px){ .pg #data .ind-bars li:nth-child(3){display:none} .pg .t-sec>h2{margin-bottom:6px} .pg>#data{margin-top:18px} .pg #data .ind-src{margin-top:6px} }

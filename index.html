@@ -100,7 +100,7 @@
   /* ---------- the latest research (the list's own rows, ui.css → .r-item) and 찾아보기: topics apart from formats ---------- */
   .latest:not(:has(.r-item)){display:none}
   .latest .r-list{max-width:none}
-  .explore:not(:has(.ex-list li)){display:none}
+  .explore:not(:has(.ex-list li)){display:none} .ex-col:not(:has(.ex-list>li)){display:none}
   .ex-cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:40px}
   .ex-col h3{margin:0 0 10px;font-size:15px;font-weight:650;color:var(--ink)} .ex-col h3 small{margin-left:6px;font-size:12.5px;font-weight:500;color:var(--dim)}
   .ex-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line-2)}
@@ -436,8 +436,8 @@
     </div>
     <ol class="wl-how" aria-label="이렇게 읽어요">
       <li><b>사례 카드</b><span>이번 주 기업의 AI 도입 사례를 한 장에 하나씩. 인스타그램에도 올라가요.</span></li>
-      <li><b>브리핑</b><span>사례마다 누가·무엇을·어디에·어떻게, 그리고 확인할 점을 표와 문단으로 풀어요.</span></li>
-      <li><b>용어 풀이</b><span>낯선 말은 눌러서 바로 봐요. 브리핑이 나올 때마다 늘어나요.</span></li>
+      <li><b>리서치</b><span>사례마다 누가·무엇을·어디에·어떻게, 그리고 확인할 점을 표와 문단으로 풀어요.</span></li>
+      <li><b>용어 풀이</b><span>낯선 말은 눌러서 바로 봐요. 리서치가 나올 때마다 늘어나요.</span></li>
       <li><b>숫자</b><span>업종·규모별 AI 도입률과 IT 영역별 발표 수. 어떻게 셌는지 검산까지 공개해요.</span></li>
     </ol>
     <p class="wl-legal"><a href="/terms">이용약관</a><span aria-hidden="true">·</span><a href="/privacy">개인정보 처리방침</a></p>
@@ -834,7 +834,7 @@ const caseCard = (li, k) => {
   const ol = node("ol", "beats one"); ol.start = k + 1;
   if (li.id) { ol.id = li.id; li.removeAttribute("id"); } // the card's own address (#case-2), the page it is on
   const bn = li.querySelector(".bn"); if (bn) bn.textContent = `사례 ${k + 1} / ${beats.length}`;
-  li.querySelector("a")?.append(node("span", "cta", "브리핑에서 이 사례 읽기 →"));
+  li.querySelector("a")?.append(node("span", "cta", "리서치에서 이 사례 읽기 →"));
   ol.append(li); return [ol];
 };
 // the announcements: who said it as a round mark
