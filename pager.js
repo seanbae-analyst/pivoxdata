@@ -17,15 +17,18 @@
 // gives up, document gets an "unpaged" event so the page's long-layout scripts can still run; "?scroll=1" keeps the long
 // page. The address follows the page: a card's own id (#c-ax-industry), else the chapter (#news) with the page in it kept
 // in history.state, so a shared link or the back button lands on the same page.
+// `toc: false` keeps the long page (wide screens) without its sidebar.
 // refresh() lays the pages out again after a chapter's items changed (the research list's search and filters change
 // which pieces are shown); on the long page it does nothing.
 const el = (tag, cls) => Object.assign(document.createElement(tag), cls ? { className: cls } : {});
 
-export function pager(chapters, { tab, fit, back = null } = {}) {
+export function pager(chapters, { tab, fit, back = null, toc = true } = {}) {
   const root = document.documentElement, has = (nodes) => nodes?.some(Boolean);
   chapters = chapters.filter((c) => c.pages?.some(has) || c.items?.length);
   const none = { refresh() {} };
-  if (!root.classList.contains("paged")) { if (chapters.length) sidebar(chapters); return none; } // the long page: the sidebar only
+  // the long page: the sidebar only — and not on a page that reads like a front page or a list (toc: false; 2026-10-27,
+  // "웹 버전도 잘 구성 좀": the home, the research list and a topic have no contents panel beside them)
+  if (!root.classList.contains("paged")) { if (chapters.length && toc) sidebar(chapters); return none; }
   if (!chapters.length) { root.classList.remove("paged"); document.dispatchEvent(new Event("unpaged")); return none; }
   // screens (2026-10-26, "이쁜 앱처럼"): chapters that name a screen are shown a screen at a time, like an app — the first
   // screen is home; a link, a tile or the sidebar opens another one over it (it comes in from the side, the address and
