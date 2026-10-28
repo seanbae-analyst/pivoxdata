@@ -29,6 +29,10 @@ async function send(body) {
     const res = await fetch("https://api.onesignal.com/notifications?c=push", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `${scheme} ${process.env.ONESIGNAL_REST_KEY.trim()}` }, body: JSON.stringify(body) });
     const j = await res.json().catch(() => ({}));
     if (res.status === 401 || res.status === 403) continue;
+    // nobody has this topic on yet: OneSignal answers 200 with this as its only error and sends nothing. That is an alert
+    // with no one to get it, not a failure — counted as sent (2026-10-27 · 28: with 0 subscribers it was retried every run
+    // for three days and commented on the failure issue each time). A later subscriber never gets an old alert anyway.
+    if (res.ok && Array.isArray(j.errors) && j.errors.length && j.errors.every((x) => /not subscribed/i.test(String(x)))) return { ...j, recipients: 0 };
     if (!res.ok || j.errors?.length) throw new Error(`OneSignal ${res.status}: ${JSON.stringify(j.errors ?? j).slice(0, 300)}`);
     return j;
   }
@@ -62,7 +66,8 @@ async function main() {
       // written down the moment it went out: a later failure must not make this one go out again
       sent.push(b.slot);
       write(LOG, sent);
-      console.log(`notify: sent [${topic}] ${b.slot} (${j.id ?? "ok"}${j.recipients != null ? `, ${j.recipients} recipients` : ""})`);
+      console.log(j.recipients === 0 && !j.id ? `notify: [${topic}] ${b.slot} — no one has this topic on yet, 0 recipients (recorded)`
+        : `notify: sent [${topic}] ${b.slot} (${j.id || "ok"}${j.recipients != null ? `, ${j.recipients} recipients` : ""})`);
     } catch (e) {
       failed.push(b.slot);
       console.error(`notify: ${b.slot} not sent — ${e.message}`);
