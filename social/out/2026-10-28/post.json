@@ -1,0 +1,42 @@
+{
+ "date": "2026-10-28",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png",
+  "14.png",
+  "15.png",
+  "16.png",
+  "17.png",
+  "18.png",
+  "19.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-28/",
+ "caption": "이번 주 AX 발표 7건은 AI를 어디에 두고 어떻게 사는지를 다뤘어요.\nAnthropic은 미국 조달청과 협력을 넓혀 정부에 Claude 40% 할인을 적용해요. 최소 약정 없이 쓴 만큼 내는 구조예요.\nSAP와 NTT는 주권 클라우드와 SAP Business AI 협력 계획을 밝혔어요. 규제 산업이 통제를 쥔 채 클라우드로 가는 길이에요.\nSnowflake와 Oracle은 AI Data Cloud를 OCI 자체 서비스로 내놓을 계획이에요. Oracle 앱 데이터 곁에서 분석하는 구조예요.\nOpenAI는 Oracle 업무 앱과 AI 에이전트를 ChatGPT에 들이겠다고 했어요. 대화창에서 업무 시스템을 부르는 구조예요.\n과학기술정보통신부는 AI 건강도우미 챗봇을 24시간 운영한다고 밝혔어요. 전문가 검증과 암호화 폐쇄망을 함께 내세웠어요.\n같은 부처는 포항에 6천억원 규모 AI 데이터센터 계획을 알렸어요. 공공 AI와 클라우드를 한 묶음으로 다뤄요.\nMcKinsey는 구매 분야 에이전틱 AI가 그만한 가치가 있는지 물었어요. 효과 검증이 먼저라는 뜻이에요.\n공통 흐름은 AI가 기존 클라우드와 구매 창구 곁에 붙는다는 점이에요.\n확인할 점: 데이터를 둘 위치와 접근 권한을 먼저 정했나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-10-28\n출처(공식 발표): 과학기술정보통신부 · SAP · McKinsey · Anthropic · Snowflake · OpenAI — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newsweek",
+  "format_name": "이번 주 AX 사건",
+  "source": "claude",
+  "slides": 19
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 109,
+  "problems": []
+ }
+}

@@ -1,5 +1,5 @@
 {
- "checked_at": "2026-10-27",
+ "checked_at": "2026-10-28",
  "notes": {
   "npm": {
    "until": "2026-10-25",
@@ -30,7 +30,7 @@
   {
    "id": "npm:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-26, 받은 날 2026-10-27 — 검산한 날(2026-10-27)에서 4일 안"
+   "fact": "마지막 날 2026-10-27, 받은 날 2026-10-28 — 검산한 날(2026-10-28)에서 4일 안"
   },
   {
    "id": "npm:days",
@@ -40,7 +40,7 @@
   {
    "id": "npm:point=range",
    "ok": true,
-   "fact": "지난주 합계 API가 오래된 주(2026-06-25~2026-07-01)를 돌려줘 오늘은 두 번째 읽기를 건너뜀 — 숫자는 기간 API의 일별 값(위 검산)으로"
+   "fact": "기간 API(일별 합)와 지난주 합계 API가 31/31개 패키지에서 같은 숫자 (2026-10-20~2026-10-26)"
   },
   {
    "id": "npm:weeks",
@@ -50,7 +50,7 @@
   {
    "id": "npm:zero-days",
    "ok": true,
-   "fact": "2026년에 0으로 적힌 날: openai 15일, @anthropic-ai/sdk 15일, @google/genai 15일, @mistralai/mistralai 17일, @ai-sdk/openai 15일, @ai-sdk/anthropic 15일, @ai-sdk/google 15일, @ai-sdk/mistral 15일, @ai-sdk/xai 15일, @ai-sdk/deepseek 15일, ai 15일, @modelcontextprotocol/sdk 15일, langchain 15일, @langchain/langgraph 15일, @openai/agents 15일, @mastra/core 15일, ollama 16일, @openai/codex 15일, @anthropic-ai/claude-code 15일, opencode-ai 15일, @google/gemini-cli 15일, @qwen-code/qwen-code 15일, @voltagent/core 15일, @browserbasehq/stagehand 14일, puppeteer 15일, playwright 15일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음 — 그중 대부분의 패키지가 함께 0인 날(06-03, 07-12, 08-14, 09-03, 09-07~08, 09-15, 10-06, 10-13~15, 10-19~21, 10-26)은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄, 최근 8주 모두 주간 수준 있음"
+   "fact": "2026년에 0으로 적힌 날: openai 15일, @anthropic-ai/sdk 15일, @google/genai 15일, @mistralai/mistralai 17일, @ai-sdk/openai 15일, @ai-sdk/anthropic 15일, @ai-sdk/google 15일, @ai-sdk/mistral 15일, @ai-sdk/xai 15일, @ai-sdk/deepseek 15일, ai 15일, @modelcontextprotocol/sdk 15일, langchain 15일, @langchain/langgraph 15일, @openai/agents 15일, @mastra/core 15일, ollama 16일, @openai/codex 15일, @anthropic-ai/claude-code 15일, opencode-ai 15일, @google/gemini-cli 15일, @qwen-code/qwen-code 15일, @voltagent/core 15일, @browserbasehq/stagehand 14일, puppeteer 15일, playwright 15일 — 주간 수준은 0이 아닌 평일의 중앙값이라 이 날들에 흔들리지 않음 — 그중 대부분의 패키지가 함께 0인 날(06-03, 07-12, 08-14, 09-03, 09-07~08, 09-15, 10-06, 10-13~15, 10-19~21, 10-27)은 집계가 멈춘 날로 보고, 그 주는 남은 평일로 수준을 냄, 최근 8주 모두 주간 수준 있음"
   },
   {
    "id": "npm:breaks",
@@ -65,7 +65,7 @@
   {
    "id": "pypi:fresh",
    "ok": true,
-   "fact": "마지막 날 2026-10-26, 받은 날 2026-10-27 — 검산한 날(2026-10-27)에서 4일 안"
+   "fact": "마지막 날 2026-10-27, 받은 날 2026-10-28 — 검산한 날(2026-10-28)에서 4일 안"
   },
   {
    "id": "pypi:days",
@@ -75,7 +75,7 @@
   {
    "id": "pypi:recent≈daily",
    "ok": true,
-   "fact": "최근 7일 합계 API와 일별 합이 46개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%)"
+   "fact": "최근 7일 합계 API와 일별 합이 46개 패키지 모두 2% 안 (가장 큰 차이 openai 0.00%) — 46개는 합계 API가 하루 늦게 갱신돼 하루 앞선 7일과 비교"
   },
   {
    "id": "pypi:weeks",
@@ -95,7 +95,7 @@
   {
    "id": "arxiv:fresh",
    "ok": true,
-   "fact": "2026-10-27에 받음 — 검산한 날(2026-10-27)에서 7일 안"
+   "fact": "2026-10-28에 받음 — 검산한 날(2026-10-28)에서 7일 안"
   },
   {
    "id": "arxiv:ai:months",
@@ -110,7 +110,7 @@
   {
    "id": "hf:snapshot",
    "ok": true,
-   "fact": "2026-10-27 스냅숏(검산한 날에서 2일 안): 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 4개)"
+   "fact": "2026-10-28 스냅숏(검산한 날에서 2일 안): 다운로드 상위 300개, 트렌딩 50개 (쌓인 스냅숏 5개)"
   },
   {
    "id": "hf:sorted",
@@ -225,12 +225,12 @@
   {
    "id": "news:sources",
    "ok": true,
-   "fact": "공식 출처 20곳 중 19곳이 피드·기사 목록으로 응답 — 못 읽음: msit(연결 실패)"
+   "fact": "공식 출처 20곳 중 20곳이 피드·기사 목록으로 응답"
   },
   {
    "id": "news:official",
    "ok": true,
-   "fact": "기사 199건 모두 그 회사·기관 자기 도메인의 원문 링크"
+   "fact": "기사 217건 모두 그 회사·기관 자기 도메인의 원문 링크"
   },
   {
    "id": "news:dated",
