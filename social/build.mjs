@@ -136,7 +136,7 @@ function storySlides(st) {
     const body = s.body ? `<p class="txt">${lines(s.body)}</p>` : "";
     const inner = s.kind === "cover" ? `${kick}<div class="badge">${e(story.format_name ?? "")}</div><h2>${lines(s.title)}</h2>${body}${num}`
       : s.kind === "quiz" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="hint">다음 장에 정답 →</div>`
-      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="more">자세한 풀이는 브리핑에서 · data.pivoxquant.com/briefs/${e(slot)}</div>`
+      : s.kind === "end" ? `${kick}<h2>${lines(s.title)}</h2>${body}${items}<div class="more">자세한 풀이는 리서치에서 · data.pivoxquant.com/briefs/${e(slot)}</div>`
       // a case (2026-10-26): who and what in the title, then where and how as a two-row table from the case story.mjs
       // checked (never the model's free text on the card), then what it means
       : s.kind === "case" && s.case ? `${kick}<h2>${lines(s.title)}</h2><dl class="case">${[["어디에", s.case.where], ["어떻게", s.case.how]].map(([l, v]) => `<div${v === "발표에 없음" ? ' class="none"' : ""}><dt>${l}</dt><dd>${e(v)}</dd></div>`).join("")}</dl>${body}`
