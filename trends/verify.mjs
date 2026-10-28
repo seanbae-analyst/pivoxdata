@@ -48,10 +48,16 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
       check("npm:point=range", off.length === 0, `기간 API(일별 합)와 지난주 합계 API가 ${all.length - off.length}/${all.length}개 패키지에서 같은 숫자 (${P.openai.last_week.start}~${P.openai.last_week.end})`);
     }
   } else {
-    // pypistats "recent" counts the last 7 days it has; compare with the daily series (±2%: its window may differ by a day)
-    const rel = all.map((p) => { const x = P[p.pkg]; const s = x.days.slice(-7).reduce((t, [, v]) => t + v, 0); return [p.pkg, Math.abs(s / x.recent.last_week - 1)]; });
-    const worst = rel.reduce((a, b) => (b[1] > a[1] ? b : a));
-    check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)`);
+    // pypistats "recent" counts the last 7 days it has; compare with the daily series (±2%). The two are not updated at the
+    // same moment: on 2026-10-28 the daily series already had 10-27 while "recent" still ended 10-26, so the last 7 days
+    // dropped 10-20 — openai-whisper's 323,021 against ~210,000 on the days around it — and missed by 6.74%, which stopped
+    // the day three times. So the 7 days ending on the newest day and the 7 ending the day before are both tried, the
+    // closer counts (that day: 0.00% on the day before, for all 46 packages).
+    const rel = all.map((p) => { const x = P[p.pkg], n = x.days.length;
+      const off = (k) => Math.abs(x.days.slice(n - 7 - k, n - k).reduce((t, [, v]) => t + v, 0) / x.recent.last_week - 1);
+      return [p.pkg, Math.min(off(0), off(1)), off(1) < off(0)]; });
+    const worst = rel.reduce((a, b) => (b[1] > a[1] ? b : a)), behind = rel.filter((r) => r[2]).length;
+    check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)${behind ? ` — ${behind}개는 합계 API가 하루 늦게 갱신돼 하루 앞선 7일과 비교` : ""}`);
   }
   // 4. what the method had to work around — reported, not hidden
   const { until, W, outage } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
