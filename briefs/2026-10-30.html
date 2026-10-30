@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI 에이전트보다 먼저 정할 것: 데이터, 운영 모델, 연구안보 · AX 트렌드 레이더</title>
+<meta name="description" content="SAP는 TechEd에서 에이전트 개발 플랫폼과 함께 데이터 기반 기능을 발표했어요. McKinsey는 은행의 운영 모델을, 과학기술정보통신부는 AI 협력과 연구안보를 다뤘어요. 이번 주 공식 발표 4건은 모두 AI를 받치는 기반을 이야기해요." />
+
+<meta name="robots" content="noindex" />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="AX 레이더" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css?v=12" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-10-27" />
+
+<link rel="stylesheet" href="/research.css" />
+<style>
+  /* the briefings read like the rest of the site (2026-10-25): plain labels, hairline rules, bronze only where it means
+     something — no pills, no boxed cards. main's children sit on their own margins (no grid gap between every line). */
+  main{gap:0}
+  main>*,article{min-width:0}
+  .kicker{width:fit-content;font-size:13px;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);font-weight:600;margin-right:8px} .kicker a{color:var(--ink-2)}
+  article{max-width:720px}
+  h1.page{font-size:clamp(28px,4.4vw,40px);line-height:1.25;letter-spacing:-.03em;margin:0 0 12px;word-break:keep-all}
+  .lede{font-size:18px;line-height:1.75;color:var(--ink-2);margin:0 0 8px}
+  .meta{font-size:13px;color:var(--dim);margin:0 0 14px}
+  article h2{font-size:21px;line-height:1.4;letter-spacing:-.02em;margin:44px 0 12px}
+  article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
+  .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
+  .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
+  /* a case (2026-10-26): its IT domain and the way it went in, the heading, then a small table — no box, hairlines */
+  .case-h{margin:44px 0 0} .case-h h2{margin:6px 0 14px}
+  .case-k{font-size:13px;color:var(--mut);margin:0}
+  .case{margin:0 0 20px;border-top:1px solid var(--line-2)}
+  .case>div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .case dt{font-size:13px;color:var(--mut);padding-top:2px} .case dd{margin:0;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .case .none dd{color:var(--dim)} .case .q dd{font-weight:600}
+  ul.asks{margin:0 0 14px;padding-left:20px;list-style:disc} ul.asks li{font-size:16.5px;line-height:1.75;color:var(--ink-2);margin:2px 0} ul.asks li::marker{color:var(--dim)}
+  .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
+  .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
+  .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
+  .srcs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14px} .srcs .d{color:var(--dim);font-size:12.5px}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0}
+  .chip{font-size:13px;color:var(--mut)} .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
+  .pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
+  .pn a{display:block;padding:14px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px;line-height:1.5}
+  .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
+  .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
+  .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
+  .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
+  .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install input{accent-color:var(--bronze);width:16px;height:16px}
+  .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
+  .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
+  .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
+  /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
+  @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
+  @media(max-width:640px){
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px}
+    h1.page{font-size:28px}
+    .pn{grid-template-columns:1fr}.pn .next{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+</header>
+
+<main>
+<article class="brief">
+  <header class="art-head">
+  <div class="kicker"><b>리서치</b><a href="/briefs">이번 주 AX 사건</a></div>
+  <h1 class="page">AI 에이전트보다 먼저 정할 것: 데이터, 운영 모델, 연구안보</h1>
+  <p class="lede">SAP는 TechEd에서 에이전트 개발 플랫폼과 함께 데이터 기반 기능을 발표했어요. McKinsey는 은행의 운영 모델을, 과학기술정보통신부는 AI 협력과 연구안보를 다뤘어요. 이번 주 공식 발표 4건은 모두 AI를 받치는 기반을 이야기해요.</p>
+  <p class="meta">2026년 10월 30일 · 사례 4건 · 공식 발표 4건 · AX 트렌드 레이더</p>
+  <p class="topics"><span>주제</span><a href="/briefs/topic/crm">CRM·고객</a><a href="/briefs/topic/data">데이터·분석</a><a href="/briefs/topic/security">보안·규제</a><a href="/briefs/topic/agents">AI 에이전트</a></p>
+  <div class="chips"><a class="chip industry" href="/briefs/tag/industry-finance">금융·보험</a><a class="chip company" href="/briefs/tag/company-mckinsey">McKinsey</a></div>
+  <div class="act-row"><button type="button" class="share-btn" data-share><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg><span>공유하기</span></button><span class="sr" role="status" data-share-status></span></div>
+  </header>
+  <section class="part" data-name="공통 흐름"><h2 id="s1">이번 주 발표는 어디서 나왔나</h2><p>이번 주 <button type="button" class="term" data-term="ax">AX</button> 사건은 <button type="button" class="term" data-term="official">공식 발표</button> 4건으로 읽어요. SAP가 베를린 개발자 행사 TechEd에서 낸 발표가 2건이에요. 은행 부실 여신 관리를 다룬 McKinsey 리서치와 과학기술정보통신부의 한-캐나다 공동위원회 보도자료가 1건씩이에요.</p><p>네 발표는 <button type="button" class="term" data-term="domain">IT 영역</button>이 서로 달라요. <button type="button" class="term" data-term="agent">AI 에이전트</button>, 데이터·분석, CRM·고객, 보안·규제 순서로 놓으면 에이전트를 받치는 데이터와 운영, 안보가 함께 보여요. McKinsey 리서치와 과기정통부 보도자료는 원문을 읽지 못했어요. 그래서 두 발표는 제목과 요약에 적힌 내용만 근거로 썼어요.</p><p class="src">출처 · <a href="https://news.sap.com/2026/10/sap-teched-developers-you-can-build-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/28</a> / <a href="https://news.sap.com/2026/10/sap-lakehouse-new-data-fabric-innovations-sap-bdc-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/29</a> / <a href="https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/banking-on-ai-how-a-new-operating-model-can-transform-distressed-credit-management" target="_blank" rel="noopener">McKinsey 리서치 · 10/29</a> / <a href="https://www.msit.go.kr/bbs/view.do?sCode=user&amp;bbsSeqNo=94&amp;nttSeqNo=3187903" target="_blank" rel="noopener">과학기술정보통신부 보도자료 · 10/29</a></p></section><section class="part case-part" data-name="사례 1"><header class="case-h" id="s2"><p class="case-k">AI 에이전트 · 제품 출시</p><h2>SAP, 에이전트를 만드는 플랫폼을 개발자에게 내놓다</h2><dl class="case"><div><dt>누가</dt><dd>SAP</dd></div><div><dt>무엇을</dt><dd>SAP Business AI Platform</dd></div><div><dt>어디에</dt><dd>SAP·비SAP 데이터 걸친 업무 프로세스</dd></div><div><dt>어떻게</dt><dd>개발자·고객·파트너용 에이전트 구축 도구</dd></div><div class="q"><dt>확인할 점</dt><dd>우리 에이전트가 SAP 밖 데이터까지 읽을 권한 체계가 있나?</dd></div></dl></header><p>SAP는 TechEd 기조연설에서 자사 AI 도구와 SAP Business AI Platform을 소개했어요. 개발자와 고객, 파트너가 이것으로 '자율 기업(Autonomous Enterprise)'을 만들 수 있다고 밝혔어요. SAP CTO Philipp Herzig는 AI로 개발자의 작업 환경이 크게 바뀌었다고 말했어요. 기존의 정형화된 개발 방식과 새 기술을 함께 쓰는 것이 이번 행사의 취지라고도 했어요.</p><p>발표의 두 축은 Joule Work와 SAP Business AI Platform이에요. Herzig는 Joule Work가 SAP의 자율 도메인과 어시스턴트에 연결된다고 설명했어요. 이 어시스턴트는 SAP 데이터와 비SAP 데이터를 오가며 판단하고 실행해요. 플랫폼은 에이전트를 만들고 넓히며, 데이터를 관리하고 AI 사용을 통제하는 기반이라고 소개했어요. 보안·거버넌스·규정 준수를 처음부터 갖췄다는 설명은 SAP의 자평이에요.</p><p>AI 에이전트 프로젝트로 보면 에이전트가 다루는 범위가 <button type="button" class="term" data-term="erp">ERP</button> 한 시스템에 머물지 않아요. SAP 데이터와 비SAP 데이터를 함께 읽는다면 설계 순서가 달라져요. 어떤 시스템을 연결하고 에이전트에게 어떤 권한을 줄지가 기능 개발보다 앞선 과제가 된다는 뜻이에요.</p><p>그래서 먼저 확인할 것은 권한 체계예요. 에이전트가 SAP 밖 데이터까지 읽고 실행하려면 시스템마다 다른 접근 권한을 하나의 기준으로 맞춰야 해요. SAP가 말하는 통제 기능이 우리 회사의 내부 통제 규정과 어디까지 맞는지도 따로 점검할 일이에요.</p><p class="src">출처 · <a href="https://news.sap.com/2026/10/sap-teched-developers-you-can-build-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/28</a></p></section><section class="part case-part" data-name="사례 2"><header class="case-h" id="s3"><p class="case-k">데이터·분석 · 제품 출시</p><h2>SAP, 데이터를 옮기지 않고 묶는 레이크하우스</h2><dl class="case"><div><dt>누가</dt><dd>SAP</dd></div><div><dt>무엇을</dt><dd>SAP BDC 레이크하우스·데이터 패브릭</dd></div><div><dt>어디에</dt><dd>분산된 기업 데이터와 AI 에이전트</dd></div><div><dt>어떻게</dt><dd>Dremio 인수 뒤 무복사 공유·통합 조회</dd></div><div class="q"><dt>확인할 점</dt><dd>데이터를 옮기지 않고 조회할 때 원천 시스템 부하와 권한은 누가 관리하나?</dd></div></dl></header><p>SAP는 같은 행사에서 자사 데이터 플랫폼에 레이크하우스와 비즈니스 데이터 패브릭 기능을 더했다고 발표했어요. 이 플랫폼의 이름은 SAP BDC로, SAP Business Data Cloud의 줄임말이에요. SAP는 에이전트가 결과를 빨리 내더라도 좋은 판단을 하려면 회사가 돌아가는 방식을 알아야 한다고 설명했어요. 데이터 사이의 관계와 업무 프로세스, 규칙이 여기에 들어가요. SAP는 이 플랫폼이 SAP Business AI Platform의 데이터 기반이며, 데이터와 그 의미·프로세스·정책을 함께 잇는다고 소개했어요.</p><p>이번 기능의 중심은 Dremio 인수를 마친 뒤 더한 기능이에요. SAP BDC는 이제 Apache Iceberg를 기본으로 지원하고, Apache Polaris 기반의 통합 카탈로그를 갖췄어요. SAP BDC Connect로는 Databricks 등 5곳의 파트너 플랫폼과 복사본 없이 데이터를 나눠요. Dremio의 SQL 엔진으로는 SQL Server, Oracle 같은 데이터베이스를 데이터 이동 없이 한꺼번에 조회한다고 밝혔어요. Joule Work와 연결해 업무 사용자가 자연어로 묻고 답을 받는 기능도 들어갔어요.</p><p>데이터·분석 프로젝트에서는 통합 방식이 달라진다는 뜻으로 읽혀요. 지금까지는 여러 원천 데이터를 한곳으로 복제하는 파이프라인 작업이 일의 큰 몫이었어요. 이 구조에서는 연결 설정과 카탈로그 관리가 일의 중심이 돼요. SAP도 복사본이 늘면 비용이 늘고 업무 맥락을 일관되게 지키기 어렵다고 짚었어요.</p><p>확인할 점은 원천 시스템 쪽이에요. 데이터를 옮기지 않고 조회하면 질의가 운영 데이터베이스에 바로 닿을 수 있어요. 그만큼 부하와 접근 권한을 누가 관리할지 정해 둬야 해요. 이미 Databricks나 Snowflake를 쓰는 회사라면 어느 카탈로그를 기준으로 삼을지도 먼저 정해야 해요.</p><p class="src">출처 · <a href="https://news.sap.com/2026/10/sap-lakehouse-new-data-fabric-innovations-sap-bdc-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/29</a></p></section><section class="part case-part" data-name="사례 3"><header class="case-h" id="s4"><p class="case-k">CRM·고객 · 연구·보고서</p><h2>McKinsey, 은행 부실 여신 관리에 운영 모델을 묻다</h2><dl class="case"><div><dt>누가</dt><dd>은행 (McKinsey 발표)</dd></div><div><dt>무엇을</dt><dd>부실 여신 관리용 AI</dd></div><div><dt>어디에</dt><dd>부실 여신 관리 업무</dd></div><div><dt>어떻게</dt><dd>운영 모델 재설계 제안</dd></div><div class="q"><dt>확인할 점</dt><dd>AI 도입에 맞춰 업무 절차와 담당 역할을 다시 짰나?</dd></div></dl></header><p>McKinsey는 은행들이 부실 여신 관리에 AI를 점점 더 많이 들이고 있다고 분석했어요. 다만 운영 모델까지 고친 은행은 적다고 지적했어요. 고객 경험을 차별화하고 재무 성과와 회수 비용을 함께 개선하려면 운영 모델이 바뀌어야 한다는 내용이에요. 원문은 읽지 못해 요약에 적힌 내용만 옮겨요.</p><p>어떤 AI를 어느 시스템에 어떻게 넣었는지는 발표 요약에 없어요. 요약에서 확인되는 것은 두 가지예요. 대상 업무는 부실 여신 관리이고, McKinsey가 내놓은 제안은 기술이 아니라 운영 모델의 재설계예요.</p><p><button type="button" class="term" data-term="crm">CRM</button>·고객 영역에서는 AI 도구를 붙이는 것만으로 고객 경험과 회수 비용이 나아지지 않는다는 지적으로 읽혀요. 회수 업무를 다루는 CRM 프로젝트라면 담당자 역할과 의사결정 절차도 프로젝트 범위에 넣어야 해요.</p><p>확인할 점은 업무 절차의 재설계예요. AI가 들어간 뒤 누가 무엇을 판단하고 어떤 경우에 사람에게 넘기는지 정해야 해요. 그러지 않으면 요약이 말한 운영 모델의 빈자리가 그대로 남아요. 변화 관리 계획을 시스템 구축 일정과 함께 세웠는지 점검해 보세요.</p><p class="src">출처 · <a href="https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/banking-on-ai-how-a-new-operating-model-can-transform-distressed-credit-management" target="_blank" rel="noopener">McKinsey 리서치 · 10/29</a></p></section><section class="part case-part" data-name="사례 4"><header class="case-h" id="s5"><p class="case-k">보안·규제 · 파트너십</p><h2>과기정통부, 캐나다와 AI·연구안보 협력</h2><dl class="case"><div><dt>누가</dt><dd>과학기술정보통신부</dd></div><div><dt>무엇을</dt><dd>AI·양자·바이오 과학기술 협력</dd></div><div><dt>어디에</dt><dd>핵심신흥기술 연구와 연구안보</dd></div><div><dt>어떻게</dt><dd>한국연구재단-캐나다 국가연구위원회 협약</dd></div><div class="q"><dt>확인할 점</dt><dd>해외 기관과 데이터를 나눌 때 연구안보 기준을 정해 두었나?</dd></div></dl></header><p>과학기술정보통신부는 제5차 한-캐나다 과학기술혁신공동위원회를 열었다고 밝혔어요. 두 나라는 AI·양자·바이오 같은 핵심신흥기술 협력과 연구안보를 논의했어요. 원문은 읽지 못해 제목과 요약을 기준으로 썼어요.</p><p>요약에 따르면 한국연구재단과 캐나다 국가연구위원회가 업무협약을 맺었어요. 캐나다 혁신과학경제개발부 차관과의 면담에서는 협력을 넓힐 방안을 찾았어요. 협약의 구체적인 내용이나 대상 사업은 발표 요약에 없어요.</p><p>이 발표에서는 기술 협력과 연구안보를 같은 회의에서 다뤘다는 점이 중요해요. 해외 기관과 AI를 함께 연구하고 개발할 때 데이터와 기술에 대한 접근 기준이 협력 조건의 하나가 된다는 뜻으로 읽혀요.</p><p>해외 연구기관이나 파트너와 AI 과제를 함께 하는 기업이 확인할 점이 있어요. 어떤 데이터를 나누고 누가 접근할지 계약 단계에서 정해 두었는지예요. 정부 간 협력에서 연구안보가 의제에 오른 만큼, 공동 과제의 참여 조건에 관련 요구가 들어 있는지도 살펴볼 일이에요.</p><p class="src">출처 · <a href="https://www.msit.go.kr/bbs/view.do?sCode=user&amp;bbsSeqNo=94&amp;nttSeqNo=3187903" target="_blank" rel="noopener">과학기술정보통신부 보도자료 · 10/29</a></p></section><section class="part" data-name="공통 흐름"><h2 id="s6">영역을 가로질러: AI 아래의 기반</h2><p>네 발표는 AI 자체보다 그 아래의 기반을 다뤄요. SAP는 에이전트가 제대로 판단하려면 업무 맥락이 담긴 데이터가 필요하다고 했어요. McKinsey는 운영 모델을, 과기정통부는 연구안보를 AI 이야기와 나란히 놓았어요.</p><p>발표 수에서도 무게가 드러나요. 최근 30일 동안 나온 회사·정부의 공식 AX 발표 가운데 AI 에이전트 영역이 42건이에요. 이 가운데 SAP와 McKinsey가 12건씩이에요. ERP·백오피스 영역 발표는 12건이었고, 그중 7건이 SAP 발표였어요.</p><p>기업의 AI 도입 폭도 넓어졌어요. <button type="button" class="term" data-term="ramp">Ramp</button> AI Index는 미국 기업 7만여 곳의 법인카드·송금 기록으로 유료 결제만 집계하는 지표예요. 이 지표로 보면 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%로, 1년 새 +12.1%p 늘었어요. 금융·보험 기업의 비율은 73.7%예요.</p><p class="src">출처 · <a href="https://news.sap.com/2026/10/sap-teched-developers-you-can-build-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/28</a> / <a href="https://news.sap.com/2026/10/sap-lakehouse-new-data-fabric-innovations-sap-bdc-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 · 10/29</a> / <a href="https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/banking-on-ai-how-a-new-operating-model-can-transform-distressed-credit-management" target="_blank" rel="noopener">McKinsey 리서치 · 10/29</a> / <a href="https://www.msit.go.kr/bbs/view.do?sCode=user&amp;bbsSeqNo=94&amp;nttSeqNo=3187903" target="_blank" rel="noopener">과학기술정보통신부 보도자료 · 10/29</a></p></section><section class="part" data-name="관점"><h2 id="s7">IT 컨설팅 관점</h2><p>이번 주 흐름을 보면 AI 에이전트 도입은 ERP나 CRM에 기능 하나를 더하는 일로 끝나지 않아요. 데이터 플랫폼과 권한 체계, 업무 절차를 함께 다시 짜는 프로젝트가 돼요. 해외 파트너가 끼는 과제라면 데이터를 나누는 기준도 처음부터 범위에 들어가요.</p><ul class="asks"><li>에이전트가 읽고 실행할 데이터 범위를 SAP 안팎으로 나눠 정의했나?</li><li>데이터를 복사하지 않고 조회할 때 원천 시스템의 부하와 권한은 누가 관리하나?</li><li>이미 쓰는 Databricks나 Snowflake와 어느 카탈로그를 기준으로 맞추나?</li><li>AI 도입에 맞춰 담당자 역할과 업무 절차를 다시 설계했나?</li><li>해외 기관이나 파트너와 나눌 데이터의 연구안보 기준을 계약에 담았나?</li></ul></section>
+  <section class="sum"><h2>정리</h2><ul><li>SAP는 TechEd에서 에이전트 개발 플랫폼과 Joule Work를 내놓았어요.</li><li>SAP BDC는 Dremio 인수 뒤 데이터를 복사하지 않고 공유·조회하는 기능을 더했어요.</li><li>McKinsey는 AI를 들인 은행 중 운영 모델까지 바꾼 곳은 적다고 지적했어요.</li><li>과기정통부는 캐나다와 AI 협력과 연구안보를 함께 논의했어요.</li><li>에이전트 프로젝트에서는 데이터 범위, 권한, 업무 절차를 개발보다 먼저 정해야 해요.</li></ul></section>
+  <section class="basis"><h2>근거</h2><p>회사·기관이 직접 낸 발표만 썼어요. 발표 2건은 공식 페이지의 원문까지 읽고, 나머지는 제목과 요약으로 썼어요. 제목을 누르면 원문으로 가요.</p><ul class="srcs"><li><a href="https://www.msit.go.kr/bbs/view.do?sCode=user&amp;bbsSeqNo=94&amp;nttSeqNo=3187903" target="_blank" rel="noopener">과학기술정보통신부 보도자료 — 제5차 한-캐나다 과학기술혁신공동위원회 개최</a> <span class="d">10/29</span></li><li><a href="https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/banking-on-ai-how-a-new-operating-model-can-transform-distressed-credit-management" target="_blank" rel="noopener">McKinsey 리서치 — Banking on AI: How a new operating model can transform distressed credit management</a> <span class="d">10/29</span></li><li><a href="https://news.sap.com/2026/10/sap-lakehouse-new-data-fabric-innovations-sap-bdc-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise</a> <span class="d">10/29</span></li><li><a href="https://news.sap.com/2026/10/sap-teched-developers-you-can-build-autonomous-enterprise/" target="_blank" rel="noopener">SAP 공식 발표 — SAP TechEd in 2026: SAP Tells Developers “You Can Build the Autonomous Enterprise”</a> <span class="d">10/28</span></li></ul></section>
+  <section class="inds" id="data" aria-labelledby="h-data"><h2 id="h-data">관련 지표</h2><p class="inds-intro">이 글이 다룬 주제를 매일 같은 방식으로 다시 센 숫자예요. '지표에서 보기'는 홈의 그 카드로, 주제 이름과 '주제 페이지'는 그 주제의 리서치와 발표로 가요.</p><div class="ind" id="ind-dom-crm" data-ind="dom-crm"><p class="ind-k"><a href="/briefs/topic/crm">IT 영역 · CRM·고객</a></p><p class="ind-src"><a class="to-card" href="/#c-dom-crm">지표에서 보기</a> · <a href="/briefs/topic/crm">주제 페이지</a></p></div><div class="ind" id="ind-dom-data" data-ind="dom-data"><p class="ind-k"><a href="/briefs/topic/data">IT 영역 · 데이터·분석</a></p><p class="ind-src"><a class="to-card" href="/#c-dom-data">지표에서 보기</a> · <a href="/briefs/topic/data">주제 페이지</a></p></div><div class="ind" id="ind-dom-security" data-ind="dom-security"><p class="ind-k"><a href="/briefs/topic/security">IT 영역 · 보안·규제</a></p><p class="ind-src"><a class="to-card" href="/#c-dom-security">지표에서 보기</a> · <a href="/briefs/topic/security">주제 페이지</a></p></div><div class="ind" id="ind-dom-agents" data-ind="dom-agents"><p class="ind-k"><a href="/briefs/topic/agents">IT 영역 · AI 에이전트</a></p><p class="ind-src"><a class="to-card" href="/#c-dom-agents">지표에서 보기</a> · <a href="/briefs/topic/agents">주제 페이지</a></p></div></section>
+  
+  <section class="rel"><h2>같이 읽기</h2><ul class="list r-list"><li class="r-item" id="r-2026-10-27" data-format="news" data-topics="data work agents" data-q="ai를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요 이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. nvidia는 porsche 등이 쓰는 학습 데이터 도구를, openai는 신약 연구개발 운영을 위한 인수를, mckinsey는 은행 cio를 위한 ai 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 it 프로젝트에서 확인할 점을 정리했어요. 이번 주 ax 사건 데이터·분석 업무 도구 ai 에이전트 도입 사례 인수·투자·제휴 데이터 금융·보험 의료·바이오 제조 mckinsey nvidia openai porsche, 그룹 브랜드와 자율주행 데이터를 함께 써요 porsche (nvidia 발표) cosmos data factory 자율주행 학습 데이터 voxel51 통해 azure에서 사용 nvidia openai, 신약 연구개발 운영을 위해 orchestra bio를 인수해요 openai orchestra bio 제약·바이오 연구개발 운영 회사 인수 openai mckinsey, 은행 cio에게 ai 에이전트 운영 원칙을 제시해요 은행 cio 대상 (mckinsey 리서치) ai 에이전트 여러 업무 흐름 거버넌스·아키텍처·책임 체계 재정비 mckinsey 세 발표가 함께 가리키는 것: 일하는 구조 mckinsey nvidia openai it 컨설팅 관점 nvidia는 porsche가 cosmos data factory로 그룹 브랜드와 자율주행 데이터를 함께 쓴다고 밝혔어요. openai는 생명과학 연구개발 운영에 ai를 들이려고 orchestra bio를 인수한다고 발표했어요. mckinsey는 은행이 ai 에이전트를 크게 쓰려면 거버넌스와 책임 체계를 새로 짜야 한다고 짚었어요. 세 발표 모두 모델보다 데이터 흐름, 운영, 책임 구조를 과제로 다뤘어요. 도입 전 데이터 검증 기준, 시스템 연동, 에이전트 승인 절차를 점검 항목으로 남겨요."><a class="r-card" href="/briefs/2026-10-27"><span class="r-k"><b>이번 주 AX 사건</b><span>데이터·분석</span><span>업무 도구</span><span>AI 에이전트</span></span><span class="r-t">AI를 동료로 들이기 전에: 데이터, 운영, 책임부터 점검해요</span><span class="r-l">이번 주 공식 발표 3건은 모두 모델보다 그 주변을 다뤘어요. NVIDIA는 Porsche 등이 쓰는 학습 데이터 도구를, OpenAI는 신약 연구개발 운영을 위한 인수를, McKinsey는 은행 CIO를 위한 AI 에이전트 안내서를 내놓았어요. 세 발표를 도입 사례처럼 읽고, 기업 IT 프로젝트에서 확인할 점을 정리했어요.</span><span class="r-m"><time datetime="2026-10-27">2026년 10월 27일</time><span>사례 3건 · 공식 발표 3건</span></span><img class="r-th" src="/social/out/2026-10-27/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-adoption">도입 사례</a><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-finance">금융·보험</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip industry" href="/briefs/tag/industry-manufacturing">제조</a><a class="chip company" href="/briefs/tag/company-mckinsey">McKinsey</a><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a></div></li><li class="r-item" id="r-2026-10-26" data-format="news" data-topics="cloud crm security" data-q="ai 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요 이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 ai를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. sk텔레콤은 거버넌스 체계를, microsoft와 databricks는 데이터와 실행 환경의 통제를, salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요. 이번 주 ax 사건 클라우드·인프라 crm·고객 보안·규제 보안·안전 인프라·클라우드 인수·투자·제휴 통신 의료·바이오 sk텔레콤 databricks microsoft salesforce sk텔레콤: 사내 ai 에이전트까지 관리 기준을 묶었어요 sk텔레콤 ai 거버넌스 리포트·관리체계 사내 ai 에이전트·대고객 ai 서비스 cpo 총괄, iso/iec 42001 인증 sk텔레콤 microsoft: 업무 시스템마다 통제 수준을 고르게 했어요 microsoft microsoft sovereign cloud 정부·핵심 인프라·규제 산업 시스템 워크로드별로 통제 수준 선택 microsoft databricks: 연구 데이터 곁에서 외부 모델을 돌려요 databricks·nvidia rfd4-proteina 단백질 설계 모델 생명과학 연구 데이터·실험 관리 ai runtime 서버리스 gpu에 통합 예정 databricks salesforce: 투자의 중심에 사람을 뒀어요 salesforce $1 billion 투자·ai 도입 전담팀 스페인 마드리드 본사·emea south 현장 엔지니어 배치, 졸업생 1년 교육 salesforce 네 발표가 앞에 둔 것: 어디서, 누가 sk텔레콤 microsoft databricks salesforce it 컨설팅 관점 sk텔레콤은 사내 ai 에이전트를 만들 때부터 종료까지 한 기준으로 관리한다고 밝혔어요. microsoft는 업무 시스템마다 통제 수준을 고르는 주권 클라우드 방식을 내놨어요. databricks는 연구 데이터와 같은 플랫폼에서 외부 모델을 돌리는 통합을 계획하고 있어요. salesforce는 스페인 $1 billion 투자에서 도입을 맡을 엔지니어와 교육에 무게를 뒀어요. 도입 전에 관리 기준, 데이터 위치, 운영 인력부터 정했는지 확인해야 해요."><a class="r-card" href="/briefs/2026-10-26"><span class="r-k"><b>이번 주 AX 사건</b><span>클라우드·인프라</span><span>CRM·고객</span><span>보안·규제</span></span><span class="r-t">AI 도입, 이번 주 발표 4건이 먼저 정한 것은 '통제할 자리'였어요</span><span class="r-l">이번 주 공식 발표 가운데 4건은 어떤 모델을 쓰느냐보다 AI를 어디서 돌리고 누가 관리하느냐를 앞에 뒀어요. SK텔레콤은 거버넌스 체계를, Microsoft와 Databricks는 데이터와 실행 환경의 통제를, Salesforce는 도입을 맡을 사람을 내세웠어요. 네 사례를 차례로 보고, 도입 프로젝트에서 확인할 점을 정리해요.</span><span class="r-m"><time datetime="2026-10-26">2026년 10월 26일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-26/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-deal">인수·투자·제휴</a><a class="chip industry" href="/briefs/tag/industry-telecom">통신</a><a class="chip industry" href="/briefs/tag/industry-healthcare">의료·바이오</a><a class="chip company" href="/briefs/tag/company-skt">SK텔레콤</a><a class="chip company" href="/briefs/tag/company-databricks">Databricks</a><a class="chip company" href="/briefs/tag/company-microsoft">Microsoft</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li><li class="r-item" id="r-2026-10-25-2" data-format="news" data-topics="security crm cloud work" data-q="ai를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 ax 사건 5건 이번 주 공식 발표 8건 가운데 기업 ax와 가까운 5건을 골랐어요. 회사들은 ai를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 ai 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요. 이번 주 ax 사건 보안·규제 crm·고객 클라우드·인프라 업무 도구 nvidia 영국 정부 openai salesforce salesforce, 고객 소통 플랫폼 braze 인수 계약 salesforce uber, 30,000명 넘는 직원에게 chatgpt work openai 영국 정부, 'ai 주권' 자문 서한 공개 영국 정부 nvidia, 유럽 등지에서 클라우드 파트너 확장 nvidia openai, 폴란드 nask와 ai 안전 협력 openai 공통 흐름: 도입 다음 질문은 '누구의 ai를, 어디서' nvidia 영국 정부 openai openai salesforce 실무자가 짚어 볼 점 salesforce는 braze를 기업가치 약 $5.66 billion에 인수하는 최종 계약을 맺었다고 발표했어요. openai는 uber가 30,000명 넘는 직원에게 chatgpt work를 도입한다고 발표했어요. 영국 정부는 ai 주권 자문 서한을, nvidia는 유럽 등지의 클라우드 파트너 확장을 발표했어요. openai는 폴란드 nask와 ai 안전·보안 협력을 발표했어요. ai를 얼마나 쓰느냐에 더해 누구의 ai를 어디서 쓰고 어떻게 지키느냐가 중요해지고 있다고 볼 수 있어요."><a class="r-card" href="/briefs/2026-10-25-2"><span class="r-k"><b>이번 주 AX 사건</b><span>보안·규제</span><span>CRM·고객</span><span>클라우드·인프라</span><span>업무 도구</span></span><span class="r-t">AI를 '쓰는 것'에서 '고르고 지키는 것'으로: 이번 주 AX 사건 5건</span><span class="r-l">이번 주 공식 발표 8건 가운데 기업 AX와 가까운 5건을 골랐어요. 회사들은 AI를 전 직원의 업무 도구로 넓히거나 고객 데이터와 접점을 한데 묶으려 했어요. 정부와 기관은 AI 주권과 안전을 이야기했어요. 도입 다음 단계에서 무엇을 따져 봐야 하는지 하나씩 살펴볼게요.</span><span class="r-m"><time datetime="2026-10-25">2026년 10월 25일</time><span>사례 5건 · 공식 발표 5건</span></span><img class="r-th" src="/social/out/2026-10-25-2/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip company" href="/briefs/tag/company-nvidia">NVIDIA</a><a class="chip company" href="/briefs/tag/company-ukgov">영국 정부</a><a class="chip company" href="/briefs/tag/company-openai">OpenAI</a><a class="chip company" href="/briefs/tag/company-salesforce">Salesforce</a></div></li></ul></section>
+  <div class="more-links"><a href="/briefs">← 리서치 전체</a><a href="/">오늘의 AX 지표</a></div>
+</article>
+<dl class="terms-src" hidden><div class="gl" id="g-ax"><dt>AX (AI 전환)</dt><dd>AI Transformation. 회사가 일하는 방식과 서비스에 AI를 들여 바꾸는 일이에요. 디지털 전환(DX)의 AI판이라고 보면 돼요.</dd></div><div class="gl" id="g-domain"><dt>IT 영역</dt><dd>IT 컨설팅에서 일을 나누는 큰 칸이에요. 이 사이트는 ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트 일곱 가지로 나눠요.</dd></div><div class="gl" id="g-agent"><dt>AI 에이전트</dt><dd>사람이 단계마다 시키지 않아도 여러 단계의 일을 이어서 처리하는 AI예요. 문의를 읽고, 시스템에서 정보를 찾고, 답장 초안까지 쓰는 식이에요.</dd></div><div class="gl" id="g-erp"><dt>ERP</dt><dd>Enterprise Resource Planning. 회사의 재무·회계·구매·재고·인사 같은 살림을 한 시스템에서 관리하는 소프트웨어예요(예: SAP, Oracle, Workday). IT 컨설팅에서 가장 큰 사업 영역 중 하나예요.</dd></div><div class="gl" id="g-crm"><dt>CRM</dt><dd>Customer Relationship Management. 고객 정보·영업·마케팅·상담 이력을 관리하는 소프트웨어예요(예: Salesforce).</dd></div><div class="gl" id="g-official"><dt>공식 발표</dt><dd>회사·정부·기관이 자기 사이트(뉴스룸, 보도자료 페이지)에 직접 낸 글이에요. 이 사이트는 언론 보도나 루머 없이 이것만 써요.</dd></div><div class="gl" id="g-ramp"><dt>Ramp AI Index</dt><dd>미국 기업 7만여 곳의 법인카드·송금 기록으로, AI 도구에 돈을 낸 회사가 몇 %인지 매달 세는 지표예요. 무료 도구나 개인 결제는 안 잡혀요. 미국 연준(FRED)에도 올라와요.</dd></div></dl>
+<script src="/terms.js" defer></script>
+<script>
+(() => { for (const b of document.querySelectorAll("[data-share]")) b.addEventListener("click", async () => {
+  const url = location.origin + location.pathname, label = b.querySelector("span"), was = (b.dataset.label ||= label.textContent);
+  clearTimeout(+b.dataset.t || 0);
+  try {
+    if (navigator.share && matchMedia("(pointer: coarse)").matches) { await navigator.share({ title: document.title, url }); return; }
+    await navigator.clipboard.writeText(url); label.textContent = "링크를 복사했어요";
+    const say = document.querySelector("[data-share-status]"); if (say) say.textContent = "이 글의 링크를 복사했어요";
+    // (a phone without a share sheet — an app's own browser — has the icon only: a toast says it, like 저장's)
+    if (getComputedStyle(label).display === "none") { let t = document.querySelector(".pd-toast"); if (!t) { t = Object.assign(document.createElement("div"), { className: "pd-toast" }); t.setAttribute("role", "status"); document.body.append(t); }
+      t.textContent = "이 글의 링크를 복사했어요"; t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 2400); }
+  } catch (e) { if (e && e.name === "AbortError") return; prompt("이 주소를 복사하세요", url); }
+  b.dataset.t = setTimeout(() => { label.textContent = was; }, 2400);
+}); })();
+</script>
+<script type="module">
+import { toc } from "/toc.js";
+
+const fillIndicators = async () => {
+  const boxes = [...document.querySelectorAll(".ind[data-ind]")]; if (!boxes.length) return false;
+  try {
+  const stop = new AbortController(), t = setTimeout(() => stop.abort(), 4000);
+  const data = await (await fetch("/briefs/indicators.json", { signal: stop.signal })).json(); clearTimeout(t);
+  const day = (d) => d ? +d.slice(0, 4) + "년 " + +d.slice(5, 7) + "월 " + +d.slice(8, 10) + "일 기준" : "";
+  const mk = (tag, cls, text) => Object.assign(document.createElement(tag), cls ? { className: cls } : {}, text != null ? { textContent: text } : {});
+  for (const box of boxes) {
+    const c = data.cards?.[box.dataset.ind], src = box.querySelector(".ind-src"); if (!c) continue;
+    if (c.home === false) { const a = src.querySelector(".to-card"); if (a) { a.nextSibling?.textContent?.startsWith(" · ") && a.nextSibling.remove(); a.remove(); } }
+    const n = mk("p", "ind-n"); n.append(mk("b", null, c.big), mk("span", null, c.bl));
+    const top = Math.max(1, ...c.rank.map((x) => x.value)), bars = mk("ol", "ind-bars");
+    for (const x of c.rank) { const li = mk("li", x.value === top ? "top" : ""), i = mk("i"), fill = mk("span"); fill.style.width = Math.round((x.value / top) * 100) + "%"; i.append(fill); i.setAttribute("aria-hidden", "true"); li.append(mk("span", "n", x.name), i, mk("span", "v", x.label)); bars.append(li); }
+    box.insertBefore(n, src); if (c.title) box.insertBefore(mk("p", "ind-t", c.title), src); if (c.rank.length) box.insertBefore(bars, src);
+    src.prepend(c.src + (data.as_of ? " · " + day(data.as_of) : "") + (src.childElementCount ? " · " : ""));
+  }
+  return true;
+  } catch { return false; }
+};
+
+const art = document.querySelector("article.brief"), $ = (s) => art.querySelector(s), parts = [...art.querySelectorAll(".part")];
+const text = parts.length && parts.every((s) => s.dataset.name)
+  ? parts.map((s, i) => { const h = s.firstElementChild, name = s.dataset.name, heading = (h.querySelector("h2") ?? h).textContent.trim();
+      return { id: h.id || `s${i + 1}`, title: heading.startsWith(name) ? heading : `${name} · ${heading}`, group: name.startsWith("사례") ? "사례" : "흐름과 관점", pages: [[h]] }; })
+  : [{ id: "text", title: "본문", group: "본문", items: [...art.querySelectorAll(".part h2")], count: 0, sub: (n) => ({ label: n.textContent }) }];
+toc([
+  { id: "top", title: "처음", pages: [[$(".art-head")]] },
+  ...text,
+  { id: "sum", title: "정리", group: "마무리", pages: [[$(".sum")]] },
+  { id: "basis", title: "근거 · 출처", group: "마무리", pages: [[$(".basis")]] },
+  { id: "data", title: "관련 지표", group: "마무리", pages: [[$(".inds")]] },
+  { id: "next", title: "더 읽기", group: "마무리", pages: [[$(".pn") ?? $(".rel")]] },
+]);
+fillIndicators();
+</script>
+</main>
+
+<footer class="site">
+  <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+</footer>
+
+<script>
+(() => { const p = location.pathname;
+  document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); })();
+</script>
+<script type="module" src="/account.js"></script>
+</div>
+</body>
+</html>

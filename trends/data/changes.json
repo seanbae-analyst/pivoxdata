@@ -3246,6 +3246,239 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-10-30",
+   "key": "filing:msft:2026Q3",
+   "subject": "filing:msft",
+   "kind": "공시",
+   "tier": "small",
+   "score": 30,
+   "topic": "ai",
+   "headline": "Microsoft, 2026년 3분기 설비투자 공시 — 1년 전보다 +103%",
+   "card": {
+    "id": "ch-filing-msft",
+    "k": "자본",
+    "big": "$39.4B",
+    "bl": "Microsoft 설비투자 · 2026년 3분기",
+    "title": "Microsoft, 2026년 3분기 설비투자 공시 — 1년 전보다 +103%",
+    "easy": "Microsoft 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
+    "body": "1년 전 같은 분기 $19.4B.",
+    "src": "SEC 공시 · Microsoft",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       2565000000,
+       4051000000,
+       3385000000,
+       3545000000,
+       3767000000,
+       4744000000,
+       4907000000,
+       4174000000,
+       5089000000,
+       6452000000,
+       5810000000,
+       5865000000,
+       5340000000,
+       6871000000,
+       6283000000,
+       6274000000,
+       6607000000,
+       8943000000,
+       9917000000,
+       9735000000,
+       10952000000,
+       13873000000,
+       14923000000,
+       15804000000,
+       16745000000,
+       17079000000,
+       19394000000,
+       29876000000,
+       30876000000,
+       35802000000,
+       39367000000
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 19394000000,
+      "to": 39367000000,
+      "fromText": "$19.4B",
+      "toText": "$39.4B",
+      "fromLabel": "2025년 3분기",
+      "toLabel": "2026년 3분기"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-30",
+   "key": "filing:googl:2026Q3",
+   "subject": "filing:googl",
+   "kind": "공시",
+   "tier": "small",
+   "score": 30,
+   "topic": "ai",
+   "headline": "Alphabet, 2026년 3분기 설비투자 공시 — 1년 전보다 +114%",
+   "card": {
+    "id": "ch-filing-googl",
+    "k": "자본",
+    "big": "$51.4B",
+    "bl": "Alphabet 설비투자 · 2026년 3분기",
+    "title": "Alphabet, 2026년 3분기 설비투자 공시 — 1년 전보다 +114%",
+    "easy": "Alphabet 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
+    "body": "1년 전 같은 분기 $24.0B.",
+    "src": "SEC 공시 · Alphabet",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       4638000000,
+       6126000000,
+       6732000000,
+       6052000000,
+       6005000000,
+       5391000000,
+       5406000000,
+       5479000000,
+       5942000000,
+       5496000000,
+       6819000000,
+       6383000000,
+       9786000000,
+       6828000000,
+       7276000000,
+       7595000000,
+       6289000000,
+       6888000000,
+       8055000000,
+       11019000000,
+       12012000000,
+       13186000000,
+       13061000000,
+       14276000000,
+       17197000000,
+       22446000000,
+       23953000000,
+       27851000000,
+       35674000000,
+       44924000000,
+       51355000000
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 23953000000,
+      "to": 51355000000,
+      "fromText": "$24.0B",
+      "toText": "$51.4B",
+      "fromLabel": "2025년 3분기",
+      "toLabel": "2026년 3분기"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-30",
+   "key": "hftop:Qwen/Qwen3-14B+argmaxinc/whisperkit-coreml:2026-10-30",
+   "subject": "hf:Qwen/Qwen3-14B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 21,
+   "topic": "ai",
+   "headline": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B 외 1개",
+   "card": {
+    "id": "ch-hftop",
+    "k": "오픈 모델",
+    "big": "2개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B 외 1개",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "Qwen/​Qwen3‑14B(1,235만), argmaxinc/​whisperkit‑coreml(1,216만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-10-30",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Qwen3-14B",
+        "value": 12353242,
+        "label": "1,235만"
+       },
+       {
+        "name": "whisperkit-coreml",
+        "value": 12164647,
+        "label": "1,216만"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-10-30",
+   "key": "hftr:LiquidAI/LFM3-1.7B+ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF:2026-10-30",
+   "subject": "hf:LiquidAI/LFM3-1.7B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 14,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: LiquidAI/​LFM3‑1.7B",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "3위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: LiquidAI/​LFM3‑1.7B",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑generation · 2026-10-23 공개. 함께 들어온 모델: ISTA‑DASLab/​DeepSeek‑V4.1‑Flash‑1017‑GSQ‑RCO‑GGUF.",
+    "src": "Hugging Face 트렌딩 · 2026-10-30",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 866,
+        "label": "13만"
+       },
+       {
+        "name": "Nanbeige4.3-33B",
+        "value": 768,
+        "label": "9,655"
+       },
+       {
+        "name": "LFM3-1.7B",
+        "value": 492,
+        "label": "1.6만"
+       },
+       {
+        "name": "flint",
+        "value": 457,
+        "label": "1.7만"
+       },
+       {
+        "name": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF",
+        "value": 427,
+        "label": "158만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

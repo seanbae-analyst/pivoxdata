@@ -1,0 +1,36 @@
+{
+ "date": "2026-10-30",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-10-30/",
+ "caption": "이번 주 AX 발표는 AI보다 그 아래 기반을 먼저 꺼냈어요.\nSAP는 TechEd에서 Joule Work와 SAP Business AI Platform으로 에이전트 개발 기반을 내놨어요.\n→ 에이전트 범위가 SAP 밖 데이터까지 넓어진다는 뜻이에요.\nSAP는 Dremio 인수를 마치고 SAP BDC에 무복사 레이크하우스 기능을 더했어요.\n→ 데이터 통합이 복제에서 연결로 옮겨 가는 흐름으로 읽혀요.\nMcKinsey는 은행의 부실 여신 관리에 AI는 늘었지만 운영 모델을 바꾼 곳은 적다고 분석했어요.\n→ 도구만큼 업무 절차를 다시 짜는 일이 중요하다는 지적이에요.\n과학기술정보통신부는 캐나다와 AI·양자·바이오, 연구안보 협력을 논의했어요.\n→ 해외 AI 협력에서 데이터 접근 기준도 함께 다뤄요.\n공통점은 데이터, 운영 모델, 연구안보라는 기반이에요.\n확인할 점: 우리 에이전트가 읽을 데이터 범위와 권한은 정해져 있나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-10-30\n출처(공식 발표): 과학기술정보통신부 · McKinsey · SAP — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newstheme",
+  "format_name": "AX 사건 묶어 보기",
+  "source": "claude",
+  "slides": 13
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 103,
+  "problems": []
+ }
+}
