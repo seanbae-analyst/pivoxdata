@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-30",
+ "built_at": "2026-10-31",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "92건",
+     "big": "94건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 42건 · 클라우드·인프라 25건 · 보안·규제 21건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 6건",
+     "body": "AI 에이전트 44건 · 클라우드·인프라 25건 · 보안·규제 21건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 6건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,8 +325,8 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 42,
-         "label": "42건"
+         "value": 44,
+         "label": "44건"
         },
         {
          "name": "클라우드·인프라",
@@ -355,23 +355,23 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "42건",
+     "big": "44건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
-     "title": "AI 에이전트, SAP 발표가 가장 많아요",
+     "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SAP 10/29 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise · OpenAI 10/28 — OpenAI and ServiceNow expand partnership across enterprise workflows · McKinsey 10/28 — Rewiring securities services for a new era of competition and growth",
+     "body": "최근: McKinsey 10/30 — Waniwani’s CEO on the agentic future of insurance distribution · SAP 10/29 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise · OpenAI 10/28 — OpenAI and ServiceNow expand partnership across enterprise workflows",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "SAP",
-         "value": 12,
-         "label": "12건"
+         "name": "McKinsey",
+         "value": 13,
+         "label": "13건"
         },
         {
-         "name": "McKinsey",
+         "name": "SAP",
          "value": 12,
          "label": "12건"
         },
@@ -522,7 +522,7 @@
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Databricks 10/26 — Unify your productivity and AI data with Lakeflow Connect · OpenAI 10/22 — Uber brings ChatGPT Work to all employees with OpenAI · Salesforce 10/19 — Salesforce Accelerates European AI Leadership with $1 Billion Investment in Spain",
+     "body": "최근: OpenAI 10/29 — Credit Saison achieves 954% ROI in a ChatGPT Enterprise pilot · Databricks 10/26 — Unify your productivity and AI data with Lakeflow Connect · OpenAI 10/22 — Uber brings ChatGPT Work to all employees with OpenAI",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -872,6 +872,93 @@
        {
         "name": "Deepgram",
         "value": 0.1125
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "capex:2026Q3",
+   "subject": "capex",
+   "kind": "공시",
+   "tier": "big",
+   "score": 90,
+   "topic": "ai",
+   "headline": "빅테크 4사 2026년 3분기 설비투자, 1년 전보다 +108%",
+   "card": {
+    "id": "ev-capex",
+    "k": "빅 케이스 · 자본",
+    "big": "$201.9B",
+    "bl": "빅테크 4사 설비투자 · 2026년 3분기",
+    "title": "빅테크 4사 2026년 3분기 설비투자, 1년 전보다 +108%",
+    "easy": "빅테크 4곳이 새 분기에 서버·데이터센터 같은 설비에 쓴 돈을 모두 공시했어요. 1년 전보다 +108% 많아요.",
+    "body": "Microsoft·Alphabet·Amazon·Meta 공시 합계. 가장 빨리 늘린 곳은 Amazon(+120%).",
+    "src": "SEC 공시 · 2019년 1분기–2026년 3분기",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       14330000000,
+       17372000000,
+       18346000000,
+       19009000000,
+       20125000000,
+       20849000000,
+       25065000000,
+       29137000000,
+       27416000000,
+       30877000000,
+       32723000000,
+       36583000000,
+       35518000000,
+       36995000000,
+       39312000000,
+       39259000000,
+       33926000000,
+       33420000000,
+       36947000000,
+       42934000000,
+       44289000000,
+       52852000000,
+       58862000000,
+       72339000000,
+       71902000000,
+       88246000000,
+       97271000000,
+       118632000000,
+       129750000000,
+       165050000000,
+       201923000000
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Amazon",
+        "value": 1.2014,
+        "label": "+120%"
+       },
+       {
+        "name": "Alphabet",
+        "value": 1.144,
+        "label": "+114%"
+       },
+       {
+        "name": "Microsoft",
+        "value": 1.0299,
+        "label": "+103%"
+       },
+       {
+        "name": "Meta",
+        "value": 0.8026,
+        "label": "+80%"
        }
       ]
      }
@@ -2034,57 +2121,57 @@
    }
   },
   {
-   "key": "filing:msft:2026Q3",
-   "subject": "filing:msft",
+   "key": "filing:amzn:2026Q3",
+   "subject": "filing:amzn",
    "kind": "공시",
    "tier": "small",
    "score": 30,
    "topic": "ai",
-   "headline": "Microsoft, 2026년 3분기 설비투자 공시 — 1년 전보다 +103%",
+   "headline": "Amazon, 2026년 3분기 설비투자 공시 — 1년 전보다 +120%",
    "card": {
-    "id": "ch-filing-msft",
+    "id": "ch-filing-amzn",
     "k": "자본",
-    "big": "$39.4B",
-    "bl": "Microsoft 설비투자 · 2026년 3분기",
-    "title": "Microsoft, 2026년 3분기 설비투자 공시 — 1년 전보다 +103%",
-    "easy": "Microsoft 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
-    "body": "1년 전 같은 분기 $19.4B.",
-    "src": "SEC 공시 · Microsoft",
+    "big": "$77.3B",
+    "bl": "Amazon 설비투자 · 2026년 3분기",
+    "title": "Amazon, 2026년 3분기 설비투자 공시 — 1년 전보다 +120%",
+    "easy": "Amazon 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
+    "body": "1년 전 같은 분기 $35.1B.",
+    "src": "SEC 공시 · Amazon",
     "viz": [
      {
       "kind": "series",
       "values": [
-       2565000000,
-       4051000000,
-       3385000000,
-       3545000000,
-       3767000000,
-       4744000000,
-       4907000000,
-       4174000000,
-       5089000000,
-       6452000000,
-       5810000000,
-       5865000000,
-       5340000000,
-       6871000000,
-       6283000000,
-       6274000000,
-       6607000000,
-       8943000000,
-       9917000000,
-       9735000000,
-       10952000000,
-       13873000000,
-       14923000000,
-       15804000000,
-       16745000000,
-       17079000000,
-       19394000000,
-       29876000000,
-       30876000000,
-       35802000000,
-       39367000000
+       3290000000,
+       3562000000,
+       4697000000,
+       5312000000,
+       6795000000,
+       7459000000,
+       11063000000,
+       14823000000,
+       12082000000,
+       14288000000,
+       15748000000,
+       18935000000,
+       14951000000,
+       15724000000,
+       16378000000,
+       16592000000,
+       14207000000,
+       11455000000,
+       12479000000,
+       14588000000,
+       14925000000,
+       17620000000,
+       22620000000,
+       27834000000,
+       25019000000,
+       32183000000,
+       35095000000,
+       39522000000,
+       44203000000,
+       54208000000,
+       77259000000
       ],
       "formats": [
        "columns",
@@ -2094,10 +2181,10 @@
      },
      {
       "kind": "versus",
-      "from": 19394000000,
-      "to": 39367000000,
-      "fromText": "$19.4B",
-      "toText": "$39.4B",
+      "from": 35095000000,
+      "to": 77259000000,
+      "fromText": "$35.1B",
+      "toText": "$77.3B",
       "fromLabel": "2025년 3분기",
       "toLabel": "2026년 3분기"
      }
@@ -2105,157 +2192,50 @@
    }
   },
   {
-   "key": "filing:googl:2026Q3",
-   "subject": "filing:googl",
-   "kind": "공시",
-   "tier": "small",
-   "score": 30,
-   "topic": "ai",
-   "headline": "Alphabet, 2026년 3분기 설비투자 공시 — 1년 전보다 +114%",
-   "card": {
-    "id": "ch-filing-googl",
-    "k": "자본",
-    "big": "$51.4B",
-    "bl": "Alphabet 설비투자 · 2026년 3분기",
-    "title": "Alphabet, 2026년 3분기 설비투자 공시 — 1년 전보다 +114%",
-    "easy": "Alphabet 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
-    "body": "1년 전 같은 분기 $24.0B.",
-    "src": "SEC 공시 · Alphabet",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       4638000000,
-       6126000000,
-       6732000000,
-       6052000000,
-       6005000000,
-       5391000000,
-       5406000000,
-       5479000000,
-       5942000000,
-       5496000000,
-       6819000000,
-       6383000000,
-       9786000000,
-       6828000000,
-       7276000000,
-       7595000000,
-       6289000000,
-       6888000000,
-       8055000000,
-       11019000000,
-       12012000000,
-       13186000000,
-       13061000000,
-       14276000000,
-       17197000000,
-       22446000000,
-       23953000000,
-       27851000000,
-       35674000000,
-       44924000000,
-       51355000000
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 23953000000,
-      "to": 51355000000,
-      "fromText": "$24.0B",
-      "toText": "$51.4B",
-      "fromLabel": "2025년 3분기",
-      "toLabel": "2026년 3분기"
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftop:Qwen/Qwen3-14B+argmaxinc/whisperkit-coreml:2026-10-30",
-   "subject": "hf:Qwen/Qwen3-14B",
-   "kind": "새로 진입",
-   "tier": "small",
-   "score": 21,
-   "topic": "ai",
-   "headline": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B 외 1개",
-   "card": {
-    "id": "ch-hftop",
-    "k": "오픈 모델",
-    "big": "2개",
-    "bl": "다운로드 상위 20에 새로 든 모델",
-    "title": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B 외 1개",
-    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
-    "body": "Qwen/​Qwen3‑14B(1,235만), argmaxinc/​whisperkit‑coreml(1,216만).",
-    "src": "Hugging Face 다운로드 상위 · 2026-10-30",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "Qwen3-14B",
-        "value": 12353242,
-        "label": "1,235만"
-       },
-       {
-        "name": "whisperkit-coreml",
-        "value": 12164647,
-        "label": "1,216만"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftr:LiquidAI/LFM3-1.7B+ISTA-DASLab/DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF:2026-10-30",
-   "subject": "hf:LiquidAI/LFM3-1.7B",
+   "key": "hftr:nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B+baidu/Unlimited-OCR-2:2026-10-31",
+   "subject": "hf:nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
    "kind": "새로 진입",
    "tier": "small",
    "score": 14,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: LiquidAI/​LFM3‑1.7B",
+   "headline": "트렌딩 상위 5에 새로: nvidia/​NVIDIA‑Nemotron‑3.5‑Transcribe‑30B‑A4B",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
-    "big": "3위",
+    "big": "4위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: LiquidAI/​LFM3‑1.7B",
+    "title": "트렌딩 상위 5에 새로: nvidia/​NVIDIA‑Nemotron‑3.5‑Transcribe‑30B‑A4B",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "text‑generation · 2026-10-23 공개. 함께 들어온 모델: ISTA‑DASLab/​DeepSeek‑V4.1‑Flash‑1017‑GSQ‑RCO‑GGUF.",
-    "src": "Hugging Face 트렌딩 · 2026-10-30",
+    "body": "automatic‑speech‑recognition · 2026-10-07 공개. 함께 들어온 모델: baidu/​Unlimited‑OCR‑2.",
+    "src": "Hugging Face 트렌딩 · 2026-10-31",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "DeepSeek-V4.1-Flash-1017",
-        "value": 866,
-        "label": "13만"
+        "value": 803,
+        "label": "15만"
        },
        {
         "name": "Nanbeige4.3-33B",
-        "value": 768,
-        "label": "9,655"
+        "value": 785,
+        "label": "1.2만"
        },
        {
         "name": "LFM3-1.7B",
-        "value": 492,
+        "value": 562,
+        "label": "2.4만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 479,
         "label": "1.6만"
        },
        {
-        "name": "flint",
-        "value": 457,
-        "label": "1.7만"
-       },
-       {
-        "name": "DeepSeek-V4.1-Flash-1017-GSQ-RCO-GGUF",
-        "value": 427,
-        "label": "158만"
+        "name": "Unlimited-OCR-2",
+        "value": 416,
+        "label": "2.4만"
        }
       ]
      }
@@ -2342,7 +2322,7 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 42건 · 발표가 많은 곳: SAP 12건, McKinsey 12건, OpenAI 6건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 44건 · 발표가 많은 곳: McKinsey 13건, SAP 12건, OpenAI 6건"
   },
   {
    "group": "domain",
@@ -2383,7 +2363,7 @@
    "kind": "government",
    "date": "2026-10-28",
    "title": "[보도참고] 국민 누구나 24시간 이용하는 ‘인공지능 건강도우미 대화 로봇(AI 건강도우미 챗봇)’ 운영 시작",
-   "summary": "- 국민 누구나 간이 설문 통해 맞춤형 건강 보고서(건강리포트) 및 상담 서비스 이용 가능 - 500만 건 보건 빅데이터 기반 24시간 대화형 인공지능 보건 행정서비스 구축 - 의학 전문가 검증 및 암호화 폐쇄망 기반의 높은 신뢰성과 보안성 확보",
+   "summary": "- 국민 누구나 간이 설문 통해 맞춤형 건강 보고서(건강리포트) 및 상담 서비스 이용 가능 - - 500만 건 보건 빅데이터 기반 24시간 대화형 인공지능 보건 행정서비스 구축 - - 의학 전문가 검증 및 암호화 폐쇄망 기반의 높은 신뢰성과 보안성 확보 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187896",
    "score": 6,
    "domains": [
@@ -2467,6 +2447,19 @@
     "보안·규제"
    ],
    "method": "정책·규제"
+  },
+  {
+   "id": "59217d1550",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-30",
+   "title": "Closing banking’s AI value gap: A CEO guide",
+   "summary": "As AI adoption races ahead, great value is being left behind. Leaders need an operating model that turns investment into AI capital that can be deployed again and again.",
+   "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide",
+   "score": 3,
+   "domains": [],
+   "method": "투자"
   },
   {
    "id": "29483938dd",
@@ -2814,13 +2807,26 @@
    "method": "연구·보고서"
   },
   {
+   "id": "01d8ee4119",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-10-30",
+   "title": "Faster planning decisions as new rules and AI tackle delays",
+   "summary": "Homeowners and small businesses to get quicker answers as new rules put expert officers in charge of straightforward applications",
+   "link": "https://www.gov.uk/government/news/faster-planning-decisions-as-new-rules-and-ai-tackle-delays",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "ad261a0253",
    "src": "msit",
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-10-29",
    "title": "과기정통부, 국내 물리적 인공지능 산업 육성 가속화를 위한 전문가 소통 추진",
-   "summary": "- 물리적 인공지능 실증, 데이터 생산 등 물리적 인공지능I 신규사업 추진 방향 논의 - 국내 물리적 인공지능I 생태계의 전방위적 육성을 위한 전문가 의견 수렴",
+   "summary": "- 물리적 인공지능 실증, 데이터 생산 등 물리적 인공지능I 신규사업 추진 방향 논의 - - 국내 물리적 인공지능I 생태계의 전방위적 육성을 위한 전문가 의견 수렴 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187900",
    "score": 1,
    "domains": [],
@@ -2846,7 +2852,7 @@
    "kind": "government",
    "date": "2026-10-28",
    "title": "인공지능으로 이룬 공공혁신, 국민이 누리는 변화 「2026 공공기관 인공지능 혁신 성과대회」 개최",
-   "summary": "- 공공기관, 인공지능 혁신 주체로 민생 체감 서비스와 행정 효율화 성과 창출- 30개 혁신 우수과제 선정... 공공행정 인공지능 전환 첫걸음 내뎌 - 한국서부발전 ‘인공지능 운영 K-가스터빈’, 인천국제공항공사 ‘인공지능 기반 항공 안전관리’ 대상 수상",
+   "summary": "- 공공기관, 인공지능 혁신 주체로 민생 체감 서비스와 행정 효율화 성과 창출 - - 30개 혁신 우수과제 선정... 공공행정 인공지능 전환 첫걸음 내뎌 - - 한국서부발전 ‘인공지능 운영 K-가스터빈’, 인천국제공항공사 ‘인공지능 기반 항공 안전관리’ 대상 수상 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187898",
    "score": 1,
    "domains": [
@@ -2873,8 +2879,8 @@
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-10-26",
-   "title": "「모두의 인공지능(AI)」 상표(브랜드), 국민들이 직접 만든다",
-   "summary": "- 대국민 공모를 통해 상표명(브랜드명)과 구호(슬로건) 선정(대상 1점 등 우수작 6점 시상) - 모두의 인공지능(AI) 서비스 화면, 홍보물 등에 공동 활용 예정",
+   "title": "「모두의 인공지능」 상표, 국민들이 직접 만든다",
+   "summary": "- 대국민 공모를 통해 상표명(브랜드명)과 구호(슬로건) 선정(대상 1점 등 우수작 6점 시상) - - 모두의 인공지능(AI) 서비스 화면, 홍보물 등에 공동 활용 예정 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187885",
    "score": 1,
    "domains": [],
