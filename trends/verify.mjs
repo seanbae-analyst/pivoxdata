@@ -52,12 +52,18 @@ for (const [src, list, control] of [["npm", NPM, NPM_CONTROL], ["pypi", PYPI, PY
     // same moment: on 2026-10-28 the daily series already had 10-27 while "recent" still ended 10-26, so the last 7 days
     // dropped 10-20 — openai-whisper's 323,021 against ~210,000 on the days around it — and missed by 6.74%, which stopped
     // the day three times. So the 7 days ending on the newest day and the 7 ending the day before are both tried, the
-    // closer counts (that day: 0.00% on the day before, for all 46 packages).
+    // closer counts (that day: 0.00% on the day before, for all 46 packages). On 2026-10-29 the lag differed by package:
+    // 38 one day behind, vllm two ("recent" ended 10-26 while the daily series had 10-28) — 5.92% against the day before,
+    // and the day stopped three times again. So windows ending up to RECENT_LAG days back are all tried; 2% stays.
+    const RECENT_LAG = 3;
     const rel = all.map((p) => { const x = P[p.pkg], n = x.days.length;
       const off = (k) => Math.abs(x.days.slice(n - 7 - k, n - k).reduce((t, [, v]) => t + v, 0) / x.recent.last_week - 1);
-      return [p.pkg, Math.min(off(0), off(1)), off(1) < off(0)]; });
-    const worst = rel.reduce((a, b) => (b[1] > a[1] ? b : a)), behind = rel.filter((r) => r[2]).length;
-    check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)${behind ? ` — ${behind}개는 합계 API가 하루 늦게 갱신돼 하루 앞선 7일과 비교` : ""}`);
+      const lag = [...Array(RECENT_LAG + 1).keys()].reduce((a, k) => (off(k) < off(a) ? k : a));
+      return [p.pkg, off(lag), lag]; });
+    const worst = rel.reduce((a, b) => (b[1] > a[1] ? b : a));
+    const behind = [...Array(RECENT_LAG).keys()].map((i) => [i + 1, rel.filter((r) => r[2] === i + 1).length])
+      .filter(([, c]) => c).map(([k, c]) => `${c}개 ${k}일`).join(" · ");
+    check("pypi:recent≈daily", worst[1] <= 0.02, `최근 7일 합계 API와 일별 합이 ${all.length}개 패키지 모두 2% 안 (가장 큰 차이 ${worst[0]} ${(worst[1] * 100).toFixed(2)}%)${behind ? ` — 합계 API가 늦게 갱신돼 그만큼 앞선 7일과 비교: ${behind}` : ""}`);
   }
   // 4. what the method had to work around — reported, not hidden
   const { until, W, outage } = weekTable(Object.fromEntries(all.map((p) => [p.pkg, P[p.pkg].days])));
