@@ -29,7 +29,7 @@ import path from "node:path";
 import { shell, writePages, SITE, NAME } from "../trends/site.mjs";
 import { SERIES, THEMES, INDUSTRIES, seriesOf, companyId } from "./tags.mjs";
 import { APP_ID } from "./notify-config.mjs";
-import { ROOT, OUT, read, AX_FORMATS } from "./util.mjs";
+import { ROOT, OUT, read, AX_FORMATS, ANNOUNCEMENT_MODES } from "./util.mjs";
 import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
 import { DOMAINS, domainOf, methodOf } from "../trends/series.mjs";
@@ -108,7 +108,7 @@ const srcItem = (x) => `<li><a href="${href(x.link)}" target="_blank" rel="noope
 function basis(b) {
   const st = b.st;
   if (b.series === "roundup") return `<p>${esc(st.month?.slice(5).replace(/^0/, ""))}월에 올린 리서치 ${st.briefs?.length ?? 0}편만으로 썼어요. 각 섹션 아래 링크가 근거가 된 리서치예요.</p>`;
-  if (st.mode === "news") {
+  if (ANNOUNCEMENT_MODES.has(st.mode)) {
     // a briefing written since 2026-10-26 says which announcements were read on their own page (story.mjs → original)
     const read = (st.sources ?? []).filter((x) => x.original).length;
     return `<p>회사·기관이 직접 낸 발표만 썼어요.${st.originals != null ? ` ${read ? `발표 ${read}건은 공식 페이지의 원문까지 읽고, 나머지는 제목과 요약으로 썼어요.` : "발표의 제목과 요약으로 썼어요."}` : ""} 제목을 누르면 원문으로 가요.</p><ul class="srcs">${(st.sources ?? []).map(srcItem).join("")}</ul>`;
@@ -210,6 +210,7 @@ const INSTALL = `<aside class="install" id="install">
   <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
   <div class="row alerts" id="alerts"><b>새 리서치 알림</b>
     <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
+    <label><input type="checkbox" value="policy" checked /> AI 정책 업데이트</label>
     <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
     <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
     <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>

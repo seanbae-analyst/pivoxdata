@@ -1,5 +1,5 @@
 // notify.mjs — "새 AX 브리핑" push alerts through OneSignal, to the readers who chose that topic on the site
-// (/briefs → 알림 받기: AX 사건 / 월간 리포트 / 그 밖의 브리핑, stored as OneSignal tags).
+// (/briefs → 알림 받기: AX 사건 / AI 정책 / 월간 리포트 / 그 밖의 브리핑, stored as OneSignal tags).
 // A briefing is announced once (social/notified.json), only when it is public: a post's briefing after the post is
 // on Instagram (post.json → published), a monthly roundup once written; and only if it is from the last few days, so
 // a backlog is never sent at once. Before sending, waits until the briefing's page is live on the site.
@@ -18,7 +18,7 @@ import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
 
 // which alert topic a series belongs to (the site's checkboxes)
-export const TOPIC = { news: "news", monthly: "monthly", roundup: "monthly", breaking: "other", weekly: "other", flow: "other" };
+export const TOPIC = { news: "news", policy: "policy", monthly: "monthly", roundup: "monthly", breaking: "other", weekly: "other", flow: "other" };
 export const RECENT_DAYS = 3;
 const SITE = "https://data.pivoxquant.com";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

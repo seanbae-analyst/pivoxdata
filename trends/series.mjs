@@ -205,6 +205,11 @@ export const NEWS = {
     { id: "eu", name: "EU 집행위원회", kind: "government", url: "https://ec.europa.eu/commission/presscorner/api/rss?language=en", domains: ["ec.europa.eu"] },
     { id: "ukgov", name: "영국 정부", kind: "government", url: "https://www.gov.uk/search/news-and-communications.atom?keywords=artificial+intelligence", domains: ["gov.uk"] },
     { id: "nist", name: "미국 NIST", kind: "government", url: "https://www.nist.gov/news-events/news/rss.xml", domains: ["nist.gov"] },
+    // AI policy (2026-11-01, owner: "ai policy 관련 업데이트" — 한국 · 미국): the White House's news (executive orders, OSTP).
+    // Tried the same day and left out: the FTC's feeds answer this radar's User-Agent with 403 (not worked around);
+    // 개인정보보호위원회 · 방송통신위원회 · 금융위원회 refuse connections from abroad, where the daily run is; 정책브리핑
+    // (korea.kr) has no feed per agency
+    { id: "whitehouse", name: "미국 백악관", kind: "government", url: "https://www.whitehouse.gov/news/feed/", domains: ["whitehouse.gov"] },
     { id: "mckinsey", name: "McKinsey", kind: "research", url: "https://www.mckinsey.com/insights/rss", domains: ["mckinsey.com"] },
     { id: "capgemini", name: "Capgemini", kind: "company", url: "https://www.capgemini.com/feed/", domains: ["capgemini.com"] },
   ],
