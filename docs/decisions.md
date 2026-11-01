@@ -415,3 +415,10 @@
   며칠 늦은 쪽으로 맞춘 패키지 수를 날수별로 검산 목록에 적는다(`trends/verify.mjs`).
 - 확인: 10-29 상태(일별 10-28까지, 합계는 하루 늦음 · vllm만 이틀 늦음)를 지금 데이터로 다시 만들어 돌림 — 옛 검산 vllm 5.92% 실패(이슈와 같은 숫자),
   새 검산 43개 통과("45개 1일 · 1개 2일"). 10-30 데이터 43개 통과. vllm 합계를 5% 틀리게 하면 실패, 4일 늦게 하면 실패.
+
+### 40. 2026-11-01 홈 화면 앱 이름 = PivoxData
+- 소유자: "홈화면을 pivoxdata만 뜨게 하면 안 되는 거냐". 폰 홈 화면에 설치한 앱 이름이 "AX 레이더"(`manifest.webmanifest` `short_name`,
+  아이폰은 `apple-mobile-web-app-title`)였다 — 사이트 머리의 로고는 이미 PivoxData다.
+- 바꾼 것: `name` · `short_name` · `apple-mobile-web-app-title`(`index.html` · `trends/site.mjs` → 만든 페이지 전부) = **PivoxData**.
+  사이트 제목 · 메일 보낸 사람 · 처리방침의 서비스 이름("AX 트렌드 레이더")은 그대로.
+- 이미 설치한 아이콘은 이름이 바뀌지 않는다 — 지우고 다시 "홈 화면에 추가".
