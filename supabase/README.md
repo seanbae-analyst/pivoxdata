@@ -36,6 +36,9 @@ SQL editor(또는 Supabase MCP `execute_sql`)로 넣는다: `insert into pivoxda
 2. **Emails → SMTP**: Supabase 내장 발송기는 팀 구성원 주소로만 보낸다. PivoxMap 과 같은 Brevo 를 붙인다
    (보내는 사람 `no-reply@pivoxquant.com`, 이름 `AX 트렌드 레이더`). 붙였으면 `AUTH.mail = "brevo"` — 처리방침의 국외 이전 표에 Brevo 가 들어간다.
 3. **Emails → Templates**: **Magic Link** 와 **Confirm signup** 두 템플릿을 이 폴더의 `magic-link.html` · `confirm-signup.html` 로 바꾼다.
+   **2026-11-01부터는 손으로 붙이지 않아도 된다**: 저장소 Secret `SUPABASE_ACCESS_TOKEN`(Supabase → Account → Access Tokens)이 있으면
+   `.github/workflows/auth-templates.yml`이 두 파일(또는 `apply-templates.mjs` · `templates-apply.txt`)이 main에서 바뀔 때마다
+   `supabase/apply-templates.mjs`로 Management API(`PATCH /v1/projects/<ref>/config/auth`)에 넣고 다시 읽어 맞는지 본다. 제목도 그 스크립트가 정한다.
    제목은 `AX 트렌드 레이더 로그인 코드` · `AX 트렌드 레이더 시작하기 — 로그인 코드`.
    - **2026-11-01부터 로그인은 코드 하나**(소유자 "코드로 로그인 다 통일"): 두 템플릿에는 **`{{ .Token }}` 코드만** 있고 링크가 없다.
      사이트도 코드만 받는다(`auth.js` → `sendCode` · `verifyCode`). 아래 링크 설명은 그 전에 보낸 메일을 위한 것 — `/auth/callback` 은
