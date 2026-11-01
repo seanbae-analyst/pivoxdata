@@ -195,6 +195,9 @@ await source("ax", async () => {
       const [d, v] = line.split(",");
       if (v && v !== "." && !Number.isNaN(+v)) months[d.slice(0, 7)] = Math.round(+v * 100) / 100;
     }
+    // nothing read (FRED answered 404 or no CSV) is FRED being down, not a series without months: keep yesterday's file.
+    // 2026-11-01 it wrote all 14 series empty, and verify stopped the whole day (#87)
+    if (!Object.keys(months).length) throw new Error(`FRED gave no months for ${x.id}${csv == null ? " (404)" : ` (${csv.length} bytes)`}`);
     out[x.id] = { ...x, months };
     const k = Object.keys(months);
     console.log(`ax    ${x.id.padEnd(20)} ${k.length} months → ${k.at(-1)}`);
