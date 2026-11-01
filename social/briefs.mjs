@@ -15,10 +15,9 @@
 //  • /briefs/tag/<kind>-<id> — one theme, industry or company across all formats
 //  • /briefs/feed.xml       — RSS, for readers and (later) e-mail
 //  • the home page's regions — this week's story, the latest pieces, the topics and the formats
-// A post's briefing is public once the post is on Instagram (post.json → published): listed, in its series and tags,
-// the RSS, the sitemap and the home page. Before that (a draft waiting for /approve, a test draft) it has its page —
-// the caption links to it, so it must be there the moment the post goes up — but marked noindex and listed nowhere,
-// and no public page links to it. A rejected draft (post.json → rejected) has no page at all. Monthly roundups are
+// A post's briefing is public once its draft is made (util.mjs → isPublic, 2026-11-01 — until then: once the post was
+// on Instagram): listed, in its series and tags, the RSS, the sitemap and the home page. A test draft waits for its
+// post: it has its page (the caption links to it) but marked noindex and listed nowhere. A rejected draft (post.json → rejected) has no page at all. Monthly roundups are
 // public once written. Rebuilt from everything each run, so a page also picks up its Instagram link once posted —
 // every publish path runs this again and commits the result with post.json. Sources are printed from the data the
 // post was written from (announcements with their links, the Ramp AI Index citation, download counts).
@@ -29,7 +28,7 @@ import path from "node:path";
 import { shell, writePages, SITE, NAME } from "../trends/site.mjs";
 import { SERIES, THEMES, INDUSTRIES, seriesOf, companyId } from "./tags.mjs";
 import { APP_ID } from "./notify-config.mjs";
-import { ROOT, OUT, read, AX_FORMATS, ANNOUNCEMENT_MODES } from "./util.mjs";
+import { ROOT, OUT, read, AX_FORMATS, ANNOUNCEMENT_MODES, isPublic } from "./util.mjs";
 import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
 import { DOMAINS, domainOf, methodOf } from "../trends/series.mjs";
@@ -59,8 +58,10 @@ const companiesOf = (st) => [...new Map((st.sources ?? []).map((x) => [companyId
 const newest = (a, b) => b.st.date.localeCompare(a.st.date) || compareSlots(b.slot, a.slot);
 const withTags = (b) => ({ ...b, series: b.st.series ?? seriesOf(b.st), tags: b.st.article.tags ?? { themes: [], industries: [], companies: companiesOf(b.st) } });
 // public: the posted ones and the roundups; pending: a draft's page, noindex, linked from nowhere
-const briefs = [...drafts.filter((b) => b.post?.published), ...roundups].map(withTags).sort(newest);
-const pending = drafts.filter((b) => !b.post?.published).map((b) => ({ ...withTags(b), pending: true })).sort(newest);
+const briefs = [...drafts.filter((b) => isPublic(b.post)), ...roundups].map(withTags).sort(newest);
+const pending = drafts.filter((b) => !isPublic(b.post)).map((b) => ({ ...withTags(b), pending: true })).sort(newest);
+// what the operator still has to put on Instagram (/upload): every draft not posted yet, public briefing or not
+const toPost = drafts.filter((b) => b.post?.images?.length && !b.post.published).sort(newest);
 const bySlot = new Map(briefs.map((b) => [b.slot, b]));
 
 // ---------- 주제 · 형식: what a piece is about, apart from the form it takes ----------
@@ -512,7 +513,7 @@ put("feed.xml", rss);
 put("indicators.json", JSON.stringify(INDICATORS) + "\n");
 // the posts not on Instagram yet, for the operator's /upload list (2026-11-01, owner: "내 이메일로 들어가면 운영자 전용이
 // 따로 뜨게"): newest first, with the card count — more than 10 is posted from the app. Public like the cards themselves.
-put("pending.json", JSON.stringify(pending.filter((b) => b.post?.images?.length)
+put("pending.json", JSON.stringify(toPost
   .map((b) => ({ slot: b.slot, date: b.st.date, title: plain(b.st.article.title), cards: b.post.images.length }))) + "\n");
 
 // a page whose briefing, series or tag went away goes too

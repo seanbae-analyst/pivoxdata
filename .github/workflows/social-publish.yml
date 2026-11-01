@@ -6,6 +6,8 @@
 # social/out/<slot>/post.json, already committed; this job only sends it (publish.mjs reads the account's recent media
 # first, so a post that is already up is recorded, never posted twice), then lists its briefing (briefs.mjs) in the
 # same push. An open "[instagram]" issue carrying the same marker is closed with the link.
+# The long stories (more than 10 cards, posted by the owner from the app) need no /approve either: every three hours
+# record-manual looks each unrecorded one up among the account's recent media, records what it finds, and closes its issue.
 # A hand-made post can also go up on its own: commit its post.json with "auto_publish": true and, once it reaches main,
 # the publish-queued job posts every such unpublished folder in slot order (merging the PR is the approval).
 name: instagram publish
@@ -16,6 +18,10 @@ on:
   push:
     branches: [main]
     paths: ["social/out/**/post.json"]
+  # the long stories the owner posts from the app are found and recorded without /approve (2026-11-01, owner:
+  # "approve 달지 말고") — every three hours, job record-manual
+  schedule:
+    - cron: "41 */3 * * *"
   workflow_dispatch:
     inputs:
       slot:
@@ -219,6 +225,70 @@ jobs:
               core.notice(`published ${slot}: ${link}`);
               for (const i of open.filter((i) => (i.body || "").includes(`<!-- instagram-post:${slot} -->`))) {
                 await github.rest.issues.createComment({ ...context.repo, issue_number: i.number, body: `게시했습니다: ${link}` });
+                await github.rest.issues.update({ ...context.repo, issue_number: i.number, state: "closed", state_reason: "completed" });
+              }
+            }
+
+  # Long stories posted from the app (2026-11-01, owner: "approve 달지 말고"): publish.mjs looks each one up among the
+  # account's recent media by its caption — found, post.json → published (its briefing gets the Instagram link) and the
+  # issue is closed; not found (exit 3), nothing happens and the next run looks again. It never posts: more than 10
+  # cards can't go through the API.
+  record-manual:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: instagram-publish
+      cancel-in-progress: false
+    env:
+      PUSH_BRANCH: main
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Record the ones that are up
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IG_GRAPH_HOST: ${{ vars.IG_GRAPH_HOST }}
+          IG_API_VERSION: ${{ vars.IG_API_VERSION }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          left=$(node social/publish.mjs --manual)
+          if [ -z "$left" ]; then echo "nothing to record"; exit 0; fi
+          test -n "$IG_USER_ID" && test -n "$IG_ACCESS_TOKEN" || { echo "IG_USER_ID / IG_ACCESS_TOKEN secrets are not set — see social/README.md"; exit 1; }
+          found=0
+          for f in $left; do
+            slot=$(basename "$(dirname "$f")")
+            set +e; node social/publish.mjs "$f"; code=$?; set -e
+            if [ "$code" = 3 ]; then echo "$slot: not on Instagram yet"; continue; fi
+            if [ "$code" != 0 ]; then echo "$slot: lookup failed (exit $code)"; continue; fi
+            node social/commit.mjs -m "social: published $slot (found on Instagram)" "$f"
+            echo "$slot" >> "$RUNNER_TEMP/published.txt"; found=1
+          done
+          if [ "$found" = 1 ]; then node social/commit.mjs --briefs -m "briefs: posts found on Instagram — linked"; fi
+
+      - name: Close their issues
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const list = `${process.env.RUNNER_TEMP}/published.txt`;
+            if (!fs.existsSync(list)) return;
+            const open = (await github.paginate(github.rest.issues.listForRepo, { ...context.repo, state: "open", per_page: 100 }))
+              .filter((i) => !i.pull_request && i.title.startsWith("[instagram]"));
+            for (const slot of fs.readFileSync(list, "utf8").split("\n").filter(Boolean)) {
+              const post = JSON.parse(fs.readFileSync(`social/out/${slot}/post.json`, "utf8"));
+              const link = post.published?.permalink ?? post.published?.media_id;
+              core.notice(`found ${slot}: ${link}`);
+              for (const i of open.filter((i) => (i.body || "").includes(`<!-- instagram-post:${slot} -->`))) {
+                await github.rest.issues.createComment({ ...context.repo, issue_number: i.number, body: `인스타그램에서 찾아 기록했습니다: ${link}` });
                 await github.rest.issues.update({ ...context.repo, issue_number: i.number, state: "closed", state_reason: "completed" });
               }
             }

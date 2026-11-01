@@ -13,7 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { SERIES, seriesOf } from "./tags.mjs";
 import { APP_ID } from "./notify-config.mjs";
-import { ROOT, OUT, read, write, isMain } from "./util.mjs";
+import { ROOT, OUT, read, write, isMain, isPublic } from "./util.mjs";
 import { plain } from "./claude.mjs";
 import { compareSlots } from "./slot.mjs";
 
@@ -45,7 +45,7 @@ async function main() {
   const dry = process.argv.includes("--dry-run") || !process.env.ONESIGNAL_REST_KEY;
   const today = new Date().toISOString().slice(0, 10), ago = (d) => (new Date(today) - new Date(d)) / 864e5;
   const due = [
-    ...(fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), public: Boolean(read(path.join(OUT, slot, "post.json"))?.published) })),
+    ...(fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), public: isPublic(read(path.join(OUT, slot, "post.json"))) })),
     ...(fs.existsSync(RU) ? fs.readdirSync(RU).filter((f) => f.endsWith(".json")) : []).map((f) => ({ slot: `roundup-${f.slice(0, -5)}`, st: read(path.join(RU, f)), public: true })),
   ].filter((b) => b.st?.article && b.public && !sent.includes(b.slot) && ago(b.st.date) <= RECENT_DAYS)
     .sort((a, b) => a.st.date.localeCompare(b.st.date) || compareSlots(a.slot, b.slot));

@@ -27,6 +27,10 @@ export const parse = (t) => { const m = String(t).match(/\{[\s\S]*\}/); if (!m) 
 export const AX_FORMATS = new Set(["monthly", "deepdive", "timeline"]);
 // the posts written from official announcements (plan.news): "이번 주 AX 사건" and, since 2026-11-01, "AI 정책 업데이트"
 export const ANNOUNCEMENT_MODES = new Set(["news", "policy"]);
+// a post's briefing is public once its draft is made (2026-11-01, owner: "approve 달지 말고 리서치 내용은 자동으로 올려줘"),
+// not when it reaches Instagram — except a test draft (POST_KIND=test, post.json → test) until it is posted; a rejected
+// one never. The one rule for briefs.mjs, notify.mjs, roundup.mjs and the glossary
+export const isPublic = (post) => Boolean(post && !post.rejected && (post.published || !post.test));
 
 // true when this file is the script node was started with (not an import), so its exports can be used in tests
 export const isMain = (url) => { try { return fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(url)); } catch { return false; } };

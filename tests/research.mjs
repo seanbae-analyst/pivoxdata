@@ -13,6 +13,7 @@ import net from "node:net";
 import { spawn, spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
+import { isPublic } from "../social/util.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { chromium } = createRequire(import.meta.url)("playwright");
@@ -29,9 +30,9 @@ async function serve(root) {
   for (let i = 0; i < 50; i++) { try { await fetch(`http://127.0.0.1:${p}/`); return { base: `http://127.0.0.1:${p}`, stop: () => child.kill() }; } catch { await new Promise((r) => setTimeout(r, 100)); } }
   throw new Error("serve.mjs did not start");
 }
-// the public pieces as the site lists them (post.json → published), newest first
+// the public pieces as the site lists them (social/util.mjs → isPublic: a draft is public once made, 2026-11-01), newest first
 const pieces = fs.readdirSync(path.join(ROOT, "social", "out")).filter((s) => fs.existsSync(path.join(ROOT, "social", "out", s, "story.json")))
-  .map((slot) => ({ slot, st: read(`social/out/${slot}/story.json`), post: read(`social/out/${slot}/post.json`) })).filter((b) => b.post?.published && b.st.article?.sections?.length);
+  .map((slot) => ({ slot, st: read(`social/out/${slot}/story.json`), post: read(`social/out/${slot}/post.json`) })).filter((b) => isPublic(b.post) && b.st.article?.sections?.length);
 // the list also carries the monthly roundups (social/roundups/*.json), as social/briefs.mjs does
 const RU = path.join(ROOT, "social", "roundups"), listed = pieces.length + (fs.existsSync(RU) ? fs.readdirSync(RU).filter((f) => f.endsWith(".json") && read(`social/roundups/${f}`)?.article).length : 0);
 
@@ -115,13 +116,17 @@ try {
     await pg.click(`.f-o[data-f="topic"][data-v="${topic.v}"]`); await pause(100);
     ok("눌린 주제를 다시 누르면 풀린다 (형식은 그대로)", !new URL(pg.url()).searchParams.get("topic") && new URL(pg.url()).searchParams.get("format") === format);
     // back from a piece: the same list
-    await pg.click(`.f-o[data-f="topic"][data-v="${topic.v}"]`); await pg.fill('input[name="q"]', word); await pause(400);
+    // the search word comes from a piece this topic and format show (with 7+ pieces, the first search word above may be
+    // in none of them — 2026-11-01, when drafts became public)
+    await pg.click(`.f-o[data-f="topic"][data-v="${topic.v}"]`); await pause(100);
+    const word2 = (await pg.$eval("ul.r-list .r-item:not([hidden]) .r-t", (t) => t.textContent)).split(/[\s:,·]+/).find((w) => w.length >= 2);
+    await pg.fill('input[name="q"]', word2); await pause(400);
     const before = { url: pg.url(), items: await visible(pg) };
     await Promise.all([pg.waitForNavigation(), pg.click("ul.r-list .r-item:not([hidden]) .r-card")]);
     ok("목록에서 글로 들어간다", /\/briefs\/\d{4}-\d{2}-\d{2}/.test(new URL(pg.url()).pathname) && await pg.isVisible("article.brief h1"));
     await pg.goBack({ waitUntil: "networkidle" }); await pause(200);
     ok("뒤로가기 → 같은 주소(검색어 · 주제 · 형식)", pg.url() === before.url, `${pg.url()} vs ${before.url}`);
-    ok("뒤로가기 → 같은 목록과 같은 검색어", JSON.stringify(await visible(pg)) === JSON.stringify(before.items) && (await pg.inputValue('input[name="q"]')) === word);
+    ok("뒤로가기 → 같은 목록과 같은 검색어", JSON.stringify(await visible(pg)) === JSON.stringify(before.items) && (await pg.inputValue('input[name="q"]')) === word2);
     // an address that names the filters opens filtered; one with a typo shows everything
     await pg.goto(`${B}/briefs?topic=${topic.v}`, { waitUntil: "networkidle" });
     ok("?topic= 로 연 주소는 걸러진 목록", (await visible(pg)).length === topic.n);

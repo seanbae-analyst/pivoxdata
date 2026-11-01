@@ -12,7 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { ask, pickRoute, ClaudeUnavailable, STYLE, plain, allowNumbers, checkArticle, ARTICLE } from "./claude.mjs";
 import { THEMES, INDUSTRIES, SERIES, tagPrompt, pickTags, companyId, seriesOf } from "./tags.mjs";
-import { ROOT, OUT, read, write, parse } from "./util.mjs";
+import { ROOT, OUT, read, write, parse, isPublic } from "./util.mjs";
 import { compareSlots } from "./slot.mjs";
 
 const MIN = 2;
@@ -24,7 +24,7 @@ const file = path.join(DIR, `${month}.json`);
 if (fs.existsSync(file)) { console.log(`roundup ${month}: already written`); process.exit(0); }
 
 const briefs = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).sort(compareSlots)
-  .map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), published: Boolean(read(path.join(OUT, slot, "post.json"))?.published) }))
+  .map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), published: isPublic(read(path.join(OUT, slot, "post.json"))) }))
   .filter((b) => b.published && b.st?.article?.sections?.length && b.st.date?.startsWith(month));
 if (briefs.length < MIN) { console.log(`roundup ${month}: ${briefs.length} public briefing(s), needs ${MIN}`); process.exit(0); }
 

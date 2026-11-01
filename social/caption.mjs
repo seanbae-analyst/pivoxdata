@@ -112,7 +112,7 @@ async function main() {
 
   const images = fs.readdirSync(dir).filter((f) => /^\d+\.png$/.test(f)).sort();
   if (images.length < 3) throw new Error(`social/out/${slot}: ${images.length} slides — run social/render.mjs first`);
-  const post = { date, ...(slot !== date ? { slot } : {}), images, image_base: `https://data.pivoxquant.com/social/out/${slot}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: ctx.allowed.size, problems: [] } };
+  const post = { date, ...(slot !== date ? { slot } : {}), ...(process.env.POST_KIND === "test" ? { test: true } : {}), images, image_base: `https://data.pivoxquant.com/social/out/${slot}/`, caption, caption_source: source, caption_via: source === "claude" ? result.via : null, story: story ? { format: story.format, format_name: story.format_name, source: story.source, slides: story.slides.length } : null, caption_note: result.why ?? null, mode: plan.mode ?? "roundup", event: plan.event ? { key: plan.event.key, kind: plan.event.kind, headline: plain(plan.event.headline) } : null, insights: slides.map((x) => x.id), checked: { numbers_allowed: ctx.allowed.size, problems: [] } };
   write(postFile, post);
   console.log(`wrote social/out/${slot}/post.json (${source} caption, ${caption.length} chars, ${images.length} images)`);
 }
