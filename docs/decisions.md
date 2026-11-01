@@ -470,3 +470,13 @@
   - `social-publish.yml` → `record-manual`(3시간마다, `41 */3 * * *`): `publish.mjs --manual`이 고른 긴 이야기를 하나씩 최근 게시물에서 찾아 기록하고
     이슈를 닫는다. 못 찾으면 exit 3 · 아무것도 안 함 — 10장 넘는 건 API로 게시할 수 없으니 절대 게시하지 않는다. `/approve`는 그대로 남음(바로 기록).
   - 초안 이슈 문구: "리서치 글은 이미 공개", 3번 단계 "/approve" → "끝 — 3시간 안에 기록".
+
+### 45. 2026-11-01 로그인 메일 템플릿은 워크플로가 Supabase에 넣는다
+- 소유자: "아직도 링크가 오잖아" → (이 세션은 템플릿을 못 바꿈: Supabase MCP는 DB · 로그 · 함수만, 관리 토큰 없음, 브라우저 도구 없음) → "B로 해줘".
+- 바꾼 것: `supabase/apply-templates.mjs` — 두 템플릿과 제목을 Management API `PATCH /v1/projects/<ref>/config/auth`
+  (`mailer_subjects_magic_link` · `mailer_templates_magic_link_content` · `mailer_subjects_confirmation` · `mailer_templates_confirmation_content`, Supabase 문서로 확인)로
+  넣고 GET으로 다시 읽어 같은지 본다. 코드(`{{ .Token }}`)가 없거나 링크(`TokenHash` · `ConfirmationURL`)가 남은 템플릿은 넣지 않는다.
+  `.github/workflows/auth-templates.yml` — 그 파일들이나 `supabase/templates-apply.txt`가 main에서 바뀌면, 또는 Run workflow. 실패하면 이슈.
+- 소유자 할 일 한 번: Supabase → Account → Access Tokens → 토큰 → 저장소 Settings → Secrets → Actions → `SUPABASE_ACCESS_TOKEN`.
+- 확인: 가짜 Management API로 — 맞는 토큰 → 넣고 다시 읽어 같음 · exit 0, 틀린 토큰 → 401로 실패, 다시 읽은 값이 다르면 실패. 토큰 없으면 무엇을 넣을지만 찍고 exit 1.
+  실제 프로젝트에는 토큰이 생긴 뒤 첫 실행에서.

@@ -86,6 +86,7 @@ PivoxQuant(투자 회고 앱)와는 다른 제품이다. 공유하는 건 디자
   - `social/request.json` `{"post":"news"}`(이번 주 AX 사건) 또는 `{"post":"test"}`(승인 필요 초안) → `trends.yml`.
     그날 이미 받은 데이터가 있으면 다시 받지 않는다. 한 번 쓰면 지워진다. (`"race"` 는 방향 밖이라 거절된다.)
   - `social/token-refresh.txt` 내용 변경 → `ig-token.yml`(인스타 토큰 갱신).
+  - `supabase/templates-apply.txt` 내용 변경(또는 `supabase/*.html` 변경) → `auth-templates.yml`(로그인 메일 템플릿을 Supabase에 넣기 — Secret `SUPABASE_ACCESS_TOKEN` 필요).
 - 근거 데이터(npm · PyPI · arXiv · Hugging Face · SEC · Ramp) 출처가 그날 안 되면 있던 것으로 계속한다 — 너무 오래되면 검산이 멈춘다
   (`trends/fetch.mjs` → `source`; 2026-10-26 arXiv 429가 하루를 통째로 멈춘 뒤).
 - 10장 넘는 게시물은 자동 게시 대신 `[instagram] … — 직접 게시 N장` 이슈가 열린다. 올리면 3시간마다 도는 `record-manual`이 최근 게시물에서

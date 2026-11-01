@@ -1,0 +1,51 @@
+# auth-templates.yml — the sign-in e-mails (supabase/magic-link.html · confirm-signup.html) into the Supabase project
+# (2026-11-01): supabase/apply-templates.mjs sets their subjects and bodies through the Management API and reads them back.
+# Needs the secret SUPABASE_ACCESS_TOKEN — a personal access token the owner makes in Supabase (Account → Access
+# Tokens) and saves under Settings → Secrets. Never pasted anywhere else. Without it, an issue says what to do.
+name: auth e-mail templates
+
+on:
+  push:
+    branches: [main]
+    paths: ["supabase/magic-link.html", "supabase/confirm-signup.html", "supabase/apply-templates.mjs", "supabase/templates-apply.txt"]
+  # or on request without the button: change supabase/templates-apply.txt on main (any content, e.g. the date)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Set the templates
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: |
+          set -o pipefail
+          node supabase/apply-templates.mjs 2>&1 | tee result.txt
+
+      - name: Open an issue when it fails
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require("fs");
+            const said = fs.existsSync("result.txt") ? fs.readFileSync("result.txt", "utf8").slice(-1500) : "";
+            const title = "auth: 로그인 메일 템플릿을 Supabase에 넣지 못했습니다";
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              /no SUPABASE_ACCESS_TOKEN/.test(said)
+                ? "저장소 Secret `SUPABASE_ACCESS_TOKEN`이 없습니다. Supabase → Account → Access Tokens에서 토큰을 만들어 Settings → Secrets → Actions에 그 이름으로 넣은 뒤, Actions → \"auth e-mail templates\" → Run workflow (또는 `supabase/templates-apply.txt`를 바꿔 main에 올리기)."
+                : "템플릿을 넣지 못했습니다.", "", "```", said.trim(), "```", "", `Run: ${run}`].join("\n");
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: "open", per_page: 100 })).data.find((i) => !i.pull_request && i.title === title);
+            if (open) await github.rest.issues.createComment({ ...context.repo, issue_number: open.number, body });
+            else await github.rest.issues.create({ ...context.repo, title, body });
