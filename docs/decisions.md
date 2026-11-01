@@ -480,3 +480,12 @@
 - 소유자 할 일 한 번: Supabase → Account → Access Tokens → 토큰 → 저장소 Settings → Secrets → Actions → `SUPABASE_ACCESS_TOKEN`.
 - 확인: 가짜 Management API로 — 맞는 토큰 → 넣고 다시 읽어 같음 · exit 0, 틀린 토큰 → 401로 실패, 다시 읽은 값이 다르면 실패. 토큰 없으면 무엇을 넣을지만 찍고 exit 1.
   실제 프로젝트에는 토큰이 생긴 뒤 첫 실행에서.
+
+### 46. 2026-11-01 작은 폰에서 로그인 화면이 옆으로 밀리던 것
+- 소유자: "화면 비율 좀 잡아줄래, 로그인할 때 폰으로 볼 때 안 맞는 듯".
+- 잰 것: 폭 320px(iPhone SE · Galaxy S9+)에서 `/login` 문서 폭이 메일 단계 384px · 코드 단계 472px — 화면이 옆으로 밀렸다. 390 · 430px 폰은 맞았다.
+  요소를 하나씩 숨겨 보니 원인은 입력칸(`#email` · `#code`, 기본 폭 20자 · 코드 칸은 22px 글자에 자간)이었다: `main`이 grid라 그 안의 `.acc`가
+  `min-width:auto`로 입력칸의 기본 폭만큼 커졌다.
+- 고친 것(`ui.css`): `.acc{min-width:0}`, `.acc-in input{width:100%}`.
+- 확인: iPhone SE · 13 · Galaxy S9+ · 14 Pro Max에서 메일 · 동의 · 코드 · 완료 단계와 `/upload` · `/saved` · `/auth/callback` 문서 폭 = 화면 폭.
+  가짜 로그인 서버로 로그인 → 운영자 흐름 16개 통과, `node tests/research.mjs` 67 통과.

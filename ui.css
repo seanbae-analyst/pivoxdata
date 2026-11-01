@@ -152,7 +152,9 @@ html.toc-open body{overflow:hidden}
 a.btn:hover{text-decoration:none}
 
 /* ---------- /login and /auth/callback (trends/pages.mjs, login.js, callback.js): one step at a time, PivoxMap's look ---------- */
-.acc{max-width:460px;margin:0 auto;padding:20px 0 8px;width:100%}
+/* min-width:0 — a grid item (main is a grid) otherwise grows to its input's own width: on a 320px phone the sign-in page was
+   384-472px wide and slid sideways (2026-11-01) */
+.acc{max-width:460px;margin:0 auto;padding:20px 0 8px;width:100%;min-width:0}
 .acc-step.in{animation:pgr-in .34s cubic-bezier(.2,.75,.25,1)} .acc-step.out{animation:pgr-out .34s cubic-bezier(.2,.75,.25,1)}
 .acc h1{margin:0;font-size:clamp(26px,3vw,32px);line-height:1.3;font-weight:750;letter-spacing:-.035em;color:#f5f0e8}
 .acc h1:focus{outline:none}
@@ -164,7 +166,7 @@ a.btn:hover{text-decoration:none}
 .acc-in{display:flex;align-items:center;gap:10px;min-height:52px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--radius-cta);background:var(--surface)}
 .acc-in:focus-within{border-color:var(--bronze-line)}
 .acc-in .ic{flex:none;width:18px;height:18px;fill:none;stroke:var(--mut);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.acc-in input{flex:1;min-width:0;height:50px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;outline:none}
+.acc-in input{flex:1;min-width:0;width:100%;height:50px;border:0;background:none;color:var(--ink);font:inherit;font-size:16px;outline:none}
 .acc-in input::placeholder{color:var(--dim)}
 .acc-err{margin:8px 0 0;font-size:13.5px;line-height:1.6;color:var(--bad)}
 .acc form .btn,.acc .btn.block+.btn.block{margin-top:14px}
