@@ -1,6 +1,6 @@
 {
-  "name": "AX 트렌드 레이더",
-  "short_name": "AX 레이더",
+  "name": "PivoxData",
+  "short_name": "PivoxData",
   "description": "기업의 AI 전환(AX)을 숫자와 공식 발표로 — 매일 갱신, AX 리서치",
   "lang": "ko",
   "start_url": "/briefs?source=app",
