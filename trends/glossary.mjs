@@ -11,6 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { esc } from "./site.mjs";
+import { isPublic } from "../social/util.mjs";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 export const GROUPS = { ax: "AX·IT 용어", data: "근거 데이터 용어" };
@@ -49,14 +50,14 @@ export const termKey = (t) => String(t ?? "").normalize("NFKC").toLowerCase().re
 const idOf = (term) => { let h = 0x811c9dc5; for (const c of termKey(term)) { h ^= c.codePointAt(0); h = Math.imul(h, 0x01000193) >>> 0; } return `b-${h.toString(36)}`; };
 
 // ---------- the briefings' words ----------
-// every word a posted briefing added (social/out/<slot>/story.json → article.terms, post.json → published), oldest
+// every word a public briefing added (social/out/<slot>/story.json → article.terms, social/util.mjs → isPublic), oldest
 // first, each once (the first briefing to explain a word keeps it), none that a fixed word already covers
 const read = (f) => { try { return JSON.parse(fs.readFileSync(f, "utf8")); } catch { return null; } };
 export function briefingTerms() {
   const OUT = path.join(ROOT, "social", "out");
   const fixed = new Set(GLOSSARY.flatMap((g) => [g.term, ...g.match]).map(termKey)), seen = new Set(), out = [];
   const posts = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).map((slot) => ({ slot, st: read(path.join(OUT, slot, "story.json")), post: read(path.join(OUT, slot, "post.json")) }))
-    .filter((b) => b.st?.article?.terms?.length && b.post?.published && !b.post?.rejected)
+    .filter((b) => b.st?.article?.terms?.length && isPublic(b.post))
     .sort((a, b) => a.st.date.localeCompare(b.st.date) || a.slot.localeCompare(b.slot, "en", { numeric: true }));
   for (const { slot, st } of posts) for (const t of st.article.terms) {
     const k = termKey(t.term);

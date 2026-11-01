@@ -19,8 +19,8 @@ PivoxQuant(투자 회고 앱)와는 다른 제품이다. 공유하는 건 디자
    (`trends/series.mjs` → `DOMAINS`, `METHODS`) + 우리 프로젝트에서 확인할 점. 사례 하나에 카드 **두 장**(2026-10-27 "스토리라인 좀더 길게"): 사건(`kind=case`) →
    무슨 뜻인가(`kind=meaning`, 그 사례의 확인할 점은 코드가 찍음). **AX 사건은 11~20장, 사례 3~7건 — 사건 많은 날은 많이**(2026-10-27 "10장 이상으로 …
    내가 직접 올리던지") — 인스타 API는 10장까지라 **소유자가 앱에서 직접 올린다**(`/upload?slot=<폴더>` — **운영자 로그인 전용**:
-   `pd_is_operator()` · `pivoxdata.operators`, 메일 주소는 저장소에 적지 않는다 → 카드 저장 · 캡션 복사 →
-   이슈에 `/approve` = 기록 + 리서치 공개). 10장 이하 게시물(빅 케이스 등)은 그대로 자동.
+   `pd_is_operator()` · `pivoxdata.operators`, 메일 주소는 저장소에 적지 않는다 → 카드 저장 · 캡션 복사 → 인스타에 올리면 끝:
+   `/approve` 없이 3시간 안에 `social-publish.yml` → `record-manual`이 찾아 기록 · 이슈 닫음, 2026-11-01). 10장 이하 게시물(빅 케이스 등)은 그대로 자동.
 3. **풀이는 웹 리서치(`/briefs`, 2026-10-27까지 "브리핑") — 본편.** 폰에서도 카드보다 더 풀어 쓴다: 사례마다 표(누가·무엇을·어디에·어떻게·확인할 점)와
    문단 서너 개, 공통 흐름, 마지막 섹션 "IT 컨설팅 관점"(확인할 점 목록).
    브리핑은 쌓이고 시리즈·태그·월간 정리·RSS로 정리된다. 카드 마지막 장과 캡션이 그 브리핑 주소를 건다.
@@ -88,10 +88,11 @@ PivoxQuant(투자 회고 앱)와는 다른 제품이다. 공유하는 건 디자
   - `social/token-refresh.txt` 내용 변경 → `ig-token.yml`(인스타 토큰 갱신).
 - 근거 데이터(npm · PyPI · arXiv · Hugging Face · SEC · Ramp) 출처가 그날 안 되면 있던 것으로 계속한다 — 너무 오래되면 검산이 멈춘다
   (`trends/fetch.mjs` → `source`; 2026-10-26 arXiv 429가 하루를 통째로 멈춘 뒤).
-- 10장 넘는 게시물은 자동 게시 대신 `[instagram] … — 직접 게시 N장` 이슈가 열린다. 올린 뒤 `/approve` 하면 `publish.mjs`가 최근 게시물에서
-  캡션으로 찾아 기록한다(못 찾으면 다시 올리라고 답함, 다시 올리지는 않음).
+- 10장 넘는 게시물은 자동 게시 대신 `[instagram] … — 직접 게시 N장` 이슈가 열린다. 올리면 3시간마다 도는 `record-manual`이 최근 게시물에서
+  캡션(끝의 리서치 링크 줄)으로 찾아 기록하고 이슈를 닫는다(`publish.mjs --manual`, 절대 게시하지 않음). `/approve`는 바로 기록하고 싶을 때만.
 - 게시물 폴더 이름은 한국 날짜(`social/util.mjs` → `kstToday`). 같은 날 두 번째 게시물은 `social/out/<날짜>-2`(그날 폴더가 이미 있으면).
-- 브리핑은 인스타 게시가 끝나야 공개된다(목록·RSS·사이트맵·홈·용어 풀이). 그전엔 noindex 페이지만 있다.
+- **브리핑은 초안이 만들어지면 바로 공개된다**(2026-11-01 소유자 "approve 달지 말고 리서치 내용은 자동으로 올려줘" — `social/util.mjs` → `isPublic`).
+  테스트 초안(`post.json` → `test`)만 게시 전까지 noindex. `/reject`하면 내려간다.
 - **토큰·키 값은 절대 출력하지 않는다.** `ONESIGNAL_REST_KEY` · `SECRETS_PAT` · `IG_ACCESS_TOKEN` · `IG_USER_ID` ·
   `CLAUDE_CODE_OAUTH_TOKEN` 은 소유자가 직접 GitHub Secrets 에 넣는다. 채팅에 붙여 달라고 하지 않는다.
 - 커밋·PR·산출물에 모델 식별자를 넣지 않는다.

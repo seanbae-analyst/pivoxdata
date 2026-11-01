@@ -458,3 +458,15 @@
 - 고친 것: 시리즈 하나라도 읽은 달이 없으면 던진다 → `source()`가 "ax skipped today, keeping what was there" — 어제 파일 그대로.
 - 확인: 복사본에서 FRED 요청을 모두 404로 바꿔 돌림 — 옛 코드는 0개월 · 검산 실패(이슈와 같은 네 개), 새 코드는 45개월 그대로 · ax 검산 6개 통과.
   FRED가 될 때(이 세션, 2026-11-01 10시 UTC) 45개월 → 2026-09.
+
+### 44. 2026-11-01 리서치는 초안 때 바로 공개 · 직접 올린 게시물은 /approve 없이 기록
+- 소유자: "approve 달지 말고 리서치 내용은 자동으로 올려줘 그냥". 그 전: 리서치 글은 인스타 게시(`post.json` → `published`) 뒤에만 공개됐고,
+  10장 넘는 게시물은 소유자가 앱에 올린 뒤 이슈에 `/approve`를 달아야 기록 · 공개됐다 — 10-28 · 10-30 · 11-01 세 편이 그 사이 비공개로 밀렸다.
+- 바꾼 것:
+  - 공개 규칙 한 곳 `social/util.mjs` → `isPublic(post)`: 거절 안 됐고, 게시됐거나 테스트 초안이 아니면 공개. `briefs.mjs`(목록 · RSS · 사이트맵 · 홈),
+    `notify.mjs`(새 리서치 알림), `roundup.mjs`(월간 정리), `trends/glossary.mjs`(용어 풀이), `tests/research.mjs`가 같은 규칙.
+  - 테스트 초안 표시: `caption.mjs`가 `POST_KIND=test`면 `post.json` → `test: true`.
+  - 운영자 목록(`briefs/pending.json`)은 공개 여부와 따로 "아직 인스타에 없는 것".
+  - `social-publish.yml` → `record-manual`(3시간마다, `41 */3 * * *`): `publish.mjs --manual`이 고른 긴 이야기를 하나씩 최근 게시물에서 찾아 기록하고
+    이슈를 닫는다. 못 찾으면 exit 3 · 아무것도 안 함 — 10장 넘는 건 API로 게시할 수 없으니 절대 게시하지 않는다. `/approve`는 그대로 남음(바로 기록).
+  - 초안 이슈 문구: "리서치 글은 이미 공개", 3번 단계 "/approve" → "끝 — 3시간 안에 기록".

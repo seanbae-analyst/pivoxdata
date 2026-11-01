@@ -7,8 +7,8 @@
 //    slot's /briefs/<slot> link) — say, published by a run whose push of post.json failed — is recorded as published
 //    instead of being posted again.
 //  • a carousel of more than API_MAX cards (a long story, 2026-10-27) can't go through the API: the owner posts it from
-//    the app (data.pivoxquant.com/upload?slot=<slot>), and /approve then records it — found among the recent media by
-//    its caption — or says it isn't up yet (exit 3).
+//    the app (data.pivoxquant.com/upload?slot=<slot>), and social-publish.yml's record-manual job (every three hours,
+//    2026-11-01) or a /approve records it — found among the recent media by its caption — or it isn't up yet (exit 3).
 // Worst case before the first container: 10 minutes for the images to appear on the site (one deadline for all of
 // them); then up to 5 minutes for the image containers (processed together) and 150 s for the carousel — about 18
 // minutes, under the 30-minute timeout of the jobs that run it.
@@ -16,6 +16,7 @@
 // Usage: node social/publish.mjs social/out/<slot>/post.json [--dry-run]
 //        node social/publish.mjs social/out/<slot>/post.json --reject    (the owner's /reject: post.json → rejected)
 //        node social/publish.mjs --queued    (the "auto_publish": true posts not yet up or rejected, oldest slot first)
+//        node social/publish.mjs --manual    (the long stories the owner posts from the app, not recorded yet)
 // Env:   IG_USER_ID, IG_ACCESS_TOKEN               (GitHub secrets; see social/README.md)
 //        IG_GRAPH_HOST   default graph.instagram.com  (graph.facebook.com for a token from Facebook Login)
 //        IG_API_VERSION  default v23.0
@@ -35,6 +36,14 @@ if (flag("--queued")) {
   const queued = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter(isSlot).sort(compareSlots)
     .filter((slot) => { const p = read(path.join(OUT, slot, "post.json")); return p?.auto_publish === true && !p.published && !p.rejected && !manual(p); });
   for (const slot of queued) console.log(`social/out/${slot}/post.json`);
+  process.exit(0);
+}
+// the long stories not recorded yet (2026-11-01, owner: "approve 달지 말고"): social-publish.yml looks each one up among
+// the account's recent media every few hours — found, it is recorded; not found, exit 3 and nothing posted
+if (flag("--manual")) {
+  const left = (fs.existsSync(OUT) ? fs.readdirSync(OUT) : []).filter(isSlot).sort(compareSlots)
+    .filter((slot) => { const p = read(path.join(OUT, slot, "post.json")); return p && !p.published && !p.rejected && !p.test && manual(p); });
+  for (const slot of left) console.log(`social/out/${slot}/post.json`);
   process.exit(0);
 }
 if (!file) { console.error("usage: node social/publish.mjs social/out/<slot>/post.json [--dry-run | --reject]  ·  node social/publish.mjs --queued"); process.exit(2); }

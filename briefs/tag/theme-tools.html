@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>개발 도구 · 리서치</title>
+<meta name="description" content="개발 도구 관련 AX 리서치 모음" />
+
+<link rel="canonical" href="https://data.pivoxquant.com/briefs/tag/theme-tools" />
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="AX 트렌드 레이더" />
+<meta property="og:locale" content="ko_KR" />
+<meta property="og:url" content="https://data.pivoxquant.com/briefs/tag/theme-tools" />
+<meta property="og:title" content="개발 도구 · 리서치" />
+<meta property="og:description" content="개발 도구 관련 AX 리서치 모음" />
+<meta property="og:image" content="https://data.pivoxquant.com/og/home.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://data.pivoxquant.com/og/home.png" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<meta name="theme-color" content="#050505" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="PivoxData" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="/ui.css?v=12" />
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
+<meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
+<meta name="pd-policy" content="2026-11-01" />
+
+<link rel="stylesheet" href="/research.css" />
+<style>
+  /* the briefings read like the rest of the site (2026-10-25): plain labels, hairline rules, bronze only where it means
+     something — no pills, no boxed cards. main's children sit on their own margins (no grid gap between every line). */
+  main{gap:0}
+  main>*,article{min-width:0}
+  .kicker{width:fit-content;font-size:13px;color:var(--mut);margin:28px 0 12px}
+  .kicker b{color:var(--bronze-hi);font-weight:600;margin-right:8px} .kicker a{color:var(--ink-2)}
+  article{max-width:720px}
+  h1.page{font-size:clamp(28px,4.4vw,40px);line-height:1.25;letter-spacing:-.03em;margin:0 0 12px;word-break:keep-all}
+  .lede{font-size:18px;line-height:1.75;color:var(--ink-2);margin:0 0 8px}
+  .meta{font-size:13px;color:var(--dim);margin:0 0 14px}
+  article h2{font-size:21px;line-height:1.4;letter-spacing:-.02em;margin:44px 0 12px}
+  article p{font-size:16.5px;line-height:1.85;color:var(--ink-2);margin:0 0 14px}
+  .src{font-size:13.5px;color:var(--mut);margin:6px 0 0;padding-left:12px;border-left:2px solid var(--bronze-line)}
+  .src a{color:var(--mut)} .src a:hover{color:var(--ink)}
+  /* a case (2026-10-26): its IT domain and the way it went in, the heading, then a small table — no box, hairlines */
+  .case-h{margin:44px 0 0} .case-h h2{margin:6px 0 14px}
+  .case-k{font-size:13px;color:var(--mut);margin:0}
+  .case{margin:0 0 20px;border-top:1px solid var(--line-2)}
+  .case>div{display:grid;grid-template-columns:76px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .case dt{font-size:13px;color:var(--mut);padding-top:2px} .case dd{margin:0;font-size:15.5px;line-height:1.55;color:var(--ink)}
+  .case .none dd{color:var(--dim)} .case .q dd{font-weight:600}
+  ul.asks{margin:0 0 14px;padding-left:20px;list-style:disc} ul.asks li{font-size:16.5px;line-height:1.75;color:var(--ink-2);margin:2px 0} ul.asks li::marker{color:var(--dim)}
+  .sum{margin:44px 0 0;padding:18px 0 0;border-top:2px solid var(--bronze-line)}
+  .sum h2{margin:0 0 10px;font-size:17px} .sum ul{margin:0;padding-left:18px} .sum li{font-size:15.5px;line-height:1.75;color:var(--ink-2)}
+  .basis{margin:36px 0 0} .basis h2{font-size:15px;margin:0 0 8px;color:var(--ink)} .basis p{font-size:14px;line-height:1.7;color:var(--mut)}
+  .srcs{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;font-size:14px} .srcs .d{color:var(--dim);font-size:12.5px}
+  .chips{display:flex;flex-wrap:wrap;gap:4px 14px;margin:10px 0 0}
+  .chip{font-size:13px;color:var(--mut)} .chip::before{content:"#";color:var(--dim);margin-right:1px} .chip:hover{color:var(--ink);text-decoration:underline}
+  .pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:40px 0 0}
+  .pn a{display:block;padding:14px 0;border-top:1px solid var(--line-2);color:var(--ink-2);font-size:14.5px;line-height:1.5}
+  .pn a:hover{text-decoration:none} .pn small{display:block;color:var(--dim);font-size:12px;margin-bottom:2px} .pn .next{text-align:right}
+  .rel{margin:36px 0 0} .rel h2{font-size:15px;margin:0 0 10px}
+  .more-links{display:flex;flex-wrap:wrap;gap:10px 18px;margin:28px 0 0;font-size:14px}
+  .intro{font-size:16px;color:var(--mut);max-width:640px;margin:0 0 20px}
+  .install{display:grid;gap:10px;max-width:760px;margin:0 0 24px;padding:14px 0;border-top:1px solid var(--line-2);border-bottom:1px solid var(--line-2);font-size:14px;color:var(--ink-2)}
+  .install .row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px} .install b{color:var(--ink)}
+  .install .alerts{padding-top:10px;border-top:1px solid var(--line)} .install label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+  .install input{accent-color:var(--bronze);width:16px;height:16px}
+  .install button{font:inherit;font-weight:600;padding:7px 14px;border-radius:var(--radius-cta);border:0;background:var(--bronze);color:#120e09;cursor:pointer}
+  .install .row button:first-of-type{margin-left:auto} .install button.ghost{background:none;border:1px solid var(--line-2);color:var(--mut)}
+  .install small{color:var(--mut)} .install small:empty{display:none} .install [hidden]{display:none}
+  /* a wide screen gets the alerts only: installing on the home screen is a phone thing */
+  @media(min-width:641px){ .install>.row:first-child,#install-ios{display:none} .install .alerts{padding-top:0;border-top:0} }
+  @media(max-width:640px){
+    main{gap:14px;padding-top:6px} .kicker{margin:14px 0 4px} .intro{margin-bottom:6px}
+    h1.page{font-size:28px}
+    .pn{grid-template-columns:1fr}.pn .next{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="topbar">
+  <a class="brand" href="/" aria-label="PivoxData — AX 트렌드 레이더 처음으로">Pivox<span class="b">Data</span></a>
+  <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a><a href="/login" data-acct="login">로그인</a></nav>
+</header>
+
+<main>
+<div class="kicker"><b>리서치</b>테마</div>
+  <h1 class="page">개발 도구</h1>
+  <p class="intro">테마 '개발 도구' 관련 리서치 1편이에요. 형식을 가리지 않고 모았어요.</p>
+  
+  <ul class="list r-list"><li class="r-item" id="r-2026-10-30" data-format="news" data-topics="crm data security agents" data-q="ai 에이전트보다 먼저 정할 것: 데이터, 운영 모델, 연구안보 sap는 teched에서 에이전트 개발 플랫폼과 함께 데이터 기반 기능을 발표했어요. mckinsey는 은행의 운영 모델을, 과학기술정보통신부는 ai 협력과 연구안보를 다뤘어요. 이번 주 공식 발표 4건은 모두 ai를 받치는 기반을 이야기해요. 이번 주 ax 사건 crm·고객 데이터·분석 보안·규제 ai 에이전트 데이터 개발 도구 정책·규제 금융·보험 공공·정부 과학기술정보통신부 mckinsey sap 이번 주 발표는 어디서 나왔나 sap sap mckinsey 과학기술정보통신부 sap, 에이전트를 만드는 플랫폼을 개발자에게 내놓다 sap sap business ai platform sap·비sap 데이터 걸친 업무 프로세스 개발자·고객·파트너용 에이전트 구축 도구 sap sap, 데이터를 옮기지 않고 묶는 레이크하우스 sap sap bdc 레이크하우스·데이터 패브릭 분산된 기업 데이터와 ai 에이전트 dremio 인수 뒤 무복사 공유·통합 조회 sap mckinsey, 은행 부실 여신 관리에 운영 모델을 묻다 은행 (mckinsey 발표) 부실 여신 관리용 ai 부실 여신 관리 업무 운영 모델 재설계 제안 mckinsey 과기정통부, 캐나다와 ai·연구안보 협력 과학기술정보통신부 ai·양자·바이오 과학기술 협력 핵심신흥기술 연구와 연구안보 한국연구재단-캐나다 국가연구위원회 협약 과학기술정보통신부 영역을 가로질러: ai 아래의 기반 sap sap mckinsey 과학기술정보통신부 it 컨설팅 관점 sap는 teched에서 에이전트 개발 플랫폼과 joule work를 내놓았어요. sap bdc는 dremio 인수 뒤 데이터를 복사하지 않고 공유·조회하는 기능을 더했어요. mckinsey는 ai를 들인 은행 중 운영 모델까지 바꾼 곳은 적다고 지적했어요. 과기정통부는 캐나다와 ai 협력과 연구안보를 함께 논의했어요. 에이전트 프로젝트에서는 데이터 범위, 권한, 업무 절차를 개발보다 먼저 정해야 해요."><a class="r-card" href="/briefs/2026-10-30"><span class="r-k"><b>이번 주 AX 사건</b><span>CRM·고객</span><span>데이터·분석</span><span>보안·규제</span><span>AI 에이전트</span></span><span class="r-t">AI 에이전트보다 먼저 정할 것: 데이터, 운영 모델, 연구안보</span><span class="r-l">SAP는 TechEd에서 에이전트 개발 플랫폼과 함께 데이터 기반 기능을 발표했어요. McKinsey는 은행의 운영 모델을, 과학기술정보통신부는 AI 협력과 연구안보를 다뤘어요. 이번 주 공식 발표 4건은 모두 AI를 받치는 기반을 이야기해요.</span><span class="r-m"><time datetime="2026-10-30">2026년 10월 30일</time><span>사례 4건 · 공식 발표 4건</span></span><img class="r-th" src="/social/out/2026-10-30/01.png" alt="" width="1080" height="1350" loading="lazy" decoding="async" /></a><div class="chips"><a class="chip theme" href="/briefs/tag/theme-tools">개발 도구</a><a class="chip industry" href="/briefs/tag/industry-finance">금융·보험</a><a class="chip industry" href="/briefs/tag/industry-public">공공·정부</a><a class="chip company" href="/briefs/tag/company-msit">과학기술정보통신부</a><a class="chip company" href="/briefs/tag/company-mckinsey">McKinsey</a><a class="chip company" href="/briefs/tag/company-sap">SAP</a></div></li></ul>
+  <aside class="install" id="install">
+  <div class="row"><b>폰에 설치하기</b><span>홈 화면에 앱처럼 두고 새 리서치를 바로 확인하세요.</span><button type="button" id="install-btn" hidden>앱 설치</button></div>
+  <small id="install-ios" hidden>아이폰: 사파리 공유 버튼 → "홈 화면에 추가" (알림도 홈 화면에 추가한 뒤 켤 수 있어요)</small>
+  <div class="row alerts" id="alerts"><b>새 리서치 알림</b>
+    <label><input type="checkbox" value="news" checked /> 이번 주 AX 사건</label>
+    <label><input type="checkbox" value="policy" checked /> AI 정책 업데이트</label>
+    <label><input type="checkbox" value="monthly" checked /> 월간 AX 리포트 · 월간 정리</label>
+    <label><input type="checkbox" value="other" /> 그 밖의 리서치</label>
+    <button type="button" id="push-on">알림 받기</button><button type="button" id="push-off" class="ghost" hidden>알림 끄기</button>
+  </div>
+  <small id="push-state" aria-live="polite"></small>
+</aside>
+<script>
+(() => { let ev; const $ = (id) => document.getElementById(id), standalone = matchMedia("(display-mode: standalone)").matches, ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (standalone) document.querySelector(".install .row").hidden = true;
+  else if (ios) $("install-ios").hidden = false;
+  addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); ev = e; $("install-btn").hidden = false; });
+  $("install-btn").addEventListener("click", async () => { if (!ev) return; ev.prompt(); await ev.userChoice; ev = null; $("install-btn").hidden = true; });
+})();
+</script>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async (OneSignal) => {
+  await OneSignal.init({ appId: "412fcb69-79ba-4111-a1dc-bb4ca940dcab", serviceWorkerPath: "sw.js", serviceWorkerParam: { scope: "/" } });
+  const $ = (id) => document.getElementById(id), boxes = [...document.querySelectorAll(".alerts input")];
+  const show = async () => {
+    const on = OneSignal.Notifications.permission && OneSignal.User.PushSubscription.optedIn;
+    const tags = on ? await OneSignal.User.getTags() : {};
+    if (on) boxes.forEach((b) => (b.checked = tags[b.value] === "1"));
+    $("push-on").textContent = on ? "알림 저장" : "알림 받기"; $("push-off").hidden = !on;
+    $("push-state").textContent = on ? "알림이 켜져 있어요. 받을 형식을 바꾸고 저장할 수 있어요." : "";
+  };
+  $("push-on").addEventListener("click", async () => {
+    const picked = boxes.filter((b) => b.checked).map((b) => b.value);
+    if (!picked.length) { $("push-state").textContent = "받을 형식을 하나 이상 골라 주세요."; return; }
+    if (!OneSignal.Notifications.isPushSupported()) { $("push-state").textContent = /iphone|ipad|ipod/i.test(navigator.userAgent) ? "아이폰은 먼저 홈 화면에 추가한 뒤, 그 앱에서 알림을 켤 수 있어요." : "이 브라우저는 알림을 지원하지 않아요."; return; }
+    await OneSignal.Notifications.requestPermission();
+    if (!OneSignal.Notifications.permission) { $("push-state").textContent = "브라우저에서 알림이 허용되지 않았어요."; return; }
+    await OneSignal.User.PushSubscription.optIn();
+    await OneSignal.User.addTags(Object.fromEntries(boxes.map((b) => [b.value, b.checked ? "1" : "0"])));
+    await show(); $("push-state").textContent = "알림을 켰어요. 새 리서치가 올라오면 알려 드릴게요.";
+  });
+  $("push-off").addEventListener("click", async () => { await OneSignal.User.PushSubscription.optOut(); await show(); $("push-state").textContent = "알림을 껐어요."; });
+  OneSignal.User.PushSubscription.addEventListener("change", show);
+  await show();
+});
+</script>
+  
+
+</main>
+
+<footer class="site">
+  <span>AX 트렌드 레이더 · 매일 갱신 · 무료</span>
+  <span class="links"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/#more">방법·검산</a><a href="https://github.com/seanbae-analyst/pivoxdata" target="_blank" rel="noopener">GitHub</a><a href="/terms">이용약관</a><a href="/privacy">개인정보 처리방침</a></span>
+</footer>
+
+<script>
+(() => { const p = location.pathname;
+  document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); })();
+</script>
+<script type="module" src="/account.js"></script>
+</div>
+</body>
+</html>
