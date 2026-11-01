@@ -36,7 +36,10 @@ SQL editor(또는 Supabase MCP `execute_sql`)로 넣는다: `insert into pivoxda
 2. **Emails → SMTP**: Supabase 내장 발송기는 팀 구성원 주소로만 보낸다. PivoxMap 과 같은 Brevo 를 붙인다
    (보내는 사람 `no-reply@pivoxquant.com`, 이름 `AX 트렌드 레이더`). 붙였으면 `AUTH.mail = "brevo"` — 처리방침의 국외 이전 표에 Brevo 가 들어간다.
 3. **Emails → Templates**: **Magic Link** 와 **Confirm signup** 두 템플릿을 이 폴더의 `magic-link.html` · `confirm-signup.html` 로 바꾼다.
-   제목은 `AX 트렌드 레이더 로그인 링크` · `AX 트렌드 레이더 시작하기 — 로그인 링크`.
+   제목은 `AX 트렌드 레이더 로그인 코드` · `AX 트렌드 레이더 시작하기 — 로그인 코드`.
+   - **2026-11-01부터 로그인은 코드 하나**(소유자 "코드로 로그인 다 통일"): 두 템플릿에는 **`{{ .Token }}` 코드만** 있고 링크가 없다.
+     사이트도 코드만 받는다(`auth.js` → `sendCode` · `verifyCode`). 아래 링크 설명은 그 전에 보낸 메일을 위한 것 — `/auth/callback` 은
+     옛 메일의 `token_hash` 링크를 아직 받는다(`?code=` PKCE 링크는 더 받지 않는다).
    - 링크는 `{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email` 그대로 — 휴대폰 메일 앱(다른 브라우저)에서 열어도 된다.
      기본 템플릿이면 `?code=` 로 와서 요청한 브라우저에서만 열린다(`callback.js` 가 "로그인을 요청한 브라우저에서 열어 주세요" 라고 말한다).
    - 처음 쓰는 주소는 Magic Link 가 아니라 Confirm signup 메일을 받는다 — 둘 다 바꾼다.

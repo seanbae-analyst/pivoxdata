@@ -1,7 +1,7 @@
-// login.js — /login (trends/pages.mjs): the address → the three required consents → "check your inbox", one step at a
-// time (PivoxMap's /login, 2026-10-15 flow). The address goes to the sign-in service (Supabase — abroad) only after the
-// consents: sending it is already a transfer abroad. While the inbox screen waits, the link opened in another window
-// of this browser signs in there (/auth/callback) and this screen follows ("이 창에서 계속").
+// login.js — /login (trends/pages.mjs): the address → the three required consents → the code from the e-mail, one step
+// at a time (PivoxMap's /login, 2026-10-15 flow; code only since 2026-11-01). The address goes to the sign-in service
+// (Supabase — abroad) only after the consents: sending it is already a transfer abroad. Signed in in another window of
+// this browser meanwhile, this screen follows ("이 창에서 계속").
 // A person already signed in: on to where they were going — or, when the terms changed since they agreed, the
 // consents again (?consent=1 from account.js) with 로그아웃 instead of 이전.
 import * as auth from "/auth.js";
@@ -28,7 +28,7 @@ if (root && auth.enabled) {
     go("consent");
   });
 
-  // ---------- 2. the consents, then the link ----------
+  // ---------- 2. the consents, then the code ----------
   const agreed = consent(cs, (ok) => { sendBtn.disabled = !ok; cs.querySelector("[data-need]").hidden = ok; say($("#send-err")); });
   cs.querySelector("[data-back]").addEventListener("click", async () => {
     if (!policyMode) { go("email", true); return; }
@@ -41,16 +41,16 @@ if (root && auth.enabled) {
     tick(); timer = setInterval(tick, 1000);
   };
   const WHY = {
-    rate: "짧은 시간에 로그인 메일을 여러 번 요청했어요. 몇 분 뒤 다시 시도해 주세요.",
+    rate: "짧은 시간에 로그인 코드를 여러 번 요청했어요. 몇 분 뒤 다시 시도해 주세요.",
     network: "로그인 서버에 연결하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
-    failed: "로그인 메일을 보내지 못했어요. 주소를 확인하고 다시 시도해 주세요.",
+    failed: "로그인 코드를 보내지 못했어요. 주소를 확인하고 다시 시도해 주세요.",
   };
   const send = async (again) => {
     if (!agreed()) return;
-    if (!again && Date.now() < until) { go("mail"); return; }   // the same link is on its way — the inbox screen again
+    if (!again && Date.now() < until) { go("mail"); return; }   // the same code is on its way — the code screen again
     const btn = again ? resendBtn : sendBtn, label = btn.textContent;
     btn.disabled = true; btn.textContent = "보내는 중…";
-    const r = await auth.sendLink(email, next);
+    const r = await auth.sendCode(email);
     btn.textContent = label; btn.disabled = false;
     if (r.ok) {
       auth.setPendingConsent(email);

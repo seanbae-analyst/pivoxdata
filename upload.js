@@ -1,4 +1,5 @@
-// upload.js — /upload?slot=<folder> (trends/pages.mjs): the operator's page for a long story, which the owner posts from
+// upload.js — /upload (trends/pages.mjs): without ?slot=, the operator's list of posts not on Instagram yet (2026-11-01);
+// with ?slot=<folder>, the page for one long story, which the owner posts from
 // the Instagram app (the API takes 10 cards). Signed in and an operator (public.pd_is_operator — supabase/schema.sql)
 // first; only then is the post read: the cards to save on the phone in order, the caption to copy.
 import * as auth from "/auth.js";
@@ -16,7 +17,10 @@ async function gate() {
   }
   for (const b of root.querySelectorAll("[data-who]")) b.textContent = who.email;
   const r = await auth.rpc("pd_is_operator");
-  if (r.ok && r.data === true) { show("tool"); return tool(); }
+  if (r.ok && r.data === true) {
+    if (new URLSearchParams(location.search).has("slot")) { show("tool"); return tool(); }
+    show("list"); return list();
+  }
   // signed out meanwhile (a revoked session), not an operator, or the check itself failed
   if (r.code === "signed_out") return gate();
   root.querySelector("[data-why]").textContent = r.ok ? "" : `확인하지 못했어요 (${r.status || "연결 끊김"}). 잠시 뒤 다시 열어 주세요.`;
@@ -24,9 +28,27 @@ async function gate() {
   show("no");
 }
 
+// no ?slot= (the menu's 운영자): the posts not on Instagram yet, newest first — briefs/pending.json (social/briefs.mjs)
+async function list() {
+  let items;
+  try { const r = await fetch("/briefs/pending.json", { cache: "no-store" }); if (!r.ok) throw new Error(r.status); items = await r.json(); }
+  catch { $("list-lead").textContent = "목록을 불러오지 못했어요. 잠시 뒤 다시 열어 주세요."; return; }
+  $("list-lead").textContent = items.length
+    ? `아직 인스타그램에 없는 게시물 ${items.length}개예요. 10장이 넘는 건 앱에서 직접 올려요.`
+    : "지금 올릴 게시물이 없어요. 새 게시물이 만들어지면 여기에 떠요.";
+  $("pend").append(...items.map((x) => {
+    const li = document.createElement("li"), a = Object.assign(document.createElement("a"), { href: `/upload?slot=${encodeURIComponent(x.slot)}` });
+    const t = document.createElement("span");
+    t.append(Object.assign(document.createElement("b"), { textContent: x.title }),
+      Object.assign(document.createElement("small"), { textContent: `${x.date} · 카드 ${x.cards}장 · ${x.cards > 10 ? "직접 올리기" : "자동 게시 대기"}` }));
+    a.append(Object.assign(document.createElement("img"), { src: `/social/out/${x.slot}/01.png`, alt: "", loading: "lazy" }), t);
+    li.append(a); return li;
+  }));
+}
+
 async function tool() {
   const slot = new URLSearchParams(location.search).get("slot") ?? "";
-  if (!/^\d{4}-\d{2}-\d{2}(?:-\d+)?$/.test(slot)) { $("title").textContent = "주소에 게시물 폴더가 없어요"; $("lead").textContent = "예: /upload?slot=2026-10-28 — GitHub 이슈의 링크로 열어 주세요."; return; }
+  if (!/^\d{4}-\d{2}-\d{2}(?:-\d+)?$/.test(slot)) { $("title").textContent = "주소에 게시물 폴더가 없어요"; $("lead").textContent = "메뉴의 운영자에서 올릴 게시물을 골라 주세요."; return; }
   const base = `/social/out/${slot}/`;
   let post;
   try { const r = await fetch(`${base}post.json`, { cache: "no-store" }); if (!r.ok) throw new Error(r.status); post = await r.json(); }

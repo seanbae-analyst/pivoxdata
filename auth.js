@@ -1,10 +1,9 @@
-// auth.js — signing in (2026-10-26, "랜딩 먼저 나오고 로그인 넘어가게 — pivoxmap처럼"): Supabase Auth's e-mail link,
-// without a library — the handful of calls this site makes. The project and its publishable key (public by design,
+// auth.js — signing in (2026-10-26, "랜딩 먼저 나오고 로그인 넘어가게 — pivoxmap처럼"): Supabase Auth's e-mail code
+// (2026-11-01 — the link is gone from the e-mail), without a library — the handful of calls this site makes. The project and its publishable key (public by design,
 // like OneSignal's app id) come from <meta name="pd-auth"> (trends/site.mjs → AUTH); without it there is no signing
 // in anywhere: no menu, no login step after the landing, no login part in the privacy policy.
-// A session is made in one place only, /auth/callback, from what the e-mail link brings back: a token_hash (the e-mail
-// template in supabase/README.md — opens on any device) or a PKCE code (Supabase's default template — only in the
-// browser that asked). An #access_token in an address is never taken: anyone can send a link that carries their own
+// A session is made from the code typed on /login (verifyCode), or — for an e-mail sent before 2026-11-01 — at
+// /auth/callback from the link's token_hash. An #access_token in an address is never taken: anyone can send a link that carries their own
 // session, and whoever opens it would be signed in to that account (PivoxMap's 2026-09-11 security review).
 // The session lives in this browser's localStorage, like supabase-js, and is refreshed shortly before it runs out.
 // The saved briefings and the consent go through public.pd_* functions (supabase/schema.sql), each of which reads and
@@ -13,7 +12,9 @@ const [BASE, KEY] = (document.querySelector('meta[name="pd-auth"]')?.content ?? 
 export const enabled = Boolean(BASE && KEY);
 export const policy = document.querySelector('meta[name="pd-policy"]')?.content ?? "";
 export const CALLBACK = "/auth/callback";
-const SESSION = "pd.session", VERIFIER = "pd.pkce", PENDING = "pd.consent", NEXT = "pd.next", EVENT = "pd:auth";
+const SESSION = "pd.session", PENDING = "pd.consent", EVENT = "pd:auth";
+// gone with the link (2026-11-01): "pd.pkce" (the PKCE verifier) and "pd.next" (where the link went back to)
+for (const k of ["pd.pkce", "pd.next"]) { try { localStorage.removeItem(k); } catch { /* storage blocked */ } }
 
 const read = (k) => { try { return JSON.parse(localStorage.getItem(k) ?? "null"); } catch { return null; } };
 const write = (k, v) => { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch { /* storage blocked */ } };
@@ -59,51 +60,36 @@ export async function session() {
   return refreshing;
 }
 
-const b64url = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-
-/** send the sign-in link. Supabase makes the account the first time an address asks. `next`: where the callback goes
- *  afterwards (kept in this browser — a link opened on another device goes home). → {ok} or {ok:false, why} with why
- *  "rate" (asked too often), "network" or "failed". */
-export async function sendLink(email, next) {
-  const verifier = b64url(crypto.getRandomValues(new Uint8Array(32)));
-  const challenge = b64url(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier))));
-  const r = await call(`/auth/v1/otp?redirect_to=${encodeURIComponent(location.origin + CALLBACK)}`,
-    { body: { email, create_user: true, data: {}, code_challenge: challenge, code_challenge_method: "s256" } });
-  if (r.ok) {
-    // only once the link has gone: a failed resend must not replace what the earlier, still good, link needs
-    write(VERIFIER, { v: verifier, at: Date.now() });
-    write(NEXT, safeNext(next, "") || null);
-    return { ok: true };
-  }
+/** send the sign-in code (2026-11-01, owner: "코드로 로그인 다 통일"): Supabase e-mails a one-time code, typed back on
+ *  /login (verifyCode) — the templates in supabase/ carry the code only, no link. Supabase makes the account the first
+ *  time an address asks. → {ok} or {ok:false, why} with why "rate" (asked too often), "network" or "failed". */
+export async function sendCode(email) {
+  const r = await call("/auth/v1/otp", { body: { email, create_user: true, data: {} } });
+  if (r.ok) return { ok: true };
   return { ok: false, why: r.status === 429 || /rate_limit/.test(r.code) ? "rate" : r.status === 0 ? "network" : "failed" };
 }
 
-/** /auth/callback: turn what the link brought into a session. The address is cleaned first, so nothing of the link stays
- *  in the history. → {user} or {failure} with failure "expired", "other_browser", "network" or "failed". */
+/** /auth/callback: an e-mail sent before 2026-11-01 still carries a link with a token_hash — it signs in once more. The
+ *  address is cleaned first, so nothing of the link stays in the history. → {user} or {failure}: "expired", "network"
+ *  or "failed". */
 export async function complete() {
   const q = new URLSearchParams(location.search), h = new URLSearchParams(location.hash.slice(1));
-  const th = q.get("token_hash"), type = q.get("type"), code = q.get("code"), err = q.get("error_code") ?? h.get("error_code");
+  const th = q.get("token_hash"), type = q.get("type"), err = q.get("error_code") ?? h.get("error_code");
   history.replaceState(null, "", location.pathname);
-  let r;
-  if (th && ["email", "magiclink", "signup"].includes(type)) r = await call("/auth/v1/verify", { body: { type, token_hash: th } });
-  else if (code) {
-    const v = read(VERIFIER);
-    if (!v) return { failure: "other_browser" };
-    r = await call("/auth/v1/token?grant_type=pkce", { body: { auth_code: code, code_verifier: v.v } });
-    if (r.ok) write(VERIFIER, null);
-  } else return { failure: err === "otp_expired" ? "expired" : "failed" };
+  if (!th || !["email", "magiclink", "signup"].includes(type)) return { failure: err === "otp_expired" ? "expired" : "failed" };
+  const r = await call("/auth/v1/verify", { body: { type, token_hash: th } });
   if (r.ok && keep(r.data)) return { user: user() };
-  return { failure: r.code === "otp_expired" ? "expired" : /flow_state|code_verifier/.test(r.code) ? "other_browser" : r.status === 0 ? "network" : "failed" };
+  return { failure: r.code === "otp_expired" ? "expired" : r.status === 0 ? "network" : "failed" };
 }
 
-/** the code in the e-mail (2026-10-27), typed on /login: a phone's mail app opens the link in a browser — never in the
- *  home-screen app — so the code signs in right where it was asked for. Supabase's e-mail one-time password, the same
- *  one the link carries. → {user} or {failure}: "expired" (used, run out or wrong), "network" or "failed". */
+/** the code in the e-mail (2026-10-27; the only way since 2026-11-01), typed on /login: it signs in right where it was
+ *  asked for — a phone's home-screen app too, which a link from the mail app never reaches. Supabase's e-mail one-time
+ *  password. → {user} or {failure}: "expired" (used, run out or wrong), "network" or "failed". */
 export async function verifyCode(email, code) {
   const token = String(code ?? "").replace(/\s+/g, "");
   if (!/^\d{6,10}$/.test(token)) return { failure: "format" };
   const r = await call("/auth/v1/verify", { body: { type: "email", email: email.trim().toLowerCase(), token } });
-  if (r.ok && keep(r.data)) { write(VERIFIER, null); return { user: user() }; }
+  if (r.ok && keep(r.data)) return { user: user() };
   return { failure: r.status === 0 ? "network" : /otp_expired|invalid|token/.test(r.code) || r.status === 403 || r.status === 400 ? "expired" : "failed" };
 }
 
@@ -135,16 +121,14 @@ export function onChange(cb) {
 }
 
 // ---------- consent given on /login, recorded by the callback ----------
-// Who agreed (the address) and when are kept too, for an hour (a link's life): on a shared browser the person before
-// must not have their consent written to the next person's account. A link opened on another device has none of
+// Who agreed (the address) and when are kept too, for an hour (a code's life): on a shared browser the person before
+// must not have their consent written to the next person's account. An old link opened on another device has none of
 // this, so the callback asks there.
 export const setPendingConsent = (email) => write(PENDING, email ? { v: policy, email: email.trim().toLowerCase(), at: Date.now() } : null);
 export function pendingConsent(email) {
   const p = read(PENDING), age = Date.now() - (p?.at ?? 0);
   return Boolean(p && email && p.v === policy && p.email === email.trim().toLowerCase() && age >= 0 && age <= 3600e3);
 }
-/** where to go after signing in, kept by sendLink; read once */
-export function takeNext() { const n = read(NEXT); write(NEXT, null); return safeNext(n, "/"); }
 
 /** a path on this site only — not `//elsewhere`, not `/\elsewhere`, not the sign-in pages themselves (a `next` that is
  *  someone's /auth/callback link would sign this browser in to their account) */

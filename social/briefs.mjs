@@ -509,6 +509,10 @@ ${briefs.slice(0, 30).map((b) => `<item><title>${xml(b.st.article.title)}</title
 `;
 put("feed.xml", rss);
 put("indicators.json", JSON.stringify(INDICATORS) + "\n");
+// the posts not on Instagram yet, for the operator's /upload list (2026-11-01, owner: "내 이메일로 들어가면 운영자 전용이
+// 따로 뜨게"): newest first, with the card count — more than 10 is posted from the app. Public like the cards themselves.
+put("pending.json", JSON.stringify(pending.filter((b) => b.post?.images?.length)
+  .map((b) => ({ slot: b.slot, date: b.st.date, title: plain(b.st.article.title), cards: b.post.images.length }))) + "\n");
 
 // a page whose briefing, series or tag went away goes too
 for (const f of fs.readdirSync(DIR, { recursive: true }).map(String)) {

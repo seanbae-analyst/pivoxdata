@@ -2,7 +2,7 @@
 // account (2026-10-26). Saved briefings live in this browser (localStorage "pd.saved"); signed in, they live in the
 // account too and follow it to any device (public.pd_saved_* — supabase/schema.sql). What it draws: the 저장 button
 // under a briefing's title and under the home page's story, the count and the sign-in link in the menus
-// ([data-acct] — the top bar), the /saved page with the account (로그아웃 · 탈퇴),
+// ([data-acct] — the top bar), 운영자 in the menu for an operator, the /saved page with the account (로그아웃 · 탈퇴),
 // and, for a signed-in person, a line when the terms have changed since they agreed.
 import * as auth from "/auth.js";
 
@@ -90,6 +90,32 @@ function paintMenus() {
     else a.textContent = me ? "계정" : "로그인";
     a.classList.toggle("on", Boolean(me));
   }
+}
+
+// ---------- the operator's link (2026-11-01, owner: "내 이메일로 들어가면 운영자 전용이 따로 뜨게") ----------
+// Signed in as an operator (public.pd_is_operator — the addresses are in the database, never in this public code), the
+// menu gets 운영자 → /upload: the posts not on Instagram yet. The answer is kept for this tab and this account
+// ("pd.op"), so a page change does not ask again. /upload checks once more by itself — the link is a shortcut, not the gate.
+const OP = "pd.op";
+async function operatorLink() {
+  const me = auth.enabled ? auth.user() : null, nav = document.querySelector(".topbar .nav");
+  let ok = false;
+  if (me) {
+    let kept = null; try { kept = sessionStorage.getItem(OP); } catch { /* storage blocked */ }
+    if (kept === `${me.id}:1` || kept === `${me.id}:0`) ok = kept.endsWith(":1");
+    else {
+      const r = await auth.rpc("pd_is_operator");
+      ok = r.ok && r.data === true;
+      if (r.ok) try { sessionStorage.setItem(OP, `${me.id}:${ok ? 1 : 0}`); } catch { /* storage blocked */ }
+    }
+  }
+  const link = nav?.querySelector('[data-acct="op"]');
+  if (ok && nav && !link) {
+    const a = Object.assign(document.createElement("a"), { href: "/upload", textContent: "운영자" });
+    a.dataset.acct = "op";
+    if (location.pathname === "/upload") a.setAttribute("aria-current", "");
+    nav.insertBefore(a, nav.querySelector('[data-acct="login"]'));
+  } else if (!ok && link) link.remove();
 }
 
 // ---------- the 저장 button ----------
@@ -184,14 +210,14 @@ function savedPage() {
 }
 
 // ---------- start ----------
-placeButtons(); savedPage(); paintMenus();
+placeButtons(); savedPage(); paintMenus(); operatorLink();
 addEventListener(EVENT, paintMenus);
 addEventListener("DOMContentLoaded", paintMenus);   // what the page's own scripts drew after this one (the sidebar)
 addEventListener("storage", (e) => { if (e.key === KEY) changed(); });
 if (auth.enabled) {
   let was = auth.user()?.id ?? null;
   auth.onChange((u) => {
-    paintMenus();
+    paintMenus(); operatorLink();
     if (!u && was) forget();
     else if (u && u.id !== was) checkConsent().then((ok) => ok && sync());
     was = u?.id ?? null;

@@ -1,5 +1,5 @@
 // pages.mjs — the pages around signing in (2026-10-26), written whole by site.mjs → writePages with the site's frame:
-// /login (address → the three consents → check your inbox), /auth/callback (where the e-mail link lands), /saved (the
+// /login (address → the three consents → the code from the e-mail), /auth/callback (where an old e-mail's link lands), /saved (the
 // saved briefings and, once signed in, the account), /privacy and /terms (trends/legal.mjs). The scripts that bring
 // them to life are login.js, callback.js and account.js; what a page shows before they run is already the right first
 // screen. Without AUTH there is no signing in: /login says so and /callback is not needed (it is still written, so an
@@ -26,7 +26,7 @@ function login(auth) {
   const mail = auth.mail === "brevo";
   return `<div class="acc" id="login">
 <section class="acc-step" data-s="email">
-  ${guide("메일 주소를 적으세요. 비밀번호 대신 로그인 링크를 보내요.")}
+  ${guide("메일 주소를 적으세요. 비밀번호 대신 로그인 코드를 메일로 보내요.")}
   <h1>로그인</h1>
   <p class="acc-lede">처음 쓰는 주소면 이 메일로 계정이 만들어져요.</p>
   <form id="f-email" novalidate>
@@ -53,34 +53,33 @@ function login(auth) {
   </ul></details>
 </section>
 <section class="acc-step" data-s="consent" hidden>
-  ${guide("필수 항목 세 가지에 동의하면 바로 로그인 링크를 보내요.")}
+  ${guide("필수 항목 세 가지에 동의하면 바로 로그인 코드를 보내요.")}
   <h1 data-t>시작하기 전에 확인해 주세요</h1>
-  <p class="acc-lede" data-d>링크를 보낼 주소 · <b data-email></b></p>
+  <p class="acc-lede" data-d>코드를 보낼 주소 · <b data-email></b></p>
   ${consentHtml(auth)}
-  <p class="acc-fine" data-need>필수 항목 세 가지에 모두 동의해야 링크를 보낼 수 있어요.</p>
+  <p class="acc-fine" data-need>필수 항목 세 가지에 모두 동의해야 코드를 보낼 수 있어요.</p>
   <p class="acc-err" id="send-err" role="alert" hidden></p>
-  <div class="acc-row"><button class="btn ghost lg" type="button" data-back>이전</button><button class="btn lg grow" type="button" id="send" disabled>동의하고 로그인 링크 받기</button></div>
+  <div class="acc-row"><button class="btn ghost lg" type="button" data-back>이전</button><button class="btn lg grow" type="button" id="send" disabled>동의하고 로그인 코드 받기</button></div>
 </section>
 <section class="acc-step" data-s="mail" role="status" hidden>
   <span class="acc-ico">${svg(ICON.mail)}</span>
   <h1>메일의 코드를 넣어 주세요</h1>
-  <p class="acc-lede">로그인 메일을 보냈어요. 메일에 있는 숫자 코드를 여기에 넣으면 이 화면에서 바로 로그인돼요 — 휴대폰 앱에서도요.</p>
+  <p class="acc-lede">로그인 코드를 메일로 보냈어요. 메일의 숫자 코드를 여기에 넣으면 이 화면에서 바로 로그인돼요 — 휴대폰 앱에서도요.</p>
   <form class="acc-form" id="f-code" novalidate>
     <label class="acc-label" for="code">로그인 코드</label>
     <div class="acc-in"><input id="code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="숫자 코드" required style="font-size:22px;letter-spacing:.18em" /></div>
     <p class="acc-err" id="code-err" role="alert" hidden></p>
     <button class="btn lg" type="submit" id="code-go" style="width:100%">로그인</button>
   </form>
-  <p class="acc-fine">메일의 버튼을 눌러도 돼요. 그러면 그 메일 앱이 연 창에서 로그인돼요.</p>
   <div class="acc-card"><span>보낸 주소 <b data-email></b></span><button class="btn ghost sm" type="button" data-change>메일 바꾸기</button></div>
   <p class="acc-fine">메일이 안 보이면 스팸함을 확인하세요. <button class="acc-link" type="button" id="resend">다시 보내기</button></p>
-  <p class="acc-fine" id="resent" hidden>다시 보냈어요. 가장 최근 메일의 코드를 넣어 주세요 — 앞 메일의 코드와 링크는 쓰지 못할 수 있어요.</p>
+  <p class="acc-fine" id="resent" hidden>다시 보냈어요. 가장 최근 메일의 코드를 넣어 주세요 — 앞 메일의 코드는 쓰지 못할 수 있어요.</p>
   <p class="acc-err" id="mail-err" role="alert" hidden></p>
 </section>
 <section class="acc-step" data-s="done" role="status" hidden>
   <span class="acc-ico ok">${svg(ICON.check)}</span>
   <h1>로그인했어요</h1>
-  <p class="acc-lede">메일에서 연 창에서 이어져요. 이 창은 닫아도 돼요.</p>
+  <p class="acc-lede">다른 창에서 로그인됐어요. 여기서 이어 가도 돼요.</p>
   <div class="acc-card"><span>로그인한 계정 <b data-user></b></span></div>
   <a class="btn ghost lg" href="/" data-next>이 창에서 계속</a>
 </section>
@@ -98,7 +97,7 @@ function callback(auth) {
 <section class="acc-step" data-s="wait" role="status">
   <span class="acc-ico">${svg(ICON.mail)}</span>
   <h1>로그인하는 중이에요</h1>
-  <p class="acc-lede">링크를 확인하고 있어요. 잠깐만 기다려 주세요.</p>
+  <p class="acc-lede">메일의 링크를 확인하고 있어요. 잠깐만 기다려 주세요.</p>
 </section>
 <section class="acc-step" data-s="consent" hidden>
   ${guide("이 기기에서는 동의를 한 번 더 받아요. 필수 항목 세 가지에 동의하면 이어져요.")}
@@ -118,8 +117,8 @@ function callback(auth) {
 </section>
 <section class="acc-step" data-s="failed" role="alert" hidden>
   <h1 data-t>로그인하지 못했어요</h1>
-  <p class="acc-lede" data-d>링크가 맞지 않아요. 새 링크를 받아 주세요.</p>
-  <a class="btn block lg" href="/login">링크 다시 받기</a>
+  <p class="acc-lede" data-d>이제 로그인은 메일로 받은 코드로 해요.</p>
+  <a class="btn block lg" href="/login">코드로 로그인</a>
   <a class="btn ghost block lg" href="/">둘러보기</a>
 </section>
 </div>
@@ -159,7 +158,8 @@ ${auth.on ? `<section class="sv-acct" id="account" aria-labelledby="h-acct">
 </section>` : ""}
 </div>`;
 
-// /upload (2026-10-27): the operator's page for a long story — more cards than the 10 the Instagram API takes, so the
+// /upload (2026-10-27): the operator's page for a long story — without ?slot= (2026-11-01, the menu's 운영자) the list of
+// posts not on Instagram yet (briefs/pending.json, social/briefs.mjs); with it, one post — more cards than the 10 the Instagram API takes, so the
 // owner posts it from the app. Only for an operator (owner: "운영자니깐 … 로그인했을 때만 폰으로 업로드 가능하게"): signed in,
 // and public.pd_is_operator() says yes (supabase/schema.sql → pivoxdata.operators — the address is never in this public
 // code). upload.js checks first and only then reads the post. The cards and the caption are public files all the same
@@ -183,6 +183,12 @@ const UPLOAD_CSS = `<style>
   .up pre{white-space:pre-wrap;word-break:keep-all;font:inherit;font-size:14.5px;line-height:1.7;color:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:0}
   .up h2{font-size:16px;margin:0 0 10px}
   .up .who{color:var(--mut);font-size:14px;margin:0 0 20px}
+  .up .k a{color:inherit;text-decoration:none}
+  .up .pend{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .up .pend a{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+  .up .pend img{width:64px;aspect-ratio:1080/1350;object-fit:cover;border-radius:6px;flex:none;background:var(--surface)}
+  .up .pend b{display:block;font-size:16px;line-height:1.4;letter-spacing:-.01em}
+  .up .pend small{display:block;color:var(--mut);font-size:13.5px;margin-top:4px}
   @media(min-width:641px){.up .grid{grid-template-columns:repeat(5,minmax(0,1fr))}.up .acts{grid-template-columns:1fr 1fr}}
 </style>`;
 function upload(auth) {
@@ -203,8 +209,15 @@ function upload(auth) {
   <p class="msg" data-why role="alert"></p>
   <div class="acts"><button class="copy" type="button" data-out>로그아웃하고 다시 로그인</button></div>
 </section>
+<section data-u="list" hidden>
+  <p class="k">운영자</p>
+  <h1>올릴 게시물</h1>
+  <p class="who">운영자 <b data-who></b></p>
+  <p class="lead" id="list-lead">불러오는 중…</p>
+  <ul class="pend" id="pend"></ul>
+</section>
 <section data-u="tool" hidden>
-  <p class="k">인스타그램 직접 올리기</p>
+  <p class="k"><a href="/upload">← 올릴 게시물</a></p>
   <h1 id="title">카드를 불러오는 중…</h1>
   <p class="who">운영자 <b data-who></b></p>
   <p class="lead" id="lead"></p>
@@ -241,7 +254,7 @@ ${body}
 // (`bare`: the top bar and the policy links only)
 export function accountPages(auth) {
   return [
-    { file: "login.html", path: "/login", title: "로그인", desc: "AX 트렌드 레이더 로그인 — 메일로 받은 링크로 들어와요.", body: login(auth), bare: true, noindex: true },
+    { file: "login.html", path: "/login", title: "로그인", desc: "AX 트렌드 레이더 로그인 — 메일로 받은 코드로 들어와요.", body: login(auth), bare: true, noindex: true },
     { file: "auth/callback.html", path: "/auth/callback", title: "로그인 확인", desc: "로그인 링크를 확인해요.", body: callback(auth), bare: true, noindex: true },
     { file: "upload.html", path: "/upload", title: "직접 올리기", desc: "운영자 전용 — 긴 이야기 카드를 인스타그램 앱으로 올려요.", body: upload(auth), bare: true, noindex: true },
     { file: "saved.html", path: "/saved", title: "저장한 리서치", desc: "저장한 리서치 목록이에요.", body: saved(auth), noindex: true },
