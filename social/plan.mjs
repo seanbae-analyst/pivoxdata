@@ -7,6 +7,9 @@
 //  • news    — no big case, NEWS_GAP days since the last news post, and at least NEWS_MIN official announcements
 //              (trends/data/insights.json → news) from the last NEWS_WINDOW days that no post used and that don't tell
 //              a story a recent post told (sameStory): "이번 주 AX 사건".
+//  • policy  — no big case, POLICY_GAP days since the last policy post, and at least POLICY_MIN unused official
+//              announcements read as policy (method 정책·규제 — trends/series.mjs → METHODS) from the last POLICY_WINDOW
+//              days: "AI 정책 업데이트" (2026-11-01). Those announcements are this post's only: the news post leaves them out.
 //  • digest  — no big case, DIGEST_DAYS since the last draft, and at least DIGEST_MIN small changes since then:
 //              the best DIGEST_MAX of them (one per subject) in one carousel.
 //  • roundup — nothing at all for QUIET_DAYS: the radar's strongest cards, so the account doesn't go silent.
@@ -20,6 +23,7 @@
 //        node social/plan.mjs --force    (draft even when the rules say not today — for testing the pipeline; the
 //                                         best there is: a new big case, else the waiting small changes, else a roundup)
 //        node social/plan.mjs --news     (this week's AX news now — POST_KIND=news)
+//        node social/plan.mjs --policy   (this week's AI policy now — POST_KIND=policy)
 import fs from "node:fs";
 import path from "node:path";
 import { ROOT, OUT, read, write, isMain, kstToday } from "./util.mjs";
@@ -34,6 +38,10 @@ export const NEWS_GAP = 1, NEWS_WINDOW = 7, NEWS_MIN = 3, NEWS_MAX = 8;
 // above it today — is the same story told again (SK텔레콤's AI governance column the day after its AI governance report;
 // NVIDIA's Kazakhstan compute after its Europe compute). It is left out, and it does not count towards NEWS_MIN.
 export const REPEAT_DAYS = 7;
+// AI policy (2026-11-01, owner: "ai policy 관련 업데이트도 넣고 싶은데" → its own series, on Instagram too): once a week,
+// from the last two weeks (insights.json keeps 14 days of announcements) — policy news comes slower than company news
+export const POLICY_GAP = 7, POLICY_WINDOW = 14, POLICY_MIN = 3, POLICY_MAX = 6;
+export const isPolicy = (n) => n.method === "정책·규제";
 export const sameStory = (a, b) => a.src === b.src && Boolean(a.method) && a.method === b.method
   && (a.domains ?? []).some((d) => (b.domains ?? []).includes(d));
 // AX only (2026-10-25): Instagram carries the AX cases (Ramp AI Index) and the weekly official-announcement post;
@@ -64,31 +72,38 @@ function main() {
   const recentNews = new Set(log.filter((p) => days(today, p.date) < REPEAT_DAYS).flatMap((p) => p.news ?? []));
   const told = (I.news ?? []).filter((n) => recentNews.has(n.id));
   const repeats = [];
-  const news = (I.news ?? []).filter((n) => !usedNews.has(n.id) && days(today, n.date) <= NEWS_WINDOW && n.score >= 3)
+  // unused announcements from the last `window` days that rank, without one that tells a story a recent post told
+  const pool = (window, max, which) => (I.news ?? []).filter((n) => !usedNews.has(n.id) && days(today, n.date) <= window && n.score >= 3 && which(n))
     .reduce((kept, n) => {
       const like = told.find((t) => sameStory(n, t)) ?? kept.find((k) => sameStory(n, k));
       if (like) repeats.push(`${n.source} "${n.title.slice(0, 40)}" (like "${like.title.slice(0, 40)}")`); else kept.push(n);
       return kept;
-    }, []).slice(0, NEWS_MAX);
+    }, []).slice(0, max);
+  const news = pool(NEWS_WINDOW, NEWS_MAX, (n) => !isPolicy(n)), policy = pool(POLICY_WINDOW, POLICY_MAX, isPolicy);
   if (repeats.length) console.log(`left out as the same story: ${repeats.join(" · ")}`);
   const newsDue = news.length >= NEWS_MIN && (!lastNews || days(today, lastNews.date) >= NEWS_GAP);
+  const lastPolicy = log.filter((p) => p.mode === "policy").at(-1);
+  const policyDue = policy.length >= POLICY_MIN && (!lastPolicy || days(today, lastPolicy.date) >= POLICY_GAP);
 
   const kind = process.env.POST_KIND ?? "";
   const force = process.argv.includes("--force") || process.env.FORCE_DRAFT === "true" || kind === "test";
   const newsNow = process.argv.includes("--news") || kind === "news";
+  const policyNow = process.argv.includes("--policy") || kind === "policy";
   let plan;
   if (process.argv.includes("--race") || kind === "race") plan = { post: false, why: "a \"누가 앞서나\" (race) post was requested, but Instagram carries AX only since 2026-10-25 — request ignored (the races stay on the site)" };
-  else if (kind && !["news", "test"].includes(kind)) plan = { post: false, why: `unknown posting request "${kind}" — use "news" or "test"` };
+  else if (kind && !["news", "policy", "test"].includes(kind)) plan = { post: false, why: `unknown posting request "${kind}" — use "news", "policy" or "test"` };
+  else if (policyNow) plan = policy.length ? { post: true, mode: "policy", date: today, news: policy, why: `policy requested; ${policy.length} announcement(s)` } : { post: false, why: `policy requested, but no unused policy announcement from the last ${POLICY_WINDOW} days` };
   else if (newsNow) plan = news.length ? { post: true, mode: "news", date: today, news, why: `news requested; ${news.length} announcement(s)` } : { post: false, why: `news requested, but no unused official announcement from the last ${NEWS_WINDOW} days` };
   else if (force) plan = big.length ? { post: true, mode: "event", date: today, event: big[0], why: `forced; big case: ${big[0].headline}` }
     : smalls.length ? { post: true, mode: "digest", date: today, items: smalls, why: `forced; ${smalls.length} small change(s)` }
     : { post: true, mode: "roundup", date: today, why: "forced; nothing new, so a roundup" };
   else if (last?.date === today) plan = { post: false, why: `already drafted today (${last.key})` };
   else if (big.length) plan = { post: true, mode: "event", date: today, event: big[0], why: `big case: ${big[0].headline}` };
+  else if (policyDue) plan = { post: true, mode: "policy", date: today, news: policy, why: `${policy.length} policy announcement(s) in ${POLICY_WINDOW} days` };
   else if (newsDue) plan = { post: true, mode: "news", date: today, news, why: `${news.length} official announcement(s) this week` };
   else if (since >= DIGEST_DAYS && smalls.length >= DIGEST_MIN) plan = { post: true, mode: "digest", date: today, items: smalls, why: `${smalls.length} small changes since ${last?.date ?? "the start"}` };
   else if (since >= QUIET_DAYS) plan = { post: true, mode: "roundup", date: today, why: last ? `nothing to draft for ${since} days` : "first draft" };
-  else plan = { post: false, why: `no new big case; ${news.length} unused announcement(s) for the news post (${NEWS_MIN}+ needed${repeats.length ? `, ${repeats.length} left out as the same story` : ""}); ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
+  else plan = { post: false, why: `no new big case; ${policy.length} unused policy announcement(s) (${POLICY_MIN}+ needed, ${lastPolicy ? `last policy post ${lastPolicy.date}` : "none yet"}); ${news.length} unused announcement(s) for the news post (${NEWS_MIN}+ needed${repeats.length ? `, ${repeats.length} left out as the same story` : ""}); ${smalls.length} small change(s) waiting, digest after ${DIGEST_DAYS} days with ${DIGEST_MIN}+ (last draft ${last?.date ?? "never"})` };
 
   // the post's folder: social/out/<date in Korea>, or <date>-2, -3 … when that day already has a folder (a manual run
   // after the daily one), so a second post never overwrites the first one's images or caption — published or not: a

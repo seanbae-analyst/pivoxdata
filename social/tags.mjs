@@ -6,6 +6,7 @@ import { AX_FORMATS } from "./util.mjs";
 
 export const SERIES = {
   news: { name: "이번 주 AX 사건", about: "회사·정부가 직접 낸 공식 발표로 보는 한 주의 AX" },
+  policy: { name: "AI 정책 업데이트", about: "정부·기관이 직접 낸 AI 정책·규제 발표를 기업 IT 프로젝트 관점에서" },
   monthly: { name: "월간 AX 리포트", about: "Ramp AI Index로 보는 미국 기업의 AI 도입, 매달" },
   breaking: { name: "주요 변화", about: "평소와 크게 다른 일이 생긴 날" },
   weekly: { name: "이번 주 정리", about: "한 주 동안 잡힌 작은 변화" },
@@ -17,6 +18,7 @@ export const SERIES = {
 export function seriesOf(st) {
   if (st.mode === "roundup-month") return "roundup";
   if (st.mode === "news") return "news";
+  if (st.mode === "policy") return "policy";
   if (st.mode === "digest") return "weekly";
   if (st.mode === "event") return st.topic === "ax" && AX_FORMATS.has(st.format) ? "monthly" : "breaking";
   return "flow";

@@ -13,7 +13,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { slidesFor } from "./pick.mjs";
 import { ask, pickRoute, ClaudeUnavailable, STYLE, plain, allowNumbers, copyChecker, checkCaption } from "./claude.mjs";
-import { ROOT, OUT, read, write, isMain, dropDraft } from "./util.mjs";
+import { ROOT, OUT, read, write, isMain, dropDraft, ANNOUNCEMENT_MODES } from "./util.mjs";
 import { parseSlot } from "./slot.mjs";
 
 // for a post without a story only (the story's caption is written with the slides, story.mjs)
@@ -38,7 +38,7 @@ async function main() {
   if (prev.published) { console.log(`social/out/${slot} was already published (${prev.published.permalink}) — caption left as is`); return; }
   const slides = slidesFor(I, plan).map((x) => ({ ...x, big: plain(x.big), bl: plain(x.bl), title: plain(x.title), easy: plain(x.easy ?? ""), body: plain(x.body), src: plain(x.src) }));
   const story = read(path.join(dir, "story.json"));
-  const news = plan.mode === "news" ? plan.news ?? [] : [];
+  const news = ANNOUNCEMENT_MODES.has(plan.mode) ? plan.news ?? [] : [];
   // what the caption may cite: what the carousel was made from — the cards, the facts the story was written from, the
   // announcements — as story.mjs allows it
   const ctx = {
@@ -101,10 +101,12 @@ async function main() {
   // the footer names the sources this post actually used: the announcements for a news post, the Ramp AI Index (its
   // licence asks for the citation) for an AX post, and the official announcements behind the IT-domain cards
   const usesDomains = slides.some((x) => String(x.id).startsWith("dom-"));
-  const sourcesLine = plan.mode === "news"
+  const sourcesLine = ANNOUNCEMENT_MODES.has(plan.mode)
     ? `출처(공식 발표): ${[...new Set((story?.sources ?? []).map((x) => x.source))].join(" · ") || "각 회사·기관 뉴스룸"} — 원문 링크는 리서치 글에`
     : `출처: Ramp AI Index (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 결제 데이터${usesDomains ? " · 회사·정부 공식 발표" : ""}`;
-  const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능" : "#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드";
+  const tags = plan.mode === "news" ? "#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능"
+    : plan.mode === "policy" ? "#AI정책 #AI규제 #AI거버넌스 #AX #기업AI #IT컨설팅 #인공지능"
+    : "#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드";
   // the long version of this post is its briefing page (social/briefs.mjs), at the post's folder name
   const caption = [result.body, "", `자세한 풀이: data.pivoxquant.com/briefs/${slot}`, sourcesLine, "", tags].join("\n");
 

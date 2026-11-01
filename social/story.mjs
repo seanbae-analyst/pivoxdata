@@ -30,7 +30,7 @@ import { ask, pickRoute, ClaudeUnavailable, STYLE, plain, numbersIn, allowNumber
 import { readOriginals } from "./original.mjs";
 import { knownTerms } from "../trends/glossary.mjs";
 import { THEMES, INDUSTRIES, tagPrompt, pickTags, companyId, seriesOf } from "./tags.mjs";
-import { ROOT, OUT, read, write, parse, isMain, dropDraft } from "./util.mjs";
+import { ROOT, OUT, read, write, parse, isMain, dropDraft, ANNOUNCEMENT_MODES } from "./util.mjs";
 import { isSlot, parseSlot, compareSlots } from "./slot.mjs";
 
 // ---------- formats ----------
@@ -48,11 +48,15 @@ export const FORMATS = {
   // a long story (2026-10-27 owner: "스토리라인 좀더 길게" → "10장 이상으로"): a case over two cards, what happened then
   // what it means — 11 to 20 cards, posted by the owner from the app (the API takes 10)
   newsweek: { name: "이번 주 AX 사건", how: "표지: 이번 주 사례들을 꿰는 질문이나 반전 한 문장 → 배경(kind=text): 이번 주에 무슨 일이 있었나, 왜 이 발표들을 함께 읽나 → 사례 3~7건을 중요한 순서로, 사례마다 두 장: 사례 장(kind=case — 사건: 누가 무엇을 들였나, 발표에 적힌 일) → 바로 다음 의미 장(kind=meaning — 그래서 무엇이 달라지나: 그 IT 영역의 도입 프로젝트에 무슨 뜻인가) → 사례들에 공통으로 보이는 흐름(kind=text) → 도입 프로젝트에서 확인할 점(kind=list, 질문 3~5개) → 정리(kind=end). 모두 11~20장" },
+  // AI policy (2026-11-01): the same long story, a policy over two cards — what was decided, then what it means for a
+  // company's IT and AI projects
+  policyweek: { name: "AI 정책 업데이트", how: "표지: 이번 주 정책들을 꿰는 질문 한 문장 → 배경(kind=text): 어느 정부·기관이 무엇을 내놓았고 왜 함께 읽나 → 정책 3~6건을 기업에 닿는 순서로, 정책마다 두 장: 정책 장(kind=case — 사건: 어느 기관이 무엇을 정했나·내놓았나, 발표에 적힌 일) → 바로 다음 의미 장(kind=meaning — 그래서 기업의 AI·IT 프로젝트에 무엇이 달라지나) → 정책들에 공통으로 보이는 흐름(kind=text) → 기업 AI 도입·운영에서 확인할 점(kind=list, 질문 3~5개) → 정리(kind=end). 모두 11~20장" },
   newstheme: { name: "AX 사건 묶어 보기", how: "표지 → 배경(kind=text): 이번 주 발표들이 어느 IT 영역에서 나왔나 → 사례 3~7건을 IT 영역(ERP·백오피스, CRM·고객, 클라우드·인프라, 데이터·분석, 업무 도구, 보안·규제, AI 에이전트)별로 놓고, 사례마다 두 장: 사례 장(kind=case — 사건) → 바로 다음 의미 장(kind=meaning — 그 영역 프로젝트에 무슨 뜻인가) → 영역을 가로질러 보이는 흐름(kind=text) → 그 영역 실무자·IT 컨설턴트가 확인할 점(kind=list, 질문 3~5개) → 정리(kind=end). 모두 11~20장" },
 };
 const candidatesFor = (plan) => plan.mode === "event"
   ? (/^ax:month/.test(plan.event.key) ? ["monthly", "deepdive", "timeline"] : plan.event.kind === "1위 교체" ? ["breaking", "versus"] : ["breaking"])
   : plan.mode === "news" ? ["newstheme", "newsweek"] // grouped by IT domain first
+  : plan.mode === "policy" ? ["policyweek"]
   : plan.mode === "digest" ? ["weekly", "checklist"] : ["explainer", "quiz", "timeline", "checklist"];
 
 // industries by how far their AI adoption moved in a year, most first — for the deep dive. Read from the AX card's own
@@ -123,6 +127,15 @@ const NEWS_RULES = `
 - 사건을 말하는 장마다 "refs"에 그 발표 번호를 적는다(예: [2]). 표지, 확인할 점(kind=list), 마지막 장은 비워도 된다. 출처 줄은 코드가 붙인다.
 - 캡션은 카드의 이야기 순서대로 8~16줄(사례가 많으면 사례마다 한 줄로): 첫 줄은 이번 주 이야기 한 문장, 사례마다 두 줄(누가 무엇을 어디에 → 그래서 무엇이 달라지나), 공통 흐름 한 줄, 마지막 줄은 확인할 점 하나.`;
 
+// AI policy (2026-11-01): on top of NEWS_RULES — the same long story and the same checks, read as policy, not adoption
+const POLICY_RULES = `
+이번 게시물은 'AX 사건'이 아니라 'AI 정책 업데이트'다. 위 규칙을 그대로 따르되, 발표 하나하나를 기업 IT 프로젝트에 닿는 정책으로 읽는다:
+- 사례(cases)는 정책 하나다. who = 정책을 낸 정부·기관, what = 정책·법·가이드라인·계획의 이름이나 종류, where = 누구·무엇에 적용되나(대상 기업·업무·데이터·시스템), how = 어떻게(시행·입법예고·의견 수렴·가이드라인·예산 지원 등과 그 시점, 발표에 있는 만큼). method는 대개 "정책·규제", domain은 대개 "보안·규제"(정책이 다른 IT 영역의 이야기면 그 영역).
+- check는 이 정책을 두고 기업의 AI 도입·운영 프로젝트가 확인할 점, 질문 하나.
+- 정책을 평가하거나 찬반을 말하지 않는다. 법률 자문처럼 쓰지 않는다: "~해야 한다", "의무다"는 발표에 그렇게 적힌 경우에만 그 기관의 말로 옮기고, 나머지는 "확인할 점"으로 쓴다. 시행일·대상·벌칙은 발표에 적힌 것만.
+- 정책 3~6건(조용한 주는 3건). 아직 정해지지 않은 것(초안·의견 수렴·계획)은 그렇다고 밝힌다.
+- 표지·배경·캡션 첫 줄은 '이번 주 AI 정책' 이야기다. 캡션의 사례 두 줄은 '어느 기관이 무엇을 정했나 → 그래서 기업 프로젝트에 무엇이 달라지나'.`;
+
 // ---------- proofreading: a second read that may fix only grammar, spacing and line breaks ----------
 const PROOF = `너는 한국어 교정자다. 인스타그램 카드뉴스 JSON을 받아 같은 구조의 JSON으로 돌려준다.
 고치는 것: 맞춤법, 띄어쓰기, 조사(앞말 받침에 맞게 — 숫자·영어는 읽는 소리 기준), 어색한 문장, 문장 끝(~요 존댓말 통일), 줄바꿈("\\n": 본문은 한 줄 22자 안쪽·한 뜻 덩어리마다, 제목은 한 줄 14자 안쪽에서 뜻이 나뉘는 곳에 한 번만, 단어·숫자 중간이나 조사 앞에서 끊지 않기).
@@ -166,7 +179,8 @@ async function main() {
   const cards = slidesFor(I, plan).map((x) => ({ ...x, title: plain(x.title), easy: plain(x.easy), body: plain(x.body), big: plain(x.big), bl: plain(x.bl) }));
   // a news post: the official announcements plan.mjs picked, numbered [1]…[n] for Claude; each news slide names the
   // ones it tells (refs) and code — not Claude — prints their source and date on it
-  const NEWS = plan.mode === "news" ? plan.news ?? [] : [];
+  const NEWS = ANNOUNCEMENT_MODES.has(plan.mode) ? plan.news ?? [] : [];
+  const RULES = plan.mode === "policy" ? NEWS_RULES + POLICY_RULES : NEWS_RULES;
   // each announcement's own page (original.mjs): read now, given to Claude, used by the checks as a source — and never
   // written anywhere. A page that can't be read leaves that announcement with its title and summary.
   const ORIG = NEWS.length ? await readOriginals(NEWS) : [];
@@ -189,7 +203,8 @@ async function main() {
   function brief() {
     const what = plan.mode === "event" ? `오늘의 빅 케이스(${plan.event.kind}): ${plain(plan.event.headline)}`
       : plan.mode === "digest" ? `지난 한 주의 작은 변화 ${plan.items.length}가지: ${plan.items.map((c) => plain(c.headline)).join(" / ")}`
-      : plan.mode === "news" ? `이번 주 AX 사건 — 회사·정부의 공식 발표 ${NEWS.length}건 중에서` : "요즘 AX 흐름 정리 (특별한 사건 없는 날)";
+      : plan.mode === "news" ? `이번 주 AX 사건 — 회사·정부의 공식 발표 ${NEWS.length}건 중에서`
+      : plan.mode === "policy" ? `AI 정책 업데이트 — 정부·기관의 AI 정책·규제 발표 ${NEWS.length}건 중에서` : "요즘 AX 흐름 정리 (특별한 사건 없는 날)";
     return [
       `날짜: ${date}`,
       `이번 게시물: ${what}`,
@@ -210,7 +225,7 @@ async function main() {
   async function fromClaude(route) {
     const messages = [{ role: "user", content: `${brief()}\n\n이 형식으로 스토리를 써 줘. JSON만.` }];
     for (let attempt = 1; attempt <= 2; attempt++) {
-      const res = await ask(route, NEWS.length ? SYSTEM + NEWS_RULES : SYSTEM, messages);
+      const res = await ask(route, NEWS.length ? SYSTEM + RULES : SYSTEM, messages);
       if (res.refusal) return { story: null, why: `refusal (${res.refusal})` };
       let story = null, problems;
       try { story = parse(res.text); problems = check(story); } catch (e) { problems = [`JSON으로 읽을 수 없음: ${e.message}`]; }
@@ -254,11 +269,11 @@ async function main() {
   function fromNews() {
     const top = NEWS.slice(0, 5);
     const slides = [
-      { kind: "cover", kicker: FORMATS[format].name, title: `이번 주 AX 사건 ${top.length}가지`, body: "회사와 정부가 직접 낸 발표만 모았어요." },
+      { kind: "cover", kicker: FORMATS[format].name, title: `${plan.mode === "policy" ? "이번 주 AI 정책" : "이번 주 AX 사건"} ${top.length}가지`, body: plan.mode === "policy" ? "정부와 기관이 직접 낸 발표만 모았어요." : "회사와 정부가 직접 낸 발표만 모았어요." },
       ...top.map((n, i) => ({ kind: "text", refs: [i + 1], kicker: n.source, title: n.title.slice(0, 70), body: n.summary.slice(0, 140) })),
       { kind: "end", title: "정리", items: top.map((n) => `${n.source}: ${n.title}`.slice(0, 70)) },
     ];
-    return { slides, caption: [`이번 주 AX 사건 ${top.length}가지 — 공식 발표만`, "", ...top.map((n) => `· ${n.source}: ${n.title}`)].join("\n") };
+    return { slides, caption: [`${plan.mode === "policy" ? "이번 주 AI 정책" : "이번 주 AX 사건"} ${top.length}가지 — 공식 발표만`, "", ...top.map((n) => `· ${n.source}: ${n.title}`)].join("\n") };
   }
 
   let result = { story: null, why: "no CLAUDE_CODE_OAUTH_TOKEN or ANTHROPIC_API_KEY" };
@@ -304,7 +319,7 @@ async function main() {
   async function articleFromClaude(route, st) {
     const messages = [{ role: "user", content: `${brief()}\n\n카드 스토리(이 흐름을 따라 더 풀어 쓸 것):\n${JSON.stringify(st.slides.map(({ src, case: c, ...x }) => x))}${st.cases?.length ? `\n\n사례(cases — 섹션 머리에 표로 붙는다):\n${JSON.stringify(st.cases.map(({ source, date, link, ...c }) => c))}` : ""}\n\n웹 브리핑 JSON만.` }];
     for (let attempt = 1; attempt <= 2; attempt++) {
-      const res = await ask(route, (NEWS.length ? SYSTEM + NEWS_RULES : SYSTEM) + articleRules(NEWS.length > 0, known), messages);
+      const res = await ask(route, (NEWS.length ? SYSTEM + RULES : SYSTEM) + articleRules(NEWS.length > 0, known), messages);
       if (res.refusal) return null;
       let a = null, problems;
       try { a = parse(res.text); problems = [...checkArticle(a, articleCtx), ...caseSections(a), ...checkTerms(a.terms, { text: articleText(a), known }, ctx)]; } catch (e) { problems = [`JSON으로 읽을 수 없음: ${e.message}`]; }
@@ -359,7 +374,7 @@ async function main() {
 
   // only the announcements the post told count as used; the others stay available for next week
   if (NEWS.length) {
-    const LOG = path.join(ROOT, "social", "posted.json"), log = read(LOG, []), e = log.findLast((x) => (x.slot ?? x.date) === slot && x.mode === "news");
+    const LOG = path.join(ROOT, "social", "posted.json"), log = read(LOG, []), e = log.findLast((x) => (x.slot ?? x.date) === slot && x.mode === plan.mode);
     if (e) { e.news = story.sources.map((x) => x.id); write(LOG, log); }
   }
   fs.mkdirSync(dir, { recursive: true });

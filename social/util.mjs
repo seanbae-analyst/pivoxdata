@@ -25,6 +25,8 @@ export const parse = (t) => { const m = String(t).match(/\{[\s\S]*\}/); if (!m) 
 // (briefs.mjs). The quiet-day and weekly formats (explainer, checklist, quiz, weekly) are told from the same AX facts
 // but are not the monthly report — briefs.mjs tells them apart by the post's mode, not by this list.
 export const AX_FORMATS = new Set(["monthly", "deepdive", "timeline"]);
+// the posts written from official announcements (plan.news): "이번 주 AX 사건" and, since 2026-11-01, "AI 정책 업데이트"
+export const ANNOUNCEMENT_MODES = new Set(["news", "policy"]);
 
 // true when this file is the script node was started with (not an import), so its exports can be used in tests
 export const isMain = (url) => { try { return fs.realpathSync(process.argv[1]) === fs.realpathSync(fileURLToPath(url)); } catch { return false; } };

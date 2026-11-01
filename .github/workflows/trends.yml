@@ -32,8 +32,8 @@ on:
         description: "인스타그램"
         type: choice
         default: "규칙대로"
-        options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "테스트 초안 (승인 필요)"]
-  # the same choices without the button: push social/request.json ({"post": "news" | "test"}) to main.
+        options: ["규칙대로", "이번 주 AX 사건 지금 올리기", "이번 주 AI 정책 지금 올리기", "테스트 초안 (승인 필요)"]
+  # the same choices without the button: push social/request.json ({"post": "news" | "policy" | "test"}) to main.
   # The run's own commit removes the file, so a request is used once (and the bot's push starts no new run).
   push:
     branches: [main]
@@ -132,6 +132,7 @@ jobs:
           kind=""
           if [ -f social/request.json ]; then kind=$(node -p 'String(require("./social/request.json").post ?? "").replace(/[^a-z]/g, "")'); fi
           if [ "$CHOICE" = "이번 주 AX 사건 지금 올리기" ]; then kind=news; fi
+          if [ "$CHOICE" = "이번 주 AI 정책 지금 올리기" ]; then kind=policy; fi
           if [ "$CHOICE" = "테스트 초안 (승인 필요)" ]; then kind=test; fi
           echo "kind=$kind" >> "$GITHUB_OUTPUT"
           if [ "$kind" = "test" ]; then echo "test=true" >> "$GITHUB_OUTPUT"; fi
@@ -335,11 +336,12 @@ jobs:
             const unrecorded = post.published && process.env.AUTO !== "success";
             // a long story (more than the 10 cards the API takes, 2026-10-27): the owner posts it from the app
             const manual = !post.published && post.images.length > 10;
-            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "news" ? "이번 주 AX 사건" : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AX 숫자";
+            const what = post.mode === "event" ? `빅 케이스 — ${post.event.headline}` : post.mode === "news" ? "이번 주 AX 사건" : post.mode === "policy" ? "AI 정책 업데이트" : post.mode === "digest" ? `작은 변화 ${post.insights.length}가지` : "요즘 AX 숫자";
             const body = [
               `<!-- instagram-post:${slot} -->`,
               post.mode === "event" ? `**빅 케이스 (${post.event.kind})** — ${post.event.headline}`
                 : post.mode === "news" ? `**이번 주 AX 사건** — 회사·정부가 직접 낸 공식 발표로 쓴 게시물입니다.`
+                : post.mode === "policy" ? `**AI 정책 업데이트** — 정부·기관이 직접 낸 AI 정책·규제 발표로 쓴 게시물입니다.`
                 : post.mode === "digest" ? `**작은 변화 ${post.insights.length}가지** — 지난 한 주 동안 잡힌 것을 모았습니다.`
                 : "**묶음** — 14일 동안 올릴 변화가 없어 요즘 AX 숫자를 모았습니다.",
               "",
