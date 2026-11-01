@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/ui.css?v=12" />
 <script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));</script>
 <meta name="pd-auth" content="https://yjiztgummaxecriiuumt.supabase.co sb_publishable_mgqgsgdtNLUE3sqAiuKk1w_gfqalamB" />
-<meta name="pd-policy" content="2026-10-27" />
+<meta name="pd-policy" content="2026-11-01" />
 
 <link rel="stylesheet" href="/research.css" />
 <style></style>
@@ -49,6 +49,12 @@
   .up pre{white-space:pre-wrap;word-break:keep-all;font:inherit;font-size:14.5px;line-height:1.7;color:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:0}
   .up h2{font-size:16px;margin:0 0 10px}
   .up .who{color:var(--mut);font-size:14px;margin:0 0 20px}
+  .up .k a{color:inherit;text-decoration:none}
+  .up .pend{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+  .up .pend a{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}
+  .up .pend img{width:64px;aspect-ratio:1080/1350;object-fit:cover;border-radius:6px;flex:none;background:var(--surface)}
+  .up .pend b{display:block;font-size:16px;line-height:1.4;letter-spacing:-.01em}
+  .up .pend small{display:block;color:var(--mut);font-size:13.5px;margin-top:4px}
   @media(min-width:641px){.up .grid{grid-template-columns:repeat(5,minmax(0,1fr))}.up .acts{grid-template-columns:1fr 1fr}}
 </style>
 <div class="up" id="upload">
@@ -67,8 +73,15 @@
   <p class="msg" data-why role="alert"></p>
   <div class="acts"><button class="copy" type="button" data-out>로그아웃하고 다시 로그인</button></div>
 </section>
+<section data-u="list" hidden>
+  <p class="k">운영자</p>
+  <h1>올릴 게시물</h1>
+  <p class="who">운영자 <b data-who></b></p>
+  <p class="lead" id="list-lead">불러오는 중…</p>
+  <ul class="pend" id="pend"></ul>
+</section>
 <section data-u="tool" hidden>
-  <p class="k">인스타그램 직접 올리기</p>
+  <p class="k"><a href="/upload">← 올릴 게시물</a></p>
   <h1 id="title">카드를 불러오는 중…</h1>
   <p class="who">운영자 <b data-who></b></p>
   <p class="lead" id="lead"></p>
