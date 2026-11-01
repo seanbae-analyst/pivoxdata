@@ -1,0 +1,459 @@
+{
+ "date": "2026-11-01",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 1,
+ "original_numbers": [
+  "80",
+  "5.6"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AX는 이번 주\n어디서 움직였나요?",
+   "body": "사장단 간담회, 은행 리포트,\n군수 물류 인수까지\n발표 3건을 읽어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "title": "발표 3건,\n세 갈래의 AX",
+   "body": "삼성은 경영진 간담회를,\nMcKinsey는 은행 운영 모델을,\nSalesforce는 현장 물류를\n다뤘어요.\n경영, 운영, 현장 순서로 읽어요.",
+   "src": "출처 · 삼성전자 · McKinsey · Salesforce 발표 3건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "삼성 사장단,\n샘 올트먼과 간담회",
+   "body": "삼성은 31일 사장단 50여 명이\n샘 올트먼 OpenAI CEO와\n간담회를 했다고 밝혔어요.\n주제는 AI가 바꿀 다음 10년이었어요.",
+   "src": "출처 · 삼성전자 공식 발표 · 10/31",
+   "case": {
+    "who": "삼성 관계사 사장단",
+    "what": "AI 경영 전략 간담회",
+    "where": "전자·금융·바이오 관계사 경영진",
+    "how": "OpenAI CEO 초청 간담회",
+    "domain": "업무 도구",
+    "method": "전사 배포",
+    "check": "경영진이 정한 AX 방향이 현업 과제와 예산으로 이어졌나?",
+    "ref": 1
+   },
+   "kicker": "업무 도구 · 전사 배포"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "AX가\n사장단 의제에 올랐어요",
+   "body": "전자·금융·바이오 사장단이\n함께 자리했다는 건\nAX가 관계사 공통 의제라는 뜻이에요.\n도입 프로젝트는\n경영진 논의와 현업 과제가\n만나는 지점이에요.",
+   "src": "출처 · 삼성전자 공식 발표 · 10/31",
+   "case": {
+    "who": "삼성 관계사 사장단",
+    "what": "AI 경영 전략 간담회",
+    "where": "전자·금융·바이오 관계사 경영진",
+    "how": "OpenAI CEO 초청 간담회",
+    "domain": "업무 도구",
+    "method": "전사 배포",
+    "check": "경영진이 정한 AX 방향이 현업 과제와 예산으로 이어졌나?",
+    "ref": 1
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "McKinsey,\n은행 AI 가이드",
+   "body": "McKinsey는 은행 CEO를 위한\nAI 가치 격차 가이드를 냈어요.\n도입은 빠른데\n가치는 많이 놓치고 있다고\n진단했어요.",
+   "src": "출처 · McKinsey 리서치 · 10/30",
+   "case": {
+    "who": "은행 (McKinsey 리서치)",
+    "what": "AI 가치 격차 CEO 가이드",
+    "where": "은행 경영·운영 모델",
+    "how": "발표에 없음",
+    "domain": "데이터·분석",
+    "method": "연구·보고서",
+    "check": "우리 AI 과제의 결과물을 다음 과제에서 다시 쓸 수 있나?",
+    "ref": 2
+   },
+   "kicker": "데이터·분석 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "AI 투자를\n거듭 쓰는 자산으로",
+   "body": "McKinsey는 투자를 반복해 쓸\n'AI 자본'으로 바꾸는\n운영 모델을 주문했어요.\n과제마다 새로 만드는 방식의\n한계를 짚은 것으로 읽혀요.",
+   "src": "출처 · McKinsey 리서치 · 10/30",
+   "case": {
+    "who": "은행 (McKinsey 리서치)",
+    "what": "AI 가치 격차 CEO 가이드",
+    "where": "은행 경영·운영 모델",
+    "how": "발표에 없음",
+    "domain": "데이터·분석",
+    "method": "연구·보고서",
+    "check": "우리 AI 과제의 결과물을 다음 과제에서 다시 쓸 수 있나?",
+    "ref": 2
+   },
+   "kicker": "데이터·분석 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "Salesforce,\nRune 인수 계약",
+   "body": "Salesforce는\n군수 물류 기술 기업\nRune Technologies를\n인수하는 확정 계약을\n맺었다고 발표했어요.\n연결이 끊긴 현장에서도\n보급 판단을 돕는 기술이에요.",
+   "src": "출처 · Salesforce 공식 발표 · 10/29",
+   "case": {
+    "who": "Salesforce",
+    "what": "Rune Technologies 인수",
+    "where": "군수 물류·보급 운영",
+    "how": "확정 인수 계약 체결",
+    "domain": "ERP·백오피스",
+    "method": "인수",
+    "check": "현장 데이터와 기존 공급망 시스템을 어떻게 연동할 건가?",
+    "ref": 3
+   },
+   "kicker": "ERP·백오피스 · 인수"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "현장 데이터와\n기업 시스템이 이어져요",
+   "body": "Salesforce는 인력·장비·보급을\n추적하는 기업 시스템과\n현장의 실시간 데이터를\n잇는다고 밝혔어요.\n공급망 연동 범위가\n오프라인 현장까지 넓어진 사례예요.",
+   "src": "출처 · Salesforce 공식 발표 · 10/29",
+   "case": {
+    "who": "Salesforce",
+    "what": "Rune Technologies 인수",
+    "where": "군수 물류·보급 운영",
+    "how": "확정 인수 계약 체결",
+    "domain": "ERP·백오피스",
+    "method": "인수",
+    "check": "현장 데이터와 기존 공급망 시스템을 어떻게 연동할 건가?",
+    "ref": 3
+   },
+   "kicker": "ERP·백오피스 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "title": "세 발표가\n함께 다룬 것",
+   "body": "세 발표 모두 도구 하나보다\n경영 의제, 운영 모델,\n시스템 연동을 다뤘어요.\n질문은 'AI를 어디에 붙이나'였어요.",
+   "src": "출처 · 삼성전자 · McKinsey · Salesforce 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "경영진 AX 방향이 과제로 내려왔나요?",
+    "만든 AI를 다음 과제에 다시 쓰나요?",
+    "현장 데이터가 기존 시스템과 이어지나요?",
+    "연결이 끊겨도 돌아가는 구조인가요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "AI를 둘 자리를\n묻는 한 주",
+   "body": "이번 주 발표는\n경영, 운영 모델, 현장 연동\n세 층에서 나왔어요.\n세 곳 모두 도구보다\n연결 지점을 다뤘어요."
+  }
+ ],
+ "caption": "이번 주 AX 발표는 경영진, 운영 모델, 현장 물류 세 층에서 나왔어요.\n삼성 사장단 50여 명이 샘 올트먼 OpenAI CEO와 AI 경영 간담회를 했어요.\n→ AX가 관계사 공통의 경영 의제라는 뜻이에요.\nMcKinsey는 은행 CEO를 위한 AI 가치 격차 가이드를 냈어요.\n→ 투자를 반복해 쓸 AI 자본으로 바꾸는 운영 모델을 주문했어요.\nSalesforce는 군수 물류 기술 기업 Rune Technologies 인수 계약을 맺었어요.\n→ 연결이 끊긴 현장의 데이터까지 기업 시스템과 잇는 일이에요.\n세 발표 모두 도구보다 AI를 어디에 붙이느냐를 다뤘어요.\n우리 회사의 AI 결과물은 다음 과제에서 다시 쓰이고 있나요?",
+ "cases": [
+  {
+   "who": "삼성 관계사 사장단",
+   "what": "AI 경영 전략 간담회",
+   "where": "전자·금융·바이오 관계사 경영진",
+   "how": "OpenAI CEO 초청 간담회",
+   "domain": "업무 도구",
+   "method": "전사 배포",
+   "check": "경영진이 정한 AX 방향이 현업 과제와 예산으로 이어졌나?",
+   "ref": 1,
+   "source": "삼성전자",
+   "date": "2026-10-31",
+   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94"
+  },
+  {
+   "who": "은행 (McKinsey 리서치)",
+   "what": "AI 가치 격차 CEO 가이드",
+   "where": "은행 경영·운영 모델",
+   "how": "발표에 없음",
+   "domain": "데이터·분석",
+   "method": "연구·보고서",
+   "check": "우리 AI 과제의 결과물을 다음 과제에서 다시 쓸 수 있나?",
+   "ref": 2,
+   "source": "McKinsey",
+   "date": "2026-10-30",
+   "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide"
+  },
+  {
+   "who": "Salesforce",
+   "what": "Rune Technologies 인수",
+   "where": "군수 물류·보급 운영",
+   "how": "확정 인수 계약 체결",
+   "domain": "ERP·백오피스",
+   "method": "인수",
+   "check": "현장 데이터와 기존 공급망 시스템을 어떻게 연동할 건가?",
+   "ref": 3,
+   "source": "Salesforce",
+   "date": "2026-10-29",
+   "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/"
+  }
+ ],
+ "sources": [
+  {
+   "source": "삼성전자",
+   "kind": "company",
+   "date": "2026-10-31",
+   "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
+   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94",
+   "id": "26bab3c236",
+   "original": false
+  },
+  {
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-10-30",
+   "title": "Closing banking’s AI value gap: A CEO guide",
+   "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide",
+   "id": "59217d1550",
+   "original": false
+  },
+  {
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-10-29",
+   "title": "Salesforce Signs Definitive Agreement to Acquire Rune Technologies",
+   "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/",
+   "id": "29483938dd",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "AX는 이번 주 어디서 움직였나: 사장단 간담회, 은행 운영 모델, 군수 물류 인수",
+  "lede": "삼성은 관계사 사장단과 샘 올트먼 OpenAI CEO의 간담회를 열었어요. McKinsey는 은행 CEO에게 AI 투자를 되풀이해 쓰는 운영 모델을 주문했고, Salesforce는 군수 물류 기술 기업 Rune Technologies를 인수하는 확정 계약을 맺었어요. 세 발표는 각각 경영, 운영, 현장에서 AI를 어디에 붙일지를 다뤘어요.",
+  "sections": [
+   {
+    "heading": "세 발표, 세 개의 층",
+    "body": "이번 주 공식 발표 가운데 사례로 읽을 만한 것은 3건이에요. 국내 그룹의 경영진 행사, 컨설팅 회사의 은행 리포트, 미국 소프트웨어 회사의 인수 소식이에요.\n\n업종도 형식도 다르지만 함께 읽는 이유가 있어요. 세 발표 모두 AI 도구 하나를 소개하기보다, AI가 기업의 어느 층에 자리 잡아야 하는지를 다뤘어요.\n\n이 글은 경영진 의제(삼성), 운영 모델(McKinsey), 현장과 기업 시스템의 연동(Salesforce) 순서로 따라가요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "삼성전자",
+      "kind": "company",
+      "date": "2026-10-31",
+      "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
+      "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94"
+     },
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-10-30",
+      "title": "Closing banking’s AI value gap: A CEO guide",
+      "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-10-29",
+      "title": "Salesforce Signs Definitive Agreement to Acquire Rune Technologies",
+      "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/"
+     }
+    ]
+   },
+   {
+    "heading": "삼성: AX를 사장단 테이블에 올리다",
+    "body": "삼성은 31일 용인의 삼성인력개발원에서 샘 올트먼(Sam Altman) OpenAI CEO를 초청해 사장단 간담회를 열었다고 밝혔어요. 삼성전자를 비롯해 전자·금융·바이오 관계사 사장단 50여 명이 참석했고, 주제는 'AI가 바꿀 다음 10년, 기업의 선택'이었어요. 삼성은 발표 제목에서 이 자리를 'AI Driven' 경영을 강화하고 전사 AX를 밀고 나가는 흐름으로 소개했어요.\n\n발표에는 어떤 AI 도구를 어느 시스템에 들이는지는 적혀 있지 않아요. 도입 범위나 일정, 예산도 발표에 없어요. 이번 발표가 보여 주는 것은 구체적 도입이 아니라 경영진 차원의 논의예요.\n\n업종이 다른 관계사의 경영진이 한자리에서 같은 주제를 다뤘다는 것은 AX가 특정 부서의 과제가 아니라 그룹 공통의 경영 의제라는 뜻이에요. 업무 도구 영역의 도입 프로젝트는 대개 전 직원이 쓰는 도구에서 출발하는데, 이런 논의는 그 출발점이 위에서 정해질 수 있다는 점을 보여 줘요.\n\n우리 회사에 비추면, 경영진이 정한 AX 방향이 현업 과제와 예산으로 실제로 내려왔는지 확인할 필요가 있어요. 방향만 있고 과제로 쪼개지지 않으면, 현장은 무엇부터 바꿔야 할지 알기 어렵기 때문이에요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "삼성 관계사 사장단",
+     "what": "AI 경영 전략 간담회",
+     "where": "전자·금융·바이오 관계사 경영진",
+     "how": "OpenAI CEO 초청 간담회",
+     "domain": "업무 도구",
+     "method": "전사 배포",
+     "check": "경영진이 정한 AX 방향이 현업 과제와 예산으로 이어졌나?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "삼성전자",
+      "kind": "company",
+      "date": "2026-10-31",
+      "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
+      "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94"
+     }
+    ]
+   },
+   {
+    "heading": "McKinsey: 은행의 'AI 가치 격차'",
+    "body": "McKinsey는 은행 CEO를 위한 가이드를 내고, 은행이 AI에서 놓치고 있는 가치를 어떻게 메울지를 다뤘어요. 요약에 따르면 McKinsey는 AI 도입은 빠르게 나아가는데, 거둘 수 있는 가치는 상당 부분 남겨지고 있다고 진단했어요. 원문은 읽지 못해 이 글은 제목과 요약에 적힌 내용만 다뤄요.\n\nMcKinsey가 내놓은 처방은 운영 모델이에요. 투자를 한 번 쓰고 끝내지 않고, 몇 번이고 다시 배치할 수 있는 'AI 자본'으로 바꾸는 운영 방식을 리더가 갖춰야 한다는 주장이에요. 구체적인 도입 방식이나 대상 시스템은 요약에 없어요.\n\n도입 속도는 다른 데이터에서도 보여요. Ramp AI Index(미국 기업의 유료 결제 기준)에서 AI 도구에 돈을 내는 금융·보험 기업은 2026년 9월 73.7%로, 1년 새 +15.5%p 늘었어요. McKinsey의 지적은 이렇게 늘어난 도입이 곧바로 가치로 이어지지는 않는다는 경고로 읽혀요.\n\n데이터·분석 영역에서는 과제마다 데이터 파이프라인과 모델을 새로 만드는 방식이 흔해요. 그래서 이번 과제에서 만든 데이터, 모델, 평가 체계를 다음 과제에서 다시 쓸 수 있는지 확인해야 해요. 다시 쓸 수 없다면 투자는 자산이 아니라 일회성 비용으로 남아요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "은행 (McKinsey 리서치)",
+     "what": "AI 가치 격차 CEO 가이드",
+     "where": "은행 경영·운영 모델",
+     "how": "발표에 없음",
+     "domain": "데이터·분석",
+     "method": "연구·보고서",
+     "check": "우리 AI 과제의 결과물을 다음 과제에서 다시 쓸 수 있나?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-10-30",
+      "title": "Closing banking’s AI value gap: A CEO guide",
+      "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide"
+     }
+    ]
+   },
+   {
+    "heading": "Salesforce: 연결이 끊긴 현장까지 기업 시스템을 잇다",
+    "body": "Salesforce는 Rune Technologies를 인수하는 확정 계약을 맺었다고 발표했어요. Rune Technologies는 미국과 동맹국 군의 물류·유지 운영을 돕는 기술 기업으로, 현장 부대가 필요한 보급 물자를 가늠하고 자원을 배분하고 중요한 결정을 내리도록 지원해요. Salesforce는 이 기술이 연결이 거의 없는 DDIL 환경에서도 작동한다고 밝혔어요.\n\nSalesforce가 설명한 문제는 거리예요. 현장의 물류 판단은 인력·장비·보급을 추적하는 기업 시스템에서 멀리 떨어진 곳에서 이뤄지는데, Rune Technologies가 그 시스템의 정보와 현장의 실시간 데이터를 이어 준다는 거예요. 인수한 기술은 Salesforce의 국방·정부용 포트폴리오인 Missionforce에 들어가, 기업 업무 자동화를 맡는 Missionforce Operations와 함께 자원 조율, 운영 가시성, 현장 서비스, 자산 관리를 돕는다고 해요.\n\nSalesforce는 이번 인수를 국가 안보 분야에서 가장 큰 규모라고 소개했어요. 또 국방 사업이 출범 1년 만에 전년 대비 80% 성장했고, 미군 여섯 군 모두가 고객이며, 상한 $5.6 billion 규모의 10년짜리 미 육군 계약을 따냈다고 밝혔어요. Missionforce 책임자 Kendall Collins는 에이전트 기반 기능을 현장 최전선까지 가져간다고 말했어요.\n\nERP·백오피스 영역으로 보면, 공급망 연동의 범위가 본사 시스템 바깥의 오프라인 현장까지 넓어진 사례예요. 우리 회사의 공장, 물류 거점, 현장 서비스 조직도 네트워크가 늘 안정적이지는 않아요. 현장 데이터가 기존 공급망·자산 관리 시스템과 어떻게 이어지는지, 연결이 끊겼을 때도 판단을 지원하는 구조인지를 확인해야 해요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "Salesforce",
+     "what": "Rune Technologies 인수",
+     "where": "군수 물류·보급 운영",
+     "how": "확정 인수 계약 체결",
+     "domain": "ERP·백오피스",
+     "method": "인수",
+     "check": "현장 데이터와 기존 공급망 시스템을 어떻게 연동할 건가?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-10-29",
+      "title": "Salesforce Signs Definitive Agreement to Acquire Rune Technologies",
+      "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 도구보다 '자리'를 묻다",
+    "body": "세 발표는 AI를 어떤 모델로 쓸지가 아니라 어디에 둘지를 다뤘어요. 삼성은 경영진 의제에, McKinsey는 반복해 쓰는 운영 모델에, Salesforce는 현장과 기업 시스템 사이의 연결 지점에 AI를 놓았어요.\n\n공식 발표 전체의 흐름도 비슷해요. 최근 30일 회사·정부의 공식 AX 발표는 AI 에이전트 영역이 43건으로 가장 많았고, ERP·백오피스 영역은 12건이었어요. Salesforce의 이번 인수도 에이전트 기능을 기존 업무 흐름에 잇는 사례였어요.\n\n도입이 늘수록 남는 질문은 연결이에요. 경영 방향과 현업 과제, 한 과제와 다음 과제, 현장 데이터와 기업 시스템이 이어지지 않으면 AI는 따로 노는 도구로 남는다는 것이 세 발표가 공통으로 가리키는 지점이에요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "삼성전자",
+      "kind": "company",
+      "date": "2026-10-31",
+      "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
+      "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94"
+     },
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-10-30",
+      "title": "Closing banking’s AI value gap: A CEO guide",
+      "link": "https://www.mckinsey.com/industries/financial-services/our-insights/closing-bankings-ai-value-gap-a-ceo-guide"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-10-29",
+      "title": "Salesforce Signs Definitive Agreement to Acquire Rune Technologies",
+      "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 주 발표들은 AI 도입 프로젝트의 무게가 도구 선정에서 연결 설계로 옮겨 가고 있다는 신호로 볼 수 있어요. 업무 도구 프로젝트는 경영진 방향과 현업 과제를 잇는 일, 데이터·분석 프로젝트는 결과물을 다음 과제에서 다시 쓰는 구조를 만드는 일, ERP·공급망 프로젝트는 현장 데이터를 기존 시스템에 끌어오는 일이 핵심 과제로 떠올라요. 기존 시스템 연동, 데이터 재사용, 거버넌스를 먼저 설계해야 투자가 쌓인다는 뜻이에요.\n\n· 경영진이 정한 AX 방향이 현업 과제와 예산으로 나뉘어 내려왔나요?\n· 이번 과제의 데이터와 모델을 다음 과제에서 다시 쓸 수 있게 관리하나요?\n· 현장의 실시간 데이터가 기존 ERP·공급망 시스템과 이어지나요?\n· 네트워크가 끊긴 현장에서도 돌아가는 구조와 데이터 동기화 방식이 있나요?\n· 관계사나 부서마다 따로 도입할 때 공통 거버넌스는 누가 맡나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "삼성은 관계사 사장단 50여 명과 샘 올트먼 OpenAI CEO의 간담회를 열어 AX를 경영 의제로 다뤘어요.",
+   "McKinsey는 은행이 AI 투자를 되풀이해 쓰는 'AI 자본'으로 바꾸는 운영 모델이 필요하다고 진단했어요.",
+   "Salesforce는 Rune Technologies 인수로 현장 실시간 데이터와 기업 시스템을 잇는 기능을 Missionforce에 더한다고 밝혔어요.",
+   "세 발표 모두 도구보다 AI를 둘 자리와 연결 지점을 다뤘어요.",
+   "도입 프로젝트에서는 과제 연결, 데이터 재사용, 현장 연동을 먼저 확인해야 해요."
+  ],
+  "terms": [
+   {
+    "term": "운영 모델",
+    "def": "조직이 일을 어떻게 나누고, 누가 결정하고, 어떤 절차와 시스템으로 돌리는지를 정리한 틀이에요. 전략을 실제 업무로 옮기는 방식이라고 보면 돼요."
+   },
+   {
+    "term": "DDIL",
+    "def": "통신이 막히거나, 약하거나, 끊겼다 이어지거나, 제한된 환경을 묶어 부르는 말이에요. 주로 군사 현장처럼 네트워크를 믿기 어려운 곳을 가리켜요."
+   },
+   {
+    "term": "운영 가시성",
+    "def": "현장의 인력, 장비, 물자가 지금 어디에 어떤 상태로 있는지를 한눈에 볼 수 있는 정도를 말해요. 흩어진 정보를 모아 보여 줄수록 높아져요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "deal",
+    "adoption",
+    "work"
+   ],
+   "industries": [
+    "finance",
+    "public",
+    "mobility"
+   ],
+   "companies": [
+    {
+     "id": "samsung",
+     "name": "삼성전자"
+    },
+    {
+     "id": "mckinsey",
+     "name": "McKinsey"
+    },
+    {
+     "id": "salesforce",
+     "name": "Salesforce"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

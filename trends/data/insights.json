@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-31",
+ "built_at": "2026-11-01",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "94건",
+     "big": "92건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 44건 · 클라우드·인프라 25건 · 보안·규제 21건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 6건",
+     "body": "AI 에이전트 43건 · 클라우드·인프라 24건 · 보안·규제 21건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 6건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 44,
-         "label": "44건"
+         "value": 43,
+         "label": "43건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 25,
-         "label": "25건"
+         "value": 24,
+         "label": "24건"
         },
         {
          "name": "보안·규제",
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "44건",
+     "big": "43건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
@@ -367,8 +367,8 @@
        "items": [
         {
          "name": "McKinsey",
-         "value": 13,
-         "label": "13건"
+         "value": 12,
+         "label": "12건"
         },
         {
          "name": "SAP",
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "25건",
+     "big": "24건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, SAP 발표가 가장 많아요",
      "easy": "",
@@ -413,14 +413,14 @@
          "label": "4건"
         },
         {
-         "name": "과학기술정보통신부",
+         "name": "NVIDIA",
          "value": 4,
          "label": "4건"
         },
         {
-         "name": "NVIDIA",
-         "value": 4,
-         "label": "4건"
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "Snowflake",
@@ -2121,121 +2121,81 @@
    }
   },
   {
-   "key": "filing:amzn:2026Q3",
-   "subject": "filing:amzn",
-   "kind": "공시",
+   "key": "month:202610",
+   "subject": "month:202610",
+   "kind": "집계",
    "tier": "small",
-   "score": 30,
+   "score": 20,
    "topic": "ai",
-   "headline": "Amazon, 2026년 3분기 설비투자 공시 — 1년 전보다 +120%",
+   "headline": "2026년 10월 논문 집계가 끝났습니다",
    "card": {
-    "id": "ch-filing-amzn",
-    "k": "자본",
-    "big": "$77.3B",
-    "bl": "Amazon 설비투자 · 2026년 3분기",
-    "title": "Amazon, 2026년 3분기 설비투자 공시 — 1년 전보다 +120%",
-    "easy": "Amazon 공시가 나왔어요 — 서버·칩·데이터센터 같은 설비에 석 달 동안 쓴 돈이에요.",
-    "body": "1년 전 같은 분기 $35.1B.",
-    "src": "SEC 공시 · Amazon",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       3290000000,
-       3562000000,
-       4697000000,
-       5312000000,
-       6795000000,
-       7459000000,
-       11063000000,
-       14823000000,
-       12082000000,
-       14288000000,
-       15748000000,
-       18935000000,
-       14951000000,
-       15724000000,
-       16378000000,
-       16592000000,
-       14207000000,
-       11455000000,
-       12479000000,
-       14588000000,
-       14925000000,
-       17620000000,
-       22620000000,
-       27834000000,
-       25019000000,
-       32183000000,
-       35095000000,
-       39522000000,
-       44203000000,
-       54208000000,
-       77259000000
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 35095000000,
-      "to": 77259000000,
-      "fromText": "$35.1B",
-      "toText": "$77.3B",
-      "fromLabel": "2025년 3분기",
-      "toLabel": "2026년 3분기"
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftr:nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B+baidu/Unlimited-OCR-2:2026-10-31",
-   "subject": "hf:nvidia/NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
-   "kind": "새로 진입",
-   "tier": "small",
-   "score": 14,
-   "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: nvidia/​NVIDIA‑Nemotron‑3.5‑Transcribe‑30B‑A4B",
-   "card": {
-    "id": "ch-hftr",
-    "k": "오픈 모델",
-    "big": "4위",
-    "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: nvidia/​NVIDIA‑Nemotron‑3.5‑Transcribe‑30B‑A4B",
-    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "automatic‑speech‑recognition · 2026-10-07 공개. 함께 들어온 모델: baidu/​Unlimited‑OCR‑2.",
-    "src": "Hugging Face 트렌딩 · 2026-10-31",
+    "id": "ch-month",
+    "k": "연구",
+    "big": "12,042편",
+    "bl": "2026년 10월 AI 논문",
+    "title": "2026년 10월 논문 집계가 끝났습니다",
+    "easy": "지난달 나온 논문 수 집계가 끝났어요. 분야마다 1년 전 같은 달과 비교했어요.",
+    "body": "AI 12,042편(1년 전 대비 +35%).",
+    "src": "arXiv · 2026년 10월",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
-        "name": "DeepSeek-V4.1-Flash-1017",
-        "value": 803,
-        "label": "15만"
-       },
+        "name": "AI",
+        "value": 12042,
+        "label": "12,042편"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "key": "hftr:mistralai/Mistral-Large-4-1T-A52B:2026-11-01",
+   "subject": "hf:mistralai/Mistral-Large-4-1T-A52B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: mistralai/​Mistral‑Large‑4‑1T‑A52B",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: mistralai/​Mistral‑Large‑4‑1T‑A52B",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-09-30 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-01",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
        {
         "name": "Nanbeige4.3-33B",
-        "value": 785,
-        "label": "1.2만"
-       },
-       {
-        "name": "LFM3-1.7B",
-        "value": 562,
-        "label": "2.4만"
-       },
-       {
-        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
-        "value": 479,
+        "value": 818,
         "label": "1.6만"
        },
        {
-        "name": "Unlimited-OCR-2",
-        "value": 416,
-        "label": "2.4만"
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 725,
+        "label": "17만"
+       },
+       {
+        "name": "LFM3-1.7B",
+        "value": 605,
+        "label": "3.8만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 519,
+        "label": "2.9만"
+       },
+       {
+        "name": "Mistral-Large-4-1T-A52B",
+        "value": 455,
+        "label": "4,576"
        }
       ]
      }
@@ -2322,12 +2282,12 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 44건 · 발표가 많은 곳: McKinsey 13건, SAP 12건, OpenAI 6건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 43건 · 발표가 많은 곳: McKinsey 12건, SAP 12건, OpenAI 6건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: SAP 4건, 과학기술정보통신부 4건, NVIDIA 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: SAP 4건, NVIDIA 4건, 과학기술정보통신부 3건"
   },
   {
    "group": "domain",
@@ -2447,6 +2407,19 @@
     "보안·규제"
    ],
    "method": "정책·규제"
+  },
+  {
+   "id": "26bab3c236",
+   "src": "samsung",
+   "source": "삼성전자",
+   "kind": "company",
+   "date": "2026-10-31",
+   "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
+   "summary": "삼성, 샘 올트먼 CEO 초청해 AI 시대 미래 경영 전략 논의 삼성은 31일 경기도 용인 삼성인력개발원에서 삼성전자 등 주요 관계사 사장단을 대상으로 샘 올트먼(Sam Altman) OpenAI CEO 초청 간담회를 개최했다. 이날 간담회에는 전자·금융·바이오 등 삼성 관계사 사장단 50여 명이 참석했으며, 샘 올트먼 CEO와 함께 ‘AI가 바꿀 다음 10년, 기업의 선택’을 주제로 진행됐다. 삼성 사장단과 샘 […]",
+   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94",
+   "score": 3,
+   "domains": [],
+   "method": "전사 배포"
   },
   {
    "id": "59217d1550",
@@ -2815,6 +2788,19 @@
    "title": "Faster planning decisions as new rules and AI tackle delays",
    "summary": "Homeowners and small businesses to get quicker answers as new rules put expert officers in charge of straightforward applications",
    "link": "https://www.gov.uk/government/news/faster-planning-decisions-as-new-rules-and-ai-tackle-delays",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "6704d46450",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-10-30",
+   "title": "국민AI서비스혁신추진단장 김세웅 단장 취임",
+   "summary": "- 카카오 AI 시너지 성과리더(부사장) 출신, 11.2일부터 출근 - - 국민이 체감하는 공공분야 AI서비스의 신속한 개발･제공 본격 추진 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187908",
    "score": 1,
    "domains": [],
    "method": "정책·규제"
