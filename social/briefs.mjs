@@ -141,7 +141,7 @@ const rests = (b) => {
 };
 const searchText = (b) => plain([b.st.article.title, b.st.article.lede, SERIES[b.series]?.name, ...topicNames(b),
   ...b.tags.themes.map((id) => THEMES.find((t) => t.id === id)?.name), ...b.tags.industries.map((id) => INDUSTRIES.find((t) => t.id === id)?.name), ...b.tags.companies.map((c) => c.name),
-  ...b.st.article.sections.flatMap((x) => [x.heading, ...(x.case ? CASE_ROWS.map(([k]) => x.case[k]) : []), ...(x.sources ?? []).map((s) => s.source)]), ...(b.st.article.takeaways ?? [])]
+  ...b.st.article.sections.flatMap((x) => [x.heading, x.body, ...(x.case ? CASE_ROWS.map(([k]) => x.case[k]) : []), ...(x.sources ?? []).map((s) => s.source)]), ...(b.st.article.takeaways ?? [])]
   .filter(Boolean).join(" ")).replace(/\s+/g, " ").trim().toLowerCase();
 const item = (b) => `<li class="r-item" id="r-${b.slot}" data-format="${b.series}" data-topics="${(b.topics ?? []).join(" ")}" data-q="${esc(searchText(b))}">`
   + `<a class="r-card" href="/briefs/${b.slot}"><span class="r-k"><b>${esc(SERIES[b.series]?.name ?? "")}</b>${topicNames(b).map((n) => `<span>${esc(n)}</span>`).join("")}</span>`

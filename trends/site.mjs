@@ -28,9 +28,16 @@ const PAGES = [
   { file: "404.html", path: "/404", noindex: true },
 ];
 
+// the search in the top bar, on every page (2026-11-01, owner: "검색창 같은 거 하나 만들어 주면 좋을 듯 — 그래야 사람들이 기사
+// 찾고 할 수 있을 듯"): a <details> that opens a form sending ?q= to /briefs, whose list already filters by it (social/briefs.mjs)
+// — the one research list, reached from anywhere. Works without scripts; MARK only moves the focus and closes it.
+const SEARCH_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15zM21 21l-5.2-5.2"/></svg>`;
 const NAV = `
 <header class="topbar">
   <a class="brand" href="/" aria-label="PivoxData — ${NAME} 처음으로">Pivox<span class="b">Data</span></a>
+  <details class="tb-search"><summary aria-label="리서치 검색" title="리서치 검색">${SEARCH_ICON}</summary>
+    <form action="/briefs" method="get" role="search"><input type="search" name="q" placeholder="회사 · 사례 · 주제로 리서치 찾기" aria-label="리서치 검색" autocomplete="off" enterkeyhint="search" required /><button type="submit">찾기</button></form>
+  </details>
   <nav class="nav" aria-label="사이트"><a href="/briefs">리서치</a><a href="/#news">공식 발표</a><a href="/#ax">지표</a><a href="/#glossary">용어 풀이</a><a href="/map">데이터 지도</a><a href="/saved" data-acct="saved" class="nav-acct">저장<span class="x">한 리서치</span><span class="n"></span></a>${AUTH.on ? `<a href="/login" data-acct="login">로그인</a>` : ""}</nav>
 </header>
 `;
@@ -39,7 +46,15 @@ const NAV = `
 const MARK = `
 <script>
 (() => { const p = location.pathname;
-  document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); }); })();
+  document.querySelectorAll(".topbar .nav a").forEach((a) => { const u = new URL(a.href); a.toggleAttribute("aria-current", u.pathname !== "/" && p.startsWith(u.pathname)); });
+  const s = document.querySelector(".tb-search");
+  if (s) {
+    const q = s.querySelector("input");
+    // "toggle" arrives a moment after the click: what was typed meanwhile stays
+    s.addEventListener("toggle", () => { if (s.open) { if (!q.value) q.value = new URLSearchParams(location.search).get("q") ?? ""; q.focus(); } });
+    s.addEventListener("keydown", (e) => { if (e.key === "Escape") { s.open = false; s.querySelector("summary").focus(); } });
+    document.addEventListener("click", (e) => { if (s.open && !s.contains(e.target)) s.open = false; });
+  } })();
 </script>`;
 // the saved briefings and the account on every page (account.js): the 저장 buttons, the counts and the sign-in links
 const ACCOUNT = `\n<script type="module" src="/account.js"></script>`;

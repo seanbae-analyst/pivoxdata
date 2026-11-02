@@ -89,7 +89,7 @@ try {
     await shot(pg, "list-desktop", true);
     // search
     const word = pieces[0].st.article.sections.find((x) => x.case)?.case.who ?? pieces[0].st.sources?.[0]?.source ?? "AI";
-    await pg.fill('input[name="q"]', word); await pause(400);
+    await pg.fill('.f-q input[name="q"]', word); await pause(400);
     const hit = await visible(pg), url1 = new URL(pg.url());
     const matched = await pg.$$eval("ul.r-list .r-item:not([hidden])", (l, w) => l.every((li) => li.dataset.q.includes(w.toLowerCase())), word);
     ok(`검색 '${word}' → ${hit.length}편, 모두 그 말을 담는다`, hit.length > 0 && matched);
@@ -97,7 +97,7 @@ try {
     ok("찾은 수를 말한다", /찾음/.test(await pg.textContent(".f-count .c")));
     await shot(pg, "list-desktop-search");
     // a search that finds nothing, then 조건 지우기
-    await pg.fill('input[name="q"]', "없는말zzz"); await pause(400);
+    await pg.fill('.f-q input[name="q"]', "없는말zzz"); await pause(400);
     ok("없는 말 → 빈 목록 안내가 보인다", (await visible(pg)).length === 0 && await pg.isVisible(".r-empty"));
     await shot(pg, "list-desktop-empty");
     await pg.click(".r-empty .f-reset"); await pause(100);
@@ -120,13 +120,13 @@ try {
     // in none of them — 2026-11-01, when drafts became public)
     await pg.click(`.f-o[data-f="topic"][data-v="${topic.v}"]`); await pause(100);
     const word2 = (await pg.$eval("ul.r-list .r-item:not([hidden]) .r-t", (t) => t.textContent)).split(/[\s:,·]+/).find((w) => w.length >= 2);
-    await pg.fill('input[name="q"]', word2); await pause(400);
+    await pg.fill('.f-q input[name="q"]', word2); await pause(400);
     const before = { url: pg.url(), items: await visible(pg) };
     await Promise.all([pg.waitForNavigation(), pg.click("ul.r-list .r-item:not([hidden]) .r-card")]);
     ok("목록에서 글로 들어간다", /\/briefs\/\d{4}-\d{2}-\d{2}/.test(new URL(pg.url()).pathname) && await pg.isVisible("article.brief h1"));
     await pg.goBack({ waitUntil: "networkidle" }); await pause(200);
     ok("뒤로가기 → 같은 주소(검색어 · 주제 · 형식)", pg.url() === before.url, `${pg.url()} vs ${before.url}`);
-    ok("뒤로가기 → 같은 목록과 같은 검색어", JSON.stringify(await visible(pg)) === JSON.stringify(before.items) && (await pg.inputValue('input[name="q"]')) === word2);
+    ok("뒤로가기 → 같은 목록과 같은 검색어", JSON.stringify(await visible(pg)) === JSON.stringify(before.items) && (await pg.inputValue('.f-q input[name="q"]')) === word2);
     // an address that names the filters opens filtered; one with a typo shows everything
     await pg.goto(`${B}/briefs?topic=${topic.v}`, { waitUntil: "networkidle" });
     ok("?topic= 로 연 주소는 걸러진 목록", (await visible(pg)).length === topic.n);
@@ -147,17 +147,17 @@ try {
     const ctx = await context(true), pg = await ctx.newPage();
     await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
     const shown = () => pg.$$eval(".r-item", (l) => l.filter((li) => !li.hidden && li.offsetParent).map((li) => li.id));
-    ok("폰도 위아래로 읽는 목록, 맨 위에 검색창", await pg.isVisible("input[name=q]") && !(await pg.evaluate(() => document.documentElement.classList.contains("paged"))));
+    ok("폰도 위아래로 읽는 목록, 맨 위에 검색창", await pg.isVisible(".f-q input[name=q]") && !(await pg.evaluate(() => document.documentElement.classList.contains("paged"))));
     ok(`${listed}편이 모두 목록에`, (await shown()).length === listed);
     await shot(pg, "list-phone");
     const word = pieces[0].st.sources?.[0]?.source ?? "AI";
-    await pg.tap('input[name="q"]'); await pg.keyboard.type(word, { delay: 30 }); await pause(500);
+    await pg.tap('.f-q input[name="q"]'); await pg.keyboard.type(word, { delay: 30 }); await pause(500);
     const focused = await pg.evaluate(() => document.activeElement?.name === "q" && document.activeElement.value);
     ok("검색하는 동안 입력창이 포커스를 잃지 않는다", focused === word, String(focused));
     const after = await shown();
     ok(`검색 '${word}' → 맞는 것만 (${after.length}편)`, after.length > 0 && after.length <= listed);
     await shot(pg, "list-phone-search");
-    await pg.fill('input[name="q"]', ""); await pause(400);
+    await pg.fill('.f-q input[name="q"]', ""); await pause(400);
     const topic = await pg.$eval('.f-o[data-f="topic"]:not([data-v=""])', (b) => ({ v: b.dataset.v, n: +b.querySelector(".n").textContent }));
     await pg.tap(`.f-o[data-v="${topic.v}"]`); await pause(300);
     ok(`주제 '${topic.v}' → ${topic.n}편`, (await shown()).length === topic.n);
@@ -171,13 +171,13 @@ try {
     // Korean typed on a phone keyboard: each syllable is composed (IME) — the box keeps it whole, and keeps the focus
     await pg.goto(B + "/briefs", { waitUntil: "networkidle" });
     const cdp = await ctx.newCDPSession(pg);
-    await pg.tap('input[name="q"]');
+    await pg.tap('.f-q input[name="q"]');
     for (const [jamo, syl] of [["ㄱ", "거"], ["ㅂ", "버"]]) {
       await cdp.send("Input.imeSetComposition", { text: jamo, selectionStart: 1, selectionEnd: 1 }); await pause(400);
       await cdp.send("Input.imeSetComposition", { text: syl, selectionStart: 1, selectionEnd: 1 }); await pause(400);
       await cdp.send("Input.insertText", { text: syl }); await pause(400);
     }
-    const ime = await pg.evaluate(() => ({ v: document.querySelector('input[name="q"]').value, focus: document.activeElement?.name }));
+    const ime = await pg.evaluate(() => ({ v: document.querySelector('.f-q input[name="q"]').value, focus: document.activeElement?.name }));
     ok("폰: 한글을 조합해 쳐도 글자가 깨지지 않고 포커스가 남는다 ('거버')", ime.v === "거버" && ime.focus === "q", JSON.stringify(ime));
     await pg.evaluate(() => document.activeElement.blur()); await pause(300);
     const kept = await shown(), expect = await pg.$$eval(".r-item", (l) => l.filter((li) => li.dataset.q.includes("거버")).map((li) => li.id));
