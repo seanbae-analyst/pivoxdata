@@ -47,9 +47,27 @@ code{background:var(--surface-3);border:1px solid var(--line);border-radius:6px;
 .nav a[aria-current]{color:var(--ink)}
 .nav a,.nav button{white-space:nowrap}
 /* (between a phone and a wide screen the menu keeps to one line: 주제 is on the home page, a link away) */
-@media(max-width:780px){ .nav a,.nav button{padding-left:8px;padding-right:8px} }
+@media(max-width:780px){ .nav a,.nav button{padding-left:8px;padding-right:8px} .topbar{gap:8px} } /* room for the search button, 641-780px */
 @media(max-width:560px){.brand{min-height:44px}.nav a{padding:0 10px;min-height:44px;display:inline-flex;align-items:center}.topbar{gap:8px}
   footer.site .links{gap:0 4px} footer.site .links a{display:inline-flex;align-items:center;min-height:44px;padding:0 8px}}
+
+/* ---------- the search in the top bar (2026-11-01): a button that opens a field, which sends ?q= to /briefs ---------- */
+.tb-search{position:relative;order:3;border:0;border-radius:0;background:none} /* research.css styles every details/summary as a box */
+.topbar>.nav{margin-left:auto}
+.tb-search>summary{list-style:none;padding:0;font-weight:inherit;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+  border-radius:var(--radius-sm);color:var(--mut);cursor:pointer}
+.tb-search>summary::-webkit-details-marker{display:none}
+.tb-search>summary:hover,.tb-search[open]>summary{color:var(--ink);background:var(--surface-2)}
+.tb-search svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tb-search form{position:absolute;right:0;top:calc(100% + 8px);z-index:30;display:flex;gap:8px;width:min(420px,calc(100vw - 32px));
+  padding:10px;background:var(--surface);border:1px solid var(--line-2);border-radius:var(--radius-card)}
+.tb-search input{flex:1;min-width:0;height:44px;padding:0 12px;border:1px solid var(--line-2);border-radius:var(--radius-sm);
+  background:var(--bg);color:var(--ink);font:inherit;font-size:16px;outline:none}
+.tb-search input:focus{border-color:var(--bronze)}
+.tb-search input::placeholder{color:var(--dim)}
+.tb-search button{flex:none;height:44px;padding:0 16px;border:0;border-radius:var(--radius-sm);background:var(--bronze);color:#120e09;
+  font:inherit;font-weight:600;cursor:pointer}
+.tb-search button:hover{background:var(--bronze-hi)}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--bronze);color:#120e09;
@@ -71,6 +89,7 @@ footer.site .links{display:flex;flex-wrap:wrap;gap:4px 16px}
    that scrolls sideways if it must; no tab bar at the bottom, no install bar ---------- */
 @media(max-width:640px){
   .topbar{flex-wrap:wrap;height:auto;padding:10px 0 0;row-gap:2px;border-bottom:1px solid var(--line)}
+  .tb-search{order:1;margin-left:auto}
   .topbar .nav{order:2;flex:1 0 100%;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -4px;gap:0}
   .topbar .nav::-webkit-scrollbar{display:none}
   .topbar .nav a{font-size:14.5px;padding:0 10px;min-height:44px}
