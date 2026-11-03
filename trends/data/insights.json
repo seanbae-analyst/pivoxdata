@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-02",
+ "built_at": "2026-11-03",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "93건",
+     "big": "98건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 43건 · 클라우드·인프라 25건 · 보안·규제 21건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 6건",
+     "body": "AI 에이전트 46건 · 클라우드·인프라 27건 · 보안·규제 22건 · ERP·백오피스 12건 · 업무 도구 10건 · 데이터·분석 8건 · CRM·고객 7건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,18 +325,18 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 43,
-         "label": "43건"
+         "value": 46,
+         "label": "46건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 25,
-         "label": "25건"
+         "value": 27,
+         "label": "27건"
         },
         {
          "name": "보안·규제",
-         "value": 21,
-         "label": "21건"
+         "value": 22,
+         "label": "22건"
         },
         {
          "name": "ERP·백오피스",
@@ -355,11 +355,11 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "43건",
+     "big": "46건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: McKinsey 10/30 — Waniwani’s CEO on the agentic future of insurance distribution · SAP 10/29 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise · OpenAI 10/28 — OpenAI and ServiceNow expand partnership across enterprise workflows",
+     "body": "최근: NVIDIA 11/3 — Cities Worldwide Build and Scale AI Services With NVIDIA Physical and Agentic AI · SK텔레콤 11/3 — SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다 · Capgemini 11/2 — Muse and Dots: the human-AI dyad enters commerce",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -381,14 +381,14 @@
          "label": "6건"
         },
         {
-         "name": "Snowflake",
+         "name": "NVIDIA",
          "value": 3,
          "label": "3건"
         },
         {
-         "name": "Databricks",
-         "value": 2,
-         "label": "2건"
+         "name": "Snowflake",
+         "value": 3,
+         "label": "3건"
         }
        ]
       }
@@ -397,23 +397,23 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "25건",
+     "big": "27건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
-     "title": "클라우드·인프라, SAP 발표가 가장 많아요",
+     "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 삼성전자 11/1 — 이재용 삼성전자 회장, 미래 반도체 패키징 기술 일본 현장 점검 · SAP 10/29 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise · Capgemini 10/29 — Modernize the mainframe at the pace your business can support",
+     "body": "최근: NVIDIA 11/3 — Cities Worldwide Build and Scale AI Services With NVIDIA Physical and Agentic AI · SK텔레콤 11/3 — SKT, 2027년 ‘UNGC 리드 기업’ 선정… 지속가능경영 리더십 인정 · 삼성전자 11/1 — 이재용 삼성전자 회장, 미래 반도체 패키징 기술 일본 현장 점검",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "SAP",
-         "value": 4,
-         "label": "4건"
+         "name": "NVIDIA",
+         "value": 5,
+         "label": "5건"
         },
         {
-         "name": "NVIDIA",
+         "name": "SAP",
          "value": 4,
          "label": "4건"
         },
@@ -428,7 +428,7 @@
          "label": "3건"
         },
         {
-         "name": "삼성전자",
+         "name": "SK텔레콤",
          "value": 2,
          "label": "2건"
         }
@@ -439,11 +439,11 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "21건",
+     "big": "22건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, Anthropic 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 과학기술정보통신부 10/28 — [보도참고] 국민 누구나 24시간 이용하는 ‘인공지능 건강도우미 대화 로봇(AI 건강도우미 챗봇)’ 운영 시작 · SAP 10/28 — SAP and NTT to Cooperate on Delivering Trusted Sovereign Cloud and SAP Business AI Capabilities · 과학기술정보통신부 10/28 — 인공지능으로 이룬 공공혁신, 국민이 누리는 변화 「2026 공공기관 인공지능 혁신 성과대회」 개최",
+     "body": "최근: OpenAI 11/2 — OpenAI appoints Dan Driscoll as Senior Counselor for National Security Modernization · 과학기술정보통신부 10/28 — [보도참고] 국민 누구나 24시간 이용하는 ‘인공지능 건강도우미 대화 로봇(AI 건강도우미 챗봇)’ 운영 시작 · SAP 10/28 — SAP and NTT to Cooperate on Delivering Trusted Sovereign Cloud and SAP Business AI Capabilities",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -460,17 +460,17 @@
          "label": "4건"
         },
         {
+         "name": "OpenAI",
+         "value": 3,
+         "label": "3건"
+        },
+        {
          "name": "과학기술정보통신부",
          "value": 3,
          "label": "3건"
         },
         {
          "name": "McKinsey",
-         "value": 2,
-         "label": "2건"
-        },
-        {
-         "name": "OpenAI",
          "value": 2,
          "label": "2건"
         }
@@ -597,11 +597,11 @@
     {
      "id": "dom-crm",
      "k": "IT 영역 · CRM·고객",
-     "big": "6건",
+     "big": "7건",
      "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
      "title": "CRM·고객, Salesforce 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Salesforce 10/29 — Salesforce Signs Definitive Agreement to Acquire Rune Technologies · McKinsey 10/28 — Who wins when AI does the shopping? New evidence on agentic commerce · Salesforce 10/20 — Salesforce Signs Definitive Agreement to Acquire Braze",
+     "body": "최근: Capgemini 11/2 — Muse and Dots: the human-AI dyad enters commerce · Salesforce 10/29 — Salesforce Signs Definitive Agreement to Acquire Rune Technologies · McKinsey 10/28 — Who wins when AI does the shopping? New evidence on agentic commerce",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -611,6 +611,11 @@
          "name": "Salesforce",
          "value": 4,
          "label": "4건"
+        },
+        {
+         "name": "Capgemini",
+         "value": 1,
+         "label": "1건"
         },
         {
          "name": "McKinsey",
@@ -889,21 +894,187 @@
    }
   },
   {
+   "key": "surge:PyPI:faster-whisper:2026-10-26",
+   "subject": "pkg:faster-whisper",
+   "kind": "급증",
+   "tier": "big",
+   "score": 76.9,
+   "topic": "ai",
+   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-faster-whisper",
+    "k": "PyPI 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 68만회, 직전 9주 평소는 36만회. 같은 주 대조군은 평소의 1.24배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 26일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       237656,
+       285645,
+       294361,
+       304896,
+       356143,
+       419208,
+       491489,
+       567273,
+       609978,
+       677380
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 356143,
+      "to": 677380,
+      "fromText": "36만",
+      "toText": "68만",
+      "fromLabel": "직전 9주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "surge:PyPI:sglang:2026-10-26",
+   "subject": "pkg:sglang",
+   "kind": "급증",
+   "tier": "big",
+   "score": 75.7,
+   "topic": "ai",
+   "headline": "지난주 SGLang 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-sglang",
+    "k": "PyPI 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 SGLang 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 7.8만회, 직전 9주 평소는 4.2만회. 같은 주 대조군은 평소의 1.24배, AI 패키지 전반은 1.15배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 26일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       18954,
+       132276,
+       143758,
+       32725,
+       12872,
+       79605,
+       41576,
+       25066,
+       76646,
+       77878
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 41576,
+      "to": 77878,
+      "fromText": "4.2만",
+      "toText": "7.8만",
+      "fromLabel": "직전 9주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "surge:npm:@qwen-code/qwen-code:2026-10-26",
+   "subject": "pkg:@qwen-code/qwen-code",
+   "kind": "급증",
+   "tier": "big",
+   "score": 73.7,
+   "topic": "ai",
+   "headline": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-@qwen-code/qwen-code",
+    "k": "npm 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2.2만회, 직전 12주 평소는 1.2만회. 같은 주 대조군은 평소의 1.26배였습니다.",
+    "src": "npm 평일 다운로드 · 5월 4일 주–10월 26일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       8489,
+       9284,
+       13740,
+       9467,
+       18098,
+       24191,
+       14995,
+       11401,
+       33208,
+       9086,
+       13636,
+       16277,
+       8175,
+       10852,
+       10376.5,
+       11684,
+       14666,
+       9190.5,
+       11799,
+       11646,
+       12729,
+       15036,
+       11213,
+       13631,
+       13142.5,
+       21839
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 11741.5,
+      "to": 21839,
+      "fromText": "1.2만",
+      "toText": "2.2만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
    "key": "ath:npm:opencode-ai:2026-10-26",
    "subject": "pkg:opencode-ai",
    "kind": "최고치",
    "tier": "big",
-   "score": 86.4,
+   "score": 66.1,
    "topic": "ai",
    "headline": "OpenCode 주간 다운로드가 역대 최고",
    "card": {
     "id": "ev-ath-opencode-ai",
     "k": "npm 최고치",
-    "big": "84만",
+    "big": "72만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "OpenCode 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +46% 많아요.",
-    "body": "이전 최고(10월 12일 주)보다 +46% 많습니다. 4주 성장 +36.3%, 대조군 +15.1%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +26% 많아요.",
+    "body": "이전 최고(10월 12일 주)보다 +26% 많습니다. 4주 성장 +29.9%, 대조군 +14.7%.",
     "src": "npm 평일 다운로드 · 2024년 11월 4일 주–2026년 10월 26일 주",
     "viz": [
      {
@@ -1012,7 +1183,7 @@
        532571,
        573806.5,
        537358,
-       840211.5
+       723721
       ],
       "formats": [
        "line",
@@ -1023,110 +1194,10 @@
      {
       "kind": "versus",
       "from": 573806.5,
-      "to": 840211.5,
+      "to": 723721,
       "fromText": "57만",
-      "toText": "84만",
+      "toText": "72만",
       "fromLabel": "이전 최고",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "surge:PyPI:faster-whisper:2026-10-26",
-   "subject": "pkg:faster-whisper",
-   "kind": "급증",
-   "tier": "big",
-   "score": 76.9,
-   "topic": "ai",
-   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
-   "card": {
-    "id": "ev-surge-faster-whisper",
-    "k": "PyPI 다운로드",
-    "big": "1.9배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
-    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 68만회, 직전 9주 평소는 36만회. 같은 주 대조군은 평소의 1.24배였습니다.",
-    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 26일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       237656,
-       285645,
-       294361,
-       304896,
-       356143,
-       419208,
-       491489,
-       567273,
-       609978,
-       677380
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 356143,
-      "to": 677380,
-      "fromText": "36만",
-      "toText": "68만",
-      "fromLabel": "직전 9주 평소",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "surge:PyPI:sglang:2026-10-26",
-   "subject": "pkg:sglang",
-   "kind": "급증",
-   "tier": "big",
-   "score": 75.7,
-   "topic": "ai",
-   "headline": "지난주 SGLang 다운로드가 평소의 1.9배",
-   "card": {
-    "id": "ev-surge-sglang",
-    "k": "PyPI 다운로드",
-    "big": "1.9배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 SGLang 다운로드가 평소의 1.9배",
-    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 7.8만회, 직전 9주 평소는 4.2만회. 같은 주 대조군은 평소의 1.24배, AI 패키지 전반은 1.15배였습니다.",
-    "src": "PyPI 평일 다운로드 · 8월 24일 주–10월 26일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       18954,
-       132276,
-       143758,
-       32725,
-       12872,
-       79605,
-       41576,
-       25066,
-       76646,
-       77878
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 41576,
-      "to": 77878,
-      "fromText": "4.2만",
-      "toText": "7.8만",
-      "fromLabel": "직전 9주 평소",
       "toLabel": "지난주"
      }
     ]
@@ -1137,7 +1208,7 @@
    "subject": "pkg:@browserbasehq/stagehand",
    "kind": "최고치",
    "tier": "big",
-   "score": 53,
+   "score": 52.4,
    "topic": "ai",
    "headline": "Stagehand (AI용) 주간 다운로드가 역대 최고",
    "card": {
@@ -1146,8 +1217,8 @@
     "big": "44만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "Stagehand (AI용) 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +13% 많아요.",
-    "body": "이전 최고(10월 19일 주)보다 +13% 많습니다. 4주 성장 +14.3%, 대조군 +15.1%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +12% 많아요.",
+    "body": "이전 최고(10월 19일 주)보다 +12% 많습니다. 4주 성장 +14.2%, 대조군 +14.7%.",
     "src": "npm 평일 다운로드 · 2024년 11월 4일 주–2026년 10월 26일 주",
     "viz": [
      {
@@ -1256,7 +1327,7 @@
        337933.5,
        279582.5,
        387888,
-       438441.5
+       436149
       ],
       "formats": [
        "line",
@@ -1267,7 +1338,7 @@
      {
       "kind": "versus",
       "from": 387888,
-      "to": 438441.5,
+      "to": 436149,
       "fromText": "39만",
       "toText": "44만",
       "fromLabel": "이전 최고",
@@ -1277,67 +1348,52 @@
    }
   },
   {
-   "key": "surge:npm:@qwen-code/qwen-code:2026-10-26",
-   "subject": "pkg:@qwen-code/qwen-code",
-   "kind": "증가",
-   "tier": "small",
-   "score": 67.7,
+   "key": "hf:LiquidAI/LFM3-1.7B",
+   "subject": "hf:LiquidAI/LFM3-1.7B",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
    "topic": "ai",
-   "headline": "지난주 Qwen Code 다운로드가 평소의 1.7배",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: LiquidAI/​LFM3‑1.7B",
    "card": {
-    "id": "ev-surge-@qwen-code/qwen-code",
-    "k": "npm 다운로드",
-    "big": "1.7배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 Qwen Code 다운로드가 평소의 1.7배",
-    "easy": "평소 한 주보다 1.7배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 2.0만회, 직전 12주 평소는 1.2만회. 같은 주 대조군은 평소의 1.28배였습니다.",
-    "src": "npm 평일 다운로드 · 5월 4일 주–10월 26일 주",
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,250",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: LiquidAI/​LFM3‑1.7B",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "text‑generation · 2026-10-23 공개. 직전 1위는 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017.",
+    "src": "Hugging Face 트렌딩 · 2026-11-03",
     "viz": [
      {
-      "kind": "series",
-      "values": [
-       8489,
-       9284,
-       13740,
-       9467,
-       18098,
-       24191,
-       14995,
-       11401,
-       33208,
-       9086,
-       13636,
-       16277,
-       8175,
-       10852,
-       10376.5,
-       11684,
-       14666,
-       9190.5,
-       11799,
-       11646,
-       12729,
-       15036,
-       11213,
-       13631,
-       13142.5,
-       20314.5
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
+      "kind": "rank",
+      "items": [
+       {
+        "name": "LFM3-1.7B",
+        "value": 797,
+        "label": "4.2만"
+       },
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 659,
+        "label": "18만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 621,
+        "label": "3.2만"
+       },
+       {
+        "name": "Mistral-Large-4-1T-A52B",
+        "value": 514,
+        "label": "5,500"
+       },
+       {
+        "name": "idol",
+        "value": 421,
+        "label": "7,787"
+       }
       ]
-     },
-     {
-      "kind": "versus",
-      "from": 11741.5,
-      "to": 20314.5,
-      "fromText": "1.2만",
-      "toText": "2.0만",
-      "fromLabel": "직전 12주 평소",
-      "toLabel": "지난주"
      }
     ]
    }
@@ -1397,7 +1453,7 @@
    "subject": "pkg:@mastra/core",
    "kind": "증가",
    "tier": "small",
-   "score": 60.5,
+   "score": 60.6,
    "topic": "ai",
    "headline": "지난주 Mastra 다운로드가 평소의 1.6배",
    "card": {
@@ -1407,7 +1463,7 @@
     "bl": "지난주 다운로드 · 평소와 비교",
     "title": "지난주 Mastra 다운로드가 평소의 1.6배",
     "easy": "평소 한 주보다 1.6배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 52만회, 직전 12주 평소는 32만회. 같은 주 대조군은 평소의 1.28배, AI 패키지 전반은 1.33배였습니다.",
+    "body": "평일 하루 52만회, 직전 12주 평소는 32만회. 같은 주 대조군은 평소의 1.26배, AI 패키지 전반은 1.32배였습니다.",
     "src": "npm 평일 다운로드 · 5월 4일 주–10월 26일 주",
     "viz": [
      {
@@ -1438,7 +1494,7 @@
        430802.5,
        448892.5,
        536509,
-       520803
+       516895
       ],
       "formats": [
        "columns",
@@ -1449,7 +1505,7 @@
      {
       "kind": "versus",
       "from": 323569,
-      "to": 520803,
+      "to": 516895,
       "fromText": "32만",
       "toText": "52만",
       "fromLabel": "직전 12주 평소",
@@ -1459,152 +1515,50 @@
    }
   },
   {
-   "key": "rank1:pypi:openai-agents:2026-10-26",
-   "subject": "pkg:openai-agents",
-   "kind": "순위",
-   "tier": "small",
-   "score": 35,
-   "topic": "ai",
-   "headline": "PyPI에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: OpenAI Agents",
-   "card": {
-    "id": "ch-rank1-pypi",
-    "k": "PyPI 순위",
-    "big": "+12.5%p",
-    "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-    "title": "PyPI에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: OpenAI Agents",
-    "easy": "PyPI에서 다른 패키지들보다 가장 빨리 크는 AI 도구가 바뀌었어요.",
-    "body": "지난번 1위는 Anthropic.",
-    "src": "PyPI 평일 다운로드 · 10월 26일 주까지 4주",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "OpenAI Agents",
-        "value": 0.1248,
-        "label": "+12.5%p"
-       },
-       {
-        "name": "Anthropic",
-        "value": 0.0731,
-        "label": "+7.3%p"
-       },
-       {
-        "name": "LangGraph",
-        "value": 0.0589,
-        "label": "+5.9%p"
-       },
-       {
-        "name": "MCP SDK",
-        "value": 0.0577,
-        "label": "+5.8%p"
-       },
-       {
-        "name": "Pydantic AI",
-        "value": 0.049,
-        "label": "+4.9%p"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
-   "key": "top3:npm:@ai-sdk/openai:2026-10-26",
-   "subject": "pkg:@ai-sdk/openai",
-   "kind": "순위",
-   "tier": "small",
-   "score": 25,
-   "topic": "ai",
-   "headline": "AI SDK용 OpenAI, npm 성장 상위 3에 새로",
-   "card": {
-    "id": "ch-top3-npm",
-    "k": "npm 순위",
-    "big": "+12.6%p",
-    "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-    "title": "AI SDK용 OpenAI, npm 성장 상위 3에 새로",
-    "easy": "빨리 크는 AI 도구 상위 3위 안에 새로 들어왔어요.",
-    "body": "상위 3: Mastra(+27.0%p), Vercel AI SDK(+14.5%p), AI SDK용 OpenAI(+12.6%p).",
-    "src": "npm 평일 다운로드 · 10월 26일 주까지 4주",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "Mastra",
-        "value": 0.2695,
-        "label": "+26.9%p"
-       },
-       {
-        "name": "Vercel AI SDK",
-        "value": 0.1454,
-        "label": "+14.5%p"
-       },
-       {
-        "name": "OpenAI",
-        "value": 0.1255,
-        "label": "+12.6%p"
-       },
-       {
-        "name": "Anthropic",
-        "value": 0.1221,
-        "label": "+12.2%p"
-       },
-       {
-        "name": "Anthropic",
-        "value": 0.1067,
-        "label": "+10.7%p"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftr:baidu/Unlimited-OCR-2:2026-11-02",
-   "subject": "hf:baidu/Unlimited-OCR-2",
+   "key": "hftr:speridlabs/idol:2026-11-03",
+   "subject": "hf:speridlabs/idol",
    "kind": "새로 진입",
    "tier": "small",
    "score": 12,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: baidu/​Unlimited‑OCR‑2",
+   "headline": "트렌딩 상위 5에 새로: speridlabs/​idol",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
     "big": "5위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: baidu/​Unlimited‑OCR‑2",
+    "title": "트렌딩 상위 5에 새로: speridlabs/​idol",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "image‑text‑to‑text · 2026-10-26 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-02",
+    "body": "image‑to‑3d · 2026-10-28 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-03",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
-        "name": "DeepSeek-V4.1-Flash-1017",
-        "value": 698,
-        "label": "17만"
+        "name": "LFM3-1.7B",
+        "value": 797,
+        "label": "4.2만"
        },
        {
-        "name": "LFM3-1.7B",
-        "value": 661,
-        "label": "3.8만"
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 659,
+        "label": "18만"
        },
        {
         "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
-        "value": 559,
-        "label": "2.9만"
+        "value": 621,
+        "label": "3.2만"
        },
        {
         "name": "Mistral-Large-4-1T-A52B",
-        "value": 484,
-        "label": "4,576"
+        "value": 514,
+        "label": "5,500"
        },
        {
-        "name": "Unlimited-OCR-2",
-        "value": 453,
-        "label": "11만"
+        "name": "idol",
+        "value": 421,
+        "label": "7,787"
        }
       ]
      }
@@ -1691,17 +1645,17 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 43건 · 발표가 많은 곳: McKinsey 12건, SAP 12건, OpenAI 6건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 46건 · 발표가 많은 곳: McKinsey 12건, SAP 12건, OpenAI 6건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: SAP 4건, NVIDIA 4건, 과학기술정보통신부 3건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 27건 · 발표가 많은 곳: NVIDIA 5건, SAP 4건, 과학기술정보통신부 3건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 21건 · 발표가 많은 곳: Anthropic 5건, SK텔레콤 4건, 과학기술정보통신부 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 22건 · 발표가 많은 곳: Anthropic 5건, SK텔레콤 4건, OpenAI 3건"
   },
   {
    "group": "domain",
@@ -1721,10 +1675,23 @@
   {
    "group": "domain",
    "id": "dom-crm",
-   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 6건 · 발표가 많은 곳: Salesforce 4건, McKinsey 1건, SAP 1건"
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 7건 · 발표가 많은 곳: Salesforce 4건, Capgemini 1건, McKinsey 1건"
   }
  ],
  "news": [
+  {
+   "id": "ebf59a6362",
+   "src": "sap",
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-11-02",
+   "title": "AI and Transformation Guidance for Every Customer",
+   "summary": "Max Success Plan is now available to every customer, whether they choose to work with SAP directly or through a trusted partner.",
+   "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/",
+   "score": 6,
+   "domains": [],
+   "method": "정책·규제"
+  },
   {
    "id": "362a39cf58",
    "src": "msit",
@@ -1800,6 +1767,21 @@
     "클라우드·인프라"
    ],
    "method": "정책·규제"
+  },
+  {
+   "id": "d6833b230f",
+   "src": "skt",
+   "source": "SK텔레콤",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다",
+   "summary": "– ‘AX 스파크’ 파이널 개최… 개발∙비개발 넘어 전사 총 173건 지원, 5개 팀 시상 – 대상은 악성앱 분석 에이전트 ‘M-TripleA’… 우수작 중심 전사 확산 추진 계획 – 정재헌 CEO “현장에 The post SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다 first appeared on SK텔레콤 뉴스룸 .",
+   "link": "https://news.sktelecom.com/232689",
+   "score": 3,
+   "domains": [
+    "AI 에이전트"
+   ],
+   "method": "전사 배포"
   },
   {
    "id": "26bab3c236",
@@ -2100,50 +2082,6 @@
    "method": "인프라 확장"
   },
   {
-   "id": "13a18076dd",
-   "src": "salesforce",
-   "source": "Salesforce",
-   "kind": "company",
-   "date": "2026-10-20",
-   "title": "Salesforce Signs Definitive Agreement to Acquire Braze",
-   "summary": "SAN FRANCISCO & NEW YORK — Salesforce (NYSE: CRM), the world’s #1 AI CRM, today announced it has entered into a definitive agreement to acquire Braze (NASDAQ: BRZE), a leading customer engagement platform, for approximately $5.66 billion in enterprise value. Under the terms of the agreement, holders of Braze Class A common stock will receive […]",
-   "link": "https://www.salesforce.com/news/press-releases/2026/10/20/salesforce-signs-definitive-agreement-to-acquire-braze/",
-   "score": 3,
-   "domains": [
-    "CRM·고객"
-   ],
-   "method": "인수"
-  },
-  {
-   "id": "d650f92872",
-   "src": "microsoft",
-   "source": "Microsoft",
-   "kind": "company",
-   "date": "2026-10-20",
-   "title": "Advancing digital sovereignty with greater control and choice",
-   "summary": "Across my conversations with leaders in government, critical infrastructure and regulated industries, one priority consistently rises to the top: putting technology to work on their most important systems while maintaining the control those systems require. This challenge is becoming more important as advanced cloud and AI capabilities move into public services, regulated processes and essential...",
-   "link": "https://blogs.microsoft.com/blog/2026/10/20/advancing-digital-sovereignty-with-greater-control-and-choice/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라",
-    "보안·규제"
-   ],
-   "method": null
-  },
-  {
-   "id": "dbaa902542",
-   "src": "openai",
-   "source": "OpenAI",
-   "kind": "company",
-   "date": "2026-10-20",
-   "title": "OpenAI acquires Orchestra Bio",
-   "summary": "OpenAI is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D, helping biopharma teams accelerate drug development and advance new treatments.",
-   "link": "https://openai.com/index/openai-to-acquire-orchestra-bio",
-   "score": 3,
-   "domains": [],
-   "method": "인수"
-  },
-  {
    "id": "8b57f21212",
    "src": "salesforce",
    "source": "Salesforce",
@@ -2157,13 +2095,65 @@
    "method": "연구·보고서"
   },
   {
+   "id": "28a7ee1428",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-03",
+   "title": "말하기 어려웠던 연구 현장의 목소리, 익명의 문자 한 통(1551-1441)으로 듣는다",
+   "summary": "- 과기정통부, 익명 소통 플랫폼, ｢R&D 대나무숲｣ 운영 착수 -- 본인 인증 없이 문자 한 통으로 어떤 의견이든 손쉽게 전송 가능 - - 접수 의견은 AI를 활용해 다각적으로 분석하여 정책·제도 개선에 환류",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187917",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "35d1307217",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-03",
+   "title": "Care workers, women returning to employment and builders to gain practical AI skills",
+   "summary": "Four Barnsley training projects will share over £800,000 to bring practical artificial intelligence skills into everyday workplaces.",
+   "link": "https://www.gov.uk/government/news/care-workers-women-returning-to-employment-and-builders-to-gain-practical-ai-skills",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "d4073c3bf0",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-03",
+   "title": "휴머노이드가 ‘일하는 법’ 배우는 데이터 생산기지 문 연다",
+   "summary": "- 공공 개방형 ‘AI 휴머노이드 데이터 팩토리’ 개소 - - 국산 휴머노이드 ‘KAIROS’ 개발 연계… 2027년 말 산학연 개방 추진 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187916",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "688e391ce2",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-02",
+   "title": "“연결을 넘어, AI가 만드는 새로운 가치” 「2026 AIoT Week Korea」 개막",
+   "summary": "- 국내외 170여 개 기업‧기관 참가, 일상과 산업 현장의 인공지능 전환(AX)을 이끄는 최신 AIoT 제품과 서비스 소개 - - 콘퍼런스‧세미나 등 다양한 연계 행사를 통해 AIoT 산업의 현재와 미래 조망 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187914",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "c5dac839a2",
    "src": "msit",
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-02",
-   "title": "표준과 지식재산(특허)으로 여는 피지컬 AI 시대, 글로벌 주도권 확보 나선다",
-   "summary": "- 과기정통부-지식재산처 「2026 글로벌 ICT 표준 컨퍼런스」 개최(11.2~4) - - AI·AX 표준, 특허 연계를 통해 기술 선도국으로 나아가기 위한 전략 논의 -",
+   "title": "표준과 지식재산(특허)으로 여는 물리적 인공지능 시대, 국제적 주도권 확보 나선다",
+   "summary": "- 과기정통부-지식재산처 「2026 국제 정보통신기술 표준 학술회의(글로벌 ICT 표준 컨퍼런스)」 개최(11.2~4) - - 인공지능·인공지능 전환 표준, 특허 연계를 통해 기술 선도국으로 나아가기 위한 전략 논의 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187912",
    "score": 1,
    "domains": [],

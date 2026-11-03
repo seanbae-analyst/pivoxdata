@@ -3955,17 +3955,17 @@
    "subject": "pkg:opencode-ai",
    "kind": "최고치",
    "tier": "big",
-   "score": 86.4,
+   "score": 66.1,
    "topic": "ai",
    "headline": "OpenCode 주간 다운로드가 역대 최고",
    "card": {
     "id": "ev-ath-opencode-ai",
     "k": "npm 최고치",
-    "big": "84만",
+    "big": "72만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "OpenCode 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +46% 많아요.",
-    "body": "이전 최고(10월 12일 주)보다 +46% 많습니다. 4주 성장 +36.3%, 대조군 +15.1%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +26% 많아요.",
+    "body": "이전 최고(10월 12일 주)보다 +26% 많습니다. 4주 성장 +29.9%, 대조군 +14.7%.",
     "src": "npm 평일 다운로드 · 2024년 11월 4일 주–2026년 10월 26일 주",
     "viz": [
      {
@@ -4074,7 +4074,7 @@
        532571,
        573806.5,
        537358,
-       840211.5
+       723721
       ],
       "formats": [
        "line",
@@ -4085,9 +4085,9 @@
      {
       "kind": "versus",
       "from": 573806.5,
-      "to": 840211.5,
+      "to": 723721,
       "fromText": "57만",
-      "toText": "84만",
+      "toText": "72만",
       "fromLabel": "이전 최고",
       "toLabel": "지난주"
      }
@@ -4202,7 +4202,7 @@
    "subject": "pkg:@browserbasehq/stagehand",
    "kind": "최고치",
    "tier": "big",
-   "score": 53,
+   "score": 52.4,
    "topic": "ai",
    "headline": "Stagehand (AI용) 주간 다운로드가 역대 최고",
    "card": {
@@ -4211,8 +4211,8 @@
     "big": "44만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "Stagehand (AI용) 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +13% 많아요.",
-    "body": "이전 최고(10월 19일 주)보다 +13% 많습니다. 4주 성장 +14.3%, 대조군 +15.1%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +12% 많아요.",
+    "body": "이전 최고(10월 19일 주)보다 +12% 많습니다. 4주 성장 +14.2%, 대조군 +14.7%.",
     "src": "npm 평일 다운로드 · 2024년 11월 4일 주–2026년 10월 26일 주",
     "viz": [
      {
@@ -4321,7 +4321,7 @@
        337933.5,
        279582.5,
        387888,
-       438441.5
+       436149
       ],
       "formats": [
        "line",
@@ -4332,7 +4332,7 @@
      {
       "kind": "versus",
       "from": 387888,
-      "to": 438441.5,
+      "to": 436149,
       "fromText": "39만",
       "toText": "44만",
       "fromLabel": "이전 최고",
@@ -4345,19 +4345,19 @@
    "date": "2026-11-02",
    "key": "surge:npm:@qwen-code/qwen-code:2026-10-26",
    "subject": "pkg:@qwen-code/qwen-code",
-   "kind": "증가",
-   "tier": "small",
-   "score": 67.7,
+   "kind": "급증",
+   "tier": "big",
+   "score": 73.7,
    "topic": "ai",
-   "headline": "지난주 Qwen Code 다운로드가 평소의 1.7배",
+   "headline": "지난주 Qwen Code 다운로드가 평소의 1.9배",
    "card": {
     "id": "ev-surge-@qwen-code/qwen-code",
     "k": "npm 다운로드",
-    "big": "1.7배",
+    "big": "1.9배",
     "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 Qwen Code 다운로드가 평소의 1.7배",
-    "easy": "평소 한 주보다 1.7배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 2.0만회, 직전 12주 평소는 1.2만회. 같은 주 대조군은 평소의 1.28배였습니다.",
+    "title": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2.2만회, 직전 12주 평소는 1.2만회. 같은 주 대조군은 평소의 1.26배였습니다.",
     "src": "npm 평일 다운로드 · 5월 4일 주–10월 26일 주",
     "viz": [
      {
@@ -4388,7 +4388,7 @@
        11213,
        13631,
        13142.5,
-       20314.5
+       21839
       ],
       "formats": [
        "columns",
@@ -4399,9 +4399,9 @@
      {
       "kind": "versus",
       "from": 11741.5,
-      "to": 20314.5,
+      "to": 21839,
       "fromText": "1.2만",
-      "toText": "2.0만",
+      "toText": "2.2만",
       "fromLabel": "직전 12주 평소",
       "toLabel": "지난주"
      }
@@ -4465,7 +4465,7 @@
    "subject": "pkg:@mastra/core",
    "kind": "증가",
    "tier": "small",
-   "score": 60.5,
+   "score": 60.6,
    "topic": "ai",
    "headline": "지난주 Mastra 다운로드가 평소의 1.6배",
    "card": {
@@ -4475,7 +4475,7 @@
     "bl": "지난주 다운로드 · 평소와 비교",
     "title": "지난주 Mastra 다운로드가 평소의 1.6배",
     "easy": "평소 한 주보다 1.6배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 52만회, 직전 12주 평소는 32만회. 같은 주 대조군은 평소의 1.28배, AI 패키지 전반은 1.33배였습니다.",
+    "body": "평일 하루 52만회, 직전 12주 평소는 32만회. 같은 주 대조군은 평소의 1.26배, AI 패키지 전반은 1.32배였습니다.",
     "src": "npm 평일 다운로드 · 5월 4일 주–10월 26일 주",
     "viz": [
      {
@@ -4506,7 +4506,7 @@
        430802.5,
        448892.5,
        536509,
-       520803
+       516895
       ],
       "formats": [
        "columns",
@@ -4517,7 +4517,7 @@
      {
       "kind": "versus",
       "from": 323569,
-      "to": 520803,
+      "to": 516895,
       "fromText": "32만",
       "toText": "52만",
       "fromLabel": "직전 12주 평소",
@@ -4676,6 +4676,110 @@
         "name": "Unlimited-OCR-2",
         "value": 453,
         "label": "11만"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-03",
+   "key": "hf:LiquidAI/LFM3-1.7B",
+   "subject": "hf:LiquidAI/LFM3-1.7B",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: LiquidAI/​LFM3‑1.7B",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,250",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: LiquidAI/​LFM3‑1.7B",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "text‑generation · 2026-10-23 공개. 직전 1위는 deepseek‑ai/​DeepSeek‑V4.1‑Flash‑1017.",
+    "src": "Hugging Face 트렌딩 · 2026-11-03",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "LFM3-1.7B",
+        "value": 797,
+        "label": "4.2만"
+       },
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 659,
+        "label": "18만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 621,
+        "label": "3.2만"
+       },
+       {
+        "name": "Mistral-Large-4-1T-A52B",
+        "value": 514,
+        "label": "5,500"
+       },
+       {
+        "name": "idol",
+        "value": 421,
+        "label": "7,787"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-03",
+   "key": "hftr:speridlabs/idol:2026-11-03",
+   "subject": "hf:speridlabs/idol",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: speridlabs/​idol",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: speridlabs/​idol",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑to‑3d · 2026-10-28 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-03",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "LFM3-1.7B",
+        "value": 797,
+        "label": "4.2만"
+       },
+       {
+        "name": "DeepSeek-V4.1-Flash-1017",
+        "value": 659,
+        "label": "18만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 621,
+        "label": "3.2만"
+       },
+       {
+        "name": "Mistral-Large-4-1T-A52B",
+        "value": 514,
+        "label": "5,500"
+       },
+       {
+        "name": "idol",
+        "value": 421,
+        "label": "7,787"
        }
       ]
      }
