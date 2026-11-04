@@ -1,0 +1,817 @@
+{
+ "date": "2026-11-04",
+ "mode": "news",
+ "topic": null,
+ "format": "newsweek",
+ "format_name": "이번 주 AX 사건",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 5,
+ "original_numbers": [
+  "38",
+  "180",
+  "18"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI 에이전트,\n데모 다음은 무엇?",
+   "body": "이번 주 발표 7건은\nAI를 실제 데이터와 권한,\n인프라 위에 올리는 일을 다뤄요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    8,
+    6,
+    5,
+    3,
+    4,
+    7
+   ],
+   "title": "이번 주\n무슨 일이 있었나",
+   "body": "SAP, Snowflake,\nOpenAI 등 회사 뉴스룸과\n과기정통부가 11월 3~4일에\n발표를 냈어요.\n도입 방식은 달라도\n같은 질문으로 읽을 수 있어요.",
+   "src": "출처 · SAP · SK텔레콤 · Snowflake 외 2곳 발표 7건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "SAP, Cohere의\nNorth 정식 제공",
+   "body": "SAP는 Cohere의 에이전트 플랫폼\nNorth를 SAP Business AI\nPlatform에서 정식 제공한다고\n발표했어요.\n데이터 주권이 필요한 고객이\n대상이라고 해요.",
+   "src": "출처 · SAP 공식 발표 · 11/3",
+   "case": {
+    "who": "SAP",
+    "what": "Cohere North(에이전트 플랫폼)",
+    "where": "SAP Business AI Platform",
+    "how": "SAP가 호스팅·운영을 일괄 지원",
+    "domain": "보안·규제",
+    "method": "파트너십",
+    "check": "우리 데이터가 승인된 지역 안에만 머무는지 확인했나?",
+    "ref": 1
+   },
+   "kicker": "보안·규제 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "규제 업종에도\n에이전트 선택지",
+   "body": "데이터 상주 요건이 걸리던 곳이\n에이전트 도입을 다시 따져 볼\n근거로 읽혀요.\nSAP 환경과의 연결을\nSAP가 맡는 점은\n운영 부담 계산에 들어가요.",
+   "src": "출처 · SAP 공식 발표 · 11/3",
+   "case": {
+    "who": "SAP",
+    "what": "Cohere North(에이전트 플랫폼)",
+    "where": "SAP Business AI Platform",
+    "how": "SAP가 호스팅·운영을 일괄 지원",
+    "domain": "보안·규제",
+    "method": "파트너십",
+    "check": "우리 데이터가 승인된 지역 안에만 머무는지 확인했나?",
+    "ref": 1
+   },
+   "kicker": "보안·규제 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    8
+   ],
+   "title": "SKT, 사내 에이전트\n173건 겨뤘다",
+   "body": "SK텔레콤은 사내 경연\n'AX 스파크'에 173건이 출품됐고\n악성앱 분석 에이전트\n'M-TripleA'가 대상을 받았다고\n밝혔어요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/3",
+   "case": {
+    "who": "SK텔레콤 구성원",
+    "what": "사내 AI 에이전트(M-TripleA 등)",
+    "where": "마케팅·네트워크·보안 등 전사",
+    "how": "경연으로 검증 후 전사 확산 계획",
+    "domain": "AI 에이전트",
+    "method": "전사 배포",
+    "check": "직원이 만든 에이전트를 검증하고 고를 기준이 있나?",
+    "ref": 8
+   },
+   "kicker": "AI 에이전트 · 전사 배포"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    8
+   ],
+   "title": "만드는 일 다음은\n고르는 일",
+   "body": "SKT는 올해 사내에서 만든\n업무 에이전트가 5천 개 이상이라고\n밝혔어요.\n개발 지원 다음 단계는\n검증과 확산 체계라는 뜻이에요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/3",
+   "case": {
+    "who": "SK텔레콤 구성원",
+    "what": "사내 AI 에이전트(M-TripleA 등)",
+    "where": "마케팅·네트워크·보안 등 전사",
+    "how": "경연으로 검증 후 전사 확산 계획",
+    "domain": "AI 에이전트",
+    "method": "전사 배포",
+    "check": "직원이 만든 에이전트를 검증하고 고를 기준이 있나?",
+    "ref": 8
+   },
+   "kicker": "AI 에이전트 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    6
+   ],
+   "title": "Snowflake,\n에이전트 기능 발표",
+   "body": "Snowflake는 행사\nExpedition 2026에서\n에이전트를 관리된 데이터와\n사용자 권한에 묶는 기능을\n발표했어요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/3",
+   "case": {
+    "who": "Snowflake",
+    "what": "CoCo·CoWork·Cortex Training 등",
+    "where": "관리된 비즈니스 데이터와 권한",
+    "how": "에이전트를 지표·권한 정의에 연결",
+    "domain": "AI 에이전트",
+    "method": "제품 출시",
+    "check": "에이전트가 참조할 공식 지표 정의가 정리돼 있나?",
+    "ref": 6
+   },
+   "kicker": "AI 에이전트 · 제품 출시"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    6
+   ],
+   "title": "시범과 운영 사이\n빈칸은 맥락",
+   "body": "Snowflake가 인용한\nDeloitte 자료에선 기업 38%가\n시범 중, 11%만 운영 중이에요.\n지표 정의와 권한 정리가\n먼저라는 신호로 읽혀요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/3",
+   "case": {
+    "who": "Snowflake",
+    "what": "CoCo·CoWork·Cortex Training 등",
+    "where": "관리된 비즈니스 데이터와 권한",
+    "how": "에이전트를 지표·권한 정의에 연결",
+    "domain": "AI 에이전트",
+    "method": "제품 출시",
+    "check": "에이전트가 참조할 공식 지표 정의가 정리돼 있나?",
+    "ref": 6
+   },
+   "kicker": "AI 에이전트 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    5
+   ],
+   "title": "Heimstaden이\nOpenAI 도구 도입",
+   "body": "OpenAI는 Heimstaden이\nChatGPT Enterprise와\nCodex를 유럽의 주거 자산 관리에\n쓰고 있다고 발표했어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/3",
+   "case": {
+    "who": "Heimstaden (OpenAI 발표)",
+    "what": "ChatGPT Enterprise·Codex",
+    "where": "유럽 주거 자산 관리",
+    "how": "유럽 전역 직원 활용",
+    "domain": "업무 도구",
+    "method": "전사 배포",
+    "check": "업무용 AI와 코딩 도구의 사용 정책을 따로 정했나?",
+    "ref": 5
+   },
+   "kicker": "업무 도구 · 전사 배포"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    5
+   ],
+   "title": "현업 도구와\n개발 도구를 함께",
+   "body": "업무용 대화형 AI와 코딩 도구를\n한 회사가 같이 들인 사례예요.\n라이선스와 사용 정책을\n두 갈래로 나눠 짤 일이 생겨요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/3",
+   "case": {
+    "who": "Heimstaden (OpenAI 발표)",
+    "what": "ChatGPT Enterprise·Codex",
+    "where": "유럽 주거 자산 관리",
+    "how": "유럽 전역 직원 활용",
+    "domain": "업무 도구",
+    "method": "전사 배포",
+    "check": "업무용 AI와 코딩 도구의 사용 정책을 따로 정했나?",
+    "ref": 5
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "과기정통부와 AMD,\nMoU 운영위 첫 개최",
+   "body": "과학기술정보통신부는 AMD와\n업무협약(MoU) 운영위원회를 처음 열고\n이기종 AI 인프라, 연구센터,\n인재 양성 과제를 구체화한다고\n밝혔어요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/3",
+   "case": {
+    "who": "과학기술정보통신부·AMD",
+    "what": "AI 반도체 협력(MoU)",
+    "where": "이기종 AI 인프라·연구센터",
+    "how": "MoU 운영위원회로 과제 구체화",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "다른 종류의 칩 환경에서도 우리 모델이 돌아가나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "칩 선택지를\n넓히는 쪽으로",
+   "body": "이기종은 여러 종류의 칩을\n섞어 쓰는 구성이에요.\n인프라 설계에서 칩 하나만\n전제하지 않을 이유가\n하나 더 생긴 셈이에요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/3",
+   "case": {
+    "who": "과학기술정보통신부·AMD",
+    "what": "AI 반도체 협력(MoU)",
+    "where": "이기종 AI 인프라·연구센터",
+    "how": "MoU 운영위원회로 과제 구체화",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "다른 종류의 칩 환경에서도 우리 모델이 돌아가나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "title": "SKT, AI DC\n실행 조직 갖춰",
+   "body": "SK텔레콤은 3분기 실적 발표에서\nSK하이퍼와 SK호라이즌 출범으로\nAI 데이터센터 사업 체계를\n갖췄다고 밝혔어요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/4",
+   "case": {
+    "who": "SK텔레콤",
+    "what": "AI 데이터센터(AI DC)",
+    "where": "울산·서울 신규 데이터센터",
+    "how": "자회사 출범과 역할 분담",
+    "domain": "클라우드·인프라",
+    "method": "인프라 확장",
+    "check": "AI 워크로드를 둘 국내 데이터센터 선택지를 비교했나?",
+    "ref": 4
+   },
+   "kicker": "클라우드·인프라 · 인프라 확장"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "title": "국내 AI 인프라,\n공급 쪽의 준비",
+   "body": "SKT는 울산과 서울에\n약 180㎿ 규모 데이터센터를\n짓고 있다고 밝혔어요.\n국내에 AI 연산을 둘 공급처 준비가\n진행 중이에요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/4",
+   "case": {
+    "who": "SK텔레콤",
+    "what": "AI 데이터센터(AI DC)",
+    "where": "울산·서울 신규 데이터센터",
+    "how": "자회사 출범과 역할 분담",
+    "domain": "클라우드·인프라",
+    "method": "인프라 확장",
+    "check": "AI 워크로드를 둘 국내 데이터센터 선택지를 비교했나?",
+    "ref": 4
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    7
+   ],
+   "title": "Snowflake와\nUSA Cycling 제휴",
+   "body": "Snowflake는\nUSA Cycling의 공식\nAI 데이터 클라우드 파트너가\n됐다고 발표했어요.\nLA28 올림픽 준비를\n지원한다고 해요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/3",
+   "case": {
+    "who": "USA Cycling (Snowflake 발표)",
+    "what": "Snowflake AI 데이터 클라우드",
+    "where": "선수 훈련·경기 데이터",
+    "how": "흩어진 데이터를 한 층에 통합",
+    "domain": "데이터·분석",
+    "method": "파트너십",
+    "check": "흩어진 원천 데이터를 한곳에 모을 계획이 있나?",
+    "ref": 7
+   },
+   "kicker": "데이터·분석 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    7
+   ],
+   "title": "모으기보다\n잇기가 어렵다",
+   "body": "USA Cycling CEO는\n처리할 수 있는 양보다\n데이터가 많다고 말했어요.\nAI보다 데이터를 한 층에\n묶는 일이 먼저인 사례예요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/3",
+   "case": {
+    "who": "USA Cycling (Snowflake 발표)",
+    "what": "Snowflake AI 데이터 클라우드",
+    "where": "선수 훈련·경기 데이터",
+    "how": "흩어진 데이터를 한 층에 통합",
+    "domain": "데이터·분석",
+    "method": "파트너십",
+    "check": "흩어진 원천 데이터를 한곳에 모을 계획이 있나?",
+    "ref": 7
+   },
+   "kicker": "데이터·분석 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    6,
+    7,
+    8
+   ],
+   "title": "공통점은\n데이터와 통제",
+   "body": "SAP는 데이터 경계를,\nSnowflake는 권한과 지표 정의를\n앞세웠어요.\n모델 성능보다 데이터가 어디 있고\n누가 쓰는지가 쟁점이에요.",
+   "src": "출처 · SAP · Snowflake · SK텔레콤 발표 4건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트\n확인할 점",
+   "items": [
+    "데이터가 승인된 지역에 머무나요?",
+    "에이전트가 쓸 지표 정의가 있나요?",
+    "사용자 권한을 그대로 따르나요?",
+    "만든 에이전트를 검증할 기준이 있나요?",
+    "인프라를 칩 하나에 묶었나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "에이전트보다\n데이터 정리가 먼저",
+   "body": "이번 주 발표 7건은\nAI를 붙일 자리와 데이터,\n권한, 인프라를 다뤘어요.\n자세한 내용은 웹 브리핑에서 확인하세요."
+  }
+ ],
+ "caption": "이번 주 AX 발표 7건은 AI를 실제 데이터와 권한, 인프라 위에 올리는 일을 다뤘어요.\nSAP는 Cohere North를 정식 제공해 데이터 주권이 필요한 고객을 겨냥했어요.\nSK텔레콤은 사내 에이전트 경연에 173건이 모였고, 우수작을 전사로 넓힐 계획이에요.\nSnowflake는 에이전트를 관리된 데이터와 사용자 권한에 묶는 기능을 내놨어요.\nOpenAI는 Heimstaden이 ChatGPT Enterprise와 Codex를 자산 관리에 쓴다고 밝혔어요.\n과기정통부와 AMD는 이기종 AI 인프라 협력 과제를 구체화했어요.\nSK텔레콤은 AI 데이터센터 사업 체계를 갖췄다고 밝혔어요.\nSnowflake는 USA Cycling과 손잡고 흩어진 경기 데이터를 모아요.\n공통 쟁점은 모델보다 데이터의 위치와 권한이에요.\n우리 에이전트가 쓸 지표 정의와 권한은 정리돼 있나요?",
+ "cases": [
+  {
+   "who": "SAP",
+   "what": "Cohere North(에이전트 플랫폼)",
+   "where": "SAP Business AI Platform",
+   "how": "SAP가 호스팅·운영을 일괄 지원",
+   "domain": "보안·규제",
+   "method": "파트너십",
+   "check": "우리 데이터가 승인된 지역 안에만 머무는지 확인했나?",
+   "ref": 1,
+   "source": "SAP",
+   "date": "2026-11-03",
+   "link": "https://news.sap.com/2026/11/sap-cohere-empower-regulated-industries-innovate-deploy-ai-faster/"
+  },
+  {
+   "who": "SK텔레콤 구성원",
+   "what": "사내 AI 에이전트(M-TripleA 등)",
+   "where": "마케팅·네트워크·보안 등 전사",
+   "how": "경연으로 검증 후 전사 확산 계획",
+   "domain": "AI 에이전트",
+   "method": "전사 배포",
+   "check": "직원이 만든 에이전트를 검증하고 고를 기준이 있나?",
+   "ref": 8,
+   "source": "SK텔레콤",
+   "date": "2026-11-03",
+   "link": "https://news.sktelecom.com/232689"
+  },
+  {
+   "who": "Snowflake",
+   "what": "CoCo·CoWork·Cortex Training 등",
+   "where": "관리된 비즈니스 데이터와 권한",
+   "how": "에이전트를 지표·권한 정의에 연결",
+   "domain": "AI 에이전트",
+   "method": "제품 출시",
+   "check": "에이전트가 참조할 공식 지표 정의가 정리돼 있나?",
+   "ref": 6,
+   "source": "Snowflake",
+   "date": "2026-11-03",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-agents-governed-data-business-context"
+  },
+  {
+   "who": "Heimstaden (OpenAI 발표)",
+   "what": "ChatGPT Enterprise·Codex",
+   "where": "유럽 주거 자산 관리",
+   "how": "유럽 전역 직원 활용",
+   "domain": "업무 도구",
+   "method": "전사 배포",
+   "check": "업무용 AI와 코딩 도구의 사용 정책을 따로 정했나?",
+   "ref": 5,
+   "source": "OpenAI",
+   "date": "2026-11-03",
+   "link": "https://openai.com/index/heimstaden"
+  },
+  {
+   "who": "과학기술정보통신부·AMD",
+   "what": "AI 반도체 협력(MoU)",
+   "where": "이기종 AI 인프라·연구센터",
+   "how": "MoU 운영위원회로 과제 구체화",
+   "domain": "클라우드·인프라",
+   "method": "파트너십",
+   "check": "다른 종류의 칩 환경에서도 우리 모델이 돌아가나?",
+   "ref": 3,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-03",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187921"
+  },
+  {
+   "who": "SK텔레콤",
+   "what": "AI 데이터센터(AI DC)",
+   "where": "울산·서울 신규 데이터센터",
+   "how": "자회사 출범과 역할 분담",
+   "domain": "클라우드·인프라",
+   "method": "인프라 확장",
+   "check": "AI 워크로드를 둘 국내 데이터센터 선택지를 비교했나?",
+   "ref": 4,
+   "source": "SK텔레콤",
+   "date": "2026-11-04",
+   "link": "https://news.sktelecom.com/232790"
+  },
+  {
+   "who": "USA Cycling (Snowflake 발표)",
+   "what": "Snowflake AI 데이터 클라우드",
+   "where": "선수 훈련·경기 데이터",
+   "how": "흩어진 데이터를 한 층에 통합",
+   "domain": "데이터·분석",
+   "method": "파트너십",
+   "check": "흩어진 원천 데이터를 한곳에 모을 계획이 있나?",
+   "ref": 7,
+   "source": "Snowflake",
+   "date": "2026-11-03",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/usa-cycling-snowflake-partnership"
+  }
+ ],
+ "sources": [
+  {
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "SAP and Cohere Empower Regulated Industries to Innovate and Deploy AI Faster",
+   "link": "https://news.sap.com/2026/11/sap-cohere-empower-regulated-industries-innovate-deploy-ai-faster/",
+   "id": "f12033583e",
+   "original": true
+  },
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-03",
+   "title": "과기정통부-AMD, 인공지능 반도체 협력 본격 가동... AMD 대표 인공지능 행사도 한국서 첫 개최",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187921",
+   "id": "e830f9dee3",
+   "original": false
+  },
+  {
+   "source": "SK텔레콤",
+   "kind": "company",
+   "date": "2026-11-04",
+   "title": "SK텔레콤, 2026년 3분기 실적 발표… 통신·AI 두 축으로 성장세 지속",
+   "link": "https://news.sktelecom.com/232790",
+   "id": "fd39d0b2fa",
+   "original": true
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "Heimstaden is changing residential real estate management with AI",
+   "link": "https://openai.com/index/heimstaden",
+   "id": "08b710f1e7",
+   "original": false
+  },
+  {
+   "source": "Snowflake",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "Build Faster, Work Smarter with AI Agents and Apps Grounded in Data | Snowflake",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-agents-governed-data-business-context",
+   "id": "6e262432fa",
+   "original": true
+  },
+  {
+   "source": "Snowflake",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "Snowflake and USA Cycling Partner on Data for LA28 Olympics",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/usa-cycling-snowflake-partnership",
+   "id": "9ac41b4a44",
+   "original": true
+  },
+  {
+   "source": "SK텔레콤",
+   "kind": "company",
+   "date": "2026-11-03",
+   "title": "SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다",
+   "link": "https://news.sktelecom.com/232689",
+   "id": "d6833b230f",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "AI 에이전트, 데모 다음은 데이터와 권한이에요",
+  "lede": "11월 3~4일 SAP, Snowflake, OpenAI, SK텔레콤과 과학기술정보통신부가 낸 공식 발표 7건을 도입 사례로 읽었어요. 에이전트를 새로 만드는 이야기보다는 데이터를 어디에 두는지, 누가 어떤 권한으로 쓰는지, 연산을 어디서 돌리는지를 다룬 발표가 많았어요. 사례마다 무엇을 어디에 어떻게 들였는지 정리하고, 우리 프로젝트에서 확인할 점으로 이었어요.",
+  "sections": [
+   {
+    "heading": "SAP, 자사 AI 플랫폼에서 Cohere North 정식 제공",
+    "body": "SAP는 Cohere의 에이전트 플랫폼 North를 SAP Business AI Platform에서 정식으로 쓸 수 있게 했다고 발표했어요. 데이터 주권과 데이터 상주 요건이 있는 고객을 위한 조치라고 설명했어요. SAP는 규제 업종의 고민으로 데이터 경로를 들었어요. AI가 답을 내기까지 데이터가 여러 애플리케이션과 공급사, 지역을 거칠 수 있다는 점이에요.\n\nSAP의 발표에 따르면 기업은 North로 자기 인프라 안에서 AI 에이전트와 업무 흐름 자동화를 만들 수 있어요. 대상 업무로는 재무, 영업, 인사, IT, 고객 지원을 꼽았고, CRM 관리, 회의 준비, IT 서비스 자동화 같은 쓰임새를 예로 들었어요. SAP는 솔루션의 호스팅과 운영, 지원을 일괄로 맡고 SAP 환경과 North를 잇는다고 밝혔어요. 실제 도입 고객이나 비용은 발표에 없어요.\n\n규제 업종에서 에이전트 도입을 막던 조건이 모델 성능보다 데이터가 지나가는 경로였다면, ERP 공급사 플랫폼 안에서 그 경로를 정하는 선택지가 하나 생겼다는 뜻이에요. 운영을 SAP가 맡는 구조는 별도 인프라를 관리할 부담을 덜어 주지만, 한 공급사에 기대는 범위가 넓어지는 구조로도 읽혀요.\n\n확인할 점은 '정식 제공'이 곧 우리 회사의 요건 충족을 뜻하지 않는다는 데서 나와요. 데이터가 저장·처리되는 지역, 접근할 수 있는 사람, 모델 호출과 로그가 남는 위치를 계약서와 아키텍처 문서로 직접 확인해야 해요. 규제 기관에 설명할 책임은 공급사가 아니라 도입하는 회사에 남기 때문이에요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "SAP",
+     "what": "Cohere North(에이전트 플랫폼)",
+     "where": "SAP Business AI Platform",
+     "how": "SAP가 호스팅·운영을 일괄 지원",
+     "domain": "보안·규제",
+     "method": "파트너십",
+     "check": "우리 데이터가 승인된 지역 안에만 머무는지 확인했나?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "SAP and Cohere Empower Regulated Industries to Innovate and Deploy AI Faster",
+      "link": "https://news.sap.com/2026/11/sap-cohere-empower-regulated-industries-innovate-deploy-ai-faster/"
+     }
+    ]
+   },
+   {
+    "heading": "SKT, 직원이 만든 에이전트 173건을 경연으로 골랐다",
+    "body": "SK텔레콤은 사내 경연 'AX 스파크' 파이널을 3일 열고 수상작을 시상했다고 밝혔어요. 8월부터 10월까지 173건이 출품됐고, 매달 예선으로 20건을 추린 뒤 사내외 심사와 구성원 투표로 최종 5건을 골랐어요. 대상은 통합보안센터가 만든 악성앱 분석 에이전트 'M-TripleA'예요. 스마트폰에 깔린 악성 앱을 분석하고 공격 서버를 자동으로 추적하는 에이전트라고 소개했어요.\n\n출품은 마케팅과 네트워크 인프라를 맡은 MNO CIC, AI CIC, 직속 조직까지 걸쳤고 개발자와 비개발자가 함께 참여했다고 해요. 최종 후보에는 서비스 기획부터 운영까지 맡도록 설계한 멀티 에이전트 플랫폼 'ATLAS', 전국 18만 여 통신설비의 전기 사용량과 요금을 분석하는 'PYLON', AI 응답의 오답 원인을 판별하는 'AUTO LLM JUDGE' 등이 올랐어요. SKT는 '1인 1에이전트'를 내걸고 사내 개발 플랫폼과 단계별 교육을 제공해 왔고, 올해 사내에서 만든 업무 에이전트가 5천 개 이상이라고 밝혔어요. 수상작을 중심으로 전사 확산을 추진할 계획이라고 해요.\n\n직원이 에이전트를 만드는 단계를 지나면, 무엇을 남기고 넓힐지 고르는 체계가 필요해진다는 뜻이에요. 에이전트가 수천 개 쌓이면 중복, 품질, 데이터 접근 권한이 모두 관리 대상이 돼요. 우수상에 AI 응답 품질을 평가하는 에이전트가 들어간 점도 같은 고민으로 읽혀요.\n\n우리 회사가 현업 주도로 에이전트를 만들게 한다면, 확산 전에 평가 기준을 먼저 정해 두는 게 좋아요. 업무 효과를 어떻게 잴지, 어떤 데이터에 닿는지, 누가 운영을 책임지는지가 기준에 들어가야 해요. 전사로 퍼지는 순간 개인 도구가 아니라 운영 시스템이 되기 때문이에요.",
+    "refs": [
+     8
+    ],
+    "case": {
+     "who": "SK텔레콤 구성원",
+     "what": "사내 AI 에이전트(M-TripleA 등)",
+     "where": "마케팅·네트워크·보안 등 전사",
+     "how": "경연으로 검증 후 전사 확산 계획",
+     "domain": "AI 에이전트",
+     "method": "전사 배포",
+     "check": "직원이 만든 에이전트를 검증하고 고를 기준이 있나?",
+     "ref": 8
+    },
+    "sources": [
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다",
+      "link": "https://news.sktelecom.com/232689"
+     }
+    ]
+   },
+   {
+    "heading": "Snowflake, 에이전트를 지표 정의와 권한에 묶는 기능 발표",
+    "body": "Snowflake는 행사 Expedition 2026에서 여러 제품에 걸친 새 기능을 발표했어요. 모델 학습 기능인 Cortex Training, Snowflake CoCo와 CoWork, 앱 개발 기능, 에이전트 협업 기능이 대상이에요. 배경으로는 Deloitte의 2026년 기술 트렌드 보고서를 인용해, 기업 38%가 에이전트를 시범 운영하지만 실제 운영 중인 곳은 11%라고 소개했어요. Snowflake는 이 간극의 원인을 맥락 부족으로 봤어요.\n\nSnowflake는 기능을 세 갈래로 설명했어요. 에이전트를 관리된 데이터, 지표, 비즈니스 로직에 연결하는 것, 사용자 각자의 권한대로 실제 작업을 하고 감사 기록을 남기는 것, 검증된 스킬과 메모리를 조직 안에서 나눠 쓰는 것이에요. 예로, 지난 분기 매출 성장률을 물으면 에이전트가 SQL은 제대로 짜도 어느 필드가 '매출'의 공식 정의인지 모르면 틀린 숫자를 자신 있게 내놓는다고 짚었어요.\n\n데이터·분석과 AI 에이전트 영역이 겹치는 지점이에요. 에이전트 프로젝트 범위에 모델 선택만이 아니라 시맨틱 레이어, 지표 정의, 권한 정비가 함께 들어가야 한다는 뜻으로 읽혀요. 시범 단계에서 그럴듯하던 데모가 운영에서 막히는 이유를 데이터 쪽에서 찾은 셈이에요.\n\n확인할 점은 세 가지예요. 매출, 고객 수 같은 핵심 지표의 공식 정의가 문서와 시스템에 정리돼 있나요? 에이전트가 사용자 권한을 그대로 따르나요, 아니면 서비스 계정 하나로 모든 데이터에 닿나요? 에이전트가 한 작업을 나중에 추적할 수 있나요? 이 셋이 비어 있으면 모델을 바꿔도 같은 문제가 남아요.",
+    "refs": [
+     6
+    ],
+    "case": {
+     "who": "Snowflake",
+     "what": "CoCo·CoWork·Cortex Training 등",
+     "where": "관리된 비즈니스 데이터와 권한",
+     "how": "에이전트를 지표·권한 정의에 연결",
+     "domain": "AI 에이전트",
+     "method": "제품 출시",
+     "check": "에이전트가 참조할 공식 지표 정의가 정리돼 있나?",
+     "ref": 6
+    },
+    "sources": [
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "Build Faster, Work Smarter with AI Agents and Apps Grounded in Data | Snowflake",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-agents-governed-data-business-context"
+     }
+    ]
+   },
+   {
+    "heading": "Heimstaden, ChatGPT Enterprise와 Codex를 함께 도입",
+    "body": "OpenAI는 유럽의 주거용 부동산 회사 Heimstaden이 ChatGPT Enterprise와 Codex를 자산 관리 업무에 쓰고 있다고 발표했어요. OpenAI는 이 도입으로 비용을 줄이고 유럽 전역 직원의 일을 돕고 있다고 소개했어요. 원문 페이지는 읽지 못해 제목과 요약만 근거로 썼어요.\n\n어떤 업무에 어떤 순서로 들였는지, 몇 명이 쓰는지, 기존 시스템과 어떻게 연결했는지는 발표 요약에 없어요. 확인되는 건 전 직원이 쓰는 대화형 업무 도구와 개발자용 코딩 도구를 한 회사가 함께 들였다는 점, 무대가 유럽의 주거 자산 관리라는 점이에요.\n\n업무 도구 영역에서 현업용 AI와 개발용 AI를 같이 들이면, 쓰는 사람과 닿는 데이터가 서로 달라진다는 뜻이에요. 현업 도구는 문서와 메일에, 코딩 도구는 코드 저장소와 개발 환경에 닿아요. 라이선스 관리와 사용 정책도 두 갈래로 나뉘게 돼요.\n\n그래서 두 도구의 사용 정책을 따로 정했는지 확인해야 해요. 업무 도구에는 입력해도 되는 정보의 범위를, 코딩 도구에는 접근할 저장소와 생성 코드의 검토 절차를 정해 두는 식이에요. 하나의 'AI 사용 지침'으로 두 도구를 함께 다루면 어느 한쪽이 빈틈으로 남기 쉬워요.",
+    "refs": [
+     5
+    ],
+    "case": {
+     "who": "Heimstaden (OpenAI 발표)",
+     "what": "ChatGPT Enterprise·Codex",
+     "where": "유럽 주거 자산 관리",
+     "how": "유럽 전역 직원 활용",
+     "domain": "업무 도구",
+     "method": "전사 배포",
+     "check": "업무용 AI와 코딩 도구의 사용 정책을 따로 정했나?",
+     "ref": 5
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "Heimstaden is changing residential real estate management with AI",
+      "link": "https://openai.com/index/heimstaden"
+     }
+    ]
+   },
+   {
+    "heading": "과기정통부와 AMD, MoU 운영위원회 첫 개최",
+    "body": "과학기술정보통신부는 AMD와 맺은 업무협약(MoU)의 제1회 운영위원회를 열었다고 밝혔어요. 이기종 AI 인프라 구축, AI 연구센터 설립, 인재 양성 같은 협력 과제를 구체화하는 자리라고 설명했어요. AMD는 한국과의 협력을 넓히는 일의 하나로, 자사의 대표 AI 행사 'Advancing AI' 월드 투어를 서울에서 처음 열었다고 해요.\n\n원문을 읽지 못해 제목과 요약만 근거로 썼어요. 과제별 일정, 규모, 참여 기관은 발표 요약에 없어요. 민간 기업이 무엇을 쓸 수 있게 되는지도 발표에 없어요.\n\n이기종 인프라는 여러 종류의 칩을 섞어 쓰는 구성이에요. 정부 협력 과제에 이 구성이 올라왔다는 건, 국내 AI 인프라 논의가 특정 칩 하나를 전제로 하지 않는 쪽도 다룬다는 뜻이에요. 클라우드·인프라 프로젝트에서는 하드웨어보다 소프트웨어가 얼마나 옮겨 다닐 수 있느냐가 쟁점이 돼요.\n\n우리 프로젝트에 비추면, 학습·추론 환경이 다른 종류의 칩에서도 돌아가는지 점검해 볼 일이에요. 특정 칩 전용 라이브러리에 깊이 묶여 있으면 공급처를 바꾸거나 늘릴 때 다시 짜야 하는 부분이 커져요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "과학기술정보통신부·AMD",
+     "what": "AI 반도체 협력(MoU)",
+     "where": "이기종 AI 인프라·연구센터",
+     "how": "MoU 운영위원회로 과제 구체화",
+     "domain": "클라우드·인프라",
+     "method": "파트너십",
+     "check": "다른 종류의 칩 환경에서도 우리 모델이 돌아가나?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-03",
+      "title": "과기정통부-AMD, 인공지능 반도체 협력 본격 가동... AMD 대표 인공지능 행사도 한국서 첫 개최",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187921"
+     }
+    ]
+   },
+   {
+    "heading": "SKT, 자회사 둘로 AI 데이터센터 실행 체계 갖춰",
+    "body": "SK텔레콤은 3분기 실적 발표에서 연결 기준 매출 4조 4,973억 원, 영업이익 5,523억 원을 기록했다고 밝혔어요. AI 쪽에서는 SK하이퍼(7월)와 SK호라이즌(8월)을 출범시켜 AI 데이터센터 사업의 추진 체계를 갖췄다고 설명했어요.\n\n역할은 나눴어요. SKT가 전략과 위험 관리, 글로벌 협력을, SK하이퍼가 사업 개발을, SK호라이즌이 인프라 운영과 확장을 맡는 구상이라고 해요. SK호라이즌은 울산과 서울에 약 180㎿ 규모 신규 데이터센터를 짓고 있고, SK하이퍼는 울산을 중심으로 잠재 고객과 조건을 협의 중이라고 밝혔어요. SKT는 독자 AI 파운데이션 모델을 에이닷과 업무용 AI 서비스에 적용하고 있다고도 했어요.\n\nAI를 쓰는 기업 입장에서는 국내에 AI 연산을 둘 공급처 준비가 진행 중이라는 뜻이에요. 앞의 SAP 사례처럼 데이터를 승인된 지역에 두어야 하는 요건과 맞물리는 부분이에요. 다만 언제 어떤 조건으로 쓸 수 있는지는 발표에 없어요.\n\nAI 워크로드를 어디에 둘지 정할 때 국내 데이터센터 선택지를 해외 리전과 나란히 비교했는지 확인해야 해요. 용량을 확보할 수 있는 시점과 계약 조건은 발표가 아니라 공급사와의 협의로 확인할 내용이에요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "SK텔레콤",
+     "what": "AI 데이터센터(AI DC)",
+     "where": "울산·서울 신규 데이터센터",
+     "how": "자회사 출범과 역할 분담",
+     "domain": "클라우드·인프라",
+     "method": "인프라 확장",
+     "check": "AI 워크로드를 둘 국내 데이터센터 선택지를 비교했나?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-04",
+      "title": "SK텔레콤, 2026년 3분기 실적 발표… 통신·AI 두 축으로 성장세 지속",
+      "link": "https://news.sktelecom.com/232790"
+     }
+    ]
+   },
+   {
+    "heading": "Snowflake, USA Cycling의 데이터 파트너로",
+    "body": "Snowflake는 USA Cycling의 공식 AI 데이터 클라우드·협업 파트너가 됐다고 발표했어요. LA28 올림픽·패럴림픽 준비를 돕는 제휴로, 도로, 산악자전거, 트랙, BMX 레이싱, BMX 프리스타일 다섯 종목과 패럴림픽 도로·트랙 종목을 다룬다고 해요.\n\n발표에 실린 USA Cycling CEO의 말을 보면 출발점이 보여요. 파리 대회 여자 팀 추발 준비 때는 자원봉사와 크게 할인된 데이터 과학 지원에 기댔고, 데이터를 하나로 묶을 시스템이 없었다고 해요. 파워, 심박, 케이던스, 속도 기록, 웨어러블의 수면·회복 데이터, 산악자전거 서스펜션 계측, 고속 카메라 영상이 따로 쌓여 있었어요. CEO는 처리할 수 있는 양보다 데이터가 훨씬 많다고 말했어요.\n\n스포츠 이야기지만 기업 데이터 프로젝트와 구조가 같다고 읽혀요. 데이터를 모으는 건 쉽고, 서로 잇는 일이 어렵다는 점이에요. AI를 얹기 전에 흩어진 원천을 한 층으로 묶는 작업이 먼저 온다는 사례예요.\n\n우리 프로젝트에서는 원천 데이터 목록부터 확인할 만해요. 어떤 시스템과 장비에서 어떤 형식으로 데이터가 나오는지, 그것을 현업 담당자가 바로 쓸 수 있는 형태로 모을 계획이 있는지가 질문이에요.",
+    "refs": [
+     7
+    ],
+    "case": {
+     "who": "USA Cycling (Snowflake 발표)",
+     "what": "Snowflake AI 데이터 클라우드",
+     "where": "선수 훈련·경기 데이터",
+     "how": "흩어진 데이터를 한 층에 통합",
+     "domain": "데이터·분석",
+     "method": "파트너십",
+     "check": "흩어진 원천 데이터를 한곳에 모을 계획이 있나?",
+     "ref": 7
+    },
+    "sources": [
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "Snowflake and USA Cycling Partner on Data for LA28 Olympics",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/usa-cycling-snowflake-partnership"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 데이터가 어디 있고 누가 쓰나",
+    "body": "이번 주 발표를 나란히 놓으면 쟁점이 모델 성능에서 데이터와 통제로 옮겨 가 있어요. SAP는 데이터가 머무는 지역을, Snowflake는 지표 정의와 사용자 권한을, USA Cycling 사례는 흩어진 데이터를 한 층으로 묶는 일을 앞세웠어요. SKT의 경연은 직원이 만든 에이전트를 검증하고 고르는 절차를 보여 줬어요.\n\n인프라 쪽 발표도 같은 질문과 이어져요. 과기정통부와 AMD의 이기종 인프라 과제, SKT의 국내 AI 데이터센터는 연산을 어디서 어떤 칩으로 돌릴지에 관한 이야기예요. 데이터를 국내에 두어야 하는 기업에는 선택지와 직결되는 문제예요.\n\n발표량도 에이전트 쪽에 몰려 있어요. 최근 30일 회사·정부의 공식 AX 발표 가운데 AI 에이전트 영역이 51건으로 가장 많았고, SAP가 13건, Snowflake가 7건을 냈어요. 에이전트를 실제 업무에 올리는 조건을 둘러싼 발표가 이어지고 있어요.",
+    "refs": [
+     1,
+     6,
+     7,
+     8,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "SAP and Cohere Empower Regulated Industries to Innovate and Deploy AI Faster",
+      "link": "https://news.sap.com/2026/11/sap-cohere-empower-regulated-industries-innovate-deploy-ai-faster/"
+     },
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "Build Faster, Work Smarter with AI Agents and Apps Grounded in Data | Snowflake",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/ai-agents-governed-data-business-context"
+     },
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "Snowflake and USA Cycling Partner on Data for LA28 Olympics",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/usa-cycling-snowflake-partnership"
+     },
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-03",
+      "title": "SKT 사내 AI 에이전트 ‘왕중왕’ 나왔다",
+      "link": "https://news.sktelecom.com/232689"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-03",
+      "title": "과기정통부-AMD, 인공지능 반도체 협력 본격 가동... AMD 대표 인공지능 행사도 한국서 첫 개최",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187921"
+     },
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-04",
+      "title": "SK텔레콤, 2026년 3분기 실적 발표… 통신·AI 두 축으로 성장세 지속",
+      "link": "https://news.sktelecom.com/232790"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 주 흐름은 에이전트 도입 프로젝트가 AI 에이전트 영역 하나로 끝나지 않는다는 점을 보여 줘요. ERP 공급사 플랫폼에서는 데이터 경로와 공급사 의존을, 데이터 플랫폼에서는 지표 정의와 권한을, 클라우드·인프라에서는 데이터센터 위치와 칩 구성을 함께 정해야 해요. Ramp AI Index(미국 기업, 유료 결제 기준)로는 2026년 9월 AI 도구에 돈을 내는 미국 기업이 55.9%예요. 도구를 들이는 일보다 그 도구가 닿을 데이터와 권한을 정리하는 일이 프로젝트 일정의 많은 부분을 차지한다는 뜻으로 읽혀요.\n\n· 데이터와 로그가 승인된 지역 안에만 머무는지 계약과 구성으로 확인했나요?\n· 에이전트가 참조할 핵심 지표의 공식 정의가 정리돼 있나요?\n· 에이전트가 사용자 권한을 그대로 따르고, 한 일을 추적할 수 있나요?\n· 현업이 만든 에이전트를 검증하고 전사로 넓힐 기준과 운영 책임자가 있나요?\n· 학습·추론 환경이 특정 칩이나 한 데이터센터에 묶여 있지 않나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "SAP는 Cohere North를 자사 AI 플랫폼에서 정식 제공해 데이터 상주 요건이 있는 고객을 겨냥했어요.",
+   "Snowflake는 Deloitte 자료를 인용해 기업 38%가 시범, 11%가 운영 중이라며 지표 정의와 권한을 해법으로 내세웠어요.",
+   "SKT는 사내 에이전트 경연에 173건이 출품됐고, 수상작 중심으로 전사 확산을 추진한다고 밝혔어요.",
+   "과기정통부-AMD 협력과 SKT의 AI 데이터센터는 연산을 어디에 둘지에 관한 선택지와 이어져요.",
+   "에이전트 프로젝트에서는 모델보다 데이터 위치, 지표 정의, 권한, 검증 체계를 먼저 확인해야 해요."
+  ],
+  "terms": [
+   {
+    "term": "데이터 상주",
+    "def": "데이터를 정해진 나라나 지역 안에서만 저장하고 처리하도록 하는 요건이에요. 법이나 규제, 계약 때문에 지켜야 하는 경우가 많아요."
+   },
+   {
+    "term": "시맨틱 레이어",
+    "def": "매출, 고객 수 같은 업무 지표의 뜻과 계산법을 한곳에 정해 두는 층이에요. 사람과 AI가 같은 정의로 데이터를 읽게 해 줘요."
+   },
+   {
+    "term": "멀티 에이전트",
+    "def": "역할이 다른 AI 에이전트 여럿이 일을 나눠 맡고 서로 결과를 주고받으며 하나의 작업을 끝내는 구성이에요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "adoption",
+    "data",
+    "infra"
+   ],
+   "industries": [
+    "telecom",
+    "tech"
+   ],
+   "companies": [
+    {
+     "id": "sap",
+     "name": "SAP"
+    },
+    {
+     "id": "msit",
+     "name": "과학기술정보통신부"
+    },
+    {
+     "id": "skt",
+     "name": "SK텔레콤"
+    },
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    },
+    {
+     "id": "snowflake",
+     "name": "Snowflake"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

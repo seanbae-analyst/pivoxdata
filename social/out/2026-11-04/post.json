@@ -1,0 +1,42 @@
+{
+ "date": "2026-11-04",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png",
+  "14.png",
+  "15.png",
+  "16.png",
+  "17.png",
+  "18.png",
+  "19.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-04/",
+ "caption": "이번 주 AX 발표 7건은 AI를 실제 데이터와 권한, 인프라 위에 올리는 일을 다뤘어요.\nSAP는 Cohere North를 정식 제공해 데이터 주권이 필요한 고객을 겨냥했어요.\nSK텔레콤은 사내 에이전트 경연에 173건이 모였고, 우수작을 전사로 넓힐 계획이에요.\nSnowflake는 에이전트를 관리된 데이터와 사용자 권한에 묶는 기능을 내놨어요.\nOpenAI는 Heimstaden이 ChatGPT Enterprise와 Codex를 자산 관리에 쓴다고 밝혔어요.\n과기정통부와 AMD는 이기종 AI 인프라 협력 과제를 구체화했어요.\nSK텔레콤은 AI 데이터센터 사업 체계를 갖췄다고 밝혔어요.\nSnowflake는 USA Cycling과 손잡고 흩어진 경기 데이터를 모아요.\n공통 쟁점은 모델보다 데이터의 위치와 권한이에요.\n우리 에이전트가 쓸 지표 정의와 권한은 정리돼 있나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-04\n출처(공식 발표): SAP · 과학기술정보통신부 · SK텔레콤 · OpenAI · Snowflake — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newsweek",
+  "format_name": "이번 주 AX 사건",
+  "source": "claude",
+  "slides": 19
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 107,
+  "problems": []
+ }
+}
