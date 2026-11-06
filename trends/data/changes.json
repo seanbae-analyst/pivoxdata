@@ -4785,6 +4785,131 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-06",
+   "key": "hf:moonshotai/Kimi-K3.1-Pro",
+   "subject": "hf:moonshotai/Kimi-K3.1-Pro",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: moonshotai/​Kimi‑K3.1‑Pro",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,099",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: moonshotai/​Kimi‑K3.1‑Pro",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "image‑text‑to‑text · 2026-11-02 공개. 직전 1위는 LiquidAI/​LFM3‑1.7B.",
+    "src": "Hugging Face 트렌딩 · 2026-11-06",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 907,
+        "label": "1.2만"
+       },
+       {
+        "name": "idol",
+        "value": 702,
+        "label": "1.7만"
+       },
+       {
+        "name": "Qwen3.5-4B-3D-Coder",
+        "value": 387,
+        "label": "16만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 373,
+        "label": "256만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 331,
+        "label": "5.7만"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "key": "hftop:hexgrad/Kokoro-82M:2026-11-06",
+   "subject": "hf:hexgrad/Kokoro-82M",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 18,
+   "topic": "ai",
+   "headline": "다운로드 상위 20에 새로: hexgrad/​Kokoro‑82M",
+   "card": {
+    "id": "ch-hftop",
+    "k": "오픈 모델",
+    "big": "1개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: hexgrad/​Kokoro‑82M",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "hexgrad/​Kokoro‑82M(1,188만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-11-06",
+    "viz": []
+   }
+  },
+  {
+   "date": "2026-11-06",
+   "key": "hftr:ccore/Qwen3.5-4B-3D-Coder+Lightricks/LTX-2.5:2026-11-06",
+   "subject": "hf:ccore/Qwen3.5-4B-3D-Coder",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 14,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: ccore/​Qwen3.5‑4B‑3D‑Coder",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "3위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: ccore/​Qwen3.5‑4B‑3D‑Coder",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "2026-10-25 공개. 함께 들어온 모델: Lightricks/​LTX‑2.5.",
+    "src": "Hugging Face 트렌딩 · 2026-11-06",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 907,
+        "label": "1.2만"
+       },
+       {
+        "name": "idol",
+        "value": 702,
+        "label": "1.7만"
+       },
+       {
+        "name": "Qwen3.5-4B-3D-Coder",
+        "value": 387,
+        "label": "16만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 373,
+        "label": "256만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 331,
+        "label": "5.7만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

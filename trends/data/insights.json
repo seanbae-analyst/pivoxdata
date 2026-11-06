@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-04",
+ "built_at": "2026-11-06",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "109건",
+     "big": "117건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 51건 · 클라우드·인프라 30건 · 보안·규제 25건 · ERP·백오피스 12건 · 업무 도구 11건 · 데이터·분석 10건 · CRM·고객 9건",
+     "body": "AI 에이전트 54건 · 클라우드·인프라 31건 · 보안·규제 25건 · 업무 도구 17건 · CRM·고객 12건 · 데이터·분석 12건 · ERP·백오피스 11건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 51,
-         "label": "51건"
+         "value": 54,
+         "label": "54건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 30,
-         "label": "30건"
+         "value": 31,
+         "label": "31건"
         },
         {
          "name": "보안·규제",
@@ -339,14 +339,14 @@
          "label": "25건"
         },
         {
-         "name": "ERP·백오피스",
-         "value": 12,
-         "label": "12건"
+         "name": "업무 도구",
+         "value": 17,
+         "label": "17건"
         },
         {
-         "name": "업무 도구",
-         "value": 11,
-         "label": "11건"
+         "name": "CRM·고객",
+         "value": 12,
+         "label": "12건"
         }
        ]
       }
@@ -355,11 +355,11 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "51건",
+     "big": "54건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, SAP 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Salesforce 11/3 — Half of Slack Messages Are No Longer From People. Here’s Slack by the Numbers. · Snowflake 11/3 — Build Faster, Work Smarter with AI Agents and Apps Grounded in Data | Snowflake · Snowflake 11/3 — Fuel Every Agent and App With Data That Keeps Pace",
+     "body": "최근: NVIDIA 11/5 — More Performance From Every Byte: How Full-Stack Codesign Solves AI’s Memory Challenge · NVIDIA 11/5 — Vera Delivers the Best of Both Worlds: Highest Throughput and Fastest Agents · Salesforce 11/4 — Your AI Agents Are Fast. Your Process Isn’t. Here’s How to Fix It.",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -367,8 +367,8 @@
        "items": [
         {
          "name": "SAP",
-         "value": 13,
-         "label": "13건"
+         "value": 11,
+         "label": "11건"
         },
         {
          "name": "McKinsey",
@@ -376,19 +376,19 @@
          "label": "11건"
         },
         {
+         "name": "OpenAI",
+         "value": 7,
+         "label": "7건"
+        },
+        {
          "name": "Snowflake",
          "value": 7,
          "label": "7건"
         },
         {
-         "name": "OpenAI",
-         "value": 6,
-         "label": "6건"
-        },
-        {
-         "name": "Salesforce",
-         "value": 3,
-         "label": "3건"
+         "name": "NVIDIA",
+         "value": 5,
+         "label": "5건"
         }
        ]
       }
@@ -397,25 +397,25 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "30건",
+     "big": "31건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
-     "title": "클라우드·인프라, 과학기술정보통신부 발표가 가장 많아요",
+     "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 과학기술정보통신부 11/3 — 국민인공지능서비스혁신추진단, 전문임기제공무원 2차 공개 모집 · NVIDIA 11/3 — Cities Worldwide Build and Scale AI Services With NVIDIA Physical and Agentic AI · Snowflake 11/3 — Snowflake and USA Cycling Partner on Data for LA28 Olympics",
+     "body": "최근: NVIDIA 11/5 — More Performance From Every Byte: How Full-Stack Codesign Solves AI’s Memory Challenge · NVIDIA 11/5 — Vera Delivers the Best of Both Worlds: Highest Throughput and Fastest Agents · 과학기술정보통신부 11/3 — 국민인공지능서비스혁신추진단, 전문임기제공무원 2차 공개 모집",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "과학기술정보통신부",
-         "value": 5,
-         "label": "5건"
+         "name": "NVIDIA",
+         "value": 7,
+         "label": "7건"
         },
         {
-         "name": "NVIDIA",
-         "value": 5,
-         "label": "5건"
+         "name": "과학기술정보통신부",
+         "value": 4,
+         "label": "4건"
         },
         {
          "name": "Snowflake",
@@ -443,7 +443,7 @@
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, Anthropic 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Snowflake 11/3 — Governed Context, Security and Spend Controls for AI Agents | Snowflake · McKinsey 11/3 — How frontier AI is rewriting software security rules · SAP 11/3 — SAP and Cohere Empower Regulated Industries to Innovate and Deploy AI Faster",
+     "body": "최근: OpenAI 11/4 — Daybreak Red is now available in AWS GovCloud (US-East) · Snowflake 11/3 — Governed Context, Security and Spend Controls for AI Agents | Snowflake · McKinsey 11/3 — How frontier AI is rewriting software security rules",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -455,7 +455,7 @@
          "label": "5건"
         },
         {
-         "name": "SK텔레콤",
+         "name": "OpenAI",
          "value": 4,
          "label": "4건"
         },
@@ -470,46 +470,9 @@
          "label": "3건"
         },
         {
-         "name": "OpenAI",
-         "value": 3,
-         "label": "3건"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "dom-erp",
-     "k": "IT 영역 · ERP·백오피스",
-     "big": "12건",
-     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
-     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
-     "easy": "",
-     "body": "최근: McKinsey 10/28 — Agentic AI in strategic sourcing: Hype or hero? · 과학기술정보통신부 10/28 — 대한민국 미래성장과 국민의 삶 개선을 위해 과학기술 정책과 경제·산업 정책의 역량을 결집 · SAP 10/19 — SAP Recognized as a Leader in the 2026 Gartner® Magic Quadrant™ for Cloud ERP for Finance",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "SAP",
-         "value": 7,
-         "label": "7건"
-        },
-        {
-         "name": "McKinsey",
-         "value": 3,
-         "label": "3건"
-        },
-        {
          "name": "과학기술정보통신부",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "Capgemini",
-         "value": 1,
-         "label": "1건"
+         "value": 3,
+         "label": "3건"
         }
        ]
       }
@@ -518,11 +481,11 @@
     {
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
-     "big": "11건",
+     "big": "17건",
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: OpenAI 11/3 — Heimstaden is changing residential real estate management with AI · OpenAI 10/29 — Credit Saison achieves 954% ROI in a ChatGPT Enterprise pilot · Databricks 10/26 — Unify your productivity and AI data with Lakeflow Connect",
+     "body": "최근: SAP 11/5 — Three Skills That Define the New Entry-Level Job in the AI Era · OpenAI 11/5 — Australian universities are creating AI-native graduates · Salesforce 11/4 — Salesforce’s Agentforce Coworker Usage Soars 21x in Three Months as Enterprises Delegate Real Work to AI",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -530,21 +493,63 @@
        "items": [
         {
          "name": "OpenAI",
-         "value": 6,
-         "label": "6건"
+         "value": 7,
+         "label": "7건"
+        },
+        {
+         "name": "SAP",
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "McKinsey",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "Salesforce",
          "value": 2,
          "label": "2건"
         },
         {
-         "name": "Databricks",
+         "name": "Amazon",
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-crm",
+     "k": "IT 영역 · CRM·고객",
+     "big": "12건",
+     "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
+     "title": "CRM·고객, Salesforce 발표가 가장 많아요",
+     "easy": "",
+     "body": "최근: OpenAI 11/5 — Merge builds product and business tools with OpenAI technology · Salesforce 11/4 — Salesforce’s Agentforce Coworker Usage Soars 21x in Three Months as Enterprises Delegate Real Work to AI · Capgemini 11/4 — Smarter insurance through human-AI collaboration",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "Salesforce",
+         "value": 5,
+         "label": "5건"
+        },
+        {
+         "name": "Capgemini",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "OpenAI",
          "value": 1,
          "label": "1건"
         },
         {
-         "name": "Salesforce",
+         "name": "SK텔레콤",
          "value": 1,
          "label": "1건"
         },
@@ -560,11 +565,11 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "10건",
+     "big": "12건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Snowflake 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Snowflake 11/3 — Fuel Every Agent and App With Data That Keeps Pace · Snowflake 11/3 — Snowflake and USA Cycling Partner on Data for LA28 Olympics · SAP 10/29 — Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise",
+     "body": "최근: NVIDIA 11/5 — Vera Delivers the Best of Both Worlds: Highest Throughput and Fastest Agents · SAP 11/4 — From AI to Analytics: Where SAP Fieldglass Stands Out in the 2026 SIA VMS Landscape · Snowflake 11/3 — Fuel Every Agent and App With Data That Keeps Pace",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -576,12 +581,17 @@
          "label": "6건"
         },
         {
+         "name": "SAP",
+         "value": 2,
+         "label": "2건"
+        },
+        {
          "name": "과학기술정보통신부",
          "value": 2,
          "label": "2건"
         },
         {
-         "name": "SAP",
+         "name": "NVIDIA",
          "value": 1,
          "label": "1건"
         },
@@ -595,40 +605,35 @@
      ]
     },
     {
-     "id": "dom-crm",
-     "k": "IT 영역 · CRM·고객",
-     "big": "9건",
-     "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
-     "title": "CRM·고객, Salesforce 발표가 가장 많아요",
+     "id": "dom-erp",
+     "k": "IT 영역 · ERP·백오피스",
+     "big": "11건",
+     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
+     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SK텔레콤 11/4 — SK텔레콤, 2026년 3분기 실적 발표… 통신·AI 두 축으로 성장세 지속 · SAP 11/3 — Business Networks Harness Agentic AI to Bolster Collaboration and Operational Resilience Among Trading Partners · Capgemini 11/2 — Muse and Dots: the human-AI dyad enters commerce",
+     "body": "최근: McKinsey 10/28 — Agentic AI in strategic sourcing: Hype or hero? · 과학기술정보통신부 10/28 — 대한민국 미래성장과 국민의 삶 개선을 위해 과학기술 정책과 경제·산업 정책의 역량을 결집 · SAP 10/19 — SAP Recognized as a Leader in the 2026 Gartner® Magic Quadrant™ for Cloud ERP for Finance",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "Salesforce",
-         "value": 4,
-         "label": "4건"
-        },
-        {
          "name": "SAP",
-         "value": 2,
-         "label": "2건"
+         "value": 6,
+         "label": "6건"
         },
         {
-         "name": "SK텔레콤",
+         "name": "McKinsey",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "과학기술정보통신부",
          "value": 1,
          "label": "1건"
         },
         {
          "name": "Capgemini",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "McKinsey",
          "value": 1,
          "label": "1건"
         }
@@ -1353,6 +1358,57 @@
    }
   },
   {
+   "key": "hf:moonshotai/Kimi-K3.1-Pro",
+   "subject": "hf:moonshotai/Kimi-K3.1-Pro",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: moonshotai/​Kimi‑K3.1‑Pro",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,099",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: moonshotai/​Kimi‑K3.1‑Pro",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "image‑text‑to‑text · 2026-11-02 공개. 직전 1위는 LiquidAI/​LFM3‑1.7B.",
+    "src": "Hugging Face 트렌딩 · 2026-11-06",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 907,
+        "label": "1.2만"
+       },
+       {
+        "name": "idol",
+        "value": 702,
+        "label": "1.7만"
+       },
+       {
+        "name": "Qwen3.5-4B-3D-Coder",
+        "value": 387,
+        "label": "16만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 373,
+        "label": "256만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 331,
+        "label": "5.7만"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
    "key": "surge:PyPI:vllm:2026-10-26",
    "subject": "pkg:vllm",
    "kind": "증가",
@@ -1467,6 +1523,77 @@
      }
     ]
    }
+  },
+  {
+   "key": "hftop:hexgrad/Kokoro-82M:2026-11-06",
+   "subject": "hf:hexgrad/Kokoro-82M",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 18,
+   "topic": "ai",
+   "headline": "다운로드 상위 20에 새로: hexgrad/​Kokoro‑82M",
+   "card": {
+    "id": "ch-hftop",
+    "k": "오픈 모델",
+    "big": "1개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: hexgrad/​Kokoro‑82M",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "hexgrad/​Kokoro‑82M(1,188만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-11-06",
+    "viz": []
+   }
+  },
+  {
+   "key": "hftr:ccore/Qwen3.5-4B-3D-Coder+Lightricks/LTX-2.5:2026-11-06",
+   "subject": "hf:ccore/Qwen3.5-4B-3D-Coder",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 14,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: ccore/​Qwen3.5‑4B‑3D‑Coder",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "3위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: ccore/​Qwen3.5‑4B‑3D‑Coder",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "2026-10-25 공개. 함께 들어온 모델: Lightricks/​LTX‑2.5.",
+    "src": "Hugging Face 트렌딩 · 2026-11-06",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 907,
+        "label": "1.2만"
+       },
+       {
+        "name": "idol",
+        "value": 702,
+        "label": "1.7만"
+       },
+       {
+        "name": "Qwen3.5-4B-3D-Coder",
+        "value": 387,
+        "label": "16만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 373,
+        "label": "256만"
+       },
+       {
+        "name": "NVIDIA-Nemotron-3.5-Transcribe-30B-A4B",
+        "value": 331,
+        "label": "5.7만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ],
  "facts": [
@@ -1548,37 +1675,37 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 51건 · 발표가 많은 곳: SAP 13건, McKinsey 11건, Snowflake 7건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 54건 · 발표가 많은 곳: SAP 11건, McKinsey 11건, OpenAI 7건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 30건 · 발표가 많은 곳: 과학기술정보통신부 5건, NVIDIA 5건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 31건 · 발표가 많은 곳: NVIDIA 7건, 과학기술정보통신부 4건, Snowflake 4건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: Anthropic 5건, SK텔레콤 4건, Snowflake 3건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: SAP 7건, McKinsey 3건, 과학기술정보통신부 1건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: Anthropic 5건, OpenAI 4건, Snowflake 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 11건 · 발표가 많은 곳: OpenAI 6건, McKinsey 2건, Databricks 1건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 10건 · 발표가 많은 곳: Snowflake 6건, 과학기술정보통신부 2건, SAP 1건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 17건 · 발표가 많은 곳: OpenAI 7건, SAP 3건, McKinsey 3건"
   },
   {
    "group": "domain",
    "id": "dom-crm",
-   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 9건 · 발표가 많은 곳: Salesforce 4건, SAP 2건, SK텔레콤 1건"
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Salesforce 5건, Capgemini 3건, OpenAI 1건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-data",
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, 과학기술정보통신부 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-erp",
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 11건 · 발표가 많은 곳: SAP 6건, McKinsey 3건, 과학기술정보통신부 1건"
   }
  ],
  "news": [
@@ -1648,7 +1775,7 @@
    "kind": "government",
    "date": "2026-11-04",
    "title": "대한민국 과학기술인상 11월 수상자 이종원 단장 선정",
-   "summary": "-한국형 AI 휴머노이드 ‘KAPEX’ 개발…핵심부품 국산화·20kg 이상 작업능력 구현 - -기술이전·산학연 협력으로 K-휴머노이드 산업 생태계 구축…피지컬AI 글로벌 1강 박차 -",
+   "summary": "-한국형 인공지능 인간형 로봇 ‘KAPEX’ 개발…핵심부품 국산화·20kg 이상 작업능력 구현 - -기술이전·산학연 협력으로 K-인간형 로봇 산업 생태계 구축…물리적 인공지능 세계 1강 박차 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187924",
    "score": 4,
    "domains": [],
@@ -1661,13 +1788,13 @@
    "kind": "government",
    "date": "2026-11-03",
    "title": "과기정통부-AMD, 인공지능 반도체 협력 본격 가동... AMD 대표 인공지능 행사도 한국서 첫 개최",
-   "summary": "- 이기종 AI 인프라 구축·AI 연구센터 설립·인재 양성 등 MoU 협력 과제 구체화를 위한 과기정통부-AMD 제1회 MoU 운영위원회 개최 - - AMD, 한국과의 AI협력 강화의 일환으로, ‘Advancing AI World Tour Seoul 2026’ 국내에서 최초로 열어 -",
+   "summary": "- 이기종 인공지능 기반 시설 구축·인공지능 연구센터 설립·인재 양성 등 업무협약 운영위원회 개최 - - AMD, 한국과의 인공지능 협력 강화의 일환으로, ‘Advancing AI World Tour Seoul 2026’ 국내에서 최초로 열어 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187921",
    "score": 4,
    "domains": [
     "클라우드·인프라"
    ],
-   "method": "인프라 확장"
+   "method": "파트너십"
   },
   {
    "id": "264e131f2b",
@@ -1697,6 +1824,63 @@
     "클라우드·인프라"
    ],
    "method": "정책·규제"
+  },
+  {
+   "id": "94a3afa0c9",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-11-05",
+   "title": "Reinventing the channel: How can your partner ecosystem fuel AI growth?",
+   "summary": "AI presents an opportunity for technology vendors to reinvent their sales channels. This comprehensive overhaul would require five key moves.",
+   "link": "https://www.mckinsey.com/industries/technology-media-and-telecommunications/our-insights/reinventing-the-channel-how-can-your-partner-ecosystem-fuel-ai-growth",
+   "score": 3,
+   "domains": [],
+   "method": "연구·보고서"
+  },
+  {
+   "id": "abce147212",
+   "src": "nvidia",
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-11-05",
+   "title": "More Performance From Every Byte: How Full-Stack Codesign Solves AI’s Memory Challenge",
+   "summary": "Larger models, longer contexts and agentic applications are increasing GPU memory pressure while supply tightens and prices rise — a trend expected to continue through the near term. NVIDIA works closely with memory partners to rapidly adopt the latest memory technologies. NVIDIA was first to adopt HBM3e and HBM4 technologies into an accelerated computing stack. […]",
+   "link": "https://blogs.nvidia.com/blog/memory-full-stack-codesign/",
+   "score": 3,
+   "domains": [
+    "클라우드·인프라",
+    "AI 에이전트"
+   ],
+   "method": "인프라 확장"
+  },
+  {
+   "id": "0e072c9f8e",
+   "src": "databricks",
+   "source": "Databricks",
+   "kind": "company",
+   "date": "2026-11-04",
+   "title": "The Enterprise Case for Open-Weight Models on Databricks",
+   "summary": "As field engineers at Databricks, we spend our days inside enterprise AI deployments,...",
+   "link": "https://www.databricks.com/blog/enterprise-case-open-weight-models-databricks",
+   "score": 3,
+   "domains": [],
+   "method": null
+  },
+  {
+   "id": "d1e7331651",
+   "src": "mckinsey",
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-11-04",
+   "title": "Rethinking growth with AI: A conversation with Slack CMO Ryan Gavin",
+   "summary": "At Cannes Lions 2026, Slack CMO Ryan Gavin and McKinsey Partner Jeff Jacobs discussed how AI can turn productivity gains into a lever for growth.",
+   "link": "https://www.mckinsey.com/capabilities/growth-marketing-and-sales/our-insights/rethinking-growth-with-ai-a-conversation-with-slack-cmo-ryan-gavin",
+   "score": 3,
+   "domains": [
+    "업무 도구"
+   ],
+   "method": "연구·보고서"
   },
   {
    "id": "fd39d0b2fa",
@@ -2016,62 +2200,20 @@
    "method": "정책·규제"
   },
   {
-   "id": "15c1f8ef7a",
-   "src": "openai",
-   "source": "OpenAI",
+   "id": "9c39ea5923",
+   "src": "sap",
+   "source": "SAP",
    "kind": "company",
-   "date": "2026-10-23",
-   "title": "OpenAI and Poland’s NASK partner to advance AI safety and security",
-   "summary": "OpenAI and Poland’s NASK are partnering on AI safety, security, and technical research to strengthen safeguards and support a more resilient digital ecosystem.",
-   "link": "https://openai.com/index/openai-nask-ai-safety-security-partnership",
-   "score": 3,
+   "date": "2026-11-04",
+   "title": "From AI to Analytics: Where SAP Fieldglass Stands Out in the 2026 SIA VMS Landscape",
+   "summary": "The report points to a future where connected data and intelligent technology drive better external workforce decisions.",
+   "link": "https://news.sap.com/2026/11/sap-fieldglass-stands-out-2026-sia-vms-landscape/",
+   "score": 2,
    "domains": [
-    "보안·규제"
-   ],
-   "method": "파트너십"
-  },
-  {
-   "id": "b21a97b1b2",
-   "src": "nvidia",
-   "source": "NVIDIA",
-   "kind": "company",
-   "date": "2026-10-23",
-   "title": "Kazakhstan Expands Compute for Its AI Future",
-   "summary": "Kazakhstan’s AI ecosystem is moving from infrastructure plans to deployment. The shift is visible across the full AI stack — from infrastructure to models to applications. The announcements below — coinciding with a visit to Astana by NVIDIA founder and CEO Jensen Huang — point to the nation’s increasing supply of accelerated computing, along with […]",
-   "link": "https://blogs.nvidia.com/blog/kazakhstan-ai-compute-ecosystem/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라"
-   ],
-   "method": "인프라 확장"
-  },
-  {
-   "id": "381130e24d",
-   "src": "nvidia",
-   "source": "NVIDIA",
-   "kind": "company",
-   "date": "2026-10-22",
-   "title": "NVIDIA Cosmos Opens New Tools to Train, Evaluate and Deploy World Models",
-   "summary": "To help developers rapidly build world models, which help physical AI systems understand and simulate the real world, NVIDIA has expanded the Cosmos platform with new training tools, simulation checkpoints and Cosmos Data Factory blueprints. Ranking top five on six different open models leaderboards, the NVIDIA Cosmos platform gives world model builders the frontier open […]",
-   "link": "https://blogs.nvidia.com/blog/cosmos-open-train-evaluate-deploy-world-models/",
-   "score": 3,
-   "domains": [],
-   "method": null
-  },
-  {
-   "id": "ba6fa07d67",
-   "src": "openai",
-   "source": "OpenAI",
-   "kind": "company",
-   "date": "2026-10-22",
-   "title": "Uber brings ChatGPT Work to all employees with OpenAI",
-   "summary": "Uber is rolling out ChatGPT Work to more than 30,000 employees, helping teams research, analyze data, create presentations, and complete complex workflows.",
-   "link": "https://openai.com/index/uber-chatgpt-work-rollout",
-   "score": 3,
-   "domains": [
+    "데이터·분석",
     "업무 도구"
    ],
-   "method": "전사 배포"
+   "method": "연구·보고서"
   },
   {
    "id": "8b57f21212",
@@ -2087,13 +2229,39 @@
    "method": "연구·보고서"
   },
   {
+   "id": "1f2e9df832",
+   "src": "eu",
+   "source": "EU 집행위원회",
+   "kind": "government",
+   "date": "2026-11-05",
+   "title": "Remarks by Executive Vice-President Mînzatu on the Education and Skills package",
+   "summary": "European Commission Speech Brussels, 05 Nov 2026 Europe is living through a transformation that will define generations to come. Artificial intelligence is changing how we work and learn. Disinformation is tes...",
+   "link": "https://ec.europa.eu/commission/presscorner/detail/en/speech_26_2351",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "4c9fc0e4dd",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-05",
+   "title": "과기정통부, 에이전틱 AI 이용 환경에서 제로트러스트를 적용할 수 있는 안내서 발간",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187929",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "56193036ca",
    "src": "msit",
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-04",
-   "title": "[관계부처 합동] 이 땅에 집 지을 수 있나요? 복잡한 토지개발 인허가, 인공지능(AI)으로 쉽게",
-   "summary": "- 「AI 민생 10대 프로젝트」 지원을 통해 내년 1월부터 시범운영 -- K-Geo Festa서 AI 통합인허가 사전진단 서비스 첫선 - - 복잡한 법령 몰라도, 평소 쓰는 말로 질문하면 AI가 인허가 사전 진단 -",
+   "title": "[관계부처 합동] 이 땅에 집 지을 수 있나요? 복잡한 토지개발 인허가, 인공지능으로 쉽게",
+   "summary": "- 「인공지능 민생 10대 사업」 지원을 통해 내년 1월부터 시범운영 -- K-Geo Festa서 인공지능 통합인허가 사전진단 서비스 첫선 - - 복잡한 법령 몰라도, 평소 쓰는 말로 질문하면 인공지능이 인허가 사전 진단 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187925",
    "score": 1,
    "domains": [],
@@ -2145,7 +2313,7 @@
    "kind": "government",
    "date": "2026-11-03",
    "title": "국민인공지능서비스혁신추진단, 전문임기제공무원 2차 공개 모집",
-   "summary": "- 국민 AI 서비스 기획·개발·인프라 등 7개 분야 민간 전문가 19명, 11.2일 부터 공고 게시 및 11.10일부터 원서 접수 - - 김세웅 단장 취임 후 첫 채용… 국민 AI 서비스 개발 역량 본격 강화",
+   "summary": "- 국민 AI 서비스 기획·개발·인프라 등 7개 분야 민간 전문가 19명, 11.2일 부터 공고 게시 및 11.10일부터 원서 접수 - - 김세웅 단장 취임 후 첫 채용… 국민 인공지능 서비스 개발 역량 본격 강화",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187920",
    "score": 1,
    "domains": [
@@ -2159,8 +2327,8 @@
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-03",
-   "title": "휴머노이드가 ‘일하는 법’ 배우는 데이터 생산기지 문 연다",
-   "summary": "- 공공 개방형 ‘AI 휴머노이드 데이터 팩토리’ 개소 - - 국산 휴머노이드 ‘KAIROS’ 개발 연계… 2027년 말 산학연 개방 추진 -",
+   "title": "인간형 로봇이 ‘일하는 법’ 배우는 데이터 생산기지 문 연다",
+   "summary": "- 공공 개방형 ‘인공지능 인간형 로봇 데이터 공장’ 개소 - - 국산 인간형 로봇 ‘KAIROS’ 개발 연계… 2027년 말 산학연 개방 추진 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187916",
    "score": 1,
    "domains": [],
