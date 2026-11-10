@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-09",
+ "built_at": "2026-11-10",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "118건",
+     "big": "121건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 55건 · 클라우드·인프라 32건 · 보안·규제 26건 · 업무 도구 17건 · CRM·고객 12건 · 데이터·분석 12건 · ERP·백오피스 11건",
+     "body": "AI 에이전트 54건 · 클라우드·인프라 34건 · 보안·규제 26건 · 업무 도구 18건 · ERP·백오피스 12건 · CRM·고객 12건 · 데이터·분석 12건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 55,
-         "label": "55건"
+         "value": 54,
+         "label": "54건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 32,
-         "label": "32건"
+         "value": 34,
+         "label": "34건"
         },
         {
          "name": "보안·규제",
@@ -340,11 +340,11 @@
         },
         {
          "name": "업무 도구",
-         "value": 17,
-         "label": "17건"
+         "value": 18,
+         "label": "18건"
         },
         {
-         "name": "CRM·고객",
+         "name": "ERP·백오피스",
          "value": 12,
          "label": "12건"
         }
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "55건",
+     "big": "54건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, SAP 발표가 가장 많아요",
      "easy": "",
@@ -372,8 +372,8 @@
         },
         {
          "name": "McKinsey",
-         "value": 10,
-         "label": "10건"
+         "value": 9,
+         "label": "9건"
         },
         {
          "name": "NVIDIA",
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "32건",
+     "big": "34건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -409,8 +409,8 @@
        "items": [
         {
          "name": "NVIDIA",
-         "value": 9,
-         "label": "9건"
+         "value": 10,
+         "label": "10건"
         },
         {
          "name": "과학기술정보통신부",
@@ -481,11 +481,11 @@
     {
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
-     "big": "17건",
+     "big": "18건",
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA · SAP 11/5 — Three Skills That Define the New Entry-Level Job in the AI Era · OpenAI 11/5 — Australian universities are creating AI-native graduates",
+     "body": "최근: SK텔레콤 11/10 — AI 활용을 넘어, 조직의 미래를 이끄는 AX Catalyst · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA · OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -493,16 +493,11 @@
        "items": [
         {
          "name": "OpenAI",
-         "value": 6,
-         "label": "6건"
+         "value": 7,
+         "label": "7건"
         },
         {
          "name": "SAP",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "McKinsey",
          "value": 3,
          "label": "3건"
         },
@@ -512,7 +507,54 @@
          "label": "2건"
         },
         {
-         "name": "NVIDIA",
+         "name": "McKinsey",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "SK텔레콤",
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-erp",
+     "k": "IT 영역 · ERP·백오피스",
+     "big": "12건",
+     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
+     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
+     "easy": "",
+     "body": "최근: OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace · SAP 11/6 — New Research Finds AI Is Moving Faster Than Organizations Can Adapt · McKinsey 10/28 — Agentic AI in strategic sourcing: Hype or hero?",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "SAP",
+         "value": 6,
+         "label": "6건"
+        },
+        {
+         "name": "McKinsey",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "OpenAI",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "Capgemini",
          "value": 1,
          "label": "1건"
         }
@@ -597,43 +639,6 @@
         },
         {
          "name": "McKinsey",
-         "value": 1,
-         "label": "1건"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "dom-erp",
-     "k": "IT 영역 · ERP·백오피스",
-     "big": "11건",
-     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
-     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
-     "easy": "",
-     "body": "최근: SAP 11/6 — New Research Finds AI Is Moving Faster Than Organizations Can Adapt · McKinsey 10/28 — Agentic AI in strategic sourcing: Hype or hero? · 과학기술정보통신부 10/28 — 대한민국 미래성장과 국민의 삶 개선을 위해 과학기술 정책과 경제·산업 정책의 역량을 결집",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "SAP",
-         "value": 6,
-         "label": "6건"
-        },
-        {
-         "name": "McKinsey",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "과학기술정보통신부",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "Capgemini",
          "value": 1,
          "label": "1건"
         }
@@ -892,7 +897,7 @@
     "bl": "평일 하루 다운로드, 지난주",
     "title": "Stagehand (AI용) 주간 다운로드가 역대 최고",
     "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +17% 많아요.",
-    "body": "이전 최고(10월 26일 주)보다 +17% 많습니다. 4주 성장 +26.0%, 대조군 +15.8%.",
+    "body": "이전 최고(10월 26일 주)보다 +17% 많습니다. 4주 성장 +25.3%, 대조군 +17.1%.",
     "src": "npm 평일 다운로드 · 2024년 11월 11일 주–2026년 11월 2일 주",
     "viz": [
      {
@@ -999,7 +1004,7 @@
        353417,
        337933.5,
        291099,
-       387888,
+       379514,
        436149,
        508811
       ],
@@ -1026,7 +1031,7 @@
    "subject": "pkg:ollama",
    "kind": "최고치",
    "tier": "big",
-   "score": 54.6,
+   "score": 51.4,
    "topic": "ai",
    "headline": "Ollama 주간 다운로드가 역대 최고",
    "card": {
@@ -1035,8 +1040,8 @@
     "big": "21만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "Ollama 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +15% 많아요.",
-    "body": "이전 최고(10월 19일 주)보다 +15% 많습니다. 4주 성장 +33.6%, 대조군 +15.8%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +11% 많아요.",
+    "body": "이전 최고(10월 19일 주)보다 +11% 많습니다. 4주 성장 +34.6%, 대조군 +17.1%.",
     "src": "npm 평일 다운로드 · 2024년 11월 11일 주–2026년 11월 2일 주",
     "viz": [
      {
@@ -1143,7 +1148,7 @@
        143805,
        144102.5,
        146377,
-       179498.5,
+       184689,
        178312,
        205685
       ],
@@ -1155,7 +1160,7 @@
      },
      {
       "kind": "versus",
-      "from": 179498.5,
+      "from": 184689,
       "to": 205685,
       "fromText": "18만",
       "toText": "21만",
@@ -1170,7 +1175,7 @@
    "subject": "pkg:@google/genai",
    "kind": "최고치",
    "tier": "big",
-   "score": 51.9,
+   "score": 50.4,
    "topic": "ai",
    "headline": "Google GenAI 주간 다운로드가 역대 최고",
    "card": {
@@ -1179,8 +1184,8 @@
     "big": "537만",
     "bl": "평일 하루 다운로드, 지난주",
     "title": "Google GenAI 주간 다운로드가 역대 최고",
-    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +12% 많아요.",
-    "body": "이전 최고(10월 19일 주)보다 +12% 많습니다. 4주 성장 +10.4%, 대조군 +15.8%.",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +10% 많아요.",
+    "body": "이전 최고(10월 19일 주)보다 +10% 많습니다. 4주 성장 +10.8%, 대조군 +17.1%.",
     "src": "npm 평일 다운로드 · 2024년 11월 11일 주–2026년 11월 2일 주",
     "viz": [
      {
@@ -1287,7 +1292,7 @@
        4664850,
        4551587,
        4429141,
-       4800659.5,
+       4864536,
        4666085,
        5370130
       ],
@@ -1299,9 +1304,9 @@
      },
      {
       "kind": "versus",
-      "from": 4800659.5,
+      "from": 4864536,
       "to": 5370130,
-      "fromText": "480만",
+      "fromText": "486만",
       "toText": "537만",
       "fromLabel": "이전 최고",
       "toLabel": "지난주"
@@ -1404,7 +1409,7 @@
        5775429,
        6190086.5,
        6194505,
-       6767019.5,
+       7080860,
        7172926,
        7772981
       ],
@@ -1427,105 +1432,23 @@
    }
   },
   {
-   "key": "top3:pypi:vllm+mcp:2026-11-02",
-   "subject": "pkg:vllm",
-   "kind": "순위",
-   "tier": "small",
-   "score": 25,
-   "topic": "ai",
-   "headline": "vLLM, PyPI 성장 상위 3에 새로",
-   "card": {
-    "id": "ch-top3-pypi",
-    "k": "PyPI 순위",
-    "big": "+16.1%p",
-    "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
-    "title": "vLLM, PyPI 성장 상위 3에 새로",
-    "easy": "빨리 크는 AI 도구 상위 3위 안에 새로 들어왔어요.",
-    "body": "상위 3: OpenAI Agents(+18.7%p), vLLM(+16.1%p), MCP SDK(+10.0%p).",
-    "src": "PyPI 평일 다운로드 · 11월 2일 주까지 4주",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "OpenAI Agents",
-        "value": 0.1871,
-        "label": "+18.7%p"
-       },
-       {
-        "name": "vLLM",
-        "value": 0.1614,
-        "label": "+16.1%p"
-       },
-       {
-        "name": "MCP SDK",
-        "value": 0.1003,
-        "label": "+10.0%p"
-       },
-       {
-        "name": "Anthropic",
-        "value": 0.0784,
-        "label": "+7.8%p"
-       },
-       {
-        "name": "Pydantic AI",
-        "value": 0.0585,
-        "label": "+5.8%p"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftr:ricursiveAI/Ripple-65B-Preview:2026-11-09",
-   "subject": "hf:ricursiveAI/Ripple-65B-Preview",
+   "key": "hftop:microsoft/Florence-2-base:2026-11-10",
+   "subject": "hf:microsoft/Florence-2-base",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 12,
+   "score": 18,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: ricursiveAI/​Ripple‑65B‑Preview",
+   "headline": "다운로드 상위 20에 새로: microsoft/​Florence‑2‑base",
    "card": {
-    "id": "ch-hftr",
+    "id": "ch-hftop",
     "k": "오픈 모델",
-    "big": "4위",
-    "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: ricursiveAI/​Ripple‑65B‑Preview",
-    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "2026-11-04 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-09",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "idol",
-        "value": 802,
-        "label": "2.3만"
-       },
-       {
-        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 747,
-        "label": "7,088"
-       },
-       {
-        "name": "Kimi-K3.1-Pro",
-        "value": 568,
-        "label": "2.6만"
-       },
-       {
-        "name": "Ripple-65B-Preview",
-        "value": 408,
-        "label": "5,087"
-       },
-       {
-        "name": "LTX-2.5",
-        "value": 392,
-        "label": "266만"
-       }
-      ]
-     }
-    ]
+    "big": "1개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: microsoft/​Florence‑2‑base",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "microsoft/​Florence‑2‑base(1,253만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-11-10",
+    "viz": []
    }
   }
  ],
@@ -1608,12 +1531,12 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 55건 · 발표가 많은 곳: SAP 10건, McKinsey 10건, NVIDIA 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 54건 · 발표가 많은 곳: SAP 10건, McKinsey 9건, NVIDIA 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 32건 · 발표가 많은 곳: NVIDIA 9건, 과학기술정보통신부 4건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 34건 · 발표가 많은 곳: NVIDIA 10건, 과학기술정보통신부 4건, Snowflake 4건"
   },
   {
    "group": "domain",
@@ -1623,7 +1546,12 @@
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 17건 · 발표가 많은 곳: OpenAI 6건, SAP 3건, McKinsey 3건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 18건 · 발표가 많은 곳: OpenAI 7건, SAP 3건, Salesforce 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-erp",
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: SAP 6건, McKinsey 3건, OpenAI 1건"
   },
   {
    "group": "domain",
@@ -1634,11 +1562,6 @@
    "group": "domain",
    "id": "dom-data",
    "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, 과학기술정보통신부 2건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 11건 · 발표가 많은 곳: SAP 6건, McKinsey 3건, 과학기술정보통신부 1건"
   }
  ],
  "news": [
@@ -1744,6 +1667,19 @@
    "method": "정책·규제"
   },
   {
+   "id": "01a8528fa1",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Closing the AI guidance gap in education",
+   "summary": "Lessons from OpenAI’s EMEA education partnerships and new ThinkYoung research. Supporting teachers, AI literacy and independent learning.",
+   "link": "https://openai.com/index/closing-ai-guidance-gap-education",
+   "score": 3,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "1f23a28303",
    "src": "skt",
    "source": "SK텔레콤",
@@ -1774,6 +1710,21 @@
     "AI 에이전트"
    ],
    "method": "인프라 확장"
+  },
+  {
+   "id": "57a8ba0d55",
+   "src": "nvidia",
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-11-09",
+   "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
+   "summary": "Korea’s Ministry of Science and ICT and NVIDIA hosted the MSIT-NVIDIA AI Startup Partnership Forum at COEX. Representatives from the Ministry of Science and ICT and NVIDIA met with over 20 Korean startups across foundation models, physical AI, AI infrastructure and AI semiconductors. NVIDIA also announced an investment in Korean startup Point2, with additional investments […]",
+   "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/",
+   "score": 3,
+   "domains": [
+    "클라우드·인프라"
+   ],
+   "method": "파트너십"
   },
   {
    "id": "e18a5f64b5",
@@ -2116,52 +2067,6 @@
    "method": "투자"
   },
   {
-   "id": "16faca12f9",
-   "src": "anthropic",
-   "source": "Anthropic",
-   "kind": "company",
-   "date": "2026-10-27",
-   "title": "Expanding our partnership with GSA to bring Claude to all levels of government",
-   "summary": "Anthropic is an AI safety and research company that's working to build reliable, interpretable, and steerable AI systems.",
-   "link": "https://www.anthropic.com/news/expanding-partnership-gsa",
-   "score": 3,
-   "domains": [
-    "보안·규제"
-   ],
-   "method": "파트너십"
-  },
-  {
-   "id": "7193d3144a",
-   "src": "snowflake",
-   "source": "Snowflake",
-   "kind": "company",
-   "date": "2026-10-27",
-   "title": "Snowflake and Oracle: Bringing the AI Data Cloud to OCI",
-   "summary": "Snowflake and Oracle are expanding their partnership to bring Snowflake's AI Data Cloud to Oracle Cloud Infrastructure as a native, first-party service.",
-   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/snowflake-oracle-partnership-ai-data-cloud-oci",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라",
-    "데이터·분석"
-   ],
-   "method": "파트너십"
-  },
-  {
-   "id": "a3a879144b",
-   "src": "openai",
-   "source": "OpenAI",
-   "kind": "company",
-   "date": "2026-10-27",
-   "title": "OpenAI expands partnership with Oracle to bring its apps to ChatGPT",
-   "summary": "OpenAI and Oracle are expanding their partnership to bring business applications and AI agents into ChatGPT and power new Oracle offerings.",
-   "link": "https://openai.com/index/oracle-apps-in-chatgpt",
-   "score": 3,
-   "domains": [
-    "AI 에이전트"
-   ],
-   "method": "파트너십"
-  },
-  {
    "id": "2144e0b4a0",
    "src": "sap",
    "source": "SAP",
@@ -2193,17 +2098,17 @@
    "method": "연구·보고서"
   },
   {
-   "id": "8b57f21212",
-   "src": "salesforce",
-   "source": "Salesforce",
-   "kind": "company",
-   "date": "2026-10-27",
-   "title": "New Research: Work Gets Trapped in Single-Player AI. Executives Are Ready for Multiplayer",
-   "summary": "Key Takeaways As more and more businesses rely on AI, workers are experiencing a bottleneck: interface isolation. According to a recent Salesforce survey of 250 U.S. executives, 68% of respondents see AI insights go unshared, 66% say people unknowingly use AI to solve the same problem as their colleagues, and 59% observe work stall because […]",
-   "link": "https://www.salesforce.com/news/stories/work-stalls-isolated-ai-tools/",
-   "score": 2,
+   "id": "bc74892faa",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-10",
+   "title": "‘K-문샷 정책 세미나’ 개최, 국가 과학 난제 해결을 위한 과학 인공지능 혁신을 논의하다.",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187943",
+   "score": 1,
    "domains": [],
-   "method": "연구·보고서"
+   "method": "정책·규제"
   },
   {
    "id": "172b003326",
@@ -2218,6 +2123,19 @@
    "domains": [
     "클라우드·인프라"
    ],
+   "method": "정책·규제"
+  },
+  {
+   "id": "c37281c411",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-09",
+   "title": "PM call with President Macron of France: 9 November 2026",
+   "summary": "The Prime Minister joined a call chaired by President Emmanuel Macron on artificial intelligence today.",
+   "link": "https://www.gov.uk/government/news/pm-call-with-president-macron-of-france-9-november-2026",
+   "score": 1,
+   "domains": [],
    "method": "정책·규제"
   },
   {
