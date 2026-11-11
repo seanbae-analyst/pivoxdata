@@ -41,7 +41,9 @@ export const REPEAT_DAYS = 7;
 // AI policy (2026-11-01, owner: "ai policy 관련 업데이트도 넣고 싶은데" → its own series, on Instagram too): once a week,
 // from the last two weeks (insights.json keeps 14 days of announcements) — policy news comes slower than company news
 export const POLICY_GAP = 7, POLICY_WINDOW = 14, POLICY_MIN = 3, POLICY_MAX = 6;
-export const isPolicy = (n) => n.method === "정책·규제";
+// a government's own announcement only (2026-11-11): the method regex also reads "guidance"·"law" in a company's post as
+// 정책·규제, and the 11-11 policy post went out with SAP and OpenAI as its only "policies". A company's post stays an AX case.
+export const isPolicy = (n) => n.kind === "government" && n.method === "정책·규제";
 export const sameStory = (a, b) => a.src === b.src && Boolean(a.method) && a.method === b.method
   && (a.domains ?? []).some((d) => (b.domains ?? []).includes(d));
 // AX only (2026-10-25): Instagram carries the AX cases (Ramp AI Index) and the weekly official-announcement post;
