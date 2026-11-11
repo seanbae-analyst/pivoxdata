@@ -1,0 +1,454 @@
+{
+ "date": "2026-11-11",
+ "mode": "policy",
+ "topic": null,
+ "format": "policyweek",
+ "format_name": "AI 정책 업데이트",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 1,
+ "original_numbers": [
+  "80",
+  "66",
+  "33"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "AI 정책 업데이트",
+   "title": "AI 도입,\n누가 길을 알려 주나요?",
+   "body": "이번 주 발표 3건은\n모두 AI를 어떻게 안내할지\n이야기해요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "title": "정부 대신\n기업 발표 3건이에요",
+   "body": "이번 주 3건은 정부가 아니라\nOpenAI 2건, SAP 1건이에요.\n기업 고객, 로펌, 학교에서\nAI를 어떻게 이끌지 다뤄요.",
+   "src": "출처 · OpenAI · SAP 발표 3건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "SAP, 지원 플랜\n문을 넓혔어요",
+   "body": "SAP는 2026년 11월 2일부터\nMax Success Plan을\n모든 고객이 쓸 수 있다고 밝혔어요.\n파트너를 거치는 고객도 포함이에요.",
+   "src": "출처 · SAP 공식 발표 · 11/2",
+   "case": {
+    "who": "SAP",
+    "what": "Max Success Plan(최상위 지원 플랜)",
+    "where": "SAP 클라우드 고객 전체",
+    "how": "직접·파트너 경로 모두로 제공",
+    "domain": "ERP·백오피스",
+    "method": "파트너십",
+    "check": "AI 프로젝트에 외부 지원을 어느 단계까지 둘지 정했나요?",
+    "ref": 2
+   },
+   "kicker": "ERP·백오피스 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "파트너 경로로도\n같은 지원을 받아요",
+   "body": "SAP 도입을 파트너와 진행해도\n같은 단계별 지원을 고를 수 있어요.\n지원 범위가 계약 검토 항목에\n하나 더 붙은 셈이에요.",
+   "src": "출처 · SAP 공식 발표 · 11/2",
+   "case": {
+    "who": "SAP",
+    "what": "Max Success Plan(최상위 지원 플랜)",
+    "where": "SAP 클라우드 고객 전체",
+    "how": "직접·파트너 경로 모두로 제공",
+    "domain": "ERP·백오피스",
+    "method": "파트너십",
+    "check": "AI 프로젝트에 외부 지원을 어느 단계까지 둘지 정했나요?",
+    "ref": 2
+   },
+   "kicker": "ERP·백오피스 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "OpenAI, 로펌 대표\n대화를 실었어요",
+   "body": "OpenAI는\nGilbert + Tobin의\nSam Nickless 대표와 나눈\n대화를 공개했어요.\n주제는 AI로 법률 사업을\n다시 짜는 일이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/12",
+   "case": {
+    "who": "Gilbert + Tobin (OpenAI 발표)",
+    "what": "AI (도구 이름은 발표에 없음)",
+    "where": "법률 사업(로펌 업무)",
+    "how": "발표에 없음",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "전문 업무에서 AI 결과를 검토할 책임자를 정했나요?",
+    "ref": 1
+   },
+   "kicker": "업무 도구 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "전문 서비스도\nAI 논의 안에 있어요",
+   "body": "제목·요약에는 어떤 도구를\n어떻게 들였는지 적혀 있지 않아요.\n다만 법률처럼 판단이 중요한 일도\nAI 논의에 들어왔다는 뜻으로 읽혀요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/12",
+   "case": {
+    "who": "Gilbert + Tobin (OpenAI 발표)",
+    "what": "AI (도구 이름은 발표에 없음)",
+    "where": "법률 사업(로펌 업무)",
+    "how": "발표에 없음",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "전문 업무에서 AI 결과를 검토할 책임자를 정했나요?",
+    "ref": 1
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "OpenAI, 교육 AI\n안내 공백을 다뤄요",
+   "body": "OpenAI는 ThinkYoung의\n새 연구와 유럽·중동·아프리카(EMEA)\n교육 협력의 교훈을 공개했어요.\n교사 지원과 AI 리터러시가 주제예요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/10",
+   "case": {
+    "who": "OpenAI (ThinkYoung 연구 포함)",
+    "what": "교육 분야 AI 안내 연구·교훈",
+    "where": "교사·학생, EMEA 교육 협력",
+    "how": "연구 결과와 협력 교훈 공개",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "직원 AI 리터러시 교육을 도입 계획에 넣었나요?",
+    "ref": 3
+   },
+   "kicker": "업무 도구 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "도구보다 안내가\n먼저 나왔어요",
+   "body": "AI 리터러시는 AI를 이해하고\n가려 쓰는 힘을 말해요.\n학교 이야기지만,\n사내 도입에서도 사용 안내를\n따로 챙길 일이라는 뜻이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/10",
+   "case": {
+    "who": "OpenAI (ThinkYoung 연구 포함)",
+    "what": "교육 분야 AI 안내 연구·교훈",
+    "where": "교사·학생, EMEA 교육 협력",
+    "how": "연구 결과와 협력 교훈 공개",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "직원 AI 리터러시 교육을 도입 계획에 넣었나요?",
+    "ref": 3
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "title": "기술보다 실행을\n말하는 한 주예요",
+   "body": "SAP는 차이를 만드는 건 기술이 아니라\n안내받는 실행이라고 주장했어요.\n나머지 두 발표도 법률과 교육에서\nAI를 이끄는 법을 다뤄요.",
+   "src": "출처 · OpenAI · SAP 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "외부 지원은 어느 단계까지 두나요?",
+    "파트너 계약에 지원 범위가 있나요?",
+    "AI 결과 검토 책임자가 있나요?",
+    "직원 AI 교육 계획이 있나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "도구 다음은\n안내예요",
+   "body": "이번 주 발표 3건은\nAI를 쓰는 사람과 과정을\n어떻게 이끌지로 모여요."
+  }
+ ],
+ "caption": "이번 주 AI 정책 꼭지의 발표 3건은 'AI를 어떻게 안내하나'로 모여요.\nSAP는 11월 2일부터 Max Success Plan을 파트너 경로 고객까지 모두에게 열었다고 밝혔어요.\n→ 파트너와 SAP를 도입해도 같은 단계별 지원을 고를 수 있어요.\nOpenAI는 로펌 Gilbert + Tobin 대표와 AI로 법률 사업을 다시 짜는 대화를 실었어요.\n→ 판단이 중요한 전문 업무도 AI 논의 안에 들어와 있어요.\nOpenAI는 ThinkYoung 연구와 EMEA 교육 협력의 교훈을 공개했어요.\n→ 도구만큼 사용 안내와 AI 리터러시를 챙길 일이라는 뜻이에요.\n세 발표 모두 기술보다 도입 뒤의 실행과 안내를 다뤄요.\n우리 AI 프로젝트에 외부 지원과 직원 교육 계획이 들어 있나요?",
+ "cases": [
+  {
+   "who": "SAP",
+   "what": "Max Success Plan(최상위 지원 플랜)",
+   "where": "SAP 클라우드 고객 전체",
+   "how": "직접·파트너 경로 모두로 제공",
+   "domain": "ERP·백오피스",
+   "method": "파트너십",
+   "check": "AI 프로젝트에 외부 지원을 어느 단계까지 둘지 정했나요?",
+   "ref": 2,
+   "source": "SAP",
+   "date": "2026-11-02",
+   "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/"
+  },
+  {
+   "who": "Gilbert + Tobin (OpenAI 발표)",
+   "what": "AI (도구 이름은 발표에 없음)",
+   "where": "법률 사업(로펌 업무)",
+   "how": "발표에 없음",
+   "domain": "업무 도구",
+   "method": "연구·보고서",
+   "check": "전문 업무에서 AI 결과를 검토할 책임자를 정했나요?",
+   "ref": 1,
+   "source": "OpenAI",
+   "date": "2026-11-12",
+   "link": "https://openai.com/index/gilbert-tobin-sam-nickless"
+  },
+  {
+   "who": "OpenAI (ThinkYoung 연구 포함)",
+   "what": "교육 분야 AI 안내 연구·교훈",
+   "where": "교사·학생, EMEA 교육 협력",
+   "how": "연구 결과와 협력 교훈 공개",
+   "domain": "업무 도구",
+   "method": "연구·보고서",
+   "check": "직원 AI 리터러시 교육을 도입 계획에 넣었나요?",
+   "ref": 3,
+   "source": "OpenAI",
+   "date": "2026-11-10",
+   "link": "https://openai.com/index/closing-ai-guidance-gap-education"
+  }
+ ],
+ "sources": [
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-12",
+   "title": "Gilbert + Tobin rethinks the business of law with AI",
+   "link": "https://openai.com/index/gilbert-tobin-sam-nickless",
+   "id": "f28f90d289",
+   "original": false
+  },
+  {
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-11-02",
+   "title": "AI and Transformation Guidance for Every Customer",
+   "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/",
+   "id": "ebf59a6362",
+   "original": true
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Closing the AI guidance gap in education",
+   "link": "https://openai.com/index/closing-ai-guidance-gap-education",
+   "id": "01a8528fa1",
+   "original": false
+  }
+ ],
+ "article": {
+  "title": "AI 도입의 다음 질문: 누가 길을 안내하나",
+  "lede": "이번 주 AI 정책 업데이트에는 정부 발표가 없고, 기업 발표 3건이 모였어요. SAP는 최상위 지원 플랜을 모든 고객에게 열었어요. OpenAI는 로펌 대표와 나눈 대화, 그리고 교육 분야의 AI 안내 연구를 공개했어요. 세 발표 모두 AI 도구 자체보다, 그 도구를 쓰는 과정과 사람을 어떻게 이끌지를 다뤄요.",
+  "sections": [
+   {
+    "heading": "이번 주 발표 3건을 함께 읽는 이유",
+    "body": "이번 주 정책 업데이트로 묶은 발표 3건은 SAP에서 1건, OpenAI에서 2건이 나왔어요. 시행일이나 벌칙이 있는 법·규제 발표는 아니에요. 그래도 세 발표가 모두 AI를 조직에 들일 때의 안내와 지원을 다뤄서 한 묶음으로 읽어요.\n\n배경 숫자도 하나 있어요. Ramp AI Index에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 9월 55.9%였고, 1년 새 +12.1%p 늘었어요. 이 지표는 미국 기업의 유료 결제 기록을 바탕으로 해서 무료 도구나 개인 결제는 잡히지 않아요.\n\nSAP는 이번 발표에서 기업들이 AI에 투자하는 일보다 그 성과를 확인하는 일을 더 어려워한다고 짚었어요. 그래서 이번 주의 질문은 '무엇을 사나'보다 '들인 뒤 누가 어떻게 이끄나'로 읽혀요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-12",
+      "title": "Gilbert + Tobin rethinks the business of law with AI",
+      "link": "https://openai.com/index/gilbert-tobin-sam-nickless"
+     },
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-02",
+      "title": "AI and Transformation Guidance for Every Customer",
+      "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Closing the AI guidance gap in education",
+      "link": "https://openai.com/index/closing-ai-guidance-gap-education"
+     }
+    ]
+   },
+   {
+    "heading": "SAP, Max Success Plan을 모든 고객에게 열었어요",
+    "body": "SAP는 2026년 11월 2일부터 Max Success Plan을 모든 고객이 이용할 수 있다고 발표했어요. SAP는 이 플랜을 자사에서 가장 전략적인 단계의 지원이라고 소개했어요. 그 근거로 외부 조사 두 가지를 인용했어요. 하나는 RAND Corporation 조사로, 기업 AI 과제의 80%가 의도한 사업 가치를 내지 못했다는 내용이에요. 다른 하나는 MIT 보고서로, 경험 있는 외부 파트너와 함께한 도입은 성공률이 66%, 내부 인력만으로 한 도입은 33%였다는 내용이에요.\n\nSAP가 설명한 지원 플랜은 세 단계예요. Foundational Success Plan은 처음부터 모든 SAP 클라우드 구독에 포함돼 있었어요. Advanced Success Plan은 직접 계약 고객과 파트너 경유 고객 모두에게 제공돼 왔어요. Max Success Plan은 2026년 2월부터 SAP와 직접 계약한 고객만 쓸 수 있었는데, 이제는 파트너를 거치는 고객도 Cloud Choice(CCFlex)나 재판매(VAR) 방식으로 쓸 수 있어요. 관리형 서비스 제공업체를 통한 경로는 곧 열린다고 SAP는 밝혔어요.\n\nERP·백오피스 도입에서 이 발표는 계약 경로에 따라 받을 수 있는 지원 단계가 달라지던 차이가 줄었다는 뜻이에요. SAP 클라우드 전환이나 SAP Business AI를 쓰는 여러 솔루션 프로젝트를 파트너와 함께 진행하는 회사라면, 계약 검토 항목이 하나 늘어요. 구현 파트너가 맡는 일과 SAP 지원 플랜이 맡는 일을 나눠 봐야 해요.\n\n우리 프로젝트에 비춰 보면, 외부 지원을 어느 단계까지 둘지부터 정해야 해요. 앞의 수치는 SAP가 자사 지원 플랜을 설명하려고 인용한 것이에요. 그러니 이 수치를 그대로 믿기보다, 실제 계약서에 지원 범위와 비용이 어떻게 적혀 있는지를 직접 확인하는 편이 맞아요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "SAP",
+     "what": "Max Success Plan(최상위 지원 플랜)",
+     "where": "SAP 클라우드 고객 전체",
+     "how": "직접·파트너 경로 모두로 제공",
+     "domain": "ERP·백오피스",
+     "method": "파트너십",
+     "check": "AI 프로젝트에 외부 지원을 어느 단계까지 둘지 정했나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-02",
+      "title": "AI and Transformation Guidance for Every Customer",
+      "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI, Gilbert + Tobin 대표와 나눈 대화를 실었어요",
+    "body": "OpenAI는 Gilbert + Tobin의 파트너이자 최고경영자인 Sam Nickless와 나눈 대화를 공개했어요. 글의 제목은 AI로 법률 사업의 방식을 다시 생각한다는 내용이에요.\n\n원문 페이지는 읽지 못해서 제목과 요약만 확인했어요. 어떤 AI 도구를 어느 업무에 어떤 범위로 들였는지는 발표에 없어요. 그래서 이 섹션은 도입 방식이 아니라 논의의 방향만 다뤄요.\n\n업무 도구 영역에서 보면, 이 글은 판단과 책임이 무거운 전문 서비스 회사의 경영자가 AI를 사업 차원에서 이야기했다는 뜻이에요. 법률, 회계, 컨설팅처럼 산출물에 이름을 걸고 내는 일에서는 AI를 들일 때 결과를 누가 검토하고 책임지는지를 프로젝트 설계 단계에서 정해야 해요.\n\n우리 프로젝트에서는 전문 업무에 쓰는 AI의 결과를 검토할 책임자를 정했는지 확인해야 해요. 고객에게 내는 문서에 AI가 어디까지 관여했는지 어떻게 기록할지도 함께 정해 두면 좋아요. 도구를 바꾸는 일과 업무 절차·역할을 바꾸는 일은 따로 준비해야 하기 때문이에요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "Gilbert + Tobin (OpenAI 발표)",
+     "what": "AI (도구 이름은 발표에 없음)",
+     "where": "법률 사업(로펌 업무)",
+     "how": "발표에 없음",
+     "domain": "업무 도구",
+     "method": "연구·보고서",
+     "check": "전문 업무에서 AI 결과를 검토할 책임자를 정했나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-12",
+      "title": "Gilbert + Tobin rethinks the business of law with AI",
+      "link": "https://openai.com/index/gilbert-tobin-sam-nickless"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI, 교육에서 AI 안내의 공백을 다뤘어요",
+    "body": "OpenAI는 교육 현장에서 AI 안내가 비어 있는 부분을 메우는 일을 주제로 글을 냈어요. 요약에 따르면, 이 글에는 ThinkYoung의 새 연구가 담겼어요. OpenAI가 EMEA(유럽·중동·아프리카)에서 맺은 교육 협력에서 얻은 교훈도 함께 담겼어요.\n\n다루는 주제는 교사 지원, AI 리터러시, 스스로 하는 학습이에요. 원문은 읽지 못해서 연구 결과의 구체적인 내용이나 협력 기관, 규모는 확인하지 못했어요.\n\n학교 이야기지만 사내 업무 도구 도입에도 겹쳐 읽을 수 있어요. 도구를 나눠 주는 일과, 쓰는 사람이 AI 결과를 가려 쓰는 힘을 갖추는 일은 서로 다른 일이에요. 교사가 학생의 AI 사용을 돕는 구조는 사내에서 현업 리더가 팀의 AI 사용을 안내하는 구조와 닮았어요.\n\n우리 프로젝트에서는 직원 AI 리터러시 교육을 도입 계획에 넣었는지 확인해야 해요. 교육은 누가 맡고 안내 자료는 어디에 둘지까지 정해 두세요. 그래야 전 직원에게 도구를 배포한 뒤 팀마다 사용 방식이 어떻게 다른지 살펴볼 기준이 생겨요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "OpenAI (ThinkYoung 연구 포함)",
+     "what": "교육 분야 AI 안내 연구·교훈",
+     "where": "교사·학생, EMEA 교육 협력",
+     "how": "연구 결과와 협력 교훈 공개",
+     "domain": "업무 도구",
+     "method": "연구·보고서",
+     "check": "직원 AI 리터러시 교육을 도입 계획에 넣었나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Closing the AI guidance gap in education",
+      "link": "https://openai.com/index/closing-ai-guidance-gap-education"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 기술보다 실행과 안내",
+    "body": "세 발표는 서로 다른 분야에서 나왔지만 같은 질문으로 모여요. SAP는 차이를 만드는 것은 기술 스택이 아니라 안내받는 실행이라고 주장했어요. OpenAI의 두 글은 로펌 경영과 교육 현장에서 AI를 어떻게 이끌지를 다뤘어요.\n\n이번 주에는 시행일이나 대상, 벌칙이 적힌 법·규제 발표가 없었어요. 대신 도입한 뒤의 운영, 지원 체계, 사용자 교육에 무게가 실린 발표들이었어요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-12",
+      "title": "Gilbert + Tobin rethinks the business of law with AI",
+      "link": "https://openai.com/index/gilbert-tobin-sam-nickless"
+     },
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-02",
+      "title": "AI and Transformation Guidance for Every Customer",
+      "link": "https://news.sap.com/2026/11/ai-transformation-guidance-for-every-customer/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Closing the AI guidance gap in education",
+      "link": "https://openai.com/index/closing-ai-guidance-gap-education"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "ERP·CRM·클라우드·데이터 프로젝트 모두에서 이번 주 발표는 하나의 질문으로 이어져요. 라이선스와 구현 다음 단계, 곧 벤더 지원 체계와 사용자 안내를 프로젝트 범위에 넣을지의 문제예요. 특히 파트너를 통해 도입하는 경우, 벤더 지원과 파트너의 역할 분담을 계약 단계에서 정리해 둘 필요가 커졌어요.\n\n· 외부 지원(벤더 지원 플랜·구현 파트너)을 프로젝트의 어느 단계까지 두나요?\n· 파트너 경유 계약에 벤더 지원 플랜의 범위와 비용이 적혀 있나요?\n· 전문 업무에서 AI 결과를 검토하고 책임질 사람을 정했나요?\n· 직원 AI 리터러시 교육과 사용 안내를 변화 관리 계획에 넣었나요?\n· AI 과제의 사업 가치를 무엇으로 잴지 시작 전에 정했나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "이번 주 정책 업데이트는 정부 발표 없이 기업 발표 3건(SAP 1건, OpenAI 2건)이에요.",
+   "SAP는 2026년 11월 2일부터 Max Success Plan을 파트너 경유 고객까지 포함한 모든 고객에게 열었다고 밝혔어요.",
+   "OpenAI의 두 글은 로펌 경영과 교육 현장에서 AI를 어떻게 이끌지를 다뤘고, 구체적인 도입 내용은 확인한 범위에 없어요.",
+   "도입 프로젝트에서는 외부 지원 범위, 결과 검토 책임, 직원 교육을 함께 점검할 차례예요."
+  ],
+  "terms": [
+   {
+    "term": "AI 리터러시",
+    "def": "AI가 어떻게 작동하는지 이해하고, AI가 내놓은 결과를 따져 보고 가려 쓰는 능력을 말해요."
+   },
+   {
+    "term": "재판매(VAR)",
+    "def": "제조사의 소프트웨어나 서비스를 파트너 회사가 다시 판매하면서 구축이나 지원을 함께 제공하는 방식이에요."
+   },
+   {
+    "term": "관리형 서비스 제공업체",
+    "def": "고객 회사의 IT 시스템 운영과 관리를 맡아서 대신 해 주는 외부 업체를 말해요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "work",
+    "deal"
+   ],
+   "industries": [
+    "tech",
+    "legal",
+    "education"
+   ],
+   "companies": [
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    },
+    {
+     "id": "sap",
+     "name": "SAP"
+    }
+   ]
+  }
+ },
+ "series": "policy"
+}

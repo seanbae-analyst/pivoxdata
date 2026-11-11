@@ -100,5 +100,16 @@
    "9ac41b4a44",
    "d6833b230f"
   ]
+ },
+ {
+  "date": "2026-11-11",
+  "mode": "policy",
+  "key": "policy:2026-11-11",
+  "subject": "policy",
+  "news": [
+   "f28f90d289",
+   "ebf59a6362",
+   "01a8528fa1"
+  ]
  }
 ]
