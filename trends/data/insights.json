@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-10",
+ "built_at": "2026-11-11",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "121건",
+     "big": "125건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 54건 · 클라우드·인프라 34건 · 보안·규제 26건 · 업무 도구 18건 · ERP·백오피스 12건 · CRM·고객 12건 · 데이터·분석 12건",
+     "body": "AI 에이전트 57건 · 클라우드·인프라 35건 · 보안·규제 27건 · 업무 도구 18건 · CRM·고객 13건 · 데이터·분석 13건 · ERP·백오피스 10건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,18 +325,18 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 54,
-         "label": "54건"
+         "value": 57,
+         "label": "57건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 34,
-         "label": "34건"
+         "value": 35,
+         "label": "35건"
         },
         {
          "name": "보안·규제",
-         "value": 26,
-         "label": "26건"
+         "value": 27,
+         "label": "27건"
         },
         {
          "name": "업무 도구",
@@ -344,9 +344,9 @@
          "label": "18건"
         },
         {
-         "name": "ERP·백오피스",
-         "value": 12,
-         "label": "12건"
+         "name": "CRM·고객",
+         "value": 13,
+         "label": "13건"
         }
        ]
       }
@@ -355,23 +355,23 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "54건",
+     "big": "57건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
-     "title": "AI 에이전트, SAP 발표가 가장 많아요",
+     "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA · NVIDIA 11/9 — Korea Advances Physical AI Across Industries With NVIDIA",
+     "body": "최근: McKinsey 11/10 — Reinventing business planning with agentic AI · Google Cloud 11/10 — Google Cloud launches Gemini for healthcare. · Microsoft 11/10 — IBM and Microsoft announce a new AI agent platform designed for industry-specific transformation",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "SAP",
+         "name": "McKinsey",
          "value": 10,
          "label": "10건"
         },
         {
-         "name": "McKinsey",
+         "name": "SAP",
          "value": 9,
          "label": "9건"
         },
@@ -397,11 +397,11 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "34건",
+     "big": "35건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 과학기술정보통신부 11/9 — 국산 NPU, 엔비디아 시스템과 연계해 글로벌 AI 인프라 시장 진출 길 연다 · SK텔레콤 11/9 — SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력 · NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
+     "body": "최근: Google Cloud 11/10 — Google Cloud launches Gemini for healthcare. · SAP 11/10 — SAP Expands Collaboration with AstraZeneca to Adopt RISE with SAP and Business AI · SK텔레콤 11/9 — SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -413,9 +413,9 @@
          "label": "10건"
         },
         {
-         "name": "과학기술정보통신부",
-         "value": 4,
-         "label": "4건"
+         "name": "SAP",
+         "value": 5,
+         "label": "5건"
         },
         {
          "name": "Snowflake",
@@ -423,9 +423,9 @@
          "label": "4건"
         },
         {
-         "name": "SAP",
-         "value": 4,
-         "label": "4건"
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "SK텔레콤",
@@ -439,11 +439,11 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "26건",
+     "big": "27건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA · OpenAI 11/4 — Daybreak Red is now available in AWS GovCloud (US-East)",
+     "body": "최근: Salesforce 11/10 — Missionforce National Security Achieves ‘Awardable’ Status for Department of War Recruiting Capabilities in the CDAO’s Tradewinds Solutions Marketplace · NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -485,7 +485,7 @@
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SK텔레콤 11/10 — AI 활용을 넘어, 조직의 미래를 이끄는 AX Catalyst · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA · OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace",
+     "body": "최근: SK텔레콤 11/10 — AI 활용을 넘어, 조직의 미래를 이끄는 AX Catalyst · Google Cloud 11/10 — We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps. · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -498,8 +498,8 @@
         },
         {
          "name": "SAP",
-         "value": 3,
-         "label": "3건"
+         "value": 2,
+         "label": "2건"
         },
         {
          "name": "Salesforce",
@@ -521,55 +521,13 @@
      ]
     },
     {
-     "id": "dom-erp",
-     "k": "IT 영역 · ERP·백오피스",
-     "big": "12건",
-     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
-     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
-     "easy": "",
-     "body": "최근: OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace · SAP 11/6 — New Research Finds AI Is Moving Faster Than Organizations Can Adapt · McKinsey 10/28 — Agentic AI in strategic sourcing: Hype or hero?",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "SAP",
-         "value": 6,
-         "label": "6건"
-        },
-        {
-         "name": "McKinsey",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "OpenAI",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "과학기술정보통신부",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "Capgemini",
-         "value": 1,
-         "label": "1건"
-        }
-       ]
-      }
-     ]
-    },
-    {
      "id": "dom-crm",
      "k": "IT 영역 · CRM·고객",
-     "big": "12건",
+     "big": "13건",
      "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
      "title": "CRM·고객, Salesforce 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: OpenAI 11/5 — Merge builds product and business tools with OpenAI technology · Salesforce 11/4 — Salesforce’s Agentforce Coworker Usage Soars 21x in Three Months as Enterprises Delegate Real Work to AI · Capgemini 11/4 — Smarter insurance through human-AI collaboration",
+     "body": "최근: Salesforce 11/10 — Missionforce National Security Achieves ‘Awardable’ Status for Department of War Recruiting Capabilities in the CDAO’s Tradewinds Solutions Marketplace · OpenAI 11/5 — Merge builds product and business tools with OpenAI technology · Salesforce 11/4 — Salesforce’s Agentforce Coworker Usage Soars 21x in Three Months as Enterprises Delegate Real Work to AI",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -577,8 +535,8 @@
        "items": [
         {
          "name": "Salesforce",
-         "value": 5,
-         "label": "5건"
+         "value": 6,
+         "label": "6건"
         },
         {
          "name": "Capgemini",
@@ -607,11 +565,11 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "12건",
+     "big": "13건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Snowflake 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: NVIDIA 11/5 — Vera Delivers the Best of Both Worlds: Highest Throughput and Fastest Agents · SAP 11/4 — From AI to Analytics: Where SAP Fieldglass Stands Out in the 2026 SIA VMS Landscape · Snowflake 11/3 — Fuel Every Agent and App With Data That Keeps Pace",
+     "body": "최근: Databricks 11/10 — Unity Catalog Metric Views, now in Power BI: one unified, governed semantic layer for all your reporting and AI · NVIDIA 11/5 — Vera Delivers the Best of Both Worlds: Highest Throughput and Fastest Agents · SAP 11/4 — From AI to Analytics: Where SAP Fieldglass Stands Out in the 2026 SIA VMS Landscape",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -633,12 +591,54 @@
          "label": "2건"
         },
         {
-         "name": "NVIDIA",
+         "name": "Databricks",
          "value": 1,
          "label": "1건"
         },
         {
+         "name": "NVIDIA",
+         "value": 1,
+         "label": "1건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-erp",
+     "k": "IT 영역 · ERP·백오피스",
+     "big": "10건",
+     "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
+     "title": "ERP·백오피스, SAP 발표가 가장 많아요",
+     "easy": "",
+     "body": "최근: SAP 11/10 — Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act · OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace · SAP 11/6 — New Research Finds AI Is Moving Faster Than Organizations Can Adapt",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "SAP",
+         "value": 4,
+         "label": "4건"
+        },
+        {
          "name": "McKinsey",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "OpenAI",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "Capgemini",
          "value": 1,
          "label": "1건"
         }
@@ -1315,6 +1315,57 @@
    }
   },
   {
+   "key": "hf:xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+   "subject": "hf:xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: xtools‑at/​DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,261",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: xtools‑at/​DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "text‑generation · 2026-10-30 공개. 직전 1위는 speridlabs/​idol.",
+    "src": "Hugging Face 트렌딩 · 2026-11-11",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+        "value": 969,
+        "label": "1.4만"
+       },
+       {
+        "name": "idol",
+        "value": 934,
+        "label": "2.6만"
+       },
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 623,
+        "label": "3.1만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 517,
+        "label": "667"
+       },
+       {
+        "name": "Ripple-65B-Preview",
+        "value": 468,
+        "label": "6,480"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
    "key": "surge:PyPI:smolagents:2026-11-02",
    "subject": "pkg:smolagents",
    "kind": "증가",
@@ -1432,23 +1483,54 @@
    }
   },
   {
-   "key": "hftop:microsoft/Florence-2-base:2026-11-10",
-   "subject": "hf:microsoft/Florence-2-base",
+   "key": "hftr:MiniMaxAI/MiniMax-H3-Image:2026-11-11",
+   "subject": "hf:MiniMaxAI/MiniMax-H3-Image",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 18,
+   "score": 12,
    "topic": "ai",
-   "headline": "다운로드 상위 20에 새로: microsoft/​Florence‑2‑base",
+   "headline": "트렌딩 상위 5에 새로: MiniMaxAI/​MiniMax‑H3‑Image",
    "card": {
-    "id": "ch-hftop",
+    "id": "ch-hftr",
     "k": "오픈 모델",
-    "big": "1개",
-    "bl": "다운로드 상위 20에 새로 든 모델",
-    "title": "다운로드 상위 20에 새로: microsoft/​Florence‑2‑base",
-    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
-    "body": "microsoft/​Florence‑2‑base(1,253만).",
-    "src": "Hugging Face 다운로드 상위 · 2026-11-10",
-    "viz": []
+    "big": "4위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: MiniMaxAI/​MiniMax‑H3‑Image",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑to‑image · 2026-11-03 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-11",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+        "value": 969,
+        "label": "1.4만"
+       },
+       {
+        "name": "idol",
+        "value": 934,
+        "label": "2.6만"
+       },
+       {
+        "name": "Kimi-K3.1-Pro",
+        "value": 623,
+        "label": "3.1만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 517,
+        "label": "667"
+       },
+       {
+        "name": "Ripple-65B-Preview",
+        "value": 468,
+        "label": "6,480"
+       }
+      ]
+     }
+    ]
    }
   }
  ],
@@ -1531,40 +1613,53 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 54건 · 발표가 많은 곳: SAP 10건, McKinsey 9건, NVIDIA 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 57건 · 발표가 많은 곳: McKinsey 10건, SAP 9건, NVIDIA 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 34건 · 발표가 많은 곳: NVIDIA 10건, 과학기술정보통신부 4건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 10건, SAP 5건, Snowflake 4건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 26건 · 발표가 많은 곳: OpenAI 4건, Anthropic 4건, Snowflake 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 27건 · 발표가 많은 곳: OpenAI 4건, Anthropic 4건, Snowflake 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 18건 · 발표가 많은 곳: OpenAI 7건, SAP 3건, Salesforce 2건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: SAP 6건, McKinsey 3건, OpenAI 1건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 18건 · 발표가 많은 곳: OpenAI 7건, SAP 2건, Salesforce 2건"
   },
   {
    "group": "domain",
    "id": "dom-crm",
-   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Salesforce 5건, Capgemini 3건, OpenAI 1건"
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Salesforce 6건, Capgemini 3건, OpenAI 1건"
   },
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, 과학기술정보통신부 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, 과학기술정보통신부 2건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-erp",
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 10건 · 발표가 많은 곳: SAP 4건, McKinsey 3건, OpenAI 1건"
   }
  ],
  "news": [
+  {
+   "id": "f28f90d289",
+   "src": "openai",
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-12",
+   "title": "Gilbert + Tobin rethinks the business of law with AI",
+   "summary": "A conversation with Sam Nickless, Partner and Chief Executive Officer at Gilbert + Tobin.",
+   "link": "https://openai.com/index/gilbert-tobin-sam-nickless",
+   "score": 6,
+   "domains": [],
+   "method": "정책·규제"
+  },
   {
    "id": "f12033583e",
    "src": "sap",
@@ -1594,20 +1689,17 @@
    "method": "정책·규제"
   },
   {
-   "id": "362a39cf58",
+   "id": "172b003326",
    "src": "msit",
    "source": "과학기술정보통신부",
    "kind": "government",
-   "date": "2026-10-28",
-   "title": "[보도참고] 국민 누구나 24시간 이용하는 ‘인공지능 건강도우미 대화 로봇(AI 건강도우미 챗봇)’ 운영 시작",
-   "summary": "- 국민 누구나 간이 설문 통해 맞춤형 건강 보고서(건강리포트) 및 상담 서비스 이용 가능 - - 500만 건 보건 빅데이터 기반 24시간 대화형 인공지능 보건 행정서비스 구축 - - 의학 전문가 검증 및 암호화 폐쇄망 기반의 높은 신뢰성과 보안성 확보 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187896",
-   "score": 6,
-   "domains": [
-    "데이터·분석",
-    "보안·규제"
-   ],
-   "method": "연구·보고서"
+   "date": "2026-11-09",
+   "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
+   "summary": "- 과기정통부-엔비디아 NVLink Fusion 협력 일환으로 엔비디아·SK텔레콤·리벨리온 업무협약 체결, 국산 신경망 처리 장치와 엔비디아 중앙 처리 장치 연계 추진 - - 과기정통부, 엔비디아와 공동 개최한 ‘인공지능 창업 초기 기업 동반관계 토론회 (스타트업 파트너십 포럼)’에 국내 인공지능 창업 초기 기업 22개 사가 참여해 엔비디아와 협력 방안 논의 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936",
+   "score": 4,
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "2cbacb37a7",
@@ -1651,33 +1743,60 @@
    "method": "파트너십"
   },
   {
-   "id": "f2cb26a020",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-10-28",
-   "title": "대한민국 미래성장과 국민의 삶 개선을 위해 과학기술 정책과 경제·산업 정책의 역량을 결집",
-   "summary": "- 과학기술관계장관회의-경제관계장관회의 첫 연석회의 개최, - 미래 성장동력 발굴을 위한 과학기술과 경제정책의 범정부 협력의 장 마련 - 국민이 체감할 수 있는 주거·일자리·서민금융 3대 핵심 사회정책 신속하게 구체화 - 퇴직급여 사외적립 단계적 의무화, 기금형 퇴직연금 도입 등 퇴직연금 기능강화 추진 - 7대 SEED 프로젝트 범부처 협력으로 미래 성장동력 확보에 속도 - 바다에도 AI 혁신 본격화…해양수산 산업의 경쟁력 높이고 새로운 성장 기회 창출 - AI·클라우드 기반으로 지방행정 혁신, 국민은 더 편리하게, 행정은 더 효율적으로 - 지역활성화 투자펀드 9호 프로젝트로 포항에 6천억원 규모 AI 데이터센터 건설",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187894",
-   "score": 4,
-   "domains": [
-    "ERP·백오피스",
-    "클라우드·인프라"
-   ],
-   "method": "정책·규제"
-  },
-  {
    "id": "01a8528fa1",
    "src": "openai",
    "source": "OpenAI",
    "kind": "company",
    "date": "2026-11-10",
    "title": "Closing the AI guidance gap in education",
-   "summary": "Lessons from OpenAI’s EMEA education partnerships and new ThinkYoung research. Supporting teachers, AI literacy and independent learning.",
+   "summary": "New ThinkYoung research and lessons from OpenAI’s EMEA education partnerships on supporting teachers, AI literacy, and independent learning.",
    "link": "https://openai.com/index/closing-ai-guidance-gap-education",
    "score": 3,
    "domains": [],
    "method": "정책·규제"
+  },
+  {
+   "id": "ac5a661efb",
+   "src": "google-ai",
+   "source": "Google",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Gemini Intelligence: New features, on more devices",
+   "summary": "Gemini Intelligence is rolling out to more devices. See how expanded capabilities across these devices help you do more.",
+   "link": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/",
+   "score": 3,
+   "domains": [],
+   "method": "전사 배포"
+  },
+  {
+   "id": "c5fffc8a0c",
+   "src": "google-cloud",
+   "source": "Google Cloud",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps.",
+   "summary": "Google and Adobe are integrating creative and productivity tools. Edit PDFs in Drive and use Adobe AI in Gemini. See what’s new in this partnership.",
+   "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/",
+   "score": 3,
+   "domains": [
+    "업무 도구"
+   ],
+   "method": "파트너십"
+  },
+  {
+   "id": "ce1f29ca22",
+   "src": "sap",
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+   "summary": "Companies with the deepest understanding of their own operations are the ones best positioned to put AI to work.",
+   "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/",
+   "score": 3,
+   "domains": [
+    "ERP·백오피스"
+   ],
+   "method": null
   },
   {
    "id": "1f23a28303",
@@ -1990,83 +2109,6 @@
    "method": null
   },
   {
-   "id": "3280ebe303",
-   "src": "samsung",
-   "source": "삼성전자",
-   "kind": "company",
-   "date": "2026-10-28",
-   "title": "삼성전자, 브랜드가치 7년 연속 세계 5위",
-   "summary": "삼성전자는 10월 28일 글로벌 브랜드 컨설팅 업체 인터브랜드가 발표한 ‘2026 글로벌 100대 브랜드’에서 7년 연속 세계 5위에 올랐다. 2020년부터 아시아 기업 중 유일하게 글로벌 5대 브랜드에 이름을 올려 왔으며, 올해 브랜드 가치는 지난해보다 16% 상승한 1,052억 달러를 기록했다. 삼성전자는 ▲반도체 집중 투자에 따른 역대 최대 실적 ▲모바일 사업을 필두로 한 DX부문의 AI 경쟁력 강화 ▲원삼성(One […]",
-   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1%ec%a0%84%ec%9e%90-%eb%b8%8c%eb%9e%9c%eb%93%9c%ea%b0%80%ec%b9%98-7%eb%85%84-%ec%97%b0%ec%86%8d-%ec%84%b8%ea%b3%84-5%ec%9c%84",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라"
-   ],
-   "method": "투자"
-  },
-  {
-   "id": "75e2017ed4",
-   "src": "openai",
-   "source": "OpenAI",
-   "kind": "company",
-   "date": "2026-10-28",
-   "title": "OpenAI and ServiceNow expand partnership across enterprise workflows",
-   "summary": "OpenAI and ServiceNow expand their partnership to bring OpenAI models and agents into ServiceNow and ServiceNow workflows into ChatGPT and Codex.",
-   "link": "https://openai.com/index/openai-servicenow-partnership-expansion",
-   "score": 3,
-   "domains": [
-    "AI 에이전트"
-   ],
-   "method": "파트너십"
-  },
-  {
-   "id": "9f8dc1b355",
-   "src": "sap",
-   "source": "SAP",
-   "kind": "company",
-   "date": "2026-10-28",
-   "title": "SAP and NTT to Cooperate on Delivering Trusted Sovereign Cloud and SAP Business AI Capabilities",
-   "summary": "TOKYO — The companies share the ambition to advance secure, resilient and sovereign digital transformation for regulated industries.",
-   "link": "https://news.sap.com/2026/10/sap-ntt-to-cooperate-deliver-trusted-sovereign-cloud-sap-business-ai-capabilities/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라",
-    "보안·규제"
-   ],
-   "method": "인프라 확장"
-  },
-  {
-   "id": "e0234fbecd",
-   "src": "sap",
-   "source": "SAP",
-   "kind": "company",
-   "date": "2026-10-28",
-   "title": "SAP TechEd in 2026: SAP Tells Developers “You Can Build the Autonomous Enterprise”",
-   "summary": "With comprehensive AI tools and the SAP Business AI Platform, developers, customers, and partners can build the Autonomous Enterprise.",
-   "link": "https://news.sap.com/2026/10/sap-teched-developers-you-can-build-autonomous-enterprise/",
-   "score": 3,
-   "domains": [
-    "AI 에이전트"
-   ],
-   "method": null
-  },
-  {
-   "id": "f05fca276c",
-   "src": "mckinsey",
-   "source": "McKinsey",
-   "kind": "research",
-   "date": "2026-10-28",
-   "title": "Agentic AI in strategic sourcing: Hype or hero?",
-   "summary": "As more procurement functions invest in agentic AI to capture savings and drive efficiency, the question is increasingly: Is it worth it?",
-   "link": "https://www.mckinsey.com/capabilities/operations/our-insights/agentic-ai-in-strategic-sourcing-hype-or-hero",
-   "score": 3,
-   "domains": [
-    "ERP·백오피스",
-    "AI 에이전트"
-   ],
-   "method": "투자"
-  },
-  {
    "id": "2144e0b4a0",
    "src": "sap",
    "source": "SAP",
@@ -2098,6 +2140,45 @@
    "method": "연구·보고서"
   },
   {
+   "id": "5a558ec413",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-10",
+   "title": "인공지능·정보통신기술, 성장의 공식을 바꾸다!",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187945",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "61a26a54d9",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-10",
+   "title": "[보도참고] 디지털·인공지능 경쟁력, 전년대비 8단계 상승한 10위 기록",
+   "summary": "- 2026년 스위스 국제 경영개발원 세계 디지털·인공지능 경쟁력 평가 결과 발표 - - 한국, 인구 2천만명 이상 32개국 중 미국·캐나다·중국에 이어 4위 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187948",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "979f8d6294",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-10",
+   "title": "세계적 인공지능바이오 강국 도약을 위한 소버린 바이오 전략 모색",
+   "summary": "- 7대 SEED, K-문샷 등 미래 바이오 전략 논의 - - 과학기술정보통신부, 11월 11일(수) 「2026 바이오 미래 포럼」 개최 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187946",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "bc74892faa",
    "src": "msit",
    "source": "과학기술정보통신부",
@@ -2108,21 +2189,6 @@
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187943",
    "score": 1,
    "domains": [],
-   "method": "정책·규제"
-  },
-  {
-   "id": "172b003326",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-11-09",
-   "title": "국산 NPU, 엔비디아 시스템과 연계해 글로벌 AI 인프라 시장 진출 길 연다",
-   "summary": "",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936",
-   "score": 1,
-   "domains": [
-    "클라우드·인프라"
-   ],
    "method": "정책·규제"
   },
   {
@@ -2336,34 +2402,6 @@
    "score": 1,
    "domains": [],
    "method": "시범 도입"
-  },
-  {
-   "id": "1a8de7e157",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-10-28",
-   "title": "과학수도 대전에 한국형 혁신 인공지능･소프트웨어 인재양성 거점 ‘이노베이션아카데미’ 개소",
-   "summary": "- ｢대전 이노베이션아카데미｣ 개소식 10월 28일(수) 개최 - 한국형 인공지능･소프트웨어 혁신교육 ‘코디세이’ 과정을 통해 대전 청년 인재들의 실전형 인공지능 전환 융합인재로 성장 지원",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187897",
-   "score": 1,
-   "domains": [],
-   "method": "정책·규제"
-  },
-  {
-   "id": "a1386c4bc8",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-10-28",
-   "title": "인공지능으로 이룬 공공혁신, 국민이 누리는 변화 「2026 공공기관 인공지능 혁신 성과대회」 개최",
-   "summary": "- 공공기관, 인공지능 혁신 주체로 민생 체감 서비스와 행정 효율화 성과 창출 - - 30개 혁신 우수과제 선정... 공공행정 인공지능 전환 첫걸음 내뎌 - - 한국서부발전 ‘인공지능 운영 K-가스터빈’, 인천국제공항공사 ‘인공지능 기반 항공 안전관리’ 대상 수상 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187898",
-   "score": 1,
-   "domains": [
-    "보안·규제"
-   ],
-   "method": "정책·규제"
   }
  ]
 }
