@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "125건",
+     "big": "127건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 57건 · 클라우드·인프라 35건 · 보안·규제 27건 · 업무 도구 18건 · CRM·고객 13건 · 데이터·분석 13건 · ERP·백오피스 10건",
+     "body": "AI 에이전트 58건 · 클라우드·인프라 36건 · 보안·규제 27건 · 업무 도구 18건 · CRM·고객 13건 · 데이터·분석 13건 · ERP·백오피스 10건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 57,
-         "label": "57건"
+         "value": 58,
+         "label": "58건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 35,
-         "label": "35건"
+         "value": 36,
+         "label": "36건"
         },
         {
          "name": "보안·규제",
@@ -355,25 +355,25 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "57건",
+     "big": "58건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
-     "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
+     "title": "AI 에이전트, SAP 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: McKinsey 11/10 — Reinventing business planning with agentic AI · Google Cloud 11/10 — Google Cloud launches Gemini for healthcare. · Microsoft 11/10 — IBM and Microsoft announce a new AI agent platform designed for industry-specific transformation",
+     "body": "최근: SAP 11/11 — ABAP Platform Becoming an Enterprise-Grade Execution Backbone for Agentic AI · McKinsey 11/10 — Reinventing business planning with agentic AI · Google Cloud 11/10 — Google Cloud launches Gemini for healthcare.",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "McKinsey",
+         "name": "SAP",
          "value": 10,
          "label": "10건"
         },
         {
-         "name": "SAP",
-         "value": 9,
-         "label": "9건"
+         "name": "McKinsey",
+         "value": 10,
+         "label": "10건"
         },
         {
          "name": "NVIDIA",
@@ -397,11 +397,11 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "35건",
+     "big": "36건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Google Cloud 11/10 — Google Cloud launches Gemini for healthcare. · SAP 11/10 — SAP Expands Collaboration with AstraZeneca to Adopt RISE with SAP and Business AI · SK텔레콤 11/9 — SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
+     "body": "최근: 영국 정부 11/11 — Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware · Google Cloud 11/10 — Google Cloud launches Gemini for healthcare. · SAP 11/10 — SAP Expands Collaboration with AstraZeneca to Adopt RISE with SAP and Business AI",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -428,7 +428,7 @@
          "label": "3건"
         },
         {
-         "name": "SK텔레콤",
+         "name": "영국 정부",
          "value": 2,
          "label": "2건"
         }
@@ -1325,7 +1325,7 @@
    "card": {
     "id": "ev-hf-trending",
     "k": "빅 케이스 · 오픈 모델",
-    "big": "♥ 1,261",
+    "big": "♥ 1,374",
     "bl": "좋아요",
     "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: xtools‑at/​DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic",
     "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
@@ -1337,28 +1337,28 @@
       "items": [
        {
         "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 969,
-        "label": "1.4만"
+        "value": 1020,
+        "label": "1.7만"
        },
        {
         "name": "idol",
-        "value": 934,
-        "label": "2.6만"
+        "value": 950,
+        "label": "2.8만"
        },
        {
         "name": "Kimi-K3.1-Pro",
-        "value": 623,
-        "label": "3.1만"
+        "value": 627.5,
+        "label": "3.4만"
        },
        {
         "name": "MiniMax-H3-Image",
-        "value": 517,
-        "label": "667"
+        "value": 598,
+        "label": "14만"
        },
        {
         "name": "Ripple-65B-Preview",
-        "value": 468,
-        "label": "6,480"
+        "value": 476,
+        "label": "7,112"
        }
       ]
      }
@@ -1505,28 +1505,28 @@
       "items": [
        {
         "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 969,
-        "label": "1.4만"
+        "value": 1020,
+        "label": "1.7만"
        },
        {
         "name": "idol",
-        "value": 934,
-        "label": "2.6만"
+        "value": 950,
+        "label": "2.8만"
        },
        {
         "name": "Kimi-K3.1-Pro",
-        "value": 623,
-        "label": "3.1만"
+        "value": 627.5,
+        "label": "3.4만"
        },
        {
         "name": "MiniMax-H3-Image",
-        "value": 517,
-        "label": "667"
+        "value": 598,
+        "label": "14만"
        },
        {
         "name": "Ripple-65B-Preview",
-        "value": 468,
-        "label": "6,480"
+        "value": 476,
+        "label": "7,112"
        }
       ]
      }
@@ -1613,12 +1613,12 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 57건 · 발표가 많은 곳: McKinsey 10건, SAP 9건, NVIDIA 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 58건 · 발표가 많은 곳: SAP 10건, McKinsey 10건, NVIDIA 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 10건, SAP 5건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 36건 · 발표가 많은 곳: NVIDIA 10건, SAP 5건, Snowflake 4건"
   },
   {
    "group": "domain",
@@ -1647,6 +1647,21 @@
   }
  ],
  "news": [
+  {
+   "id": "5953160b33",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-11",
+   "title": "Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware",
+   "summary": "UK Government’s Sovereign AI and the British Business Bank back Fractile - a Bristol and London based frontier AI hardware firm developing advanced chips",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware",
+   "score": 7,
+   "domains": [
+    "클라우드·인프라"
+   ],
+   "method": "투자"
+  },
   {
    "id": "f28f90d289",
    "src": "openai",
