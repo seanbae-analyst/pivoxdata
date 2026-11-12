@@ -1,0 +1,43 @@
+{
+ "date": "2026-11-12",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-12/",
+ "caption": "AI 도구에 돈을 내는 미국 기업이 56.8%예요. 1년 전 43.5%에서 +13.3%p 늘었어요(Ramp AI Index, 미국 기업 결제 기록 기준).\n가장 빨리 바뀐 업종은 제조로, +19.6%p 늘었어요.\n회사 규모별로는 대기업이 66.7%로 가장 높고, 1년 새 증가 폭은 중견기업(+15.8%p)이 가장 커요.\nAnthropic에 돈을 내는 기업은 16.6%에서 44.8%로 늘었고, OpenAI는 40.6%로 1년 전과 같아요.\n같은 달 공식 AX 발표는 AI 에이전트 영역이 61건으로 가장 많았어요.\n도입 전 무료·개인 사용 파악, 공급사 교체 가능성, 비용 관리, 보안 기준을 점검해 보세요.\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-12\n출처: Ramp AI Index (Ramp Economics Lab) · FRED, 세인트루이스 연방준비은행 — 미국 기업 결제 데이터\n\n#AX #AI전환 #기업AI #IT컨설팅 #디지털전환 #인공지능 #AI트렌드",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "monthly",
+  "format_name": "월간 AX 리포트",
+  "source": "claude",
+  "slides": 10
+ },
+ "caption_note": null,
+ "mode": "event",
+ "event": {
+  "key": "ax:month:2026-10",
+  "kind": "AX 월간",
+  "headline": "AI 도구에 돈을 내는 미국 기업, 1년 새 +13.3%p"
+ },
+ "insights": [
+  "ax-all",
+  "ax-vendor",
+  "ax-industry",
+  "ax-industry-up",
+  "ax-size"
+ ],
+ "checked": {
+  "numbers_allowed": 105,
+  "problems": []
+ }
+}

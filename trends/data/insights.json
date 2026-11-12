@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-11",
+ "built_at": "2026-11-12",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -9,60 +9,60 @@
     {
      "id": "ax-all",
      "k": "AX · 기업 도입률",
-     "big": "55.9%",
-     "bl": "AI 도구에 돈을 내는 미국 기업 · 2026년 9월",
-     "title": "AI 도구에 돈을 내는 미국 기업, 1년 새 +12.1%p",
-     "easy": "미국 기업 100곳 중 56곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 44곳이었어요.",
-     "body": "지난달보다 +0.6%p, 1년 전보다 +12.1%p. Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
-     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
+     "big": "56.8%",
+     "bl": "AI 도구에 돈을 내는 미국 기업 · 2026년 10월",
+     "title": "AI 도구에 돈을 내는 미국 기업, 1년 새 +13.3%p",
+     "easy": "미국 기업 100곳 중 57곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 44곳이었어요.",
+     "body": "지난달보다 +1.0%p, 1년 전보다 +13.3%p. Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
+     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
      "viz": [
       {
        "kind": "series",
        "values": [
-        0.2725,
-        0.2816,
-        0.2941,
-        0.304,
-        0.3064,
-        0.3119,
-        0.308,
-        0.3116,
-        0.3137,
-        0.3183,
-        0.3206,
-        0.329,
-        0.3352,
-        0.3417,
-        0.345,
-        0.3556,
-        0.3666,
-        0.3749,
-        0.39,
-        0.403,
-        0.4118,
-        0.4254,
-        0.4349,
-        0.438,
-        0.4361,
-        0.4443,
-        0.445,
-        0.4552,
-        0.4774,
-        0.5015,
-        0.5198,
-        0.5324,
-        0.5398,
-        0.5484,
-        0.5524,
-        0.5586
+        0.281,
+        0.2935,
+        0.3031,
+        0.3056,
+        0.311,
+        0.3071,
+        0.3106,
+        0.313,
+        0.3177,
+        0.3199,
+        0.3284,
+        0.3345,
+        0.341,
+        0.3444,
+        0.3549,
+        0.3658,
+        0.3741,
+        0.3892,
+        0.4021,
+        0.4112,
+        0.4247,
+        0.4343,
+        0.4372,
+        0.4354,
+        0.4435,
+        0.4442,
+        0.4544,
+        0.4767,
+        0.5008,
+        0.5193,
+        0.5318,
+        0.5392,
+        0.5477,
+        0.5517,
+        0.5583,
+        0.568
        ]
       },
       {
        "kind": "versus",
-       "from": 0.43799999999999994,
-       "to": 0.5586,
-       "fromText": "43.8%",
-       "toText": "55.9%",
+       "from": 0.4354,
+       "to": 0.568,
+       "fromText": "43.5%",
+       "toText": "56.8%",
        "fromLabel": "1년 전",
        "toLabel": "지금"
       }
@@ -71,39 +71,39 @@
     {
      "id": "ax-vendor",
      "k": "AX · 기업이 고르는 AI",
-     "big": "43.8%",
+     "big": "44.8%",
      "bl": "Anthropic에 돈을 내는 미국 기업",
      "title": "기업이 가장 많이 돈을 내는 AI는 Anthropic",
-     "easy": "미국 기업 100곳 중 44곳이 Anthropic, 41곳이 OpenAI에 돈을 내요(둘 다 쓰는 회사도 있어요). 1년 전엔 Anthropic 16곳이었어요.",
-     "body": "Anthropic 43.8%(1년 전 16.0%) · OpenAI 40.6%(1년 전 41.0%) · xAI 4.1%(1년 전 2.0%). 개발자들이 내려받는 AI 회사 SDK(자바스크립트)에서도 1위는 Anthropic예요.",
-     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
+     "easy": "미국 기업 100곳 중 45곳이 Anthropic, 41곳이 OpenAI에 돈을 내요(둘 다 쓰는 회사도 있어요). 1년 전엔 Anthropic 17곳이었어요.",
+     "body": "Anthropic 44.8%(1년 전 16.6%) · OpenAI 40.6%(1년 전 40.6%) · xAI 6.3%(1년 전 2.0%). 개발자들이 내려받는 AI 회사 SDK(자바스크립트)에서도 1위는 Anthropic예요.",
+     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
          "name": "Anthropic",
-         "value": 43.77,
-         "label": "43.8%"
+         "value": 44.78,
+         "label": "44.8%"
         },
         {
          "name": "OpenAI",
-         "value": 40.63,
+         "value": 40.56,
          "label": "40.6%"
         },
         {
          "name": "xAI",
-         "value": 4.14,
-         "label": "4.1%"
+         "value": 6.27,
+         "label": "6.3%"
         }
        ]
       },
       {
        "kind": "versus",
-       "from": 0.1602,
-       "to": 0.43770000000000003,
-       "fromText": "16.0%",
-       "toText": "43.8%",
+       "from": 0.16570000000000001,
+       "to": 0.44780000000000003,
+       "fromText": "16.6%",
+       "toText": "44.8%",
        "fromLabel": "1년 전 Anthropic",
        "toLabel": "지금 Anthropic"
       }
@@ -112,30 +112,30 @@
     {
      "id": "ax-industry",
      "k": "AX · 업종별",
-     "big": "79.9%",
+     "big": "80.1%",
      "bl": "IT·기술 기업의 AI 도입률",
      "title": "업종별 AI 도입 1위는 IT·기술",
-     "easy": "IT·기술 기업은 100곳 중 80곳이 AI에 돈을 내요. 가장 낮은 곳(숙박·외식)은 100곳 중 33곳이에요.",
-     "body": "IT·기술 79.9% · 금융·보험 73.7% · 제조 60.9% · 소매 49.9% · 건설 43.2% · 의료·복지 42.5% · 숙박·외식 33.0%.",
-     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
+     "easy": "IT·기술 기업은 100곳 중 80곳이 AI에 돈을 내요. 가장 낮은 곳(숙박·외식)은 100곳 중 35곳이에요.",
+     "body": "IT·기술 80.1% · 금융·보험 74.3% · 제조 62.8% · 소매 49.9% · 건설 45.0% · 의료·복지 43.7% · 숙박·외식 35.0%.",
+     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
          "name": "IT·기술",
-         "value": 79.92,
-         "label": "79.9%"
+         "value": 80.11,
+         "label": "80.1%"
         },
         {
          "name": "금융·보험",
-         "value": 73.69,
-         "label": "73.7%"
+         "value": 74.26,
+         "label": "74.3%"
         },
         {
          "name": "제조",
-         "value": 60.87,
-         "label": "60.9%"
+         "value": 62.82,
+         "label": "62.8%"
         },
         {
          "name": "소매",
@@ -144,60 +144,60 @@
         },
         {
          "name": "건설",
-         "value": 43.16,
-         "label": "43.2%"
+         "value": 45.01,
+         "label": "45.0%"
         },
         {
          "name": "의료·복지",
-         "value": 42.54,
-         "label": "42.5%"
+         "value": 43.7,
+         "label": "43.7%"
         },
         {
          "name": "숙박·외식",
-         "value": 32.98,
-         "label": "33.0%"
+         "value": 34.96,
+         "label": "35.0%"
         }
        ]
       },
       {
        "kind": "series",
        "values": [
-        0.5145,
-        0.5342,
-        0.5444,
-        0.5554,
-        0.5625,
-        0.5769,
-        0.5789,
-        0.5824,
-        0.5851,
-        0.5976,
-        0.6005,
-        0.6105,
-        0.6186,
-        0.6277,
-        0.6272,
-        0.6368,
-        0.6473,
-        0.6654,
-        0.6668,
-        0.6771,
-        0.6886,
-        0.7013,
-        0.7057,
-        0.7135,
-        0.7143,
-        0.7175,
-        0.7146,
-        0.7308,
-        0.7518,
-        0.7667,
-        0.7815,
+        0.5332,
+        0.5436,
+        0.5544,
+        0.5624,
+        0.5757,
+        0.5776,
+        0.5808,
+        0.5837,
+        0.5962,
+        0.5993,
+        0.6094,
+        0.617,
+        0.6267,
+        0.6261,
+        0.6356,
+        0.6463,
+        0.6639,
+        0.6658,
+        0.6761,
+        0.6877,
+        0.701,
+        0.705,
+        0.713,
+        0.7131,
+        0.7165,
+        0.7136,
+        0.7299,
+        0.7512,
+        0.7661,
+        0.7811,
         0.7807,
-        0.787,
-        0.7966,
-        0.8005,
-        0.7992
+        0.7864,
+        0.7956,
+        0.8,
+        0.7995,
+        0.8011
        ]
       }
      ]
@@ -205,19 +205,19 @@
     {
      "id": "ax-industry-up",
      "k": "AX · 가장 빨리 바뀌는 업종",
-     "big": "+17.4%p",
+     "big": "+19.6%p",
      "bl": "제조 기업의 AI 도입률, 1년 새",
      "title": "1년 새 AI 도입이 가장 많이 늘어난 업종은 제조",
-     "easy": "제조 기업 중 AI에 돈을 내는 곳이 1년 전 100곳 중 43곳에서 지금 61곳으로 늘었어요.",
-     "body": "1년 새 늘어난 폭: 제조 +17.4%p · 금융·보험 +15.5%p · 소매 +15.4%p · 건설 +13.6%p · 의료·복지 +12.3%p · 숙박·외식 +10.2%p · IT·기술 +8.6%p.",
-     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
+     "easy": "제조 기업 중 AI에 돈을 내는 곳이 1년 전 100곳 중 43곳에서 지금 63곳으로 늘었어요.",
+     "body": "1년 새 늘어난 폭: 제조 +19.6%p · 건설 +15.8%p · 금융·보험 +15.8%p · 소매 +15.1%p · 의료·복지 +14.1%p · 숙박·외식 +11.5%p · IT·기술 +8.8%p.",
+     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
      "viz": [
       {
        "kind": "versus",
-       "from": 0.43479999999999996,
-       "to": 0.6087,
-       "fromText": "43.5%",
-       "toText": "60.9%",
+       "from": 0.4321,
+       "to": 0.6282,
+       "fromText": "43.2%",
+       "toText": "62.8%",
        "fromLabel": "1년 전",
        "toLabel": "지금"
       },
@@ -226,38 +226,38 @@
        "items": [
         {
          "name": "제조",
-         "value": 17.39,
-         "label": "+17.4%p"
-        },
-        {
-         "name": "금융·보험",
-         "value": 15.55,
-         "label": "+15.5%p"
-        },
-        {
-         "name": "소매",
-         "value": 15.4,
-         "label": "+15.4%p"
+         "value": 19.61,
+         "label": "+19.6%p"
         },
         {
          "name": "건설",
-         "value": 13.58,
-         "label": "+13.6%p"
+         "value": 15.82,
+         "label": "+15.8%p"
+        },
+        {
+         "name": "금융·보험",
+         "value": 15.8,
+         "label": "+15.8%p"
+        },
+        {
+         "name": "소매",
+         "value": 15.06,
+         "label": "+15.1%p"
         },
         {
          "name": "의료·복지",
-         "value": 12.26,
-         "label": "+12.3%p"
+         "value": 14.05,
+         "label": "+14.1%p"
         },
         {
          "name": "숙박·외식",
-         "value": 10.17,
-         "label": "+10.2%p"
+         "value": 11.5,
+         "label": "+11.5%p"
         },
         {
          "name": "IT·기술",
-         "value": 8.57,
-         "label": "+8.6%p"
+         "value": 8.8,
+         "label": "+8.8%p"
         }
        ]
       }
@@ -266,39 +266,39 @@
     {
      "id": "ax-size",
      "k": "AX · 회사 규모별",
-     "big": "65.7%",
+     "big": "66.7%",
      "bl": "대기업의 AI 도입률",
      "title": "회사가 클수록 AI를 더 많이 써요",
-     "easy": "회사가 클수록 AI를 더 많이 써요. 1년 새 가장 많이 늘어난 쪽은 중견기업, +14.8%p.",
-     "body": "대기업 65.7%(1년 전 51.7%) · 중견기업 62.5%(1년 전 47.7%) · 중소기업 50.0%(1년 전 38.6%). Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
-     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 9월",
+     "easy": "회사가 클수록 AI를 더 많이 써요. 1년 새 가장 많이 늘어난 쪽은 중견기업, +15.8%p.",
+     "body": "대기업 66.7%(1년 전 51.8%) · 중견기업 63.2%(1년 전 47.4%) · 중소기업 51.2%(1년 전 38.3%). Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
+     "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
          "name": "대기업",
-         "value": 65.72,
-         "label": "65.7%"
+         "value": 66.71,
+         "label": "66.7%"
         },
         {
          "name": "중견기업",
-         "value": 62.5,
-         "label": "62.5%"
+         "value": 63.21,
+         "label": "63.2%"
         },
         {
          "name": "중소기업",
-         "value": 50.03,
-         "label": "50.0%"
+         "value": 51.23,
+         "label": "51.2%"
         }
        ]
       },
       {
        "kind": "versus",
-       "from": 0.4767,
-       "to": 0.625,
-       "fromText": "47.7%",
-       "toText": "62.5%",
+       "from": 0.47369999999999995,
+       "to": 0.6321,
+       "fromText": "47.4%",
+       "toText": "63.2%",
        "fromLabel": "1년 전 중견기업",
        "toLabel": "지금 중견기업"
       }
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "127건",
+     "big": "129건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 58건 · 클라우드·인프라 36건 · 보안·규제 27건 · 업무 도구 18건 · CRM·고객 13건 · 데이터·분석 13건 · ERP·백오피스 10건",
+     "body": "AI 에이전트 61건 · 클라우드·인프라 35건 · 보안·규제 27건 · 업무 도구 20건 · CRM·고객 13건 · 데이터·분석 12건 · ERP·백오피스 7건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 58,
-         "label": "58건"
+         "value": 61,
+         "label": "61건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 36,
-         "label": "36건"
+         "value": 35,
+         "label": "35건"
         },
         {
          "name": "보안·규제",
@@ -340,8 +340,8 @@
         },
         {
          "name": "업무 도구",
-         "value": 18,
-         "label": "18건"
+         "value": 20,
+         "label": "20건"
         },
         {
          "name": "CRM·고객",
@@ -355,25 +355,25 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "58건",
+     "big": "61건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
-     "title": "AI 에이전트, SAP 발표가 가장 많아요",
+     "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SAP 11/11 — ABAP Platform Becoming an Enterprise-Grade Execution Backbone for Agentic AI · McKinsey 11/10 — Reinventing business planning with agentic AI · Google Cloud 11/10 — Google Cloud launches Gemini for healthcare.",
+     "body": "최근: Amazon 11/11 — How we built the agents that built AWS Emulator · Databricks 11/11 — The new Genie: autonomous AI for complex enterprise work · Salesforce 11/11 — Salesforce Releases R&D Agents That Improve Its AI Models",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "SAP",
+         "name": "McKinsey",
          "value": 10,
          "label": "10건"
         },
         {
-         "name": "McKinsey",
-         "value": 10,
-         "label": "10건"
+         "name": "SAP",
+         "value": 9,
+         "label": "9건"
         },
         {
          "name": "NVIDIA",
@@ -386,7 +386,7 @@
          "label": "7건"
         },
         {
-         "name": "OpenAI",
+         "name": "Salesforce",
          "value": 6,
          "label": "6건"
         }
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "36건",
+     "big": "35건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -414,8 +414,8 @@
         },
         {
          "name": "SAP",
-         "value": 5,
-         "label": "5건"
+         "value": 4,
+         "label": "4건"
         },
         {
          "name": "Snowflake",
@@ -443,7 +443,7 @@
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Salesforce 11/10 — Missionforce National Security Achieves ‘Awardable’ Status for Department of War Recruiting Capabilities in the CDAO’s Tradewinds Solutions Marketplace · NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA",
+     "body": "최근: 과학기술정보통신부 11/12 — 인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범 · Salesforce 11/10 — Missionforce National Security Achieves ‘Awardable’ Status for Department of War Recruiting Capabilities in the CDAO’s Tradewinds Solutions Marketplace · NVIDIA 11/9 — From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -460,17 +460,17 @@
          "label": "4건"
         },
         {
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
+        },
+        {
          "name": "Snowflake",
          "value": 3,
          "label": "3건"
         },
         {
          "name": "McKinsey",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "과학기술정보통신부",
          "value": 3,
          "label": "3건"
         }
@@ -481,11 +481,11 @@
     {
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
-     "big": "18건",
+     "big": "20건",
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SK텔레콤 11/10 — AI 활용을 넘어, 조직의 미래를 이끄는 AX Catalyst · Google Cloud 11/10 — We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps. · NVIDIA 11/9 — Korea’s AI Ecosystem Advances and Secures Agentic AI With NVIDIA",
+     "body": "최근: Databricks 11/11 — The new Genie: autonomous AI for complex enterprise work · Databricks 11/11 — Bring your business context to ChatGPT, Claude, Microsoft Copilot Cowork and Grok Bot · SK텔레콤 11/10 — AI 활용을 넘어, 조직의 미래를 이끄는 AX Catalyst",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -495,6 +495,11 @@
          "name": "OpenAI",
          "value": 7,
          "label": "7건"
+        },
+        {
+         "name": "Databricks",
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "SAP",
@@ -510,11 +515,6 @@
          "name": "McKinsey",
          "value": 2,
          "label": "2건"
-        },
-        {
-         "name": "SK텔레콤",
-         "value": 1,
-         "label": "1건"
         }
        ]
       }
@@ -565,7 +565,7 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "13건",
+     "big": "12건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Snowflake 발표가 가장 많아요",
      "easy": "",
@@ -586,17 +586,17 @@
          "label": "2건"
         },
         {
-         "name": "과학기술정보통신부",
-         "value": 2,
-         "label": "2건"
-        },
-        {
          "name": "Databricks",
          "value": 1,
          "label": "1건"
         },
         {
          "name": "NVIDIA",
+         "value": 1,
+         "label": "1건"
+        },
+        {
+         "name": "McKinsey",
          "value": 1,
          "label": "1건"
         }
@@ -607,7 +607,7 @@
     {
      "id": "dom-erp",
      "k": "IT 영역 · ERP·백오피스",
-     "big": "10건",
+     "big": "7건",
      "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
      "title": "ERP·백오피스, SAP 발표가 가장 많아요",
      "easy": "",
@@ -619,13 +619,13 @@
        "items": [
         {
          "name": "SAP",
-         "value": 4,
-         "label": "4건"
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "McKinsey",
-         "value": 3,
-         "label": "3건"
+         "value": 2,
+         "label": "2건"
         },
         {
          "name": "OpenAI",
@@ -634,11 +634,6 @@
         },
         {
          "name": "과학기술정보통신부",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "Capgemini",
          "value": 1,
          "label": "1건"
         }
@@ -650,6 +645,77 @@
   }
  ],
  "events": [
+  {
+   "key": "ax:month:2026-10",
+   "subject": "ax:month:2026-10",
+   "kind": "AX 월간",
+   "tier": "big",
+   "score": 110,
+   "topic": "ax",
+   "headline": "AI 도구에 돈을 내는 미국 기업, 1년 새 +13.3%p",
+   "card": {
+    "id": "ax-all",
+    "k": "빅 케이스 · AX 월간 · 2026년 10월",
+    "big": "56.8%",
+    "bl": "AI 도구에 돈을 내는 미국 기업 · 2026년 10월",
+    "title": "AI 도구에 돈을 내는 미국 기업, 1년 새 +13.3%p",
+    "easy": "미국 기업 100곳 중 57곳이 AI 도구를 유료로 쓰고 있어요. 1년 전엔 44곳이었어요.",
+    "body": "지난달보다 +1.0%p, 1년 전보다 +13.3%p. Ramp 고객사의 법인카드·송금 기록이라 무료 도구나 개인 결제는 빠져 있어요.",
+    "src": "Ramp AI Index (FRED) · 미국 기업 7만여 곳의 결제 기록 · 2023년 1월–2026년 10월",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       0.281,
+       0.2935,
+       0.3031,
+       0.3056,
+       0.311,
+       0.3071,
+       0.3106,
+       0.313,
+       0.3177,
+       0.3199,
+       0.3284,
+       0.3345,
+       0.341,
+       0.3444,
+       0.3549,
+       0.3658,
+       0.3741,
+       0.3892,
+       0.4021,
+       0.4112,
+       0.4247,
+       0.4343,
+       0.4372,
+       0.4354,
+       0.4435,
+       0.4442,
+       0.4544,
+       0.4767,
+       0.5008,
+       0.5193,
+       0.5318,
+       0.5392,
+       0.5477,
+       0.5517,
+       0.5583,
+       0.568
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 0.4354,
+      "to": 0.568,
+      "fromText": "43.5%",
+      "toText": "56.8%",
+      "fromLabel": "1년 전",
+      "toLabel": "지금"
+     }
+    ]
+   }
+  },
   {
    "key": "flip:race:vector:qdrant-client:2026-11-02",
    "subject": "race:vector",
@@ -1315,57 +1381,6 @@
    }
   },
   {
-   "key": "hf:xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-   "subject": "hf:xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-   "kind": "새 1위",
-   "tier": "big",
-   "score": 45,
-   "topic": "ai",
-   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: xtools‑at/​DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic",
-   "card": {
-    "id": "ev-hf-trending",
-    "k": "빅 케이스 · 오픈 모델",
-    "big": "♥ 1,374",
-    "bl": "좋아요",
-    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: xtools‑at/​DeepSeek‑V4‑Pro‑Qwen3.5‑9B‑UNCENSORED‑heretic",
-    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
-    "body": "text‑generation · 2026-10-30 공개. 직전 1위는 speridlabs/​idol.",
-    "src": "Hugging Face 트렌딩 · 2026-11-11",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 1020,
-        "label": "1.7만"
-       },
-       {
-        "name": "idol",
-        "value": 950,
-        "label": "2.8만"
-       },
-       {
-        "name": "Kimi-K3.1-Pro",
-        "value": 627.5,
-        "label": "3.4만"
-       },
-       {
-        "name": "MiniMax-H3-Image",
-        "value": 598,
-        "label": "14만"
-       },
-       {
-        "name": "Ripple-65B-Preview",
-        "value": 476,
-        "label": "7,112"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
    "key": "surge:PyPI:smolagents:2026-11-02",
    "subject": "pkg:smolagents",
    "kind": "증가",
@@ -1483,50 +1498,50 @@
    }
   },
   {
-   "key": "hftr:MiniMaxAI/MiniMax-H3-Image:2026-11-11",
-   "subject": "hf:MiniMaxAI/MiniMax-H3-Image",
+   "key": "hftr:NousResearch/Arete-27B+Lightricks/LTX-2.5:2026-11-12",
+   "subject": "hf:NousResearch/Arete-27B",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 12,
+   "score": 14,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: MiniMaxAI/​MiniMax‑H3‑Image",
+   "headline": "트렌딩 상위 5에 새로: NousResearch/​Arete‑27B",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
     "big": "4위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: MiniMaxAI/​MiniMax‑H3‑Image",
+    "title": "트렌딩 상위 5에 새로: NousResearch/​Arete‑27B",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "text‑to‑image · 2026-11-03 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-11",
+    "body": "text‑generation · 2026-11-06 공개. 함께 들어온 모델: Lightricks/​LTX‑2.5.",
+    "src": "Hugging Face 트렌딩 · 2026-11-12",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 1020,
+        "value": 2876,
         "label": "1.7만"
        },
        {
-        "name": "idol",
-        "value": 950,
-        "label": "2.8만"
-       },
-       {
-        "name": "Kimi-K3.1-Pro",
-        "value": 627.5,
-        "label": "3.4만"
-       },
-       {
         "name": "MiniMax-H3-Image",
-        "value": 598,
+        "value": 751,
         "label": "14만"
        },
        {
-        "name": "Ripple-65B-Preview",
-        "value": 476,
-        "label": "7,112"
+        "name": "idol",
+        "value": 484,
+        "label": "2.8만"
+       },
+       {
+        "name": "Arete-27B",
+        "value": 424,
+        "label": "4,023"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 415,
+        "label": "285만"
        }
       ]
      }
@@ -1538,72 +1553,72 @@
   {
    "group": "ax",
    "id": "ax-RAMPAIALL",
-   "text": "AI 도구에 돈을 내는 미국 기업 비율(전체): 2026년 9월 55.9% · 지난달 55.2% · 1년 전(2025년 9월) 43.8% · 1년 새 +12.1%p · 처음 잰 2023년 1월 7.5%"
+   "text": "AI 도구에 돈을 내는 미국 기업 비율(전체): 2026년 10월 56.8% · 지난달 55.8% · 1년 전(2025년 10월) 43.5% · 1년 새 +13.3%p · 처음 잰 2023년 1월 7.5%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIANTHROPIC",
-   "text": "미국 기업 중 Anthropic에 돈을 내는 비율: 2026년 9월 43.8% · 지난달 43.5% · 1년 전(2025년 9월) 16.0% · 1년 새 +27.8%p · 처음 잰 2023년 1월 0.2%"
+   "text": "미국 기업 중 Anthropic에 돈을 내는 비율: 2026년 10월 44.8% · 지난달 43.7% · 1년 전(2025년 10월) 16.6% · 1년 새 +28.2%p · 처음 잰 2023년 1월 0.2%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIOPENAI",
-   "text": "미국 기업 중 OpenAI에 돈을 내는 비율: 2026년 9월 40.6% · 지난달 39.5% · 1년 전(2025년 9월) 41.0% · 1년 새 −0.4%p · 처음 잰 2023년 1월 2.1%"
+   "text": "미국 기업 중 OpenAI에 돈을 내는 비율: 2026년 10월 40.6% · 지난달 40.6% · 1년 전(2025년 10월) 40.6% · 1년 새 −0.0%p · 처음 잰 2023년 1월 2.1%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIXAI",
-   "text": "미국 기업 중 xAI에 돈을 내는 비율: 2026년 9월 4.1% · 지난달 3.5% · 1년 전(2025년 9월) 2.0% · 1년 새 +2.1%p · 처음 잰 2023년 1월 0.8%"
+   "text": "미국 기업 중 xAI에 돈을 내는 비율: 2026년 10월 6.3% · 지난달 4.1% · 1년 전(2025년 10월) 2.0% · 1년 새 +4.3%p · 처음 잰 2023년 1월 0.8%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIENTERPRISE",
-   "text": "대기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 65.7% · 지난달 65.2% · 1년 전(2025년 9월) 51.7% · 1년 새 +14.0%p · 처음 잰 2023년 1월 7.3%"
+   "text": "대기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 66.7% · 지난달 65.6% · 1년 전(2025년 10월) 51.8% · 1년 새 +14.9%p · 처음 잰 2023년 1월 7.3%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIMIDMARKET",
-   "text": "중견기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 62.5% · 지난달 61.4% · 1년 전(2025년 9월) 47.7% · 1년 새 +14.8%p · 처음 잰 2023년 1월 13.4%"
+   "text": "중견기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 63.2% · 지난달 62.5% · 1년 전(2025년 10월) 47.4% · 1년 새 +15.8%p · 처음 잰 2023년 1월 13.4%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAISMB",
-   "text": "중소기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 50.0% · 지난달 49.5% · 1년 전(2025년 9월) 38.6% · 1년 새 +11.5%p · 처음 잰 2023년 1월 7.7%"
+   "text": "중소기업 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 51.2% · 지난달 50.0% · 1년 전(2025년 10월) 38.3% · 1년 새 +13.0%p · 처음 잰 2023년 1월 7.7%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAITECH",
-   "text": "IT·기술 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 79.9% · 지난달 80.0% · 1년 전(2025년 9월) 71.3% · 1년 새 +8.6%p · 처음 잰 2023년 1월 15.4%"
+   "text": "IT·기술 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 80.1% · 지난달 80.0% · 1년 전(2025년 10월) 71.3% · 1년 새 +8.8%p · 처음 잰 2023년 1월 15.4%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIFINANCE",
-   "text": "금융·보험 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 73.7% · 지난달 73.1% · 1년 전(2025년 9월) 58.1% · 1년 새 +15.5%p · 처음 잰 2023년 1월 8.7%"
+   "text": "금융·보험 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 74.3% · 지난달 73.9% · 1년 전(2025년 10월) 58.5% · 1년 새 +15.8%p · 처음 잰 2023년 1월 8.7%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIMANUFACTURING",
-   "text": "제조 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 60.9% · 지난달 60.3% · 1년 전(2025년 9월) 43.5% · 1년 새 +17.4%p · 처음 잰 2023년 1월 4.3%"
+   "text": "제조 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 62.8% · 지난달 60.9% · 1년 전(2025년 10월) 43.2% · 1년 새 +19.6%p · 처음 잰 2023년 1월 4.3%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIRETAIL",
-   "text": "소매 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 49.9% · 지난달 48.3% · 1년 전(2025년 9월) 34.5% · 1년 새 +15.4%p · 처음 잰 2023년 1월 5.3%"
+   "text": "소매 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 49.9% · 지난달 49.9% · 1년 전(2025년 10월) 34.8% · 1년 새 +15.1%p · 처음 잰 2023년 1월 5.3%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAICONSTRUCTION",
-   "text": "건설 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 43.2% · 지난달 41.2% · 1년 전(2025년 9월) 29.6% · 1년 새 +13.6%p · 처음 잰 2023년 1월 1.3%"
+   "text": "건설 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 45.0% · 지난달 43.1% · 1년 전(2025년 10월) 29.2% · 1년 새 +15.8%p · 처음 잰 2023년 1월 1.3%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIHEALTHCARE",
-   "text": "의료·복지 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 42.5% · 지난달 42.3% · 1년 전(2025년 9월) 30.3% · 1년 새 +12.3%p · 처음 잰 2023년 1월 3.9%"
+   "text": "의료·복지 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 43.7% · 지난달 42.5% · 1년 전(2025년 10월) 29.6% · 1년 새 +14.1%p · 처음 잰 2023년 1월 3.9%"
   },
   {
    "group": "ax",
    "id": "ax-RAMPAIHOSPITALITY",
-   "text": "숙박·외식 기업 중 AI 도구에 돈을 내는 비율: 2026년 9월 33.0% · 지난달 32.6% · 1년 전(2025년 9월) 22.8% · 1년 새 +10.2%p · 처음 잰 2023년 1월 1.7%"
+   "text": "숙박·외식 기업 중 AI 도구에 돈을 내는 비율: 2026년 10월 35.0% · 지난달 33.0% · 1년 전(2025년 10월) 23.5% · 1년 새 +11.5%p · 처음 잰 2023년 1월 1.7%"
   },
   {
    "group": "ax",
@@ -1613,22 +1628,22 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 58건 · 발표가 많은 곳: SAP 10건, McKinsey 10건, NVIDIA 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 61건 · 발표가 많은 곳: McKinsey 10건, SAP 9건, NVIDIA 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 36건 · 발표가 많은 곳: NVIDIA 10건, SAP 5건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 10건, SAP 4건, Snowflake 4건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 27건 · 발표가 많은 곳: OpenAI 4건, Anthropic 4건, Snowflake 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 27건 · 발표가 많은 곳: OpenAI 4건, Anthropic 4건, 과학기술정보통신부 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 18건 · 발표가 많은 곳: OpenAI 7건, SAP 2건, Salesforce 2건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 20건 · 발표가 많은 곳: OpenAI 7건, Databricks 3건, SAP 2건"
   },
   {
    "group": "domain",
@@ -1638,12 +1653,12 @@
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, 과학기술정보통신부 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Snowflake 6건, SAP 2건, Databricks 1건"
   },
   {
    "group": "domain",
    "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 10건 · 발표가 많은 곳: SAP 4건, McKinsey 3건, OpenAI 1건"
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 7건 · 발표가 많은 곳: SAP 3건, McKinsey 2건, OpenAI 1건"
   }
  ],
  "news": [
@@ -1704,6 +1719,21 @@
    "method": "정책·규제"
   },
   {
+   "id": "e814c25ebe",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-12",
+   "title": "인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+   "summary": "- 과기정통부‧인공지능 안전연구소, 대학생‧직장인 등 “인공지능 안전 지킴이” 80명 위촉 - - 사실왜곡, 편향, 보안 취약점, 결함 등 4대 분야 오류사례 상시 제보 체계 구축 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956",
+   "score": 4,
+   "domains": [
+    "보안·규제"
+   ],
+   "method": "연구·보고서"
+  },
+  {
    "id": "172b003326",
    "src": "msit",
    "source": "과학기술정보통신부",
@@ -1745,17 +1775,19 @@
    "method": "파트너십"
   },
   {
-   "id": "264e131f2b",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-10-29",
-   "title": "제5차 한-캐나다 과학기술혁신공동위원회 개최",
-   "summary": "- 인공지능·양자·생명공학(바이오) 등 핵심신흥기술 및 연구안보 협력 논의 - - 양국 연구지원기관(한한국연구재단 – 캐국가연구위원회) 간 업무협약 체결 - - 혁신과학경제개발부 차관 면담을 통해 협력 확대 모색 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187903",
-   "score": 4,
-   "domains": [],
-   "method": "파트너십"
+   "id": "ac911e6647",
+   "src": "salesforce",
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-11-11",
+   "title": "Salesforce Releases R&D Agents That Improve Its AI Models",
+   "summary": "SFR-AutoR&D, a new self-improving system from Salesforce, trains and improves the embedding models in deployment-grade enterprise AI.",
+   "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/",
+   "score": 3,
+   "domains": [
+    "AI 에이전트"
+   ],
+   "method": null
   },
   {
    "id": "01a8528fa1",
@@ -2079,51 +2111,6 @@
    "method": "투자"
   },
   {
-   "id": "29483938dd",
-   "src": "salesforce",
-   "source": "Salesforce",
-   "kind": "company",
-   "date": "2026-10-29",
-   "title": "Salesforce Signs Definitive Agreement to Acquire Rune Technologies",
-   "summary": "Salesforce, the #1 AI CRM, today announced it has signed a definitive agreement to acquire Rune Technologies, a leading edge-native technology provider building solutions to enable critical logistics and sustainment operations for the U.S. military and allied nations. Rune Technologies’s technology helps frontline teams forecast supply needs, optimize resources, and make mission-critical decisions – including […]",
-   "link": "https://www.salesforce.com/news/stories/salesforce-signs-definitive-agreement-to-acquire-rune-technologies/",
-   "score": 3,
-   "domains": [
-    "CRM·고객"
-   ],
-   "method": "인수"
-  },
-  {
-   "id": "465d649971",
-   "src": "mckinsey",
-   "source": "McKinsey",
-   "kind": "research",
-   "date": "2026-10-29",
-   "title": "Banking on AI: How a new operating model can transform distressed credit management",
-   "summary": "Banks increasingly deploy AI in distressed credit management. But few have adjusted their operating models to deliver distinctive customer experiences and optimize financial outcomes and recovery costs.",
-   "link": "https://www.mckinsey.com/capabilities/risk-and-resilience/our-insights/banking-on-ai-how-a-new-operating-model-can-transform-distressed-credit-management",
-   "score": 3,
-   "domains": [],
-   "method": "연구·보고서"
-  },
-  {
-   "id": "4e9e7ebd16",
-   "src": "sap",
-   "source": "SAP",
-   "kind": "company",
-   "date": "2026-10-29",
-   "title": "Advancing SAP Lakehouse and New Data Fabric Innovations in SAP Business Data Cloud for the Autonomous Enterprise",
-   "summary": "Enterprises can build AI agents act with greater autonomy and confidence.",
-   "link": "https://news.sap.com/2026/10/sap-lakehouse-new-data-fabric-innovations-sap-bdc-autonomous-enterprise/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라",
-    "데이터·분석",
-    "AI 에이전트"
-   ],
-   "method": null
-  },
-  {
    "id": "2144e0b4a0",
    "src": "sap",
    "source": "SAP",
@@ -2153,6 +2140,19 @@
     "업무 도구"
    ],
    "method": "연구·보고서"
+  },
+  {
+   "id": "a81fbf52b5",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-11",
+   "title": "인공지능 시대의 사회적 쟁점, 국민과 함께 해법 찾는다",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187950",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "5a558ec413",
@@ -2186,8 +2186,8 @@
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-10",
-   "title": "세계적 인공지능바이오 강국 도약을 위한 소버린 바이오 전략 모색",
-   "summary": "- 7대 SEED, K-문샷 등 미래 바이오 전략 논의 - - 과학기술정보통신부, 11월 11일(수) 「2026 바이오 미래 포럼」 개최 -",
+   "title": "세계적 인공지능 생명공학 강국 도약을 위한 소버린 바이오 전략 모색",
+   "summary": "- 7대 미래 전략기술, K-문샷 등 미래 생명공학 전략 논의 - - 과학기술정보통신부, 11월 11일(수) 「2026 생명공학 미래 토론회」 개최 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187946",
    "score": 1,
    "domains": [],
@@ -2404,19 +2404,6 @@
    "score": 1,
    "domains": [],
    "method": "인프라 확장"
-  },
-  {
-   "id": "ad261a0253",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-10-29",
-   "title": "과기정통부, 국내 물리적 인공지능 산업 육성 가속화를 위한 전문가 소통 추진",
-   "summary": "- 물리적 인공지능 실증, 데이터 생산 등 물리적 인공지능I 신규사업 추진 방향 논의 - - 국내 물리적 인공지능I 생태계의 전방위적 육성을 위한 전문가 의견 수렴 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187900",
-   "score": 1,
-   "domains": [],
-   "method": "시범 도입"
   }
  ]
 }
