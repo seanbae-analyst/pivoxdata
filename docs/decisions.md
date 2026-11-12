@@ -500,3 +500,20 @@
   641~780px에서 위 막대가 12px 넘침 → 그 폭에서 막대 간격 16→8px. 테스트의 `input[name="q"]`가 둘(위 막대 + 목록)이 돼 목록 칸(`.f-q`)으로 좁힘.
 - 확인: 폰(SE · 13) · 데스크톱에서 열기 · 커서 · 넘침 없음 · Esc · 검색 → `/briefs?q=에이전트` 결과 · 다시 열면 검색어 · 바깥 누르면 닫힘 · 로그인 화면에도 · 스크립트 오류 0
   (27개, 세 번 연속). 641 · 700 · 781 · 900 · 1024 · 1199 · 1200px에서 6개 페이지 넘침 없음. `node tests/research.mjs` 67 통과.
+
+### 48. 2026-11-12 깨진 초안의 재시도가 요청 종류를 잃던 것 · 카드용 브라우저 설치
+- 소유자: "Pivoxdata 업데이트 된거냐" → 11-11 밤 새 인스타 초안이 없던 이유를 Actions 로그로 찾음 → "ㄱㄱ"(고쳐서 PR).
+- 잰 것(`gh run view --log`):
+  - 13:50 UTC 실행(버튼 "이번 주 AX 사건", `POST_KIND=news`): 글(17장)은 써졌는데 `render.mjs`가
+    `Executable doesn't exist … chromium-1140` 로 죽음. 그 앞 `npx playwright install --with-deps chromium`이 apt 단계에서
+    `Temporary failure resolving 'azure.archive.ubuntu.com'`(우분투 미러 DNS)로 실패 → 브라우저를 받기 전에 멈췄고, `continue-on-error`라 그대로 지나감.
+  - 14:27 UTC 예비 예약: `social/retry.json`을 보고 다시 돌았지만 요청 종류가 없어 `plan.mjs`가 그날 반려된 정책 초안을 보고
+    `already drafted today (policy:2026-11-11)` → 건너뛰고 retry.json만 지움. 요청한 AX 사건 초안이 사라짐.
+- 바꾼 것(`.github/workflows/trends.yml`):
+  - `Draft status`의 `retry()`가 `{"date", "why", "post"}` — `post`는 그 실행의 요청 종류(글자만). `Posting request`는 같은 날짜의
+    retry.json이 있으면 그 종류로 시작하고, request.json · 버튼이 있으면 그쪽이 이긴다. 옛 형식(`post` 없음) · 지난 날짜는 빈 종류(전과 같음).
+  - `Browser for the cards`: `--with-deps`가 실패하면 경고를 남기고 `npx playwright install chromium`(브라우저만, apt 없이)으로 한 번 더.
+    러너 이미지에 크롬 라이브러리가 없으면 여전히 렌더가 실패하고 재시도로 넘어간다 — 그 경우는 확인 불가(재현 못 함).
+- 확인: `actionlint` 통과. 셸 조각을 그대로 떼어 — 실패 실행(news) → retry.json `post: news` · 올바른 JSON, 예비 예약 → `news`,
+  request.json `policy` → `policy`, 버튼 테스트 → `test`, 지난 날짜 · 옛 형식 → 빈 종류, 이상한 글자는 글자만 남음(plan이 알 수 없는 요청으로 거절).
+  설치 폴백은 가짜 `npx`(--with-deps만 실패)로 브라우저만 설치 → 단계 성공. 실제 Actions에서는 다음 실패 때 확인.
