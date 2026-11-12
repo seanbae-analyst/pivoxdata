@@ -115,7 +115,7 @@ npm run dev                           # http://localhost:8099
 
 | 항목 | 값 | 잰 방법 |
 |---|---|---|
-| 자동 실행 | 매일 01:17 UTC (10:17 KST). GitHub 예약은 늦거나 빠지므로 03:47 · 06:17 UTC에 한 번씩 더 — 그날 데이터가 이미 main에 있으면 바로 멈춘다. 단 그날 초안이 깨졌으면(`social/retry.json`) 데이터를 다시 받지 않고 초안만 다시 만든다(2026-10-27) | `.github/workflows/trends.yml` cron · job `today` |
+| 자동 실행 | 매일 01:17 UTC (10:17 KST). GitHub 예약은 늦거나 빠지므로 03:47 · 06:17 UTC에 한 번씩 더 — 그날 데이터가 이미 main에 있으면 바로 멈춘다. 단 그날 초안이 깨졌으면(`social/retry.json`) 데이터를 다시 받지 않고 초안만 다시 만든다(2026-10-27) — 깨진 실행이 받은 요청 종류(news · policy · test)도 그대로(`retry.json` → `post`, 2026-11-12) | `.github/workflows/trends.yml` cron · job `today` |
 | 검산 | 43개 모두 통과 (npm이 모든 패키지를 0으로 낸 날은 집계 멈춤으로 봄) | `npm run trends:build` → `trends/data/checks.json` |
 | 공식 발표 출처 | 20개 피드, 120일 보관 | `trends/series.mjs` → `NEWS` |
 | 첫 AX 사건 게시 | instagram.com/p/De6FGlbHLJo · `/briefs/2026-10-25-2` | `social/out/2026-10-25-2/post.json` |

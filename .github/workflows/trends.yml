@@ -52,7 +52,7 @@ jobs:
   # posting request always go on). A day whose run failed its checks committed nothing, so the next schedule tries again.
   # A day whose data went in but whose draft broke on the way (failed, or dropped: its fallback failed the checks) left
   # social/retry.json with that date: the next schedule goes on and drafts again (2026-10-27 — with a post every day,
-  # one broken draft used to cost the whole day).
+  # one broken draft used to cost the whole day), the same kind the broken run was asked for (retry.json → post, 2026-11-12).
   today:
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -103,9 +103,18 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # needed only for the cards (render.mjs): if it fails, the draft fails and is undone — the data still goes in
-      - run: npx playwright install --with-deps chromium
+      # needed only for the cards (render.mjs): if it fails, the draft fails and is undone — the data still goes in.
+      # --with-deps first runs apt-get for the system libraries; when the runner's Ubuntu mirrors do not resolve
+      # (2026-11-11 13:50 UTC: "Temporary failure resolving 'azure.archive.ubuntu.com'") it stops before chromium is
+      # downloaded, and render.mjs found no browser. Then the browser alone is fetched (Playwright's own download, not
+      # apt). If the runner image lacks a library chromium needs, render.mjs still fails and the draft is retried.
+      - name: Browser for the cards
         continue-on-error: true
+        run: |
+          if ! npx playwright install --with-deps chromium; then
+            echo "::warning::playwright install --with-deps failed — installing the browser alone"
+            npx playwright install chromium
+          fi
 
       - name: Fetch, verify, build
         id: data
@@ -123,13 +132,17 @@ jobs:
             npm run trends 2>&1 | tee run.log
           fi
 
-      # the kind of post asked for: the Run workflow choice, or social/request.json (letters only — it is pushed text)
+      # the kind of post asked for: the Run workflow choice, or social/request.json (letters only — it is pushed text),
+      # or, on a backup run after a broken draft, the kind that run was asked for (social/retry.json → post, same day):
+      # 2026-11-11 a requested AX 사건 draft broke at the cards, and the backup run, asked for nothing, stopped at
+      # "already drafted today" (that day's rejected policy draft) — the requested post was lost.
       - name: Posting request
         id: req
         env:
           CHOICE: ${{ inputs.post }}
         run: |
           kind=""
+          if [ -f social/retry.json ]; then kind=$(node -p 'const r = require("./social/retry.json"); r.date === process.argv[1] ? String(r.post ?? "").replace(/[^a-z]/g, "") : ""' "$(date -u +%F)"); fi
           if [ -f social/request.json ]; then kind=$(node -p 'String(require("./social/request.json").post ?? "").replace(/[^a-z]/g, "")'); fi
           if [ "$CHOICE" = "이번 주 AX 사건 지금 올리기" ]; then kind=news; fi
           if [ "$CHOICE" = "이번 주 AI 정책 지금 올리기" ]; then kind=policy; fi
@@ -168,8 +181,9 @@ jobs:
         shell: bash
         env:
           OUTCOME: ${{ steps.social.outcome }}
+          POST_KIND: ${{ steps.req.outputs.kind }} # letters only (step "Posting request"), so safe inside the JSON
         run: |
-          retry() { printf '{"date": "%s", "why": "%s"}\n' "$(date -u +%F)" "$1" > social/retry.json; }
+          retry() { printf '{"date": "%s", "why": "%s", "post": "%s"}\n' "$(date -u +%F)" "$1" "$POST_KIND" > social/retry.json; }
           if [ "$OUTCOME" != "success" ]; then
             git checkout -- social/posted.json social/cards.html
             git clean -fdq -- social/out
