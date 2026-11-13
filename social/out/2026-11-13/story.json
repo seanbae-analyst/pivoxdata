@@ -1,0 +1,753 @@
+{
+ "date": "2026-11-13",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 5,
+ "original_numbers": [
+  "500"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "title": "칩에서 공급망까지,\n이번 주 AX",
+   "body": "정부는 AI 칩과 안전을,\n기업은 업무 시스템 속\nAI를 발표했어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    7
+   ],
+   "title": "정부는 인프라,\n기업은 업무",
+   "body": "영국 정부와 과기정통부는\n칩 투자·협력과 AI 안전을\n발표했어요.\n기업들은 공급망과 검색,\n협업 도구 속 AI를 내놨어요.\nIT 영역별로 나눠 읽어요.",
+   "src": "출처 · 영국 정부 · 과학기술정보통신부 · Salesforce 외 2곳 발표 6건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    7
+   ],
+   "title": "SAP가 그린\n공급망 AI",
+   "body": "SAP 공급망 관리 책임자는\n공급망 AI가 알리는 데서\n그치지 말고 실행까지\n도와야 한다고 썼어요.",
+   "src": "출처 · SAP 공식 발표 · 11/10",
+   "case": {
+    "who": "SAP (공급망 관리 책임자 기고)",
+    "what": "공급망 의사결정 AI 구상",
+    "where": "계획·생산·구매·물류 시스템",
+    "how": "발표에 없음",
+    "domain": "ERP·백오피스",
+    "method": "연구·보고서",
+    "check": "공급망 예외 상황에서 AI 제안을 사람이 승인하는 단계가 있나?",
+    "ref": 7
+   },
+   "kicker": "ERP·백오피스 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    7
+   ],
+   "title": "경보 다음 단계까지\nAI가 맡는다는 구상",
+   "body": "SAP는 공급 지연 때\n위험한 주문과 재고,\n대체 경로를 AI가 따지고\n사람이 고르는 예시를 들었어요.\nERP 범위가 알림에서\n판단 지원까지 넓어진다는\n뜻이에요.",
+   "src": "출처 · SAP 공식 발표 · 11/10",
+   "case": {
+    "who": "SAP (공급망 관리 책임자 기고)",
+    "what": "공급망 의사결정 AI 구상",
+    "where": "계획·생산·구매·물류 시스템",
+    "how": "발표에 없음",
+    "domain": "ERP·백오피스",
+    "method": "연구·보고서",
+    "check": "공급망 예외 상황에서 AI 제안을 사람이 승인하는 단계가 있나?",
+    "ref": 7
+   },
+   "kicker": "ERP·백오피스 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "title": "Salesforce,\n모델을 고치는 에이전트",
+   "body": "Salesforce는 연구 과정을\n스스로 돌리는 에이전트\nSFR-AutoR&D를 공개했어요.\nData Cloud 검색 모델을\n이 시스템이 개선했다고\n밝혔어요.",
+   "src": "출처 · Salesforce 공식 발표 · 11/11",
+   "case": {
+    "who": "Salesforce AI Research",
+    "what": "연구 에이전트 SFR-AutoR&D",
+    "where": "Data Cloud 검색용 임베딩 모델",
+    "how": "운영 모델 학습·개선에 적용",
+    "domain": "AI 에이전트",
+    "method": "자체 구축",
+    "check": "검색 품질을 잴 기준 데이터와 평가 지표가 우리에게 있나?",
+    "ref": 4
+   },
+   "kicker": "AI 에이전트 · 자체 구축"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "title": "검색 품질이\n에이전트 답을 정한다",
+   "body": "Salesforce는 개선 주기 한 번을\n약 80시간에 마쳤다고 했어요.\n에이전트 프로젝트에선\n검색 모델도 계속 손보는\n운영 대상으로 읽혀요.",
+   "src": "출처 · Salesforce 공식 발표 · 11/11",
+   "case": {
+    "who": "Salesforce AI Research",
+    "what": "연구 에이전트 SFR-AutoR&D",
+    "where": "Data Cloud 검색용 임베딩 모델",
+    "how": "운영 모델 학습·개선에 적용",
+    "domain": "AI 에이전트",
+    "method": "자체 구축",
+    "check": "검색 품질을 잴 기준 데이터와 평가 지표가 우리에게 있나?",
+    "ref": 4
+   },
+   "kicker": "AI 에이전트 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    6
+   ],
+   "title": "Google·Adobe\n협업 도구 연결",
+   "body": "Google은 Adobe MAX에서\nAdobe와 제휴를 넓힌다고\n발표했어요.\nDrive·Gmail에서\nAcrobat으로 바로 가는 길이\n생긴다고 밝혔어요.",
+   "src": "출처 · Google Cloud 공식 발표 · 11/10",
+   "case": {
+    "who": "Google, Adobe",
+    "what": "Acrobat 연동, Adobe 에이전트",
+    "where": "Drive·Gmail·Gemini Enterprise",
+    "how": "기존 협업 도구에 커넥터로 내장",
+    "domain": "업무 도구",
+    "method": "파트너십",
+    "check": "외부 에이전트가 사내 문서에 접근할 때 권한 범위를 누가 정하나?",
+    "ref": 6
+   },
+   "kicker": "업무 도구 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    6
+   ],
+   "title": "협업 도구 안에\n남의 에이전트가",
+   "body": "Gemini Enterprise에서\nAdobe의 업무 에이전트를\n쓸 수 있다고 해요.\n업무 도구 도입이\n여러 회사 에이전트를\n한곳에 모으는 일로\n바뀌는 셈이에요.",
+   "src": "출처 · Google Cloud 공식 발표 · 11/10",
+   "case": {
+    "who": "Google, Adobe",
+    "what": "Acrobat 연동, Adobe 에이전트",
+    "where": "Drive·Gmail·Gemini Enterprise",
+    "how": "기존 협업 도구에 커넥터로 내장",
+    "domain": "업무 도구",
+    "method": "파트너십",
+    "check": "외부 에이전트가 사내 문서에 접근할 때 권한 범위를 누가 정하나?",
+    "ref": 6
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "국산 NPU,\n엔비디아와 잇는다",
+   "body": "과기정통부는 엔비디아와\nSK텔레콤, 리벨리온이\n업무 협약을 맺었다고 밝혔어요.\n국산 NPU(신경망 처리 장치)와\n엔비디아 CPU 연계를 추진해요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/9",
+   "case": {
+    "who": "SK텔레콤, 리벨리온 (과기정통부 발표)",
+    "what": "국산 NPU와 엔비디아 CPU 연계",
+    "where": "AI 인프라용 칩 구성",
+    "how": "엔비디아 포함 3사 업무협약",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "AI 서버를 고를 때 칩 조합별 호환 조건을 따져 봤나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "AI 서버 칩\n선택지가 섞인다",
+   "body": "국산 칩과 엔비디아 칩을\n한 시스템에 묶는 구성을\n노린 협약이에요.\n인프라 프로젝트에선\n칩 조합별 호환과 운영 부담이\n따져 볼 항목이 돼요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/9",
+   "case": {
+    "who": "SK텔레콤, 리벨리온 (과기정통부 발표)",
+    "what": "국산 NPU와 엔비디아 CPU 연계",
+    "where": "AI 인프라용 칩 구성",
+    "how": "엔비디아 포함 3사 업무협약",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "AI 서버를 고를 때 칩 조합별 호환 조건을 따져 봤나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "영국 정부,\nAI 칩 기업에 투자",
+   "body": "영국 정부는 정부 펀드\nSovereign AI 등이\nAI 칩 기업 Fractile에\n투자했다고 밝혔어요.\n£500 million이 넘는\n라운드의 일부예요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/11",
+   "case": {
+    "who": "영국 정부 Sovereign AI 등",
+    "what": "AI 칩 기업 Fractile 투자",
+    "where": "AI 하드웨어(칩) 개발",
+    "how": "£500 million 넘는 Series C 참여",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "해외 칩·클라우드 의존을 줄여야 하는 업무가 우리에게 있나?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 투자"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "정부가 AI 칩을\n산업 정책으로",
+   "body": "영국 정부는 이번 투자가\n해외 기술 의존을 줄인다고\n설명했어요.\nAI 인프라 선택이\n비용만이 아니라\n공급망 위험의 문제라는\n신호로 읽혀요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/11",
+   "case": {
+    "who": "영국 정부 Sovereign AI 등",
+    "what": "AI 칩 기업 Fractile 투자",
+    "where": "AI 하드웨어(칩) 개발",
+    "how": "£500 million 넘는 Series C 참여",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "해외 칩·클라우드 의존을 줄여야 하는 업무가 우리에게 있나?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "과기정통부,\nAI 안전 지킴이 출범",
+   "body": "과기정통부와\n인공지능 안전연구소는\n대학생과 직장인 등 80명을\n안전 지킴이로 위촉했어요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/12",
+   "case": {
+    "who": "과기정통부, 인공지능 안전연구소",
+    "what": "국민 모니터링단 '인공지능 안전 지킴이'",
+    "where": "AI 오류 사례 제보",
+    "how": "80명 위촉, 상시 제보 체계",
+    "domain": "보안·규제",
+    "method": "정책·규제",
+    "check": "사내 AI의 잘못된 답변을 직원이 신고하는 경로가 있나?",
+    "ref": 2
+   },
+   "kicker": "보안·규제 · 정책·규제"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "AI 오류를\n사람이 상시 제보",
+   "body": "제보 분야는 사실 왜곡, 편향,\n보안 취약점, 결함 네 가지예요.\n기업 AI 운영에서도\n오류를 모아 둘 때\n참고할 틀이 생긴 거예요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/12",
+   "case": {
+    "who": "과기정통부, 인공지능 안전연구소",
+    "what": "국민 모니터링단 '인공지능 안전 지킴이'",
+    "where": "AI 오류 사례 제보",
+    "how": "80명 위촉, 상시 제보 체계",
+    "domain": "보안·규제",
+    "method": "정책·규제",
+    "check": "사내 AI의 잘못된 답변을 직원이 신고하는 경로가 있나?",
+    "ref": 2
+   },
+   "kicker": "보안·규제 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    3,
+    4,
+    6,
+    7
+   ],
+   "title": "알리는 AI에서\n일하는 AI로",
+   "body": "SAP·Salesforce·Adobe는\nAI가 일을 직접 처리하는\n쪽을 내세웠어요.\n영국과 한국 정부는\n자국 AI 칩을 키우는 데\n힘을 실었어요.",
+   "src": "출처 · 영국 정부 · 과학기술정보통신부 · Salesforce 외 2곳 발표 5건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "AI 제안을 누가 승인하나?",
+    "검색 품질을 무엇으로 재나?",
+    "외부 에이전트 권한은 어디까지?",
+    "특정 칩·클라우드에 묶이지 않나?",
+    "AI 오류를 신고할 길이 있나?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "맡기는 범위만큼\n기준이 필요해요",
+   "body": "AI가 판단과 실행에\n가까워질수록\n승인과 권한, 평가 기준을\n먼저 정해 둘 일이에요."
+  }
+ ],
+ "caption": "이번 주 AX는 칩에서 공급망까지 이어졌어요.\nSAP는 공급망 AI가 알림을 넘어 실행을 도와야 한다고 밝혔어요.\n→ ERP 범위가 판단 지원까지 넓어진다는 뜻이에요.\nSalesforce는 검색 모델을 스스로 개선하는 에이전트를 공개했어요.\n→ 검색 모델도 계속 손보는 운영 대상이 돼요.\nGoogle과 Adobe는 Drive·Gmail·Gemini Enterprise 연동을 넓혀요.\n→ 협업 도구에 여러 회사 에이전트가 모여요.\n과기정통부는 국산 NPU와 엔비디아 CPU 연계 협약을 알렸어요.\n→ AI 서버 칩 조합을 따질 일이 생겨요.\n영국 정부는 AI 칩 기업 Fractile 투자를 밝혔어요.\n→ 인프라 선택이 공급망 위험의 문제로도 읽혀요.\n과기정통부는 AI 오류를 제보할 안전 지킴이 80명을 위촉했어요.\n→ 사내 AI 오류 관리에 참고할 틀이에요.\n공통 흐름은 알리는 AI에서 일하는 AI로, 그리고 자국 칩이에요.\nAI에 일을 맡기기 전, 승인과 권한 기준부터 정해 두셨나요?",
+ "cases": [
+  {
+   "who": "SAP (공급망 관리 책임자 기고)",
+   "what": "공급망 의사결정 AI 구상",
+   "where": "계획·생산·구매·물류 시스템",
+   "how": "발표에 없음",
+   "domain": "ERP·백오피스",
+   "method": "연구·보고서",
+   "check": "공급망 예외 상황에서 AI 제안을 사람이 승인하는 단계가 있나?",
+   "ref": 7,
+   "source": "SAP",
+   "date": "2026-11-10",
+   "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/"
+  },
+  {
+   "who": "Salesforce AI Research",
+   "what": "연구 에이전트 SFR-AutoR&D",
+   "where": "Data Cloud 검색용 임베딩 모델",
+   "how": "운영 모델 학습·개선에 적용",
+   "domain": "AI 에이전트",
+   "method": "자체 구축",
+   "check": "검색 품질을 잴 기준 데이터와 평가 지표가 우리에게 있나?",
+   "ref": 4,
+   "source": "Salesforce",
+   "date": "2026-11-11",
+   "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/"
+  },
+  {
+   "who": "Google, Adobe",
+   "what": "Acrobat 연동, Adobe 에이전트",
+   "where": "Drive·Gmail·Gemini Enterprise",
+   "how": "기존 협업 도구에 커넥터로 내장",
+   "domain": "업무 도구",
+   "method": "파트너십",
+   "check": "외부 에이전트가 사내 문서에 접근할 때 권한 범위를 누가 정하나?",
+   "ref": 6,
+   "source": "Google Cloud",
+   "date": "2026-11-10",
+   "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/"
+  },
+  {
+   "who": "SK텔레콤, 리벨리온 (과기정통부 발표)",
+   "what": "국산 NPU와 엔비디아 CPU 연계",
+   "where": "AI 인프라용 칩 구성",
+   "how": "엔비디아 포함 3사 업무협약",
+   "domain": "클라우드·인프라",
+   "method": "파트너십",
+   "check": "AI 서버를 고를 때 칩 조합별 호환 조건을 따져 봤나?",
+   "ref": 3,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-09",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936"
+  },
+  {
+   "who": "영국 정부 Sovereign AI 등",
+   "what": "AI 칩 기업 Fractile 투자",
+   "where": "AI 하드웨어(칩) 개발",
+   "how": "£500 million 넘는 Series C 참여",
+   "domain": "클라우드·인프라",
+   "method": "투자",
+   "check": "해외 칩·클라우드 의존을 줄여야 하는 업무가 우리에게 있나?",
+   "ref": 1,
+   "source": "영국 정부",
+   "date": "2026-11-11",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware"
+  },
+  {
+   "who": "과기정통부, 인공지능 안전연구소",
+   "what": "국민 모니터링단 '인공지능 안전 지킴이'",
+   "where": "AI 오류 사례 제보",
+   "how": "80명 위촉, 상시 제보 체계",
+   "domain": "보안·규제",
+   "method": "정책·규제",
+   "check": "사내 AI의 잘못된 답변을 직원이 신고하는 경로가 있나?",
+   "ref": 2,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-12",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956"
+  }
+ ],
+ "sources": [
+  {
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-11",
+   "title": "Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware",
+   "id": "5953160b33",
+   "original": true
+  },
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-12",
+   "title": "인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956",
+   "id": "e814c25ebe",
+   "original": false
+  },
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-09",
+   "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936",
+   "id": "172b003326",
+   "original": false
+  },
+  {
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-11-11",
+   "title": "Salesforce Releases R&D Agents That Improve Its AI Models",
+   "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/",
+   "id": "ac911e6647",
+   "original": true
+  },
+  {
+   "source": "Google Cloud",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps.",
+   "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/",
+   "id": "c5fffc8a0c",
+   "original": true
+  },
+  {
+   "source": "SAP",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+   "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/",
+   "id": "ce1f29ca22",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "칩에서 공급망까지, 이번 주 AX",
+  "lede": "정부는 AI 칩과 안전을, 기업은 업무 시스템 속 AI를 발표했어요.",
+  "sections": [
+   {
+    "heading": "정부는 인프라, 기업은 업무",
+    "body": "영국 정부와 과기정통부는 칩 투자·협력과 AI 안전을 발표했어요. 기업들은 공급망과 검색, 협업 도구 속 AI를 내놨어요. IT 영역별로 나눠 읽어요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4,
+     6,
+     7
+    ],
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-11",
+      "title": "Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-12",
+      "title": "인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-09",
+      "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-11",
+      "title": "Salesforce Releases R&D Agents That Improve Its AI Models",
+      "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/"
+     },
+     {
+      "source": "Google Cloud",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps.",
+      "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/"
+     },
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+      "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/"
+     }
+    ]
+   },
+   {
+    "heading": "SAP가 그린 공급망 AI",
+    "body": "SAP 공급망 관리 책임자는 공급망 AI가 알리는 데서 그치지 말고 실행까지 도와야 한다고 썼어요.\n\nSAP는 공급 지연 때 위험한 주문과 재고, 대체 경로를 AI가 따지고 사람이 고르는 예시를 들었어요. ERP 범위가 알림에서 판단 지원까지 넓어진다는 뜻이에요.",
+    "refs": [
+     7
+    ],
+    "case": {
+     "who": "SAP (공급망 관리 책임자 기고)",
+     "what": "공급망 의사결정 AI 구상",
+     "where": "계획·생산·구매·물류 시스템",
+     "how": "발표에 없음",
+     "domain": "ERP·백오피스",
+     "method": "연구·보고서",
+     "check": "공급망 예외 상황에서 AI 제안을 사람이 승인하는 단계가 있나?",
+     "ref": 7
+    },
+    "sources": [
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+      "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/"
+     }
+    ]
+   },
+   {
+    "heading": "Salesforce, 모델을 고치는 에이전트",
+    "body": "Salesforce는 연구 과정을 스스로 돌리는 에이전트 SFR-AutoR&D를 공개했어요. Data Cloud 검색 모델을 이 시스템이 개선했다고 밝혔어요.\n\nSalesforce는 개선 주기 한 번을 약 80시간에 마쳤다고 했어요. 에이전트 프로젝트에선 검색 모델도 계속 손보는 운영 대상으로 읽혀요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "Salesforce AI Research",
+     "what": "연구 에이전트 SFR-AutoR&D",
+     "where": "Data Cloud 검색용 임베딩 모델",
+     "how": "운영 모델 학습·개선에 적용",
+     "domain": "AI 에이전트",
+     "method": "자체 구축",
+     "check": "검색 품질을 잴 기준 데이터와 평가 지표가 우리에게 있나?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-11",
+      "title": "Salesforce Releases R&D Agents That Improve Its AI Models",
+      "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/"
+     }
+    ]
+   },
+   {
+    "heading": "Google·Adobe 협업 도구 연결",
+    "body": "Google은 Adobe MAX에서 Adobe와 제휴를 넓힌다고 발표했어요. Drive·Gmail에서 Acrobat으로 바로 가는 길이 생긴다고 밝혔어요.\n\nGemini Enterprise에서 Adobe의 업무 에이전트를 쓸 수 있다고 해요. 업무 도구 도입이 여러 회사 에이전트를 한곳에 모으는 일로 바뀌는 셈이에요.",
+    "refs": [
+     6
+    ],
+    "case": {
+     "who": "Google, Adobe",
+     "what": "Acrobat 연동, Adobe 에이전트",
+     "where": "Drive·Gmail·Gemini Enterprise",
+     "how": "기존 협업 도구에 커넥터로 내장",
+     "domain": "업무 도구",
+     "method": "파트너십",
+     "check": "외부 에이전트가 사내 문서에 접근할 때 권한 범위를 누가 정하나?",
+     "ref": 6
+    },
+    "sources": [
+     {
+      "source": "Google Cloud",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps.",
+      "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/"
+     }
+    ]
+   },
+   {
+    "heading": "국산 NPU, 엔비디아와 잇는다",
+    "body": "과기정통부는 엔비디아와 SK텔레콤, 리벨리온이 업무 협약을 맺었다고 밝혔어요. 국산 NPU(신경망 처리 장치)와 엔비디아 CPU 연계를 추진해요.\n\n국산 칩과 엔비디아 칩을 한 시스템에 묶는 구성을 노린 협약이에요. 인프라 프로젝트에선 칩 조합별 호환과 운영 부담이 따져 볼 항목이 돼요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "SK텔레콤, 리벨리온 (과기정통부 발표)",
+     "what": "국산 NPU와 엔비디아 CPU 연계",
+     "where": "AI 인프라용 칩 구성",
+     "how": "엔비디아 포함 3사 업무협약",
+     "domain": "클라우드·인프라",
+     "method": "파트너십",
+     "check": "AI 서버를 고를 때 칩 조합별 호환 조건을 따져 봤나?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-09",
+      "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936"
+     }
+    ]
+   },
+   {
+    "heading": "영국 정부, AI 칩 기업에 투자",
+    "body": "영국 정부는 정부 펀드 Sovereign AI 등이 AI 칩 기업 Fractile에 투자했다고 밝혔어요. £500 million이 넘는 라운드의 일부예요.\n\n영국 정부는 이번 투자가 해외 기술 의존을 줄인다고 설명했어요. AI 인프라 선택이 비용만이 아니라 공급망 위험의 문제라는 신호로 읽혀요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "영국 정부 Sovereign AI 등",
+     "what": "AI 칩 기업 Fractile 투자",
+     "where": "AI 하드웨어(칩) 개발",
+     "how": "£500 million 넘는 Series C 참여",
+     "domain": "클라우드·인프라",
+     "method": "투자",
+     "check": "해외 칩·클라우드 의존을 줄여야 하는 업무가 우리에게 있나?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-11",
+      "title": "Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware"
+     }
+    ]
+   },
+   {
+    "heading": "과기정통부, AI 안전 지킴이 출범",
+    "body": "과기정통부와 인공지능 안전연구소는 대학생과 직장인 등 80명을 안전 지킴이로 위촉했어요.\n\n제보 분야는 사실 왜곡, 편향, 보안 취약점, 결함 네 가지예요. 기업 AI 운영에서도 오류를 모아 둘 때 참고할 틀이 생긴 거예요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "과기정통부, 인공지능 안전연구소",
+     "what": "국민 모니터링단 '인공지능 안전 지킴이'",
+     "where": "AI 오류 사례 제보",
+     "how": "80명 위촉, 상시 제보 체계",
+     "domain": "보안·규제",
+     "method": "정책·규제",
+     "check": "사내 AI의 잘못된 답변을 직원이 신고하는 경로가 있나?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-12",
+      "title": "인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956"
+     }
+    ]
+   },
+   {
+    "heading": "알리는 AI에서 일하는 AI로",
+    "body": "SAP·Salesforce·Adobe는 AI가 일을 직접 처리하는 쪽을 내세웠어요. 영국과 한국 정부는 자국 AI 칩을 키우는 데 힘을 실었어요.",
+    "refs": [
+     1,
+     3,
+     4,
+     6,
+     7
+    ],
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-11",
+      "title": "Sovereign AI and British Business Bank invest in British firm developing the next generation of AI hardware",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-british-business-bank-invest-in-british-firm-developing-the-next-generation-of-ai-hardware"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-09",
+      "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-11",
+      "title": "Salesforce Releases R&D Agents That Improve Its AI Models",
+      "link": "https://www.salesforce.com/news/stories/agents-that-improve-ai-models/"
+     },
+     {
+      "source": "Google Cloud",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "We’re bringing Adobe’s creative and productivity tools closer to your everyday Google apps.",
+      "link": "https://blog.google/company-news/inside-google/company-announcements/adobe-google-partnership-integration/"
+     },
+     {
+      "source": "SAP",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+      "link": "https://news.sap.com/2026/11/supply-chain-ai-must-do-more-than-inform-it-must-help-businesses-act/"
+     }
+    ]
+   },
+   {
+    "heading": "도입 프로젝트에서 확인할 점",
+    "body": "· AI 제안을 누가 승인하나?\n\n· 검색 품질을 무엇으로 재나?\n\n· 외부 에이전트 권한은 어디까지?\n\n· 특정 칩·클라우드에 묶이지 않나?\n\n· AI 오류를 신고할 길이 있나?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "AI가 판단과 실행에",
+   "가까워질수록",
+   "승인과 권한, 평가 기준을",
+   "먼저 정해 둘 일이에요."
+  ],
+  "source": "slides",
+  "terms": [],
+  "tags": {
+   "themes": [],
+   "industries": [],
+   "companies": [
+    {
+     "id": "ukgov",
+     "name": "영국 정부"
+    },
+    {
+     "id": "msit",
+     "name": "과학기술정보통신부"
+    },
+    {
+     "id": "salesforce",
+     "name": "Salesforce"
+    },
+    {
+     "id": "google-cloud",
+     "name": "Google Cloud"
+    },
+    {
+     "id": "sap",
+     "name": "SAP"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

@@ -117,5 +117,19 @@
   "mode": "event",
   "key": "ax:month:2026-10",
   "subject": "ax:month:2026-10"
+ },
+ {
+  "date": "2026-11-13",
+  "mode": "news",
+  "key": "news:2026-11-13",
+  "subject": "news",
+  "news": [
+   "5953160b33",
+   "e814c25ebe",
+   "172b003326",
+   "ac911e6647",
+   "c5fffc8a0c",
+   "ce1f29ca22"
+  ]
  }
 ]
