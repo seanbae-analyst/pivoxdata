@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-14",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-14/",
+ "caption": "이번 주 한국 주권 AI 발표는 칩에서 인재까지 이어졌어요.\nNVIDIA는 과기정통부와 반도체·데이터센터·인재·보안 협력을 넓힌다고 밝혔어요.\n국산 NPU를 인프라 후보로 따져 볼 여지로 읽혀요.\nSK텔레콤은 엔비디아, 리벨리온과 함께 한국형 소버린 AI 인프라를 짓는다고 발표했어요.\n통신사도 국내 AI 인프라 공급 후보가 된다는 뜻이에요.\nNVIDIA는 Point2에 투자하고 Motif Technologies, RLWRLD, Upstage에도 투자할 계획이라고 해요.\n국내 모델·문서 AI를 비교할 후보가 늘었어요.\nGoogle은 Gemini Intelligence를 Pixel 10 등 더 많은 기기로 넓혔어요.\n직원 폰의 AI가 메일·일정을 읽는 만큼 모바일 보안 정책을 다시 볼 때예요.\n한국 발표 3건은 인프라, 모델, 인재를 한 묶음으로 다뤘어요.\n우리 업무 데이터를 국내에 둬야 하는지부터 확인해 보세요.\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-14\n출처(공식 발표): Google · SK텔레콤 · NVIDIA — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newsweek",
+  "format_name": "이번 주 AX 사건",
+  "source": "claude",
+  "slides": 13
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 98,
+  "problems": []
+ }
+}

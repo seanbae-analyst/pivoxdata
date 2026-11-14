@@ -1,0 +1,558 @@
+{
+ "date": "2026-11-14",
+ "mode": "news",
+ "topic": null,
+ "format": "newsweek",
+ "format_name": "이번 주 AX 사건",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 3,
+ "original_numbers": [
+  "1000",
+  "27",
+  "19"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "주권 AI, 칩만의\n이야기일까요?",
+   "body": "주권 AI(나라 안 인프라로\n돌리는 AI)를 두고\nNVIDIA가 한국과 협력을 넓혔어요.\n인재와 스타트업까지 포함됐어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    3,
+    2,
+    4,
+    1
+   ],
+   "title": "주권 AI 발표 3건,\n기기 AI 1건",
+   "body": "NVIDIA와 SK텔레콤의 발표 3건은\n한국 주권 AI를 다뤄요.\nGoogle은 Gemini 기능을\n더 많은 기기로 넓혔어요.",
+   "src": "출처 · NVIDIA · SK텔레콤 · Google 발표 4건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "NVIDIA와 과기정통부,\n협력 범위 확대",
+   "body": "NVIDIA는 과학기술정보통신부와\n칩·데이터센터부터\n인재·모델·보안까지\n협력을 넓힌다고 발표했어요.\n교육·인증과 해커톤도 담겼어요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/9",
+   "case": {
+    "who": "과학기술정보통신부 (NVIDIA 발표)",
+    "what": "AI 반도체·인프라·인재 협력",
+    "where": "한국 주권 AI 생태계",
+    "how": "컨소시엄 3곳·모델 개발사 4곳과 협력",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "우리 추론 워크로드를 국내 인프라에서 돌릴 수 있나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "국산 NPU의\n참여 기반이 생겼어요",
+   "body": "한국 NPU 업체가\nNVLink Fusion(칩을 잇는\nNVIDIA 연결 기술) 참여를\n검토할 기반이 생겼다고 해요.\n인프라 설계 때 GPU 말고\n국산 칩도 따져 볼 여지로 읽혀요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/9",
+   "case": {
+    "who": "과학기술정보통신부 (NVIDIA 발표)",
+    "what": "AI 반도체·인프라·인재 협력",
+    "where": "한국 주권 AI 생태계",
+    "how": "컨소시엄 3곳·모델 개발사 4곳과 협력",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "우리 추론 워크로드를 국내 인프라에서 돌릴 수 있나?",
+    "ref": 3
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "SK텔레콤 등 3곳,\n소버린 AI 인프라 협력",
+   "body": "SK텔레콤은 엔비디아, 리벨리온과\n함께 한국형 소버린 AI 인프라를\n짓는다고 발표했어요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/9",
+   "case": {
+    "who": "SK텔레콤 등 3곳",
+    "what": "한국형 소버린 AI 인프라",
+    "where": "발표에 없음",
+    "how": "3사 협력 구축",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "국내 통신사 AI 인프라를 클라우드 후보에 넣어 봤나?",
+    "ref": 2
+   },
+   "kicker": "클라우드·인프라 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "통신사도\nAI 인프라 공급 후보로",
+   "body": "통신사가 칩 회사들과\n국내 AI 인프라를 짓는다는 뜻이에요.\n구체적인 범위와 일정은\n발표 제목에 나와 있지 않아요.",
+   "src": "출처 · SK텔레콤 공식 발표 · 11/9",
+   "case": {
+    "who": "SK텔레콤 등 3곳",
+    "what": "한국형 소버린 AI 인프라",
+    "where": "발표에 없음",
+    "how": "3사 협력 구축",
+    "domain": "클라우드·인프라",
+    "method": "파트너십",
+    "check": "국내 통신사 AI 인프라를 클라우드 후보에 넣어 봤나?",
+    "ref": 2
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "title": "NVIDIA, 한국\n스타트업에 투자",
+   "body": "NVIDIA는 과기정통부와 연 포럼에서\nPoint2 투자를 알렸어요.\nMotif Technologies,\nRLWRLD, Upstage에도\n투자할 계획이라고 해요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/9",
+   "case": {
+    "who": "NVIDIA",
+    "what": "한국 AI 스타트업 투자",
+    "where": "인프라·모델·로봇 스타트업",
+    "how": "Point2 투자, 3곳 투자 계획",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "국내 모델·문서 AI 공급사를 후보 목록에 넣어 봤나?",
+    "ref": 4
+   },
+   "kicker": "클라우드·인프라 · 투자"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "title": "인프라부터 로봇까지\n국내 공급사가 보여요",
+   "body": "투자 대상은 칩 연결, 에이전트용 모델,\n로봇 모델, 문서 AI까지 걸쳐요.\n국내 모델로 에이전트나 문서 처리를\n짜려는 팀에는 비교할 후보가\n늘었다는 뜻이에요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/9",
+   "case": {
+    "who": "NVIDIA",
+    "what": "한국 AI 스타트업 투자",
+    "where": "인프라·모델·로봇 스타트업",
+    "how": "Point2 투자, 3곳 투자 계획",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "국내 모델·문서 AI 공급사를 후보 목록에 넣어 봤나?",
+    "ref": 4
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "Google, 기기 속\nGemini 기능 확대",
+   "body": "Google은\nGemini Intelligence를\nPixel 10 등 더 많은 기기로\n넓힌다고 발표했어요.\n앱을 넘나드는 작업 자동화는\n영국·인도·일본으로 넓혀요.",
+   "src": "출처 · Google 공식 발표 · 11/10",
+   "case": {
+    "who": "Google",
+    "what": "Gemini Intelligence",
+    "where": "Android 기기",
+    "how": "새 기능 추가, 기기·지역 확대",
+    "domain": "AI 에이전트",
+    "method": "제품 출시",
+    "check": "직원 개인 기기의 AI가 업무 메일·일정에 접근하나?",
+    "ref": 1
+   },
+   "kicker": "AI 에이전트 · 제품 출시"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "직원 폰의 AI가\n메일·일정을 읽어요",
+   "body": "Create My Widget은\nGmail·캘린더 정보로\n위젯을 만든다고 해요.\n모바일 보안 정책에서\n살필 범위가 커진다는 신호로 읽혀요.",
+   "src": "출처 · Google 공식 발표 · 11/10",
+   "case": {
+    "who": "Google",
+    "what": "Gemini Intelligence",
+    "where": "Android 기기",
+    "how": "새 기능 추가, 기기·지역 확대",
+    "domain": "AI 에이전트",
+    "method": "제품 출시",
+    "check": "직원 개인 기기의 AI가 업무 메일·일정에 접근하나?",
+    "ref": 1
+   },
+   "kicker": "AI 에이전트 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    2,
+    3,
+    4
+   ],
+   "title": "인프라부터 모델까지\n한 묶음으로",
+   "body": "한국 발표 3건은 칩, 데이터센터,\n모델, 인재를 한꺼번에 다뤘어요.\n최근 30일 클라우드·인프라\n공식 발표 34건 중 10건이\nNVIDIA 발표였어요.",
+   "src": "출처 · SK텔레콤 · NVIDIA 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "데이터를 국내에 둬야 하는 업무인가요?",
+    "GPU 말고 국산 칩도 비교했나요?",
+    "국내·해외 모델을 함께 시험하나요?",
+    "직원 폰 AI의 메일 접근 기준을 정했나요?",
+    "추론 비용을 인프라별로 따져 봤나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "주권 AI는\n인프라 선택 문제예요",
+   "body": "칩·모델·인재 협력이 한 번에 나왔어요.\n우리 업무에 맞는 조합부터\n따져 보세요."
+  }
+ ],
+ "caption": "이번 주 한국 주권 AI 발표는 칩에서 인재까지 이어졌어요.\nNVIDIA는 과기정통부와 반도체·데이터센터·인재·보안 협력을 넓힌다고 밝혔어요.\n국산 NPU를 인프라 후보로 따져 볼 여지로 읽혀요.\nSK텔레콤은 엔비디아, 리벨리온과 함께 한국형 소버린 AI 인프라를 짓는다고 발표했어요.\n통신사도 국내 AI 인프라 공급 후보가 된다는 뜻이에요.\nNVIDIA는 Point2에 투자하고 Motif Technologies, RLWRLD, Upstage에도 투자할 계획이라고 해요.\n국내 모델·문서 AI를 비교할 후보가 늘었어요.\nGoogle은 Gemini Intelligence를 Pixel 10 등 더 많은 기기로 넓혔어요.\n직원 폰의 AI가 메일·일정을 읽는 만큼 모바일 보안 정책을 다시 볼 때예요.\n한국 발표 3건은 인프라, 모델, 인재를 한 묶음으로 다뤘어요.\n우리 업무 데이터를 국내에 둬야 하는지부터 확인해 보세요.",
+ "cases": [
+  {
+   "who": "과학기술정보통신부 (NVIDIA 발표)",
+   "what": "AI 반도체·인프라·인재 협력",
+   "where": "한국 주권 AI 생태계",
+   "how": "컨소시엄 3곳·모델 개발사 4곳과 협력",
+   "domain": "클라우드·인프라",
+   "method": "파트너십",
+   "check": "우리 추론 워크로드를 국내 인프라에서 돌릴 수 있나?",
+   "ref": 3,
+   "source": "NVIDIA",
+   "date": "2026-11-09",
+   "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/"
+  },
+  {
+   "who": "SK텔레콤 등 3곳",
+   "what": "한국형 소버린 AI 인프라",
+   "where": "발표에 없음",
+   "how": "3사 협력 구축",
+   "domain": "클라우드·인프라",
+   "method": "파트너십",
+   "check": "국내 통신사 AI 인프라를 클라우드 후보에 넣어 봤나?",
+   "ref": 2,
+   "source": "SK텔레콤",
+   "date": "2026-11-09",
+   "link": "https://news.sktelecom.com/232963"
+  },
+  {
+   "who": "NVIDIA",
+   "what": "한국 AI 스타트업 투자",
+   "where": "인프라·모델·로봇 스타트업",
+   "how": "Point2 투자, 3곳 투자 계획",
+   "domain": "클라우드·인프라",
+   "method": "투자",
+   "check": "국내 모델·문서 AI 공급사를 후보 목록에 넣어 봤나?",
+   "ref": 4,
+   "source": "NVIDIA",
+   "date": "2026-11-09",
+   "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/"
+  },
+  {
+   "who": "Google",
+   "what": "Gemini Intelligence",
+   "where": "Android 기기",
+   "how": "새 기능 추가, 기기·지역 확대",
+   "domain": "AI 에이전트",
+   "method": "제품 출시",
+   "check": "직원 개인 기기의 AI가 업무 메일·일정에 접근하나?",
+   "ref": 1,
+   "source": "Google",
+   "date": "2026-11-10",
+   "link": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/"
+  }
+ ],
+ "sources": [
+  {
+   "source": "Google",
+   "kind": "company",
+   "date": "2026-11-10",
+   "title": "Gemini Intelligence: New features, on more devices",
+   "link": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/",
+   "id": "ac5a661efb",
+   "original": true
+  },
+  {
+   "source": "SK텔레콤",
+   "kind": "company",
+   "date": "2026-11-09",
+   "title": "SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
+   "link": "https://news.sktelecom.com/232963",
+   "id": "1f23a28303",
+   "original": false
+  },
+  {
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-11-09",
+   "title": "From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
+   "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/",
+   "id": "22dc4f77b8",
+   "original": true
+  },
+  {
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-11-09",
+   "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
+   "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/",
+   "id": "57a8ba0d55",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "주권 AI, 칩만이 아니라 모델·인재·스타트업까지: 이번 주 한국 발표 3건과 Google의 기기 AI",
+  "lede": "NVIDIA는 과학기술정보통신부와 한국 주권 AI 협력 범위를 칩과 데이터센터에서 인재, 모델, 에이전트, 보안까지 넓힌다고 발표했어요. SK텔레콤은 엔비디아, 리벨리온과 한국형 소버린 AI 인프라 협력을 알렸고, NVIDIA는 한국 스타트업 투자 계획도 밝혔어요. 같은 주 Google은 Gemini 기능을 더 많은 Android 기기로 넓혔어요. 기업이 AI 인프라와 모델을 고를 때 비교할 국내 선택지가 늘었고, 직원 기기의 AI가 업무 데이터에 닿는 범위도 커지고 있다는 이야기예요.",
+  "sections": [
+   {
+    "heading": "이번 주에 나온 발표 4건",
+    "body": "이번 주 공식 발표 4건 가운데 3건은 같은 날 한국에서 나왔어요. NVIDIA가 2건, SK텔레콤이 1건을 냈고, 모두 과학기술정보통신부와 이어진 한국 주권 AI 이야기예요.\n\n주권 AI는 한 나라가 자국 안의 인프라와 모델로 AI를 돌리는 것을 말해요. 세 발표를 함께 읽으면 칩, 데이터센터, 모델, 인재, 스타트업이 한 묶음으로 움직인다는 점이 보여요.\n\n나머지 1건은 Google의 Gemini Intelligence 확대 발표예요. 소비자 기기 소식이지만 업무 메일과 일정에 닿는 기능이 들어 있어, 기업의 모바일 보안 정책 쪽에서 함께 읽을 거리예요.",
+    "refs": [
+     3,
+     2,
+     4,
+     1
+    ],
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
+      "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/"
+     },
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
+      "link": "https://news.sktelecom.com/232963"
+     },
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
+      "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/"
+     },
+     {
+      "source": "Google",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Gemini Intelligence: New features, on more devices",
+      "link": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/"
+     }
+    ]
+   },
+   {
+    "heading": "NVIDIA와 과기정통부, 협력을 생태계 전체로",
+    "body": "NVIDIA는 과학기술정보통신부와 한국 주권 AI 협력을 넓힌다고 발표했어요. 범위는 AI 반도체와 데이터센터 인프라에서 시작해 인재, 스타트업, 모델, 에이전트, 보안까지 걸쳐요. GPU 활용 역량을 키우는 교육·인증 프로그램, 해커톤, 기술 세미나도 들어 있어요.\n\n도입 방식은 여러 층의 파트너십이에요. NVIDIA는 한국의 AI for All 사업에서 선정된 컨소시엄 3곳, 국내 파운데이션 모델 개발사 4곳과 협력한다고 밝혔어요. 여기서 AI 추론을 최적화하고 규모를 키우는 데 NVIDIA Dynamo 소프트웨어를 쓴다고 해요. 또 한국 NPU·XPU 업체가 칩 연결 기술인 NVIDIA NVLink Fusion 생태계 참여를 검토할 토대를 마련한다고 했어요.\n\n클라우드·인프라 프로젝트에서는 GPU 하나만 놓고 인프라를 설계하던 방식에 국산 칩이라는 비교 항목이 더해질 여지로 읽혀요. 다만 발표는 참여를 검토할 토대를 말할 뿐, 실제 연결 제품이나 일정은 적혀 있지 않아요.\n\n그래서 우리 추론 워크로드를 국내 인프라에서 돌릴 수 있는지부터 따져 볼 만해요. 데이터를 국내에 둬야 하는 업무가 있다면, 어떤 칩과 소프트웨어 조합이 그 조건을 채우는지가 설계의 첫 질문이 돼요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "과학기술정보통신부 (NVIDIA 발표)",
+     "what": "AI 반도체·인프라·인재 협력",
+     "where": "한국 주권 AI 생태계",
+     "how": "컨소시엄 3곳·모델 개발사 4곳과 협력",
+     "domain": "클라우드·인프라",
+     "method": "파트너십",
+     "check": "우리 추론 워크로드를 국내 인프라에서 돌릴 수 있나?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
+      "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/"
+     }
+    ]
+   },
+   {
+    "heading": "SK텔레콤, 칩 회사들과 소버린 AI 인프라 협력",
+    "body": "SK텔레콤은 엔비디아, 리벨리온과 함께 한국형 소버린 AI 인프라를 만든다는 협력을 발표했어요. 이 발표의 원문은 읽지 못해서, 제목에 적힌 내용까지만 확인됐어요.\n\n같은 날 NVIDIA가 낸 발표에는 이 협력이 과기정통부의 지원을 받고, 한국 모델과 워크로드를 위한 주권 AI 인프라에 NVLink Fusion을 쓴다고 적혀 있어요. 어느 업무·시스템에 들이는지, 구축 범위와 일정은 발표에 없어요.\n\n통신사가 GPU 회사, 국산 NPU 회사와 손잡고 국내 AI 인프라를 짓는다는 뜻이에요. 기업 입장에서는 해외 퍼블릭 클라우드 외에 국내 통신사 인프라가 AI 워크로드를 올릴 후보로 들어올 수 있다는 신호로 읽혀요.\n\n확인할 점은 국내 통신사 AI 인프라를 클라우드 후보 목록에 넣어 비교해 봤는지예요. 아직 상세 조건이 공개되지 않았으니, 성능·비용·데이터 위치 같은 비교 기준을 미리 정해 두면 조건이 나왔을 때 바로 견줘 볼 수 있어요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "SK텔레콤 등 3곳",
+     "what": "한국형 소버린 AI 인프라",
+     "where": "발표에 없음",
+     "how": "3사 협력 구축",
+     "domain": "클라우드·인프라",
+     "method": "파트너십",
+     "check": "국내 통신사 AI 인프라를 클라우드 후보에 넣어 봤나?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
+      "link": "https://news.sktelecom.com/232963"
+     }
+    ]
+   },
+   {
+    "heading": "NVIDIA, 한국 AI 스타트업 4곳에 투자",
+    "body": "과기정통부와 NVIDIA는 COEX에서 AI 스타트업 파트너십 포럼을 열고 국내 스타트업 20곳이 넘는 곳을 만났어요. 분야는 파운데이션 모델, 피지컬 AI, AI 인프라, AI 반도체였어요. NVIDIA는 Point2에 투자했다고 밝혔고, Motif Technologies, RLWRLD, Upstage에도 투자할 계획이라고 했어요.\n\n발표에 적힌 각 회사의 일은 이래요. Point2는 칩과 랙 사이에서 데이터를 옮기는 무선 주파수 방식 연결 기술을 만들어요. Motif Technologies는 복잡한 일을 처리하는 AI 에이전트용 파운데이션 모델을 만들고, 가중치를 공개한 언어 모델 Motif-3을 내놨어요. RLWRLD는 휴머노이드와 산업용 로봇이 부품 끼우기 같은 정밀 작업을 하도록 돕는 로봇 모델을, Upstage는 Solar 언어 모델과 복잡한 문서에서 정보를 뽑는 문서 AI 도구를 만들어요. NVIDIA는 한국에 있는 NVIDIA Inception 회원사가 1,000곳이 넘는다고도 밝혔어요.\n\n투자 대상이 인프라, 에이전트용 모델, 로봇, 문서 처리까지 걸쳐 있다는 점이 눈에 띄어요. 국내 모델로 에이전트나 문서 처리 업무를 짜려는 팀에는 비교할 공급사 후보가 늘었다는 뜻이에요.\n\n그래서 국내 모델과 문서 AI 공급사를 후보 목록에 넣어 봤는지 확인해 볼 만해요. 투자 소식은 공급사의 품질을 보증하지 않으니, 우리 문서와 업무로 직접 시험해 보는 단계가 따로 필요해요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "NVIDIA",
+     "what": "한국 AI 스타트업 투자",
+     "where": "인프라·모델·로봇 스타트업",
+     "how": "Point2 투자, 3곳 투자 계획",
+     "domain": "클라우드·인프라",
+     "method": "투자",
+     "check": "국내 모델·문서 AI 공급사를 후보 목록에 넣어 봤나?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
+      "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/"
+     }
+    ]
+   },
+   {
+    "heading": "Google, Gemini Intelligence를 더 많은 기기로",
+    "body": "Google은 Android 기기용 Gemini Intelligence에 새 기능을 더하고 지원 기기를 넓힌다고 발표했어요. Pixel 10 계열에 최신 기능이 들어가고, Motorola의 첫 Gemini Intelligence 기기인 motorola signature 27은 미국에서 11월 19일 사전 주문을 받는다고 해요.\n\n기능도 늘었어요. 말을 실시간으로 정리된 글로 바꾸는 Rambler가 더 많은 기기로 가고, 여러 앱에 걸쳐 음식 주문, 차량 호출, 예약을 맡기는 작업 자동화는 영국, 인도, 일본으로 넓어져요. 몇 주에 걸쳐 나오는 Create My Widget은 말로 설명하면 코딩 없이 위젯을 만들어 주는데, Gmail, 캘린더, 검색 정보를 끌어온다고 해요. Device Assistance는 어떤 앱이 위치에 접근하는지 확인하는 등 기기 설정을 대신 다뤄요.\n\n기업 IT 관점에서 보면, 직원 폰의 AI가 메일과 일정 같은 업무 정보를 읽어 화면에 띄우는 일이 기본 기능이 되어 간다는 뜻이에요. 모바일 보안 정책이 살펴야 할 범위가 앱 단위에서 AI 기능 단위로 넓어지는 신호로 읽혀요.\n\n확인할 점은 직원 개인 기기의 AI가 업무 메일과 일정에 접근하는지, 접근한다면 어디까지 허용할지예요. 개인 기기를 업무에 쓰는 회사라면 업무 계정과 개인 기능의 경계를 정책에 적어 두는 일이 먼저예요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "Google",
+     "what": "Gemini Intelligence",
+     "where": "Android 기기",
+     "how": "새 기능 추가, 기기·지역 확대",
+     "domain": "AI 에이전트",
+     "method": "제품 출시",
+     "check": "직원 개인 기기의 AI가 업무 메일·일정에 접근하나?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "Google",
+      "kind": "company",
+      "date": "2026-11-10",
+      "title": "Gemini Intelligence: New features, on more devices",
+      "link": "https://blog.google/products-and-platforms/platforms/android/gemini-intelligence-november-features-devices/"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 인프라부터 모델까지 한 묶음",
+    "body": "한국 발표 3건은 칩, 데이터센터, 모델, 인재, 스타트업을 따로따로가 아니라 한 번에 다뤘어요. 정부가 판을 짜고, 글로벌 칩 회사와 통신사, 국산 칩 회사, 모델 스타트업이 각자 자리를 맡는 구조예요.\n\n이런 발표는 최근 한 달 사이 자주 나왔어요. 최근 30일 클라우드·인프라 영역의 회사·정부 공식 AX 발표는 34건이었고, 그 가운데 10건이 NVIDIA 발표였어요. 같은 기간 보안·규제 영역 발표 26건 중 3건은 과학기술정보통신부가 냈어요.\n\n주권 AI가 칩 공급 문제에 그치지 않고, 기업이 어떤 인프라와 모델 조합을 고를지의 문제로 넓어지고 있다고 볼 수 있어요.",
+    "refs": [
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "SK텔레콤",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
+      "link": "https://news.sktelecom.com/232963"
+     },
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
+      "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/"
+     },
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-09",
+      "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
+      "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 흐름은 클라우드·인프라 프로젝트에서 선택지가 늘어난다는 뜻이에요. 해외 퍼블릭 클라우드와 GPU만 비교하던 자리에 국내 통신사 인프라, 국산 NPU, 국내 파운데이션 모델과 문서 AI가 후보로 들어와요. 동시에 직원 기기의 AI가 업무 데이터에 닿으면서 보안·거버넌스 쪽 점검 범위도 커져요.\n\n· 데이터를 국내에 둬야 하는 업무가 어디인지 먼저 나눠 두었나요?\n· 추론 인프라를 고를 때 GPU 외에 국산 칩도 비교 항목에 넣었나요?\n· 국내 모델과 해외 모델을 우리 문서와 업무로 함께 시험해 볼 계획이 있나요?\n· 직원 폰 AI가 업무 메일과 일정에 접근하는 기준을 보안 정책에 적어 두었나요?\n· 인프라별 추론 비용을 같은 기준으로 견줘 봤나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "NVIDIA와 과기정통부는 칩부터 인재·모델·보안까지 주권 AI 협력을 넓혔어요.",
+   "SK텔레콤은 엔비디아, 리벨리온과 소버린 AI 인프라 협력을 발표했어요.",
+   "NVIDIA는 Point2에 투자했고 Motif Technologies, RLWRLD, Upstage에도 투자할 계획이에요.",
+   "Google의 Gemini 기능은 Gmail·캘린더 정보를 끌어와 위젯을 만들어요.",
+   "인프라·모델 후보를 넓혀 비교하고, 직원 기기 AI의 접근 기준을 정해 두는 일이 남아요."
+  ],
+  "terms": [
+   {
+    "term": "주권 AI",
+    "def": "한 나라가 자국 안의 데이터센터, 칩, 모델로 AI를 만들고 운영하는 것을 말해요. 데이터와 기술을 나라 밖에 덜 기대려는 뜻이 담겨 있어요."
+   },
+   {
+    "term": "NPU",
+    "def": "AI 계산을 빠르게 처리하도록 따로 설계한 반도체예요. 여러 일을 두루 하는 칩보다 AI 연산에 맞춰져 있어요."
+   },
+   {
+    "term": "추론",
+    "def": "학습을 마친 AI 모델이 실제 질문이나 데이터를 받아 답을 내는 단계예요. 서비스로 AI를 쓸 때 늘 드는 계산이에요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "infra",
+    "deal",
+    "policy"
+   ],
+   "industries": [
+    "public",
+    "telecom",
+    "tech"
+   ],
+   "companies": [
+    {
+     "id": "google-ai",
+     "name": "Google"
+    },
+    {
+     "id": "skt",
+     "name": "SK텔레콤"
+    },
+    {
+     "id": "nvidia",
+     "name": "NVIDIA"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

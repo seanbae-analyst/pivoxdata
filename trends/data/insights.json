@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-13",
+ "built_at": "2026-11-14",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "130건",
+     "big": "126건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 63건 · 클라우드·인프라 36건 · 보안·규제 28건 · 업무 도구 20건 · CRM·고객 14건 · 데이터·분석 13건 · ERP·백오피스 6건",
+     "body": "AI 에이전트 61건 · 클라우드·인프라 34건 · 보안·규제 26건 · 업무 도구 20건 · CRM·고객 13건 · 데이터·분석 12건 · ERP·백오피스 6건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,18 +325,18 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 63,
-         "label": "63건"
+         "value": 61,
+         "label": "61건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 36,
-         "label": "36건"
+         "value": 34,
+         "label": "34건"
         },
         {
          "name": "보안·규제",
-         "value": 28,
-         "label": "28건"
+         "value": 26,
+         "label": "26건"
         },
         {
          "name": "업무 도구",
@@ -345,8 +345,8 @@
         },
         {
          "name": "CRM·고객",
-         "value": 14,
-         "label": "14건"
+         "value": 13,
+         "label": "13건"
         }
        ]
       }
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "63건",
+     "big": "61건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, SAP 발표가 가장 많아요",
      "easy": "",
@@ -376,17 +376,17 @@
          "label": "9건"
         },
         {
-         "name": "Snowflake",
-         "value": 8,
-         "label": "8건"
-        },
-        {
          "name": "NVIDIA",
          "value": 8,
          "label": "8건"
         },
         {
          "name": "Databricks",
+         "value": 7,
+         "label": "7건"
+        },
+        {
+         "name": "Snowflake",
          "value": 7,
          "label": "7건"
         }
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "36건",
+     "big": "34건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -418,11 +418,6 @@
          "label": "4건"
         },
         {
-         "name": "Snowflake",
-         "value": 4,
-         "label": "4건"
-        },
-        {
          "name": "영국 정부",
          "value": 3,
          "label": "3건"
@@ -431,6 +426,11 @@
          "name": "과학기술정보통신부",
          "value": 3,
          "label": "3건"
+        },
+        {
+         "name": "SK텔레콤",
+         "value": 2,
+         "label": "2건"
         }
        ]
       }
@@ -439,21 +439,16 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "28건",
+     "big": "26건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, Snowflake 발표가 가장 많아요",
+     "title": "보안·규제, OpenAI 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 영국 정부 11/12 — United Kingdom-Norway Joint Statement of intent on Artificial Intelligence · Snowflake 11/12 — Agentic Enterprise Security: Where the Ecosystem Goes Next · 과학기술정보통신부 11/12 — 인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+     "body": "최근: 영국 정부 11/12 — United Kingdom-Norway Joint Statement of intent on Artificial Intelligence · Snowflake 11/12 — Agentic Enterprise Security: Where the Ecosystem Goes Next · 과학기술정보통신부 11/12 — 인공지능 안전 국민 점검단 「인공지능 안전 지킴이」 출범",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
-        {
-         "name": "Snowflake",
-         "value": 4,
-         "label": "4건"
-        },
         {
          "name": "OpenAI",
          "value": 4,
@@ -471,6 +466,11 @@
         },
         {
          "name": "Anthropic",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "SK텔레콤",
          "value": 3,
          "label": "3건"
         }
@@ -523,7 +523,7 @@
     {
      "id": "dom-crm",
      "k": "IT 영역 · CRM·고객",
-     "big": "14건",
+     "big": "13건",
      "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
      "title": "CRM·고객, Salesforce 발표가 가장 많아요",
      "easy": "",
@@ -535,8 +535,8 @@
        "items": [
         {
          "name": "Salesforce",
-         "value": 6,
-         "label": "6건"
+         "value": 5,
+         "label": "5건"
         },
         {
          "name": "Capgemini",
@@ -565,7 +565,7 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "13건",
+     "big": "12건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Snowflake 발표가 가장 많아요",
      "easy": "",
@@ -577,8 +577,8 @@
        "items": [
         {
          "name": "Snowflake",
-         "value": 6,
-         "label": "6건"
+         "value": 5,
+         "label": "5건"
         },
         {
          "name": "Databricks",
@@ -1425,6 +1425,57 @@
      }
     ]
    }
+  },
+  {
+   "key": "hftr:Qwen/Qwen3.8-27B:2026-11-14",
+   "subject": "hf:Qwen/Qwen3.8-27B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: Qwen/​Qwen3.8‑27B",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: Qwen/​Qwen3.8‑27B",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-08-05 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-14",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+        "value": 4132,
+        "label": "2.2만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 971,
+        "label": "44만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 421,
+        "label": "278만"
+       },
+       {
+        "name": "Arete-27B",
+        "value": 420,
+        "label": "5,545"
+       },
+       {
+        "name": "Qwen3.8-27B",
+        "value": 411,
+        "label": "696만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ],
  "facts": [
@@ -1506,17 +1557,17 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 63건 · 발표가 많은 곳: SAP 9건, McKinsey 9건, Snowflake 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 61건 · 발표가 많은 곳: SAP 9건, McKinsey 9건, NVIDIA 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 36건 · 발표가 많은 곳: NVIDIA 10건, SAP 4건, Snowflake 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 34건 · 발표가 많은 곳: NVIDIA 10건, SAP 4건, 영국 정부 3건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 28건 · 발표가 많은 곳: Snowflake 4건, OpenAI 4건, 과학기술정보통신부 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 26건 · 발표가 많은 곳: OpenAI 4건, 과학기술정보통신부 3건, McKinsey 3건"
   },
   {
    "group": "domain",
@@ -1526,12 +1577,12 @@
   {
    "group": "domain",
    "id": "dom-crm",
-   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 14건 · 발표가 많은 곳: Salesforce 6건, Capgemini 3건, Snowflake 1건"
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Salesforce 5건, Capgemini 3건, Snowflake 1건"
   },
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Snowflake 6건, Databricks 2건, SAP 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Snowflake 5건, Databricks 2건, SAP 2건"
   },
   {
    "group": "domain",
@@ -1602,7 +1653,7 @@
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-12",
-   "title": "인공지능 안전 국민 모니터링단 「인공지능 안전 지킴이」 출범",
+   "title": "인공지능 안전 국민 점검단 「인공지능 안전 지킴이」 출범",
    "summary": "- 과기정통부‧인공지능 안전연구소, 대학생‧직장인 등 “인공지능 안전 지킴이” 80명 위촉 - - 사실왜곡, 편향, 보안 취약점, 결함 등 4대 분야 오류사례 상시 제보 체계 구축 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956",
    "score": 4,
@@ -1963,19 +2014,6 @@
    "method": "파트너십"
   },
   {
-   "id": "26bab3c236",
-   "src": "samsung",
-   "source": "삼성전자",
-   "kind": "company",
-   "date": "2026-10-31",
-   "title": "삼성, 샘 올트먼과 ‘AI 혁신’ 간담회 개최 ‘AI Driven’ 경영 강화… 전사적 AX 추진 가속",
-   "summary": "삼성, 샘 올트먼 CEO 초청해 AI 시대 미래 경영 전략 논의 삼성은 31일 경기도 용인 삼성인력개발원에서 삼성전자 등 주요 관계사 사장단을 대상으로 샘 올트먼(Sam Altman) OpenAI CEO 초청 간담회를 개최했다. 이날 간담회에는 전자·금융·바이오 등 삼성 관계사 사장단 50여 명이 참석했으며, 샘 올트먼 CEO와 함께 ‘AI가 바꿀 다음 10년, 기업의 선택’을 주제로 진행됐다. 삼성 사장단과 샘 […]",
-   "link": "https://news.samsung.com/kr/%ec%82%bc%ec%84%b1-%ec%83%98-%ec%98%ac%ed%8a%b8%eb%a8%bc%ea%b3%bc-ai-%ed%98%81%ec%8b%a0-%ea%b0%84%eb%8b%b4%ed%9a%8c-%ea%b0%9c%ec%b5%9c-ai-driven-%ea%b2%bd%ec%98%81-%ea%b0%95%ed%99%94",
-   "score": 3,
-   "domains": [],
-   "method": "전사 배포"
-  },
-  {
    "id": "2144e0b4a0",
    "src": "sap",
    "source": "SAP",
@@ -2005,6 +2043,19 @@
     "업무 도구"
    ],
    "method": "연구·보고서"
+  },
+  {
+   "id": "958c99eb8f",
+   "src": "eu",
+   "source": "EU 집행위원회",
+   "kind": "government",
+   "date": "2026-11-13",
+   "title": "Doorstep by President von der Leyen ahead of the informal meeting of the European Council of 13 November",
+   "summary": "European Commission Statement Dublin, 13 Nov 2026 Today, we are going to discuss AI. It is going to be very interesting. Of course, we are going to discuss the risks, like, for example, runaway AI, but also the...",
+   "link": "https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2431",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "631f611ed8",
@@ -2093,7 +2144,7 @@
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-10",
-   "title": "‘K-문샷 정책 세미나’ 개최, 국가 과학 난제 해결을 위한 과학 인공지능 혁신을 논의하다.",
+   "title": "‘K-문샷 정책 발표회 개최, 국가 과학 난제 해결을 위한 과학 인공지능 혁신을 논의하다.",
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187943",
    "score": 1,
