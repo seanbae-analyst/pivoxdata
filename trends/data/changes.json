@@ -6172,6 +6172,58 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-15",
+   "key": "hftr:DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:2026-11-15",
+   "subject": "hf:DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: DavidAU/​Qwen3.8‑27B‑TURBO‑Fable‑Cold‑Fusion‑735‑882‑Heretic‑Uncensored‑NEO‑CODER‑MAX‑MTP‑GGUF",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: DavidAU/​Qwen3.8‑27B‑TURBO‑Fable‑Cold‑Fusion‑735‑882‑Heretic‑Uncensored‑NEO‑CODER‑MAX‑MTP‑GGUF",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-09-01 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-15",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+        "value": 4239,
+        "label": "2.4만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 1030,
+        "label": "52만"
+       },
+       {
+        "name": "Qwen3.8-27B",
+        "value": 440,
+        "label": "676만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 425,
+        "label": "278만"
+       },
+       {
+        "name": "Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+        "value": 363,
+        "label": "166만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-14",
+ "built_at": "2026-11-15",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "126건",
+     "big": "122건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 61건 · 클라우드·인프라 34건 · 보안·규제 26건 · 업무 도구 20건 · CRM·고객 13건 · 데이터·분석 12건 · ERP·백오피스 6건",
+     "body": "AI 에이전트 58건 · 클라우드·인프라 34건 · 보안·규제 25건 · 업무 도구 18건 · CRM·고객 13건 · 데이터·분석 12건 · ERP·백오피스 6건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,8 +325,8 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 61,
-         "label": "61건"
+         "value": 58,
+         "label": "58건"
         },
         {
          "name": "클라우드·인프라",
@@ -335,13 +335,13 @@
         },
         {
          "name": "보안·규제",
-         "value": 26,
-         "label": "26건"
+         "value": 25,
+         "label": "25건"
         },
         {
          "name": "업무 도구",
-         "value": 20,
-         "label": "20건"
+         "value": 18,
+         "label": "18건"
         },
         {
          "name": "CRM·고객",
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "61건",
+     "big": "58건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, SAP 발표가 가장 많아요",
      "easy": "",
@@ -372,8 +372,8 @@
         },
         {
          "name": "McKinsey",
-         "value": 9,
-         "label": "9건"
+         "value": 8,
+         "label": "8건"
         },
         {
          "name": "NVIDIA",
@@ -439,9 +439,9 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "26건",
+     "big": "25건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, OpenAI 발표가 가장 많아요",
+     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
      "easy": "",
      "body": "최근: 영국 정부 11/12 — United Kingdom-Norway Joint Statement of intent on Artificial Intelligence · Snowflake 11/12 — Agentic Enterprise Security: Where the Ecosystem Goes Next · 과학기술정보통신부 11/12 — 인공지능 안전 국민 점검단 「인공지능 안전 지킴이」 출범",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
@@ -450,12 +450,12 @@
        "kind": "rank",
        "items": [
         {
-         "name": "OpenAI",
-         "value": 4,
-         "label": "4건"
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
         },
         {
-         "name": "과학기술정보통신부",
+         "name": "OpenAI",
          "value": 3,
          "label": "3건"
         },
@@ -481,7 +481,7 @@
     {
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
-     "big": "20건",
+     "big": "18건",
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
@@ -493,8 +493,8 @@
        "items": [
         {
          "name": "OpenAI",
-         "value": 7,
-         "label": "7건"
+         "value": 5,
+         "label": "5건"
         },
         {
          "name": "Databricks",
@@ -1427,50 +1427,50 @@
    }
   },
   {
-   "key": "hftr:Qwen/Qwen3.8-27B:2026-11-14",
-   "subject": "hf:Qwen/Qwen3.8-27B",
+   "key": "hftr:DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF:2026-11-15",
+   "subject": "hf:DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
    "kind": "새로 진입",
    "tier": "small",
    "score": 12,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: Qwen/​Qwen3.8‑27B",
+   "headline": "트렌딩 상위 5에 새로: DavidAU/​Qwen3.8‑27B‑TURBO‑Fable‑Cold‑Fusion‑735‑882‑Heretic‑Uncensored‑NEO‑CODER‑MAX‑MTP‑GGUF",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
     "big": "5위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: Qwen/​Qwen3.8‑27B",
+    "title": "트렌딩 상위 5에 새로: DavidAU/​Qwen3.8‑27B‑TURBO‑Fable‑Cold‑Fusion‑735‑882‑Heretic‑Uncensored‑NEO‑CODER‑MAX‑MTP‑GGUF",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "image‑text‑to‑text · 2026-08-05 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-14",
+    "body": "image‑text‑to‑text · 2026-09-01 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-15",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
-        "value": 4132,
-        "label": "2.2만"
+        "value": 4239,
+        "label": "2.4만"
        },
        {
         "name": "MiniMax-H3-Image",
-        "value": 971,
-        "label": "44만"
-       },
-       {
-        "name": "LTX-2.5",
-        "value": 421,
-        "label": "278만"
-       },
-       {
-        "name": "Arete-27B",
-        "value": 420,
-        "label": "5,545"
+        "value": 1030,
+        "label": "52만"
        },
        {
         "name": "Qwen3.8-27B",
-        "value": 411,
-        "label": "696만"
+        "value": 440,
+        "label": "676만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 425,
+        "label": "278만"
+       },
+       {
+        "name": "Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+        "value": 363,
+        "label": "166만"
        }
       ]
      }
@@ -1557,7 +1557,7 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 61건 · 발표가 많은 곳: SAP 9건, McKinsey 9건, NVIDIA 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 58건 · 발표가 많은 곳: SAP 9건, McKinsey 8건, NVIDIA 8건"
   },
   {
    "group": "domain",
@@ -1567,12 +1567,12 @@
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 26건 · 발표가 많은 곳: OpenAI 4건, 과학기술정보통신부 3건, McKinsey 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: 과학기술정보통신부 3건, OpenAI 3건, McKinsey 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 20건 · 발표가 많은 곳: OpenAI 7건, Databricks 4건, SAP 2건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 18건 · 발표가 많은 곳: OpenAI 5건, Databricks 4건, SAP 2건"
   },
   {
    "group": "domain",
