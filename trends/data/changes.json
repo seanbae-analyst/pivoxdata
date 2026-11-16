@@ -6224,6 +6224,403 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "surge:PyPI:smolagents:2026-11-09",
+   "subject": "pkg:smolagents",
+   "kind": "급증",
+   "tier": "big",
+   "score": 90.3,
+   "topic": "ai",
+   "headline": "지난주 smolagents 다운로드가 평소의 2.0배",
+   "card": {
+    "id": "ev-surge-smolagents",
+    "k": "PyPI 다운로드",
+    "big": "2.0배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 smolagents 다운로드가 평소의 2.0배",
+    "easy": "평소 한 주보다 2.0배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 3.7만회, 직전 11주 평소는 1.8만회. 같은 주 대조군은 평소의 1.10배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       16953,
+       17521,
+       15021,
+       17571,
+       18307,
+       18641,
+       22086,
+       17682,
+       22689,
+       24852,
+       28005,
+       36520
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 18307,
+      "to": 36520,
+      "fromText": "1.8만",
+      "toText": "3.7만",
+      "fromLabel": "직전 11주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "surge:PyPI:faster-whisper:2026-11-09",
+   "subject": "pkg:faster-whisper",
+   "kind": "급증",
+   "tier": "big",
+   "score": 83.1,
+   "topic": "ai",
+   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.8배",
+   "card": {
+    "id": "ev-surge-faster-whisper",
+    "k": "PyPI 다운로드",
+    "big": "1.8배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 faster‑whisper 다운로드가 평소의 1.8배",
+    "easy": "평소 한 주보다 1.8배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 77만회, 직전 11주 평소는 42만회. 같은 주 대조군은 평소의 1.10배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       237656,
+       285645,
+       294361,
+       304896,
+       356143,
+       419208,
+       491489,
+       567273,
+       609978,
+       677380,
+       713288,
+       769306
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 419208,
+      "to": 769306,
+      "fromText": "42만",
+      "toText": "77만",
+      "fromLabel": "직전 11주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "surge:npm:@qwen-code/qwen-code:2026-11-09",
+   "subject": "pkg:@qwen-code/qwen-code",
+   "kind": "급증",
+   "tier": "big",
+   "score": 81.4,
+   "topic": "ai",
+   "headline": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-@qwen-code/qwen-code",
+    "k": "npm 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2.5만회, 직전 12주 평소는 1.3만회. 같은 주 대조군은 평소의 1.18배였습니다.",
+    "src": "npm 평일 다운로드 · 5월 18일 주–11월 9일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       13740,
+       9467,
+       18098,
+       24191,
+       14995,
+       11401,
+       33208,
+       9086,
+       13636,
+       16277,
+       8175,
+       10852,
+       10376.5,
+       11684,
+       14666,
+       9190.5,
+       11799,
+       11646,
+       12729,
+       15036,
+       11213,
+       14490,
+       13418,
+       21839,
+       19275,
+       25103
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 13073.5,
+      "to": 25103,
+      "fromText": "1.3만",
+      "toText": "2.5만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "surge:PyPI:openai-agents:2026-11-09",
+   "subject": "pkg:openai-agents",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.3,
+   "topic": "ai",
+   "headline": "지난주 OpenAI Agents 다운로드가 평소의 1.4배",
+   "card": {
+    "id": "ev-surge-openai-agents",
+    "k": "PyPI 다운로드",
+    "big": "1.4배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 OpenAI Agents 다운로드가 평소의 1.4배",
+    "easy": "평소 한 주보다 1.4배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 72만회, 직전 11주 평소는 53만회. 같은 주 대조군은 평소의 1.10배, AI 패키지 전반은 1.13배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       439865,
+       446734,
+       484237,
+       498994,
+       529149,
+       513103,
+       527284,
+       557433,
+       764362,
+       735727,
+       729873,
+       721452
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 527284,
+      "to": 721452,
+      "fromText": "53만",
+      "toText": "72만",
+      "fromLabel": "직전 11주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "surge:npm:@mastra/core:2026-11-09",
+   "subject": "pkg:@mastra/core",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.2,
+   "topic": "ai",
+   "headline": "지난주 Mastra 다운로드가 평소의 1.5배",
+   "card": {
+    "id": "ev-surge-@mastra/core",
+    "k": "npm 다운로드",
+    "big": "1.5배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Mastra 다운로드가 평소의 1.5배",
+    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 55만회, 직전 12주 평소는 36만회. 같은 주 대조군은 평소의 1.18배, AI 패키지 전반은 1.26배였습니다.",
+    "src": "npm 평일 다운로드 · 5월 18일 주–11월 9일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       172804,
+       156423,
+       171389,
+       196712,
+       194579,
+       196608,
+       186841,
+       203296,
+       211886,
+       216707,
+       235879,
+       229057,
+       259590.5,
+       256312,
+       282390,
+       294883,
+       329620,
+       317518,
+       342676,
+       374123,
+       430802.5,
+       453212,
+       553054,
+       516895,
+       532148,
+       545148
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 358399.5,
+      "to": 545148,
+      "fromText": "36만",
+      "toText": "55만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "rank1:npm:ollama:2026-11-09",
+   "subject": "pkg:ollama",
+   "kind": "순위",
+   "tier": "small",
+   "score": 35,
+   "topic": "ai",
+   "headline": "npm에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: Ollama",
+   "card": {
+    "id": "ch-rank1-npm",
+    "k": "npm 순위",
+    "big": "+18.4%p",
+    "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
+    "title": "npm에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: Ollama",
+    "easy": "npm에서 다른 패키지들보다 가장 빨리 크는 AI 도구가 바뀌었어요.",
+    "body": "지난번 1위는 Mastra.",
+    "src": "npm 평일 다운로드 · 11월 9일 주까지 4주",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Ollama",
+        "value": 0.184,
+        "label": "+18.4%p"
+       },
+       {
+        "name": "Mastra",
+        "value": 0.1756,
+        "label": "+17.6%p"
+       },
+       {
+        "name": "Anthropic",
+        "value": 0.1141,
+        "label": "+11.4%p"
+       },
+       {
+        "name": "Vercel AI SDK",
+        "value": 0.107,
+        "label": "+10.7%p"
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.1011,
+        "label": "+10.1%p"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "key": "hftr:Comfy-Org/MiniMax-H3-Image:2026-11-16",
+   "subject": "hf:Comfy-Org/MiniMax-H3-Image",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: Comfy‑Org/​MiniMax‑H3‑Image",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: Comfy‑Org/​MiniMax‑H3‑Image",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑to‑image · 2026-11-08 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-16",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic",
+        "value": 4103,
+        "label": "2.7만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 1095,
+        "label": "57만"
+       },
+       {
+        "name": "Qwen3.8-27B",
+        "value": 461,
+        "label": "655만"
+       },
+       {
+        "name": "LTX-2.5",
+        "value": 418,
+        "label": "275만"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 380,
+        "label": "197만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }
