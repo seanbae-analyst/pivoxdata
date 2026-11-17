@@ -1,0 +1,566 @@
+{
+ "date": "2026-11-17",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 2,
+ "original_numbers": [
+  "70",
+  "365",
+  "1998"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "정제된 데이터면\n충분할까요?",
+   "body": "11월 16일에 나온 공식 발표 4건으로\n기업의 AI 도입을 읽어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "title": "발표 4건,\n네 개 영역에서",
+   "body": "Databricks, NVIDIA,\nOpenAI가 낸 발표예요.\n데이터·분석, 공급망, 고객 접점,\n인력 교육을 차례로 읽어요.",
+   "src": "출처 · NVIDIA · OpenAI · Databricks 발표 4건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "title": "IFS Copperleaf\n사내 비서 IONA 구축",
+   "body": "Databricks는\nIFS Copperleaf가\nGenie One으로 IONA를\n만들었다고 밝혔어요.\n2026년 7월 출시 뒤\n활성화율은 70%였다고 해요.",
+   "src": "출처 · Databricks 공식 발표 · 11/16",
+   "case": {
+    "who": "IFS Copperleaf (Databricks 발표)",
+    "what": "사내 AI 비서 IONA(Genie One 기반)",
+    "where": "전사, 30곳 가까운 시스템의 데이터",
+    "how": "Skills로 업무 의미 학습",
+    "domain": "데이터·분석",
+    "method": "자체 구축",
+    "check": "우리 회사는 '활성 고객' 같은 지표를 부서마다 같은 뜻으로 쓰나요?",
+    "ref": 4
+   },
+   "kicker": "데이터·분석 · 자체 구축"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "title": "정의를 맞추는 일이\n먼저예요",
+   "body": "발표에 따르면 팀마다\n'활성 고객'의 정의가 달랐어요.\n데이터 정제만큼 용어 합의도\n프로젝트 범위에 든다는 뜻이에요.",
+   "src": "출처 · Databricks 공식 발표 · 11/16",
+   "case": {
+    "who": "IFS Copperleaf (Databricks 발표)",
+    "what": "사내 AI 비서 IONA(Genie One 기반)",
+    "where": "전사, 30곳 가까운 시스템의 데이터",
+    "how": "Skills로 업무 의미 학습",
+    "domain": "데이터·분석",
+    "method": "자체 구축",
+    "check": "우리 회사는 '활성 고객' 같은 지표를 부서마다 같은 뜻으로 쓰나요?",
+    "ref": 4
+   },
+   "kicker": "데이터·분석 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "NVIDIA가 밝힌\nAI 공급망 운영",
+   "body": "NVIDIA는 운영 총괄\nDeb Shoquist 인터뷰를 냈어요.\nTSMC 등 주요 공급사와\n분기마다 만난다고 밝혔어요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/16",
+   "case": {
+    "who": "NVIDIA",
+    "what": "AI 플랫폼 공급망·제조 운영",
+    "where": "운영 부문(공급망·제조)",
+    "how": "제조 파트너 네트워크, 분기별 공급사 협의",
+    "domain": "ERP·백오피스",
+    "method": "파트너십",
+    "check": "AI 인프라를 들일 때 공급사의 재무 체력과 기술력을 따져 봤나요?",
+    "ref": 1
+   },
+   "kicker": "ERP·백오피스 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "설계를 실물로 바꾸는\n공급망 역량",
+   "body": "Shoquist는 재무 체력, 기술력,\n새 일에 나설 의지로\n파트너를 고른다고 했어요.\nAI 인프라 조달에서도\n공급사 평가가 일정을 좌우한다고 읽혀요.",
+   "src": "출처 · NVIDIA 공식 발표 · 11/16",
+   "case": {
+    "who": "NVIDIA",
+    "what": "AI 플랫폼 공급망·제조 운영",
+    "where": "운영 부문(공급망·제조)",
+    "how": "제조 파트너 네트워크, 분기별 공급사 협의",
+    "domain": "ERP·백오피스",
+    "method": "파트너십",
+    "check": "AI 인프라를 들일 때 공급사의 재무 체력과 기술력을 따져 봤나요?",
+    "ref": 1
+   },
+   "kicker": "ERP·백오피스 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "LVMH 미디어 부문,\nOpenAI와 제휴",
+   "body": "OpenAI는 LVMH 미디어 부문과\n전략적 제휴를 발표했어요.\nAI로 저널리즘을 돕고,\n간행물을 ChatGPT에서\n보기 쉽게 한다고 해요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/16",
+   "case": {
+    "who": "LVMH 미디어 부문 (OpenAI 발표)",
+    "what": "OpenAI의 AI, ChatGPT",
+    "where": "저널리즘, 간행물",
+    "how": "전략적 파트너십",
+    "domain": "CRM·고객",
+    "method": "파트너십",
+    "check": "외부 AI 서비스에 나가는 우리 콘텐츠의 기준과 관리 주체를 정했나요?",
+    "ref": 2
+   },
+   "kicker": "CRM·고객 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "고객 접점이\nAI 대화창까지 와요",
+   "body": "독자를 만나는 창구에\n외부 AI 서비스가 더해진 셈이에요.\n그 안에서 콘텐츠가 어떻게\n보이는지도 관리할 대상이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/16",
+   "case": {
+    "who": "LVMH 미디어 부문 (OpenAI 발표)",
+    "what": "OpenAI의 AI, ChatGPT",
+    "where": "저널리즘, 간행물",
+    "how": "전략적 파트너십",
+    "domain": "CRM·고객",
+    "method": "파트너십",
+    "check": "외부 AI 서비스에 나가는 우리 콘텐츠의 기준과 관리 주체를 정했나요?",
+    "ref": 2
+   },
+   "kicker": "CRM·고객 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "청년 AI 교육,\n£1m 제휴 출범",
+   "body": "The King’s Trust와\nOpenAI는 £1m 제휴를\n시작했다고 밝혔어요.\n영국 청년 최대 25,000명이\n일에 쓸 AI 역량을\n쌓도록 돕는다고 해요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/16",
+   "case": {
+    "who": "The King’s Trust (OpenAI 발표)",
+    "what": "업무용 AI 역량 교육",
+    "where": "영국 청년 최대 25,000명",
+    "how": "£1m 파트너십",
+    "domain": "업무 도구",
+    "method": "파트너십",
+    "check": "AI 도구를 배포할 때 직원 교육 계획과 예산을 함께 잡았나요?",
+    "ref": 3
+   },
+   "kicker": "업무 도구 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "AI 역량이\n교육 과제가 돼요",
+   "body": "직무용 AI 역량이\n외부 제휴로도 다뤄진다는 뜻이에요.\n사내 도입에서도 도구 배포와\n교육을 한 계획에 담을 일이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/16",
+   "case": {
+    "who": "The King’s Trust (OpenAI 발표)",
+    "what": "업무용 AI 역량 교육",
+    "where": "영국 청년 최대 25,000명",
+    "how": "£1m 파트너십",
+    "domain": "업무 도구",
+    "method": "파트너십",
+    "check": "AI 도구를 배포할 때 직원 교육 계획과 예산을 함께 잡았나요?",
+    "ref": 3
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "title": "네 발표의 공통점은\n'연결'이에요",
+   "body": "IONA는 30곳 가까운 시스템을,\nNVIDIA는 제조 파트너를 묶었어요.\nOpenAI의 두 제휴도 외부 조직과\n손잡는 방식이었어요.",
+   "src": "출처 · NVIDIA · OpenAI · Databricks 발표 4건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "부서마다 지표 정의가 같나요?",
+    "연결할 시스템 권한을 정했나요?",
+    "AI 인프라 공급사를 평가했나요?",
+    "외부 AI에 낼 콘텐츠 기준이 있나요?",
+    "도구와 교육을 함께 계획했나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "AI 도입은\n연결을 설계하는 일",
+   "body": "이번 주 4건은 기술보다\n정의, 파트너, 사람을\n맞추는 일을 보여 줬어요."
+  }
+ ],
+ "caption": "이번 주 공식 발표 4건은 AI 도입이 '연결'의 일이라는 점을 보여 줬어요.\nIFS Copperleaf는 Databricks Genie One으로 사내 AI 비서 IONA를 만들었어요.\n→ 데이터 정제만큼 부서 간 용어 합의도 프로젝트 범위에 든다는 뜻이에요.\nNVIDIA는 운영 총괄 인터뷰로 제조 파트너와의 공급망 운영을 밝혔어요.\n→ AI 인프라 조달에서도 공급사 평가가 일정을 좌우한다고 읽혀요.\nOpenAI는 LVMH 미디어 부문과 저널리즘·간행물 제휴를 발표했어요.\n→ 고객 접점이 외부 AI 대화창까지 넓어졌어요.\nThe King’s Trust와 OpenAI는 영국 청년 AI 역량을 위한 £1m 제휴를 시작했어요.\n→ 도구 배포와 교육을 한 계획에 담을 일이에요.\n네 발표 모두 시스템, 파트너, 외부 조직을 묶는 방식이었어요.\n우리 회사는 부서마다 지표 정의가 같은지부터 확인해 보세요.",
+ "cases": [
+  {
+   "who": "IFS Copperleaf (Databricks 발표)",
+   "what": "사내 AI 비서 IONA(Genie One 기반)",
+   "where": "전사, 30곳 가까운 시스템의 데이터",
+   "how": "Skills로 업무 의미 학습",
+   "domain": "데이터·분석",
+   "method": "자체 구축",
+   "check": "우리 회사는 '활성 고객' 같은 지표를 부서마다 같은 뜻으로 쓰나요?",
+   "ref": 4,
+   "source": "Databricks",
+   "date": "2026-11-16",
+   "link": "https://www.databricks.com/blog/clean-data-was-never-enough-how-ifs-copperleaf-taught-ai-its-business-databricks-genie-one-0"
+  },
+  {
+   "who": "NVIDIA",
+   "what": "AI 플랫폼 공급망·제조 운영",
+   "where": "운영 부문(공급망·제조)",
+   "how": "제조 파트너 네트워크, 분기별 공급사 협의",
+   "domain": "ERP·백오피스",
+   "method": "파트너십",
+   "check": "AI 인프라를 들일 때 공급사의 재무 체력과 기술력을 따져 봤나요?",
+   "ref": 1,
+   "source": "NVIDIA",
+   "date": "2026-11-16",
+   "link": "https://blogs.nvidia.com/blog/ai-infrastructure-supply-chain/"
+  },
+  {
+   "who": "LVMH 미디어 부문 (OpenAI 발표)",
+   "what": "OpenAI의 AI, ChatGPT",
+   "where": "저널리즘, 간행물",
+   "how": "전략적 파트너십",
+   "domain": "CRM·고객",
+   "method": "파트너십",
+   "check": "외부 AI 서비스에 나가는 우리 콘텐츠의 기준과 관리 주체를 정했나요?",
+   "ref": 2,
+   "source": "OpenAI",
+   "date": "2026-11-16",
+   "link": "https://openai.com/index/lvmh-media-division-partnership"
+  },
+  {
+   "who": "The King’s Trust (OpenAI 발표)",
+   "what": "업무용 AI 역량 교육",
+   "where": "영국 청년 최대 25,000명",
+   "how": "£1m 파트너십",
+   "domain": "업무 도구",
+   "method": "파트너십",
+   "check": "AI 도구를 배포할 때 직원 교육 계획과 예산을 함께 잡았나요?",
+   "ref": 3,
+   "source": "OpenAI",
+   "date": "2026-11-16",
+   "link": "https://openai.com/index/the-kings-trust-and-openai"
+  }
+ ],
+ "sources": [
+  {
+   "source": "NVIDIA",
+   "kind": "company",
+   "date": "2026-11-16",
+   "title": "How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future",
+   "link": "https://blogs.nvidia.com/blog/ai-infrastructure-supply-chain/",
+   "id": "66395cf511",
+   "original": true
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-16",
+   "title": "LVMH’s Media Division announces strategic partnership with OpenAI",
+   "link": "https://openai.com/index/lvmh-media-division-partnership",
+   "id": "91e58e2ea9",
+   "original": false
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-16",
+   "title": "The King’s Trust and OpenAI launch £1m partnership",
+   "link": "https://openai.com/index/the-kings-trust-and-openai",
+   "id": "e3915f7e4c",
+   "original": false
+  },
+  {
+   "source": "Databricks",
+   "kind": "company",
+   "date": "2026-11-16",
+   "title": "Clean data was never enough: How IFS Copperleaf taught AI its business with Databricks Genie One",
+   "link": "https://www.databricks.com/blog/clean-data-was-never-enough-how-ifs-copperleaf-taught-ai-its-business-databricks-genie-one-0",
+   "id": "ea83950bc1",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "정제된 데이터만으로는 모자랐던 이유: 11월 16일 AX 발표 4건",
+  "lede": "11월 16일 Databricks, NVIDIA, OpenAI가 낸 공식 발표 4건을 도입 사례처럼 읽었어요. 사내 AI 비서, AI 인프라 공급망, 미디어 제휴, 청년 AI 교육으로 영역은 서로 달라요. 그래도 네 발표 모두 무언가를 잇는 일을 다뤘어요. 각 사례에 비춰 우리 회사 도입 프로젝트에서 확인할 점을 정리했어요.",
+  "sections": [
+   {
+    "heading": "발표 4건이 나온 자리",
+    "body": "이번에 읽는 발표는 모두 2026년 11월 16일에 나왔어요. Databricks는 고객사 IFS Copperleaf의 사내 AI 비서 구축기를 냈어요. NVIDIA는 운영 총괄의 인터뷰를, OpenAI는 제휴 소식 두 건을 냈어요.\n\nIT 영역으로 나누면 데이터·분석, ERP·백오피스(공급망), CRM·고객, 업무 도구예요. 영역은 달라도 함께 읽을 이유가 있어요. 네 발표 모두 기술 자체보다 시스템, 공급사, 외부 조직, 사람을 어떻게 잇는지를 다뤄요.\n\n배경 숫자도 하나 짚어요. Ramp AI Index는 미국 기업의 유료 결제 기록을 기준으로 해요. 여기서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 10월 56.8%였어요. 도구를 사는 회사가 많아질수록 그 도구를 무엇과 어떻게 이을지가 프로젝트의 큰 몫이 된다는 뜻으로 읽혀요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future",
+      "link": "https://blogs.nvidia.com/blog/ai-infrastructure-supply-chain/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "LVMH’s Media Division announces strategic partnership with OpenAI",
+      "link": "https://openai.com/index/lvmh-media-division-partnership"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "The King’s Trust and OpenAI launch £1m partnership",
+      "link": "https://openai.com/index/the-kings-trust-and-openai"
+     },
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "Clean data was never enough: How IFS Copperleaf taught AI its business with Databricks Genie One",
+      "link": "https://www.databricks.com/blog/clean-data-was-never-enough-how-ifs-copperleaf-taught-ai-its-business-databricks-genie-one-0"
+     }
+    ]
+   },
+   {
+    "heading": "IFS Copperleaf: 깨끗한 데이터에 '업무의 뜻'을 더하다",
+    "body": "Databricks는 IFS Copperleaf가 Databricks Genie One으로 사내 AI 비서 IONA를 만들었다고 발표했어요. 발표에 따르면 IFS Copperleaf는 자산 투자 계획(AIP) 소프트웨어를 만드는 회사이고, 지금은 IFS에 속해 있어요. 출발점은 2025년 가을이었어요. 회사의 데이터 아키텍트와 기술·AI 책임자가 2년 뒤 데이터 업무가 어떤 모습일지 따져 봤다고 해요. 그때 개발자는 이미 AI가 쓴 코드를 내놓고 있었고, 데이터 팀은 여전히 파이프라인을 손으로 짜고 있었다고 해요.\n\nIONA는 회사 안의 누구나 쓰는 비서예요. Salesforce, HubSpot, M365 등 30곳 가까운 시스템의 관리되는 데이터에 평이한 영어로 질문할 수 있어요. 발표는 데이터를 정제하는 것만으로는 모자랐다고 밝혔어요. 팀마다 '활성 고객' 같은 지표를 다르게 정의했기 때문이에요. 그래서 IONA는 원본 데이터를 바탕으로 답해요. 그 데이터가 무슨 뜻인지는 현업 팀이 Genie Ontology 기반의 Skills로 가르치고, 이 과정은 Unity Catalog로 관리한다고 설명했어요.\n\n발표에 따르면 IONA는 2026년 7월 출시 뒤 활성화율 70%를 기록했어요. 운영비는 4개월 안에 회수했다고 밝혔어요. 영업 담당자는 확장 영업을 준비하면서 세 가지를 한 번에 묻는다고 해요. 고객이 무엇을 쓰고 있는지, 추가 판매 여지(화이트스페이스)가 어디인지, 계약상 SaaS로 옮길 수 있는지예요. 답의 근거는 라이선스 기록과 계약서라고 해요.\n\n데이터·분석 프로젝트의 범위를 '데이터 정제'에서 끝내면 부서 사이의 용어 차이가 그대로 남는다는 뜻이에요. 그러니 확인할 점은 부서마다 핵심 지표를 같은 뜻으로 쓰는지, 다르다면 누가 정의를 정하고 고치는지예요. IONA처럼 여러 시스템을 묶는다면 시스템마다 접근 권한을 어떻게 다룰지도 함께 정해야 해요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "IFS Copperleaf (Databricks 발표)",
+     "what": "사내 AI 비서 IONA(Genie One 기반)",
+     "where": "전사, 30곳 가까운 시스템의 데이터",
+     "how": "Skills로 업무 의미 학습",
+     "domain": "데이터·분석",
+     "method": "자체 구축",
+     "check": "우리 회사는 '활성 고객' 같은 지표를 부서마다 같은 뜻으로 쓰나요?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "Clean data was never enough: How IFS Copperleaf taught AI its business with Databricks Genie One",
+      "link": "https://www.databricks.com/blog/clean-data-was-never-enough-how-ifs-copperleaf-taught-ai-its-business-databricks-genie-one-0"
+     }
+    ]
+   },
+   {
+    "heading": "NVIDIA: 설계도를 실물로 바꾸는 공급망",
+    "body": "NVIDIA는 운영 총괄 Deb Shoquist의 인터뷰를 공개했어요. Shoquist는 AI 플랫폼의 공급망과 제조를 맡고 있어요. 발표에는 그가 최근 혁신을 이끈 여성에게 주는 상을 받았다는 내용도 있어요. 제품 출시나 고객 도입 소식은 아니에요. AI 인프라가 만들어지는 뒤편을 보여 주는 발표예요.\n\nShoquist는 설계 팀이 만든 청사진을 믿을 수 있는 고성능 공급망으로 옮기는 것이 자기 일이라고 설명했어요. 협력사로 TSMC, Foxconn, Wistron 등 제조사를 들었고, TSMC와는 1998년부터 함께했다고 밝혔어요. 핵심 공급사와는 분기마다 만나요. 해마다 6주는 대만, 중국, 한국, 베트남, 미국의 파트너 공장을 직접 찾는다고 해요.\n\n그는 공급사를 고를 때 세 가지를 본다고 했어요. 생산 확대에 투자할 만한 재무 체력, 높은 기술력, 전에 없던 일에 나설 의지예요. 셋 중 하나라도 빠지면 필요한 물량과 속도를 낼 수 없다고 말했어요.\n\nERP·백오피스의 공급망 관점에서는 공급사 관리가 계약과 발주에서 끝나지 않고 현장의 문제 해결까지 이어진다는 뜻이에요. AI 인프라를 들이는 기업도 하드웨어·클라우드 공급사의 재무 체력과 기술력을 일정 리스크로 따져 봐야 한다고 읽혀요. 다만 이 발표는 NVIDIA의 내부 운영 이야기예요. 고객 기업의 도입 사례는 아니라는 점을 감안해야 해요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "NVIDIA",
+     "what": "AI 플랫폼 공급망·제조 운영",
+     "where": "운영 부문(공급망·제조)",
+     "how": "제조 파트너 네트워크, 분기별 공급사 협의",
+     "domain": "ERP·백오피스",
+     "method": "파트너십",
+     "check": "AI 인프라를 들일 때 공급사의 재무 체력과 기술력을 따져 봤나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future",
+      "link": "https://blogs.nvidia.com/blog/ai-infrastructure-supply-chain/"
+     }
+    ]
+   },
+   {
+    "heading": "LVMH 미디어 부문: 독자를 만나는 창구가 넓어지다",
+    "body": "OpenAI는 LVMH 미디어 부문과 전략적 파트너십을 맺었다고 발표했어요. 요약에 적힌 목적은 두 가지예요. AI로 저널리즘을 돕는 것, 그리고 이 부문의 간행물을 ChatGPT에서 더 쉽게 볼 수 있게 하는 것이에요.\n\n원문은 읽지 못해서 제목과 요약만 근거로 썼어요. 어느 매체가 참여하는지, AI를 편집 업무의 어느 단계에 쓰는지, 계약 조건이 무엇인지는 발표 요약에 없어요.\n\nCRM·고객 영역에서 보면 독자를 만나는 창구가 자사 웹사이트와 앱을 넘어 외부 AI 대화창까지 넓어진다는 뜻이에요. 고객이 우리 콘텐츠를 어디서 어떤 모습으로 보는지가 자사 시스템 밖에서도 정해진다는 점이 달라져요.\n\n그래서 외부 AI 서비스로 나가는 콘텐츠의 기준과 관리 주체를 확인해야 해요. 어떤 콘텐츠를 내보내고 어떤 것은 내보내지 않을지 정해야 해요. 노출 방식이 바뀌었을 때 누가 점검할지도 미리 정해 두지 않으면 책임이 흐려질 수 있어요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "LVMH 미디어 부문 (OpenAI 발표)",
+     "what": "OpenAI의 AI, ChatGPT",
+     "where": "저널리즘, 간행물",
+     "how": "전략적 파트너십",
+     "domain": "CRM·고객",
+     "method": "파트너십",
+     "check": "외부 AI 서비스에 나가는 우리 콘텐츠의 기준과 관리 주체를 정했나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "LVMH’s Media Division announces strategic partnership with OpenAI",
+      "link": "https://openai.com/index/lvmh-media-division-partnership"
+     }
+    ]
+   },
+   {
+    "heading": "The King’s Trust: AI 역량을 교육으로 다루다",
+    "body": "OpenAI는 The King’s Trust와 £1m 파트너십을 시작했다고 발표했어요. 영국 청년 최대 25,000명이 일에 쓸 실용적인 AI 역량을 쌓도록 돕는 내용이에요.\n\n이 발표도 원문을 읽지 못해 제목과 요약만 근거로 썼어요. 교육 과정, 기간, 쓰는 도구는 요약에 없어요. 기업이 자사 시스템에 AI를 들인 사례가 아니라 청년을 대상으로 한 교육 제휴라는 점도 감안해야 해요.\n\n업무 도구 영역에서 보면 직무용 AI 역량이 따로 다뤄야 할 교육 과제가 됐다는 뜻이에요. 사내에 AI 도구를 배포할 때도 라이선스와 함께 사람들이 그 도구를 일에 쓰는 법을 익히는 과정이 있어야 한다고 읽혀요.\n\n확인할 점은 도구 배포 계획 안에 교육 계획과 예산이 함께 들어 있는지예요. 교육 대상과 범위를 누가 정하는지, 배포 뒤 실제로 얼마나 쓰는지를 어떻게 볼지도 변화 관리 항목에 넣어야 해요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "The King’s Trust (OpenAI 발표)",
+     "what": "업무용 AI 역량 교육",
+     "where": "영국 청년 최대 25,000명",
+     "how": "£1m 파트너십",
+     "domain": "업무 도구",
+     "method": "파트너십",
+     "check": "AI 도구를 배포할 때 직원 교육 계획과 예산을 함께 잡았나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "The King’s Trust and OpenAI launch £1m partnership",
+      "link": "https://openai.com/index/the-kings-trust-and-openai"
+     }
+    ]
+   },
+   {
+    "heading": "네 발표를 잇는 말, '연결'",
+    "body": "네 발표를 나란히 놓으면 공통점이 보여요. IONA는 30곳 가까운 시스템을 질문 창구 하나로 묶었어요. NVIDIA는 여러 나라의 제조 파트너 네트워크로 설계를 실물로 옮겨요. OpenAI의 두 발표는 미디어 기업, 청년 지원 단체와 손잡는 방식이었어요.\n\n잇는 대상은 저마다 달라요. IONA는 데이터와 그 뜻을, NVIDIA는 설계와 공급사를 이어요. LVMH 제휴는 콘텐츠와 독자를, King’s Trust 제휴는 도구와 사람을 이어요. 어느 쪽이든 기술을 사는 것으로 끝나지 않고, 함께 맞춰야 할 상대가 생긴다는 뜻이에요.\n\n최근 30일 회사·정부의 공식 AX 발표를 IT 영역별로 세면 AI 에이전트가 65건, 클라우드·인프라가 37건이에요. 데이터·분석은 13건, ERP·백오피스는 7건이었어요. 이번 주에는 발표가 적은 영역에서도 실제 운영 이야기가 나왔어요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "NVIDIA",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future",
+      "link": "https://blogs.nvidia.com/blog/ai-infrastructure-supply-chain/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "LVMH’s Media Division announces strategic partnership with OpenAI",
+      "link": "https://openai.com/index/lvmh-media-division-partnership"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "The King’s Trust and OpenAI launch £1m partnership",
+      "link": "https://openai.com/index/the-kings-trust-and-openai"
+     },
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-16",
+      "title": "Clean data was never enough: How IFS Copperleaf taught AI its business with Databricks Genie One",
+      "link": "https://www.databricks.com/blog/clean-data-was-never-enough-how-ifs-copperleaf-taught-ai-its-business-databricks-genie-one-0"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 발표들은 데이터, ERP·공급망, CRM, 업무 도구 영역의 AI 도입 프로젝트에서 구현에 앞서 할 일이 크다는 점을 보여 줘요. 영역마다 범위에 넣을 일이 있어요. 데이터 플랫폼에서는 지표 정의와 거버넌스, 공급망·인프라에서는 공급사 평가예요. 고객 접점에서는 외부 채널에 낼 콘텐츠 기준, 업무 도구에서는 교육이에요. 이 일들은 뒤로 미루지 말고 처음 견적과 일정에 담아야 해요.\n\n· 부서마다 '활성 고객' 같은 핵심 지표를 같은 뜻으로 쓰나요? 정의는 누가 관리하나요?\n· AI 비서에 연결할 시스템과 시스템별 접근 권한을 정했나요?\n· AI 인프라 공급사의 재무 체력과 기술력을 일정 리스크로 따져 봤나요?\n· 외부 AI 서비스에 내보낼 콘텐츠의 기준과 관리 주체가 있나요?\n· 도구 배포 계획에 직원 교육과 예산이 함께 들어 있나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "IFS Copperleaf는 데이터 정제만으로는 모자랐고, 팀마다 다른 지표 정의를 맞추는 일이 필요했다고 Databricks는 밝혔어요.",
+   "NVIDIA의 Shoquist는 재무 체력, 기술력, 새 일에 나설 의지로 공급사를 고른다고 했어요.",
+   "OpenAI의 두 제휴는 콘텐츠와 독자, 도구와 사람을 잇는 방식이었어요.",
+   "네 발표 모두 기술보다 시스템, 공급사, 외부 조직, 사람을 맞추는 일을 다뤘어요."
+  ],
+  "terms": [
+   {
+    "term": "활성화율",
+    "def": "도구를 쓸 수 있는 사람 가운데 실제로 써 본 사람이 얼마나 되는지를 나타내는 지표예요. 배포한 도구가 현장에서 쓰이는지 볼 때 써요."
+   },
+   {
+    "term": "화이트스페이스",
+    "def": "기존 고객에게 아직 팔지 않은 제품이나 서비스, 곧 추가로 판매할 여지가 남은 영역을 뜻하는 영업 용어예요."
+   },
+   {
+    "term": "파이프라인",
+    "def": "여러 시스템에서 데이터를 가져와 정리하고, 분석할 수 있는 곳으로 옮기는 일련의 처리 흐름이에요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "adoption",
+    "deal",
+    "data"
+   ],
+   "industries": [
+    "tech",
+    "media",
+    "education"
+   ],
+   "companies": [
+    {
+     "id": "nvidia",
+     "name": "NVIDIA"
+    },
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    },
+    {
+     "id": "databricks",
+     "name": "Databricks"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

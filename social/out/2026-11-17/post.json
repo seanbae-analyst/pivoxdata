@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-17",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-17/",
+ "caption": "이번 주 공식 발표 4건은 AI 도입이 '연결'의 일이라는 점을 보여 줬어요.\nIFS Copperleaf는 Databricks Genie One으로 사내 AI 비서 IONA를 만들었어요.\n→ 데이터 정제만큼 부서 간 용어 합의도 프로젝트 범위에 든다는 뜻이에요.\nNVIDIA는 운영 총괄 인터뷰로 제조 파트너와의 공급망 운영을 밝혔어요.\n→ AI 인프라 조달에서도 공급사 평가가 일정을 좌우한다고 읽혀요.\nOpenAI는 LVMH 미디어 부문과 저널리즘·간행물 제휴를 발표했어요.\n→ 고객 접점이 외부 AI 대화창까지 넓어졌어요.\nThe King’s Trust와 OpenAI는 영국 청년 AI 역량을 위한 £1m 제휴를 시작했어요.\n→ 도구 배포와 교육을 한 계획에 담을 일이에요.\n네 발표 모두 시스템, 파트너, 외부 조직을 묶는 방식이었어요.\n우리 회사는 부서마다 지표 정의가 같은지부터 확인해 보세요.\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-17\n출처(공식 발표): NVIDIA · OpenAI · Databricks — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newstheme",
+  "format_name": "AX 사건 묶어 보기",
+  "source": "claude",
+  "slides": 13
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 98,
+  "problems": []
+ }
+}
