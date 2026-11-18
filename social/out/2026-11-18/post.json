@@ -1,0 +1,37 @@
+{
+ "date": "2026-11-18",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png",
+  "14.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-18/",
+ "caption": "이번 주 AX 발표 4건은 AI가 직원이 이미 쓰는 화면으로 들어가는 이야기예요.\nSalesforce와 Microsoft는 Copilotforce로 CRM 정보와 영업 작업을 Copilot·Teams에 넣는다고 발표했어요.\n→ 메일·회의가 CRM 작업의 재료가 되면서 데이터 설계가 먼저인 일로 읽혀요.\nOpenAI는 ChatGPT에 Sales 플러그인과 파트너 플러그인 30+개를 더했다고 밝혔어요.\n→ CRM 갱신이 대화창 안에서 이뤄질 수 있다는 뜻이에요.\nOpenAI는 칠레 정부와 책임 있는 AI 도입, 공공 역량을 돕는 파트너십을 발표했어요.\n→ 공공 AI 도입에 교육과 운영 원칙이 함께 들어갔어요.\nOpenAI는 Astra for Law가 24개 법 분야 평가에서 1위였다고 밝혔고, ChatGPT Enterprise 고객은 이용을 신청할 수 있어요.\n→ 전문 업무 AI가 기업 계정 안에서 따로 열리는 구조예요.\n공통 흐름: 새 앱보다 기존 도구에 붙는 발표가 많았어요.\n확인할 점: 메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-18\n출처(공식 발표): OpenAI · Salesforce — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newstheme",
+  "format_name": "AX 사건 묶어 보기",
+  "source": "claude",
+  "slides": 14
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 99,
+  "problems": []
+ }
+}

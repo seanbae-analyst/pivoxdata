@@ -1,0 +1,574 @@
+{
+ "date": "2026-11-18",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 1,
+ "original_numbers": [],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "AX 사건 · 11월 셋째 주",
+   "title": "AI는 이제\n영업 화면 안으로?",
+   "body": "OpenAI와 Salesforce가\n같은 날 영업용 AI를\n내놨어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "kicker": "이번 주 배경",
+   "title": "발표 4건,\n세 갈래로 읽혀요",
+   "body": "CRM·고객 2건, 업무 도구 1건,\n공공 파트너십 1건이에요.\n모두 11월 17일에 나왔어요.",
+   "src": "출처 · OpenAI · Salesforce 발표 4건"
+  },
+  {
+   "kind": "number",
+   "refs": [
+    3,
+    4
+   ],
+   "kicker": "최근 30일",
+   "title": "영업 AI 발표가\n이어지고 있어요",
+   "number": "15건",
+   "label": "CRM·고객 영역 공식 AX 발표",
+   "body": "Salesforce 5건,\nCapgemini 4건,\nOpenAI 2건 순이에요.\nCopilotforce와\nChatGPT for Sales도\n이 영역에 들어요.",
+   "src": "출처 · Salesforce 공식 발표 · 11/17 / OpenAI 공식 발표 · 11/17"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "kicker": "CRM·고객 · 파트너십",
+   "title": "Salesforce가\nCopilot 안으로",
+   "body": "Salesforce와 Microsoft는\nCopilot에서 고객 정보를 보고\nCRM 작업까지 할 수 있게 한다고\n발표했어요.\nAccenture는 첫 고객으로\n자사 영업 조직에 배포해요.",
+   "src": "출처 · Salesforce 공식 발표 · 11/17",
+   "case": {
+    "who": "Salesforce와 Microsoft",
+    "what": "Copilotforce 연동",
+    "where": "Copilot·Teams 속 영업 업무",
+    "how": "Data 360·Fabric 무복사 양방향 연결",
+    "domain": "CRM·고객",
+    "method": "파트너십",
+    "check": "메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?",
+    "ref": 3
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "kicker": "CRM·고객 · 무슨 뜻인가",
+   "title": "CRM이 메일·회의\n곁으로 와요",
+   "body": "Teams 대화·Outlook 메일이\nCRM 작업의 재료가 된다는\n뜻이에요.\nData 360과 Fabric은\n복사 없이 양방향으로 이어져\n데이터 설계가 먼저인 일로 읽혀요.",
+   "src": "출처 · Salesforce 공식 발표 · 11/17",
+   "case": {
+    "who": "Salesforce와 Microsoft",
+    "what": "Copilotforce 연동",
+    "where": "Copilot·Teams 속 영업 업무",
+    "how": "Data 360·Fabric 무복사 양방향 연결",
+    "domain": "CRM·고객",
+    "method": "파트너십",
+    "check": "메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?",
+    "ref": 3
+   }
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "kicker": "CRM·고객 · 제품 출시",
+   "title": "OpenAI가\n영업 플러그인을 내놨어요",
+   "body": "OpenAI는 Sales 플러그인과\n파트너 플러그인 30+개를\nChatGPT에 더했다고 밝혔어요.\n잠재 고객 조사, 제안 준비,\nCRM 갱신을 돕는다고 했어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "OpenAI",
+    "what": "ChatGPT Sales 플러그인 등",
+    "where": "잠재 고객 조사·제안·CRM 갱신",
+    "how": "ChatGPT에 플러그인 30+개 추가",
+    "domain": "CRM·고객",
+    "method": "제품 출시",
+    "check": "플러그인이 CRM에 쓰는 값을 누가 검수하나요?",
+    "ref": 4
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "kicker": "CRM·고객 · 무슨 뜻인가",
+   "title": "CRM 입력이\n대화창으로 와요",
+   "body": "CRM 갱신이 채팅 도구 안에서\n이뤄질 수 있다는 뜻이에요.\nCopilotforce와 함께 보면\n영업 AI의 입구가 한곳이 아니에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "OpenAI",
+    "what": "ChatGPT Sales 플러그인 등",
+    "where": "잠재 고객 조사·제안·CRM 갱신",
+    "how": "ChatGPT에 플러그인 30+개 추가",
+    "domain": "CRM·고객",
+    "method": "제품 출시",
+    "check": "플러그인이 CRM에 쓰는 값을 누가 검수하나요?",
+    "ref": 4
+   }
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "kicker": "보안·규제 · 파트너십",
+   "title": "OpenAI와 칠레 정부가\n손잡았어요",
+   "body": "OpenAI는 칠레 정부와\nOpenAI for Chile를\n시작한다고 발표했어요.\n책임 있는 AI 도입, 공공 역량,\n현지 스타트업의 AI 앱 개발을\n돕는 것이 목표라고 했어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "칠레 정부 (OpenAI 발표)",
+    "what": "OpenAI for Chile",
+    "where": "공공 부문·현지 스타트업",
+    "how": "정부와 파트너십",
+    "domain": "보안·규제",
+    "method": "파트너십",
+    "check": "우리 조직의 책임 있는 AI 사용 기준은 문서로 있나요?",
+    "ref": 2
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "kicker": "보안·규제 · 무슨 뜻인가",
+   "title": "공공 AI는\n기준과 교육이 함께예요",
+   "body": "정부 파트너십에 '책임 있는 도입'과\n인력 교육이 같이 들어갔다는\n뜻이에요.\n공공 도입에서는 운영 원칙이\n도구만큼 중요하다는\n해석이 가능해요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "칠레 정부 (OpenAI 발표)",
+    "what": "OpenAI for Chile",
+    "where": "공공 부문·현지 스타트업",
+    "how": "정부와 파트너십",
+    "domain": "보안·규제",
+    "method": "파트너십",
+    "check": "우리 조직의 책임 있는 AI 사용 기준은 문서로 있나요?",
+    "ref": 2
+   }
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "kicker": "업무 도구 · 제품 출시",
+   "title": "OpenAI,\n법률 AI를 열었어요",
+   "body": "OpenAI는 Astra for Law가\n24개 법 분야 출시 평가에서\n1위를 했다고 밝혔어요.\nChatGPT Enterprise 고객은\n모두 이용을 신청할 수 있어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "OpenAI",
+    "what": "Astra for Law(법률 AI)",
+    "where": "법률 업무",
+    "how": "ChatGPT Enterprise 고객 신청형",
+    "domain": "업무 도구",
+    "method": "제품 출시",
+    "check": "법률 문서를 AI에 넣기 전 기밀 분류 기준이 있나요?",
+    "ref": 1
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "kicker": "업무 도구 · 무슨 뜻인가",
+   "title": "전문 업무 AI가\n기업 계정에 붙어요",
+   "body": "범용 업무 도구 계약 안에서\n법률 같은 전문 영역 AI를\n따로 신청해 쓰는 구조예요.\n1위라는 평가는 OpenAI의 기준이라\n우리 업무로 다시 시험할 몫이 남아요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/17",
+   "case": {
+    "who": "OpenAI",
+    "what": "Astra for Law(법률 AI)",
+    "where": "법률 업무",
+    "how": "ChatGPT Enterprise 고객 신청형",
+    "domain": "업무 도구",
+    "method": "제품 출시",
+    "check": "법률 문서를 AI에 넣기 전 기밀 분류 기준이 있나요?",
+    "ref": 1
+   }
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    3,
+    4
+   ],
+   "kicker": "영역을 가로질러",
+   "title": "AI가 이미 쓰는\n도구 안으로 와요",
+   "body": "새 앱보다 Copilot, Teams,\nChatGPT 같은 기존 화면에\n붙는 발표가 세 건이었어요.\n과제가 도구 선택보다 데이터 연결과\n권한 쪽에 있다는 뜻으로 읽혀요.",
+   "src": "출처 · OpenAI · Salesforce 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "kicker": "실무 체크",
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "CRM과 메일·문서 권한이 맞나요?",
+    "복사 없는 연결의 데이터 책임자는요?",
+    "플러그인이 쓴 CRM 값은 누가 보나요?",
+    "기밀 문서 투입 기준이 있나요?",
+    "직원 교육 계획이 예산에 있나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "kicker": "정리",
+   "title": "AI는 새 앱보다\n기존 화면으로 와요",
+   "body": "이번 주 발표의 공통점은\n연결이에요. 도구보다 먼저\n데이터와 권한을 점검해 보세요."
+  }
+ ],
+ "caption": "이번 주 AX 발표 4건은 AI가 직원이 이미 쓰는 화면으로 들어가는 이야기예요.\nSalesforce와 Microsoft는 Copilotforce로 CRM 정보와 영업 작업을 Copilot·Teams에 넣는다고 발표했어요.\n→ 메일·회의가 CRM 작업의 재료가 되면서 데이터 설계가 먼저인 일로 읽혀요.\nOpenAI는 ChatGPT에 Sales 플러그인과 파트너 플러그인 30+개를 더했다고 밝혔어요.\n→ CRM 갱신이 대화창 안에서 이뤄질 수 있다는 뜻이에요.\nOpenAI는 칠레 정부와 책임 있는 AI 도입, 공공 역량을 돕는 파트너십을 발표했어요.\n→ 공공 AI 도입에 교육과 운영 원칙이 함께 들어갔어요.\nOpenAI는 Astra for Law가 24개 법 분야 평가에서 1위였다고 밝혔고, ChatGPT Enterprise 고객은 이용을 신청할 수 있어요.\n→ 전문 업무 AI가 기업 계정 안에서 따로 열리는 구조예요.\n공통 흐름: 새 앱보다 기존 도구에 붙는 발표가 많았어요.\n확인할 점: 메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?",
+ "cases": [
+  {
+   "who": "Salesforce와 Microsoft",
+   "what": "Copilotforce 연동",
+   "where": "Copilot·Teams 속 영업 업무",
+   "how": "Data 360·Fabric 무복사 양방향 연결",
+   "domain": "CRM·고객",
+   "method": "파트너십",
+   "check": "메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?",
+   "ref": 3,
+   "source": "Salesforce",
+   "date": "2026-11-17",
+   "link": "https://www.salesforce.com/news/stories/copilotforce-announcement/"
+  },
+  {
+   "who": "OpenAI",
+   "what": "ChatGPT Sales 플러그인 등",
+   "where": "잠재 고객 조사·제안·CRM 갱신",
+   "how": "ChatGPT에 플러그인 30+개 추가",
+   "domain": "CRM·고객",
+   "method": "제품 출시",
+   "check": "플러그인이 CRM에 쓰는 값을 누가 검수하나요?",
+   "ref": 4,
+   "source": "OpenAI",
+   "date": "2026-11-17",
+   "link": "https://openai.com/index/introducing-chatgpt-for-sales"
+  },
+  {
+   "who": "칠레 정부 (OpenAI 발표)",
+   "what": "OpenAI for Chile",
+   "where": "공공 부문·현지 스타트업",
+   "how": "정부와 파트너십",
+   "domain": "보안·규제",
+   "method": "파트너십",
+   "check": "우리 조직의 책임 있는 AI 사용 기준은 문서로 있나요?",
+   "ref": 2,
+   "source": "OpenAI",
+   "date": "2026-11-17",
+   "link": "https://openai.com/index/introducing-openai-for-chile"
+  },
+  {
+   "who": "OpenAI",
+   "what": "Astra for Law(법률 AI)",
+   "where": "법률 업무",
+   "how": "ChatGPT Enterprise 고객 신청형",
+   "domain": "업무 도구",
+   "method": "제품 출시",
+   "check": "법률 문서를 AI에 넣기 전 기밀 분류 기준이 있나요?",
+   "ref": 1,
+   "source": "OpenAI",
+   "date": "2026-11-17",
+   "link": "https://openai.com/index/astra-law-6-2"
+  }
+ ],
+ "sources": [
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-17",
+   "title": "Astra for Law leads in legal intelligence",
+   "link": "https://openai.com/index/astra-law-6-2",
+   "id": "0604bc2b50",
+   "original": false
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-17",
+   "title": "Introducing OpenAI for Chile",
+   "link": "https://openai.com/index/introducing-openai-for-chile",
+   "id": "58da9c66b1",
+   "original": false
+  },
+  {
+   "source": "Salesforce",
+   "kind": "company",
+   "date": "2026-11-17",
+   "title": "Salesforce and Microsoft Announce Copilotforce, Bringing Salesforce Customer Context and Sales Workflows to Microsoft Copilot",
+   "link": "https://www.salesforce.com/news/stories/copilotforce-announcement/",
+   "id": "bd11114f34",
+   "original": true
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-17",
+   "title": "Introducing ChatGPT for Sales",
+   "link": "https://openai.com/index/introducing-chatgpt-for-sales",
+   "id": "c6c361c53b",
+   "original": false
+  }
+ ],
+ "article": {
+  "title": "영업 AI가 Copilot과 ChatGPT 화면 안으로 들어왔어요",
+  "lede": "11월 17일 하루 동안 OpenAI와 Salesforce가 공식 발표 4건을 냈어요. 이 가운데 3건은 새 앱을 따로 여는 방식이 아니에요. 직원이 이미 쓰는 Copilot, Teams, ChatGPT에 영업 기능과 전문 업무 기능을 붙이는 내용이에요. 남은 1건은 OpenAI와 칠레 정부의 공공 파트너십이에요. 도입 프로젝트에서는 도구 선택보다 데이터 연결과 권한 정리를 먼저 따져 봐야 한다는 이야기로 읽혀요.",
+  "sections": [
+   {
+    "heading": "같은 날 나온 발표 4건",
+    "body": "이번에 다루는 발표는 모두 2026년 11월 17일에 나왔어요. 영업 업무를 다루는 CRM·고객 영역이 2건이에요. Salesforce와 Microsoft의 Copilotforce, OpenAI의 ChatGPT for Sales예요. 나머지는 법률 업무용 AI인 Astra for Law와 칠레 정부와의 파트너십인 OpenAI for Chile예요.\n\n영업 AI 발표는 이번이 처음이 아니에요. 최근 30일 동안 CRM·고객 영역에서 나온 회사·정부의 공식 AX 발표는 15건이에요. 발표가 가장 많은 곳은 Salesforce(5건)이고, Capgemini(4건)와 OpenAI(2건)가 뒤를 이었어요.\n\n같은 기간 업무 도구 영역 발표는 21건이었고, 이 가운데 OpenAI가 7건으로 가장 많았어요. 이번 주 발표 4건은 이 두 흐름이 만나는 자리에 있어요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Astra for Law leads in legal intelligence",
+      "link": "https://openai.com/index/astra-law-6-2"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing OpenAI for Chile",
+      "link": "https://openai.com/index/introducing-openai-for-chile"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Salesforce and Microsoft Announce Copilotforce, Bringing Salesforce Customer Context and Sales Workflows to Microsoft Copilot",
+      "link": "https://www.salesforce.com/news/stories/copilotforce-announcement/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing ChatGPT for Sales",
+      "link": "https://openai.com/index/introducing-chatgpt-for-sales"
+     }
+    ]
+   },
+   {
+    "heading": "Copilotforce: Salesforce가 Microsoft 업무 환경에 들어가요",
+    "body": "Salesforce와 Microsoft는 Microsoft Ignite 행사에서 Copilotforce라는 파트너십을 발표했어요. Copilotforce는 Microsoft Copilot, Teams, Fabric에 걸친 새 연동 묶음이에요. 두 회사는 Salesforce의 고객 정보와 AI 기능, 영업 업무 흐름을 직원들이 일하는 Microsoft 환경으로 넓힌다고 설명했어요.\n\n발표에 따르면 영업 담당자는 Copilot 안에서 Salesforce 고객 정보를 확인하고, 영업 기회를 분석하고, 미팅을 준비하고, 우선순위를 정할 수 있어요. 이때 Teams 대화와 Outlook 메일, 공유 문서의 내용을 참고해 CRM 작업을 할 수 있다고 했어요. 데이터 쪽에서는 Salesforce Data 360과 Microsoft Fabric을 무복사 연결로 양방향으로 잇는다고 밝혔어요. 데이터 세트를 복제하지 않고, Data 360에서 Fabric 데이터를 바로 조회하고, Data 360의 분석 결과를 Fabric으로 공유하는 구조예요. 이번 연동은 Dreamforce에서 처음 소개되고 현재 시범 운영 중인 Sales Cloud in Teams를 바탕으로 해요. Accenture는 설계·구축 파트너를 맡고, 첫 고객인 customer zero로서 자사 글로벌 영업 조직에 이 연동을 배포한다고 했어요.\n\nCRM 프로젝트에서 이 발표가 뜻하는 변화는 CRM의 입력 재료가 넓어진다는 점이에요. 지금까지 CRM에 들어가는 정보는 주로 영업 담당자가 직접 입력한 기록이었어요. 이번 구조에서는 메일과 회의 대화, 문서가 CRM 작업의 근거가 돼요. 데이터를 복사하지 않는 연결은 중복 저장을 줄이는 대신, 두 플랫폼 사이에서 어떤 데이터를 누가 관리하는지를 먼저 정해야 하는 과제로 읽혀요. Salesforce는 자사를 1위 CRM으로, Microsoft를 1위 생산성 환경으로 소개했는데, 이 표현은 Salesforce 측의 말이에요.\n\n우리 프로젝트에 비춰 보면 권한부터 확인해야 해요. Copilot이 메일과 문서, CRM을 함께 읽으려면 세 시스템의 접근 권한이 같은 기준으로 정리돼 있어야 해요. 한쪽에서 볼 수 없는 정보가 다른 쪽 화면에 나타나면 안 되기 때문이에요. 무복사 연결에서는 원본 데이터의 품질 책임자와 공유 범위를 누가 승인하는지도 정해 둬야 해요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "Salesforce와 Microsoft",
+     "what": "Copilotforce 연동",
+     "where": "Copilot·Teams 속 영업 업무",
+     "how": "Data 360·Fabric 무복사 양방향 연결",
+     "domain": "CRM·고객",
+     "method": "파트너십",
+     "check": "메일·문서·CRM 권한이 서로 맞게 정리돼 있나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Salesforce and Microsoft Announce Copilotforce, Bringing Salesforce Customer Context and Sales Workflows to Microsoft Copilot",
+      "link": "https://www.salesforce.com/news/stories/copilotforce-announcement/"
+     }
+    ]
+   },
+   {
+    "heading": "ChatGPT for Sales: 영업 업무를 채팅 도구에서 처리해요",
+    "body": "OpenAI는 ChatGPT에 Sales 플러그인을 내놓았다고 발표했어요. 함께 새로 나오거나 확장된 파트너 플러그인이 30+개라고 밝혔어요. OpenAI가 밝힌 용도는 잠재 고객 조사, 제안 준비, CRM 갱신, 거래 진행이에요.\n\n이번 발표는 공식 페이지 원문을 읽지 못해 제목과 요약에 적힌 내용만 옮겨요. 어떤 CRM과 연결되는지, 파트너 플러그인을 만든 회사가 어디인지, 어떤 요금제에서 쓸 수 있는지는 요약에 없어요. 도입 범위와 방식을 판단하려면 원문과 플러그인별 설명을 따로 확인해야 해요.\n\nCRM 프로젝트 관점에서는 CRM에 값을 넣는 입구가 하나 더 생긴다는 뜻이에요. Copilotforce와 함께 보면, 같은 날 두 진영이 영업 담당자의 작업 화면을 각자의 도구로 끌어오려 한 셈이에요. 기업 안에서 Copilot과 ChatGPT를 함께 쓰면 같은 CRM에 여러 경로로 데이터가 들어올 수 있어요.\n\n그래서 확인할 점은 검수 절차예요. 플러그인이 CRM에 쓴 값을 누가 확인하는지, 사람이 승인해야 반영되는지 정해 둬야 해요. 영업 단계나 금액 같은 항목이 잘못 바뀌면 파이프라인 보고가 흔들릴 수 있어요. 어떤 경로로 바뀐 값인지 남기는 기록 체계도 함께 점검할 만해요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "OpenAI",
+     "what": "ChatGPT Sales 플러그인 등",
+     "where": "잠재 고객 조사·제안·CRM 갱신",
+     "how": "ChatGPT에 플러그인 30+개 추가",
+     "domain": "CRM·고객",
+     "method": "제품 출시",
+     "check": "플러그인이 CRM에 쓰는 값을 누가 검수하나요?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing ChatGPT for Sales",
+      "link": "https://openai.com/index/introducing-chatgpt-for-sales"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI for Chile: 정부 파트너십에 기준과 교육이 함께 들어갔어요",
+    "body": "OpenAI는 칠레 정부와 OpenAI for Chile를 시작한다고 발표했어요. OpenAI가 밝힌 목표는 세 가지예요. 책임 있는 AI 도입을 지원하고, 공공 부문의 역량을 키우고, 현지 스타트업이 AI 애플리케이션을 만들도록 돕는 일이에요.\n\n이 발표도 원문을 읽지 못해 요약만 근거로 써요. 어떤 정부 기관이 참여하는지, 어떤 도구를 쓰는지, 기간과 예산은 얼마인지는 발표 요약에 없어요. 그래서 사례 표의 도입 방식도 '정부와 파트너십'까지만 적었어요.\n\n공공 AI 도입에서 이 발표가 뜻하는 것은 구성이에요. 도구 공급만 있는 것이 아니라 '책임 있는 도입'이라는 운영 원칙과 공공 인력 교육이 한 묶음으로 들어갔어요. 보안·규제 영역의 프로젝트에서는 사용 원칙과 교육 계획이 도구 선정과 같은 단계에서 다뤄져야 한다는 신호로 읽혀요.\n\n민간 기업에도 같은 질문이 남아요. 우리 조직에 책임 있는 AI 사용 기준이 문서로 정리돼 있는지 확인해야 해요. 그 기준을 직원에게 어떻게 교육할지, 교육 비용이 도입 예산에 들어 있는지도 함께 따져 볼 일이에요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "칠레 정부 (OpenAI 발표)",
+     "what": "OpenAI for Chile",
+     "where": "공공 부문·현지 스타트업",
+     "how": "정부와 파트너십",
+     "domain": "보안·규제",
+     "method": "파트너십",
+     "check": "우리 조직의 책임 있는 AI 사용 기준은 문서로 있나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing OpenAI for Chile",
+      "link": "https://openai.com/index/introducing-openai-for-chile"
+     }
+    ]
+   },
+   {
+    "heading": "Astra for Law: 전문 업무 AI를 기업 계정에서 신청해요",
+    "body": "OpenAI는 법률 업무용 AI인 Astra for Law가 24개 법 분야에 걸친 출시 평가에서 1위를 했다고 밝혔어요. 모든 ChatGPT Enterprise 고객은 이제 이용을 신청할 수 있다고 했어요.\n\n원문을 읽지 못해 요약에 있는 내용만 옮겨요. 평가를 누가 어떤 방식으로 했는지, 어떤 법률 업무에 쓰는지, 데이터를 어떻게 처리하는지는 요약에 나오지 않아요. 확실한 것은 ChatGPT Enterprise 고객이 신청하는 방식으로 쓸 수 있다는 점이에요.\n\n업무 도구 프로젝트에서는 범용 AI 계약 안에서 전문 영역 기능을 따로 열어 쓰는 구조라는 뜻이에요. 전사 도구를 들인 기업은 법무 같은 부서별 기능을 같은 계약 안에서 더할 수 있어요. 다만 1위라는 결과는 OpenAI가 밝힌 출시 평가 기준이에요. 우리 법무 업무에 맞는지는 실제 문서와 업무로 다시 시험해 봐야 해요.\n\n가장 먼저 확인할 것은 기밀 분류예요. 계약서나 소송 자료 같은 법률 문서를 AI에 넣기 전에 어떤 문서를 넣어도 되는지 기준이 있어야 해요. 신청 권한을 누구에게 줄지, 법무 부서의 검토 절차와 어떻게 이을지도 함께 정해야 해요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "OpenAI",
+     "what": "Astra for Law(법률 AI)",
+     "where": "법률 업무",
+     "how": "ChatGPT Enterprise 고객 신청형",
+     "domain": "업무 도구",
+     "method": "제품 출시",
+     "check": "법률 문서를 AI에 넣기 전 기밀 분류 기준이 있나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Astra for Law leads in legal intelligence",
+      "link": "https://openai.com/index/astra-law-6-2"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: AI가 이미 쓰는 화면에 붙어요",
+    "body": "이번 주 사례 4건 가운데 3건은 새 애플리케이션을 따로 여는 방식이 아니었어요. Copilotforce는 Copilot과 Teams에, ChatGPT for Sales와 Astra for Law는 ChatGPT에 기능을 더하는 방식이에요. 직원이 매일 여는 화면이 AI의 입구가 되는 구조예요.\n\n이런 구조에서는 도구를 고르는 일보다 그 도구가 무엇을 읽고 쓰는지가 더 중요해져요. 메일, 회의, 문서, CRM이 한 화면에서 만나면 데이터 연결과 권한 정리가 프로젝트의 중심 과제가 돼요. 칠레 정부 사례처럼 사용 원칙과 교육을 함께 설계하는 일도 같은 맥락에서 볼 수 있어요.\n\n입구가 여러 개라는 점도 함께 봐야 해요. 같은 날 Microsoft 진영과 OpenAI가 각각 영업 AI를 내놓았으니, 기업 안에서 두 경로가 함께 쓰일 수 있어요. 어느 도구가 어떤 데이터에 접근하는지 한 장의 표로 정리하는 일이 필요하다는 뜻이에요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Astra for Law leads in legal intelligence",
+      "link": "https://openai.com/index/astra-law-6-2"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing OpenAI for Chile",
+      "link": "https://openai.com/index/introducing-openai-for-chile"
+     },
+     {
+      "source": "Salesforce",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Salesforce and Microsoft Announce Copilotforce, Bringing Salesforce Customer Context and Sales Workflows to Microsoft Copilot",
+      "link": "https://www.salesforce.com/news/stories/copilotforce-announcement/"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-17",
+      "title": "Introducing ChatGPT for Sales",
+      "link": "https://openai.com/index/introducing-chatgpt-for-sales"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 발표들은 CRM·고객, 업무 도구, 데이터·분석, 보안·규제 영역이 한 프로젝트 안에서 만난다는 점을 보여 줘요. CRM 프로젝트는 이제 메일과 협업 도구의 권한 설계를 함께 다뤄야 하고, 데이터 플랫폼 프로젝트는 복사 없는 연결의 책임 범위를 정해야 해요. 전문 업무 AI는 기존 전사 도구 계약 안에서 열리기 때문에 부서별 사용 기준과 기밀 분류가 도입 전에 준비돼 있어야 해요.\n\n· CRM과 메일·문서·Teams의 접근 권한이 같은 기준으로 정리돼 있나요?\n· Data 360과 Fabric처럼 복사 없이 잇는 데이터의 품질 책임자와 공유 승인자는 누구인가요?\n· AI 플러그인이 CRM에 쓴 값을 사람이 검수하고, 변경 경로를 기록하나요?\n· 법률 문서 같은 기밀 자료를 AI에 넣기 전 분류 기준이 있나요?\n· 책임 있는 AI 사용 기준과 직원 교육 계획이 도입 예산에 들어 있나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "11월 17일 OpenAI와 Salesforce가 공식 발표 4건을 냈고, 그중 3건은 기존 업무 화면에 AI를 붙이는 내용이에요.",
+   "Copilotforce는 Teams 대화와 Outlook 메일, 문서를 CRM 작업의 근거로 쓰고, Data 360과 Fabric을 복사 없이 이어요.",
+   "ChatGPT for Sales와 Astra for Law는 ChatGPT 안에서 영업·법률 업무를 다루는 방식이에요.",
+   "OpenAI for Chile에는 책임 있는 AI 도입과 공공 역량 교육이 함께 들어갔어요.",
+   "도입 전에 권한, 데이터 책임, CRM 값 검수, 기밀 분류, 교육 예산을 점검해야 해요."
+  ],
+  "terms": [
+   {
+    "term": "무복사 연결",
+    "def": "두 시스템이 데이터를 복제해 옮기지 않고, 원래 있던 곳의 데이터를 그대로 조회하거나 공유하는 연결 방식이에요. 중복 저장을 줄이는 대신 원본 관리 책임을 분명히 해야 해요."
+   },
+   {
+    "term": "customer zero",
+    "def": "제품이나 서비스를 만든 회사, 또는 구축을 맡은 회사가 자기 조직에 먼저 적용해 보는 첫 고객을 가리키는 말이에요."
+   },
+   {
+    "term": "플러그인",
+    "def": "기본 프로그램에 덧붙여 새 기능을 쓸 수 있게 하는 추가 모듈이에요. 다른 서비스와 연결해 데이터를 읽거나 쓰는 데 자주 쓰여요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "deal",
+    "work",
+    "data"
+   ],
+   "industries": [
+    "public",
+    "legal"
+   ],
+   "companies": [
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    },
+    {
+     "id": "salesforce",
+     "name": "Salesforce"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}
