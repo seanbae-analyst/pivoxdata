@@ -1,0 +1,558 @@
+{
+ "date": "2026-11-19",
+ "mode": "news",
+ "topic": null,
+ "format": "newsweek",
+ "format_name": "이번 주 AX 사건",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 0,
+ "original_numbers": [],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI를 들였다면\n다음은 무엇일까요?",
+   "body": "이번 주 공식 발표 4건은\n도구보다 쓰는 방식을 다뤄요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "title": "발표 4건이\n같은 날 나왔어요",
+   "body": "OpenAI 발표 3건과\nMcKinsey 인터뷰 1건이에요.\n모두 11월 18일에 나왔고,\nAI를 들인 뒤의 운영을 다뤄요.",
+   "src": "출처 · McKinsey · OpenAI 발표 4건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    4
+   ],
+   "title": "Sumitomo Life가\n업무 AI를 들였어요",
+   "body": "OpenAI는 Sumitomo Life가\nChatGPT Enterprise를\n업무에 쓴다고 발표했어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "Sumitomo Life (OpenAI 발표)",
+    "what": "ChatGPT Enterprise",
+    "where": "보험사 조사·제안서·투자 분석 코드",
+    "how": "경영진이 먼저 사용",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "경영진이 먼저 써 보며 활용 방식을 보여 줄 계획이 있나요?",
+    "ref": 4
+   },
+   "kicker": "업무 도구 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    4
+   ],
+   "title": "경영진 사용이\n확산의 출발점이었어요",
+   "body": "발표는 경영진이 먼저 쓴 것이\n팀의 도입을 도왔다고 적었어요.\n라이선스 배포만큼\n누가 먼저 쓰는지도\n도입 계획의 한 항목이라는 뜻이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "Sumitomo Life (OpenAI 발표)",
+    "what": "ChatGPT Enterprise",
+    "where": "보험사 조사·제안서·투자 분석 코드",
+    "how": "경영진이 먼저 사용",
+    "domain": "업무 도구",
+    "method": "연구·보고서",
+    "check": "경영진이 먼저 써 보며 활용 방식을 보여 줄 계획이 있나요?",
+    "ref": 4
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "HOCHTIEF 리더들이\n혁신 방식을 밝혔어요",
+   "body": "McKinsey가 인터뷰한 곳은\nHOCHTIEF PPP Solutions\n리더 두 명이에요.\n150년 된 엔지니어링 회사의\nAI 성장 방식을 다뤘어요.",
+   "src": "출처 · McKinsey 리서치 · 11/18",
+   "case": {
+    "who": "HOCHTIEF PPP Solutions",
+    "what": "AI (구체 솔루션은 발표에 없음)",
+    "where": "사업 성장·혁신 방식",
+    "how": "발표에 없음",
+    "domain": "클라우드·인프라",
+    "method": "연구·보고서",
+    "check": "AI 도입을 어떤 사업 성장 목표와 지표로 연결할지 정했나요?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "AI를 성장 계획에\n넣은 사례예요",
+   "body": "AI를 IT 과제가 아니라\n사업 성장 전략 안에서\n다룬 사례로 읽혀요.\n어떤 도구를 썼는지는\n요약에 나오지 않아요.",
+   "src": "출처 · McKinsey 리서치 · 11/18",
+   "case": {
+    "who": "HOCHTIEF PPP Solutions",
+    "what": "AI (구체 솔루션은 발표에 없음)",
+    "where": "사업 성장·혁신 방식",
+    "how": "발표에 없음",
+    "domain": "클라우드·인프라",
+    "method": "연구·보고서",
+    "check": "AI 도입을 어떤 사업 성장 목표와 지표로 연결할지 정했나요?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "Le Figaro 기사가\nChatGPT에 들어가요",
+   "body": "OpenAI는\nLe Groupe Figaro와\n제휴한다고 발표했어요.\nChatGPT가 기사 요약·발췌를\n원문 링크와 함께 보여 줘요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "Le Groupe Figaro (OpenAI 발표)",
+    "what": "ChatGPT 속 기사 요약·발췌",
+    "where": "Le Figaro 기사 콘텐츠",
+    "how": "원문 링크를 단 제휴",
+    "domain": "데이터·분석",
+    "method": "파트너십",
+    "check": "AI 답변에 쓰일 사내 콘텐츠의 사용 권한과 출처 표시를 정했나요?",
+    "ref": 2
+   },
+   "kicker": "데이터·분석 · 파트너십"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "AI 답변에도\n출처가 붙어요",
+   "body": "외부 콘텐츠를 AI 답변에 쓸 때\n쓰는 범위와 출처 링크를\n제휴로 정한 사례예요.\n사내 문서를 AI에 연결할 때도\n같은 질문이 생긴다는 뜻이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "Le Groupe Figaro (OpenAI 발표)",
+    "what": "ChatGPT 속 기사 요약·발췌",
+    "where": "Le Figaro 기사 콘텐츠",
+    "how": "원문 링크를 단 제휴",
+    "domain": "데이터·분석",
+    "method": "파트너십",
+    "check": "AI 답변에 쓰일 사내 콘텐츠의 사용 권한과 출처 표시를 정했나요?",
+    "ref": 2
+   },
+   "kicker": "데이터·분석 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "OpenAI가\n위험 관리 방식을 밝혔어요",
+   "body": "OpenAI는 프런티어 AI\n(가장 앞선 성능의 모델)의\n위험을 학습부터 배포까지\n관리하는 방식을 설명했어요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "OpenAI",
+    "what": "프런티어 AI 위험 관리 방식",
+    "where": "모델 학습부터 배포까지",
+    "how": "정렬·샌드박스·차단·모니터링",
+    "domain": "보안·규제",
+    "method": "연구·보고서",
+    "check": "도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "안전장치도\n공급사 평가 항목이에요",
+   "body": "AI를 사 오는 회사에는\n공급사가 무엇을 막고\n무엇을 지켜보는지가\n보안 검토 항목이 돼요.\n사내 보안 기준과 맞춰 볼\n자료가 생긴 셈이에요.",
+   "src": "출처 · OpenAI 공식 발표 · 11/18",
+   "case": {
+    "who": "OpenAI",
+    "what": "프런티어 AI 위험 관리 방식",
+    "where": "모델 학습부터 배포까지",
+    "how": "정렬·샌드박스·차단·모니터링",
+    "domain": "보안·규제",
+    "method": "연구·보고서",
+    "check": "도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "title": "도구보다\n운영 규칙이 앞에 섰어요",
+   "body": "성장 전략에 AI를 어떻게 넣는지,\n누가 먼저 쓰는지,\n콘텐츠를 어떤 조건으로 쓰는지,\n위험을 어떻게 막는지예요.",
+   "src": "출처 · McKinsey · OpenAI 발표 4건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "AI를 어느 사업 목표에 연결하나요?",
+    "경영진이 먼저 쓰는 계획이 있나요?",
+    "AI에 연결할 콘텐츠 권한은 정했나요?",
+    "답변에 출처를 남기는 방식은요?",
+    "공급사의 차단·모니터링을 확인했나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "도구 다음은\n쓰는 방식이에요",
+   "body": "이번 주 발표 4건은\n누가, 어떤 조건으로,\n어떤 안전장치 위에서\n쓰는지를 다뤘어요.\n자세한 내용은 웹 브리핑에 있어요."
+  }
+ ],
+ "caption": "이번 주 공식 발표 4건은 AI를 들인 뒤 어떻게 쓰고 관리하는지를 다뤘어요.\nOpenAI는 Sumitomo Life가 ChatGPT Enterprise를 업무에 쓴다고 발표했어요.\n→ 경영진이 먼저 쓴 것이 확산을 도왔다고 적었어요.\nMcKinsey는 HOCHTIEF PPP Solutions 리더들과 AI 성장 방식을 두고 인터뷰했어요.\n→ AI를 사업 성장 전략 안에서 다룬 사례로 읽혀요.\nOpenAI는 Le Groupe Figaro와 손잡고, ChatGPT에서 기사 요약·발췌를 원문 링크와 함께 보여 줘요.\n→ AI 답변에 쓰는 콘텐츠의 권한과 출처가 도입 조건이 돼요.\nOpenAI는 학습부터 배포까지 위험을 관리하는 방식을 설명했어요.\n→ 공급사의 안전장치가 보안 검토 항목이 돼요.\n네 발표 모두 도구보다 운영 규칙을 앞에 뒀어요.\n확인할 점: 도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?",
+ "cases": [
+  {
+   "who": "Sumitomo Life (OpenAI 발표)",
+   "what": "ChatGPT Enterprise",
+   "where": "보험사 조사·제안서·투자 분석 코드",
+   "how": "경영진이 먼저 사용",
+   "domain": "업무 도구",
+   "method": "연구·보고서",
+   "check": "경영진이 먼저 써 보며 활용 방식을 보여 줄 계획이 있나요?",
+   "ref": 4,
+   "source": "OpenAI",
+   "date": "2026-11-18",
+   "link": "https://openai.com/business/customer-stories/sumitomo-life"
+  },
+  {
+   "who": "HOCHTIEF PPP Solutions",
+   "what": "AI (구체 솔루션은 발표에 없음)",
+   "where": "사업 성장·혁신 방식",
+   "how": "발표에 없음",
+   "domain": "클라우드·인프라",
+   "method": "연구·보고서",
+   "check": "AI 도입을 어떤 사업 성장 목표와 지표로 연결할지 정했나요?",
+   "ref": 1,
+   "source": "McKinsey",
+   "date": "2026-11-18",
+   "link": "https://www.mckinsey.com/capabilities/business-building/our-insights/infrastructure-entrepreneurs-how-hochtief-captures-growth-in-the-ai-age"
+  },
+  {
+   "who": "Le Groupe Figaro (OpenAI 발표)",
+   "what": "ChatGPT 속 기사 요약·발췌",
+   "where": "Le Figaro 기사 콘텐츠",
+   "how": "원문 링크를 단 제휴",
+   "domain": "데이터·분석",
+   "method": "파트너십",
+   "check": "AI 답변에 쓰일 사내 콘텐츠의 사용 권한과 출처 표시를 정했나요?",
+   "ref": 2,
+   "source": "OpenAI",
+   "date": "2026-11-18",
+   "link": "https://openai.com/index/le-groupe-figaro-and-openai-announce-partnership"
+  },
+  {
+   "who": "OpenAI",
+   "what": "프런티어 AI 위험 관리 방식",
+   "where": "모델 학습부터 배포까지",
+   "how": "정렬·샌드박스·차단·모니터링",
+   "domain": "보안·규제",
+   "method": "연구·보고서",
+   "check": "도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?",
+   "ref": 3,
+   "source": "OpenAI",
+   "date": "2026-11-18",
+   "link": "https://openai.com/index/managing-frontier-ai-risk"
+  }
+ ],
+ "sources": [
+  {
+   "source": "McKinsey",
+   "kind": "research",
+   "date": "2026-11-18",
+   "title": "Infrastructure entrepreneurs: How HOCHTIEF captures growth with AI",
+   "link": "https://www.mckinsey.com/capabilities/business-building/our-insights/infrastructure-entrepreneurs-how-hochtief-captures-growth-in-the-ai-age",
+   "id": "6593f91a3f",
+   "original": false
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-18",
+   "title": "Le Groupe Figaro and OpenAI partner to bring Le Figaro journalism to ChatGPT",
+   "link": "https://openai.com/index/le-groupe-figaro-and-openai-announce-partnership",
+   "id": "6cab9c8cd3",
+   "original": false
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-18",
+   "title": "Managing frontier AI risk: From training to deployment",
+   "link": "https://openai.com/index/managing-frontier-ai-risk",
+   "id": "8b6ac2940f",
+   "original": false
+  },
+  {
+   "source": "OpenAI",
+   "kind": "company",
+   "date": "2026-11-18",
+   "title": "How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise",
+   "link": "https://openai.com/business/customer-stories/sumitomo-life",
+   "id": "b527b6f0dd",
+   "original": false
+  }
+ ],
+ "article": {
+  "title": "AI를 들인 뒤에 무엇을 정해야 하나요: 공식 발표 4건으로 본 운영 규칙",
+  "lede": "11월 18일에 OpenAI가 발표 3건, McKinsey가 인터뷰 1건을 냈어요. 보험사의 사내 확산, 150년 된 엔지니어링 회사의 성장 전략, 언론사 콘텐츠 제휴, 모델 위험 관리까지 네 발표 모두 도구 자체보다 쓰는 방식을 다뤘어요. 각 발표를 도입 사례로 읽고, 우리 프로젝트에서 확인할 점으로 정리해요.",
+  "sections": [
+   {
+    "heading": "같은 날 나온 발표 4건",
+    "body": "이번에 읽는 발표는 모두 2026년 11월 18일에 나왔어요. OpenAI가 고객 사례, 언론사 제휴, 위험 관리 설명을 냈고, McKinsey가 HOCHTIEF PPP Solutions 리더 인터뷰를 냈어요.\n\n네 발표 모두 원문 페이지는 읽지 못했어요. 이 글은 발표의 제목과 요약에 적힌 내용만 근거로 써요. 요약에 없는 도입 규모나 효과는 다루지 않아요.\n\n네 발표를 함께 읽는 이유는 질문이 같아서예요. AI를 들인 뒤 누가 먼저 쓰는지, 어떤 조건으로 쓰는지, 어떤 안전장치를 두는지를 다뤄요. Ramp AI Index(미국 기업 7만여 곳의 법인카드·송금 기록으로 AI 도구 유료 결제 비율을 재는 지표)에서 미국 기업 가운데 AI 도구에 돈을 내는 곳은 2026년 10월에 56.8%였어요. 1년 전에는 43.5%였어요. 유료 결제가 절반을 넘은 상황에서는 무엇을 살지보다 어떻게 운영할지가 더 큰 과제로 읽혀요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-11-18",
+      "title": "Infrastructure entrepreneurs: How HOCHTIEF captures growth with AI",
+      "link": "https://www.mckinsey.com/capabilities/business-building/our-insights/infrastructure-entrepreneurs-how-hochtief-captures-growth-in-the-ai-age"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Le Groupe Figaro and OpenAI partner to bring Le Figaro journalism to ChatGPT",
+      "link": "https://openai.com/index/le-groupe-figaro-and-openai-announce-partnership"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Managing frontier AI risk: From training to deployment",
+      "link": "https://openai.com/index/managing-frontier-ai-risk"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise",
+      "link": "https://openai.com/business/customer-stories/sumitomo-life"
+     }
+    ]
+   },
+   {
+    "heading": "Sumitomo Life: 경영진이 먼저 써서 팀에 퍼졌어요",
+    "body": "OpenAI는 Sumitomo Life의 리더들이 팀의 ChatGPT Enterprise 도입을 도운 사례를 발표했어요. 요약을 보면 이 회사는 ChatGPT Enterprise를 세 가지 일에 써요. 다른 보험사를 조사하고, 제안서를 준비하고, 투자 분석에 쓸 코드 초안을 만들어요.\n\n발표가 강조한 것은 도입 순서예요. 경영진이 초기에 먼저 써 본 것이 조직 전체의 도입을 이끌었다고 요약에 적혀 있어요. 배포 범위, 사용자 수, 기존 시스템과의 연결 방식은 요약에 나오지 않아요.\n\n업무 도구 영역에서는 전 직원에게 같은 도구를 나눠 주는 경우가 많아요. 그런데 이 사례는 라이선스를 배포하는 것과 실제로 쓰게 만드는 것을 따로 다뤘다는 뜻으로 읽혀요. 조사, 문서 작성, 코드 초안처럼 성격이 다른 업무에 한 도구를 쓰고 있어서, 어느 업무부터 보여 줄지도 계획의 일부가 돼요. 참고로 Ramp AI Index에서 미국 금융·보험 기업 중 AI 도구에 돈을 내는 비율은 2026년 10월에 74.3%였어요. 이 수치는 유료 결제 기준이라 실제 활용 정도까지 보여 주지는 않아요.\n\n우리 프로젝트에 비추면 경영진이 먼저 써 보고 활용 방식을 보여 줄 계획이 있는지 확인해야 해요. 이 발표가 확산의 계기로 짚은 것이 경영진의 초기 사용이기 때문이에요. 투자 분석 코드처럼 결과를 검증해야 하는 업무에 쓴다면 누가 검토하는지도 함께 정해 둘 항목이에요.",
+    "refs": [
+     4
+    ],
+    "case": {
+     "who": "Sumitomo Life (OpenAI 발표)",
+     "what": "ChatGPT Enterprise",
+     "where": "보험사 조사·제안서·투자 분석 코드",
+     "how": "경영진이 먼저 사용",
+     "domain": "업무 도구",
+     "method": "연구·보고서",
+     "check": "경영진이 먼저 써 보며 활용 방식을 보여 줄 계획이 있나요?",
+     "ref": 4
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise",
+      "link": "https://openai.com/business/customer-stories/sumitomo-life"
+     }
+    ]
+   },
+   {
+    "heading": "HOCHTIEF: AI를 성장 전략 안에서 다뤘어요",
+    "body": "McKinsey는 파트너 Jerome Königsfeld가 HOCHTIEF PPP Solutions의 리더 두 명을 인터뷰한 글을 냈어요. 질문은 150년 된 엔지니어링 회사가 어떻게 성장을 이끄는 회사가 되느냐였어요. 인터뷰는 이 회사가 혁신을 추진하는 방법과 AI로 성장을 만드는 방식을 다뤘어요.\n\n어떤 AI를 어느 업무에 어떤 방식으로 들였는지는 요약에 없어요. 제목은 이 리더들을 '인프라 기업가'라고 불렀고, 요약은 혁신의 방법을 중심에 뒀어요. 원문을 읽지 못해 구체적인 도구나 시스템은 이 글에서 다루지 않아요.\n\n이 사례는 AI를 IT 부서의 도구 도입 과제가 아니라 사업 성장 전략의 한 부분으로 다룬 경우로 읽혀요. 오래된 회사가 새 기술을 받아들이는 이야기를 혁신 방법이라는 틀로 풀었다는 점도 같은 방향이에요. 도구 선정보다 사업 목표를 먼저 정하는 순서를 보여 준 셈이에요.\n\n우리 프로젝트에서는 AI 도입을 어떤 사업 성장 목표와 지표에 연결할지 먼저 정했는지 확인해야 해요. 목표가 없으면 도입 뒤에 성과를 잴 기준도 없어요. 또 혁신 과제를 누가 맡고 어떤 순서로 시험하는지도 같이 정해 둘 항목이에요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "HOCHTIEF PPP Solutions",
+     "what": "AI (구체 솔루션은 발표에 없음)",
+     "where": "사업 성장·혁신 방식",
+     "how": "발표에 없음",
+     "domain": "클라우드·인프라",
+     "method": "연구·보고서",
+     "check": "AI 도입을 어떤 사업 성장 목표와 지표로 연결할지 정했나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-11-18",
+      "title": "Infrastructure entrepreneurs: How HOCHTIEF captures growth with AI",
+      "link": "https://www.mckinsey.com/capabilities/business-building/our-insights/infrastructure-entrepreneurs-how-hochtief-captures-growth-in-the-ai-age"
+     }
+    ]
+   },
+   {
+    "heading": "Le Figaro: AI 답변에 출처 링크가 붙어요",
+    "body": "OpenAI는 Le Groupe Figaro와 제휴했다고 발표했어요. 이 제휴로 ChatGPT가 Le Figaro의 기사를 요약하거나 일부를 발췌해서 보여 줘요. 이때 원래 기사로 가는 링크도 함께 붙어요.\n\n발표 요약에서 확인되는 방식은 세 가지예요. 기사 요약, 기사 발췌, 원문 링크예요. 계약 조건, 기간, 대상 기사의 범위는 요약에 나오지 않아요.\n\n데이터·분석 영역에서 보면 외부 콘텐츠를 AI 답변에 쓸 때 쓰는 형태와 출처 표시를 계약으로 정한 사례예요. 회사 안에서도 같은 질문이 생겨요. 사내 문서나 보고서를 AI에 연결하면 답변이 문서의 어느 부분을 얼마나 옮길지, 원문으로 돌아갈 길을 남길지를 정해야 한다는 뜻이에요.\n\n우리 프로젝트에서는 AI 답변에 쓰일 사내 콘텐츠의 사용 권한과 출처 표시 방식을 정했는지 확인해야 해요. 출처가 남아야 사용자가 답변을 원문과 대조할 수 있어요. 부서마다 공개 범위가 다른 문서라면 누가 어떤 문서를 볼 수 있는지도 연결 전에 정리해야 해요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "Le Groupe Figaro (OpenAI 발표)",
+     "what": "ChatGPT 속 기사 요약·발췌",
+     "where": "Le Figaro 기사 콘텐츠",
+     "how": "원문 링크를 단 제휴",
+     "domain": "데이터·분석",
+     "method": "파트너십",
+     "check": "AI 답변에 쓰일 사내 콘텐츠의 사용 권한과 출처 표시를 정했나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Le Groupe Figaro and OpenAI partner to bring Le Figaro journalism to ChatGPT",
+      "link": "https://openai.com/index/le-groupe-figaro-and-openai-announce-partnership"
+     }
+    ]
+   },
+   {
+    "heading": "OpenAI: 학습부터 배포까지 위험을 관리하는 방식",
+    "body": "OpenAI는 프런티어 AI의 위험을 관리하는 방식을 설명하는 글을 냈어요. 대상 구간은 모델을 학습시키는 단계부터 서비스로 내놓는 단계까지예요. 요약에는 네 가지 장치가 나와요. 모델 정렬, 샌드박스, 위험한 요청을 막는 차단 장치, 모니터링이에요.\n\n각 장치가 어떻게 작동하는지, 어떤 기준으로 차단하는지는 원문을 읽지 못해 이 글에서 다루지 않아요. 요약만으로 알 수 있는 것은 위험 관리를 한 단계가 아니라 학습과 배포 전 구간에 나눠 걸었다는 점이에요.\n\n보안·규제 영역에서 AI를 사 오는 회사는 모델 안쪽을 직접 들여다보기 어려워요. 그래서 공급사가 무엇을 막고 무엇을 지켜보는지가 보안 검토의 재료가 돼요. 이런 설명 자료는 사내 보안 기준과 하나씩 맞춰 볼 근거가 생겼다는 뜻으로 읽혀요. 최근 30일 보안·규제 영역의 회사·정부 공식 AX 발표는 24건이었고, 이 중 OpenAI 발표가 3건이었어요.\n\n우리 프로젝트에서는 도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했는지 점검해야 해요. 공급사 쪽 장치와 회사 쪽 통제가 겹치는 곳과 비는 곳을 알아야 사내에서 무엇을 더할지 정할 수 있어요. 사고가 났을 때 어떤 기록을 누가 볼 수 있는지도 같이 물어볼 항목이에요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "OpenAI",
+     "what": "프런티어 AI 위험 관리 방식",
+     "where": "모델 학습부터 배포까지",
+     "how": "정렬·샌드박스·차단·모니터링",
+     "domain": "보안·규제",
+     "method": "연구·보고서",
+     "check": "도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Managing frontier AI risk: From training to deployment",
+      "link": "https://openai.com/index/managing-frontier-ai-risk"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 도구 다음은 운영 규칙이에요",
+    "body": "네 발표를 나란히 놓으면 질문이 네 개로 나뉘어요. 성장 전략에 AI를 어떻게 넣는지, 누가 먼저 쓰는지, 외부 콘텐츠를 어떤 조건으로 쓰는지, 위험을 어떻게 막는지예요.\n\n어느 발표도 새 기능의 성능을 앞세우지 않았어요. 대신 조직이 AI를 받아들이는 순서, 콘텐츠를 쓰는 조건, 안전장치의 구조를 설명했어요. 도구를 고르는 일보다 도구를 둘러싼 운영 규칙이 발표의 중심에 섰다는 뜻이에요.\n\n이 규칙들은 서로 이어져 있어요. 사업 목표가 정해져야 누가 먼저 쓸지 정할 수 있고, 연결할 콘텐츠의 권한이 정리돼야 안전장치를 어디에 걸지 정할 수 있어요.",
+    "refs": [
+     1,
+     2,
+     3,
+     4
+    ],
+    "sources": [
+     {
+      "source": "McKinsey",
+      "kind": "research",
+      "date": "2026-11-18",
+      "title": "Infrastructure entrepreneurs: How HOCHTIEF captures growth with AI",
+      "link": "https://www.mckinsey.com/capabilities/business-building/our-insights/infrastructure-entrepreneurs-how-hochtief-captures-growth-in-the-ai-age"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Le Groupe Figaro and OpenAI partner to bring Le Figaro journalism to ChatGPT",
+      "link": "https://openai.com/index/le-groupe-figaro-and-openai-announce-partnership"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "Managing frontier AI risk: From training to deployment",
+      "link": "https://openai.com/index/managing-frontier-ai-risk"
+     },
+     {
+      "source": "OpenAI",
+      "kind": "company",
+      "date": "2026-11-18",
+      "title": "How Sumitomo Life’s leaders helped teams adopt ChatGPT Enterprise",
+      "link": "https://openai.com/business/customer-stories/sumitomo-life"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 흐름을 IT 영역의 도입 프로젝트에 대 보면 일의 무게가 조금 옮겨 가요. 업무 도구 프로젝트에서는 라이선스 배포 뒤의 확산 계획이, 데이터 영역에서는 AI에 연결할 콘텐츠의 권한과 출처 표시가, 보안 영역에서는 공급사의 안전장치를 사내 기준과 맞춰 보는 일이 작업 범위에 들어가요. 그리고 이 모든 일이 어떤 사업 목표를 위한 것인지가 맨 앞에 와야 한다는 점을 HOCHTIEF 인터뷰가 보여 줘요.\n\n· AI 도입을 어느 사업 목표에 연결하고, 어떤 지표로 성과를 잴지 정했나요?\n· 경영진이나 부서 리더가 먼저 써 보며 활용 방식을 보여 줄 계획이 있나요?\n· AI에 연결할 사내 문서의 사용 권한과 공개 범위를 정리했나요?\n· AI 답변에 출처를 남겨 원문과 대조할 수 있게 했나요?\n· 공급사의 차단 장치와 모니터링 방식을 확인하고, 사내 보안 기준과 맞춰 봤나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "11월 18일에 나온 공식 발표 4건은 AI를 들인 뒤의 운영 방식을 다뤘어요.",
+   "OpenAI는 Sumitomo Life에서 경영진의 초기 사용이 ChatGPT Enterprise 확산을 도왔다고 밝혔어요.",
+   "Le Groupe Figaro와 OpenAI의 제휴는 기사 요약·발췌에 원문 링크를 붙이는 방식이에요.",
+   "OpenAI는 정렬, 샌드박스, 차단 장치, 모니터링으로 학습부터 배포까지 위험을 관리한다고 설명했어요.",
+   "도입 프로젝트에서는 사업 목표, 확산 순서, 콘텐츠 권한, 공급사 안전장치를 함께 확인해야 해요."
+  ],
+  "terms": [
+   {
+    "term": "샌드박스",
+    "def": "프로그램을 바깥과 분리된 공간에서 실행해, 문제가 생겨도 다른 시스템에 번지지 않게 막는 방법이에요."
+   },
+   {
+    "term": "모델 정렬",
+    "def": "AI 모델이 사람이 의도한 목적과 규칙에 맞게 답하고 행동하도록 학습시키는 일이에요."
+   },
+   {
+    "term": "프런티어 AI",
+    "def": "그때그때 가장 앞선 성능을 내는 최신 AI 모델을 가리키는 말이에요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "adoption",
+    "work",
+    "security"
+   ],
+   "industries": [
+    "finance",
+    "media"
+   ],
+   "companies": [
+    {
+     "id": "mckinsey",
+     "name": "McKinsey"
+    },
+    {
+     "id": "openai",
+     "name": "OpenAI"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

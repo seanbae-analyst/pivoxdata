@@ -6725,6 +6725,110 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-19",
+   "key": "hf:higurashi-ai/Haru-4B",
+   "subject": "hf:higurashi-ai/Haru-4B",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: higurashi‑ai/​Haru‑4B",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,337",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: higurashi‑ai/​Haru‑4B",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "audio‑to‑audio · 2026-11-12 공개. 직전 1위는 MiniMaxAI/​MiniMax‑H3‑Image.",
+    "src": "Hugging Face 트렌딩 · 2026-11-19",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Haru-4B",
+        "value": 289.5,
+        "label": "5,314"
+       },
+       {
+        "name": "Qwen3.8-27B",
+        "value": 243.5,
+        "label": "689만"
+       },
+       {
+        "name": "Hy4-flash",
+        "value": 242,
+        "label": "159"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 238,
+        "label": "76만"
+       },
+       {
+        "name": "Qwen3.8-27B-pi-adapted",
+        "value": 220.5,
+        "label": "377"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-19",
+   "key": "hftr:tencent/Hy4-flash+harness-hub/Qwen3.8-27B-pi-adapted:2026-11-19",
+   "subject": "hf:tencent/Hy4-flash",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 14,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: tencent/​Hy4‑flash",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "3위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: tencent/​Hy4‑flash",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-11-17 공개. 함께 들어온 모델: harness‑hub/​Qwen3.8‑27B‑pi‑adapted.",
+    "src": "Hugging Face 트렌딩 · 2026-11-19",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Haru-4B",
+        "value": 289.5,
+        "label": "5,314"
+       },
+       {
+        "name": "Qwen3.8-27B",
+        "value": 243.5,
+        "label": "689만"
+       },
+       {
+        "name": "Hy4-flash",
+        "value": 242,
+        "label": "159"
+       },
+       {
+        "name": "MiniMax-H3-Image",
+        "value": 238,
+        "label": "76만"
+       },
+       {
+        "name": "Qwen3.8-27B-pi-adapted",
+        "value": 220.5,
+        "label": "377"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

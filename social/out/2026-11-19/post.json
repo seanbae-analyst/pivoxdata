@@ -1,0 +1,36 @@
+{
+ "date": "2026-11-19",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png",
+  "12.png",
+  "13.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-19/",
+ "caption": "이번 주 공식 발표 4건은 AI를 들인 뒤 어떻게 쓰고 관리하는지를 다뤘어요.\nOpenAI는 Sumitomo Life가 ChatGPT Enterprise를 업무에 쓴다고 발표했어요.\n→ 경영진이 먼저 쓴 것이 확산을 도왔다고 적었어요.\nMcKinsey는 HOCHTIEF PPP Solutions 리더들과 AI 성장 방식을 두고 인터뷰했어요.\n→ AI를 사업 성장 전략 안에서 다룬 사례로 읽혀요.\nOpenAI는 Le Groupe Figaro와 손잡고, ChatGPT에서 기사 요약·발췌를 원문 링크와 함께 보여 줘요.\n→ AI 답변에 쓰는 콘텐츠의 권한과 출처가 도입 조건이 돼요.\nOpenAI는 학습부터 배포까지 위험을 관리하는 방식을 설명했어요.\n→ 공급사의 안전장치가 보안 검토 항목이 돼요.\n네 발표 모두 도구보다 운영 규칙을 앞에 뒀어요.\n확인할 점: 도입할 AI 서비스의 차단 장치와 모니터링 방식을 공급사에 확인했나요?\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-19\n출처(공식 발표): McKinsey · OpenAI — 원문 링크는 리서치 글에\n\n#AX #AI전환 #AI뉴스 #기업AI #IT컨설팅 #디지털전환 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "newsweek",
+  "format_name": "이번 주 AX 사건",
+  "source": "claude",
+  "slides": 13
+ },
+ "caption_note": null,
+ "mode": "news",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 97,
+  "problems": []
+ }
+}
