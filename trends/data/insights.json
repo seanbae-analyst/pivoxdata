@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-20",
+ "built_at": "2026-11-21",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "136건",
+     "big": "131건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 64건 · 클라우드·인프라 35건 · 보안·규제 25건 · 업무 도구 24건 · CRM·고객 14건 · 데이터·분석 14건 · ERP·백오피스 6건",
+     "body": "AI 에이전트 62건 · 클라우드·인프라 33건 · 보안·규제 24건 · 업무 도구 23건 · CRM·고객 14건 · 데이터·분석 12건 · ERP·백오피스 7건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,23 +325,23 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 64,
-         "label": "64건"
+         "value": 62,
+         "label": "62건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 35,
-         "label": "35건"
+         "value": 33,
+         "label": "33건"
         },
         {
          "name": "보안·규제",
-         "value": 25,
-         "label": "25건"
+         "value": 24,
+         "label": "24건"
         },
         {
          "name": "업무 도구",
-         "value": 24,
-         "label": "24건"
+         "value": 23,
+         "label": "23건"
         },
         {
          "name": "CRM·고객",
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "64건",
+     "big": "62건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
@@ -376,14 +376,14 @@
          "label": "9건"
         },
         {
-         "name": "Snowflake",
+         "name": "SAP",
          "value": 8,
          "label": "8건"
         },
         {
-         "name": "SAP",
-         "value": 8,
-         "label": "8건"
+         "name": "Snowflake",
+         "value": 7,
+         "label": "7건"
         },
         {
          "name": "Databricks",
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "35건",
+     "big": "33건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -409,8 +409,8 @@
        "items": [
         {
          "name": "NVIDIA",
-         "value": 11,
-         "label": "11건"
+         "value": 9,
+         "label": "9건"
         },
         {
          "name": "과학기술정보통신부",
@@ -439,7 +439,7 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "25건",
+     "big": "24건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
      "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
      "easy": "",
@@ -460,17 +460,17 @@
          "label": "3건"
         },
         {
-         "name": "Anthropic",
-         "value": 3,
-         "label": "3건"
-        },
-        {
          "name": "SK텔레콤",
          "value": 3,
          "label": "3건"
         },
         {
          "name": "영국 정부",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "Snowflake",
          "value": 2,
          "label": "2건"
         }
@@ -481,7 +481,7 @@
     {
      "id": "dom-work",
      "k": "IT 영역 · 업무 도구",
-     "big": "24건",
+     "big": "23건",
      "bl": "최근 30일 공식 발표 · 전 직원이 쓰는 AI 도구·협업 이야기",
      "title": "업무 도구, OpenAI 발표가 가장 많아요",
      "easy": "",
@@ -493,8 +493,8 @@
        "items": [
         {
          "name": "OpenAI",
-         "value": 8,
-         "label": "8건"
+         "value": 7,
+         "label": "7건"
         },
         {
          "name": "Databricks",
@@ -565,9 +565,9 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "14건",
+     "big": "12건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
-     "title": "데이터·분석, Snowflake 발표가 가장 많아요",
+     "title": "데이터·분석, Databricks 발표가 가장 많아요",
      "easy": "",
      "body": "최근: Salesforce 11/17 — Informatica from Salesforce brings Trusted Enterprise Data into Microsoft Copilot, Microsoft Foundry, and Microsoft Fabric to Accelerate AI & Analytics · Databricks 11/14 — Databricks is a Leader and positioned highest in execution in the 2026 Gartner® Magic Quadrant™ for Data Lakehouse Platforms · Databricks 11/12 — Migrate Effortlessly to the Databricks Lakehouse with Genie Migrate, now Generally Available",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
@@ -576,12 +576,12 @@
        "kind": "rank",
        "items": [
         {
-         "name": "Snowflake",
-         "value": 5,
-         "label": "5건"
+         "name": "Databricks",
+         "value": 3,
+         "label": "3건"
         },
         {
-         "name": "Databricks",
+         "name": "Snowflake",
          "value": 3,
          "label": "3건"
         },
@@ -607,11 +607,11 @@
     {
      "id": "dom-erp",
      "k": "IT 영역 · ERP·백오피스",
-     "big": "6건",
+     "big": "7건",
      "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
      "title": "ERP·백오피스, SAP 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: NVIDIA 11/16 — How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future · SAP 11/10 — Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act · OpenAI 11/9 — ChatGPT Enterprise now available in AWS Marketplace",
+     "body": "최근: SAP 11/20 — Takeda Turns to SAP S/4HANA to Support Digital Transformation · NVIDIA 11/16 — How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future · SAP 11/10 — Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -619,8 +619,8 @@
        "items": [
         {
          "name": "SAP",
-         "value": 2,
-         "label": "2건"
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "NVIDIA",
@@ -908,6 +908,57 @@
    }
   },
   {
+   "key": "hf:thinkingmachines/Inkling-2-Mini",
+   "subject": "hf:thinkingmachines/Inkling-2-Mini",
+   "kind": "새 1위",
+   "tier": "big",
+   "score": 45,
+   "topic": "ai",
+   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: thinkingmachines/​Inkling‑2‑Mini",
+   "card": {
+    "id": "ev-hf-trending",
+    "k": "빅 케이스 · 오픈 모델",
+    "big": "♥ 1,020",
+    "bl": "좋아요",
+    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: thinkingmachines/​Inkling‑2‑Mini",
+    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
+    "body": "image‑text‑to‑text · 2026-11-17 공개. 직전 1위는 tencent/​Hy4‑flash.",
+    "src": "Hugging Face 트렌딩 · 2026-11-21",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Inkling-2-Mini",
+        "value": 771,
+        "label": "136"
+       },
+       {
+        "name": "Haru-4B",
+        "value": 623,
+        "label": "7,323"
+       },
+       {
+        "name": "Qwen3.8-27B-pi-adapted",
+        "value": 598,
+        "label": "1,874"
+       },
+       {
+        "name": "h3",
+        "value": 436,
+        "label": "0"
+       },
+       {
+        "name": "Hy4-flash",
+        "value": 361,
+        "label": "3,949"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
    "key": "surge:PyPI:openai-agents:2026-11-09",
    "subject": "pkg:openai-agents",
    "kind": "증가",
@@ -1026,50 +1077,50 @@
    }
   },
   {
-   "key": "hftr:apple/FastFrames-L+inworld/voice-isolator:2026-11-20",
-   "subject": "hf:apple/FastFrames-L",
+   "key": "hftr:Sentinel7/h3:2026-11-21",
+   "subject": "hf:Sentinel7/h3",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 14,
+   "score": 12,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: apple/​FastFrames‑L",
+   "headline": "트렌딩 상위 5에 새로: Sentinel7/​h3",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
-    "big": "3위",
+    "big": "4위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: apple/​FastFrames‑L",
+    "title": "트렌딩 상위 5에 새로: Sentinel7/​h3",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "text‑to‑video · 2026-11-16 공개. 함께 들어온 모델: inworld/​voice‑isolator.",
-    "src": "Hugging Face 트렌딩 · 2026-11-20",
+    "body": "2026-08-06 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-21",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
-        "name": "Hy4-flash",
-        "value": 319,
-        "label": "2,053"
+        "name": "Inkling-2-Mini",
+        "value": 771,
+        "label": "136"
        },
        {
         "name": "Haru-4B",
-        "value": 309,
-        "label": "6,266"
-       },
-       {
-        "name": "FastFrames-L",
-        "value": 295,
-        "label": "0"
-       },
-       {
-        "name": "voice-isolator",
-        "value": 267,
-        "label": "0"
+        "value": 623,
+        "label": "7,323"
        },
        {
         "name": "Qwen3.8-27B-pi-adapted",
-        "value": 265.5,
-        "label": "1,320"
+        "value": 598,
+        "label": "1,874"
+       },
+       {
+        "name": "h3",
+        "value": 436,
+        "label": "0"
+       },
+       {
+        "name": "Hy4-flash",
+        "value": 361,
+        "label": "3,949"
        }
       ]
      }
@@ -1156,22 +1207,22 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 64건 · 발표가 많은 곳: McKinsey 10건, NVIDIA 9건, Snowflake 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 62건 · 발표가 많은 곳: McKinsey 10건, NVIDIA 9건, SAP 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 11건, 과학기술정보통신부 5건, McKinsey 3건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 33건 · 발표가 많은 곳: NVIDIA 9건, 과학기술정보통신부 5건, McKinsey 3건"
   },
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 25건 · 발표가 많은 곳: 과학기술정보통신부 3건, OpenAI 3건, Anthropic 3건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: 과학기술정보통신부 3건, OpenAI 3건, SK텔레콤 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
-   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: OpenAI 8건, Databricks 4건, Salesforce 3건"
+   "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: OpenAI 7건, Databricks 4건, Salesforce 3건"
   },
   {
    "group": "domain",
@@ -1181,12 +1232,12 @@
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 14건 · 발표가 많은 곳: Snowflake 5건, Databricks 3건, SAP 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Databricks 3건, Snowflake 3건, SAP 2건"
   },
   {
    "group": "domain",
    "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 6건 · 발표가 많은 곳: SAP 2건, NVIDIA 1건, OpenAI 1건"
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 7건 · 발표가 많은 곳: SAP 3건, NVIDIA 1건, OpenAI 1건"
   }
  ],
  "news": [
@@ -1247,6 +1298,19 @@
     "클라우드·인프라"
    ],
    "method": "인프라 확장"
+  },
+  {
+   "id": "d99e9b2aab",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "New AI guidance to cut paperwork and free more time for care",
+   "summary": "Drive for artificial intelligence in social care, as guidance sets out how more social care services can harness digital tools to support care",
+   "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care",
+   "score": 4,
+   "domains": [],
+   "method": "정책·규제"
   },
   {
    "id": "8c88ed8d44",
@@ -1623,6 +1687,32 @@
     "AI 에이전트"
    ],
    "method": "연구·보고서"
+  },
+  {
+   "id": "36375521bb",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "미래의 피지컬 AI 전문가 발굴! 「2026 청소년 로보틱스 챌린지」 결선 개최",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187986",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "da477d15c5",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "배경훈 부총리 겸 과기정통부 장관, 아랍에미리트 건국 55주년 국경일 기념행사 참석",
+   "summary": "- 대한민국 정부 대표로 참석하여 아랍에미리트 건국 55주년 축하 및 양국 우호관계 강화 - - 인공지능·첨단기술 분야 협력 확대로 미래지향적 동반자 관계 발전 기대 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187981",
+   "score": 1,
+   "domains": [],
+   "method": "파트너십"
   },
   {
    "id": "0d825a7cd7",

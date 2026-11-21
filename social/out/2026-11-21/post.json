@@ -1,0 +1,34 @@
+{
+ "date": "2026-11-21",
+ "images": [
+  "01.png",
+  "02.png",
+  "03.png",
+  "04.png",
+  "05.png",
+  "06.png",
+  "07.png",
+  "08.png",
+  "09.png",
+  "10.png",
+  "11.png"
+ ],
+ "image_base": "https://data.pivoxquant.com/social/out/2026-11-21/",
+ "caption": "이번 주 AI 정책은 AI를 짓는 곳, 쓰는 곳, 잘못 쓰는 곳을 각각 다뤘어요.\n과학기술정보통신부는 AI 데이터센터 특별법 하위법령 제정안을 입법예고했어요.\n인허가 시한과 특구 기준이 초안에 담겨, 국내 AI 인프라 일정을 가늠할 기준이 생겨요.\n영국 정부는 아동·성인 돌봄 분야의 AI 활용 지침을 냈어요.\n기록 받아쓰기와 요약 같은 문서 작업이 AI 적용의 첫 대상으로 읽혀요.\n영국 Ofqual은 비시험 평가 속 AI 오용에 관해 평가기관에 서한을 보냈어요.\n결과물을 누가 만들었는지 묻는 일이 규제 의제가 됐어요.\n세 발표 모두 특정 시설, 업무, 평가를 겨냥했어요.\n우리 회사는 업무별 AI 허용 범위를 문서로 정해 두었는지 확인해 보세요.\n\n자세한 풀이: data.pivoxquant.com/briefs/2026-11-21\n출처(공식 발표): 과학기술정보통신부 · 영국 정부 — 원문 링크는 리서치 글에\n\n#AI정책 #AI규제 #AI거버넌스 #AX #기업AI #IT컨설팅 #인공지능",
+ "caption_source": "claude",
+ "caption_via": "Claude Code",
+ "story": {
+  "format": "policyweek",
+  "format_name": "AI 정책 업데이트",
+  "source": "claude",
+  "slides": 11
+ },
+ "caption_note": null,
+ "mode": "policy",
+ "event": null,
+ "insights": [],
+ "checked": {
+  "numbers_allowed": 95,
+  "problems": []
+ }
+}

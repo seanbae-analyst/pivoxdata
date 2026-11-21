@@ -1,0 +1,434 @@
+{
+ "date": "2026-11-21",
+ "mode": "policy",
+ "topic": null,
+ "format": "policyweek",
+ "format_name": "AI 정책 업데이트",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 2,
+ "original_numbers": [
+  "63"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "AI 정책 업데이트",
+   "title": "AI 정책은 어디에\n선을 긋고 있나요?",
+   "body": "한국은 데이터센터 인허가를,\n영국은 돌봄 현장의 AI 활용과\n평가 속 AI 오용을 다뤘어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "kicker": "이번 주 배경",
+   "title": "인프라, 현장, 평가\n세 곳에서 나왔어요",
+   "body": "과학기술정보통신부와 영국 정부가\n이번 주 AI 정책 3건을 냈어요.\nAI를 짓는 곳, 쓰는 곳,\n잘못 쓰는 곳으로 나눠 읽어 봐요.",
+   "src": "출처 · 과학기술정보통신부 · 영국 정부 발표 3건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "과기정통부,\n데이터센터 법령 예고",
+   "body": "과학기술정보통신부는\n「인공지능 데이터센터 특별법」의\n하위법령 제정안을\n입법예고했다고 밝혔어요.\n아직 확정 전 단계예요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/20",
+   "case": {
+    "who": "과학기술정보통신부",
+    "what": "AI 데이터센터 특별법 하위법령 제정안",
+    "where": "AI 데이터센터, 비수도권 AI 데이터센터 특구",
+    "how": "입법예고(확정 전)",
+    "domain": "클라우드·인프라",
+    "method": "정책·규제",
+    "check": "국내 데이터센터·클라우드 이용 계획에 특구·인허가 일정이 닿는가?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 정책·규제"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "인허가 절차와 시한이\n초안에 담겼어요",
+   "body": "초안에는 인허가 일괄처리 시한,\n전력계통영향평가 면제 기준,\n비수도권 특구 기준이 들어 있어요.\n국내 AI 인프라의 입지와 일정을\n가늠할 기준이 생긴다는 뜻이에요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/20",
+   "case": {
+    "who": "과학기술정보통신부",
+    "what": "AI 데이터센터 특별법 하위법령 제정안",
+    "where": "AI 데이터센터, 비수도권 AI 데이터센터 특구",
+    "how": "입법예고(확정 전)",
+    "domain": "클라우드·인프라",
+    "method": "정책·규제",
+    "check": "국내 데이터센터·클라우드 이용 계획에 특구·인허가 일정이 닿는가?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "영국, 돌봄 분야\nAI 지침 발표",
+   "body": "영국 정부는 아동·성인 돌봄에서\nAI를 쓰는 방법을 담은\n첫 분야 공통 지침을 냈다고 밝혔어요.\nSwindon 시범에서는 행정 시간이\n63% 줄었다고 해요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/20",
+   "case": {
+    "who": "영국 정부",
+    "what": "사회돌봄 AI 활용 지침",
+    "where": "아동·성인 사회돌봄 기관과 인력",
+    "how": "분야 공통 가이드라인 발표",
+    "domain": "업무 도구",
+    "method": "정책·규제",
+    "check": "상담·기록 내용을 AI로 받아쓸 때 개인정보 처리 기준은 정했는가?",
+    "ref": 2
+   },
+   "kicker": "업무 도구 · 정책·규제"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "기록과 요약이\n첫 대상이에요",
+   "body": "지침이 든 예는 기록 받아쓰기·요약,\n번역, 사례 이력 검색이에요.\n사람을 상대하는 업무의 문서 작업에\nAI를 붙이는 방향으로 읽혀요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/20",
+   "case": {
+    "who": "영국 정부",
+    "what": "사회돌봄 AI 활용 지침",
+    "where": "아동·성인 사회돌봄 기관과 인력",
+    "how": "분야 공통 가이드라인 발표",
+    "domain": "업무 도구",
+    "method": "정책·규제",
+    "check": "상담·기록 내용을 AI로 받아쓸 때 개인정보 처리 기준은 정했는가?",
+    "ref": 2
+   },
+   "kicker": "업무 도구 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "Ofqual, AI 오용\n서한 발송",
+   "body": "Ofqual의 수석 규제관\nIan Bauckham은\n일부 평가기관 대표에게 서한을 보냈어요.\n비시험 평가 속 AI 오용과\n웨어러블 기기 문제를 다뤘어요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/18",
+   "case": {
+    "who": "영국 Ofqual",
+    "what": "AI·웨어러블 기기 오용 관련 서한",
+    "where": "평가기관의 비시험 평가",
+    "how": "수석 규제관이 일부 평가기관에 서한",
+    "domain": "보안·규제",
+    "method": "정책·규제",
+    "check": "사내 평가·채용 과제에서 AI 사용 허용 범위를 정해 두었는가?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 정책·규제"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "누가 했는지\n묻는 일이 됐어요",
+   "body": "사람의 결과물을 평가하는 곳에서\nAI 오용이 규제 의제가 됐어요.\n사내 평가나 채용 과제에도\n같은 질문이 이어진다는 뜻이에요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/18",
+   "case": {
+    "who": "영국 Ofqual",
+    "what": "AI·웨어러블 기기 오용 관련 서한",
+    "where": "평가기관의 비시험 평가",
+    "how": "수석 규제관이 일부 평가기관에 서한",
+    "domain": "보안·규제",
+    "method": "정책·규제",
+    "check": "사내 평가·채용 과제에서 AI 사용 허용 범위를 정해 두었는가?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "kicker": "공통 흐름",
+   "title": "규칙이 업무 단위로\n좁혀지고 있어요",
+   "body": "세 발표 모두 AI 일반론보다\n특정 시설, 업무, 평가를 다뤘어요.\n최근 30일 보안·규제 영역의\n공식 발표는 24건이었어요.",
+   "src": "출처 · 과학기술정보통신부 · 영국 정부 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "인프라 일정에 법령 확정 시점을 반영했나요?",
+    "기록·요약 AI에 개인정보 기준이 있나요?",
+    "업무별 AI 허용 범위를 문서로 정했나요?",
+    "AI 결과물은 누가 검토하나요?",
+    "해외 지침이 적용되는 사업이 있나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "title": "짓고, 쓰고, 막는\n규칙이 나왔어요",
+   "body": "한국은 데이터센터 법령 초안을,\n영국은 돌봄 지침과 평가 서한을 냈어요.\n프로젝트 단계마다 맞춰 보세요."
+  }
+ ],
+ "caption": "이번 주 AI 정책은 AI를 짓는 곳, 쓰는 곳, 잘못 쓰는 곳을 각각 다뤘어요.\n과학기술정보통신부는 AI 데이터센터 특별법 하위법령 제정안을 입법예고했어요.\n인허가 시한과 특구 기준이 초안에 담겨, 국내 AI 인프라 일정을 가늠할 기준이 생겨요.\n영국 정부는 아동·성인 돌봄 분야의 AI 활용 지침을 냈어요.\n기록 받아쓰기와 요약 같은 문서 작업이 AI 적용의 첫 대상으로 읽혀요.\n영국 Ofqual은 비시험 평가 속 AI 오용에 관해 평가기관에 서한을 보냈어요.\n결과물을 누가 만들었는지 묻는 일이 규제 의제가 됐어요.\n세 발표 모두 특정 시설, 업무, 평가를 겨냥했어요.\n우리 회사는 업무별 AI 허용 범위를 문서로 정해 두었는지 확인해 보세요.",
+ "cases": [
+  {
+   "who": "과학기술정보통신부",
+   "what": "AI 데이터센터 특별법 하위법령 제정안",
+   "where": "AI 데이터센터, 비수도권 AI 데이터센터 특구",
+   "how": "입법예고(확정 전)",
+   "domain": "클라우드·인프라",
+   "method": "정책·규제",
+   "check": "국내 데이터센터·클라우드 이용 계획에 특구·인허가 일정이 닿는가?",
+   "ref": 1,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-20",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187983"
+  },
+  {
+   "who": "영국 정부",
+   "what": "사회돌봄 AI 활용 지침",
+   "where": "아동·성인 사회돌봄 기관과 인력",
+   "how": "분야 공통 가이드라인 발표",
+   "domain": "업무 도구",
+   "method": "정책·규제",
+   "check": "상담·기록 내용을 AI로 받아쓸 때 개인정보 처리 기준은 정했는가?",
+   "ref": 2,
+   "source": "영국 정부",
+   "date": "2026-11-20",
+   "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care"
+  },
+  {
+   "who": "영국 Ofqual",
+   "what": "AI·웨어러블 기기 오용 관련 서한",
+   "where": "평가기관의 비시험 평가",
+   "how": "수석 규제관이 일부 평가기관에 서한",
+   "domain": "보안·규제",
+   "method": "정책·규제",
+   "check": "사내 평가·채용 과제에서 AI 사용 허용 범위를 정해 두었는가?",
+   "ref": 3,
+   "source": "영국 정부",
+   "date": "2026-11-18",
+   "link": "https://www.gov.uk/government/publications/letter-to-awarding-organisations-about-misuse-of-ai-and-wearable-technology"
+  }
+ ],
+ "sources": [
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "인공지능 데이터센터 신속 구축을 위한 「인공지능 데이터센터 특별법」 하위법령 제정안 입법예고",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187983",
+   "id": "bfe538d1ac",
+   "original": false
+  },
+  {
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "New AI guidance to cut paperwork and free more time for care",
+   "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care",
+   "id": "d99e9b2aab",
+   "original": true
+  },
+  {
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-18",
+   "title": "Letter to awarding organisations about misuse of AI and wearable technology",
+   "link": "https://www.gov.uk/government/publications/letter-to-awarding-organisations-about-misuse-of-ai-and-wearable-technology",
+   "id": "8c88ed8d44",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "AI 정책은 어디에 선을 긋고 있나요?",
+  "lede": "한국은 데이터센터 인허가를, 영국은 돌봄 현장의 AI 활용과 평가 속 AI 오용을 다뤘어요.",
+  "sections": [
+   {
+    "heading": "인프라, 현장, 평가 세 곳에서 나왔어요",
+    "body": "과학기술정보통신부와 영국 정부가 이번 주 AI 정책 3건을 냈어요. AI를 짓는 곳, 쓰는 곳, 잘못 쓰는 곳으로 나눠 읽어 봐요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "인공지능 데이터센터 신속 구축을 위한 「인공지능 데이터센터 특별법」 하위법령 제정안 입법예고",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187983"
+     },
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "New AI guidance to cut paperwork and free more time for care",
+      "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care"
+     },
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-18",
+      "title": "Letter to awarding organisations about misuse of AI and wearable technology",
+      "link": "https://www.gov.uk/government/publications/letter-to-awarding-organisations-about-misuse-of-ai-and-wearable-technology"
+     }
+    ]
+   },
+   {
+    "heading": "과기정통부, 데이터센터 법령 예고",
+    "body": "과학기술정보통신부는 「인공지능 데이터센터 특별법」의 하위법령 제정안을 입법예고했다고 밝혔어요. 아직 확정 전 단계예요.\n\n초안에는 인허가 일괄처리 시한, 전력계통영향평가 면제 기준, 비수도권 특구 기준이 들어 있어요. 국내 AI 인프라의 입지와 일정을 가늠할 기준이 생긴다는 뜻이에요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "과학기술정보통신부",
+     "what": "AI 데이터센터 특별법 하위법령 제정안",
+     "where": "AI 데이터센터, 비수도권 AI 데이터센터 특구",
+     "how": "입법예고(확정 전)",
+     "domain": "클라우드·인프라",
+     "method": "정책·규제",
+     "check": "국내 데이터센터·클라우드 이용 계획에 특구·인허가 일정이 닿는가?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "인공지능 데이터센터 신속 구축을 위한 「인공지능 데이터센터 특별법」 하위법령 제정안 입법예고",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187983"
+     }
+    ]
+   },
+   {
+    "heading": "영국, 돌봄 분야 AI 지침 발표",
+    "body": "영국 정부는 아동·성인 돌봄에서 AI를 쓰는 방법을 담은 첫 분야 공통 지침을 냈다고 밝혔어요. Swindon 시범에서는 행정 시간이 63% 줄었다고 해요.\n\n지침이 든 예는 기록 받아쓰기·요약, 번역, 사례 이력 검색이에요. 사람을 상대하는 업무의 문서 작업에 AI를 붙이는 방향으로 읽혀요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "영국 정부",
+     "what": "사회돌봄 AI 활용 지침",
+     "where": "아동·성인 사회돌봄 기관과 인력",
+     "how": "분야 공통 가이드라인 발표",
+     "domain": "업무 도구",
+     "method": "정책·규제",
+     "check": "상담·기록 내용을 AI로 받아쓸 때 개인정보 처리 기준은 정했는가?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "New AI guidance to cut paperwork and free more time for care",
+      "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care"
+     }
+    ]
+   },
+   {
+    "heading": "Ofqual, AI 오용 서한 발송",
+    "body": "Ofqual의 수석 규제관 Ian Bauckham은 일부 평가기관 대표에게 서한을 보냈어요. 비시험 평가 속 AI 오용과 웨어러블 기기 문제를 다뤘어요.\n\n사람의 결과물을 평가하는 곳에서 AI 오용이 규제 의제가 됐어요. 사내 평가나 채용 과제에도 같은 질문이 이어진다는 뜻이에요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "영국 Ofqual",
+     "what": "AI·웨어러블 기기 오용 관련 서한",
+     "where": "평가기관의 비시험 평가",
+     "how": "수석 규제관이 일부 평가기관에 서한",
+     "domain": "보안·규제",
+     "method": "정책·규제",
+     "check": "사내 평가·채용 과제에서 AI 사용 허용 범위를 정해 두었는가?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-18",
+      "title": "Letter to awarding organisations about misuse of AI and wearable technology",
+      "link": "https://www.gov.uk/government/publications/letter-to-awarding-organisations-about-misuse-of-ai-and-wearable-technology"
+     }
+    ]
+   },
+   {
+    "heading": "규칙이 업무 단위로 좁혀지고 있어요",
+    "body": "세 발표 모두 AI 일반론보다 특정 시설, 업무, 평가를 다뤘어요. 최근 30일 보안·규제 영역의 공식 발표는 24건이었어요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "인공지능 데이터센터 신속 구축을 위한 「인공지능 데이터센터 특별법」 하위법령 제정안 입법예고",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187983"
+     },
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "New AI guidance to cut paperwork and free more time for care",
+      "link": "https://www.gov.uk/government/news/new-ai-guidance-to-cut-paperwork-and-free-more-time-for-care"
+     },
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-18",
+      "title": "Letter to awarding organisations about misuse of AI and wearable technology",
+      "link": "https://www.gov.uk/government/publications/letter-to-awarding-organisations-about-misuse-of-ai-and-wearable-technology"
+     }
+    ]
+   },
+   {
+    "heading": "도입 프로젝트에서 확인할 점",
+    "body": "· 인프라 일정에 법령 확정 시점을 반영했나요?\n\n· 기록·요약 AI에 개인정보 기준이 있나요?\n\n· 업무별 AI 허용 범위를 문서로 정했나요?\n\n· AI 결과물은 누가 검토하나요?\n\n· 해외 지침이 적용되는 사업이 있나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "한국은 데이터센터 법령 초안을,",
+   "영국은 돌봄 지침과 평가 서한을 냈어요.",
+   "프로젝트 단계마다 맞춰 보세요."
+  ],
+  "source": "slides",
+  "terms": [],
+  "tags": {
+   "themes": [],
+   "industries": [],
+   "companies": [
+    {
+     "id": "msit",
+     "name": "과학기술정보통신부"
+    },
+    {
+     "id": "ukgov",
+     "name": "영국 정부"
+    }
+   ]
+  }
+ },
+ "series": "policy"
+}
