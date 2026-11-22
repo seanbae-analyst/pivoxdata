@@ -6985,6 +6985,58 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-22",
+   "key": "hftr:unsloth/Inkling-2-Mini-GGUF+inworld/voice-isolator+apple/FastFrames-L:2026-11-22",
+   "subject": "hf:unsloth/Inkling-2-Mini-GGUF",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 16,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "2위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-11-20 공개. 함께 들어온 모델: inworld/​voice‑isolator, apple/​FastFrames‑L.",
+    "src": "Hugging Face 트렌딩 · 2026-11-22",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Inkling-2-Mini",
+        "value": 743.5,
+        "label": "7,944"
+       },
+       {
+        "name": "Inkling-2-Mini-GGUF",
+        "value": 654,
+        "label": "24만"
+       },
+       {
+        "name": "Hy4-flash",
+        "value": 401,
+        "label": "5,588"
+       },
+       {
+        "name": "voice-isolator",
+        "value": 398,
+        "label": "0"
+       },
+       {
+        "name": "FastFrames-L",
+        "value": 347,
+        "label": "0"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-21",
+ "built_at": "2026-11-22",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "131건",
+     "big": "129건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 62건 · 클라우드·인프라 33건 · 보안·규제 24건 · 업무 도구 23건 · CRM·고객 14건 · 데이터·분석 12건 · ERP·백오피스 7건",
+     "body": "AI 에이전트 62건 · 클라우드·인프라 32건 · 업무 도구 23건 · 보안·규제 23건 · CRM·고객 14건 · 데이터·분석 12건 · ERP·백오피스 7건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -330,16 +330,16 @@
         },
         {
          "name": "클라우드·인프라",
-         "value": 33,
-         "label": "33건"
-        },
-        {
-         "name": "보안·규제",
-         "value": 24,
-         "label": "24건"
+         "value": 32,
+         "label": "32건"
         },
         {
          "name": "업무 도구",
+         "value": 23,
+         "label": "23건"
+        },
+        {
+         "name": "보안·규제",
          "value": 23,
          "label": "23건"
         },
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "33건",
+     "big": "32건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -409,8 +409,8 @@
        "items": [
         {
          "name": "NVIDIA",
-         "value": 9,
-         "label": "9건"
+         "value": 8,
+         "label": "8건"
         },
         {
          "name": "과학기술정보통신부",
@@ -431,48 +431,6 @@
          "name": "SAP",
          "value": 3,
          "label": "3건"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "dom-security",
-     "k": "IT 영역 · 보안·규제",
-     "big": "24건",
-     "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
-     "easy": "",
-     "body": "최근: Databricks 11/19 — Four AI Architecture Patterns for Regulated Industries · 영국 정부 11/18 — Letter to awarding organisations about misuse of AI and wearable technology · Google Cloud 11/16 — Outpace automated cyber threats with security built for nonstop defense.",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "과학기술정보통신부",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "OpenAI",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "SK텔레콤",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "영국 정부",
-         "value": 2,
-         "label": "2건"
-        },
-        {
-         "name": "Snowflake",
-         "value": 2,
-         "label": "2건"
         }
        ]
       }
@@ -513,6 +471,48 @@
         },
         {
          "name": "Google Cloud",
+         "value": 2,
+         "label": "2건"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-security",
+     "k": "IT 영역 · 보안·규제",
+     "big": "23건",
+     "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
+     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
+     "easy": "",
+     "body": "최근: Databricks 11/19 — Four AI Architecture Patterns for Regulated Industries · 영국 정부 11/18 — Letter to awarding organisations about misuse of AI and wearable technology · Google Cloud 11/16 — Outpace automated cyber threats with security built for nonstop defense.",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
+        {
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "SK텔레콤",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "영국 정부",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "Snowflake",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "NVIDIA",
          "value": 2,
          "label": "2건"
         }
@@ -908,57 +908,6 @@
    }
   },
   {
-   "key": "hf:thinkingmachines/Inkling-2-Mini",
-   "subject": "hf:thinkingmachines/Inkling-2-Mini",
-   "kind": "새 1위",
-   "tier": "big",
-   "score": 45,
-   "topic": "ai",
-   "headline": "Hugging Face 트렌딩 1위가 바뀌었습니다: thinkingmachines/​Inkling‑2‑Mini",
-   "card": {
-    "id": "ev-hf-trending",
-    "k": "빅 케이스 · 오픈 모델",
-    "big": "♥ 1,020",
-    "bl": "좋아요",
-    "title": "Hugging Face 트렌딩 1위가 바뀌었습니다: thinkingmachines/​Inkling‑2‑Mini",
-    "easy": "지금 가장 주목받는 오픈 AI 모델이 바뀌었어요.",
-    "body": "image‑text‑to‑text · 2026-11-17 공개. 직전 1위는 tencent/​Hy4‑flash.",
-    "src": "Hugging Face 트렌딩 · 2026-11-21",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "Inkling-2-Mini",
-        "value": 771,
-        "label": "136"
-       },
-       {
-        "name": "Haru-4B",
-        "value": 623,
-        "label": "7,323"
-       },
-       {
-        "name": "Qwen3.8-27B-pi-adapted",
-        "value": 598,
-        "label": "1,874"
-       },
-       {
-        "name": "h3",
-        "value": 436,
-        "label": "0"
-       },
-       {
-        "name": "Hy4-flash",
-        "value": 361,
-        "label": "3,949"
-       }
-      ]
-     }
-    ]
-   }
-  },
-  {
    "key": "surge:PyPI:openai-agents:2026-11-09",
    "subject": "pkg:openai-agents",
    "kind": "증가",
@@ -1077,50 +1026,50 @@
    }
   },
   {
-   "key": "hftr:Sentinel7/h3:2026-11-21",
-   "subject": "hf:Sentinel7/h3",
+   "key": "hftr:unsloth/Inkling-2-Mini-GGUF+inworld/voice-isolator+apple/FastFrames-L:2026-11-22",
+   "subject": "hf:unsloth/Inkling-2-Mini-GGUF",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 12,
+   "score": 16,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: Sentinel7/​h3",
+   "headline": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
-    "big": "4위",
+    "big": "2위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: Sentinel7/​h3",
+    "title": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "2026-08-06 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-21",
+    "body": "image‑text‑to‑text · 2026-11-20 공개. 함께 들어온 모델: inworld/​voice‑isolator, apple/​FastFrames‑L.",
+    "src": "Hugging Face 트렌딩 · 2026-11-22",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "Inkling-2-Mini",
-        "value": 771,
-        "label": "136"
+        "value": 743.5,
+        "label": "7,944"
        },
        {
-        "name": "Haru-4B",
-        "value": 623,
-        "label": "7,323"
-       },
-       {
-        "name": "Qwen3.8-27B-pi-adapted",
-        "value": 598,
-        "label": "1,874"
-       },
-       {
-        "name": "h3",
-        "value": 436,
-        "label": "0"
+        "name": "Inkling-2-Mini-GGUF",
+        "value": 654,
+        "label": "24만"
        },
        {
         "name": "Hy4-flash",
-        "value": 361,
-        "label": "3,949"
+        "value": 401,
+        "label": "5,588"
+       },
+       {
+        "name": "voice-isolator",
+        "value": 398,
+        "label": "0"
+       },
+       {
+        "name": "FastFrames-L",
+        "value": 347,
+        "label": "0"
        }
       ]
      }
@@ -1212,17 +1161,17 @@
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 33건 · 발표가 많은 곳: NVIDIA 9건, 과학기술정보통신부 5건, McKinsey 3건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: 과학기술정보통신부 3건, OpenAI 3건, SK텔레콤 3건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 32건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 5건, McKinsey 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
    "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: OpenAI 7건, Databricks 4건, Salesforce 3건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-security",
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: 과학기술정보통신부 3건, SK텔레콤 3건, 영국 정부 2건"
   },
   {
    "group": "domain",
