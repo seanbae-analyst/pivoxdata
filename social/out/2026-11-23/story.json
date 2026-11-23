@@ -1,0 +1,461 @@
+{
+ "date": "2026-11-23",
+ "mode": "news",
+ "topic": null,
+ "format": "newstheme",
+ "format_name": "AX 사건 묶어 보기",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 3,
+ "original_numbers": [
+  "70",
+  "450",
+  "100"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI를 들이기 전,\n무엇을 먼저 깔까요?",
+   "body": "영국 정부, 과기정통부,\nDatabricks 발표 3건은\n모두 AI의 바탕을 다뤄요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "kicker": "배경",
+   "title": "모델보다 바탕을\n다룬 한 주",
+   "body": "국방 AI 검증 인프라 투자,\nAI 데이터센터 인허가 개선,\n규제 산업용 에이전트 설계 틀이에요.\n클라우드·인프라와 보안·규제에서\n나온 발표예요.",
+   "src": "출처 · 영국 정부 · 과학기술정보통신부 · Databricks 발표 3건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "title": "영국 정부,\n국방 AI 기업에 투자",
+   "body": "영국 정부는 두 펀드가 Agon의\n$70 million 시리즈 A에\n참여했다고 발표했어요.\n기업가치는 $450 million이에요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/23",
+   "case": {
+    "who": "영국 정부(Sovereign AI Fund 등)",
+    "what": "국방 AI 기업 Agon 투자",
+    "where": "국방 AI 학습·검증 인프라",
+    "how": "$70 million 시리즈 A 참여",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "AI 모델을 운영에 넣기 전에 시뮬레이션으로 검증할 환경이 있나요?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 투자"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "title": "실전 전에\n가상에서 검증해요",
+   "body": "Agon은 AI 모델을\n실제 상황 대신 가상 전장에서\n시험하는 인프라를 만들어요.\n학습만큼 검증 인프라도\n투자 대상이라는 뜻으로 읽혀요.",
+   "src": "출처 · 영국 정부 보도자료 · 11/23",
+   "case": {
+    "who": "영국 정부(Sovereign AI Fund 등)",
+    "what": "국방 AI 기업 Agon 투자",
+    "where": "국방 AI 학습·검증 인프라",
+    "how": "$70 million 시리즈 A 참여",
+    "domain": "클라우드·인프라",
+    "method": "투자",
+    "check": "AI 모델을 운영에 넣기 전에 시뮬레이션으로 검증할 환경이 있나요?",
+    "ref": 1
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "title": "AI 데이터센터\n전력 평가를 줄여요",
+   "body": "과기정통부와 기후부는\n계약전력 50MW 이하인\n비수도권 AIDC(AI 데이터센터)는\n전력계통영향평가를\n면제한다고 밝혔어요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/20",
+   "case": {
+    "who": "과학기술정보통신부, 기후부",
+    "what": "전력계통영향평가 제도 개선",
+    "where": "AI 데이터센터(AIDC) 인허가",
+    "how": "50MW 이하 면제, 패스트트랙",
+    "domain": "클라우드·인프라",
+    "method": "정책·규제",
+    "check": "쓰려는 데이터센터의 전력 확보와 인허가 일정을 확인했나요?",
+    "ref": 2
+   },
+   "kicker": "클라우드·인프라 · 정책·규제"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "title": "특구는 간소화,\n큰 사업은 먼저",
+   "body": "특구 안 AIDC는\n비기술적 평가를 면제받고,\n메가프로젝트는 우선 처리돼요.\n전력 인허가가\n데이터센터 일정을 좌우한다는 뜻이에요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/20",
+   "case": {
+    "who": "과학기술정보통신부, 기후부",
+    "what": "전력계통영향평가 제도 개선",
+    "where": "AI 데이터센터(AIDC) 인허가",
+    "how": "50MW 이하 면제, 패스트트랙",
+    "domain": "클라우드·인프라",
+    "method": "정책·규제",
+    "check": "쓰려는 데이터센터의 전력 확보와 인허가 일정을 확인했나요?",
+    "ref": 2
+   },
+   "kicker": "클라우드·인프라 · 무슨 뜻인가"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "title": "Databricks,\n에이전트 설계 틀 공개",
+   "body": "Databricks는 규제 산업에서\n에이전트와 결정론적 통제를\n함께 쓰는 패턴 4가지를\n연재 첫 글로 소개했어요.",
+   "src": "출처 · Databricks 공식 발표 · 11/19",
+   "case": {
+    "who": "Databricks",
+    "what": "규제 산업용 AI 설계 패턴 4가지",
+    "where": "규제 산업의 기업 시스템",
+    "how": "연재 첫 글로 판단 틀 공개",
+    "domain": "보안·규제",
+    "method": "연구·보고서",
+    "check": "되돌릴 수 없는 작업에 에이전트 권한을 주고 있지 않나요?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 연구·보고서"
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "title": "에이전트 권한은\n되돌릴 수 있는지로",
+   "body": "Databricks는\n되돌릴 수 없는 일엔\n결정론적 통제(재현되는 규칙)를,\n되돌리기 쉬운 일엔 에이전트 권한을\n두는 식으로 나눠요.\n데이터 계보(출처 이력)와 감사 증거가\n배포 조건이라는 뜻으로 읽혀요.",
+   "src": "출처 · Databricks 공식 발표 · 11/19",
+   "case": {
+    "who": "Databricks",
+    "what": "규제 산업용 AI 설계 패턴 4가지",
+    "where": "규제 산업의 기업 시스템",
+    "how": "연재 첫 글로 판단 틀 공개",
+    "domain": "보안·규제",
+    "method": "연구·보고서",
+    "check": "되돌릴 수 없는 작업에 에이전트 권한을 주고 있지 않나요?",
+    "ref": 3
+   },
+   "kicker": "보안·규제 · 무슨 뜻인가"
+  },
+  {
+   "kind": "text",
+   "refs": [
+    1,
+    2,
+    3
+   ],
+   "kicker": "공통 흐름",
+   "title": "모델 밖의 준비가\n먼저 나왔어요",
+   "body": "검증 환경, 전력 인허가, 통제 설계.\n세 발표 모두 모델을 둘러싼\n조건을 다뤄요.\n최근 30일 클라우드·인프라\n공식 발표는 34건이었어요.",
+   "src": "출처 · 영국 정부 · 과학기술정보통신부 · Databricks 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "kicker": "실무 체크",
+   "title": "도입 프로젝트에서\n확인할 점",
+   "items": [
+    "운영 전 AI를 시험할 환경이 있나요?",
+    "데이터센터 전력·인허가 일정을 확인했나요?",
+    "되돌릴 수 없는 작업은 누가 승인하나요?",
+    "데이터 계보와 감사 기록이 남나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "kicker": "정리",
+   "title": "AI 도입은\n바탕부터 점검해요",
+   "body": "검증 환경, 전력, 통제 설계를\n모델 선택보다 먼저\n확인해 보세요."
+  }
+ ],
+ "caption": "이번 주 AX 발표 3건은 모두 AI를 돌리는 바탕을 다뤘어요.\n영국 정부는 두 펀드가 국방 AI 기업 Agon의 $70 million 시리즈 A에 참여했다고 발표했어요.\n→ 학습만큼 검증 인프라도 투자 대상이라는 뜻으로 읽혀요.\n과기정통부와 기후부는 비수도권 50MW 이하 AIDC의 전력계통영향평가를 면제한다고 밝혔어요.\n→ 데이터센터 일정에서 전력 인허가가 큰 몫이라는 뜻이에요.\nDatabricks는 규제 산업에서 에이전트와 결정론적 통제를 함께 쓰는 패턴 4가지를 소개했어요.\n→ 에이전트 권한을 되돌릴 수 있는 일인지에 따라 나누는 틀이에요.\n세 발표 모두 모델 밖의 조건을 다뤘어요.\n우리 회사는 되돌릴 수 없는 작업을 누가 승인하나요?",
+ "cases": [
+  {
+   "who": "영국 정부(Sovereign AI Fund 등)",
+   "what": "국방 AI 기업 Agon 투자",
+   "where": "국방 AI 학습·검증 인프라",
+   "how": "$70 million 시리즈 A 참여",
+   "domain": "클라우드·인프라",
+   "method": "투자",
+   "check": "AI 모델을 운영에 넣기 전에 시뮬레이션으로 검증할 환경이 있나요?",
+   "ref": 1,
+   "source": "영국 정부",
+   "date": "2026-11-23",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm"
+  },
+  {
+   "who": "과학기술정보통신부, 기후부",
+   "what": "전력계통영향평가 제도 개선",
+   "where": "AI 데이터센터(AIDC) 인허가",
+   "how": "50MW 이하 면제, 패스트트랙",
+   "domain": "클라우드·인프라",
+   "method": "정책·규제",
+   "check": "쓰려는 데이터센터의 전력 확보와 인허가 일정을 확인했나요?",
+   "ref": 2,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-20",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187982"
+  },
+  {
+   "who": "Databricks",
+   "what": "규제 산업용 AI 설계 패턴 4가지",
+   "where": "규제 산업의 기업 시스템",
+   "how": "연재 첫 글로 판단 틀 공개",
+   "domain": "보안·규제",
+   "method": "연구·보고서",
+   "check": "되돌릴 수 없는 작업에 에이전트 권한을 주고 있지 않나요?",
+   "ref": 3,
+   "source": "Databricks",
+   "date": "2026-11-19",
+   "link": "https://www.databricks.com/blog/ai-architecture-patterns-regulated-industries"
+  }
+ ],
+ "sources": [
+  {
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-23",
+   "title": "Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm",
+   "id": "e7fab70aad",
+   "original": true
+  },
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187982",
+   "id": "aa74c8ca26",
+   "original": true
+  },
+  {
+   "source": "Databricks",
+   "kind": "company",
+   "date": "2026-11-19",
+   "title": "Four AI Architecture Patterns for Regulated Industries",
+   "link": "https://www.databricks.com/blog/ai-architecture-patterns-regulated-industries",
+   "id": "112c49c74f",
+   "original": true
+  }
+ ],
+ "article": {
+  "title": "AI를 돌리기 전에 깔아야 할 것: 검증 환경, 전력 인허가, 통제 설계",
+  "lede": "이번 주 공식 발표 3건은 AI 모델보다 모델이 놓일 바탕을 다뤘어요. 영국 정부는 국방 AI를 가상 환경에서 시험하는 인프라 기업에 투자했고, 과기정통부와 기후부는 AI 데이터센터의 전력 평가 절차를 줄이겠다고 밝혔어요. Databricks는 규제 산업에서 에이전트에게 어디까지 맡길지 나누는 설계 틀을 내놨어요.",
+  "sections": [
+   {
+    "heading": "세 발표를 함께 읽는 이유",
+    "body": "세 발표는 나온 곳이 달라요. 하나는 영국 정부의 투자 발표, 하나는 한국 과학기술정보통신부와 기후부의 보도자료, 하나는 Databricks의 기술 연재 첫 글이에요.\n\nIT 영역으로 나누면 두 건은 클라우드·인프라, 한 건은 보안·규제에 속해요. 세 발표 모두 어떤 모델을 고를지가 아니라 모델을 시험하고, 돌리고, 통제하는 조건을 다뤄요. 그래서 한 묶음으로 읽어요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-23",
+      "title": "Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187982"
+     },
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-19",
+      "title": "Four AI Architecture Patterns for Regulated Industries",
+      "link": "https://www.databricks.com/blog/ai-architecture-patterns-regulated-industries"
+     }
+    ]
+   },
+   {
+    "heading": "영국 정부, 국방 AI 검증 인프라 기업 Agon에 투자",
+    "body": "영국 정부는 Sovereign AI Fund와 NSSIF(국가안보 전략투자펀드)가 국방 AI 스타트업 Agon에 투자했다고 11월 23일 발표했어요. 두 펀드는 $70 million 규모의 시리즈 A에 참여했고, 이번 라운드에서 Agon의 기업가치는 $450 million으로 매겨졌어요. 발표에 따르면 Agon이 지금까지 모은 투자금은 모두 $100 million이에요.\n\nAgon은 영국 육군 장교 출신 Tristam Constant와 Cambridge Aerospace 공동창업자 Junaid Hussain이 세운 회사로, 런던을 기반으로 베를린에도 사무실을 두고 있어요. 이 회사가 만드는 것은 자율 국방 시스템을 학습시키고, 검증하고, 조율하는 인프라예요. 영국 정부는 시험 대상의 예로 드론 공격을 막는 AI, 적이 통신을 방해해도 의도대로 작동해야 하는 AI를 들었어요. 민간에서는 Northzone 등 투자사가 함께 참여했어요.\n\n영국 정부는 지금은 이런 학습을 대부분 실제 환경에서 해야 해서 시간과 비용이 많이 든다고 설명했어요. Agon은 그 대신 현실적인 시뮬레이션 속에서 AI 모델을 빠르고 적은 비용으로 시험하는 '가상 전장'을 짓고 있어요. 클라우드·인프라 영역에서 학습용 연산뿐 아니라 검증 환경도 따로 돈이 들어가는 대상이 됐다는 뜻으로 읽혀요. 정부는 이 투자로 해외 기술 의존을 줄이고 자국 역량을 키우겠다고 밝혔어요.\n\n기업 프로젝트로 옮기면, AI를 운영에 넣기 전에 어디서 시험하느냐의 문제예요. 실제 업무 시스템에 바로 붙여 시험하면 오류가 곧 운영 사고가 되기 때문이에요. 예외 상황이나 연동 장애를 재현해 볼 시험 환경이 있는지, 그 환경을 누가 관리하는지 먼저 확인해 보세요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "영국 정부(Sovereign AI Fund 등)",
+     "what": "국방 AI 기업 Agon 투자",
+     "where": "국방 AI 학습·검증 인프라",
+     "how": "$70 million 시리즈 A 참여",
+     "domain": "클라우드·인프라",
+     "method": "투자",
+     "check": "AI 모델을 운영에 넣기 전에 시뮬레이션으로 검증할 환경이 있나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-23",
+      "title": "Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm"
+     }
+    ]
+   },
+   {
+    "heading": "과기정통부·기후부, AI 데이터센터 전력 평가 절차 손질",
+    "body": "과학기술정보통신부와 기후부는 AI 데이터센터(AIDC)를 빨리 지을 수 있도록 전력계통영향평가 제도를 고치겠다고 보도자료에서 밝혔어요. 보도자료 요약에는 세 갈래의 개선안이 담겼어요.\n\n첫째, 비수도권에 짓는 AIDC 가운데 계약전력이 50MW 이하인 곳은 평가를 받지 않아요. 둘째, AIDC 특구 안의 AIDC는 비기술적 평가가 빠져 절차가 간단해져요. 셋째, 메가프로젝트나 인허가 일괄처리 대상인 AIDC는 평가를 먼저 처리하는 패스트트랙에 올라요. 세부 기준과 시행 시점은 첨부파일에 있고, 이 글에서 확인한 범위에는 없어요.\n\n클라우드·인프라 영역에서 데이터센터는 전력 계통과 인허가를 통과해야 가동할 수 있어요. 정부가 전력 평가를 따로 손본다는 것은, 이 절차가 AIDC 일정에서 걸리는 지점이라는 뜻이에요. 다만 혜택은 지역, 전력 규모, 특구 여부에 따라 갈려요.\n\nAI용 서버를 직접 들이거나 국내 데이터센터·클라우드의 AI 자원을 쓰려는 기업이라면, 그 시설의 전력 확보와 인허가 일정이 프로젝트 일정과 맞는지 물어봐야 해요. 공급사가 어느 지역, 어떤 규모의 AIDC를 쓰는지에 따라 이번 개선안이 적용되는지도 달라지기 때문이에요. 일정 계획에 인프라 준비 기간을 따로 잡아 두면 좋아요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "과학기술정보통신부, 기후부",
+     "what": "전력계통영향평가 제도 개선",
+     "where": "AI 데이터센터(AIDC) 인허가",
+     "how": "50MW 이하 면제, 패스트트랙",
+     "domain": "클라우드·인프라",
+     "method": "정책·규제",
+     "check": "쓰려는 데이터센터의 전력 확보와 인허가 일정을 확인했나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187982"
+     }
+    ]
+   },
+   {
+    "heading": "Databricks, 규제 산업용 에이전트 설계 패턴 4가지",
+    "body": "Databricks는 규제 산업에서 AI 에이전트를 기존 시스템에 넣을 때 쓸 설계 패턴 4가지를 연재로 소개하기 시작했어요. 글은 고객 현장에 나가 모호한 업무 문제를 운영 시스템으로 바꾸는 Databricks의 현장 배치 엔지니어들이 썼어요. 고객들이 비슷한 질문을 거듭 묻기 때문에 연재를 시작했다고 했고, 기관별 구현 내용은 밝힐 수 없어 일반화한 패턴만 다룬다고 했어요.\n\n첫 글은 판단 틀을 소개해요. 질문은 두 가지예요. 정해진 규칙대로 처리하는 방식을 꼭 남겨야 하는 곳은 어디인지, 에이전트에게 권한을 줘도 되는 곳은 어디인지예요. Databricks는 작업을 되돌릴 수 없거나 오류의 대가가 한쪽으로 쏠릴 때는 결정론을, 되돌릴 수 있거나 바로잡는 비용이 낮을 때는 에이전트 권한을 검토하는 식으로 나눴어요.\n\n첫 번째 패턴은 결정론적 통제와 에이전트의 추론을 함께 쓰는 방식이에요. 결과가 엄격하게 재현돼야 하거나 오류를 되돌리기 어려울 때 쓰라고 했어요. Databricks는 여기서 결정론적이라는 말을, 어떤 데이터와 규칙, 허용 오차, 설정을 썼는지 남긴 버전 관리 약속 아래에서 같은 결과를 다시 낼 수 있다는 뜻으로 썼어요. 나머지 세 패턴은 다음 글들에서 다룬다고 밝혔어요.\n\nDatabricks는 에이전트를 실제로 배포할 수 있게 하는 것이 모델 하나가 아니라 관리되는 데이터, 데이터 계보, 정책 집행, 평가, 감사 증거라고 봤어요. 보안·규제 영역에서 에이전트 도입은 모델 선택보다 통제 설계의 문제로 읽혀요. 우리 프로젝트라면 에이전트가 맡을 작업을 되돌릴 수 있는지부터 분류하고, 되돌릴 수 없는 작업의 최종 승인자가 사람으로 정해져 있는지 확인해 보세요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "Databricks",
+     "what": "규제 산업용 AI 설계 패턴 4가지",
+     "where": "규제 산업의 기업 시스템",
+     "how": "연재 첫 글로 판단 틀 공개",
+     "domain": "보안·규제",
+     "method": "연구·보고서",
+     "check": "되돌릴 수 없는 작업에 에이전트 권한을 주고 있지 않나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-19",
+      "title": "Four AI Architecture Patterns for Regulated Industries",
+      "link": "https://www.databricks.com/blog/ai-architecture-patterns-regulated-industries"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: 모델 바깥의 조건",
+    "body": "세 발표는 모두 모델 바깥의 조건을 다뤘어요. Agon은 AI를 시험할 곳, AIDC 제도 개선은 AI를 돌릴 곳, Databricks 패턴은 AI를 통제할 방식에 관한 이야기예요.\n\n최근 30일 회사·정부의 공식 AX 발표 가운데 클라우드·인프라 영역은 34건, 보안·규제 영역은 24건이었어요. 두 영역 모두에서 영국 정부와 과학기술정보통신부가 발표가 많은 곳에 이름을 올렸어요. 정부는 인프라와 규제 쪽에서 바탕을 다루고, 기업은 그 위에서 통제 설계를 고민하는 구도예요.",
+    "refs": [
+     1,
+     2,
+     3
+    ],
+    "sources": [
+     {
+      "source": "영국 정부",
+      "kind": "government",
+      "date": "2026-11-23",
+      "title": "Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+      "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-20",
+      "title": "과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187982"
+     },
+     {
+      "source": "Databricks",
+      "kind": "company",
+      "date": "2026-11-19",
+      "title": "Four AI Architecture Patterns for Regulated Industries",
+      "link": "https://www.databricks.com/blog/ai-architecture-patterns-regulated-industries"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "ERP·CRM 같은 핵심 시스템에 AI 에이전트를 붙이는 프로젝트라면, 이번 주 세 발표는 같은 질문으로 모여요. 어디서 시험하고, 어떤 인프라에서 돌리고, 어떤 작업까지 맡길지예요. 모델을 비교하기 전에 이 세 가지를 설계 문서에 먼저 적어 두는 것이 출발점이에요.\n\n· 운영 전에 예외 상황을 재현해 AI를 시험할 환경이 있나요?\n· 쓰려는 데이터센터나 클라우드의 전력·인허가 일정이 프로젝트 일정과 맞나요?\n· 에이전트가 맡을 작업을 되돌릴 수 있는 것과 없는 것으로 나눴나요?\n· 되돌릴 수 없는 작업의 최종 승인자는 누구로 정했나요?\n· 데이터 계보와 감사 기록이 남도록 기존 시스템과 연결돼 있나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "영국 정부는 두 펀드로 국방 AI 검증 인프라 기업 Agon의 $70 million 시리즈 A에 참여했어요.",
+   "과기정통부와 기후부는 50MW 이하 비수도권 AIDC의 전력계통영향평가를 면제하는 등 절차를 줄이겠다고 밝혔어요.",
+   "Databricks는 되돌릴 수 있는지를 기준으로 에이전트 권한을 나누는 설계 틀을 내놨어요.",
+   "세 발표 모두 모델보다 시험 환경, 인프라, 통제 설계를 다뤘어요."
+  ],
+  "terms": [
+   {
+    "term": "결정론적 통제",
+    "def": "같은 입력을 넣으면 언제나 같은 결과가 나오도록 정해진 규칙으로 처리하는 방식이에요. 결과를 다시 만들어 확인할 수 있어 감사와 검증이 쉬워요."
+   },
+   {
+    "term": "데이터 계보",
+    "def": "데이터가 어디서 왔고 어떤 처리를 거쳐 지금 모습이 됐는지 남긴 이력이에요. 결과에 문제가 생겼을 때 원인을 거슬러 찾는 데 써요."
+   },
+   {
+    "term": "전력계통영향평가",
+    "def": "큰 전력을 쓰는 시설이 들어설 때 그 시설이 전력망에 주는 영향을 미리 따져 보는 절차예요. 평가를 통과해야 전력 공급 계획을 세울 수 있어요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "infra",
+    "policy",
+    "security"
+   ],
+   "industries": [
+    "public"
+   ],
+   "companies": [
+    {
+     "id": "ukgov",
+     "name": "영국 정부"
+    },
+    {
+     "id": "msit",
+     "name": "과학기술정보통신부"
+    },
+    {
+     "id": "databricks",
+     "name": "Databricks"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}

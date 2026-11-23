@@ -190,5 +190,16 @@
    "d99e9b2aab",
    "8c88ed8d44"
   ]
+ },
+ {
+  "date": "2026-11-23",
+  "mode": "news",
+  "key": "news:2026-11-23",
+  "subject": "news",
+  "news": [
+   "e7fab70aad",
+   "aa74c8ca26",
+   "112c49c74f"
+  ]
  }
 ]

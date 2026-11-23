@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-22",
+ "built_at": "2026-11-23",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "129건",
+     "big": "131건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 62건 · 클라우드·인프라 32건 · 업무 도구 23건 · 보안·규제 23건 · CRM·고객 14건 · 데이터·분석 12건 · ERP·백오피스 7건",
+     "body": "AI 에이전트 63건 · 클라우드·인프라 34건 · 보안·규제 24건 · 업무 도구 23건 · CRM·고객 14건 · 데이터·분석 12건 · ERP·백오피스 8건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,21 +325,21 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 62,
-         "label": "62건"
+         "value": 63,
+         "label": "63건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 32,
-         "label": "32건"
-        },
-        {
-         "name": "업무 도구",
-         "value": 23,
-         "label": "23건"
+         "value": 34,
+         "label": "34건"
         },
         {
          "name": "보안·규제",
+         "value": 24,
+         "label": "24건"
+        },
+        {
+         "name": "업무 도구",
          "value": 23,
          "label": "23건"
         },
@@ -355,11 +355,11 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "62건",
+     "big": "63건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, McKinsey 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Snowflake 11/19 — Agentic AI Vendor Evaluation: Healthcare Guide | Snowflake · McKinsey 11/19 — Building pharma’s laboratory of the future · Microsoft 11/17 — Microsoft and organizations across industries launch AI Transparency Initiative to strengthen enterprise trust in AI models and agents",
+     "body": "최근: 영국 정부 11/23 — Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm · Snowflake 11/19 — Agentic AI Vendor Evaluation: Healthcare Guide | Snowflake · McKinsey 11/19 — Building pharma’s laboratory of the future",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -397,11 +397,11 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "32건",
+     "big": "34건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: 과학기술정보통신부 11/20 — 과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진 · 과학기술정보통신부 11/20 — 인공지능 데이터센터 신속 구축을 위한 「인공지능 데이터센터 특별법」 하위법령 제정안 입법예고 · McKinsey 11/18 — Infrastructure entrepreneurs: How HOCHTIEF captures growth with AI",
+     "body": "최근: 영국 정부 11/23 — Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm · 과학기술정보통신부 11/20 — 과기정통부, 인공지능 반도체 업계 현안 점검...국제 협력·공급망 대응 모색 · 과학기술정보통신부 11/20 — 과기정통부-기후부, 인공지능 데이터센터 신속 구축을 위한 전력계통영향평가 제도 개선 추진",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -414,8 +414,13 @@
         },
         {
          "name": "과학기술정보통신부",
-         "value": 5,
-         "label": "5건"
+         "value": 6,
+         "label": "6건"
+        },
+        {
+         "name": "영국 정부",
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "McKinsey",
@@ -426,11 +431,48 @@
          "name": "Snowflake",
          "value": 3,
          "label": "3건"
-        },
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dom-security",
+     "k": "IT 영역 · 보안·규제",
+     "big": "24건",
+     "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
+     "title": "보안·규제, 영국 정부 발표가 가장 많아요",
+     "easy": "",
+     "body": "최근: 영국 정부 11/23 — Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm · Databricks 11/19 — Four AI Architecture Patterns for Regulated Industries · 영국 정부 11/18 — Letter to awarding organisations about misuse of AI and wearable technology",
+     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
+     "viz": [
+      {
+       "kind": "rank",
+       "items": [
         {
-         "name": "SAP",
+         "name": "영국 정부",
          "value": 3,
          "label": "3건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "SK텔레콤",
+         "value": 3,
+         "label": "3건"
+        },
+        {
+         "name": "Snowflake",
+         "value": 2,
+         "label": "2건"
+        },
+        {
+         "name": "NVIDIA",
+         "value": 2,
+         "label": "2건"
         }
        ]
       }
@@ -471,48 +513,6 @@
         },
         {
          "name": "Google Cloud",
-         "value": 2,
-         "label": "2건"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "id": "dom-security",
-     "k": "IT 영역 · 보안·규제",
-     "big": "23건",
-     "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
-     "easy": "",
-     "body": "최근: Databricks 11/19 — Four AI Architecture Patterns for Regulated Industries · 영국 정부 11/18 — Letter to awarding organisations about misuse of AI and wearable technology · Google Cloud 11/16 — Outpace automated cyber threats with security built for nonstop defense.",
-     "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
-     "viz": [
-      {
-       "kind": "rank",
-       "items": [
-        {
-         "name": "과학기술정보통신부",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "SK텔레콤",
-         "value": 3,
-         "label": "3건"
-        },
-        {
-         "name": "영국 정부",
-         "value": 2,
-         "label": "2건"
-        },
-        {
-         "name": "Snowflake",
-         "value": 2,
-         "label": "2건"
-        },
-        {
-         "name": "NVIDIA",
          "value": 2,
          "label": "2건"
         }
@@ -607,11 +607,11 @@
     {
      "id": "dom-erp",
      "k": "IT 영역 · ERP·백오피스",
-     "big": "7건",
+     "big": "8건",
      "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
      "title": "ERP·백오피스, SAP 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: SAP 11/20 — Takeda Turns to SAP S/4HANA to Support Digital Transformation · NVIDIA 11/16 — How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future · SAP 11/10 — Supply Chain AI Must Do More Than Inform; It Must Help Businesses Act",
+     "body": "최근: 과학기술정보통신부 11/20 — 과기정통부, 인공지능 반도체 업계 현안 점검...국제 협력·공급망 대응 모색 · SAP 11/20 — Takeda Turns to SAP S/4HANA to Support Digital Transformation · NVIDIA 11/16 — How the World’s Most Advanced AI Infrastructure Supply Chain Invents the Future",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -621,6 +621,11 @@
          "name": "SAP",
          "value": 3,
          "label": "3건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 2,
+         "label": "2건"
         },
         {
          "name": "NVIDIA",
@@ -634,11 +639,6 @@
         },
         {
          "name": "McKinsey",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "과학기술정보통신부",
          "value": 1,
          "label": "1건"
         }
@@ -657,13 +657,13 @@
    "tier": "big",
    "score": 90.3,
    "topic": "ai",
-   "headline": "지난주 smolagents 다운로드가 평소의 2.0배",
+   "headline": "11월 9일 주 smolagents 다운로드가 평소의 2.0배",
    "card": {
     "id": "ev-surge-smolagents",
     "k": "PyPI 다운로드",
     "big": "2.0배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 smolagents 다운로드가 평소의 2.0배",
+    "bl": "11월 9일 주 다운로드 · 평소와 비교",
+    "title": "11월 9일 주 smolagents 다운로드가 평소의 2.0배",
     "easy": "평소 한 주보다 2.0배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
     "body": "평일 하루 3.7만회, 직전 11주 평소는 1.8만회. 같은 주 대조군은 평소의 1.10배였습니다.",
     "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
@@ -697,7 +697,7 @@
       "fromText": "1.8만",
       "toText": "3.7만",
       "fromLabel": "직전 11주 평소",
-      "toLabel": "지난주"
+      "toLabel": "11월 9일 주"
      }
     ]
    }
@@ -796,13 +796,13 @@
    "tier": "big",
    "score": 83.1,
    "topic": "ai",
-   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.8배",
+   "headline": "11월 9일 주 faster‑whisper 다운로드가 평소의 1.8배",
    "card": {
     "id": "ev-surge-faster-whisper",
     "k": "PyPI 다운로드",
     "big": "1.8배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 faster‑whisper 다운로드가 평소의 1.8배",
+    "bl": "11월 9일 주 다운로드 · 평소와 비교",
+    "title": "11월 9일 주 faster‑whisper 다운로드가 평소의 1.8배",
     "easy": "평소 한 주보다 1.8배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
     "body": "평일 하루 77만회, 직전 11주 평소는 42만회. 같은 주 대조군은 평소의 1.10배였습니다.",
     "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
@@ -836,33 +836,896 @@
       "fromText": "42만",
       "toText": "77만",
       "fromLabel": "직전 11주 평소",
+      "toLabel": "11월 9일 주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "ath:npm:@mastra/core:2026-11-16",
+   "subject": "pkg:@mastra/core",
+   "kind": "최고치",
+   "tier": "big",
+   "score": 66.2,
+   "topic": "ai",
+   "headline": "Mastra 주간 다운로드가 역대 최고",
+   "card": {
+    "id": "ev-ath-@mastra/core",
+    "k": "npm 최고치",
+    "big": "70만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "Mastra 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +26% 많아요.",
+    "body": "이전 최고(10월 19일 주)보다 +26% 많습니다. 4주 성장 +26.5%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       262,
+       125,
+       555,
+       402,
+       19,
+       169,
+       122,
+       349,
+       340,
+       418,
+       868,
+       812,
+       1085,
+       1757,
+       1556,
+       2381,
+       2469,
+       3088,
+       3440,
+       5038,
+       5810,
+       5535,
+       6775,
+       8908,
+       8962,
+       9700,
+       12109,
+       11594,
+       12572,
+       14024,
+       13640,
+       14073,
+       16399,
+       16524,
+       16093,
+       19928,
+       21032,
+       23461,
+       23087,
+       23956,
+       23707,
+       29310,
+       29954,
+       29226,
+       29502,
+       33860,
+       41121,
+       40315,
+       38152,
+       41630,
+       39963,
+       46912,
+       44039,
+       53526,
+       58942,
+       55106,
+       24307,
+       25290,
+       45607,
+       57978,
+       64685,
+       70450,
+       80210,
+       78066,
+       80460,
+       93621,
+       93514,
+       91904,
+       96362,
+       112535,
+       105999,
+       107468,
+       122849,
+       130843,
+       143908,
+       156497,
+       157937,
+       172804,
+       156423,
+       171389,
+       196712,
+       194579,
+       196608,
+       186841,
+       203296,
+       211886,
+       216707,
+       235879,
+       229057,
+       259590.5,
+       256312,
+       282390,
+       294883,
+       329620,
+       317518,
+       342676,
+       374123,
+       430802.5,
+       453212,
+       553054,
+       516895,
+       532148,
+       545148,
+       697835
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 553054,
+      "to": 697835,
+      "fromText": "55만",
+      "toText": "70만",
+      "fromLabel": "이전 최고",
       "toLabel": "지난주"
      }
     ]
    }
   },
   {
-   "key": "surge:npm:@qwen-code/qwen-code:2026-11-09",
-   "subject": "pkg:@qwen-code/qwen-code",
-   "kind": "급증",
+   "key": "ath:npm:@ai-sdk/openai:2026-11-16",
+   "subject": "pkg:@ai-sdk/openai",
+   "kind": "최고치",
    "tier": "big",
-   "score": 81.4,
+   "score": 55.1,
    "topic": "ai",
-   "headline": "지난주 Qwen Code 다운로드가 평소의 1.9배",
+   "headline": "AI SDK용 OpenAI 주간 다운로드가 역대 최고",
    "card": {
-    "id": "ev-surge-@qwen-code/qwen-code",
-    "k": "npm 다운로드",
-    "big": "1.9배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 Qwen Code 다운로드가 평소의 1.9배",
-    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 2.5만회, 직전 12주 평소는 1.3만회. 같은 주 대조군은 평소의 1.18배였습니다.",
-    "src": "npm 평일 다운로드 · 5월 18일 주–11월 9일 주",
+    "id": "ev-ath-@ai-sdk/openai",
+    "k": "npm 최고치",
+    "big": "445만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "AI SDK용 OpenAI 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +15% 많아요.",
+    "body": "이전 최고(11월 9일 주)보다 +15% 많습니다. 4주 성장 +23.5%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
     "viz": [
      {
       "kind": "series",
       "values": [
-       13740,
+       69329,
+       108136,
+       100737,
+       125165,
+       27124,
+       33350,
+       99298,
+       121654,
+       105285,
+       155441,
+       157759,
+       154586,
+       150054,
+       189458,
+       157743,
+       158861,
+       130522,
+       101700,
+       148146,
+       123398,
+       129385,
+       128965,
+       110779,
+       133288,
+       142470,
+       161439,
+       151096,
+       164797,
+       154824,
+       167621,
+       167055,
+       176300,
+       194400,
+       192542,
+       210270,
+       219585,
+       231085,
+       248484,
+       251383,
+       255301,
+       268241,
+       292795,
+       274828,
+       275044,
+       286099,
+       305342,
+       318945,
+       326371,
+       346777,
+       366044,
+       351548,
+       384044,
+       380874,
+       445054,
+       450968,
+       448637,
+       221098,
+       230983,
+       473287,
+       570846,
+       567164,
+       659095,
+       715171,
+       684363,
+       664502,
+       736100,
+       778505,
+       805999,
+       813806,
+       836605,
+       845252,
+       885890,
+       976374,
+       962131,
+       1059388,
+       1033943,
+       1101250,
+       1164602,
+       1091714,
+       1214113,
+       1295910,
+       1415765,
+       1356103,
+       1310084,
+       1448964,
+       1555431,
+       1602763,
+       1696971,
+       1741576,
+       1850759,
+       1926690,
+       2026888,
+       2221733.5,
+       2397566,
+       2448788.5,
+       2619075,
+       2933548,
+       3133882,
+       3176407,
+       3610625,
+       3683708,
+       3862717,
+       3870748,
+       4454659
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 3870748,
+      "to": 4454659,
+      "fromText": "387만",
+      "toText": "445만",
+      "fromLabel": "이전 최고",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "ath:npm:@ai-sdk/xai:2026-11-16",
+   "subject": "pkg:@ai-sdk/xai",
+   "kind": "최고치",
+   "tier": "big",
+   "score": 53.6,
+   "topic": "ai",
+   "headline": "AI SDK용 xAI 주간 다운로드가 역대 최고",
+   "card": {
+    "id": "ev-ath-@ai-sdk/xai",
+    "k": "npm 최고치",
+    "big": "76만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "AI SDK용 xAI 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +14% 많아요.",
+    "body": "이전 최고(11월 9일 주)보다 +14% 많습니다. 4주 성장 +14.9%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       221,
+       313,
+       607,
+       947,
+       428,
+       452,
+       809,
+       1276,
+       987,
+       1501,
+       1614,
+       1693,
+       2045,
+       2421,
+       2751,
+       3093,
+       4006,
+       4244,
+       4765,
+       5624,
+       5789,
+       6949,
+       6796,
+       9582,
+       10430,
+       18337,
+       11924,
+       12436,
+       14254,
+       14955,
+       14669,
+       16493,
+       19952,
+       22429,
+       22923,
+       24518,
+       25116,
+       26466,
+       27777,
+       27357,
+       26963,
+       29335,
+       27084,
+       32106,
+       32659,
+       42324,
+       46527,
+       52588,
+       57507,
+       62475,
+       59997,
+       69555,
+       65986,
+       86702,
+       85300,
+       82930,
+       41755,
+       44833,
+       113966,
+       133374,
+       150029,
+       169655,
+       177195,
+       181636,
+       171281,
+       184026,
+       196484,
+       171884,
+       163220,
+       176676,
+       171989,
+       187781,
+       204605,
+       222014,
+       238491,
+       225526,
+       237247,
+       260676,
+       247319,
+       280821,
+       295577,
+       289695,
+       291417.5,
+       264372,
+       297871,
+       307404,
+       309353,
+       350805,
+       378258,
+       396773,
+       409173,
+       413976,
+       475731,
+       483733,
+       516979.5,
+       512145,
+       546744,
+       590385,
+       556355,
+       620173,
+       622971,
+       599704,
+       671902,
+       763061
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 671902,
+      "to": 763061,
+      "fromText": "67만",
+      "toText": "76만",
+      "fromLabel": "이전 최고",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "ath:npm:@ai-sdk/anthropic:2026-11-16",
+   "subject": "pkg:@ai-sdk/anthropic",
+   "kind": "최고치",
+   "tier": "big",
+   "score": 52.7,
+   "topic": "ai",
+   "headline": "AI SDK용 Anthropic 주간 다운로드가 역대 최고",
+   "card": {
+    "id": "ev-ath-@ai-sdk/anthropic",
+    "k": "npm 최고치",
+    "big": "430만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "AI SDK용 Anthropic 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +13% 많아요.",
+    "body": "이전 최고(11월 9일 주)보다 +13% 많습니다. 4주 성장 +20.4%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       20547,
+       21946,
+       20838,
+       19765,
+       12090,
+       14810,
+       25629,
+       25283,
+       25034,
+       25902,
+       26186,
+       28754,
+       30810,
+       34141,
+       36429,
+       40031,
+       38565,
+       41994,
+       40190,
+       46929,
+       47094,
+       49307,
+       48516,
+       52312,
+       56598,
+       60918,
+       61374,
+       68678,
+       68189,
+       73076,
+       75657,
+       76553,
+       87315,
+       91645,
+       97709,
+       105648,
+       109305,
+       122377,
+       124407,
+       129090,
+       132948,
+       144402,
+       151283,
+       161351,
+       159253,
+       187532,
+       195513,
+       209521,
+       206245,
+       226932,
+       225681,
+       240342,
+       266983,
+       299760,
+       298446,
+       296872,
+       143249,
+       160611,
+       339631,
+       397776,
+       419644,
+       473731,
+       530712,
+       536138,
+       554143,
+       620405,
+       631794,
+       652016,
+       685092,
+       727429,
+       733573,
+       770270,
+       856275,
+       878058,
+       936715,
+       959789,
+       1010087,
+       1083279,
+       1062512,
+       1170767.5,
+       1220834,
+       1248268,
+       1313975,
+       1286431,
+       1429537,
+       1537516,
+       1592659,
+       1720559,
+       1755439,
+       1883542,
+       1927670,
+       2028641,
+       2170411,
+       2343755,
+       2346398,
+       2532074,
+       2885466,
+       3052607,
+       3100285,
+       3538494,
+       3469634,
+       3562415,
+       3815242,
+       4298945
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 3815242,
+      "to": 4298945,
+      "fromText": "382만",
+      "toText": "430만",
+      "fromLabel": "이전 최고",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "ath:npm:@ai-sdk/google:2026-11-16",
+   "subject": "pkg:@ai-sdk/google",
+   "kind": "최고치",
+   "tier": "big",
+   "score": 52.3,
+   "topic": "ai",
+   "headline": "AI SDK용 Google 주간 다운로드가 역대 최고",
+   "card": {
+    "id": "ev-ath-@ai-sdk/google",
+    "k": "npm 최고치",
+    "big": "250만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "AI SDK용 Google 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +12% 많아요.",
+    "body": "이전 최고(11월 9일 주)보다 +12% 많습니다. 4주 성장 +16.8%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       7873,
+       9303,
+       10557,
+       11348,
+       6381,
+       8186,
+       14077,
+       14947,
+       15020,
+       16427,
+       17976,
+       20137,
+       20954,
+       24214,
+       24064,
+       25411,
+       28727,
+       29942,
+       32982,
+       40176,
+       47246,
+       49309,
+       47589,
+       52652,
+       56782,
+       65137,
+       59988,
+       65137,
+       64502,
+       67740,
+       73304,
+       76572,
+       81958,
+       81700,
+       86124,
+       93451,
+       99705,
+       109980,
+       109592,
+       108297,
+       112266,
+       124617,
+       124971,
+       130872,
+       132741,
+       150478,
+       158744,
+       164165,
+       172458,
+       180867,
+       174699,
+       195415,
+       193196,
+       236476,
+       240968,
+       248076,
+       119623,
+       128064,
+       275351,
+       332049,
+       350359,
+       383796,
+       410686,
+       425466,
+       413506,
+       468425,
+       474707,
+       503478,
+       502890,
+       545979,
+       542322,
+       562863,
+       620657,
+       634461,
+       686731,
+       690177,
+       733427,
+       793264,
+       755419,
+       830652,
+       879874,
+       962252,
+       955631,
+       904486,
+       997101,
+       1066448,
+       1079661,
+       1169034,
+       1159563,
+       1236357,
+       1248630,
+       1294438,
+       1386824,
+       1499409,
+       1517849,
+       1642460,
+       1819238,
+       1888025.5,
+       1907426,
+       2079965,
+       2085702,
+       2186330,
+       2223106,
+       2495962
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 2223106,
+      "to": 2495962,
+      "fromText": "222만",
+      "toText": "250만",
+      "fromLabel": "이전 최고",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "ath:npm:@ai-sdk/deepseek:2026-11-16",
+   "subject": "pkg:@ai-sdk/deepseek",
+   "kind": "최고치",
+   "tier": "big",
+   "score": 51.5,
+   "topic": "ai",
+   "headline": "AI SDK용 DeepSeek 주간 다운로드가 역대 최고",
+   "card": {
+    "id": "ev-ath-@ai-sdk/deepseek",
+    "k": "npm 최고치",
+    "big": "72만",
+    "bl": "평일 하루 다운로드, 지난주",
+    "title": "AI SDK용 DeepSeek 주간 다운로드가 역대 최고",
+    "easy": "기록이 시작된 뒤 가장 많이 내려받은 주예요. 이전 최고보다 +11% 많아요.",
+    "body": "이전 최고(11월 9일 주)보다 +11% 많습니다. 4주 성장 +16.7%, 대조군 +12.0%.",
+    "src": "npm 평일 다운로드 · 2024년 11월 25일 주–2026년 11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       null,
+       null,
+       null,
+       null,
+       null,
+       null,
+       566,
+       486,
+       1212,
+       5266,
+       5029,
+       5591,
+       5250,
+       5431,
+       6269,
+       6225,
+       6347,
+       6114,
+       6855,
+       7489,
+       6954,
+       6512,
+       6858,
+       7345,
+       7479,
+       8422,
+       8166,
+       8469,
+       9031,
+       10808,
+       10576,
+       11973,
+       14872,
+       16618,
+       18489,
+       19015,
+       19472,
+       20836,
+       20160,
+       20326,
+       20033,
+       21275,
+       18144,
+       23076,
+       23815,
+       21819,
+       23503,
+       24975,
+       27066,
+       26810,
+       24754,
+       25804,
+       24688,
+       29755,
+       32178,
+       29586,
+       19604,
+       19860,
+       65778,
+       74458,
+       85613,
+       95429,
+       100232,
+       109392,
+       102026,
+       111297,
+       112259,
+       99823,
+       93237,
+       90742,
+       85886,
+       100703,
+       104921,
+       110092,
+       125946,
+       127537,
+       141505,
+       158384,
+       152389,
+       165189.5,
+       177867,
+       199136,
+       207352,
+       198554,
+       232650,
+       243095,
+       263793,
+       289105,
+       307136,
+       317386,
+       323083,
+       356393,
+       421377.5,
+       443213,
+       472319,
+       494193,
+       532102,
+       555910.5,
+       514603,
+       612930,
+       603036,
+       619572,
+       644998,
+       719004
+      ],
+      "formats": [
+       "line",
+       "area",
+       "columns"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 644998,
+      "to": 719004,
+      "fromText": "64만",
+      "toText": "72만",
+      "fromLabel": "이전 최고",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "key": "surge:npm:@qwen-code/qwen-code:2026-11-16",
+   "subject": "pkg:@qwen-code/qwen-code",
+   "kind": "증가",
+   "tier": "small",
+   "score": 60.9,
+   "topic": "ai",
+   "headline": "지난주 Qwen Code 다운로드가 평소의 1.5배",
+   "card": {
+    "id": "ev-surge-@qwen-code/qwen-code",
+    "k": "npm 다운로드",
+    "big": "1.5배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 Qwen Code 다운로드가 평소의 1.5배",
+    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2.1만회, 직전 12주 평소는 1.4만회. 같은 주 대조군은 평소의 1.24배였습니다.",
+    "src": "npm 평일 다운로드 · 5월 25일 주–11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
        9467,
        18098,
        24191,
@@ -887,7 +1750,8 @@
        13418,
        21839,
        19275,
-       25103
+       25103,
+       21138
       ],
       "formats": [
        "columns",
@@ -897,10 +1761,10 @@
      },
      {
       "kind": "versus",
-      "from": 13073.5,
-      "to": 25103,
-      "fromText": "1.3만",
-      "toText": "2.5만",
+      "from": 13954,
+      "to": 21138,
+      "fromText": "1.4만",
+      "toText": "2.1만",
       "fromLabel": "직전 12주 평소",
       "toLabel": "지난주"
      }
@@ -914,13 +1778,13 @@
    "tier": "small",
    "score": 60.3,
    "topic": "ai",
-   "headline": "지난주 OpenAI Agents 다운로드가 평소의 1.4배",
+   "headline": "11월 9일 주 OpenAI Agents 다운로드가 평소의 1.4배",
    "card": {
     "id": "ev-surge-openai-agents",
     "k": "PyPI 다운로드",
     "big": "1.4배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 OpenAI Agents 다운로드가 평소의 1.4배",
+    "bl": "11월 9일 주 다운로드 · 평소와 비교",
+    "title": "11월 9일 주 OpenAI Agents 다운로드가 평소의 1.4배",
     "easy": "평소 한 주보다 1.4배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
     "body": "평일 하루 72만회, 직전 11주 평소는 53만회. 같은 주 대조군은 평소의 1.10배, AI 패키지 전반은 1.13배였습니다.",
     "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 9일 주",
@@ -954,122 +1818,56 @@
       "fromText": "53만",
       "toText": "72만",
       "fromLabel": "직전 11주 평소",
-      "toLabel": "지난주"
+      "toLabel": "11월 9일 주"
      }
     ]
    }
   },
   {
-   "key": "surge:npm:@mastra/core:2026-11-09",
-   "subject": "pkg:@mastra/core",
-   "kind": "증가",
-   "tier": "small",
-   "score": 60.2,
-   "topic": "ai",
-   "headline": "지난주 Mastra 다운로드가 평소의 1.5배",
-   "card": {
-    "id": "ev-surge-@mastra/core",
-    "k": "npm 다운로드",
-    "big": "1.5배",
-    "bl": "지난주 다운로드 · 평소와 비교",
-    "title": "지난주 Mastra 다운로드가 평소의 1.5배",
-    "easy": "평소 한 주보다 1.5배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
-    "body": "평일 하루 55만회, 직전 12주 평소는 36만회. 같은 주 대조군은 평소의 1.18배, AI 패키지 전반은 1.26배였습니다.",
-    "src": "npm 평일 다운로드 · 5월 18일 주–11월 9일 주",
-    "viz": [
-     {
-      "kind": "series",
-      "values": [
-       172804,
-       156423,
-       171389,
-       196712,
-       194579,
-       196608,
-       186841,
-       203296,
-       211886,
-       216707,
-       235879,
-       229057,
-       259590.5,
-       256312,
-       282390,
-       294883,
-       329620,
-       317518,
-       342676,
-       374123,
-       430802.5,
-       453212,
-       553054,
-       516895,
-       532148,
-       545148
-      ],
-      "formats": [
-       "columns",
-       "area",
-       "line"
-      ]
-     },
-     {
-      "kind": "versus",
-      "from": 358399.5,
-      "to": 545148,
-      "fromText": "36만",
-      "toText": "55만",
-      "fromLabel": "직전 12주 평소",
-      "toLabel": "지난주"
-     }
-    ]
-   }
-  },
-  {
-   "key": "hftr:unsloth/Inkling-2-Mini-GGUF+inworld/voice-isolator+apple/FastFrames-L:2026-11-22",
-   "subject": "hf:unsloth/Inkling-2-Mini-GGUF",
+   "key": "hftr:harness-hub/Qwen3.8-27B-pi-adapted:2026-11-23",
+   "subject": "hf:harness-hub/Qwen3.8-27B-pi-adapted",
    "kind": "새로 진입",
    "tier": "small",
-   "score": 16,
+   "score": 12,
    "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
+   "headline": "트렌딩 상위 5에 새로: harness‑hub/​Qwen3.8‑27B‑pi‑adapted",
    "card": {
     "id": "ch-hftr",
     "k": "오픈 모델",
-    "big": "2위",
+    "big": "5위",
     "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: unsloth/​Inkling‑2‑Mini‑GGUF",
+    "title": "트렌딩 상위 5에 새로: harness‑hub/​Qwen3.8‑27B‑pi‑adapted",
     "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "image‑text‑to‑text · 2026-11-20 공개. 함께 들어온 모델: inworld/​voice‑isolator, apple/​FastFrames‑L.",
-    "src": "Hugging Face 트렌딩 · 2026-11-22",
+    "body": "image‑text‑to‑text · 2026-11-16 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-23",
     "viz": [
      {
       "kind": "rank",
       "items": [
        {
         "name": "Inkling-2-Mini",
-        "value": 743.5,
-        "label": "7,944"
+        "value": 1005.5,
+        "label": "2.4만"
        },
        {
         "name": "Inkling-2-Mini-GGUF",
-        "value": 654,
-        "label": "24만"
-       },
-       {
-        "name": "Hy4-flash",
-        "value": 401,
-        "label": "5,588"
+        "value": 867,
+        "label": "81만"
        },
        {
         "name": "voice-isolator",
-        "value": 398,
+        "value": 503,
         "label": "0"
        },
        {
-        "name": "FastFrames-L",
-        "value": 347,
-        "label": "0"
+        "name": "Hy4-flash",
+        "value": 430,
+        "label": "6,617"
+       },
+       {
+        "name": "Qwen3.8-27B-pi-adapted",
+        "value": 337.5,
+        "label": "2,831"
        }
       ]
      }
@@ -1156,22 +1954,22 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 62건 · 발표가 많은 곳: McKinsey 10건, NVIDIA 9건, SAP 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 63건 · 발표가 많은 곳: McKinsey 10건, NVIDIA 9건, SAP 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 32건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 5건, McKinsey 3건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 34건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 6건, 영국 정부 3건"
+  },
+  {
+   "group": "domain",
+   "id": "dom-security",
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 24건 · 발표가 많은 곳: 영국 정부 3건, 과학기술정보통신부 3건, SK텔레콤 3건"
   },
   {
    "group": "domain",
    "id": "dom-work",
    "text": "IT 영역 업무 도구(전 직원이 쓰는 AI 도구·협업): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: OpenAI 7건, Databricks 4건, Salesforce 3건"
-  },
-  {
-   "group": "domain",
-   "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: 과학기술정보통신부 3건, SK텔레콤 3건, 영국 정부 2건"
   },
   {
    "group": "domain",
@@ -1186,10 +1984,27 @@
   {
    "group": "domain",
    "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 7건 · 발표가 많은 곳: SAP 3건, NVIDIA 1건, OpenAI 1건"
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 8건 · 발표가 많은 곳: SAP 3건, 과학기술정보통신부 2건, NVIDIA 1건"
   }
  ],
  "news": [
+  {
+   "id": "e7fab70aad",
+   "src": "ukgov",
+   "source": "영국 정부",
+   "kind": "government",
+   "date": "2026-11-23",
+   "title": "Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+   "summary": "UK Government’s Sovereign AI Fund and the National Security Strategic Investment Fund (NSSIF) invest in AI defence firm Agon",
+   "link": "https://www.gov.uk/government/news/sovereign-ai-and-national-security-strategic-investment-fund-backing-british-autonomous-defence-systems-firm",
+   "score": 7,
+   "domains": [
+    "클라우드·인프라",
+    "보안·규제",
+    "AI 에이전트"
+   ],
+   "method": "투자"
+  },
   {
    "id": "bfe538d1ac",
    "src": "msit",
@@ -1290,19 +2105,6 @@
     "보안·규제"
    ],
    "method": "연구·보고서"
-  },
-  {
-   "id": "172b003326",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-11-09",
-   "title": "국산 신경망 처리 장치, 엔비디아 시스템과 연계해 세계 인공지능 기반 시장 진출 길 연다",
-   "summary": "- 과기정통부-엔비디아 NVLink Fusion 협력 일환으로 엔비디아·SK텔레콤·리벨리온 업무협약 체결, 국산 신경망 처리 장치와 엔비디아 중앙 처리 장치 연계 추진 - - 과기정통부, 엔비디아와 공동 개최한 ‘인공지능 창업 초기 기업 동반관계 토론회 (스타트업 파트너십 포럼)’에 국내 인공지능 창업 초기 기업 22개 사가 참여해 엔비디아와 협력 방안 논의 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187936",
-   "score": 4,
-   "domains": [],
-   "method": "파트너십"
   },
   {
    "id": "112c49c74f",
@@ -1561,68 +2363,6 @@
    "method": null
   },
   {
-   "id": "1f23a28303",
-   "src": "skt",
-   "source": "SK텔레콤",
-   "kind": "company",
-   "date": "2026-11-09",
-   "title": "SKT-엔비디아-리벨리온, 한국형 소버린 AI 인프라 구축 협력",
-   "summary": "",
-   "link": "https://news.sktelecom.com/232963",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라"
-   ],
-   "method": "인프라 확장"
-  },
-  {
-   "id": "22dc4f77b8",
-   "src": "nvidia",
-   "source": "NVIDIA",
-   "kind": "company",
-   "date": "2026-11-09",
-   "title": "From Chips to Skills, NVIDIA and Korea Expand Sovereign AI Collaboration",
-   "summary": "NVIDIA and Korea’s Ministry of Science and ICT (MSIT) are expanding their collaboration across the country’s sovereign AI ecosystem, from AI semiconductors and data center infrastructure to talent, startups, models, agents and security. The collaboration lays the groundwork for Korean NPU and XPU companies to explore participation in the NVIDIA NVLink Fusion ecosystem, and includes […]",
-   "link": "https://blogs.nvidia.com/blog/korea-sovereign-ai-collaboration/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라",
-    "보안·규제",
-    "AI 에이전트"
-   ],
-   "method": "인프라 확장"
-  },
-  {
-   "id": "57a8ba0d55",
-   "src": "nvidia",
-   "source": "NVIDIA",
-   "kind": "company",
-   "date": "2026-11-09",
-   "title": "NVIDIA Announces New Planned Investments in Korean Startups at the MSIT-NVIDIA AI Startup Partnership Forum",
-   "summary": "Korea’s Ministry of Science and ICT and NVIDIA hosted the MSIT-NVIDIA AI Startup Partnership Forum at COEX. Representatives from the Ministry of Science and ICT and NVIDIA met with over 20 Korean startups across foundation models, physical AI, AI infrastructure and AI semiconductors. NVIDIA also announced an investment in Korean startup Point2, with additional investments […]",
-   "link": "https://blogs.nvidia.com/blog/korean-startup-investments-msit/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라"
-   ],
-   "method": "파트너십"
-  },
-  {
-   "id": "e18a5f64b5",
-   "src": "nvidia",
-   "source": "NVIDIA",
-   "kind": "company",
-   "date": "2026-11-09",
-   "title": "NVIDIA Dynamo Recipes Bring Korea’s Leading Open Models to Production",
-   "summary": "NVIDIA is releasing Dynamo-optimized deployment recipes for Korea’s leading open models: A.X K2 from SK Telecom, K-EXAONE 2.0 from LG AI Research, Solar Open 2 from Upstage and Motif-3 from Motif Technologies. As models grow beyond the capacity of a single GPU, they must be split across multiple GPUs, requiring careful coordination of request routing […]",
-   "link": "https://blogs.nvidia.com/blog/nvidia-dynamo-korea-open-models/",
-   "score": 3,
-   "domains": [
-    "클라우드·인프라"
-   ],
-   "method": "인프라 확장"
-  },
-  {
    "id": "0447cd44cd",
    "src": "databricks",
    "source": "Databricks",
@@ -1636,6 +2376,35 @@
     "AI 에이전트"
    ],
    "method": "연구·보고서"
+  },
+  {
+   "id": "2fd48610ad",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-23",
+   "title": "국가 과학 인공지능 역량 결집해 초지능 과학 혁신을 선도한다",
+   "summary": "- 배경훈 부총리, 국가 과학 인공지능 연구센터(NAIS) 방문 및 전문가 간담회 개최 -- 국가 과학 인공지능 자원·역량을 결집하고, 인공지능 과학자 구현을 위한 산학연 협력 방안 논의 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187990",
+   "score": 1,
+   "domains": [],
+   "method": "파트너십"
+  },
+  {
+   "id": "251189fc24",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-20",
+   "title": "과기정통부, 인공지능 반도체 업계 현안 점검...국제 협력·공급망 대응 모색",
+   "summary": "- AMD·엔비디아·인텔 등 글로벌 빅테크와의 협력 상황 및 성과 확대 방안 논의 - - 메모리·기판 등 핵심 부품·소재 수급 애로와 美 중간선거, 엔비디아 관련 주요 현안 등 대외 불확실성에 따른 대응 방안 모색 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187984",
+   "score": 1,
+   "domains": [
+    "ERP·백오피스",
+    "클라우드·인프라"
+   ],
+   "method": "파트너십"
   },
   {
    "id": "36375521bb",
@@ -1818,32 +2587,6 @@
    "title": "‘K-문샷 정책 발표회 개최, 국가 과학 난제 해결을 위한 과학 인공지능 혁신을 논의하다.",
    "summary": "",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187943",
-   "score": 1,
-   "domains": [],
-   "method": "정책·규제"
-  },
-  {
-   "id": "c37281c411",
-   "src": "ukgov",
-   "source": "영국 정부",
-   "kind": "government",
-   "date": "2026-11-09",
-   "title": "PM call with President Macron of France: 9 November 2026",
-   "summary": "The Prime Minister joined a call chaired by President Emmanuel Macron on artificial intelligence today.",
-   "link": "https://www.gov.uk/government/news/pm-call-with-president-macron-of-france-9-november-2026",
-   "score": 1,
-   "domains": [],
-   "method": "정책·규제"
-  },
-  {
-   "id": "eeb0be6f53",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-11-09",
-   "title": "배경훈 부총리, 국제전기통신연합 전권회의에서 국제 디지털 협력 강화",
-   "summary": "- 고위급 정책연설 등을 통해 한국의 인공지능‧디지털 정책 미래상 공유 -- 국제전기통신연합 이사국, 전파규칙위원회 위원 선거 출마, 국제 정보통신기술 협력 확대 추진 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187937",
    "score": 1,
    "domains": [],
    "method": "정책·규제"
