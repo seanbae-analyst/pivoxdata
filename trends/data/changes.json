@@ -8026,6 +8026,272 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-24",
+   "key": "surge:PyPI:faster-whisper:2026-11-16",
+   "subject": "pkg:faster-whisper",
+   "kind": "급증",
+   "tier": "big",
+   "score": 81.6,
+   "topic": "ai",
+   "headline": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+   "card": {
+    "id": "ev-surge-faster-whisper",
+    "k": "PyPI 다운로드",
+    "big": "1.9배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 faster‑whisper 다운로드가 평소의 1.9배",
+    "easy": "평소 한 주보다 1.9배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 86만회, 직전 12주 평소는 46만회. 같은 주 대조군은 평소의 1.15배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       237656,
+       285645,
+       294361,
+       304896,
+       356143,
+       419208,
+       491489,
+       567273,
+       609978,
+       677380,
+       713288,
+       769306,
+       857445
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 455348.5,
+      "to": 857445,
+      "fromText": "46만",
+      "toText": "86만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-24",
+   "key": "surge:PyPI:openai-agents:2026-11-16",
+   "subject": "pkg:openai-agents",
+   "kind": "증가",
+   "tier": "small",
+   "score": 66.4,
+   "topic": "ai",
+   "headline": "지난주 OpenAI Agents 다운로드가 평소의 1.6배",
+   "card": {
+    "id": "ev-surge-openai-agents",
+    "k": "PyPI 다운로드",
+    "big": "1.6배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 OpenAI Agents 다운로드가 평소의 1.6배",
+    "easy": "평소 한 주보다 1.6배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 84만회, 직전 12주 평소는 53만회. 같은 주 대조군은 평소의 1.15배, AI 패키지 전반은 1.19배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       439865,
+       446734,
+       484237,
+       498994,
+       529149,
+       513103,
+       527284,
+       557433,
+       764362,
+       735727,
+       729873,
+       721452,
+       835426
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 528216.5,
+      "to": 835426,
+      "fromText": "53만",
+      "toText": "84만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-24",
+   "key": "surge:PyPI:smolagents:2026-11-16",
+   "subject": "pkg:smolagents",
+   "kind": "증가",
+   "tier": "small",
+   "score": 62.1,
+   "topic": "ai",
+   "headline": "지난주 smolagents 다운로드가 평소의 1.4배",
+   "card": {
+    "id": "ev-surge-smolagents",
+    "k": "PyPI 다운로드",
+    "big": "1.4배",
+    "bl": "지난주 다운로드 · 평소와 비교",
+    "title": "지난주 smolagents 다운로드가 평소의 1.4배",
+    "easy": "평소 한 주보다 1.4배 많이 내려받았어요. 다른 패키지들이 함께 오른 몫을 빼도 두드러져요.",
+    "body": "평일 하루 2.6만회, 직전 12주 평소는 1.8만회. 같은 주 대조군은 평소의 1.15배였습니다.",
+    "src": "PyPI 평일 다운로드 · 8월 24일 주–11월 16일 주",
+    "viz": [
+     {
+      "kind": "series",
+      "values": [
+       16953,
+       17521,
+       15021,
+       17571,
+       18307,
+       18641,
+       22086,
+       17682,
+       22689,
+       24852,
+       28005,
+       36520,
+       26475
+      ],
+      "formats": [
+       "columns",
+       "area",
+       "line"
+      ]
+     },
+     {
+      "kind": "versus",
+      "from": 18474,
+      "to": 26475,
+      "fromText": "1.8만",
+      "toText": "2.6만",
+      "fromLabel": "직전 12주 평소",
+      "toLabel": "지난주"
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-24",
+   "key": "rank1:pypi:vllm:2026-11-16",
+   "subject": "pkg:vllm",
+   "kind": "순위",
+   "tier": "small",
+   "score": 35,
+   "topic": "ai",
+   "headline": "PyPI에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: vLLM",
+   "card": {
+    "id": "ch-rank1-pypi",
+    "k": "PyPI 순위",
+    "big": "+30.3%p",
+    "bl": "인기 패키지보다 더 늘어난 폭 · 4주",
+    "title": "PyPI에서 가장 빨리 크는 AI 패키지가 바뀌었습니다: vLLM",
+    "easy": "PyPI에서 다른 패키지들보다 가장 빨리 크는 AI 도구가 바뀌었어요.",
+    "body": "지난번 1위는 OpenAI Agents.",
+    "src": "PyPI 평일 다운로드 · 11월 16일 주까지 4주",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "vLLM",
+        "value": 0.3032,
+        "label": "+30.3%p"
+       },
+       {
+        "name": "OpenAI Agents",
+        "value": 0.169,
+        "label": "+16.9%p"
+       },
+       {
+        "name": "MCP SDK",
+        "value": 0.1102,
+        "label": "+11.0%p"
+       },
+       {
+        "name": "Anthropic",
+        "value": 0.067,
+        "label": "+6.7%p"
+       },
+       {
+        "name": "OpenAI",
+        "value": 0.0457,
+        "label": "+4.6%p"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "date": "2026-11-24",
+   "key": "hftr:AtomicChat/Inkling-2-Mini-Uncensored-GGUF:2026-11-24",
+   "subject": "hf:AtomicChat/Inkling-2-Mini-Uncensored-GGUF",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: AtomicChat/​Inkling‑2‑Mini‑Uncensored‑GGUF",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "4위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: AtomicChat/​Inkling‑2‑Mini‑Uncensored‑GGUF",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "image‑text‑to‑text · 2026-11-20 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-24",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Inkling-2-Mini",
+        "value": 1172.5,
+        "label": "6.9만"
+       },
+       {
+        "name": "Inkling-2-Mini-GGUF",
+        "value": 1034,
+        "label": "191만"
+       },
+       {
+        "name": "voice-isolator",
+        "value": 592,
+        "label": "1.3만"
+       },
+       {
+        "name": "Inkling-2-Mini-Uncensored-GGUF",
+        "value": 411.6,
+        "label": "57만"
+       },
+       {
+        "name": "Qwen3.8-27B-pi-adapted",
+        "value": 356,
+        "label": "3,529"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }
