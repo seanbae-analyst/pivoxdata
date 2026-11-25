@@ -8292,6 +8292,58 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-25",
+   "key": "hftr:SulphurAI/Sulphur-3:2026-11-25",
+   "subject": "hf:SulphurAI/Sulphur-3",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: SulphurAI/​Sulphur‑3",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: SulphurAI/​Sulphur‑3",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "2026-10-31 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-25",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Inkling-2-Mini",
+        "value": 1276.5,
+        "label": "6.9만"
+       },
+       {
+        "name": "Inkling-2-Mini-GGUF",
+        "value": 1127,
+        "label": "191만"
+       },
+       {
+        "name": "voice-isolator",
+        "value": 652,
+        "label": "1.3만"
+       },
+       {
+        "name": "Inkling-2-Mini-Uncensored-GGUF",
+        "value": 453.6,
+        "label": "57만"
+       },
+       {
+        "name": "Sulphur-3",
+        "value": 296,
+        "label": "16만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ]
 }

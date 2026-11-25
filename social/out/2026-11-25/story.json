@@ -1,0 +1,462 @@
+{
+ "date": "2026-11-25",
+ "mode": "news",
+ "topic": null,
+ "format": "newsweek",
+ "format_name": "이번 주 AX 사건",
+ "industry": null,
+ "source": "claude",
+ "via": "Claude Code",
+ "proofread": true,
+ "note": null,
+ "originals": 1,
+ "original_numbers": [
+  "2019"
+ ],
+ "slides": [
+  {
+   "kind": "cover",
+   "refs": [],
+   "kicker": "이번 주 AX 사건",
+   "title": "AI 에이전트,\n무엇 위에 올리나",
+   "body": "구단은 에이전트를 만들었고\n데이터 회사는 기반을 말했어요.\n정부는 에너지 연구소를 열었어요."
+  },
+  {
+   "kind": "text",
+   "refs": [
+    2,
+    3,
+    1
+   ],
+   "kicker": "배경",
+   "title": "이번 주\n발표 3건",
+   "body": "스포츠 구단, 데이터 플랫폼,\n정부 연구 사업에서 나온 발표예요.\nAI 아래에 무엇을 까는지가\n세 발표에 함께 보여요.",
+   "src": "출처 · Google · Snowflake · 과학기술정보통신부 발표 3건"
+  },
+  {
+   "kind": "case",
+   "refs": [
+    2
+   ],
+   "kicker": "AI 에이전트 · 파트너십",
+   "title": "Golden State,\nGemini로 에이전트",
+   "body": "Google은 Golden State와의\n제휴를 넓혔다고 발표했어요.\n구단은 맞춤형 AI 에이전트를\nGemini로 만들고 있어요.",
+   "src": "출처 · Google 공식 발표 · 11/24",
+   "case": {
+    "who": "Golden State (Google 발표)",
+    "what": "Gemini 기반 맞춤 AI 에이전트",
+    "where": "경기장 전광판·디지털 채널, 구단 운영",
+    "how": "기존 제휴 확대, 공식 AI 파트너 지정",
+    "domain": "AI 에이전트",
+    "method": "파트너십",
+    "check": "고객용과 내부 업무용 AI를 한 공급사에 맡길 때 데이터 경계는 어떻게 나누나요?",
+    "ref": 2
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    2
+   ],
+   "kicker": "AI 에이전트 · 무슨 뜻인가",
+   "title": "팬 화면과 사무실이\n같은 AI로",
+   "body": "고객 접점과 내부 운영을\nAI 플랫폼 하나로 묶는\n방식으로 읽혀요.\n업무가 한 공급사에 모이면\n계약 범위와 데이터 경계를\n먼저 정해야 한다는 뜻이에요.",
+   "src": "출처 · Google 공식 발표 · 11/24",
+   "case": {
+    "who": "Golden State (Google 발표)",
+    "what": "Gemini 기반 맞춤 AI 에이전트",
+    "where": "경기장 전광판·디지털 채널, 구단 운영",
+    "how": "기존 제휴 확대, 공식 AI 파트너 지정",
+    "domain": "AI 에이전트",
+    "method": "파트너십",
+    "check": "고객용과 내부 업무용 AI를 한 공급사에 맡길 때 데이터 경계는 어떻게 나누나요?",
+    "ref": 2
+   }
+  },
+  {
+   "kind": "case",
+   "refs": [
+    3
+   ],
+   "kicker": "데이터·분석 · 연구·보고서",
+   "title": "Snowflake,\n데이터 기반부터",
+   "body": "Snowflake는 AI 에이전트가\n답하기를 넘어 행동한다고 했어요.\n관리 규칙(거버넌스)을 갖춘 데이터와\n에이전트 제어 계층을 꼽았어요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/23",
+   "case": {
+    "who": "Snowflake",
+    "what": "데이터 기반과 에이전트 제어 계층",
+    "where": "기업의 AI 에이전트 운영",
+    "how": "발표에 없음",
+    "domain": "데이터·분석",
+    "method": "연구·보고서",
+    "check": "에이전트가 접근할 데이터의 권한과 품질 기준이 정해져 있나요?",
+    "ref": 3
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    3
+   ],
+   "kicker": "데이터·분석 · 무슨 뜻인가",
+   "title": "에이전트 과제는\n데이터 과제부터",
+   "body": "에이전트가 시스템을 직접 움직이면\n권한과 데이터 품질이\n프로젝트 범위에 들어온다는 뜻이에요.\n모델을 고르기 전에\n데이터 정리가 먼저 와요.",
+   "src": "출처 · Snowflake 공식 발표 · 11/23",
+   "case": {
+    "who": "Snowflake",
+    "what": "데이터 기반과 에이전트 제어 계층",
+    "where": "기업의 AI 에이전트 운영",
+    "how": "발표에 없음",
+    "domain": "데이터·분석",
+    "method": "연구·보고서",
+    "check": "에이전트가 접근할 데이터의 권한과 품질 기준이 정해져 있나요?",
+    "ref": 3
+   }
+  },
+  {
+   "kind": "case",
+   "refs": [
+    1
+   ],
+   "kicker": "클라우드·인프라 · 연구·보고서",
+   "title": "성균관대에\n국가연구소 개소",
+   "body": "과학기술정보통신부는 성균관대\n국가연구소 개소를 밝혔어요.\n국가연구소 사업(NRL 2.0)의\n'26년 선정 대학이에요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/25",
+   "case": {
+    "who": "성균관대 (과학기술정보통신부 발표)",
+    "what": "지능화 에너지 국가연구소",
+    "where": "에너지 연구 거점",
+    "how": "국가연구소(NRL 2.0) '26년 선정",
+    "domain": "클라우드·인프라",
+    "method": "연구·보고서",
+    "check": "AI 인프라 계획에 전력 조건과 비용이 들어가 있나요?",
+    "ref": 1
+   }
+  },
+  {
+   "kind": "meaning",
+   "refs": [
+    1
+   ],
+   "kicker": "클라우드·인프라 · 무슨 뜻인가",
+   "title": "AI 전환의 바닥에\n에너지가 놓였어요",
+   "body": "정부가 AI 전환과 에너지 주권을\n한데 묶어 본다는 뜻이에요.\nAI 인프라 계획에서는\n전력 조건도 따져 볼 항목이에요.",
+   "src": "출처 · 과학기술정보통신부 보도자료 · 11/25",
+   "case": {
+    "who": "성균관대 (과학기술정보통신부 발표)",
+    "what": "지능화 에너지 국가연구소",
+    "where": "에너지 연구 거점",
+    "how": "국가연구소(NRL 2.0) '26년 선정",
+    "domain": "클라우드·인프라",
+    "method": "연구·보고서",
+    "check": "AI 인프라 계획에 전력 조건과 비용이 들어가 있나요?",
+    "ref": 1
+   }
+  },
+  {
+   "kind": "text",
+   "refs": [
+    2,
+    3,
+    1
+   ],
+   "kicker": "공통 흐름",
+   "title": "AI 아래층을\n다룬 한 주",
+   "body": "에이전트, 데이터 기반, 에너지까지\n세 발표 모두 AI를 받칠\n바닥을 다뤘어요.\n최근 30일 AI 에이전트 영역\n공식 발표는 64건이었어요.",
+   "src": "출처 · Google · Snowflake · 과학기술정보통신부 발표 3건"
+  },
+  {
+   "kind": "list",
+   "refs": [],
+   "kicker": "실무 체크",
+   "title": "도입 전에\n확인할 점",
+   "items": [
+    "에이전트가 쓸 데이터는 정리됐나요?",
+    "에이전트 권한은 누가 승인하나요?",
+    "한 공급사에 맡길 범위는 어디까지인가요?",
+    "기존 시스템과 어떻게 연동하나요?",
+    "전력과 인프라 비용을 따져 봤나요?"
+   ]
+  },
+  {
+   "kind": "end",
+   "refs": [],
+   "kicker": "정리",
+   "title": "AI보다\n바닥부터",
+   "body": "이번 주 세 발표는\n에이전트를 받칠 데이터와\n인프라를 가리켰어요."
+  }
+ ],
+ "caption": "이번 주 세 발표는 AI를 받칠 바닥을 다뤘어요.\nGoogle은 Golden State가 Gemini로 맞춤 AI 에이전트를 만든다고 발표했어요.\n→ 고객 접점과 내부 운영을 AI 플랫폼 하나로 묶는 방식으로 읽혀요.\nSnowflake는 행동하는 에이전트에 관리되는 데이터 기반이 필요하다고 했어요.\n→ 에이전트 과제는 데이터 정리에서 시작한다는 뜻이에요.\n과학기술정보통신부는 성균관대에 지능화 에너지 국가연구소를 열었어요.\n→ AI 전환과 에너지 주권이 한데 묶였어요.\n에이전트, 데이터, 에너지 모두 AI 아래층의 이야기예요.\n우리 회사 에이전트가 쓸 데이터가 정리돼 있는지 먼저 확인해 보세요.",
+ "cases": [
+  {
+   "who": "Golden State (Google 발표)",
+   "what": "Gemini 기반 맞춤 AI 에이전트",
+   "where": "경기장 전광판·디지털 채널, 구단 운영",
+   "how": "기존 제휴 확대, 공식 AI 파트너 지정",
+   "domain": "AI 에이전트",
+   "method": "파트너십",
+   "check": "고객용과 내부 업무용 AI를 한 공급사에 맡길 때 데이터 경계는 어떻게 나누나요?",
+   "ref": 2,
+   "source": "Google",
+   "date": "2026-11-24",
+   "link": "https://blog.google/products-and-platforms/products/gemini/gemini-golden-state/"
+  },
+  {
+   "who": "Snowflake",
+   "what": "데이터 기반과 에이전트 제어 계층",
+   "where": "기업의 AI 에이전트 운영",
+   "how": "발표에 없음",
+   "domain": "데이터·분석",
+   "method": "연구·보고서",
+   "check": "에이전트가 접근할 데이터의 권한과 품질 기준이 정해져 있나요?",
+   "ref": 3,
+   "source": "Snowflake",
+   "date": "2026-11-23",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/trust-ai-agents-data-foundation"
+  },
+  {
+   "who": "성균관대 (과학기술정보통신부 발표)",
+   "what": "지능화 에너지 국가연구소",
+   "where": "에너지 연구 거점",
+   "how": "국가연구소(NRL 2.0) '26년 선정",
+   "domain": "클라우드·인프라",
+   "method": "연구·보고서",
+   "check": "AI 인프라 계획에 전력 조건과 비용이 들어가 있나요?",
+   "ref": 1,
+   "source": "과학기술정보통신부",
+   "date": "2026-11-25",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004"
+  }
+ ],
+ "sources": [
+  {
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-25",
+   "title": "초격차 소버린 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004",
+   "id": "b0a964a4a4",
+   "original": false
+  },
+  {
+   "source": "Google",
+   "kind": "company",
+   "date": "2026-11-24",
+   "title": "How Gemini is changing the game for Golden State's organization and fans.",
+   "link": "https://blog.google/products-and-platforms/products/gemini/gemini-golden-state/",
+   "id": "8d6c7c64bc",
+   "original": true
+  },
+  {
+   "source": "Snowflake",
+   "kind": "company",
+   "date": "2026-11-23",
+   "title": "Trust AI Agents to Act: Start With Your Data Foundation",
+   "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/trust-ai-agents-data-foundation",
+   "id": "be168b8995",
+   "original": false
+  }
+ ],
+ "article": {
+  "title": "AI 에이전트를 받칠 바닥, 세 발표가 함께 가리킨 곳",
+  "lede": "이번 주 공식 발표 3건은 서로 다른 곳에서 나왔지만, 모두 AI가 서 있을 바닥을 다뤘어요. 농구 구단은 Gemini로 맞춤형 에이전트를 만들고, Snowflake는 에이전트에 앞서 데이터 기반을 말했어요. 과학기술정보통신부는 AI 전환과 에너지 주권을 함께 내건 국가연구소를 열었어요.",
+  "sections": [
+   {
+    "heading": "이번 주, 왜 이 세 발표를 함께 읽나",
+    "body": "발표는 미국 스포츠 구단, 데이터 플랫폼 회사, 한국 정부의 연구 사업이라는 세 곳에서 나왔어요. 업종도 규모도 다르지만 공통 질문이 하나 있어요. AI를 무엇 위에 올리느냐는 질문이에요.\n\n구단은 AI 플랫폼 하나를 고객 접점과 내부 업무에 함께 들였어요. Snowflake는 에이전트가 움직이려면 데이터가 먼저 정리돼야 한다고 했어요. 정부는 AI 전환을 받칠 에너지 기술을 연구 거점의 목표로 삼았어요.\n\n세 발표를 나란히 놓으면 플랫폼, 데이터, 에너지라는 세 층이 차례로 보여요. 이 글은 그 순서대로 사례를 읽고, 도입 프로젝트에서 확인할 점으로 맺어요.",
+    "refs": [
+     2,
+     3,
+     1
+    ],
+    "sources": [
+     {
+      "source": "Google",
+      "kind": "company",
+      "date": "2026-11-24",
+      "title": "How Gemini is changing the game for Golden State's organization and fans.",
+      "link": "https://blog.google/products-and-platforms/products/gemini/gemini-golden-state/"
+     },
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-23",
+      "title": "Trust AI Agents to Act: Start With Your Data Foundation",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/trust-ai-agents-data-foundation"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-25",
+      "title": "초격차 소버린 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004"
+     }
+    ]
+   },
+   {
+    "heading": "Golden State, Gemini로 구단 전체에 에이전트를",
+    "body": "Google은 Golden State와 맺어 온 제휴를 넓혔다고 발표했어요. Gemini는 Warriors, 2026 WNBA 우승팀 Valkyries, 그리고 경기장 Chase Center의 공식 AI 어시스턴트 파트너이자 생성형 AI·기업용 LLM 파트너로 지정됐어요. Google은 2019년부터 Chase Center의 창립 파트너였고, 구단은 그동안에도 Google의 생성형 AI 도구를 운영에 써 왔다고 밝혔어요.\n\n이번 확대는 두 갈래예요. 팬 쪽에서는 경기장 안의 대형 전광판에 상호작용 기능을 넣고, 집에서 보는 팬을 위한 디지털 채널에도 Gemini를 붙여요. 내부에서는 기업용 Gemini로 맞춤형 AI 에이전트를 만들어 사업 운영과 농구 운영 양쪽 팀이 쓰게 한다고 했어요. 어떤 시스템과 연결했는지, 에이전트가 몇 개인지는 발표에 없어요.\n\n이 사례는 고객 접점과 내부 운영을 AI 플랫폼 하나로 묶는 방식으로 읽혀요. IT 영역으로 보면 CRM·고객 쪽 경험과 백오피스 쪽 에이전트가 같은 공급사 위에 놓인 셈이에요. 한곳에 모이면 관리가 단순해지지만, 의존도도 함께 커진다는 뜻이에요.\n\n우리 프로젝트에 비추면, 고객용 AI와 직원용 AI가 같은 데이터를 보아도 되는지부터 정해야 해요. 팬이나 고객이 쓰는 화면에 내부 운영 데이터가 섞이면 곤란하기 때문이에요. 계약 범위, 데이터가 오가는 경계, 공급사를 바꿀 때의 이전 방법을 처음에 문서로 남겨 두는 편이 안전해요.",
+    "refs": [
+     2
+    ],
+    "case": {
+     "who": "Golden State (Google 발표)",
+     "what": "Gemini 기반 맞춤 AI 에이전트",
+     "where": "경기장 전광판·디지털 채널, 구단 운영",
+     "how": "기존 제휴 확대, 공식 AI 파트너 지정",
+     "domain": "AI 에이전트",
+     "method": "파트너십",
+     "check": "고객용과 내부 업무용 AI를 한 공급사에 맡길 때 데이터 경계는 어떻게 나누나요?",
+     "ref": 2
+    },
+    "sources": [
+     {
+      "source": "Google",
+      "kind": "company",
+      "date": "2026-11-24",
+      "title": "How Gemini is changing the game for Golden State's organization and fans.",
+      "link": "https://blog.google/products-and-platforms/products/gemini/gemini-golden-state/"
+     }
+    ]
+   },
+   {
+    "heading": "Snowflake, 에이전트보다 데이터 기반을 먼저",
+    "body": "Snowflake는 AI 에이전트가 질문에 답하는 단계에서 실제 행동을 하는 단계로 옮겨 가고 있다고 했어요. 그러면서 기업이 AI를 넓혀 쓰려면 관리 규칙을 갖춘 데이터 기반과 에이전트 제어 계층이 필요하다고 짚었어요. 원문 페이지는 이번에 읽지 못해, 이 글은 제목과 요약에 적힌 내용만 다뤄요.\n\n발표는 특정 고객의 도입 사례가 아니라 회사의 관점을 담은 글이에요. 그래서 어느 시스템에 어떤 방식으로 들였는지는 발표에 없어요. 다만 무게를 둔 곳은 분명해요. 모델의 성능보다 에이전트가 딛고 설 데이터와, 에이전트의 행동을 통제하는 층이에요.\n\n에이전트가 답만 하면 틀린 답은 사람이 걸러 낼 수 있어요. 에이전트가 주문을 넣거나 기록을 고치면, 데이터의 품질과 접근 권한이 곧바로 업무 결과가 돼요. 데이터·분석 영역의 프로젝트가 에이전트 과제의 앞단으로 들어온다는 뜻으로 읽혀요.\n\n확인할 점은 에이전트가 접근할 데이터마다 권한과 품질 기준이 정해져 있느냐예요. 누가 어떤 데이터를 볼 수 있는지가 사람 기준으로만 정해져 있다면, 에이전트에게 줄 권한은 따로 설계해야 해요. 에이전트가 한 일을 나중에 추적할 기록이 남는지도 함께 따져 볼 항목이에요.",
+    "refs": [
+     3
+    ],
+    "case": {
+     "who": "Snowflake",
+     "what": "데이터 기반과 에이전트 제어 계층",
+     "where": "기업의 AI 에이전트 운영",
+     "how": "발표에 없음",
+     "domain": "데이터·분석",
+     "method": "연구·보고서",
+     "check": "에이전트가 접근할 데이터의 권한과 품질 기준이 정해져 있나요?",
+     "ref": 3
+    },
+    "sources": [
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-23",
+      "title": "Trust AI Agents to Act: Start With Your Data Foundation",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/trust-ai-agents-data-foundation"
+     }
+    ]
+   },
+   {
+    "heading": "성균관대에 지능화 에너지 국가연구소",
+    "body": "과학기술정보통신부는 성균관대에 국가연구소를 열었다고 밝혔어요. 성균관대는 세계적 수준의 대학 연구소를 키우는 국가연구소 사업(NRL 2.0)의 '26년 선정 대학이에요. 원문은 읽지 못해 보도자료의 제목과 요약만 근거로 써요.\n\n요약에 따르면 이 연구소는 AI와 AI 전환 시대에 국가 에너지 주권을 실현할 지능화 에너지 연구 거점을 목표로 해요. 제목에는 초격차 소버린 에너지 기술 확보라는 말이 들어 있어요. 연구 분야의 세부 내용, 예산, 참여 기관은 발표에 없어요.\n\n이 발표는 기업 도입 사례가 아니라 정부의 연구 정책이에요. 그래도 정부가 AI 전환과 에너지를 한데 묶어 본다는 점이 드러나요. AI 인프라를 다루는 클라우드·인프라 영역에서 전력과 에너지가 바닥 조건으로 놓인다는 뜻으로 읽혀요.\n\n우리 프로젝트에 비추면, AI 인프라 계획에 전력 조건과 비용이 들어가 있는지를 확인할 만해요. 클라우드를 쓰든 자체 서버를 두든, AI 연산이 늘면 전력과 인프라 비용이 함께 따라오기 때문이에요. 예산을 세울 때 이용료만 볼지, 인프라 조건까지 볼지를 미리 정해 두는 편이 좋아요.",
+    "refs": [
+     1
+    ],
+    "case": {
+     "who": "성균관대 (과학기술정보통신부 발표)",
+     "what": "지능화 에너지 국가연구소",
+     "where": "에너지 연구 거점",
+     "how": "국가연구소(NRL 2.0) '26년 선정",
+     "domain": "클라우드·인프라",
+     "method": "연구·보고서",
+     "check": "AI 인프라 계획에 전력 조건과 비용이 들어가 있나요?",
+     "ref": 1
+    },
+    "sources": [
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-25",
+      "title": "초격차 소버린 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004"
+     }
+    ]
+   },
+   {
+    "heading": "공통 흐름: AI 아래층을 다룬 한 주",
+    "body": "세 발표는 모두 AI 자체보다 AI를 받칠 바닥을 다뤘어요. 구단은 에이전트를 올릴 플랫폼을 정했고, Snowflake는 데이터와 제어 계층을 말했고, 정부는 에너지를 연구 목표에 올렸어요.\n\n최근 30일 회사·정부의 공식 AX 발표를 IT 영역별로 세면 AI 에이전트 영역이 64건으로 가장 많았어요. 이 가운데 Snowflake가 9건이었어요. 데이터·분석 영역은 14건이었고, 그중 Snowflake가 4건이었어요. 에이전트와 데이터 이야기가 같은 회사에서 함께 나오고 있다는 뜻이에요.\n\n돈을 내는 기업도 늘었어요. Ramp AI Index(미국 기업, 유료 결제 기준)에서 AI 도구에 돈을 내는 미국 기업 비율은 2026년 10월 56.8%였어요. 도구를 쓰는 곳이 늘수록 그 아래에 무엇을 깔지가 프로젝트의 앞자리로 온다는 점이 이번 주 발표에서 보여요.",
+    "refs": [
+     2,
+     3,
+     1
+    ],
+    "sources": [
+     {
+      "source": "Google",
+      "kind": "company",
+      "date": "2026-11-24",
+      "title": "How Gemini is changing the game for Golden State's organization and fans.",
+      "link": "https://blog.google/products-and-platforms/products/gemini/gemini-golden-state/"
+     },
+     {
+      "source": "Snowflake",
+      "kind": "company",
+      "date": "2026-11-23",
+      "title": "Trust AI Agents to Act: Start With Your Data Foundation",
+      "link": "https://www.snowflake.com/content/snowflake-site/global/en/blog/trust-ai-agents-data-foundation"
+     },
+     {
+      "source": "과학기술정보통신부",
+      "kind": "government",
+      "date": "2026-11-25",
+      "title": "초격차 소버린 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
+      "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004"
+     }
+    ]
+   },
+   {
+    "heading": "IT 컨설팅 관점",
+    "body": "이번 주 흐름을 IT 영역으로 옮기면, AI 에이전트 과제가 데이터·분석, 보안·거버넌스, 클라우드·인프라 과제와 떼어 낼 수 없다는 뜻으로 읽혀요. CRM과 내부 운영을 한 플랫폼에 올리는 결정, 에이전트에게 데이터 권한을 주는 결정, 연산을 받칠 인프라를 정하는 결정이 한 프로젝트 안에 함께 들어와요. 모델을 고르는 일은 그다음 순서에 가까워요.\n\n· 에이전트가 읽고 고칠 데이터는 정리돼 있고, 품질 기준이 정해져 있나요?\n· 에이전트의 권한은 누가 승인하고, 한 일은 어떻게 기록하나요?\n· 고객용 AI와 내부용 AI를 한 공급사에 맡길 때 데이터 경계는 어디인가요?\n· 에이전트가 기존 ERP·CRM과 어떤 방식으로 연동되나요?\n· AI 인프라 비용에 전력과 연산 조건까지 넣어 계산했나요?",
+    "refs": [],
+    "sources": []
+   }
+  ],
+  "takeaways": [
+   "Google은 Golden State 구단 전체에 Gemini를 넣고, 내부에는 맞춤형 에이전트를 만든다고 발표했어요.",
+   "Snowflake는 에이전트가 행동하려면 관리되는 데이터 기반과 제어 계층이 먼저라고 했어요.",
+   "과학기술정보통신부는 성균관대에 AI 전환과 에너지 주권을 함께 내건 국가연구소를 열었어요.",
+   "최근 30일 공식 AX 발표는 AI 에이전트 영역이 64건으로 가장 많았어요.",
+   "에이전트 도입 전에 데이터 권한, 시스템 연동, 인프라 비용부터 확인하는 편이 좋아요."
+  ],
+  "terms": [
+   {
+    "term": "LLM",
+    "def": "많은 글을 학습해 사람처럼 글을 읽고 쓰는 대규모 언어 모델이에요. 챗봇과 AI 에이전트의 바탕이 되는 기술이에요."
+   },
+   {
+    "term": "에이전트 제어 계층",
+    "def": "AI 에이전트가 무엇을 할 수 있는지 정하고, 한 일을 지켜보고 막을 수 있게 하는 관리 층이에요. 권한과 기록을 한곳에서 다뤄요."
+   },
+   {
+    "term": "거버넌스",
+    "def": "데이터나 시스템을 누가 어떤 규칙으로 쓰고 관리할지 정한 체계예요. 접근 권한, 품질 기준, 책임자 같은 것이 들어가요."
+   }
+  ],
+  "source": "claude",
+  "tags": {
+   "themes": [
+    "adoption",
+    "data",
+    "infra"
+   ],
+   "industries": [
+    "energy",
+    "public"
+   ],
+   "companies": [
+    {
+     "id": "msit",
+     "name": "과학기술정보통신부"
+    },
+    {
+     "id": "google-ai",
+     "name": "Google"
+    },
+    {
+     "id": "snowflake",
+     "name": "Snowflake"
+    }
+   ]
+  }
+ },
+ "series": "news"
+}
