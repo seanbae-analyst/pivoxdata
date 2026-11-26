@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-25",
+ "built_at": "2026-11-26",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "134건",
+     "big": "125건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 64건 · 클라우드·인프라 36건 · 업무 도구 23건 · 보안·규제 23건 · CRM·고객 14건 · 데이터·분석 14건 · ERP·백오피스 8건",
+     "body": "AI 에이전트 57건 · 클라우드·인프라 35건 · 업무 도구 23건 · 보안·규제 22건 · CRM·고객 14건 · 데이터·분석 13건 · ERP·백오피스 8건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 64,
-         "label": "64건"
+         "value": 57,
+         "label": "57건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 36,
-         "label": "36건"
+         "value": 35,
+         "label": "35건"
         },
         {
          "name": "업무 도구",
@@ -340,8 +340,8 @@
         },
         {
          "name": "보안·규제",
-         "value": 23,
-         "label": "23건"
+         "value": 22,
+         "label": "22건"
         },
         {
          "name": "CRM·고객",
@@ -355,7 +355,7 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "64건",
+     "big": "57건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, Snowflake 발표가 가장 많아요",
      "easy": "",
@@ -382,13 +382,13 @@
         },
         {
          "name": "Databricks",
-         "value": 8,
-         "label": "8건"
-        },
-        {
-         "name": "SAP",
          "value": 7,
          "label": "7건"
+        },
+        {
+         "name": "OpenAI",
+         "value": 4,
+         "label": "4건"
         }
        ]
       }
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "36건",
+     "big": "35건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -428,7 +428,7 @@
          "label": "3건"
         },
         {
-         "name": "Snowflake",
+         "name": "SAP",
          "value": 3,
          "label": "3건"
         }
@@ -481,23 +481,23 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "23건",
+     "big": "22건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, 영국 정부 발표가 가장 많아요",
+     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: Amazon 11/23 — AI safety can’t depend on an emergency brake. It needs better engineering. · McKinsey 11/23 — Rewiring GCC countries for AI: Realizing value in government · 영국 정부 11/23 — Sovereign AI and National Security Strategic Investment Fund backing British autonomous defence systems firm",
+     "body": "최근: 과학기술정보통신부 11/26 — ‘인공지능의 모든 순간에 사이버보안, 대한민국 인공지능 보안 역량을 하나로’ 2026 인공지능 해킹 방어대회(ACDC) 개최 · Amazon 11/23 — AI safety can’t depend on an emergency brake. It needs better engineering. · McKinsey 11/23 — Rewiring GCC countries for AI: Realizing value in government",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
        "kind": "rank",
        "items": [
         {
-         "name": "영국 정부",
-         "value": 3,
-         "label": "3건"
+         "name": "과학기술정보통신부",
+         "value": 4,
+         "label": "4건"
         },
         {
-         "name": "과학기술정보통신부",
+         "name": "영국 정부",
          "value": 3,
          "label": "3건"
         },
@@ -565,7 +565,7 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "14건",
+     "big": "13건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Databricks 발표가 가장 많아요",
      "easy": "",
@@ -582,8 +582,8 @@
         },
         {
          "name": "Snowflake",
-         "value": 4,
-         "label": "4건"
+         "value": 3,
+         "label": "3건"
         },
         {
          "name": "SAP",
@@ -1825,57 +1825,6 @@
      }
     ]
    }
-  },
-  {
-   "key": "hftr:SulphurAI/Sulphur-3:2026-11-25",
-   "subject": "hf:SulphurAI/Sulphur-3",
-   "kind": "새로 진입",
-   "tier": "small",
-   "score": 12,
-   "topic": "ai",
-   "headline": "트렌딩 상위 5에 새로: SulphurAI/​Sulphur‑3",
-   "card": {
-    "id": "ch-hftr",
-    "k": "오픈 모델",
-    "big": "5위",
-    "bl": "Hugging Face 트렌딩",
-    "title": "트렌딩 상위 5에 새로: SulphurAI/​Sulphur‑3",
-    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
-    "body": "2026-10-31 공개.",
-    "src": "Hugging Face 트렌딩 · 2026-11-25",
-    "viz": [
-     {
-      "kind": "rank",
-      "items": [
-       {
-        "name": "Inkling-2-Mini",
-        "value": 1276.5,
-        "label": "6.9만"
-       },
-       {
-        "name": "Inkling-2-Mini-GGUF",
-        "value": 1127,
-        "label": "191만"
-       },
-       {
-        "name": "voice-isolator",
-        "value": 652,
-        "label": "1.3만"
-       },
-       {
-        "name": "Inkling-2-Mini-Uncensored-GGUF",
-        "value": 453.6,
-        "label": "57만"
-       },
-       {
-        "name": "Sulphur-3",
-        "value": 296,
-        "label": "16만"
-       }
-      ]
-     }
-    ]
-   }
   }
  ],
  "facts": [
@@ -1957,12 +1906,12 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 64건 · 발표가 많은 곳: Snowflake 9건, NVIDIA 9건, McKinsey 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 57건 · 발표가 많은 곳: Snowflake 9건, NVIDIA 9건, McKinsey 8건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 36건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 6건, McKinsey 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 6건, McKinsey 4건"
   },
   {
    "group": "domain",
@@ -1972,7 +1921,7 @@
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 23건 · 발표가 많은 곳: 영국 정부 3건, 과학기술정보통신부 3건, McKinsey 2건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 22건 · 발표가 많은 곳: 과학기술정보통신부 4건, 영국 정부 3건, McKinsey 2건"
   },
   {
    "group": "domain",
@@ -1982,7 +1931,7 @@
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 14건 · 발표가 많은 곳: Databricks 4건, Snowflake 4건, SAP 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Databricks 4건, Snowflake 3건, SAP 2건"
   },
   {
    "group": "domain",
@@ -2021,19 +1970,6 @@
    "domains": [
     "클라우드·인프라"
    ],
-   "method": "정책·규제"
-  },
-  {
-   "id": "f28f90d289",
-   "src": "openai",
-   "source": "OpenAI",
-   "kind": "company",
-   "date": "2026-11-12",
-   "title": "Gilbert + Tobin rethinks the business of law with AI",
-   "summary": "A conversation with Sam Nickless, Partner and Chief Executive Officer at Gilbert + Tobin.",
-   "link": "https://openai.com/index/gilbert-tobin-sam-nickless",
-   "score": 6,
-   "domains": [],
    "method": "정책·규제"
   },
   {
@@ -2091,21 +2027,6 @@
     "보안·규제"
    ],
    "method": "정책·규제"
-  },
-  {
-   "id": "e814c25ebe",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-11-12",
-   "title": "인공지능 안전 국민 점검단 「인공지능 안전 지킴이」 출범",
-   "summary": "- 과기정통부‧인공지능 안전연구소, 대학생‧직장인 등 “인공지능 안전 지킴이” 80명 위촉 - - 사실왜곡, 편향, 보안 취약점, 결함 등 4대 분야 오류사례 상시 제보 체계 구축 -",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187956",
-   "score": 4,
-   "domains": [
-    "보안·규제"
-   ],
-   "method": "연구·보고서"
   },
   {
    "id": "8d6c7c64bc",
@@ -2353,6 +2274,34 @@
    "method": "연구·보고서"
   },
   {
+   "id": "bbe0ff27e1",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-26",
+   "title": "인공지능 시대, 우리 사회가 마주한 쟁점을 논하는｢인공지능 사회정책포럼｣ 공개 발표회 개최",
+   "summary": "- 지난 4월 인공지능 사회정책포럼 출범 이후 논의 결과를 국민과 공유 - - 각계 전문가 종합토론으로 인공지능 사회정책 대응 방향과 과제 논의 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188012",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
+   "id": "fbaa49ac5e",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-26",
+   "title": "‘인공지능의 모든 순간에 사이버보안, 대한민국 인공지능 보안 역량을 하나로’ 2026 인공지능 해킹 방어대회(ACDC) 개최",
+   "summary": "인공지능 모델을 활용한 실전형 해킹 방어대회 및 국민 참여형 대회 운영 -사이버보안 특화 인공지능 모델 개발 방향 제시, 국내외 전문가 정책·기술 교류 - 2026년 정보보호 지원사업 주요 성과 발표 및 산업·인재 협력 확대 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188013",
+   "score": 1,
+   "domains": [
+    "보안·규제"
+   ],
+   "method": "정책·규제"
+  },
+  {
    "id": "170d0d286c",
    "src": "msit",
    "source": "과학기술정보통신부",
@@ -2499,35 +2448,6 @@
    "score": 1,
    "domains": [],
    "method": "정책·규제"
-  },
-  {
-   "id": "631f611ed8",
-   "src": "ukgov",
-   "source": "영국 정부",
-   "kind": "government",
-   "date": "2026-11-12",
-   "title": "United Kingdom-Norway Joint Statement of intent on Artificial Intelligence",
-   "summary": "A joint statement by the UK and Norway to deepen cooperation on AI, including compute, defence, AI security, and international governance.",
-   "link": "https://www.gov.uk/government/news/united-kingdom-norway-joint-statement-of-intent-on-artificial-intelligence",
-   "score": 1,
-   "domains": [
-    "클라우드·인프라",
-    "보안·규제"
-   ],
-   "method": "정책·규제"
-  },
-  {
-   "id": "f85d9ed3f0",
-   "src": "msit",
-   "source": "과학기술정보통신부",
-   "kind": "government",
-   "date": "2026-11-12",
-   "title": "미래 인공지능·정보통신기술 기술 혁신, 한-해외 연구자가 함께 만들어 간다",
-   "summary": "",
-   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3187959",
-   "score": 1,
-   "domains": [],
-   "method": "연구·보고서"
   }
  ]
 }
