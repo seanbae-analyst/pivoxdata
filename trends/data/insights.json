@@ -1,5 +1,5 @@
 {
- "built_at": "2026-11-26",
+ "built_at": "2026-11-27",
  "page": "https://data.pivoxquant.com/",
  "topics": [
   {
@@ -313,11 +313,11 @@
     {
      "id": "dom-all",
      "k": "IT 영역 · 한눈에",
-     "big": "125건",
+     "big": "116건",
      "bl": "최근 30일 회사·정부 공식 AX 발표 · 한 발표가 여러 영역에 들 수 있어요",
      "title": "발표가 가장 많은 IT 영역은 AI 에이전트",
      "easy": "",
-     "body": "AI 에이전트 57건 · 클라우드·인프라 35건 · 업무 도구 23건 · 보안·규제 22건 · CRM·고객 14건 · 데이터·분석 13건 · ERP·백오피스 8건",
+     "body": "AI 에이전트 53건 · 클라우드·인프라 32건 · 업무 도구 23건 · 보안·규제 19건 · CRM·고객 13건 · 데이터·분석 12건 · ERP·백오피스 6건",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -325,13 +325,13 @@
        "items": [
         {
          "name": "AI 에이전트",
-         "value": 57,
-         "label": "57건"
+         "value": 53,
+         "label": "53건"
         },
         {
          "name": "클라우드·인프라",
-         "value": 35,
-         "label": "35건"
+         "value": 32,
+         "label": "32건"
         },
         {
          "name": "업무 도구",
@@ -340,13 +340,13 @@
         },
         {
          "name": "보안·규제",
-         "value": 22,
-         "label": "22건"
+         "value": 19,
+         "label": "19건"
         },
         {
          "name": "CRM·고객",
-         "value": 14,
-         "label": "14건"
+         "value": 13,
+         "label": "13건"
         }
        ]
       }
@@ -355,11 +355,11 @@
     {
      "id": "dom-agents",
      "k": "IT 영역 · AI 에이전트",
-     "big": "57건",
+     "big": "53건",
      "bl": "최근 30일 공식 발표 · 스스로 일하는 AI·업무 자동화 이야기",
      "title": "AI 에이전트, Snowflake 발표가 가장 많아요",
      "easy": "",
-     "body": "최근: McKinsey 11/24 — What is the agentic factory? An update to the machinery of transformation for financial-services businesses · 과학기술정보통신부 11/24 — 과기정통부, 인공지능 자율화가 바꿀 미래 산업·사회 질서 논의 · Databricks 11/24 — Data Modeling Best Practices for an Agentic CDP, Part 1: The Data Foundation",
+     "body": "최근: SAP 11/27 — Building Your First Agentic Use Case: New Whitepaper Offers a Road Map for Enterprise AI · McKinsey 11/24 — What is the agentic factory? An update to the machinery of transformation for financial-services businesses · 과학기술정보통신부 11/24 — 과기정통부, 인공지능 자율화가 바꿀 미래 산업·사회 질서 논의",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
      "viz": [
       {
@@ -376,17 +376,17 @@
          "label": "9건"
         },
         {
-         "name": "McKinsey",
-         "value": 8,
-         "label": "8건"
-        },
-        {
          "name": "Databricks",
          "value": 7,
          "label": "7건"
         },
         {
-         "name": "OpenAI",
+         "name": "McKinsey",
+         "value": 5,
+         "label": "5건"
+        },
+        {
+         "name": "SAP",
          "value": 4,
          "label": "4건"
         }
@@ -397,7 +397,7 @@
     {
      "id": "dom-cloud",
      "k": "IT 영역 · 클라우드·인프라",
-     "big": "35건",
+     "big": "32건",
      "bl": "최근 30일 공식 발표 · 클라우드·데이터센터·칩·주권 AI 이야기",
      "title": "클라우드·인프라, NVIDIA 발표가 가장 많아요",
      "easy": "",
@@ -414,8 +414,8 @@
         },
         {
          "name": "과학기술정보통신부",
-         "value": 6,
-         "label": "6건"
+         "value": 5,
+         "label": "5건"
         },
         {
          "name": "McKinsey",
@@ -428,9 +428,9 @@
          "label": "3건"
         },
         {
-         "name": "SAP",
-         "value": 3,
-         "label": "3건"
+         "name": "Amazon",
+         "value": 2,
+         "label": "2건"
         }
        ]
       }
@@ -481,9 +481,9 @@
     {
      "id": "dom-security",
      "k": "IT 영역 · 보안·규제",
-     "big": "22건",
+     "big": "19건",
      "bl": "최근 30일 공식 발표 · AI 보안·안전·법·규제 이야기",
-     "title": "보안·규제, 과학기술정보통신부 발표가 가장 많아요",
+     "title": "보안·규제, 영국 정부 발표가 가장 많아요",
      "easy": "",
      "body": "최근: 과학기술정보통신부 11/26 — ‘인공지능의 모든 순간에 사이버보안, 대한민국 인공지능 보안 역량을 하나로’ 2026 인공지능 해킹 방어대회(ACDC) 개최 · Amazon 11/23 — AI safety can’t depend on an emergency brake. It needs better engineering. · McKinsey 11/23 — Rewiring GCC countries for AI: Realizing value in government",
      "src": "회사·정부 공식 발표(뉴스룸·보도자료) · 최근 30일",
@@ -492,14 +492,14 @@
        "kind": "rank",
        "items": [
         {
-         "name": "과학기술정보통신부",
-         "value": 4,
-         "label": "4건"
-        },
-        {
          "name": "영국 정부",
          "value": 3,
          "label": "3건"
+        },
+        {
+         "name": "과학기술정보통신부",
+         "value": 2,
+         "label": "2건"
         },
         {
          "name": "McKinsey",
@@ -523,7 +523,7 @@
     {
      "id": "dom-crm",
      "k": "IT 영역 · CRM·고객",
-     "big": "14건",
+     "big": "13건",
      "bl": "최근 30일 공식 발표 · 영업·마케팅·고객 상담 이야기",
      "title": "CRM·고객, Capgemini 발표가 가장 많아요",
      "easy": "",
@@ -565,7 +565,7 @@
     {
      "id": "dom-data",
      "k": "IT 영역 · 데이터·분석",
-     "big": "13건",
+     "big": "12건",
      "bl": "최근 30일 공식 발표 · 데이터 플랫폼·분석·거버넌스 이야기",
      "title": "데이터·분석, Databricks 발표가 가장 많아요",
      "easy": "",
@@ -607,7 +607,7 @@
     {
      "id": "dom-erp",
      "k": "IT 영역 · ERP·백오피스",
-     "big": "8건",
+     "big": "6건",
      "bl": "최근 30일 공식 발표 · 재무·회계·구매·공급망·인사 이야기",
      "title": "ERP·백오피스, SAP 발표가 가장 많아요",
      "easy": "",
@@ -624,8 +624,8 @@
         },
         {
          "name": "과학기술정보통신부",
-         "value": 2,
-         "label": "2건"
+         "value": 1,
+         "label": "1건"
         },
         {
          "name": "NVIDIA",
@@ -634,11 +634,6 @@
         },
         {
          "name": "OpenAI",
-         "value": 1,
-         "label": "1건"
-        },
-        {
-         "name": "McKinsey",
          "value": 1,
          "label": "1건"
         }
@@ -1825,6 +1820,77 @@
      }
     ]
    }
+  },
+  {
+   "key": "hftop:BAAI/bge-large-en-v1.5:2026-11-27",
+   "subject": "hf:BAAI/bge-large-en-v1.5",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 18,
+   "topic": "ai",
+   "headline": "다운로드 상위 20에 새로: BAAI/​bge‑large‑en‑v1.5",
+   "card": {
+    "id": "ch-hftop",
+    "k": "오픈 모델",
+    "big": "1개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: BAAI/​bge‑large‑en‑v1.5",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "BAAI/​bge‑large‑en‑v1.5(1,336만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-11-27",
+    "viz": []
+   }
+  },
+  {
+   "key": "hftr:prism-ml/Ternary-Bonsai-2.5-27B-GGUF:2026-11-27",
+   "subject": "hf:prism-ml/Ternary-Bonsai-2.5-27B-GGUF",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 12,
+   "topic": "ai",
+   "headline": "트렌딩 상위 5에 새로: prism‑ml/​Ternary‑Bonsai‑2.5‑27B‑GGUF",
+   "card": {
+    "id": "ch-hftr",
+    "k": "오픈 모델",
+    "big": "5위",
+    "bl": "Hugging Face 트렌딩",
+    "title": "트렌딩 상위 5에 새로: prism‑ml/​Ternary‑Bonsai‑2.5‑27B‑GGUF",
+    "easy": "요즘 빠르게 주목받는 오픈 AI 모델 상위 5위 안에 새로 들어왔어요.",
+    "body": "text‑generation · 2026-11-24 공개.",
+    "src": "Hugging Face 트렌딩 · 2026-11-27",
+    "viz": [
+     {
+      "kind": "rank",
+      "items": [
+       {
+        "name": "Inkling-2-Mini",
+        "value": 1435.5,
+        "label": "16만"
+       },
+       {
+        "name": "Inkling-2-Mini-GGUF",
+        "value": 1267,
+        "label": "330만"
+       },
+       {
+        "name": "Sulphur-3",
+        "value": 545,
+        "label": "54만"
+       },
+       {
+        "name": "Inkling-2-Mini-Uncensored-GGUF",
+        "value": 529.2,
+        "label": "106만"
+       },
+       {
+        "name": "Ternary-Bonsai-2.5-27B-GGUF",
+        "value": 498,
+        "label": "38만"
+       }
+      ]
+     }
+    ]
+   }
   }
  ],
  "facts": [
@@ -1906,12 +1972,12 @@
   {
    "group": "domain",
    "id": "dom-agents",
-   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 57건 · 발표가 많은 곳: Snowflake 9건, NVIDIA 9건, McKinsey 8건"
+   "text": "IT 영역 AI 에이전트(스스로 일하는 AI·업무 자동화): 최근 30일 회사·정부 공식 AX 발표 53건 · 발표가 많은 곳: Snowflake 9건, NVIDIA 9건, Databricks 7건"
   },
   {
    "group": "domain",
    "id": "dom-cloud",
-   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 35건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 6건, McKinsey 4건"
+   "text": "IT 영역 클라우드·인프라(클라우드·데이터센터·칩·주권 AI): 최근 30일 회사·정부 공식 AX 발표 32건 · 발표가 많은 곳: NVIDIA 8건, 과학기술정보통신부 5건, McKinsey 4건"
   },
   {
    "group": "domain",
@@ -1921,22 +1987,22 @@
   {
    "group": "domain",
    "id": "dom-security",
-   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 22건 · 발표가 많은 곳: 과학기술정보통신부 4건, 영국 정부 3건, McKinsey 2건"
+   "text": "IT 영역 보안·규제(AI 보안·안전·법·규제): 최근 30일 회사·정부 공식 AX 발표 19건 · 발표가 많은 곳: 영국 정부 3건, 과학기술정보통신부 2건, McKinsey 2건"
   },
   {
    "group": "domain",
    "id": "dom-crm",
-   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 14건 · 발표가 많은 곳: Capgemini 4건, Salesforce 4건, OpenAI 2건"
+   "text": "IT 영역 CRM·고객(영업·마케팅·고객 상담): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Capgemini 4건, Salesforce 4건, OpenAI 2건"
   },
   {
    "group": "domain",
    "id": "dom-data",
-   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 13건 · 발표가 많은 곳: Databricks 4건, Snowflake 3건, SAP 2건"
+   "text": "IT 영역 데이터·분석(데이터 플랫폼·분석·거버넌스): 최근 30일 회사·정부 공식 AX 발표 12건 · 발표가 많은 곳: Databricks 4건, Snowflake 3건, SAP 2건"
   },
   {
    "group": "domain",
    "id": "dom-erp",
-   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 8건 · 발표가 많은 곳: SAP 3건, 과학기술정보통신부 2건, NVIDIA 1건"
+   "text": "IT 영역 ERP·백오피스(재무·회계·구매·공급망·인사): 최근 30일 회사·정부 공식 AX 발표 6건 · 발표가 많은 곳: SAP 3건, 과학기술정보통신부 1건, NVIDIA 1건"
   }
  ],
  "news": [
@@ -1973,12 +2039,25 @@
    "method": "정책·규제"
   },
   {
+   "id": "c77ddc8766",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-27",
+   "title": "인공지능 시대 연구개발 경쟁력의 핵심, ‘국가연구데이터’ 생태계 기반 마련",
+   "summary": "- 제 15회 과학기술관계장관회의, 국가연구데이터 정책 기본방향 심의 및 의결 - - 내년 6월 연구데이터법 시행 앞두고 데이터관리계획 수립 의무화, 데이터 통합 이음터 구축 등 데이터 생산부터 활용까지 전주기 관리방안 확립 -",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188016",
+   "score": 4,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "b0a964a4a4",
    "src": "msit",
    "source": "과학기술정보통신부",
    "kind": "government",
    "date": "2026-11-25",
-   "title": "초격차 소버린 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
+   "title": "초격차 독자 에너지 기술 확보를 위한 국가연구소 개소(성균관대)",
    "summary": "- 세계적 수준의 대학 연구소 육성을 위한 국가연구소(NRL 2.0) 사업 ’26년 선정 대학 - - 인공지능・인공지능 전환 시대 국가에너지주권을 실현하는 세계적 지능화 에너지 연구 거점 구축 목표 -",
    "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188004",
    "score": 4,
@@ -2274,6 +2353,19 @@
    "method": "연구·보고서"
   },
   {
+   "id": "e614f41f15",
+   "src": "msit",
+   "source": "과학기술정보통신부",
+   "kind": "government",
+   "date": "2026-11-27",
+   "title": "제5회 K-디지털 그랜드 챔피언십 개최… 대한민국 대표 인공지능 창업 초기 기업 발굴‧육성",
+   "summary": "",
+   "link": "https://www.msit.go.kr/bbs/view.do?sCode=user&bbsSeqNo=94&nttSeqNo=3188024",
+   "score": 1,
+   "domains": [],
+   "method": "정책·규제"
+  },
+  {
    "id": "bbe0ff27e1",
    "src": "msit",
    "source": "과학기술정보통신부",
@@ -2435,19 +2527,6 @@
    "score": 1,
    "domains": [],
    "method": "파트너십"
-  },
-  {
-   "id": "958c99eb8f",
-   "src": "eu",
-   "source": "EU 집행위원회",
-   "kind": "government",
-   "date": "2026-11-13",
-   "title": "Doorstep by President von der Leyen ahead of the informal meeting of the European Council of 13 November",
-   "summary": "European Commission Statement Dublin, 13 Nov 2026 Today, we are going to discuss AI. It is going to be very interesting. Of course, we are going to discuss the risks, like, for example, runaway AI, but also the...",
-   "link": "https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2431",
-   "score": 1,
-   "domains": [],
-   "method": "정책·규제"
   }
  ]
 }
