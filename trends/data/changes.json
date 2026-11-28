@@ -8417,6 +8417,27 @@
      }
     ]
    }
+  },
+  {
+   "date": "2026-11-28",
+   "key": "hftop:Qwen/Qwen3-14B:2026-11-28",
+   "subject": "hf:Qwen/Qwen3-14B",
+   "kind": "새로 진입",
+   "tier": "small",
+   "score": 18,
+   "topic": "ai",
+   "headline": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B",
+   "card": {
+    "id": "ch-hftop",
+    "k": "오픈 모델",
+    "big": "1개",
+    "bl": "다운로드 상위 20에 새로 든 모델",
+    "title": "다운로드 상위 20에 새로: Qwen/​Qwen3‑14B",
+    "easy": "많이 내려받는 오픈 AI 모델 상위 20위 안에 새 얼굴이 들어왔어요.",
+    "body": "Qwen/​Qwen3‑14B(1,326만).",
+    "src": "Hugging Face 다운로드 상위 · 2026-11-28",
+    "viz": []
+   }
   }
  ]
 }
